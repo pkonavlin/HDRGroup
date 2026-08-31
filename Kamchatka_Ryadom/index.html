@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Контент-бриф «Камчатка Рядом»</title>
+</head>
+<body>
+<style>
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #d96a3b;
+    --roe-soft: #f0a47a;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6;
+      --ocean: #7fc4c9;
+      --ocean-soft: #5aa5ab;
+      --ice: #12292d;
+      --paper: #0b1d22;
+      --surface: #102529;
+      --roe: #f0895a;
+      --roe-soft: #c96636;
+      --ink: #e9f3f1;
+      --ink-soft: #b6cbc8;
+      --ink-faint: #7f9a97;
+      --line: #24444b;
+      --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6;
+    --ocean: #7fc4c9;
+    --ocean-soft: #5aa5ab;
+    --ice: #12292d;
+    --paper: #0b1d22;
+    --surface: #102529;
+    --roe: #f0895a;
+    --roe-soft: #c96636;
+    --ink: #e9f3f1;
+    --ink-soft: #b6cbc8;
+    --ink-faint: #7f9a97;
+    --line: #24444b;
+    --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--ocean); }
+
+  /* TOP BAR */
+  header.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .topbar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .topbar .brand {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--ocean-deep);
+    white-space: nowrap;
+  }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.84rem;
+    padding: 7px 11px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+  }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+
+  @media (max-width: 720px) {
+    .topbar-inner { padding: 12px 20px; }
+    main { padding: 32px 20px 80px; }
+  }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: var(--ocean);
+    margin-bottom: 14px;
+  }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  /* brand board */
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 26px; }
+  .swatch { border-radius: 10px; height: 88px; display: flex; flex-direction: column; justify-content: space-between; padding: 9px; border: 1px solid rgba(0,0,0,0.06); }
+  .swatch .role {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(255,255,255,0.88);
+    color: #241f1c;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  .swatch .name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.62rem;
+    background: rgba(255,255,255,0.88);
+    color: #241f1c;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  @media (max-width: 700px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .brand-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+  .brand-card h3 { font-size: 0.98rem; color: var(--ocean-deep); margin-bottom: 10px; }
+  .brand-card ul { margin: 0; padding-left: 18px; font-size: 0.9rem; color: var(--ink-soft); }
+  .brand-card li { margin-bottom: 6px; }
+
+  .type-sample { display: flex; flex-direction: column; gap: 10px; }
+  .type-sample .display { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 1.7rem; color: var(--ink); }
+  .type-sample .body { font-size: 0.95rem; color: var(--ink-soft); }
+  .type-sample .mono-line { font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ocean); }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px 18px; border-right: 1px solid var(--line-soft); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.82rem; color: var(--ink-faint); }
+
+  /* theme cards */
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { color: var(--roe); }
+
+  /* stories — single slide, no cover */
+  .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  /* map of themes */
+  details.map-history { margin-bottom: 20px; }
+  details.map-history summary {
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    padding: 10px 14px;
+    background: var(--ice);
+    border-radius: 10px;
+    list-style: none;
+  }
+  details.map-history summary::-webkit-details-marker { display: none; }
+  details.map-history summary::before { content: "▸ "; }
+  details.map-history[open] summary::before { content: "▾ "; }
+  details.map-history .hist-body { padding: 14px 4px 4px; color: var(--ink-faint); font-size: 0.86rem; }
+
+  .stage-block { border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 20px 22px; background: var(--surface); box-shadow: var(--shadow); }
+  .stage-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .stage-head .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--roe); color: var(--paper); border-radius: 999px; padding: 4px 11px; }
+  .stage-head h3 { font-size: 1rem; color: var(--ink); }
+  .stage-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 640px) { .stage-cols { grid-template-columns: 1fr; } }
+  .stage-cols h4 { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 8px; }
+  .stage-cols ul { margin: 0; padding-left: 18px; font-size: 0.88rem; color: var(--ink-soft); }
+  .stage-cols li { margin-bottom: 6px; }
+
+  footer { border-top: 1px solid var(--line-soft); padding-top: 24px; font-size: 0.82rem; color: var(--ink-faint); }
+  footer a { color: var(--ink-faint); }
+  footer ul { padding-left: 18px; }
+  footer li { margin-bottom: 4px; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Камчатка Рядом</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+      <a href="#sources">Источники</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Ритейл рыбы и морепродуктов</div>
+    <h1 class="title">«Камчатка Рядом»</h1>
+    <p class="lede">Сеть магазинов свежей рыбы и морепродуктов в Смоленске. ТЗ на 4 темы новостей с обложками и 4 темы сторис для карточки компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Смоленск</span>
+      <span><b>Категория:</b> розница, рыба и морепродукты</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1 (знакомство)</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card">
+        <div class="k">Точка — Рабочий переулок</div>
+        <div class="v">Рабочий пер., 4 (1 эт.), Промышленный р-н<small>Ежедневно 09:00–19:00 · рейтинг 3.9 (25 оценок / 15 отзывов)</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Точка — Шевченко</div>
+        <div class="v">Фрэш-Маркет, ул. Шевченко, 78а (1 эт.), р-н Поповка<small>Ежедневно 09:00–20:00 · рейтинг 4.2 (13 оценок / 10 отзывов)</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Точка — Попова</div>
+        <div class="v">ул. Попова, 102А<small>Ежедневно 09:00–21:00</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Сеть</div>
+        <div class="v">Несколько магазинов в разных районах Смоленска — Промышленный, Поповка и другие<small>Розница + доставка</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Контакты</div>
+        <div class="v mono">+7 915 651-48-44<br>+7 910 118-88-85<br>kamchatka.ryadom@yandex.ru</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Каналы связи</div>
+        <div class="v">VK, Telegram, WhatsApp<small>+ мобильное приложение «Камчатка рядом»</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Услуги</div>
+        <div class="v">Розничная продажа рыбы и морепродуктов, доставка, самовывоз</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Позиционирование</div>
+        <div class="v">Всегда свежие морепродукты в наличии, большой выбор на любой вкус</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа ресурсов компании определены фирменные цвета, типографика и фотостиль бренда — их придерживаемся при подготовке макетов для новостей и сторис.</p>
+
+    <div class="swatch-row">
+      <div class="swatch" style="background:#2a2622"><span class="role">Основной</span><span class="name">Графит · #2A2622</span></div>
+      <div class="swatch" style="background:#5c534b"><span class="role">Второстепенный</span><span class="name">Камень · #5C534B</span></div>
+      <div class="swatch" style="background:#b23a2e"><span class="role">Акцентный</span><span class="name">Краб · #B23A2E</span></div>
+      <div class="swatch" style="background:#f2eeea"><span class="role">Фоновый</span><span class="name">Иней · #F2EEEA</span></div>
+      <div class="swatch" style="background:#241f1c"><span class="role">Текстовый</span><span class="name">Уголь · #241F1C</span></div>
+    </div>
+
+    <div class="brand-grid">
+      <div class="brand-card">
+        <h3>Палитра</h3>
+        <ul>
+          <li>База — тёплый графит и камень (#2A2622–#5C534B): фон обложек, плашки заголовков — статусно и нейтрально</li>
+          <li>Фон карточек с фактами и воздух вокруг продукта — «иней» (#F2EEEA)</li>
+          <li>Акцент — тёплый красный «краб» (#B23A2E): CTA, цены, важные метки, не более 10–15% площади</li>
+          <li>Синий в палитру не входит — в категории он занят конкурентами, графитово-красная пара держит узнаваемость</li>
+        </ul>
+      </div>
+      <div class="brand-card">
+        <h3>Типографика</h3>
+        <div class="type-sample">
+          <div class="display">Камчатка рядом</div>
+          <div class="body">Крупный чистый гротеск на заголовках, без засечек — читается на маленьком экране за секунду</div>
+          <div class="mono-line">09:00–20:00 · +7 915 651-48-44</div>
+        </div>
+      </div>
+      <div class="brand-card">
+        <h3>Фотостиль</h3>
+        <ul>
+          <li>Крупный план продукта: лёд, влажный блеск, естественный холодный свет</li>
+          <li>Минимум пропсов и текста поверх фото — продукт говорит сам за себя</li>
+          <li>Единый ракурс/кроп между публикациями для узнаваемости карточки</li>
+        </ul>
+      </div>
+      <div class="brand-card">
+        <h3>Графика и тон</h3>
+        <ul>
+          <li>Тонкие line-иконки: волна, снежинка/лёд, силуэты рыбы и краба — как акценты, не как основа макета</li>
+          <li>Тон текста — спокойный, фактологичный, экспертный</li>
+          <li>Без «лучший», «№1», кричащих плашек и избытка восклицательных знаков</li>
+          <li>Лого — минимально, в углу, не поверх продукта</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 — знакомство. Одна связная последовательность, одинаковая для новостей и сторис.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">Знакомство</div><div class="d">кто мы и чем занимаемся</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Ассортимент</div><div class="d">подход к свежести</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Сеть</div><div class="d">где нас найти в городе</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Заказ</div><div class="d">как купить и получить</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — 4 темы + обложка</h2></div>
+    <p class="section-sub">Тексты — с интеграцией SEO-ключей в тезисы, без переспама; заголовки и первый абзац несут основной ключ.</p>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Кто такие «Камчатка Рядом»</h3><span class="theme-tag">имиджевый · информационный</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Первое касание с новым посетителем карточки: закрывает базовые вопросы «кто вы» и «где вы» до того, как человек начнёт читать остальные публикации.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Сеть магазинов свежей рыбы и морепродуктов в Смоленске, работает в нескольких районах города</li>
+            <li>Работает ежедневно без выходных</li>
+            <li>Формат — розница «на любой вкус» (широкий ассортимент), плюс доставка</li>
+            <li>Как связаться: сообщения, WhatsApp, телефон</li>
+            <li>Без превосходных степеней — только факты о формате работы</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">камчатка рядом смоленск</span>
+            <span class="chip">магазин морепродуктов смоленск</span>
+            <span class="chip">рыбный магазин смоленск</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Сохранить номер и адрес ближайшей точки для заказа</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Фон — графит (#2A2622), крупно название сети, под ним факт-строка «рыба и морепродукты в Смоленске, ежедневно». Фото витрины/продукта крупным планом справа или на фоне с затемнением.</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Ассортимент и подход к свежести</h3><span class="theme-tag">экспертный</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Свежесть — главный критерий выбора в категории «рыба и морепродукты»; раскрывает УТП без хвалебных штампов.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Широкий ассортимент рыбы и морепродуктов «на любой вкус» — подтверждённая формулировка позиционирования</li>
+            <li>Конкретные позиции и периодичность поставок — уточняются в брифе компании перед публикацией; не указывать невыясненные виды рыбы или цены</li>
+            <li>Общие критерии выбора свежего продукта — как ориентир для читателя, без привязки к конкретному товару</li>
+            <li>Мягкий призыв уточнять наличие конкретной позиции по телефону</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">свежая рыба купить смоленск</span>
+            <span class="chip">морепродукты купить смоленск</span>
+            <span class="chip">красная икра смоленск</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Уточнить наличие конкретной позиции по телефону</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Крупный план морепродуктов на льду (фото), холодный свет. Заголовок «Ассортимент» плашкой в углу на графитовой подложке. Без цен и конкретных SKU, если они не согласованы отдельно.</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Где нас найти: точки сети в Смоленске</h3><span class="theme-tag">информационный · локальный SEO</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Закрывает самый частый вопрос локального ритейла — «где купить рядом со мной» — и усиливает гео-часть SEO карточки по районам города.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Адреса и часы: Рабочий пер., 4 (09:00–19:00); ул. Шевченко, 78а, Фрэш-Маркет (09:00–20:00); ул. Попова, 102А (09:00–21:00)</li>
+            <li>Разные районы города (Промышленный, Поповка) — удобно для жителей разных концов Смоленска</li>
+            <li>Единый номер для связи с любой точкой</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">рыбный магазин промышленный район смоленск</span>
+            <span class="chip">магазин морепродуктов поповка</span>
+            <span class="chip">адреса камчатка рядом</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Сохранить ближайший адрес / проложить маршрут до точки</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Стилизованная мини-карта Смоленска с пинами (line-иконка), заголовок «Точки в городе». Фон — иней (#F2EEEA), пины и акценты — краб (#B23A2E).</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Как сделать заказ и получить доставку</h3><span class="theme-tag">продающий · сервисный</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Снимает барьер «не знаю, как заказать» и напрямую ведёт к покупке — особенно для тех, кто не рядом с точкой продаж.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Способы связи: сообщения, WhatsApp, звонок по телефону</li>
+            <li>Доставка подтверждена минимум на 1 точке — зона, стоимость и минимальная сумма уточняются в брифе компании для точной формулировки</li>
+            <li>Самовывоз с любой точки сети как альтернатива</li>
+            <li>Кратко упомянуть мобильное приложение как дополнительный канал</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">морепродукты с доставкой смоленск</span>
+            <span class="chip">заказать рыбу смоленск</span>
+            <span class="chip">рыба на дом смоленск</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Позвонить или написать в WhatsApp, чтобы оформить заказ</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Три line-иконки способов связи (телефон / WhatsApp / сообщения) на графитовой подложке, заголовок «Как заказать». Акцентная кнопка-плашка цвета «краб» с CTA-текстом.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — 4 темы</h2></div>
+    <p class="section-sub">Та же последовательность тем, что и в новостях. Один слайд на тему — тезисно, только факты.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Знакомство</div>
+        <h3>Кто мы</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Сеть магазинов свежей рыбы и морепродуктов в Смоленске</li>
+          <li>Работает ежедневно</li>
+          <li>Розница + доставка</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Графитовый фон (#2A2622), крупно название сети, факт-строка внизу на плашке цвета краб. Фото продукта на льду крупным планом.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер «Написать нам»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">02 · Ассортимент</div>
+        <h3>Что у нас есть</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Широкий выбор рыбы и морепродуктов «на любой вкус»</li>
+          <li>Точный список категорий — из брифа компании</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Крупный план морепродуктов на льду, холодный свет, заголовок «Ассортимент» плашкой цвета краб в углу.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер-вопрос «Спросить про наличие»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">03 · Сеть</div>
+        <h3>Где нас найти</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Рабочий пер., 4 — 09:00–19:00</li>
+          <li>Ул. Шевченко, 78а (Фрэш-Маркет) — 09:00–20:00</li>
+          <li>Ул. Попова, 102А — 09:00–21:00</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Мини-карта Смоленска с пинами цвета краб на фоне иней, заголовок «Точки в городе».</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер геолокации ближайшей точки</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">04 · Заказ</div>
+        <h3>Как заказать</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Сообщения, WhatsApp или звонок</li>
+          <li>Доставка или самовывоз</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Три line-иконки способов связи на графитовом фоне, кнопка-плашка цвета краб с CTA-текстом.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер-опрос «Нужна доставка?»</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <p class="section-sub">История этапов ведения карточки. Пройденные этапы сворачиваются по мере накопления — сейчас в работе первый.</p>
+
+    <details class="map-history">
+      <summary>Пройденные этапы (0)</summary>
+      <div class="hist-body">Пока нет — этап 1 идёт первым.</div>
+    </details>
+
+    <div class="stage-block">
+      <div class="stage-head"><span class="badge">актуальный</span><h3>Этап 1 — знакомство</h3></div>
+      <div class="stage-cols">
+        <div>
+          <h4>Новости</h4>
+          <ul>
+            <li>Кто такие «Камчатка Рядом»</li>
+            <li>Ассортимент и подход к свежести</li>
+            <li>Где нас найти: точки сети в Смоленске</li>
+            <li>Как сделать заказ и получить доставку</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Сторис</h4>
+          <ul>
+            <li>Кто мы</li>
+            <li>Что у нас есть</li>
+            <li>Где нас найти</li>
+            <li>Как заказать</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="sources">
+    <div>Источники данных о компании:</div>
+    <ul>
+      <li><a href="https://2gis.ru/smolensk/firm/70000001032683001">2ГИС — точка на Рабочем переулке, 4</a></li>
+      <li><a href="https://2gis.ru/smolensk/firm/70000001053031245">2ГИС — точка на ул. Шевченко, 78а</a></li>
+      <li><a href="https://smolensk.spravker.ru/magaziny-ryiby/kamchatka-riadom-3.htm">Spravker — карточка сети, ул. Попова, 102А</a></li>
+      <li><a href="https://zoon.ru/smolensk/shops/network/magazin_ryb_i_moreproduktov_kamchatka_ryadom/">Zoon — сеть магазинов «Камчатка рядом»</a></li>
+    </ul>
+  </footer>
+</main>
+
+</body>
+</html>
