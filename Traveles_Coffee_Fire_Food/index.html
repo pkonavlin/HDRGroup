@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fire Food и Travelers Coffee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F8F8;
+    --surface:#FFFFFF;
+    --surface-2:#EAF3F2;
+    --nav-bg:#0E3B47;
+    --nav-bg-2:#0B2E38;
+    --ink:#16262A;
+    --ink-muted:#4E6469;
+    --accent:#1B6B78;
+    --terracotta:#C4572B;
+    --border:rgba(14,59,71,0.14);
+    --border-soft:rgba(14,59,71,0.08);
+    --chip-bg:#FFFFFF;
+    --shadow:0 1px 2px rgba(14,59,71,0.06), 0 8px 24px -12px rgba(14,59,71,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1A1F;
+      --surface:#112429;
+      --surface-2:#0F2126;
+      --nav-bg:#081D24;
+      --nav-bg-2:#06161B;
+      --ink:#E9F2F1;
+      --ink-muted:#9FB7BB;
+      --accent:#5AB2BC;
+      --terracotta:#E08657;
+      --border:rgba(255,255,255,0.12);
+      --border-soft:rgba(255,255,255,0.08);
+      --chip-bg:#0F2429;
+      --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1A1F;
+    --surface:#112429;
+    --surface-2:#0F2126;
+    --nav-bg:#081D24;
+    --nav-bg-2:#06161B;
+    --ink:#E9F2F1;
+    --ink-muted:#9FB7BB;
+    --accent:#5AB2BC;
+    --terracotta:#E08657;
+    --border:rgba(255,255,255,0.12);
+    --border-soft:rgba(255,255,255,0.08);
+    --chip-bg:#0F2429;
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:"Bricolage Grotesque","Public Sans",sans-serif;text-wrap:balance;margin:0;color:var(--ink);}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+  a{color:var(--accent);}
+  ::selection{background:var(--terracotta);color:#fff;}
+
+  /* ---- TOPBAR ---- */
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:20px;min-height:60px;padding:10px 28px;flex-wrap:wrap;background:linear-gradient(180deg,var(--nav-bg),var(--nav-bg-2));color:#EAF4F3;box-shadow:0 4px 18px -8px rgba(0,0,0,0.35);}
+  .co-switch{display:flex;gap:6px;flex:0 0 auto;}
+  .switch-btn{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:0.92rem;letter-spacing:-0.01em;padding:8px 16px;border-radius:9px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#BFDAD8;cursor:pointer;transition:background .15s ease,color .15s ease;}
+  .switch-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
+  .switch-btn.active{background:#fff;color:var(--nav-bg);border-color:#fff;}
+  .topbar-sep{width:1px;align-self:stretch;margin:6px 0;background:rgba(255,255,255,0.16);flex:0 0 auto;}
+  .nav-list{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1 1 auto;}
+  .nav-list[hidden]{display:none;}
+  .nav-list a{display:flex;align-items:baseline;gap:7px;color:#CDE6E4;text-decoration:none;font-size:0.82rem;padding:8px 12px;border-radius:8px;white-space:nowrap;transition:background .15s ease,color .15s ease;}
+  .nav-list a:hover{background:rgba(255,255,255,0.09);color:#fff;}
+  .nav-list .n{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;color:#6F9C9A;}
+
+  /* ---- MAIN ---- */
+  .main{margin:0 auto;padding:56px 64px 96px;max-width:1080px;}
+  .co-shell{display:none;}
+  .co-shell.active{display:block;}
+  .doc-head{margin-bottom:64px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--terracotta);margin-bottom:14px;display:block;}
+  .doc-head h1{font-size:clamp(2rem,3.4vw,2.7rem);font-weight:700;letter-spacing:-0.015em;max-width:20ch;}
+  .doc-head p{margin-top:16px;color:var(--ink-muted);font-size:1.02rem;max-width:62ch;}
+  .pub-chip{display:inline-flex;margin-top:18px;font-family:"IBM Plex Mono",monospace;font-size:0.76rem;padding:7px 14px;border:1px solid var(--border);border-radius:99px;color:var(--ink-muted);background:var(--surface);}
+
+  section{margin-bottom:76px;scroll-margin-top:32px;}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .section-head .idx{font-family:"IBM Plex Mono",monospace;font-size:0.8rem;color:var(--terracotta);}
+  .section-head h2{font-size:1.5rem;font-weight:700;letter-spacing:-0.01em;}
+
+  /* Компания */
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border-soft);border:1px solid var(--border-soft);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--surface);padding:20px 22px;}
+  .fact .k{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px;display:block;}
+  .fact .v{font-size:0.96rem;color:var(--ink);}
+  .fact .v small{color:var(--ink-muted);}
+  .quotes{margin-top:20px;display:flex;gap:14px;flex-wrap:wrap;}
+  .quote{flex:1 1 260px;background:var(--surface-2);border-left:3px solid var(--accent);padding:14px 18px;border-radius:2px 10px 10px 2px;font-size:0.92rem;font-style:italic;color:var(--ink);}
+
+  /* Брендбук */
+  .brand-block{background:var(--surface);border:1px solid var(--border-soft);border-radius:16px;padding:32px;box-shadow:var(--shadow);}
+  .brand-intro{color:var(--ink-muted);max-width:66ch;margin-bottom:28px;font-size:0.98rem;}
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+  .swatch{border-radius:12px;overflow:hidden;border:1px solid var(--border-soft);}
+  .swatch .chip-color{height:76px;}
+  .swatch .chip-label{padding:10px 12px;background:var(--surface);}
+  .swatch .chip-label .role{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:0.6rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--terracotta);background:var(--surface-2);border-radius:999px;padding:2px 8px;margin-bottom:6px;}
+  .swatch .chip-label .name{font-size:0.78rem;font-weight:600;}
+  .swatch .chip-label .hex{font-family:"IBM Plex Mono",monospace;font-size:0.7rem;color:var(--ink-muted);}
+  .brand-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;}
+  .brand-note h4{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;font-family:"IBM Plex Mono",monospace;color:var(--terracotta);margin-bottom:8px;}
+  .brand-note p{margin:0;font-size:0.9rem;color:var(--ink);}
+
+  /* Логика цикла */
+  .cycle-band{display:flex;align-items:stretch;gap:0;background:var(--surface);border:1px solid var(--border-soft);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);}
+  .cycle-stage{flex:1;padding:20px;position:relative;font-size:0.86rem;}
+  .cycle-stage + .cycle-stage{border-left:1px dashed var(--border);}
+  .cycle-stage.now{background:var(--surface-2);color:var(--ink);font-weight:600;}
+  .cycle-stage .tag{display:block;font-family:"IBM Plex Mono",monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;color:var(--accent);}
+
+  /* Новости / Сторис карточки */
+  .theme-cards{display:flex;flex-direction:column;gap:22px;}
+  .theme-card{background:var(--surface);border:1px solid var(--border-soft);border-radius:16px;padding:28px 30px;box-shadow:var(--shadow);}
+  .theme-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
+  .theme-top h3{font-size:1.22rem;font-weight:700;max-width:46ch;}
+  .theme-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .badge{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;letter-spacing:0.04em;padding:5px 10px;border-radius:999px;border:1px solid var(--border);color:var(--ink-muted);white-space:nowrap;}
+  .badge.cover{background:var(--nav-bg);color:#EAF4F3;border-color:var(--nav-bg);}
+  .why{color:var(--ink-muted);font-size:0.9rem;margin:12px 0 18px;max-width:70ch;}
+  .theme-card h5{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--terracotta);margin:0 0 10px;}
+  .thesis-list{margin:0 0 22px;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:0.94rem;}
+  .thesis-list li{padding-left:2px;}
+  .seo-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .seo-chip{font-family:"IBM Plex Mono",monospace;font-size:0.74rem;background:var(--chip-bg);border:1px solid var(--border);padding:6px 11px;border-radius:8px;color:var(--ink);}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .cta-line{font-size:0.9rem;padding:12px 16px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border-soft);}
+  .cta-line b{font-weight:600;}
+  .cover-brief{font-size:0.88rem;color:var(--ink-muted);line-height:1.6;}
+  .cover-brief .lbl{font-family:"IBM Plex Mono",monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--terracotta);display:block;margin-bottom:4px;}
+
+  /* Сторис специфика */
+  .story-card .slide-box{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:12px;padding:18px 20px;font-size:0.95rem;margin-bottom:18px;}
+  .story-card .slide-box .lbl{font-family:"IBM Plex Mono",monospace;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);display:block;margin-bottom:8px;}
+  .design-block{border-top:1px dashed var(--border);padding-top:18px;margin-top:4px;}
+  .design-block .lbl{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--terracotta);margin-bottom:10px;display:block;}
+  .design-panel{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:0.86rem;color:var(--ink);}
+  .dot-row{display:flex;gap:6px;margin-top:10px;}
+  .dot{width:14px;height:14px;border-radius:4px;border:1px solid var(--border-soft);}
+
+  /* Источники */
+  .sources{display:flex;flex-direction:column;gap:10px;}
+  .sources a{font-size:0.92rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+  .sources a::before{content:"→";color:var(--terracotta);}
+
+  /* Карта тем */
+  .timeline{display:flex;flex-direction:column;gap:0;}
+  .tl-stage{display:grid;grid-template-columns:28px 1fr;gap:0 22px;}
+  .tl-dot-col{display:flex;flex-direction:column;align-items:center;}
+  .tl-dot{width:12px;height:12px;border-radius:50%;background:var(--border);margin-top:6px;flex:0 0 auto;}
+  .tl-stage.current .tl-dot{background:var(--terracotta);}
+  .tl-body{padding-bottom:8px;}
+  .tl-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .tl-head h4{font-size:1rem;font-weight:700;}
+  .tl-current-badge{font-family:"IBM Plex Mono",monospace;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.05em;color:#fff;background:var(--terracotta);padding:3px 9px;border-radius:999px;}
+  .tl-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .tl-cols h5{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-muted);margin-bottom:8px;}
+  .tl-cols ul{margin:0;padding-left:18px;font-size:0.88rem;display:flex;flex-direction:column;gap:6px;}
+
+  @media (max-width:860px){
+    .topbar{padding:10px 16px;}
+    .main{padding:36px 20px 64px;}
+    .row-2,.tl-cols{grid-template-columns:1fr;}
+    .cycle-band{flex-direction:column;}
+    .cycle-stage + .cycle-stage{border-left:none;border-top:1px dashed var(--border);}
+    .swatches{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="co-switch">
+    <button class="switch-btn active" data-co="ff" onclick="switchCo('ff')">Fire Food</button>
+    <button class="switch-btn" data-co="tc" onclick="switchCo('tc')">Travelers Coffee</button>
+  </div>
+  <div class="topbar-sep"></div>
+  <ul class="nav-list" data-co="ff">
+    <li><a href="#ff-company"><span class="n">01</span>Компания</a></li>
+    <li><a href="#ff-brand"><span class="n">02</span>Мини-брендбук</a></li>
+    <li><a href="#ff-cycle"><span class="n">03</span>Логика цикла</a></li>
+    <li><a href="#ff-news"><span class="n">04</span>Новости</a></li>
+    <li><a href="#ff-stories"><span class="n">05</span>Сторис</a></li>
+    <li><a href="#ff-sources"><span class="n">·</span>Источники</a></li>
+    <li><a href="#ff-map"><span class="n">06</span>Карта тем</a></li>
+  </ul>
+  <ul class="nav-list" data-co="tc" hidden>
+    <li><a href="#tc-company"><span class="n">01</span>Компания</a></li>
+    <li><a href="#tc-brand"><span class="n">02</span>Мини-брендбук</a></li>
+    <li><a href="#tc-cycle"><span class="n">03</span>Логика цикла</a></li>
+    <li><a href="#tc-news"><span class="n">04</span>Новости</a></li>
+    <li><a href="#tc-stories"><span class="n">05</span>Сторис</a></li>
+    <li><a href="#tc-sources"><span class="n">·</span>Источники</a></li>
+    <li><a href="#tc-map"><span class="n">06</span>Карта тем</a></li>
+  </ul>
+</div>
+
+<div class="main">
+
+<!-- ============ FIRE FOOD ============ -->
+<div class="co-shell active" data-co="ff">
+
+  <div class="doc-head">
+    <span class="eyebrow">ТЗ на контент · Этап 1</span>
+    <h1>Fire Food</h1>
+    <p>Новости и сторис для карточки компании на Яндекс Картах: 4 темы для новостей с ТЗ на обложку и 4 темы для сторис (один слайд на тему).</p>
+    <span class="pub-chip">Публикация — карточка компании на Яндекс Картах</span>
+  </div>
+
+  <section id="ff-company">
+    <div class="section-head"><span class="idx">01</span><h2>Компания</h2></div>
+    <div class="facts-grid">
+      <div class="fact"><span class="k">Формат</span><div class="v">Сеть заведений быстрого питания — шаурма, донер, стрит-фуд</div></div>
+      <div class="fact"><span class="k">География</span><div class="v">12+ точек в Красноярске + точка в Железногорске (пр. Ленинградский, 1Б, ТЦ «Сибирский городок»)</div></div>
+      <div class="fact"><span class="k">Пример точки</span><div class="v">ул. Толстого, 49/1 <small>— круглосуточно</small></div></div>
+      <div class="fact"><span class="k">Режим работы</span><div class="v">Большинство точек — 24/7 <br><small>отдельные — 10:00–22:00</small></div></div>
+      <div class="fact"><span class="k">Рейтинг</span><div class="v">4,0 из 5 <small>· 137 отзывов, Яндекс Карты</small></div></div>
+      <div class="fact"><span class="k">Средний чек</span><div class="v">до 1000 ₽</div></div>
+      <div class="fact"><span class="k">Меню</span><div class="v">Шаурма, донер, хот-доги, картофель фри, наггетсы</div></div>
+      <div class="fact"><span class="k">Контакты</span><div class="v">+7 913 583-25-00 <br><small>Telegram @Fire_foodkrsk</small></div></div>
+    </div>
+    <div class="quotes">
+      <div class="quote">«Мясо сочное, хорошо прожаренное, без жира и хрящей. Овощи свежие, соус просто пушка»</div>
+    </div>
+  </section>
+
+  <section id="ff-brand">
+    <div class="section-head"><span class="idx">02</span><h2>Мини-брендбук</h2></div>
+    <div class="brand-block">
+      <p class="brand-intro">После анализа ресурсов компании определены фирменные цвета, типографика и фотостиль бренда — их придерживаемся при подготовке макетов для новостей и сторис.</p>
+      <div class="swatches">
+        <div class="swatch"><div class="chip-color" style="background:#E1481C"></div><div class="chip-label"><span class="role">Акцентный</span><div class="name">Огненный оранжевый</div><div class="hex">#E1481C</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#F2A63D"></div><div class="chip-label"><span class="role">Второстепенный</span><div class="name">Янтарный</div><div class="hex">#F2A63D</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#221D1A"></div><div class="chip-label"><span class="role">Фоновый</span><div class="name">Уголь</div><div class="hex">#221D1A</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#FAF7F2;border-bottom:1px solid var(--border-soft)"></div><div class="chip-label"><span class="role">Текстовый</span><div class="name">Кремовый</div><div class="hex">#FAF7F2</div></div></div>
+      </div>
+      <div class="brand-notes">
+        <div class="brand-note"><h4>Типографика</h4><p>Жирный конденсированный гротеск в заголовках, простой гротеск в тексте.</p></div>
+        <div class="brand-note"><h4>Фотостиль</h4><p>Крупный план продукта в разрезе, тёплый контрастный свет, стрит-фуд эстетика.</p></div>
+        <div class="brand-note"><h4>Графика</h4><p>Эмодзи 🔥🌯🥙 как фирменный элемент соцсетей бренда, минимум декоративных рамок.</p></div>
+        <div class="brand-note"><h4>Тон коммуникации</h4><p>Дружелюбный, дерзкий, драйвовый — короткие энергичные фразы, обращение на «ты».</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ff-cycle">
+    <div class="section-head"><span class="idx">03</span><h2>Логика цикла</h2></div>
+    <div class="cycle-band">
+      <div class="cycle-stage now"><span class="tag">01</span>Знакомство</div>
+      <div class="cycle-stage now"><span class="tag">02</span>Ассортимент</div>
+      <div class="cycle-stage now"><span class="tag">03</span>Доверие и качество</div>
+      <div class="cycle-stage now"><span class="tag">04</span>Формат</div>
+    </div>
+  </section>
+
+  <section id="ff-news">
+    <div class="section-head"><span class="idx">04</span><h2>Новости</h2></div>
+    <div class="theme-cards">
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Fire Food в Красноярске: сеть, которая работает для тебя круглосуточно</h3>
+          <div class="theme-meta"><span class="badge">имиджевая</span><span class="badge cover">Обложка: «Fire Food 24/7»</span></div>
+        </div>
+        <p class="why">Формирует единый образ сети из 12+ точек города — гость узнаёт бренд в любом районе и запоминает главное преимущество: доступность в любое время суток.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Fire Food — сеть фастфуда с 12+ точками в Красноярске и точкой в Железногорске</li>
+          <li>Большинство точек работают круглосуточно, часть — до 22:00</li>
+          <li>Формат уличной еды: быстро, доступно, рядом с домом или работой</li>
+          <li>Пример точки — ул. Толстого, 49/1, открыта 24/7</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">шаурма Красноярск</span>
+          <span class="seo-chip">донер Красноярск</span>
+          <span class="seo-chip">фастфуд круглосуточно Красноярск</span>
+          <span class="seo-chip">сеть Fire Food Красноярск</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Подписаться на паблик Fire Food, чтобы не пропускать новинки</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Тёмный уголь-фон #221D1A, крупный кадр шаурмы/донера в разрезе на переднем плане; тезис «Fire Food 24/7» — белый жирный конденсированный гротеск; акцентная плашка огненным оранжевым #E1481C под текстом.</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Меню Fire Food: шаурма, донер и уличная кухня для тех, кто спешит</h3>
+          <div class="theme-meta"><span class="badge">ассортиментная</span><span class="badge cover">Обложка: «На любой вкус»</span></div>
+        </div>
+        <p class="why">Знакомит с ассортиментом в целом — прежде чем говорить о конкретных блюдах и точках, гость должен понимать, что вообще есть в меню Fire Food.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>В меню — шаурма, донер, хот-доги, картофель фри и наггетсы</li>
+          <li>Формат уличной еды: готовится быстро, подходит и для перекуса, и для полноценного приёма пищи</li>
+          <li>Есть выбор для разных вкусов и поводов — от классики до сытного комбо</li>
+          <li>Меню одинаково доступно на всех точках сети</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">меню Fire Food</span>
+          <span class="seo-chip">шаурма и донер Красноярск</span>
+          <span class="seo-chip">уличная еда Красноярск</span>
+          <span class="seo-chip">фастфуд меню</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Посмотреть меню и выбрать то, что по вкусу</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Угольный фон #221D1A, композиция из нескольких блюд сети (шаурма, донер, фри) сверху; тезис «На любой вкус» — белый гротеск; акцентная плашка янтарным #F2A63D.</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Почему гости выбирают Fire Food</h3>
+          <div class="theme-meta"><span class="badge">имиджевая · доверие</span><span class="badge cover">Обложка: «Любят гости»</span></div>
+        </div>
+        <p class="why">Формирует доверие ещё до первого визита — опирается на общее впечатление гостей о вкусе и сервисе, без привязки к конкретной точке или акции.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Гости отмечают вкус, свежесть и качество приготовления</li>
+          <li>Быстрое и вежливое обслуживание — то, за что ценят сеть</li>
+          <li>Рейтинг 4,0 на Яндекс Картах держится на стабильном качестве</li>
+          <li>«Мясо сочное, хорошо прожаренное... соус просто пушка» — из отзывов гостей</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">отзывы Fire Food Красноярск</span>
+          <span class="seo-chip">лучший фастфуд Красноярск</span>
+          <span class="seo-chip">вкусная шаурма отзывы</span>
+          <span class="seo-chip">рейтинг Fire Food</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Прочитать отзывы гостей и убедиться самому</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Угольный фон #221D1A, крупная цитата гостя или значок рейтинга; тезис «Любят гости» — белый гротеск; акцентная плашка огненным оранжевым #E1481C.</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Формат Fire Food: быстро, просто и рядом</h3>
+          <div class="theme-meta"><span class="badge">сервисная</span><span class="badge cover">Обложка: «Всегда рядом»</span></div>
+        </div>
+        <p class="why">Объясняет, каково это — быть гостем Fire Food: формат работы и удобство, без привязки к конкретному адресу или графику акций.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Заказ занимает минимум времени — идеально для перекуса на бегу</li>
+          <li>Точки есть практически в любой части города</li>
+          <li>Подходит и чтобы перекусить на месте, и чтобы взять с собой</li>
+          <li>Работает для всех — студентов, курьеров, тех, кто допоздна на ногах</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">перекус на бегу Красноярск</span>
+          <span class="seo-chip">фастфуд рядом</span>
+          <span class="seo-chip">шаурма с собой</span>
+          <span class="seo-chip">быстрое питание Красноярск</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Заглянуть в ближайший Fire Food</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Угольный фон #221D1A, силуэт еды на вынос в движении; тезис «Всегда рядом» — белый гротеск; акцентная плашка янтарным #F2A63D.</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="ff-stories">
+    <div class="section-head"><span class="idx">05</span><h2>Сторис</h2></div>
+    <div class="theme-cards">
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Кто мы</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Сеть фастфуда в Красноярске — 12+ точек по городу. Работаем для тех, кто спешит.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Угольный фон #221D1A, кадр логотипа/акцент огня; текст кремовым #FAF7F2, плашка оранжевым #E1481C под ключевой фразой.
+            <div class="dot-row"><span class="dot" style="background:#221D1A"></span><span class="dot" style="background:#E1481C"></span><span class="dot" style="background:#FAF7F2"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Меню</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>В меню — шаурма, донер, хот-доги, картофель фри и наггетсы. Есть выбор на любой вкус.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Крупный кадр нескольких блюд сети фоном, угольный фон #221D1A, акцентная плашка янтарным #F2A63D под текстом.
+            <div class="dot-row"><span class="dot" style="background:#221D1A"></span><span class="dot" style="background:#F2A63D"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Почему выбирают нас</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Гости отмечают вкус, свежесть и быстрое обслуживание. Рейтинг 4,0 на Яндекс Картах.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Угольный фон #221D1A, крупная цитата гостя или значок рейтинга по центру, акцент огненным оранжевым #E1481C.
+            <div class="dot-row"><span class="dot" style="background:#221D1A"></span><span class="dot" style="background:#E1481C"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Формат</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Быстро, просто и рядом — для тех, кто спешит. Точки есть в разных районах города.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Силуэт еды на вынос в движении, угольный фон #221D1A, акцентная плашка янтарным #F2A63D.
+            <div class="dot-row"><span class="dot" style="background:#221D1A"></span><span class="dot" style="background:#F2A63D"></span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="ff-sources">
+    <div class="section-head"><span class="idx">·</span><h2>Источники</h2></div>
+    <div class="sources">
+      <a href="https://yandex.ru/maps/-/CTTGIF6C" target="_blank" rel="noopener">Карточка компании на Яндекс Картах</a>
+      <a href="https://www.afisha.ru/krasnoyarsk/restaurant/fire-food-469923/" target="_blank" rel="noopener">Афиша Рестораны — Fire Food, ул. Толстого</a>
+      <a href="https://firefood24.orgs.biz/" target="_blank" rel="noopener">Профиль сети Fire Food (адреса, меню)</a>
+    </div>
+  </section>
+
+  <section id="ff-map">
+    <div class="section-head"><span class="idx">06</span><h2>Карта тем</h2></div>
+    <div class="timeline">
+      <div class="tl-stage current">
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-head"><h4>Этап 1</h4><span class="tl-current-badge">Актуальный</span></div>
+          <div class="tl-cols">
+            <div><h5>Новости</h5><ul>
+              <li>Fire Food в Красноярске: сеть, которая работает круглосуточно</li>
+              <li>Меню Fire Food: шаурма, донер и уличная кухня</li>
+              <li>Почему гости выбирают Fire Food</li>
+              <li>Формат Fire Food: быстро, просто и рядом</li>
+            </ul></div>
+            <div><h5>Сторис</h5><ul>
+              <li>Кто мы</li>
+              <li>Меню</li>
+              <li>Почему выбирают нас</li>
+              <li>Формат</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ TRAVELERS COFFEE ============ -->
+<div class="co-shell" data-co="tc">
+
+  <div class="doc-head">
+    <span class="eyebrow">ТЗ на контент · Этап 1</span>
+    <h1>Travelers Coffee</h1>
+    <p>Новости и сторис для карточки компании на Яндекс Картах: 4 темы для новостей с ТЗ на обложку и 4 темы для сторис (один слайд на тему).</p>
+    <span class="pub-chip">Публикация — карточка компании на Яндекс Картах</span>
+  </div>
+
+  <section id="tc-company">
+    <div class="section-head"><span class="idx">01</span><h2>Компания</h2></div>
+    <div class="facts-grid">
+      <div class="fact"><span class="k">Позиционирование</span><div class="v">Specialty coffee — «путешествие по вкусам мира»</div></div>
+      <div class="fact"><span class="k">Основание</span><div class="v">1997, Новосибирск <small>— Кристофер и Светлана Тара-Браун</small></div></div>
+      <div class="fact"><span class="k">Обжарка</span><div class="v">своя фабрика в Кольцово с 2001 года <small>— ≈600 кг за смену</small></div></div>
+      <div class="fact"><span class="k">Признание</span><div class="v">Арсений Кузнецов — чемпион мира по обжарке кофе, 2019</div></div>
+      <div class="fact"><span class="k">География сети</span><div class="v">101 точка в 45 городах (2019) <small>— включая Азербайджан, Казахстан, Киргизию, Германию</small></div></div>
+      <div class="fact"><span class="k">В Красноярске</span><div class="v">5 точек, включая drive-thru <small>ежедневно 08:00–24:00</small></div></div>
+      <div class="fact"><span class="k">Рейтинг</span><div class="v">4,9 из 5 <small>· 1476 оценок, 533 отзыва — Яндекс Карты</small></div></div>
+      <div class="fact"><span class="k">Капучино</span><div class="v">120–215 ₽</div></div>
+      <div class="fact"><span class="k">Услуги</span><div class="v">Доставка, кофе с собой, Wi-Fi, летняя терраса, оплата картой/QR, завтраки и бизнес-ланчи</div></div>
+      <div class="fact"><span class="k">Ещё у бренда</span><div class="v">Программа лояльности, кофе для дома, франшиза, корпоративные поставки</div></div>
+      <div class="fact"><span class="k">Контакты</span><div class="v">+7 800 600-46-54</div></div>
+    </div>
+  </section>
+
+  <section id="tc-brand">
+    <div class="section-head"><span class="idx">02</span><h2>Мини-брендбук</h2></div>
+    <div class="brand-block">
+      <p class="brand-intro">После анализа ресурсов компании определены фирменные цвета, типографика и фотостиль бренда — их придерживаемся при подготовке макетов для новостей и сторис.</p>
+      <div class="swatches">
+        <div class="swatch"><div class="chip-color" style="background:#3B2A22"></div><div class="chip-label"><span class="role">Основной</span><div class="name">Кофейный тёмный</div><div class="hex">#3B2A22</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#B36A34"></div><div class="chip-label"><span class="role">Акцентный</span><div class="name">Карамель</div><div class="hex">#B36A34</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#F3EAE0;border-bottom:1px solid var(--border-soft)"></div><div class="chip-label"><span class="role">Фоновый</span><div class="name">Молочная пена</div><div class="hex">#F3EAE0</div></div></div>
+        <div class="swatch"><div class="chip-color" style="background:#5E4632"></div><div class="chip-label"><span class="role">Второстепенный</span><div class="name">Обжарка</div><div class="hex">#5E4632</div></div></div>
+      </div>
+      <div class="brand-notes">
+        <div class="brand-note"><h4>Типографика</h4><p>Элегантный серифный акцент в заголовках, чистый гротеск в тексте.</p></div>
+        <div class="brand-note"><h4>Фотостиль</h4><p>Чашка и латте-арт крупным планом, процесс обжарки зёрен, интерьер с деревом и тёплым светом.</p></div>
+        <div class="brand-note"><h4>Графика</h4><p>Мотив путешествий как метафора бренда — карта, дорога, «в пути», без штампов вроде глобуса.</p></div>
+        <div class="brand-note"><h4>Тон коммуникации</h4><p>Тёплый, гостеприимный, экспертный, с лёгким международным колоритом.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tc-cycle">
+    <div class="section-head"><span class="idx">03</span><h2>Логика цикла</h2></div>
+    <div class="cycle-band">
+      <div class="cycle-stage now"><span class="tag">01</span>История и имидж</div>
+      <div class="cycle-stage now"><span class="tag">02</span>Продукт (обжарка)</div>
+      <div class="cycle-stage now"><span class="tag">03</span>Ассортимент</div>
+      <div class="cycle-stage now"><span class="tag">04</span>Формат</div>
+    </div>
+  </section>
+
+  <section id="tc-news">
+    <div class="section-head"><span class="idx">04</span><h2>Новости</h2></div>
+    <div class="theme-cards">
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Travelers Coffee: кофейня с историей с 1997 года</h3>
+          <div class="theme-meta"><span class="badge">имиджевая</span><span class="badge cover">Обложка: «С 1997 года»</span></div>
+        </div>
+        <p class="why">Устанавливает статус specialty-бренда с первых строк — почти 30 лет на рынке отличают Travelers Coffee от типовых кофеен «на бегу» и объясняют, почему сеть выросла до 101 точки в 45 городах.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Бренд основан в Новосибирске в 1997 году Кристофером и Светланой Тара-Браун</li>
+          <li>Философия сети — «путешествие по вкусам мира»</li>
+          <li>Сеть выросла до 101 точки в 45 городах, включая Азербайджан, Казахстан, Киргизию, Германию</li>
+          <li>Теперь Travelers Coffee — и в Красноярске</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">кофейня с историей Красноярск</span>
+          <span class="seo-chip">Travelers Coffee история бренда</span>
+          <span class="seo-chip">специалти кофе Красноярск</span>
+          <span class="seo-chip">кофейня с 1997 года</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Заглянуть в ближайшую кофейню сети</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Тёплый кофейно-карамельный фон #3B2A22, серифная типографика с историческим акцентом, чашка кофе крупным планом; тезис «С 1997 года» карамельным #B36A34.</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Кто обжаривает наш кофе: собственное производство Travelers Coffee</h3>
+          <div class="theme-meta"><span class="badge">экспертная</span><span class="badge cover">Обложка: «Обжариваем сами»</span></div>
+        </div>
+        <p class="why">Доказывает статус specialty coffee конкретным фактом, а не только словом — своя обжарка и мировой чемпион в команде дают повод доверять качеству зерна.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Собственная обжарочная фабрика в Кольцово (Новосибирская область) с 2001 года</li>
+          <li>Обжарщик компании Арсений Кузнецов — чемпион мира по обжарке кофе 2019 года</li>
+          <li>Мощность производства — около 600 кг кофе за смену</li>
+          <li>Это стоит за каждой чашкой, поданной в Красноярске</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">свежеобжаренный кофе Красноярск</span>
+          <span class="seo-chip">специалти кофе обжарка</span>
+          <span class="seo-chip">лучший кофе в городе</span>
+          <span class="seo-chip">кто обжаривает кофе Travelers</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Попробовать свежеобжаренный кофе сети</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Зёрна кофе или процесс обжарки крупным планом на кремовом фоне #F3EAE0, минималистичный текстовый блок карамельным #B36A34; тезис «Обжариваем сами».</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Что готовят в Travelers Coffee: кофе и не только</h3>
+          <div class="theme-meta"><span class="badge">ассортиментная</span><span class="badge cover">Обложка: «Не только кофе»</span></div>
+        </div>
+        <p class="why">Расширяет образ бренда с «кофейни» до полноценного места — важно показать общий ассортимент, прежде чем переходить к конкретным позициям и ценам.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>В основе — специалти кофе на зерне собственной обжарки</li>
+          <li>В меню также завтраки, бизнес-ланчи и десерты</li>
+          <li>Найдётся повод зайти в любое время дня — от утреннего кофе до обеда</li>
+          <li>Подход к качеству одинаков и для напитков, и для еды</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">меню Travelers Coffee</span>
+          <span class="seo-chip">завтраки в кофейне Красноярск</span>
+          <span class="seo-chip">бизнес-ланч кофейня</span>
+          <span class="seo-chip">кофе и еда Красноярск</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Заглянуть на завтрак или обед в ближайшую кофейню</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Кремовый фон #F3EAE0, композиция из чашки кофе и тарелки с едой; тезис «Не только кофе» карамельным #B36A34.</div>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-top">
+          <h3>Формат Travelers Coffee: как тебе удобно</h3>
+          <div class="theme-meta"><span class="badge">сервисная</span><span class="badge cover">Обложка: «Как тебе удобно»</span></div>
+        </div>
+        <p class="why">Показывает гибкость формата — важная общая характеристика бренда, отдельная от конкретных адресов и графика акций.</p>
+        <h5>Тезисы для копирайтера</h5>
+        <ul class="thesis-list">
+          <li>Можно остаться за столиком с Wi-Fi или на летней террасе</li>
+          <li>Можно взять кофе с собой и идти дальше по своим делам</li>
+          <li>Есть формат drive-thru — кофе без необходимости выходить из машины</li>
+          <li>Формат подстраивается под гостя, а не наоборот</li>
+        </ul>
+        <h5>SEO-ключи</h5>
+        <div class="seo-chips">
+          <span class="seo-chip">кофе с собой Красноярск</span>
+          <span class="seo-chip">кофейня с Wi-Fi Красноярск</span>
+          <span class="seo-chip">кофейня с террасой</span>
+          <span class="seo-chip">drive thru кофейня</span>
+        </div>
+        <div class="row-2">
+          <div class="cta-line"><b>CTA:</b> Выбрать удобный формат — за столиком, с собой или через drive-thru</div>
+          <div class="cover-brief"><span class="lbl">ТЗ на обложку</span>Кремовый фон #F3EAE0, коллаж из чашки на вынос и интерьера кофейни; тезис «Как тебе удобно» карамельным #B36A34.</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="tc-stories">
+    <div class="section-head"><span class="idx">05</span><h2>Сторис</h2></div>
+    <div class="theme-cards">
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Кто мы</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Кофейня с историей с 1997 года, философия «путешествие по вкусам мира» — теперь и в Красноярске.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Кремовый фон #F3EAE0, серифный акцент карамельным #B36A34, кадр интерьера или чашки кофе.
+            <div class="dot-row"><span class="dot" style="background:#F3EAE0"></span><span class="dot" style="background:#B36A34"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Наш кофе</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Обжариваем сами с 2001 года, обжарщик — чемпион мира 2019. ≈600 кг зерна за смену.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Кадр зёрен или процесса обжарки, кофейно-тёмный текст #3B2A22 на кремовом фоне #F3EAE0.
+            <div class="dot-row"><span class="dot" style="background:#3B2A22"></span><span class="dot" style="background:#F3EAE0"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Что у нас есть</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>Специалти кофе собственной обжарки, завтраки, бизнес-ланчи и десерты.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Композиция из чашки кофе и тарелки с едой на кремовом фоне #F3EAE0, акцент карамельным #B36A34.
+            <div class="dot-row"><span class="dot" style="background:#F3EAE0"></span><span class="dot" style="background:#B36A34"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme-card story-card">
+        <div class="theme-top"><h3>Формат</h3></div>
+        <div class="slide-box"><span class="lbl">Слайд</span>За столиком, с собой или через drive-thru — как тебе удобно.</div>
+        <div class="design-block">
+          <span class="lbl">Дизайн слайда</span>
+          <div class="design-panel">
+            Коллаж чашки на вынос и интерьера кофейни на кремовом фоне #F3EAE0, акцент карамельным #B36A34.
+            <div class="dot-row"><span class="dot" style="background:#F3EAE0"></span><span class="dot" style="background:#B36A34"></span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="tc-sources">
+    <div class="section-head"><span class="idx">·</span><h2>Источники</h2></div>
+    <div class="sources">
+      <a href="https://travelers-coffee.com/russian_cities/krasnoyarsk" target="_blank" rel="noopener">Официальный сайт — филиалы в Красноярске</a>
+      <a href="https://yandex.ru/maps/-/CTTGMY8s" target="_blank" rel="noopener">Карточка компании на Яндекс Картах</a>
+      <a href="https://en.wikipedia.org/wiki/Traveler%27s_Coffee" target="_blank" rel="noopener">История бренда — Wikipedia</a>
+    </div>
+  </section>
+
+  <section id="tc-map">
+    <div class="section-head"><span class="idx">06</span><h2>Карта тем</h2></div>
+    <div class="timeline">
+      <div class="tl-stage current">
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-head"><h4>Этап 1</h4><span class="tl-current-badge">Актуальный</span></div>
+          <div class="tl-cols">
+            <div><h5>Новости</h5><ul>
+              <li>Travelers Coffee: кофейня с историей с 1997 года</li>
+              <li>Кто обжаривает наш кофе</li>
+              <li>Что готовят в Travelers Coffee: кофе и не только</li>
+              <li>Формат Travelers Coffee: как тебе удобно</li>
+            </ul></div>
+            <div><h5>Сторис</h5><ul>
+              <li>Кто мы</li>
+              <li>Наш кофе</li>
+              <li>Что у нас есть</li>
+              <li>Формат</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</div>
+
+<script>
+  function switchCo(co){
+    document.querySelectorAll('.switch-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.co === co); });
+    document.querySelectorAll('.nav-list').forEach(function(n){ n.hidden = (n.dataset.co !== co); });
+    document.querySelectorAll('.co-shell').forEach(function(s){ s.classList.toggle('active', s.dataset.co === co); });
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+</script>
+</body>
+</html>
