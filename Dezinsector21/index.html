@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дезинсектор 21 — ТЗ на контент</title>
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --ink:#132329; --ink-soft:#4C6068; --line:#D8E2E1; --line-soft:#E7EEED;
+    --card:#FFFFFF; --card-alt:#EEF4F3; --bg:#F5F8F8;
+    --ok:#2F7D5A; --warn:#B4762B;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+    --body:'Public Sans',-apple-system,'Segoe UI',sans-serif;
+    --display:'Bricolage Grotesque',var(--body);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#BFE3E9; --teal:#7FC3CC; --ice:#0B1B20; --roe:#E38257;
+      --ink:#EAF3F2; --ink-soft:#A9BEC1; --line:#22383E; --line-soft:#1B2E33;
+      --card:#102227; --card-alt:#0D1D22; --bg:#0B1B20;
+      --ok:#5FBF8F; --warn:#E0A857;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#BFE3E9; --teal:#7FC3CC; --ice:#0B1B20; --roe:#E38257;
+    --ink:#EAF3F2; --ink-soft:#A9BEC1; --line:#22383E; --line-soft:#1B2E33;
+    --card:#102227; --card-alt:#0D1D22; --bg:#0B1B20;
+    --ok:#5FBF8F; --warn:#E0A857;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0;color:var(--ink);}
+  p{margin:0;}
+  a{color:var(--teal);}
+  ::selection{background:var(--roe);color:#fff;}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;padding:14px 28px;background:color-mix(in srgb, var(--ice) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.01em;white-space:nowrap;}
+  .brand span{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;}
+  .nav-links{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;}
+  .nav-links a{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);
+    text-decoration:none;padding:7px 11px;border-radius:7px;transition:background .15s,color .15s;}
+  .nav-links a:hover,.nav-links a:focus-visible{background:var(--card-alt);color:var(--ink);outline:none;}
+
+  main{max-width:1040px;margin:0 auto;padding:0 28px;}
+  section{padding:64px 0;border-bottom:1px solid var(--line-soft);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--roe);margin-bottom:10px;display:block;}
+  .lede{color:var(--ink-soft);font-size:16px;max-width:62ch;margin-top:14px;}
+
+  /* HERO */
+  .hero{padding:56px 0 48px;border-bottom:1px solid var(--line-soft);}
+  .hero h1{font-size:clamp(30px,4.4vw,44px);letter-spacing:-.01em;max-width:16ch;}
+  .hero .tag{font-family:var(--mono);font-size:13px;color:var(--teal);margin-top:16px;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--card);}
+  .pill b{color:var(--ink);font-weight:600;}
+
+  /* FACT GRID */
+  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:32px;}
+  .fact{background:var(--card);padding:20px;}
+  .fact .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);}
+  .fact .v{margin-top:8px;font-size:15px;font-weight:600;line-height:1.4;}
+  .fact .v.small{font-size:13px;font-weight:400;color:var(--ink-soft);}
+
+  .note{margin-top:18px;padding:14px 16px;border:1px dashed var(--line);border-radius:10px;
+    background:var(--card-alt);font-size:13px;color:var(--ink-soft);}
+  .note b{color:var(--ink);}
+
+  /* BRANDBOOK */
+  .brand-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:28px;}
+  .swatch{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:64px;position:relative;}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);}
+  .swatch .name{font-weight:700;margin-top:3px;font-size:14px;}
+  .swatch .status{font-family:var(--mono);font-size:10.5px;margin-top:6px;color:var(--warn);}
+  .bb-block{margin-top:30px;}
+  .bb-block h4{font-size:14px;margin-bottom:10px;}
+  .bb-block ul{margin:0;padding-left:0;list-style:none;display:grid;gap:9px;}
+  .bb-block li{font-size:14.5px;padding-left:18px;position:relative;color:var(--ink);}
+  .bb-block li::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:1px;background:var(--roe);}
+
+  /* CYCLE */
+  .cycle{display:flex;flex-wrap:wrap;gap:0;margin-top:32px;counter-reset:step;}
+  .step{flex:1 1 200px;position:relative;padding:20px 22px 20px 0;}
+  .step:not(:last-child)::after{content:'→';position:absolute;right:-2px;top:20px;color:var(--line);font-size:18px;}
+  .step .num{font-family:var(--mono);font-size:11px;color:var(--roe);}
+  .step h4{margin-top:8px;font-size:15px;}
+  .step p{margin-top:6px;font-size:13px;color:var(--ink-soft);}
+
+  /* NEWS CARDS */
+  .news-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:32px;}
+  .news-card{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;}
+  .news-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px 18px;
+    border-bottom:1px solid var(--line-soft);}
+  .news-head .idx{font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
+  .news-head h3{font-size:19px;margin-top:6px;max-width:46ch;}
+  .angle-tag{flex:none;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--teal);border:1px solid var(--teal);border-radius:999px;padding:5px 10px;white-space:nowrap;}
+  .news-body{padding:20px 24px 24px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;}
+  @media (max-width:680px){.news-body{grid-template-columns:1fr;}}
+  .news-body h5{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;}
+  .thesis{margin:0;padding-left:0;list-style:none;display:grid;gap:7px;}
+  .thesis li{font-size:14px;padding-left:16px;position:relative;}
+  .thesis li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--roe);}
+  .seo-box{background:var(--card-alt);border-radius:10px;padding:14px 16px;}
+  .kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .kw span{font-family:var(--mono);font-size:11px;background:var(--card);border:1px solid var(--line);
+    padding:3px 9px;border-radius:6px;color:var(--ink);}
+  .meta-line{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
+  .cta-line{margin-top:12px;font-size:13px;}
+  .cta-line b{font-family:var(--mono);color:var(--roe);font-weight:600;}
+  .cover-box{margin-top:24px;padding:16px 18px;border:1px dashed var(--teal);border-radius:10px;background:color-mix(in srgb, var(--teal) 6%, transparent);}
+  .cover-box h5{color:var(--teal);}
+  .cover-box .headline{font-family:var(--display);font-weight:700;font-size:16px;margin-top:4px;}
+  .cover-box p{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  /* STORIES */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:18px;margin-top:32px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;display:flex;}
+  .story-screen{flex:1;padding:18px;}
+  .story-screen + .story-screen{border-left:1px solid var(--line-soft);}
+  .story-screen .tag2{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);}
+  .story-screen h4{font-size:14px;margin-top:8px;}
+  .story-cover{background:linear-gradient(155deg,#13181C 0%,#3B2B10 62%,#8A6A24 100%);color:#fff;}
+  .story-cover .tag2{color:rgba(255,255,255,.72);}
+  .story-cover .cover-text{font-family:var(--display);font-weight:800;font-size:20px;margin-top:10px;line-height:1.15;}
+  .story-cover p{color:rgba(255,255,255,.85);font-size:12px;margin-top:8px;}
+  .story-screen ul{margin:10px 0 0;padding-left:0;list-style:none;display:grid;gap:6px;}
+  .story-screen li{font-size:12.5px;padding-left:14px;position:relative;color:var(--ink);}
+  .story-screen li::before{content:'';position:absolute;left:0;top:6px;width:4px;height:4px;border-radius:50%;background:var(--roe);}
+  .story-card-title{padding:14px 18px 0;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
+
+  /* MAP TABLE */
+  table{width:100%;border-collapse:collapse;margin-top:28px;font-size:13.5px;}
+  th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);}
+  td{padding:11px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .fmt{font-family:var(--mono);font-size:11px;color:var(--teal);}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;}
+  .tbl-wrap table{margin-top:0;}
+  .tbl-wrap th:first-child,.tbl-wrap td:first-child{padding-left:16px;}
+
+  footer{padding:36px 28px 60px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand">ДЕЗИНСЕКТОР 21 <span>ТЗ · ЭТАП 1</span></div>
+  <div class="nav-links">
+    <a href="#overview">Обзор</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </div>
+</nav>
+
+<main>
+
+  <section class="hero" id="overview">
+    <span class="eyebrow">Дезинфекция · Дезинсекция · Дератизация</span>
+    <h1>ТЗ на контент: новости и сторис для «Дезинсектор 21»</h1>
+    <p class="tag">Этап 1 — знакомство. Чебоксары, Чувашская Республика + Республика Марий Эл</p>
+    <p class="lede">4 темы для новостей (тезисы, SEO-блок, ТЗ на обложку) + 4 темы для сторис (обложка + 1 слайд, максимум 2 экрана). Публикация — карточка компании на 2ГИС и в соцсетях.</p>
+
+    <div class="hero-meta">
+      <span class="pill">Рынок: <b>Чебоксары</b> + Марий Эл</span>
+      <span class="pill">На рынке с <b>2010 года</b></span>
+      <span class="pill">Рейтинг 2ГИС: <b>4,7 / 5</b> (26 оценок)</span>
+      <span class="pill">Режим: <b>круглосуточно</b></span>
+    </div>
+
+    <div class="fact-grid">
+      <div class="fact"><div class="k">Услуги</div><div class="v">Дезинсекция · дератизация · дезинфекция</div></div>
+      <div class="fact"><div class="k">Уровни обработки</div><div class="v">Стандарт · Комплекс · Premium · Premium Gold</div></div>
+      <div class="fact"><div class="k">Офис</div><div class="v">Чебоксары, Эгерский бул., 47</div></div>
+      <div class="fact"><div class="k">Клиенты</div><div class="v">Частные лица и юрлица</div></div>
+      <div class="fact"><div class="k">Цена (комната)</div><div class="v">1 000–2 200 ₽</div></div>
+      <div class="fact"><div class="k">Цена (юрлица)</div><div class="v">от 2 400 ₽ / договор</div></div>
+      <div class="fact"><div class="k">Гарантии</div><div class="v small">Анонимность, безопасность, качество, гарантия по договору</div></div>
+      <div class="fact"><div class="k">Акция</div><div class="v small">2 вида обработки → барьерная в подарок</div></div>
+      <div class="fact"><div class="k">Контакты</div><div class="v small">+7 (962) 321-22-22 · WhatsApp · Telegram @dezinsektor_21</div></div>
+    </div>
+
+    <div class="note"><b>По телефонам:</b> сайт и справочники называют разные номера — герой сайта +7 (962) 321-22-22, страница цен +7 919 675-62-31, карточка 2ГИС +7 (8352) 212-222. Указан каждый как факт источника; для публикации нужно уточнить у клиента единый актуальный номер.</div>
+  </section>
+
+  <section id="brandbook">
+    <span class="eyebrow">02 · Мини-брендбук</span>
+    <h2>Уточнено по скриншоту главной страницы</h2>
+    <p class="lede">Первая версия была собрана по текстовому анализу сайта и ошибочно предположила светлый фон на главной. Клиент прислал реальный скриншот — ниже палитра, снятая попиксельно с него (не на глаз). Официальных файлов логотипа и гайдлайна по-прежнему нет в открытом доступе — итоговые файлы лучше запросить у клиента.</p>
+
+    <div class="brand-row">
+      <div class="swatch">
+        <div class="chip" style="background:#13181C;"></div>
+        <div class="info"><div class="role">Основной фон</div><div class="name">Тёмный графитово-синий #13181C</div><div class="status">подтверждено пикселем</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:linear-gradient(90deg,#DEB162,#EBCC7C,#FCEE9E);"></div>
+        <div class="info"><div class="role">Акцент / CTA</div><div class="name">Золотой градиент #DEB162 → #FCEE9E</div><div class="status">подтверждено пикселем</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#66593A;"></div>
+        <div class="info"><div class="role">Второстепенный акцент</div><div class="name">Оливково-золотая плашка #66593A</div><div class="status">подтверждено пикселем</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E3834B;"></div>
+        <div class="info"><div class="role">Акцент-метка (лого/детали)</div><div class="name">Терракотовый оранжевый #E3834B</div><div class="status">подтверждено пикселем</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid #2a2a2a;"></div>
+        <div class="info"><div class="role">Текст на тёмном</div><div class="name">Белый #FFFFFF</div><div class="status">подтверждено пикселем</div></div>
+      </div>
+    </div>
+
+    <div class="bb-block">
+      <h4>Наблюдение по оформлению (обновлено)</h4>
+      <ul>
+        <li>Сайт единообразно тёмный: главная и прайс-страница обе на тёмном графитово-синем фоне #13181C, а не «светлая главная + тёмный прайс», как показал текстовый анализ без рендера — исправлено по факту, не по предположению.</li>
+        <li>Золотой градиент — сквозной акцент: кнопка CTA, заголовок «О компании», декоративные радиальные засветки за фото сотрудника.</li>
+        <li>Терракотовый оранжевый — точечная деталь бренда (значок-хексагон на одежде, крышка оборудования), не основной цвет.</li>
+        <li>Типографика — жирный гротеск в заголовках, крупный кегль, высокий контраст с тёмным фоном.</li>
+        <li>Фотостиль — реальные кадры сотрудников за работой (не стоковые), с тёплой цветокоррекцией под золотую палитру + декоративные радиальные засветки.</li>
+        <li>Тон коммуникации — уверенный, прямой, на результат: «раз и навсегда», «100% качество», «опыт работы — 12 лет» — акцент на скорость и гарантию, без заигрывания.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <span class="eyebrow">03 · Логика цикла (этап 1)</span>
+    <h2>Знакомство: от «кто мы» до «сколько это стоит»</h2>
+    <p class="lede">Последовательность одинакова для новостей и сторис — от доверия к компании к конкретной услуге и цене.</p>
+    <div class="cycle">
+      <div class="step"><div class="num">01</div><h4>Кто мы</h4><p>Компания, регион, гарантии</p></div>
+      <div class="step"><div class="num">02</div><h4>Дезинсекция</h4><p>Насекомые, 4 уровня обработки</p></div>
+      <div class="step"><div class="num">03</div><h4>Дератизация и дезинфекция</h4><p>Грызуны, плесень, вирусы</p></div>
+      <div class="step"><div class="num">04</div><h4>Цена и заказ</h4><p>Прайс, гарантия, акция, CTA</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <span class="eyebrow">04 · Новости</span>
+    <h2>4 темы для новостей</h2>
+    <p class="lede">Каждая тема — с тезисами, SEO-ключами, мета-описанием, CTA и ТЗ на обложку. Максимальная локальная SEO-оптимизация под Чебоксары и Чувашию.</p>
+
+    <div class="news-grid">
+
+      <article class="news-card">
+        <div class="news-head">
+          <div><div class="idx">Тема 01 / 04 · знакомство</div><h3>«Дезинсектор_21» в Чебоксарах: избавляем от вредителей раз и навсегда с гарантией по договору</h3></div>
+          <span class="angle-tag">Имиджевая</span>
+        </div>
+        <div class="news-body">
+          <div>
+            <h5>Тезисы</h5>
+            <ul class="thesis">
+              <li>Компания на рынке с 2010 года, средний стаж специалистов — от 7 лет</li>
+              <li>Работает в Чебоксарах, по Чувашии и Республике Марий Эл</li>
+              <li>Три этапа работы: анализ помещения → подбор средств → выполнение работ</li>
+              <li>Гарантии: анонимность, безопасность препаратов, 100% качество, гарантия по договору</li>
+              <li>Бесплатная консультация перед заказом, связь по телефону/WhatsApp/Telegram</li>
+            </ul>
+          </div>
+          <div>
+            <div class="seo-box">
+              <h5>SEO-ключи</h5>
+              <div class="kw"><span>дезинсектор21 чебоксары</span><span>служба дезинсекции чебоксары</span><span>вызвать дезинсектора чебоксары</span><span>дезинфекция дезинсекция дератизация</span></div>
+              <div class="meta-line">Meta: Дезинсектор_21 в Чебоксарах — дезинсекция, дератизация и дезинфекция с 2010 года. Гарантия по договору, бесплатная консультация. Работаем по Чувашии и Марий Эл.</div>
+            </div>
+            <div class="cta-line">CTA: <b>«Получить бесплатную консультацию»</b> → телефон/WhatsApp</div>
+          </div>
+        </div>
+        <div style="padding:0 24px 24px;">
+          <div class="cover-box">
+            <h5>ТЗ на обложку</h5>
+            <div class="headline">«Раз и навсегда»</div>
+            <p>Тёмный графитово-синий фон (#13181C) с золотой радиальной засветкой за кадром специалиста, как на сайте. Заголовок белым, плашка «с 2010» — на золотом градиенте.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <div class="news-head">
+          <div><div class="idx">Тема 02 / 04 · дезинсекция</div><h3>Уничтожение тараканов, клопов и других насекомых в Чебоксарах: 4 уровня обработки</h3></div>
+          <span class="angle-tag">Экспертная</span>
+        </div>
+        <div class="news-body">
+          <div>
+            <h5>Тезисы</h5>
+            <ul class="thesis">
+              <li>Дезинсекция закрывает тараканов, клопов, блох, муравьёв и других насекомых</li>
+              <li>4 уровня обслуживания: стандартная, комплексная, Premium, Premium Gold — под задачу и бюджет</li>
+              <li>Безопасные препараты, результат заметен уже через 1 час после обработки</li>
+              <li>Работают по квартирам, домам и коммерческим помещениям</li>
+              <li>Барьерная обработка как отдельная защитная услуга (500–900 ₽)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="seo-box">
+              <h5>SEO-ключи</h5>
+              <div class="kw"><span>уничтожение тараканов чебоксары</span><span>травля клопов чебоксары</span><span>обработка от насекомых цена</span><span>дезинсекция квартиры чебоксары</span></div>
+              <div class="meta-line">Meta: Уничтожение тараканов, клопов, блох и муравьёв в Чебоксарах — 4 уровня обработки, безопасные препараты, результат за 1 час. Дезинсектор_21.</div>
+            </div>
+            <div class="cta-line">CTA: <b>«Подобрать уровень обработки»</b> → форма с выбором вредителя</div>
+          </div>
+        </div>
+        <div style="padding:0 24px 24px;">
+          <div class="cover-box">
+            <h5>ТЗ на обложку</h5>
+            <div class="headline">«И тараканы, и клопы — за один визит»</div>
+            <p>Тёмный фон #13181C, сетка из 4 плашек-иконок вредителей (как на сайте), заголовок белым крупно сверху, акцентная плашка уровня обработки — золотым градиентом.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <div class="news-head">
+          <div><div class="idx">Тема 03 / 04 · дератизация и дезинфекция</div><h3>Дератизация и дезинфекция в Чебоксарах: избавляем от грызунов, плесени и вирусов</h3></div>
+          <span class="angle-tag">Экспертная</span>
+        </div>
+        <div class="news-body">
+          <div>
+            <h5>Тезисы</h5>
+            <ul class="thesis">
+              <li>Дератизация — уничтожение мышей и крыс, установка оригинальных ловушек «Форс-Сайт»</li>
+              <li>Дезинфекция — обработка от плесени, вирусов и бактерий</li>
+              <li>Дополнительно — акарицидная обработка участков от клещей</li>
+              <li>Подходит и жилым помещениям, и пищевым/коммерческим объектам</li>
+              <li>Стоимость дератизации и дезинфекции — от 1 000 ₽</li>
+            </ul>
+          </div>
+          <div>
+            <div class="seo-box">
+              <h5>SEO-ключи</h5>
+              <div class="kw"><span>дератизация чебоксары</span><span>уничтожение крыс и мышей цена</span><span>дезинфекция от плесени чебоксары</span><span>обработка участка от клещей</span></div>
+              <div class="meta-line">Meta: Дератизация и дезинфекция в Чебоксарах — уничтожение мышей, крыс, плесени и вирусов. Ловушки Форс-Сайт, обработка участков от клещей. Дезинсектор_21.</div>
+            </div>
+            <div class="cta-line">CTA: <b>«Узнать стоимость для моего объекта»</b> → телефон</div>
+          </div>
+        </div>
+        <div style="padding:0 24px 24px;">
+          <div class="cover-box">
+            <h5>ТЗ на обложку</h5>
+            <div class="headline">«Мыши, крысы, плесень — под контролем»</div>
+            <p>Тёмный фон #13181C, белый заголовок, терракотовый акцент #E3834B на значке ловушки/капли дезраствора справа.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <div class="news-head">
+          <div><div class="idx">Тема 04 / 04 · конверсия</div><h3>Сколько стоит вызвать дезинсектора в Чебоксарах: цены, гарантия и акция «2 в 1»</h3></div>
+          <span class="angle-tag">Продающая</span>
+        </div>
+        <div class="news-body">
+          <div>
+            <h5>Тезисы</h5>
+            <ul class="thesis">
+              <li>Цены по типу жилья: комната 1000–2200 ₽, 1-комн. кв. 1300–2900 ₽, 4-комн. кв. 2200–4700 ₽</li>
+              <li>Для юрлиц — от 2400 ₽ или расчёт по площади индивидуально</li>
+              <li>Акция: при заказе двух видов обработки — барьерная защита в подарок</li>
+              <li>Гарантия по договору на весь спектр услуг</li>
+              <li>Заявка — через форму на сайте с выбором вредителя, телефон, WhatsApp, Telegram</li>
+            </ul>
+          </div>
+          <div>
+            <div class="seo-box">
+              <h5>SEO-ключи</h5>
+              <div class="kw"><span>цена дезинсекции чебоксары</span><span>сколько стоит обработка от тараканов</span><span>вызвать дезинсектора цена</span><span>дезинсекция для юрлиц чебоксары</span></div>
+              <div class="meta-line">Meta: Цены на дезинсекцию, дератизацию и дезинфекцию в Чебоксарах — от 1000 ₽. Акция: 2 обработки — барьерная защита в подарок. Гарантия по договору.</div>
+            </div>
+            <div class="cta-line">CTA: <b>«Рассчитать стоимость»</b> → форма заявки</div>
+          </div>
+        </div>
+        <div style="padding:0 24px 24px;">
+          <div class="cover-box">
+            <h5>ТЗ на обложку</h5>
+            <div class="headline">«2 обработки — барьер в подарок»</div>
+            <p>Тёмный фон #13181C, плашка «в подарок» на золотом градиенте #DEB162→#FCEE9E (как кнопка CTA на сайте), рядом — компактная таблица цен (2–3 строки).</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="stories">
+    <span class="eyebrow">05 · Сторис</span>
+    <h2>4 темы для сторис</h2>
+    <p class="lede">Формат — обложка + 1 слайд (максимум 2 экрана). Только сухие тезисы, зеркалят новости 1:1, без развёрнутых текстов.</p>
+
+    <div class="story-grid">
+
+      <article>
+        <div class="story-card-title">Сторис 01 — Кто мы</div>
+        <div class="story-card">
+          <div class="story-screen story-cover">
+            <div class="tag2">Обложка</div>
+            <div class="cover-text">Раз и навсегда</div>
+            <p>Дезинсектор_21 · с 2010 года</p>
+          </div>
+          <div class="story-screen">
+            <div class="tag2">Слайд</div>
+            <h4>Компания</h4>
+            <ul>
+              <li>С 2010 года, Чебоксары</li>
+              <li>Работаем по Чувашии и Марий Эл</li>
+              <li>Гарантия по договору</li>
+              <li>Бесплатная консультация</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="story-card-title">Сторис 02 — Дезинсекция</div>
+        <div class="story-card">
+          <div class="story-screen story-cover">
+            <div class="tag2">Обложка</div>
+            <div class="cover-text">Тараканы и клопы — за визит</div>
+            <p>4 уровня обработки</p>
+          </div>
+          <div class="story-screen">
+            <div class="tag2">Слайд</div>
+            <h4>Дезинсекция</h4>
+            <ul>
+              <li>Тараканы, клопы, блохи, муравьи</li>
+              <li>Стандарт / Комплекс / Premium / Premium Gold</li>
+              <li>Результат за 1 час</li>
+              <li>Безопасные препараты</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="story-card-title">Сторис 03 — Дератизация и дезинфекция</div>
+        <div class="story-card">
+          <div class="story-screen story-cover">
+            <div class="tag2">Обложка</div>
+            <div class="cover-text">Мыши, крысы, плесень — под контролем</div>
+            <p>Дератизация · Дезинфекция</p>
+          </div>
+          <div class="story-screen">
+            <div class="tag2">Слайд</div>
+            <h4>Грызуны и дезинфекция</h4>
+            <ul>
+              <li>Мыши и крысы, ловушки «Форс-Сайт»</li>
+              <li>Плесень, вирусы, бактерии</li>
+              <li>+ обработка участков от клещей</li>
+              <li>Жильё и коммерческие объекты</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="story-card-title">Сторис 04 — Цена и акция</div>
+        <div class="story-card">
+          <div class="story-screen story-cover">
+            <div class="tag2">Обложка</div>
+            <div class="cover-text">2 обработки — барьер в подарок</div>
+            <p>Цены от 1 000 ₽</p>
+          </div>
+          <div class="story-screen">
+            <div class="tag2">Слайд</div>
+            <h4>Стоимость</h4>
+            <ul>
+              <li>Комната — от 1000 ₽</li>
+              <li>Квартира — от 1300 ₽</li>
+              <li>Юрлицам — от 2400 ₽</li>
+              <li>Гарантия по договору</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="map">
+    <span class="eyebrow">06 · Карта тем</span>
+    <h2>Этап 1 — полный список</h2>
+    <p class="lede">Служебная сводка. При следующем этапе сюда добавятся новые строки, этап 1 свернётся в архив.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>№</th><th>Формат</th><th>Тема</th><th>Угол</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="fmt">Новость</td><td>«Дезинсектор_21» в Чебоксарах: избавляем от вредителей раз и навсегда</td><td>Имиджевая</td></tr>
+          <tr><td>2</td><td class="fmt">Новость</td><td>Уничтожение тараканов, клопов и других насекомых: 4 уровня обработки</td><td>Экспертная</td></tr>
+          <tr><td>3</td><td class="fmt">Новость</td><td>Дератизация и дезинфекция: грызуны, плесень, вирусы</td><td>Экспертная</td></tr>
+          <tr><td>4</td><td class="fmt">Новость</td><td>Сколько стоит вызвать дезинсектора: цены, гарантия, акция «2 в 1»</td><td>Продающая</td></tr>
+          <tr><td>5</td><td class="fmt">Сторис</td><td>Кто мы</td><td>Зеркалит №1</td></tr>
+          <tr><td>6</td><td class="fmt">Сторис</td><td>Дезинсекция</td><td>Зеркалит №2</td></tr>
+          <tr><td>7</td><td class="fmt">Сторис</td><td>Дератизация и дезинфекция</td><td>Зеркалит №3</td></tr>
+          <tr><td>8</td><td class="fmt">Сторис</td><td>Цена и акция</td><td>Зеркалит №4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+<footer>Дезинсектор 21 · Чебоксары · ТЗ подготовлено на основе dezinsektor21.ru/price/ и открытых справочников</footer>
+
+</body>
+</html>
