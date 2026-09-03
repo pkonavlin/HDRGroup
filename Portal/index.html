@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal — ТЗ на контент</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#EEF6F5;
+    --roe:#D96A3B;
+    --ink:#12262B;
+    --paper:#FBFDFC;
+    --line:#D7E6E3;
+    --mute:#5D7A78;
+    --chip:#E4F0EE;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#8FC4CE;
+      --teal:#7FD8C9;
+      --ice:#0F2427;
+      --roe:#F08A57;
+      --ink:#E8F3F1;
+      --paper:#0A1719;
+      --line:#1E3A3D;
+      --mute:#9BB8B5;
+      --chip:#122E31;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#8FC4CE;
+    --teal:#7FD8C9;
+    --ice:#0F2427;
+    --roe:#F08A57;
+    --ink:#E8F3F1;
+    --paper:#0A1719;
+    --line:#1E3A3D;
+    --mute:#9BB8B5;
+    --chip:#122E31;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Public Sans", Arial, sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,h3,.display{
+    font-family:"Bricolage Grotesque", "Public Sans", sans-serif;
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+  }
+  a{color:var(--teal);}
+
+  /* top bar */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:24px;
+    padding:14px 28px;
+    background:var(--ocean);
+    color:var(--ice);
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .topbar .brand{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.02em;
+    color:var(--ice);
+    flex:none;
+  }
+  .topbar nav{display:flex; gap:4px;}
+  .topbar nav a{
+    color:var(--ice);
+    opacity:0.78;
+    text-decoration:none;
+    font-size:0.86rem;
+    padding:8px 12px;
+    border-radius:8px;
+    transition:opacity .15s, background .15s;
+  }
+  .topbar nav a:hover{opacity:1; background:rgba(255,255,255,.08);}
+
+  main{max-width:960px; margin:0 auto; padding:0 28px 120px;}
+  section{padding-top:64px;}
+  section:first-of-type{padding-top:48px;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--roe);
+    margin-bottom:10px;
+    display:block;
+  }
+  h2{font-size:1.7rem; font-weight:700; margin-bottom:6px;}
+  .lede{color:var(--mute); font-size:0.98rem; max-width:62ch; margin-top:10px;}
+
+  /* hero */
+  .hero{padding-top:56px; padding-bottom:8px;}
+  .hero h1{font-size:2.5rem; font-weight:800; letter-spacing:-0.01em;}
+  .hero .lede{max-width:66ch; font-size:1.05rem;}
+  .hero-meta{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;
+  }
+  .pill{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.76rem;
+    padding:6px 12px;
+    border-radius:999px;
+    background:var(--chip);
+    border:1px solid var(--line);
+    color:var(--ink);
+  }
+
+  /* facts grid */
+  .facts{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    margin-top:24px;
+  }
+  .fact{background:var(--paper); padding:18px 20px;}
+  .fact .k{font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--mute); font-family:"IBM Plex Mono",monospace;}
+  .fact .v{font-size:1.02rem; margin-top:6px; font-weight:600;}
+
+  .quest-list{
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;
+  }
+  .quest-list span{
+    font-size:0.82rem; padding:6px 12px; border-radius:8px;
+    background:var(--chip); border:1px solid var(--line);
+  }
+
+  /* brandbook swatches */
+  .swatches{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:14px; margin-top:22px;
+  }
+  .swatch{border-radius:12px; overflow:hidden; border:1px solid var(--line);}
+  .swatch .chip{height:74px;}
+  .swatch .meta{padding:10px 12px; background:var(--paper);}
+  .swatch .role{
+    font-family:"IBM Plex Mono",monospace; font-size:0.66rem;
+    text-transform:uppercase; letter-spacing:0.06em; color:var(--roe);
+  }
+  .swatch .name{font-size:0.86rem; font-weight:600; margin-top:2px;}
+  .swatch .hex{font-family:"IBM Plex Mono",monospace; font-size:0.74rem; color:var(--mute);}
+
+  .brand-notes{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:26px;
+  }
+  @media (max-width:640px){.brand-notes{grid-template-columns:1fr;}}
+  .note-card{
+    border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:var(--paper);
+  }
+  .note-card .t{font-weight:700; font-size:0.9rem; margin-bottom:6px;}
+  .note-card p{margin:0; font-size:0.9rem; color:var(--ink);}
+
+  /* cycle logic */
+  .cycle-row{
+    display:flex; gap:0; margin-top:24px; border-radius:14px; overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .cycle-step{
+    flex:1; padding:18px 16px; background:var(--paper); position:relative;
+    border-right:1px solid var(--line);
+  }
+  .cycle-step:last-child{border-right:none;}
+  .cycle-step.current{background:var(--chip);}
+  .cycle-step .n{font-family:"IBM Plex Mono",monospace; font-size:0.72rem; color:var(--roe);}
+  .cycle-step .t{font-weight:700; font-size:0.92rem; margin-top:6px;}
+  .cycle-step .d{font-size:0.82rem; color:var(--mute); margin-top:6px;}
+
+  /* theme cards - news */
+  .theme-card{
+    border:1px solid var(--line); border-radius:16px; padding:26px 28px;
+    margin-top:20px; background:var(--paper);
+  }
+  .theme-head{display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;}
+  .theme-num{font-family:"IBM Plex Mono",monospace; color:var(--mute); font-size:0.8rem;}
+  .theme-title{font-size:1.22rem; font-weight:700; margin-top:4px; max-width:56ch;}
+  .goal-tag{
+    font-family:"IBM Plex Mono",monospace; font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.06em; padding:6px 12px; border-radius:8px;
+    background:var(--teal); color:var(--ice); white-space:nowrap;
+  }
+  .theme-block{margin-top:16px;}
+  .theme-block .lbl{
+    font-family:"IBM Plex Mono",monospace; font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--mute); margin-bottom:6px;
+  }
+  .theme-block p, .theme-block li{font-size:0.94rem;}
+  .theme-block ul{margin:0; padding-left:20px;}
+  .seo-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .seo-chips span{
+    font-family:"IBM Plex Mono",monospace; font-size:0.74rem;
+    padding:5px 10px; border-radius:6px; background:var(--chip); border:1px solid var(--line);
+  }
+  .cta-box{
+    display:inline-block; margin-top:2px; font-size:0.94rem; font-weight:600;
+    color:var(--ocean);
+  }
+  :root[data-theme="dark"] .cta-box{color:var(--teal);}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .cta-box{color:var(--teal);}
+  }
+  .cover-box{
+    margin-top:16px; padding:14px 16px; border-radius:10px;
+    background:var(--chip); border:1px solid var(--line);
+  }
+  .cover-box .lbl{color:var(--roe);}
+
+  /* stories */
+  .story-card{
+    border:1px solid var(--line); border-radius:14px; padding:20px 22px;
+    margin-top:16px; background:var(--paper);
+  }
+  .story-head{display:flex; justify-content:space-between; gap:12px; align-items:baseline; flex-wrap:wrap;}
+  .story-title{font-weight:700; font-size:1.02rem;}
+  .story-slide-lbl{font-family:"IBM Plex Mono",monospace; font-size:0.7rem; color:var(--mute);}
+  .story-thesis{margin-top:10px; font-size:0.94rem;}
+  .story-design{
+    margin-top:12px; padding:12px 14px; border-radius:8px; background:var(--chip);
+    font-size:0.86rem;
+  }
+  .story-design .lbl{font-family:"IBM Plex Mono",monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--roe); margin-bottom:4px;}
+
+  /* sources */
+  .src-list{list-style:none; margin:18px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .src-list li{font-size:0.92rem;}
+  .src-list a{word-break:break-all;}
+
+  /* map / timeline */
+  .timeline{margin-top:22px;}
+  .tl-stage{
+    border-left:2px solid var(--teal); padding-left:20px; padding-bottom:26px; position:relative;
+  }
+  .tl-stage:last-child{padding-bottom:4px;}
+  .tl-stage::before{
+    content:""; position:absolute; left:-6px; top:2px; width:10px; height:10px;
+    border-radius:50%; background:var(--teal); border:2px solid var(--paper);
+  }
+  .tl-stage .tl-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .tl-stage .tl-title{font-weight:700; font-size:1rem;}
+  .badge-current{
+    font-family:"IBM Plex Mono",monospace; font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:0.06em; padding:3px 9px; border-radius:999px;
+    background:var(--roe); color:#fff;
+  }
+  .tl-cols{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:12px;}
+  @media (max-width:640px){.tl-cols{grid-template-columns:1fr;}}
+  .tl-cols .h{font-family:"IBM Plex Mono",monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--mute); margin-bottom:8px;}
+  .tl-cols ul{margin:0; padding-left:18px; font-size:0.88rem;}
+  .tl-cols li{margin-bottom:6px;}
+
+  footer{
+    padding:40px 28px 60px; text-align:center; color:var(--mute); font-size:0.82rem;
+  }
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="brand">Portal</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#sources">Источники</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<main>
+
+  <section class="hero">
+    <span class="eyebrow">ТЗ на контент · этап 01</span>
+    <h1>Portal — квест-парк и организация праздников в Перми</h1>
+    <p class="lede">Техническое задание на публикации для карточки компании на Яндекс Картах и 2ГИС: 4 темы новостей с ТЗ на обложку и 4 темы сторис в формате «один слайд».</p>
+    <div class="hero-meta">
+      <span class="pill">Пермь, ул. Соловьева, 15</span>
+      <span class="pill">4,8 / 5 · 201 оценка</span>
+      <span class="pill">8 квестов под одной крышей</span>
+    </div>
+  </section>
+
+  <section id="company">
+    <span class="eyebrow">01 · Компания</span>
+    <h2>Portal</h2>
+    <p class="lede">Развлекательный центр в Перми: тематические квесты с живыми актёрами, банкетный зал и организация детских и взрослых праздников — от дня рождения до корпоратива.</p>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Категория</div><div class="v">Квесты · развлекательный центр · детские праздники</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Пермь, ул. Соловьева, 15 (цокольный этаж, рядом с Грин Плаза)</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (342) 214-03-04</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно, до 22:00</div></div>
+      <div class="fact"><div class="k">Рейтинг</div><div class="v">4,8 из 5 — 201 оценка, 88 отзывов</div></div>
+      <div class="fact"><div class="k">Формат</div><div class="v">1 час квеста с актёрами + 1 час банкетной зоны с дискотекой</div></div>
+      <div class="fact"><div class="k">Банкетный зал</div><div class="v">До 30 человек, с дискотекой и флешмобом</div></div>
+      <div class="fact"><div class="k">Поводы</div><div class="v">Дни рождения, выпускные, корпоративы, тимбилдинг, Новый год, взрослые праздники</div></div>
+      <div class="fact"><div class="k">18+ линейка</div><div class="v">Отдельные хоррор-перформансы для взрослых — «Техасская резня бензопилой» 1 и 2, «Убежище 101»</div></div>
+      <div class="fact"><div class="k">Сообщество</div><div class="v">Группа ВК «Квесты Пермь | Праздники | Квеструм ПОРТАЛ» — 29,5К подписчиков</div></div>
+    </div>
+
+    <div class="theme-block" style="margin-top:26px;">
+      <div class="lbl">8 тематических квестов</div>
+      <div class="quest-list">
+        <span>Пиратская вечеринка</span>
+        <span>Отель Трансильвания</span>
+        <span>Школа шпионов</span>
+        <span>Школа волшебства и магии</span>
+        <span>Охотники на вампиров</span>
+        <span>Хоррор-вечеринка</span>
+        <span>Сундук Дейви Джонса</span>
+        <span>Игра в кальмара</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <span class="eyebrow">02 · Мини-брендбук</span>
+    <h2>Фирменный стиль Portal</h2>
+    <p class="lede">После анализа сайта компании определены фирменные цвета, фотостиль и тон коммуникации бренда — их придерживаемся при подготовке макетов для новостей и сторис.</p>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#0C0C0E;"></div>
+        <div class="meta"><div class="role">Фоновый</div><div class="name">Графитово-чёрный</div><div class="hex">#0C0C0E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F23D8F;"></div>
+        <div class="meta"><div class="role">Акцентный (лого)</div><div class="name">Неон-розовый</div><div class="hex">#F23D8F</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#7B3FE4;"></div>
+        <div class="meta"><div class="role">Акцентный (лого)</div><div class="name">Неон-фиолетовый</div><div class="hex">#7B3FE4</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#2FD9E8;"></div>
+        <div class="meta"><div class="role">Акцентный (лого)</div><div class="name">Неон-бирюзовый</div><div class="hex">#2FD9E8</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#CC4F8E;"></div>
+        <div class="meta"><div class="role">Кнопки / CTA</div><div class="name">Малиновый</div><div class="hex">#CC4F8E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F2941C;"></div>
+        <div class="meta"><div class="role">Промо-плашки</div><div class="name">Оранжевый</div><div class="hex">#F2941C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF; border-bottom:1px solid var(--line);"></div>
+        <div class="meta"><div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+      </div>
+    </div>
+
+    <div class="brand-notes">
+      <div class="note-card">
+        <div class="t">Логотип</div>
+        <p>Слово PORTAL жирным геометричным гротеском заглавными буквами рядом с фирменным знаком — кольцевым неоновым «порталом» из концентрических колец градиентом розовый → фиолетовый → бирюзовый.</p>
+      </div>
+      <div class="note-card">
+        <div class="t">Типографика</div>
+        <p>Крупный плотный гротеск-заголовок афишного типа на чёрном фоне, светлый текст сверху — коммуникация выстроена как ночная афиша аттракциона, а не как типовой лендинг.</p>
+      </div>
+      <div class="note-card">
+        <div class="t">Фотостиль</div>
+        <p>Тёмные кинематографичные кадры с драматичным боковым светом: тёплое золотое свечение (огонь, сокровища) в одних сценах, холодные неоновые и лазерные эффекты (зелёные лучи, неоновое кольцо) — в других. Актёры в гриме и костюмах крупным планом, как кадры из фильма.</p>
+      </div>
+      <div class="note-card">
+        <div class="t">Настроение и тон</div>
+        <p>Тёмное, атмосферное, уверенное — компания прямо называет себя «самым большим квест-центром в Перми» и обращается в повелительном наклонении: «Подарите ребёнку квест-приключение», «Выберите своё приключение». Линейка охватывает и детский формат, и взрослый хоррор-перформанс 18+.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <span class="eyebrow">03 · Логика цикла</span>
+    <h2>Единая последовательность на этапе 1</h2>
+    <p class="lede">Четыре темы новостей и четыре темы сторис связаны одной линией: от знакомства с площадкой — к формату мероприятия, авторскому продукту (актёры и постановка) и полному спектру поводов для праздника.</p>
+
+    <div class="cycle-row">
+      <div class="cycle-step current">
+        <div class="n">01</div>
+        <div class="t">Знакомство</div>
+        <div class="d">Что такое Portal, где находится, из чего состоит площадка</div>
+      </div>
+      <div class="cycle-step current">
+        <div class="n">02</div>
+        <div class="t">Формат мероприятия</div>
+        <div class="d">Как устроен квест-час и банкетная зона</div>
+      </div>
+      <div class="cycle-step current">
+        <div class="n">03</div>
+        <div class="t">Актёры и постановка</div>
+        <div class="d">Живые актёры, спецэффекты, костюмы и декорации</div>
+      </div>
+      <div class="cycle-step current">
+        <div class="n">04</div>
+        <div class="t">Поводы и аудитория</div>
+        <div class="d">От дня рождения до корпоратива и Нового года</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <span class="eyebrow">04 · Новости</span>
+    <h2>4 темы для новостей</h2>
+    <p class="lede">Публикация — в разделе новостей карточки компании на Яндекс Картах и 2ГИС. Тексты — с максимальной SEO-оптимизацией под запросы по квестам и детским праздникам в Перми.</p>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <div>
+          <div class="theme-num">Тема 01</div>
+          <div class="theme-title">Квест-парк Portal в Перми: 8 тематических квестов, банкетный зал и дискотека под одной крышей</div>
+        </div>
+        <span class="goal-tag">Ознакомительный</span>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Почему актуально</div>
+        <p>Открывающая тема цикла — знакомит с площадкой целиком: адрес, формат, масштаб (8 квестов), базовая узнаваемость по рейтингу.</p>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Тезисы для копирайтера</div>
+        <ul>
+          <li>Portal — развлекательный центр в Перми на ул. Соловьева, 15 (цокольный этаж, рядом с Грин Плаза)</li>
+          <li>8 тематических квестов на одной площадке: от пиратской вечеринки до «Игры в кальмара»</li>
+          <li>Собственный банкетный зал на 30 человек с дискотекой — не нужно искать отдельную площадку для застолья</li>
+          <li>Рейтинг 4,8 из 5 на основе 201 оценки и 88 отзывов</li>
+          <li>Работает ежедневно, приём заявок по телефону +7 (342) 214-03-04</li>
+        </ul>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">SEO-ключи</div>
+        <div class="seo-chips">
+          <span>квесты пермь</span><span>квест-рум пермь</span><span>развлекательный центр пермь</span><span>детский квест пермь</span><span>квесты для детей пермь соловьева</span>
+        </div>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">CTA</div>
+        <span class="cta-box">Позвоните и подберите квест под праздник — +7 (342) 214-03-04</span>
+      </div>
+      <div class="cover-box">
+        <div class="lbl">ТЗ на обложку</div>
+        <p style="margin:0;">Графитово-чёрный фон (#0C0C0E), кадр с актёром в костюме одного из флагманских квестов (пират или вампир) с драматичным боковым светом, в углу — фирменный неоновый значок-кольцо Portal; крупный афишный заголовок белым (#FFFFFF), акцентное слово розовым неоном (#F23D8F) «8 КВЕСТОВ В ПЕРМИ», внизу — адрес мелким шрифтом.</p>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <div>
+          <div class="theme-num">Тема 02</div>
+          <div class="theme-title">Как проходит праздник в Portal: час квеста с актёрами + час банкетной зоны с дискотекой</div>
+        </div>
+        <span class="goal-tag">Продающий</span>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Почему актуально</div>
+        <p>Родители и организаторы выбирают площадку по сценарию мероприятия — тема закрывает главный практический вопрос «что входит в программу».</p>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Тезисы для копирайтера</div>
+        <ul>
+          <li>Программа состоит из двух частей: час квеста-приключения и час в банкетной зоне</li>
+          <li>Квест ведут профессиональные актёры — сценарий строится как театральное представление, а не просто набор загадок</li>
+          <li>В программе — спецэффекты, декорации и костюмы под тему квеста</li>
+          <li>После игры — дискотека с флешмобом в банкетной зоне на компанию до 30 человек</li>
+          <li>Один звонок — и площадка, актёры, декорации и банкет закрыты одной программой</li>
+        </ul>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">SEO-ключи</div>
+        <div class="seo-chips">
+          <span>детский день рождения пермь</span><span>квест с актерами пермь</span><span>организация детского праздника пермь</span><span>день рождения ребенку квест</span>
+        </div>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">CTA</div>
+        <span class="cta-box">Уточните программу и свободные даты по телефону +7 (342) 214-03-04</span>
+      </div>
+      <div class="cover-box">
+        <div class="lbl">ТЗ на обложку</div>
+        <p style="margin:0;">Раздельная композиция «до / после» на чёрном фоне (#0C0C0E): слева кадр из квеста с тёплым золотым светом (огонь/сокровища), справа — банкетная зона с неоновым дискотечным светом; разделитель — малиновый акцент (#CC4F8E); заголовок «КВЕСТ + БАНКЕТ» белым (#FFFFFF).</p>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <div>
+          <div class="theme-num">Тема 03</div>
+          <div class="theme-title">Живые актёры, спецэффекты и костюмы: театральная постановка в каждом из 8 квестов Portal</div>
+        </div>
+        <span class="goal-tag">Экспертный</span>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Почему актуально</div>
+        <p>Раскрывает главное отличие от типового квест-рума — живую театральную постановку, а не запертую комнату с загадками; опирается на отзывы гостей о профессионализме актёров.</p>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Тезисы для копирайтера</div>
+        <ul>
+          <li>Каждый из 8 квестов — это театральное представление с актёрами, а не просто комната с загадками</li>
+          <li>В арсенале — спецэффекты, декорации и костюмы, подобранные под сюжет: пираты, вампиры, шпионы, магия</li>
+          <li>Гости в отзывах отмечают, что дети под впечатлением, а актёры — профессионалы своего дела</li>
+          <li>Оформление комнат проработано детально — под каждую тему собран свой антураж</li>
+          <li>Есть форматы для разного возраста и настроения — от «Школы волшебства» до хоррор-вечеринки</li>
+        </ul>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">SEO-ключи</div>
+        <div class="seo-chips">
+          <span>хоррор квест пермь</span><span>квест для детей с актерами</span><span>квест охотники на вампиров пермь</span><span>театральный квест пермь</span>
+        </div>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">CTA</div>
+        <span class="cta-box">Узнайте, какой квест подойдёт вашей компании — звоните +7 (342) 214-03-04</span>
+      </div>
+      <div class="cover-box">
+        <div class="lbl">ТЗ на обложку</div>
+        <p style="margin:0;">Крупный портрет актёра в гриме/костюме (вампир или шпион) на графитово-чёрном фоне (#0C0C0E), направленный боковой свет, фирменное неоновое кольцо-портал (розовый→фиолетовый→бирюзовый) как фоновый элемент; заголовок мелкой капителью бирюзовым неоном (#2FD9E8) «ЖИВЫЕ АКТЁРЫ · СПЕЦЭФФЕКТЫ».</p>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <div>
+          <div class="theme-num">Тема 04</div>
+          <div class="theme-title">Не только день рождения: Portal принимает выпускные, корпоративы и новогодние праздники в Перми</div>
+        </div>
+        <span class="goal-tag">Вовлекающий</span>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Почему актуально</div>
+        <p>Завершает цикл расширением аудитории — от детских дней рождения к взрослым и корпоративным форматам, показывая площадку как универсальное место для любого праздника.</p>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">Тезисы для копирайтера</div>
+        <ul>
+          <li>Portal принимает не только детские дни рождения, но и выпускные, корпоративы, тимбилдинги и новогодние мероприятия</li>
+          <li>Формат квеста подходит и взрослой компании — есть хоррор- и приключенческие сюжеты для взрослых праздников</li>
+          <li>Банкетный зал на 30 человек с дискотекой закрывает часть мероприятия «после программы»</li>
+          <li>Одна площадка — и активная часть (квест), и застолье, без переезда между локациями</li>
+          <li>Подходит для тимбилдинга — командный формат квеста работает как совместная активность коллектива</li>
+        </ul>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">SEO-ключи</div>
+        <div class="seo-chips">
+          <span>корпоратив пермь квест</span><span>тимбилдинг пермь</span><span>выпускной в квесте пермь</span><span>новогодний квест пермь</span><span>взрослый квест пермь</span>
+        </div>
+      </div>
+      <div class="theme-block">
+        <div class="lbl">CTA</div>
+        <span class="cta-box">Обсудите формат корпоратива или выпускного — +7 (342) 214-03-04</span>
+      </div>
+      <div class="cover-box">
+        <div class="lbl">ТЗ на обложку</div>
+        <p style="margin:0;">Кадр банкетного зала с лазерным/дискотечным светом (зелёные лучи, как на фирменных фото) и взрослой компанией на фоне, графитово-чёрный фон (#0C0C0E), заголовок «ПРАЗДНИК ЛЮБОГО ФОРМАТА» белым, акцентное слово — на оранжевой промо-плашке (#F2941C) в духе фирменного стиля.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <span class="eyebrow">05 · Сторис</span>
+    <h2>4 темы для сторис</h2>
+    <p class="lede">Формат — один слайд на тему: заголовок, тезис-факт и заметка для дизайнера. Публикация — сторис карточки компании на Яндекс Картах и 2ГИС.</p>
+
+    <div class="story-card">
+      <div class="story-head">
+        <div class="story-title">01 · Portal — квест-парк в Перми</div>
+        <span class="story-slide-lbl">1 слайд</span>
+      </div>
+      <div class="story-thesis">8 тематических квестов и банкетный зал на 30 человек под одной крышей на ул. Соловьева, 15. Рейтинг 4,8 из 5.</div>
+      <div class="seo-chips" style="margin-top:10px;"><span>квесты пермь</span><span>квест-рум пермь</span></div>
+      <div class="story-design">
+        <div class="lbl">Дизайн слайда</div>
+        Фон — графитово-чёрный #0C0C0E, фото актёра в костюме крупным планом с драматичным боковым светом, в углу фирменный неоновый значок-кольцо Portal, заголовок афишным гротеском белым, акцентное слово розовым неоном #F23D8F, адрес мелким моно-шрифтом внизу.
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-head">
+        <div class="story-title">02 · Формат: квест + банкет</div>
+        <span class="story-slide-lbl">1 слайд</span>
+      </div>
+      <div class="story-thesis">Час квеста с актёрами + час в банкетной зоне с дискотекой — весь праздник на одной площадке.</div>
+      <div class="seo-chips" style="margin-top:10px;"><span>детский день рождения пермь</span><span>квест с актерами</span></div>
+      <div class="story-design">
+        <div class="lbl">Дизайн слайда</div>
+        Композиция «до / после» на весь слайд на чёрном фоне #0C0C0E: тёплый золотой свет квеста слева, неоновый дискотечный свет банкета справа, разделитель — малиновый акцент #CC4F8E, текст белый.
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-head">
+        <div class="story-title">03 · Живые актёры и спецэффекты</div>
+        <span class="story-slide-lbl">1 слайд</span>
+      </div>
+      <div class="story-thesis">Каждый из 8 квестов — театральное представление: актёры, костюмы, декорации и спецэффекты.</div>
+      <div class="seo-chips" style="margin-top:10px;"><span>хоррор квест пермь</span><span>театральный квест пермь</span></div>
+      <div class="story-design">
+        <div class="lbl">Дизайн слайда</div>
+        Портрет актёра в гриме на графитово-чёрном фоне #0C0C0E, боковой направленный свет, неоновое кольцо-портал фоновым элементом, заголовок капителью бирюзовым неоном #2FD9E8.
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-head">
+        <div class="story-title">04 · Праздник для всех</div>
+        <span class="story-slide-lbl">1 слайд</span>
+      </div>
+      <div class="story-thesis">Дни рождения, выпускные, корпоративы, тимбилдинг и Новый год — Portal принимает праздники любого формата.</div>
+      <div class="seo-chips" style="margin-top:10px;"><span>корпоратив пермь квест</span><span>выпускной в квесте пермь</span></div>
+      <div class="story-design">
+        <div class="lbl">Дизайн слайда</div>
+        Кадр банкетного зала с лазерным/дискотечным светом (зелёные лучи), графитово-чёрный фон #0C0C0E, акцентное слово (повод праздника) на оранжевой промо-плашке #F2941C, остальной текст белый.
+      </div>
+    </div>
+  </section>
+
+  <section id="sources">
+    <span class="eyebrow">06 · Источники</span>
+    <h2>Использованные материалы</h2>
+    <ul class="src-list">
+      <li><a href="https://portal-park.ru/" target="_blank" rel="noopener">portal-park.ru — официальный сайт компании</a></li>
+      <li><a href="https://yandex.ru/maps/-/CTXQrX-b" target="_blank" rel="noopener">Карточка Portal на Яндекс Картах</a></li>
+      <li><a href="https://vk.ru/portalpark" target="_blank" rel="noopener">Группа ВК Portal</a> — скриншоты предоставлены компанией</li>
+    </ul>
+  </section>
+
+  <section id="map">
+    <span class="eyebrow">07 · Карта тем</span>
+    <h2>История циклов</h2>
+    <div class="timeline">
+      <div class="tl-stage">
+        <div class="tl-head">
+          <div class="tl-title">Этап 1</div>
+          <span class="badge-current">актуальный</span>
+        </div>
+        <div class="tl-cols">
+          <div>
+            <div class="h">Новости</div>
+            <ul>
+              <li>Квест-парк Portal: 8 квестов под одной крышей</li>
+              <li>Формат праздника: квест + банкет</li>
+              <li>Живые актёры и постановка</li>
+              <li>Праздник любого формата</li>
+            </ul>
+          </div>
+          <div>
+            <div class="h">Сторис</div>
+            <ul>
+              <li>Portal — квест-парк в Перми</li>
+              <li>Формат: квест + банкет</li>
+              <li>Живые актёры и спецэффекты</li>
+              <li>Праздник для всех</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Portal · ТЗ на контент · этап 01</footer>
+
+</body>
+</html>
