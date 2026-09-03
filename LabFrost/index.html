@@ -1,0 +1,656 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контент-бриф «Lab Frost»</title>
+<style>
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #d96a3b;
+    --roe-soft: #f0a47a;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6;
+      --ocean: #7fc4c9;
+      --ocean-soft: #5aa5ab;
+      --ice: #12292d;
+      --paper: #0b1d22;
+      --surface: #102529;
+      --roe: #f0895a;
+      --roe-soft: #c96636;
+      --ink: #e9f3f1;
+      --ink-soft: #b6cbc8;
+      --ink-faint: #7f9a97;
+      --line: #24444b;
+      --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6;
+    --ocean: #7fc4c9;
+    --ocean-soft: #5aa5ab;
+    --ice: #12292d;
+    --paper: #0b1d22;
+    --surface: #102529;
+    --roe: #f0895a;
+    --roe-soft: #c96636;
+    --ink: #e9f3f1;
+    --ink-soft: #b6cbc8;
+    --ink-faint: #7f9a97;
+    --line: #24444b;
+    --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--ocean); }
+
+  /* TOP BAR */
+  header.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .topbar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .topbar .brand {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--ocean-deep);
+    white-space: nowrap;
+  }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.84rem;
+    padding: 7px 11px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+  }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+
+  @media (max-width: 720px) {
+    .topbar-inner { padding: 12px 20px; }
+    main { padding: 32px 20px 80px; }
+  }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: var(--ocean);
+    margin-bottom: 14px;
+  }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  /* brand board */
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 26px; }
+  .swatch { border-radius: 10px; height: 88px; display: flex; flex-direction: column; justify-content: space-between; padding: 9px; border: 1px solid rgba(0,0,0,0.06); }
+  .swatch .role {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(255,255,255,0.88);
+    color: #1e2327;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  .swatch .name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.62rem;
+    background: rgba(255,255,255,0.88);
+    color: #1e2327;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  @media (max-width: 700px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .brand-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+  .brand-card h3 { font-size: 0.98rem; color: var(--ocean-deep); margin-bottom: 10px; }
+  .brand-card ul { margin: 0; padding-left: 18px; font-size: 0.9rem; color: var(--ink-soft); }
+  .brand-card li { margin-bottom: 6px; }
+
+  .type-sample { display: flex; flex-direction: column; gap: 10px; }
+  .type-sample .display { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 1.7rem; color: var(--ink); }
+  .type-sample .body { font-size: 0.95rem; color: var(--ink-soft); }
+  .type-sample .mono-line { font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ocean); }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px 18px; border-right: 1px solid var(--line-soft); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.82rem; color: var(--ink-faint); }
+
+  /* theme cards */
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { color: var(--roe); }
+
+  /* stories — single slide, no cover */
+  .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  /* map of themes */
+  details.map-history { margin-bottom: 20px; }
+  details.map-history summary {
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    padding: 10px 14px;
+    background: var(--ice);
+    border-radius: 10px;
+    list-style: none;
+  }
+  details.map-history summary::-webkit-details-marker { display: none; }
+  details.map-history summary::before { content: "▸ "; }
+  details.map-history[open] summary::before { content: "▾ "; }
+  details.map-history .hist-body { padding: 14px 4px 4px; color: var(--ink-faint); font-size: 0.86rem; }
+
+  .stage-block { border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 20px 22px; background: var(--surface); box-shadow: var(--shadow); }
+  .stage-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .stage-head .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--roe); color: var(--paper); border-radius: 999px; padding: 4px 11px; }
+  .stage-head h3 { font-size: 1rem; color: var(--ink); }
+  .stage-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 640px) { .stage-cols { grid-template-columns: 1fr; } }
+  .stage-cols h4 { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 8px; }
+  .stage-cols ul { margin: 0; padding-left: 18px; font-size: 0.88rem; color: var(--ink-soft); }
+  .stage-cols li { margin-bottom: 6px; }
+
+  footer { border-top: 1px solid var(--line-soft); padding-top: 24px; font-size: 0.82rem; color: var(--ink-faint); }
+  footer a { color: var(--ink-faint); }
+  footer ul { padding-left: 18px; }
+  footer li { margin-bottom: 4px; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Lab Frost</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+      <a href="#sources">Источники</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Салон бровей и ресниц, салон красоты, обучение мастеров</div>
+    <h1 class="title">«Lab Frost»</h1>
+    <p class="lede">Студия оформления бровей и ресниц, салон красоты и центр обучения мастеров в Туле. ТЗ на 4 темы новостей с обложками и 4 темы сторис для карточки компании на Яндекс Картах.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Тула</span>
+      <span><b>Категория:</b> брови и ресницы · салон красоты · обучение мастеров</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах</span>
+      <span><b>Этап:</b> 1 (знакомство)</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card">
+        <div class="k">Локация</div>
+        <div class="v">Тула, ул. Каминского, 24В, ТРЦ «Тройка», 3 этаж</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Профиль</div>
+        <div class="v">Студия оформления бровей и ресниц<small>+ услуги салона красоты + обучение мастеров</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Рейтинг</div>
+        <div class="v">5,0<small>852 отзыва / 1109 оценок</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Контакты</div>
+        <div class="v mono">+7 (906) 622-06-66<small>WhatsApp / Telegram</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Режим работы</div>
+        <div class="v">С 09:00, по предварительной записи</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Услуги ресниц</div>
+        <div class="v">Наращивание 2D (от 2 500 ₽), ботокс, ламинирование, УФ-наращивание, окрашивание</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Услуги бровей и лица</div>
+        <div class="v">Оформление бровей, перманентный макияж, депиляция лица</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Год основания</div>
+        <div class="v">2018 (метка «EST. 2018» в логотипе)</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Категории мастеров</div>
+        <div class="v">Младший · Стандарт · Старший · Ведущий · Premium<small>Цена на наращивание растёт по категории — от 1 500 ₽ до premium-уровня</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Запись и сервис</div>
+        <div class="v">Онлайн-запись, WhatsApp, Telegram, Telegram-канал со свободными окнами на сегодня, подарочные сертификаты</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Удобства</div>
+        <div class="v">Wi-Fi, парковка, оплата картой, доступная среда (лифт, туалет для МГН), приём с животными</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа ресурсов компании определены фирменные цвета, типографика и фотостиль бренда — их придерживаемся при подготовке макетов для новостей и сторис.</p>
+
+    <div class="swatch-row">
+      <div class="swatch" style="background:#362e28"><span class="role">Основной</span><span class="name">Тёмный шоколад · #362E28</span></div>
+      <div class="swatch" style="background:#a39b8c"><span class="role">Второстепенный</span><span class="name">Тёплый таупе · #A39B8C</span></div>
+      <div class="swatch" style="background:#1a1714"><span class="role">Акцентный</span><span class="name">Глубокий чёрно-графит · #1A1714</span></div>
+      <div class="swatch" style="background:#f1eee8"><span class="role">Фоновый</span><span class="name">Тёплый кремовый · #F1EEE8</span></div>
+      <div class="swatch" style="background:#3d3833"><span class="role">Текстовый</span><span class="name">Тёмный графит-коричневый · #3D3833</span></div>
+    </div>
+
+    <div class="brand-grid">
+      <div class="brand-card">
+        <h3>Палитра</h3>
+        <ul>
+          <li>Тёплая нейтральная база — кремовый фон (#F1EEE8) и тёмный шоколад (#362E28), без единого холодного оттенка в палитре</li>
+          <li>Второстепенный тёплый таупе (#A39B8C) — фон капсульных кнопок и мягких плашек, узнаваемый элемент интерфейса студии</li>
+          <li>Акцент — глубокий чёрно-графит (#1A1714): прайс-лист, блок ценностей, статусные тёмные секции</li>
+          <li>Синий, циан и любые холодные тона в фирменной палитре отсутствуют — визуальный код студии полностью тёплый</li>
+        </ul>
+      </div>
+      <div class="brand-card">
+        <h3>Типографика</h3>
+        <div class="type-sample">
+          <div class="display">Lab Frost</div>
+          <div class="body">Логотип — засечковое «LAB» капителью и курсивная рукописная надпись «Frost» поверх, метка «EST. 2018» под ним. В заголовках публикаций — элегантный серифный шрифт, в тексте — простой нейтральный гротеск</div>
+          <div class="mono-line">ул. Каминского, 24В · +7 (906) 622-06-66</div>
+        </div>
+      </div>
+      <div class="brand-card">
+        <h3>Фотостиль</h3>
+        <ul>
+          <li>Атмосферные интерьерные кадры студии — камень, дерево, приглушённый тёплый свет, лёгкая затемнённость</li>
+          <li>Крупный план: линия ресниц, изгиб бровей — тёплый мягкий свет без клинической стерильности</li>
+          <li>Минимум ярких бликов и холодного света — кадры выдержаны в единой тёплой тональности с интерьером</li>
+        </ul>
+      </div>
+      <div class="brand-card">
+        <h3>Графика и тон</h3>
+        <ul>
+          <li>Капсульные (pill-shaped) кнопки на таупе — фирменный UI-элемент сайта, переносится в дизайн сторис как форма плашек</li>
+          <li>Тонкие волосяные линии-разделители, минимум декора; изредка — сдержанный винтажный узор-туаль как акцентная деталь фона</li>
+          <li>Тон текста — тёплый, заботливый, статусно-бутиковый: «место, где забота о себе становится источником вдохновения» — без клинической сухости, но и без «лучший»/«топовый»/превосходных степеней</li>
+          <li>Логотип — минимально, в углу, не поверх лица модели</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 — знакомство. Одна связная последовательность, одинаковая для новостей и сторис: от знакомства со студией — к её направлениям.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">Знакомство</div><div class="d">кто такая Lab Frost</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Ресницы</div><div class="d">техники оформления</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Брови и уход</div><div class="d">брови, макияж, депиляция лица</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Обучение</div><div class="d">курсы для мастеров</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — 4 темы + обложка</h2></div>
+    <p class="section-sub">Тексты — с интеграцией SEO-ключей в тезисы, без переспама; заголовок и первый абзац несут основной ключ.</p>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Lab Frost — студия оформления бровей и ресниц в Туле</h3><span class="theme-tag">имиджевый · информационный</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Первое касание с новым посетителем карточки: закрывает вопросы «кто вы» и «чем занимаетесь» до того, как человек перейдёт к остальным публикациям, и сразу задаёт все три направления студии.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Студия Lab Frost работает в Туле с 2018 года по адресу ул. Каминского, 24В, ТРЦ «Тройка», 3 этаж</li>
+            <li>Три направления: оформление бровей и ресниц, услуги салона красоты, обучение мастеров для салонов красоты</li>
+            <li>Рейтинг 5,0 на основе 852 отзывов и 1109 оценок</li>
+            <li>Команда разделена на 5 категорий мастеров — от младшего до premium, гостю доступен выбор уровня специалиста</li>
+            <li>Условия для гостей: Wi-Fi, парковка, оплата картой, доступная среда, предварительная запись обязательна</li>
+            <li>Без превосходных степеней — только факты о формате работы</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">брови и ресницы тула</span>
+            <span class="chip">студия ресниц тула</span>
+            <span class="chip">салон красоты каминского тула</span>
+            <span class="chip">lab frost тула</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Записаться через WhatsApp или Telegram</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Фон — тёплый кремовый (#F1EEE8), логотип студии в фирменном начертании (засечковое «LAB» + курсивная «Frost», метка «EST. 2018»). Факт-строка «брови · ресницы · обучение — Тула, с 2018 года» на плашке тёплого таупе (#A39B8C). Фото — атмосферный кадр интерьера студии (камень, дерево, приглушённый тёплый свет).</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Оформление ресниц в Lab Frost: наращивание, ламинирование, ботокс</h3><span class="theme-tag">продающий · экспертный</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Основное направление студии с подтверждённым ценовым ориентиром — самый конверсионный контент, помогает читателю выбрать процедуру под свою задачу.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Наращивание ресниц (1D–4D) — от 1 500 ₽ у мастера младшей категории, у ведущего и premium-мастера — выше</li>
+            <li>5 категорий мастеров: младший, стандарт, старший, ведущий, premium — гость выбирает уровень специалиста</li>
+            <li>Ботокс ресниц — укрепление и питание без наращивания</li>
+            <li>Ламинирование ресниц — долговременный эффект густоты и изгиба</li>
+            <li>Ультрафиолетовое наращивание — быстрая полимеризация клея</li>
+            <li>Окрашивание ресниц — как отдельная услуга или в дополнение к другой процедуре</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">наращивание ресниц тула цена</span>
+            <span class="chip">ламинирование ресниц тула</span>
+            <span class="chip">ботокс ресниц тула</span>
+            <span class="chip">уф наращивание ресниц</span>
+            <span class="chip">наращивание ресниц по категориям мастеров</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Записаться на подбор техники и категории мастера</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Тёмный фон в духе фирменного прайс-листа (#1A1714), крупная элегантная серифная цифра/цена кремовым цветом. Плашка «от 1 500 ₽» тёплого таупе в углу, без перегруза текстом.</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Брови и уход за лицом в Lab Frost</h3><span class="theme-tag">продающий · вовлекающий</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Раскрывает второй профиль студии — салон красоты — и расширяет карточку за пределы одной услуги, показывая комплексный подход к лицу.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Оформление бровей — коррекция формы и окрашивание</li>
+            <li>Перманентный макияж — долговременный результат без ежедневного макияжа</li>
+            <li>Депиляция лица — деликатное удаление нежелательных волосков</li>
+            <li>Брови и уход за лицом можно совместить за один визит</li>
+            <li>Форма и техника подбираются индивидуально под черты лица</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">коррекция бровей тула</span>
+            <span class="chip">перманентный макияж бровей тула</span>
+            <span class="chip">депиляция лица тула</span>
+            <span class="chip">оформление бровей тула</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Записаться на консультацию по форме бровей</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Крупный план линии бровей в тёплом мягком свете, кремовый фон (#F1EEE8) или атмосферный интерьерный кадр. Заголовок «Брови и уход» плашкой тёплого таупе.</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Обучение мастеров бровей и ресниц в Lab Frost</h3><span class="theme-tag">экспертный · имиджевый</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Раскрывает третий профиль студии — образовательный центр — и выводит на карточку отдельную аудиторию: будущих и действующих мастеров индустрии красоты.</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы для копирайтера</div>
+          <div class="body"><ul>
+            <li>Обучение мастеров для салонов красоты на базе студии Lab Frost</li>
+            <li>Практика по актуальным техникам: наращивание, ламинирование, ботокс ресниц, оформление бровей</li>
+            <li>Обучение проходит в действующей студии — реальные условия работы мастера</li>
+            <li>В студии выстроена система из 5 категорий мастеров (младший → premium) — понятная траектория роста после обучения</li>
+            <li>Подходит для тех, кто осваивает профессию с нуля или повышает квалификацию</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">обучение мастеров ресниц тула</span>
+            <span class="chip">курсы бровиста тула</span>
+            <span class="chip">обучение наращиванию ресниц тула</span>
+            <span class="chip">курсы для мастеров красоты тула</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Узнать про запись на обучение</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">Тёмный шоколадный фон (#362E28), композиция «рабочее место мастера» в тёплом свете — инструменты, лупа-лампа, дерево/камень. Плашка «Обучение мастеров» тёплого таупе.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — 4 темы</h2></div>
+    <p class="section-sub">Та же последовательность тем, что и в новостях. Один слайд на тему — тезисно, только факты.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Знакомство</div>
+        <h3>Lab Frost в Туле</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Студия на ул. Каминского, 24В, ТРЦ «Тройка», с 2018 года</li>
+          <li>Брови, ресницы, обучение мастеров — три направления</li>
+          <li>Рейтинг 5,0 (852 отзыва)</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёплый кремовый фон (#F1EEE8), крупно логотип студии (LAB + курсив Frost), факт-строка на капсульной плашке тёплого таупе. Фото — атмосферный кадр интерьера.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер «Написать нам»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">02 · Ресницы</div>
+        <h3>Оформление ресниц</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Наращивание 1D–4D — от 1 500 ₽, цена по категории мастера</li>
+          <li>Ботокс, ламинирование, УФ-наращивание, окрашивание</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмный фон в духе прайс-листа бренда (#1A1714), элегантная серифная цена кремовым цветом. Плашка тёплого таупе.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер-вопрос «Записаться»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">03 · Брови и уход</div>
+        <h3>Брови и уход за лицом</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Коррекция и окрашивание бровей</li>
+          <li>Перманентный макияж, депиляция лица</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Крупный план линии бровей в тёплом свете, кремовый фон, заголовок «Брови и уход» на капсульной плашке тёплого таупе.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер «Хочу так же»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">04 · Обучение</div>
+        <h3>Обучение мастеров</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Обучение мастеров для салонов красоты</li>
+          <li>Практика в действующей студии, 5 категорий роста — от младшего до premium</li>
+        </ul></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмный шоколадный фон, композиция с инструментами мастера в тёплом свете, значок «Обучение» тёплого таупе.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Стикер-вопрос «Как записаться на курс?»</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <p class="section-sub">История этапов ведения карточки. Пройденные этапы сворачиваются по мере накопления — сейчас в работе первый.</p>
+
+    <details class="map-history">
+      <summary>Пройденные этапы (0)</summary>
+      <div class="hist-body">Пока нет — этап 1 идёт первым.</div>
+    </details>
+
+    <div class="stage-block">
+      <div class="stage-head"><span class="badge">актуальный</span><h3>Этап 1 — знакомство</h3></div>
+      <div class="stage-cols">
+        <div>
+          <h4>Новости</h4>
+          <ul>
+            <li>Lab Frost — студия оформления бровей и ресниц в Туле</li>
+            <li>Оформление ресниц в Lab Frost: наращивание, ламинирование, ботокс</li>
+            <li>Брови и уход за лицом в Lab Frost</li>
+            <li>Обучение мастеров бровей и ресниц в Lab Frost</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Сторис</h4>
+          <ul>
+            <li>Lab Frost в Туле</li>
+            <li>Оформление ресниц</li>
+            <li>Брови и уход за лицом</li>
+            <li>Обучение мастеров</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="sources">
+    <div>Источники данных о компании:</div>
+    <ul>
+      <li><a href="https://yandex.ru/maps/-/CTXMZY7w">Карточка компании на Яндекс Картах</a></li>
+      <li>Скриншоты сайта, предоставленные компанией — фирменная палитра, логотип, категории мастеров, прайс-лист</li>
+    </ul>
+  </footer>
+</main>
+
+</body>
+</html>
