@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шмелёва и Партнёры — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8;
+    --roe:#C4572B; --roe-light:#E07C4F;
+    --ink:#12232A; --ink-soft:#4A6069;
+    --line:#D8E3E1; --card:#FFFFFF; --bg:#F5F8F8;
+    --font-display:'Bricolage Grotesque',system-ui,sans-serif;
+    --font-body:'Public Sans',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ice:#0F1B1E; --bg:#0F1B1E; --ink:#EAF2F1; --ink-soft:#9FB4B4;
+      --line:#22383C; --card:#152426;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ice:#0F1B1E; --bg:#0F1B1E; --ink:#EAF2F1; --ink-soft:#9FB4B4;
+    --line:#22383C; --card:#152426;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); line-height:1.55; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:700; margin:0; color:var(--ink); letter-spacing:-.01em;}
+  p{margin:0;}
+  a{color:inherit;}
+  .mono{font-family:var(--font-mono);}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ===== TOP NAV — fixed agency chrome, single sticky horizontal bar ===== */
+  .topbar{position:sticky; top:0; z-index:50; background:var(--ocean); border-bottom:1px solid rgba(255,255,255,.08);}
+  .topbar-inner{max-width:1080px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between; gap:24px;}
+  .brand{font-family:var(--font-display); font-weight:700; color:#fff; font-size:17px; white-space:nowrap;}
+  .brand span{color:var(--roe-light);}
+  .navlinks{display:flex; gap:4px; flex-wrap:wrap;}
+  .navlinks a{font-family:var(--font-mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:#CFE3E1; text-decoration:none; padding:8px 12px; border-radius:8px; transition:background .15s,color .15s;}
+  .navlinks a:hover{background:rgba(255,255,255,.08); color:#fff;}
+
+  section{padding:64px 0;}
+  section:first-of-type{padding-top:48px;}
+  .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--roe); margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .eyebrow .num{background:var(--ocean); color:#fff; border-radius:6px; padding:2px 7px; font-size:11px;}
+  .sec-title{font-size:30px; margin-bottom:8px;}
+  .sec-sub{color:var(--ink-soft); font-size:15px; max-width:680px; margin-bottom:32px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(180deg,var(--ocean),var(--teal)); color:#fff; padding:56px 0 48px;}
+  .hero .eyebrow{color:var(--roe-light);}
+  .hero h1{color:#fff; font-size:36px; max-width:760px;}
+  .hero .lede{color:#D6ECEA; max-width:640px; margin-top:14px; font-size:15px;}
+  .dest-note{margin-top:24px; display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:10px 16px; font-family:var(--font-mono); font-size:12.5px; color:#EAF6F4;}
+  .dest-note b{color:#fff;}
+  .facts-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:36px;}
+  .fact{background:var(--card); padding:20px 18px;}
+  .fact .v{font-family:var(--font-display); font-size:24px; font-weight:700; color:var(--ocean);}
+  .fact .l{font-size:12.5px; color:var(--ink-soft); margin-top:4px;}
+  @media(max-width:760px){.facts-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* MINI BRANDBOOK */
+  .bb-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:32px;}
+  @media(max-width:760px){.bb-grid{grid-template-columns:1fr;}}
+  .swatches{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  .swatch{border-radius:12px; overflow:hidden; border:1px solid var(--line);}
+  .swatch .chip{height:64px;}
+  .swatch .lbl{background:var(--card); padding:9px 11px;}
+  .swatch .lbl .role{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+  .swatch .lbl .hex{font-family:var(--font-mono); font-size:12.5px; font-weight:600; margin-top:2px;}
+  .bb-notes{display:flex; flex-direction:column; gap:14px;}
+  .bb-note{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+  .bb-note .t{font-family:var(--font-display); font-weight:700; font-size:14.5px; margin-bottom:6px;}
+  .bb-note .d{font-size:13.5px; color:var(--ink-soft);}
+
+  /* ЛОГИКА ЦИКЛА */
+  .cycle{display:flex; flex-wrap:wrap; gap:12px; align-items:stretch;}
+  .cycle-step{flex:1 1 200px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; position:relative;}
+  .cycle-step .n{font-family:var(--font-mono); font-size:11px; color:var(--roe); margin-bottom:6px;}
+  .cycle-step .t{font-family:var(--font-display); font-weight:700; font-size:14.5px; margin-bottom:6px;}
+  .cycle-step .d{font-size:12.5px; color:var(--ink-soft);}
+  .cycle-arrow{align-self:center; color:var(--line); font-size:20px; display:flex; align-items:center;}
+  @media(max-width:760px){.cycle{flex-direction:column;} .cycle-arrow{display:none;}}
+
+  /* CARDS — NEWS */
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 26px 24px; margin-bottom:22px;}
+  .card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:10px; flex-wrap:wrap;}
+  .card-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft);}
+  .tag{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.04em; background:var(--ocean); color:#fff; border-radius:999px; padding:4px 11px;}
+  .tag.alt{background:var(--roe);}
+  .card h3{font-size:19px; margin:6px 0 14px; max-width:640px;}
+  .thesis{margin:0 0 16px; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .thesis li{font-size:13.8px; padding-left:16px; position:relative; color:var(--ink);}
+  .thesis li::before{content:"—"; position:absolute; left:0; color:var(--roe);}
+  .note-box{background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:13px; color:var(--ink-soft); margin:14px 0;}
+  .note-box b{color:var(--ink);}
+  .seo-block{margin:14px 0;}
+  .seo-label{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:7px;}
+  .chips{display:flex; flex-wrap:wrap; gap:7px;}
+  .chip{font-family:var(--font-mono); font-size:12px; background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:4px 9px; color:var(--ink);}
+  .chip.add{color:var(--ink-soft);}
+  .cta-line{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line); font-size:13px;}
+  .cta-line b{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--roe); letter-spacing:.04em;}
+  .cover-block{margin-top:16px; background:var(--ocean); color:#fff; border-radius:12px; padding:18px 20px;}
+  .cover-block .cb-label{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:#9FD7CE; margin-bottom:8px;}
+  .cover-block .cb-title{font-family:var(--font-display); font-weight:700; font-size:17px; margin-bottom:4px;}
+  .cover-block .cb-sub{font-size:13px; color:#D6ECEA; margin-bottom:10px;}
+  .cover-block .cb-visual{font-size:12.5px; color:#B9DAD6; border-top:1px solid rgba(255,255,255,.15); padding-top:10px;}
+
+  /* СТОРИС — no cover, one slide each */
+  .stories-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+  @media(max-width:760px){.stories-grid{grid-template-columns:1fr;}}
+  .story-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 22px 20px;}
+  .story-card .card-num{margin-bottom:8px; display:block;}
+  .story-card h4{font-size:16.5px; margin-bottom:4px;}
+  .story-card .sub{font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+  .story-card .thesis li{font-size:13px;}
+  .story-fact{margin-top:12px; background:var(--bg); border-radius:10px; padding:10px 13px; font-size:13px;}
+  .story-fact b{font-family:var(--font-display); color:var(--roe);}
+  .design-note{margin-top:14px; border-radius:10px; padding:13px 15px; font-size:12.5px; background:#1B2036; color:#EDE3D2;}
+  .design-note .dn-label{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#BD9257; margin-bottom:6px;}
+  .design-note code{font-family:var(--font-mono); background:rgba(255,255,255,.08); padding:1px 5px; border-radius:4px;}
+
+  /* КАРТА ТЕМ */
+  details.stage{background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden;}
+  details.stage summary{cursor:pointer; padding:14px 18px; font-family:var(--font-mono); font-size:12.5px; display:flex; align-items:center; gap:10px; list-style:none;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{background:var(--roe); color:#fff; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; padding:3px 9px; border-radius:999px;}
+  .stage-body{padding:0 18px 16px; font-size:13px; color:var(--ink-soft);}
+  .stage-list{margin-top:8px; display:flex; flex-direction:column; gap:4px;}
+
+  footer{border-top:1px solid var(--line); padding:32px 0 56px;}
+  footer .src{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:18px;}
+  footer .src a{text-decoration:none; color:var(--teal);}
+  footer .src a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Шмелёва <span>&amp;</span> Партнёры</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<section id="company" class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">01</span> Компания</div>
+    <h1>Шмелёва и Партнёры — юридическая фирма</h1>
+    <p class="lede">Юридические услуги для бизнеса и физических лиц, миграционные услуги, адвокатская практика. Офисы в Саратове, Москве и Краснодаре. Управляющий партнёр — Марина Шмелева, доктор юридических наук, председатель Саратовского областного состава арбитров Волго-Уральского отделения Арбитражного центра при РСПП.</p>
+    <div class="dest-note">Публикация: карточка компании «Шмелёва и Партнёры» на <b>Яндекс Картах и 2ГИС</b></div>
+    <div class="facts-grid">
+      <div class="fact"><div class="v">98%</div><div class="l">выигранных судебных дел</div></div>
+      <div class="fact"><div class="v">60%+</div><div class="l">споров урегулировано досудебно</div></div>
+      <div class="fact"><div class="v">10+</div><div class="l">лет опыта у каждого юриста в команде</div></div>
+      <div class="fact"><div class="v">3</div><div class="l">офиса — Саратов, Москва, Краснодар</div></div>
+      <div class="fact"><div class="v">43%</div><div class="l">экономия на содержании штатного юриста</div></div>
+      <div class="fact"><div class="v">0₽</div><div class="l">предоплаты — поэтапная, фиксированная оплата</div></div>
+      <div class="fact"><div class="v">6+</div><div class="l">профильных юристов-партнёров в команде</div></div>
+      <div class="fact"><div class="v">АЮР</div><div class="l">членство в Ассоциации юристов России</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">02</span> Мини-брендбук</div>
+    <h2 class="sec-title">Фирменный стиль компании</h2>
+    <p class="sec-sub">После анализа ресурсов компании определены фирменные цвета, типографика и фотостиль. Ниже — палитра и визуальные принципы для дизайнера сторис и обложек новостей.</p>
+    <div class="bb-grid">
+      <div>
+        <div class="swatches">
+          <div class="swatch">
+            <div class="chip" style="background:#1B2036"></div>
+            <div class="lbl"><div class="role">Основной / фон</div><div class="hex">#1B2036 — глубокий синий индиго</div></div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background:#262F4C"></div>
+            <div class="lbl"><div class="role">Второстепенный</div><div class="hex">#262F4C — синий шапки сайта</div></div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background:#BD9257"></div>
+            <div class="lbl"><div class="role">Акцентный</div><div class="hex">#BD9257 — бронзово-золотой</div></div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background:#8B6B3D"></div>
+            <div class="lbl"><div class="role">Акцент, тёмный</div><div class="hex">#8B6B3D — тень/градиент лого</div></div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background:#D9B87E"></div>
+            <div class="lbl"><div class="role">Акцент, светлый</div><div class="hex">#D9B87E — блик лого/иконок</div></div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background:#F7F5F1; border-bottom:1px solid #eee"></div>
+            <div class="lbl"><div class="role">Фоновый, светлый</div><div class="hex">#F7F5F1 — карточки услуг</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bb-notes">
+        <div class="bb-note"><div class="t">Логотип</div><div class="d">Античная колонна (портик) в бронзово-золотом градиенте + название серифным шрифтом того же тона; под названием — тонкая подпись «Юридическая фирма». Используется на тёмно-синем фоне шапки.</div></div>
+        <div class="bb-note"><div class="t">Типографика</div><div class="d">Крупные уверенные заголовки без засечек на тёмном фоне; бронзовый акцент — для выделения имён, цифр и ключевых терминов внутри текста.</div></div>
+        <div class="bb-note"><div class="t">Фотостиль</div><div class="d">Чёрно-белая/монохромная обработка для карточек услуг; цветная деловая фотография — для героя и портретов юристов. Строгие костюмы, нейтральный студийный или офисный фон, сдержанный свет.</div></div>
+        <div class="bb-note"><div class="t">Иконография</div><div class="d">Тонкие линейные иконки (весы, чемодан, тележка, спасательный круг) в квадратных бронзовых бейджах на светлом фоне.</div></div>
+        <div class="bb-note"><div class="t">Тон коммуникации</div><div class="d">Сдержанный, статусный, экспертный. Короткие заголовки, минимум декора, акцент на цифрах и фактах — без превосходных степеней.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">03</span> Логика цикла</div>
+    <h2 class="sec-title">Связная последовательность тем</h2>
+    <p class="sec-sub">Цикл выстроен от базовой компетенции к предметным денежным болям бизнеса, с переходом на самый конверсионный кейс.</p>
+    <div class="cycle">
+      <div class="cycle-step"><div class="n">01</div><div class="t">Судебное сопровождение</div><div class="d">Базовая компетенция — полный цикл судебной работы</div></div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step"><div class="n">02</div><div class="t">Налоговые споры</div><div class="d">Частная, но частая боль — претензии ФНС</div></div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step"><div class="n">03</div><div class="t">Арбитражные споры</div><div class="d">Коммерческие конфликты между компаниями</div></div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step"><div class="n">04</div><div class="t">Взыскание задолженности</div><div class="d">Самый предметный кейс — от претензии до денег</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">04</span> Новости</div>
+    <h2 class="sec-title">Темы для новостей (4 + обложка)</h2>
+    <p class="sec-sub">Тексты — с максимальной SEO-оптимизацией: ключи вшиты в заголовок, подзаголовки и первый абзац, без «воды» и без формулировок вроде «мы оказываем качественные услуги».</p>
+
+    <div class="card">
+      <div class="card-head"><span class="card-num">Новость 01</span><span class="tag">Экспертная / доверие</span></div>
+      <h3>Судебное сопровождение бизнеса: от анализа спора до исполнения решения</h3>
+      <ul class="thesis">
+        <li>Анализ обстоятельств и документов, оценка перспектив и рисков спора</li>
+        <li>Определение стратегии защиты, подготовка исков, отзывов, возражений</li>
+        <li>Представительство интересов компании в суде, работа с доказательствами</li>
+        <li>Обжалование судебных актов при необходимости</li>
+        <li>Сопровождение исполнения судебного решения</li>
+        <li>Оценка возможности досудебного урегулирования, если это выгоднее по деньгам и срокам</li>
+      </ul>
+      <div class="note-box"><b>Акцент:</b> перед началом работы проводится оценка рисков и перспектив спора; более 60% дел компании урегулированы в досудебном порядке (по данным сайта). Показывать этапы работы и результат, не декларировать «качество услуг».</div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — основные</div>
+        <div class="chips">
+          <span class="chip">судебное сопровождение бизнеса</span><span class="chip">судебное сопровождение</span><span class="chip">юридическое сопровождение в суде</span><span class="chip">представительство в суде</span><span class="chip">юрист по судебным спорам</span><span class="chip">судебный юрист для бизнеса</span><span class="chip">защита бизнеса в суде</span>
+        </div>
+      </div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — дополнительные</div>
+        <div class="chips">
+          <span class="chip add">судебное представительство</span><span class="chip add">юридическая помощь в суде</span><span class="chip add">сопровождение судебных споров</span><span class="chip add">юрист по гражданским спорам</span><span class="chip add">юридическая компания для бизнеса</span>
+        </div>
+      </div>
+      <div class="cta-line"><b>CTA</b> — получить оценку перспектив спора / записаться на консультацию</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку</div>
+        <div class="cb-title">Судебное сопровождение бизнеса</div>
+        <div class="cb-sub">От анализа ситуации и подготовки позиции до судебного решения и его исполнения</div>
+        <div class="cb-visual">Деловой портрет юриста или судебная атрибутика (папки, документы) + фирменный бронзовый акцент из брендбука.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-num">Новость 02</span><span class="tag">Экспертная</span></div>
+      <h3>Налоговые споры: как защитить бизнес при претензиях налоговых органов</h3>
+      <ul class="thesis">
+        <li>Причины налоговых споров: доначисление налогов, отказ в вычетах</li>
+        <li>Претензии к расходам и хозяйственным операциям, вопросы обоснованности налоговой выгоды</li>
+        <li>Результаты камеральных и выездных проверок, обжалование решений налоговых органов</li>
+        <li>Подготовка возражений и доказательств, представительство интересов компании</li>
+        <li>Досудебный и судебный этапы защиты</li>
+      </ul>
+      <div class="note-box"><b>Кейс:</b> защита права IT-компании на применение льготной ставки УСН. <b>Акцент:</b> текст отвечает на вопрос «что делать при претензиях ФНС и чем реально помогают юристы» — без пересказа Налогового кодекса.</div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — основные</div>
+        <div class="chips">
+          <span class="chip">налоговые споры</span><span class="chip">налоговый юрист</span><span class="chip">юрист по налоговым спорам</span><span class="chip">налоговые споры с ФНС</span><span class="chip">защита бизнеса от налоговой</span><span class="chip">обжалование решения налоговой</span><span class="chip">налоговый адвокат</span>
+        </div>
+      </div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — дополнительные</div>
+        <div class="chips">
+          <span class="chip add">спор с налоговой инспекцией</span><span class="chip add">оспаривание решения налоговой</span><span class="chip add">налоговая проверка</span><span class="chip add">юридическая помощь при налоговой проверке</span><span class="chip add">защита интересов бизнеса в налоговом споре</span>
+        </div>
+      </div>
+      <div class="cta-line"><b>CTA</b> — разобрать ситуацию с налоговой проверкой на консультации</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку</div>
+        <div class="cb-title">Налоговые споры: защита бизнеса</div>
+        <div class="cb-sub">Как действовать при претензиях налоговых органов</div>
+        <div class="cb-visual">Документы / декларация / деловой портрет специалиста, бронзовый акцент на ключевом термине.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-num">Новость 03</span><span class="tag">Экспертная</span></div>
+      <h3>Арбитражные споры: защита интересов бизнеса в коммерческих конфликтах</h3>
+      <ul class="thesis">
+        <li>Споры по договорам поставки, взыскание оплаты за товары и услуги</li>
+        <li>Подрядные споры, споры по исполнению и расторжению договоров</li>
+        <li>Взыскание убытков и неустоек, корпоративные и имущественные споры</li>
+        <li>Защита ответчика по необоснованным требованиям, подготовка доказательственной базы</li>
+        <li>Досудебное урегулирование и представительство в арбитражном суде, обжалование судебных актов</li>
+      </ul>
+      <div class="note-box"><b>Практика:</b> в портфеле компании — взыскание 1 млн ₽ и 3,5 млн ₽ по контрактам, защита от штрафных санкций на сумму свыше 1 млн ₽. Структура текста: ситуация → риск для бизнеса → действия юристов → результат.</div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — основные</div>
+        <div class="chips">
+          <span class="chip">арбитражный юрист</span><span class="chip">юрист по арбитражным спорам</span><span class="chip">арбитражный суд</span><span class="chip">представительство в арбитражном суде</span><span class="chip">защита в арбитражном суде</span><span class="chip">арбитражные дела</span>
+        </div>
+      </div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — дополнительные</div>
+        <div class="chips">
+          <span class="chip add">коммерческие споры</span><span class="chip add">экономические споры</span><span class="chip add">арбитражный адвокат</span><span class="chip add">взыскание задолженности в арбитражном суде</span><span class="chip add">юрист по хозяйственным спорам</span>
+        </div>
+      </div>
+      <div class="cta-line"><b>CTA</b> — направить документы по спору на предварительную оценку</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку</div>
+        <div class="cb-title">Арбитражные споры</div>
+        <div class="cb-sub">Защита интересов бизнеса в коммерческих конфликтах</div>
+        <div class="cb-visual">Судебное заседание / деловые переговоры + фирменная графика; без стоковых молотков судьи и весов правосудия.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-num">Новость 04</span><span class="tag alt">Продающая</span></div>
+      <h3>Взыскание задолженности с контрагентов: от претензии до получения денег</h3>
+      <ul class="thesis">
+        <li>Почему простого требования «заплатить долг» часто недостаточно</li>
+        <li>Анализ договора и оснований задолженности, проверка доказательств</li>
+        <li>Расчёт суммы долга, процентов и неустойки, подготовка претензии</li>
+        <li>Досудебное взыскание, обращение в арбитражный суд, получение судебного акта</li>
+        <li>Исполнительное производство и контроль фактического взыскания денег</li>
+      </ul>
+      <div class="note-box"><b>Кейс:</b> взыскание 3 528 900 ₽ за строительно-монтажные работы — без письменного договора и при отказе заказчика подписывать акты; долг погашен в досудебном порядке вместе с процентами. <b>Важно:</b> сумма и детали кейса публикуются только при отдельном подтверждении согласия компании на его использование — на сайте указано, что кейсы размещаются после разрешения клиента.</div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — основные</div>
+        <div class="chips">
+          <span class="chip">взыскание задолженности</span><span class="chip">взыскание задолженности с юридических лиц</span><span class="chip">взыскание долга с контрагента</span><span class="chip">взыскание задолженности с ООО</span><span class="chip">юрист по взысканию задолженности</span><span class="chip">взыскание задолженности через суд</span>
+        </div>
+      </div>
+      <div class="seo-block">
+        <div class="seo-label">SEO — дополнительные</div>
+        <div class="chips">
+          <span class="chip add">взыскание дебиторской задолженности</span><span class="chip add">взыскание долга по договору</span><span class="chip add">взыскание задолженности в арбитражном суде</span><span class="chip add">претензия о взыскании задолженности</span>
+        </div>
+      </div>
+      <div class="cta-line"><b>CTA</b> — получить расчёт суммы долга и план взыскания</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку</div>
+        <div class="cb-title">Взыскание задолженности с контрагента</div>
+        <div class="cb-sub">От юридического анализа и претензии до фактического получения денег</div>
+        <div class="cb-visual">Опционально, при согласии компании — акцент «3 528 900 ₽ взыскано для клиента»; без согласия — обложка без суммы.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">05</span> Сторис</div>
+    <h2 class="sec-title">Темы для сторис (4, формат — 1 слайд)</h2>
+    <p class="sec-sub">Каждая сторис — один слайд: заголовок, тезисы, факт. Без обложек. Только сухие факты, без «N причин» и превосходных степеней.</p>
+    <div class="stories-grid">
+
+      <div class="story-card">
+        <span class="card-num">Сторис 01</span>
+        <h4>Судебное сопровождение бизнеса</h4>
+        <div class="sub">Когда спор требует не просто юриста, а полноценной стратегии защиты</div>
+        <ul class="thesis">
+          <li>Анализ ситуации и документов, оценка перспектив и рисков</li>
+          <li>Разработка позиции по делу, подготовка процессуальных документов</li>
+          <li>Представительство в суде, обжалование актов, сопровождение исполнения решения</li>
+        </ul>
+        <div class="story-fact"><b>98%</b> выигранных судебных разбирательств — показатель компании</div>
+        <div class="design-note"><div class="dn-label">Дизайн слайда</div>Фон <code>#1B2036</code>, типографика белая, акцент — бронзовый <code>#BD9257</code> для цифры «98%». Фотография юриста или судебной тематики, минимум декора, без обложки.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="card-num">Сторис 02</span>
+        <h4>Налоговые споры</h4>
+        <div class="sub">Защита бизнеса при претензиях налоговых органов</div>
+        <ul class="thesis">
+          <li>Анализ результатов налоговых проверок, правовые основания претензий ФНС</li>
+          <li>Подготовка возражений и документов, обжалование решений налоговых органов</li>
+          <li>Представительство интересов компании, защита позиции в суде</li>
+        </ul>
+        <div class="story-fact">В команде — профильные специалисты по <b>налоговому праву</b></div>
+        <div class="design-note"><div class="dn-label">Дизайн слайда</div>Документы / деловая съёмка, крупный заголовок белым на <code>#1B2036</code>, отдельные термины выделены бронзовым <code>#BD9257</code>.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="card-num">Сторис 03</span>
+        <h4>Арбитражные споры</h4>
+        <div class="sub">Защита интересов бизнеса в коммерческих конфликтах</div>
+        <ul class="thesis">
+          <li>Споры по поставкам, подряду, оплате товаров и услуг</li>
+          <li>Взыскание задолженности, штрафов и неустоек</li>
+          <li>Корпоративные и имущественные требования</li>
+        </ul>
+        <div class="story-fact">В практике — дела с взысканием <b>1 млн ₽, 3,5 млн ₽</b> и защита от штрафных санкций</div>
+        <div class="design-note"><div class="dn-label">Дизайн слайда</div>Строгая эстетика: судебные документы / переговоры, крупные суммы как визуальный акцент на <code>#1B2036</code>. Без стоковых весов правосудия и молотка судьи.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="card-num">Сторис 04</span>
+        <h4>Контрагент не платит?</h4>
+        <div class="sub">Взыскание задолженности — от претензии до получения денег</div>
+        <ul class="thesis">
+          <li>Анализ договоров, документов и доказательств</li>
+          <li>Претензия с юридически обоснованными требованиями</li>
+          <li>Представительство в суде, контроль исполнительного производства</li>
+        </ul>
+        <div class="story-fact"><b>3 528 900 ₽</b> взыскано без обращения в суд — при публикации требуется согласие компании на использование кейса</div>
+        <div class="design-note"><div class="dn-label">Дизайн слайда</div>Цифровая подача: крупная сумма на <code>#1B2036</code>, подпись «без обращения в суд» бронзовым <code>#BD9257</code>. Кейс и сумма — только по согласованию с компанией.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">06</span> Карта тем</div>
+    <h2 class="sec-title">История этапов</h2>
+    <details class="stage" open>
+      <summary><span class="badge-current">Актуальный</span> Этап 1 — 4 новости + 4 сторис</summary>
+      <div class="stage-body">
+        <div class="stage-list">
+          <div>Новость: Судебное сопровождение бизнеса</div>
+          <div>Новость: Налоговые споры</div>
+          <div>Новость: Арбитражные споры</div>
+          <div>Новость: Взыскание задолженности с контрагентов</div>
+          <div>Сторис: Судебное сопровождение бизнеса</div>
+          <div>Сторис: Налоговые споры</div>
+          <div>Сторис: Арбитражные споры</div>
+          <div>Сторис: Контрагент не платит?</div>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="src">
+      <a href="https://shmeleva-partners.ru/" target="_blank" rel="noopener">shmeleva-partners.ru</a>
+      <a href="https://vk.ru/shmelmarina" target="_blank" rel="noopener">vk.ru/shmelmarina</a>
+      <a href="https://t.me/lawshmel" target="_blank" rel="noopener">t.me/lawshmel</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
