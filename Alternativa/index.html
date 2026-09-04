@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Альтернатива — ТЗ на контент</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --ink:#1A1F23; --ink-soft:#4A555C; --line:#DCE3E3; --card:#FFFFFF; --bg:#F5F8F8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#0E3B47; --teal:#2E97A6; --ice:#0F1A1D; --roe:#E07349;
+      --ink:#EDF3F3; --ink-soft:#A9BDC0; --line:#233234; --card:#152225; --bg:#0F1A1D;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#0E3B47; --teal:#2E97A6; --ice:#0F1A1D; --roe:#E07349;
+    --ink:#EDF3F3; --ink-soft:#A9BDC0; --line:#233234; --card:#152225; --bg:#0F1A1D;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;margin:0}
+  h1,h2,h3,.display{font-family:'Bricolage Grotesque',system-ui,sans-serif}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:50;background:var(--ocean);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:24px;padding:14px 24px;overflow-x:auto;white-space:nowrap}
+  .topbar .brand{color:#fff;font-weight:700;font-size:15px;letter-spacing:.01em;margin-right:auto}
+  .topbar nav{display:flex;gap:18px}
+  .topbar nav a{color:#CFE3E6;text-decoration:none;font-size:13px;font-family:'IBM Plex Mono',monospace;padding:6px 2px;border-bottom:2px solid transparent}
+  .topbar nav a:hover{color:#fff;border-color:var(--roe)}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin:0 0 10px}
+  h2.title{font-size:30px;margin:0 0 8px;font-weight:800}
+  .lede{color:var(--ink-soft);max-width:640px;margin:0 0 36px;font-size:15px}
+
+  /* hero */
+  .hero{padding-top:56px}
+  .hero h1{font-size:38px;line-height:1.15;font-weight:800;margin:0 0 14px}
+  .hero p{color:var(--ink-soft);max-width:620px;font-size:16px}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:32px}
+  .fact{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .fact .n{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;color:var(--roe)}
+  .fact .l{font-size:13px;color:var(--ink-soft);margin-top:4px}
+
+  /* brandbook */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:28px}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .swatch .chip{height:64px}
+  .swatch .meta{padding:12px 14px}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px}
+  .notes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .note-card h4{margin:0 0 8px;font-size:14px}
+  .note-card p{margin:0;font-size:13.5px;color:var(--ink-soft)}
+  .src-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);background:color-mix(in srgb, var(--teal) 12%, transparent);border-radius:6px;padding:2px 8px;margin-bottom:14px}
+
+  /* cycle */
+  .cycle{display:flex;flex-direction:column;gap:12px}
+  .cycle .step{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .cycle .idx{font-family:'IBM Plex Mono',monospace;color:var(--roe);font-weight:700;font-size:13px;padding-top:2px}
+  .cycle p{margin:0;font-size:14px;color:var(--ink-soft)}
+  .cycle b{color:var(--ink)}
+
+  /* news cards */
+  .news-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px}
+  .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb, var(--roe) 14%, transparent);color:var(--roe);border-radius:6px;padding:3px 9px;margin-bottom:10px}
+  .news-card h3{font-size:19px;margin:0 0 12px}
+  .news-card ul{margin:0 0 16px;padding-left:18px;font-size:14px;color:var(--ink-soft)}
+  .news-card li{margin-bottom:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .chip-kw{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--ink-soft)}
+  .meta-box{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft);margin-bottom:14px}
+  .meta-box b{color:var(--ink)}
+  .cta-line{font-size:13.5px;font-weight:600;color:var(--teal)}
+  .cover-box{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px}
+  .cover-box .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;margin-bottom:8px}
+  .cover-box ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-soft)}
+
+  /* stories */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .story-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .story-card h3{font-size:17px;margin:0 0 12px}
+  .story-card ul{margin:0 0 14px;padding-left:18px;font-size:14px;color:var(--ink-soft)}
+  .story-card li{margin-bottom:4px}
+  .design-note{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft)}
+  .design-note .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;margin-bottom:6px;display:block}
+
+  /* map */
+  details.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  details.stage[open]{border-color:var(--roe)}
+  summary{cursor:pointer;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;border-radius:20px;padding:3px 10px}
+  .badge.past{background:var(--ink-soft)}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft)}
+
+  footer{padding:40px 0;text-align:center}
+  footer a{color:var(--teal);font-size:13.5px;text-decoration:none}
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="brand">Альтернатива — Контент</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+</div>
+
+<section id="company" class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Автошкола / Мотошкола · Санкт-Петербург</p>
+    <h1>Альтернатива</h1>
+    <p>Сеть автошкол и мотошкол в Санкт-Петербурге и Ленинградской области. На рынке с 2008 года: подготовка на категории А, В, А+В и восстановление навыков вождения для тех, кто уже имеет права. Обучение — очно, онлайн и в смешанном формате, с сопровождением до получения прав.</p>
+    <div class="facts">
+      <div class="fact"><div class="n">2008</div><div class="l">год основания, 16 лет на рынке</div></div>
+      <div class="fact"><div class="n">45 000+</div><div class="l">подготовленных курсантов</div></div>
+      <div class="fact"><div class="n">25+</div><div class="l">филиалов в Петербурге и области</div></div>
+      <div class="fact"><div class="n">30+</div><div class="l">точек для практики вождения</div></div>
+      <div class="fact"><div class="n">3</div><div class="l">отделения ГИБДД для сдачи экзамена</div></div>
+      <div class="fact"><div class="n">А · В · А+В</div><div class="l">категории обучения + восстановление навыков</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <div class="wrap">
+    <p class="eyebrow">Мини-брендбук</p>
+    <h2 class="title">Визуальный язык компании</h2>
+    <p class="lede">После анализа сайта schooldriving.ru и материалов, предоставленных заказчиком, определены фирменные цвета, типографика и фотостиль «Альтернативы» — используются в дизайн-заметках блока «Сторис» ниже.</p>
+
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#4356E4"></div><div class="meta"><div class="role">Основной</div><div class="hex">#4356E4 — индиго-синий</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#5B4FE8"></div><div class="meta"><div class="role">Второстепенный</div><div class="hex">#5B4FE8 — сине-фиолетовый</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#E8382E"></div><div class="meta"><div class="role">Акцентный</div><div class="hex">#E8382E — красный (CTA, срочность)</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#B4E61F"></div><div class="meta"><div class="role">Акцентный доп.</div><div class="hex">#B4E61F — лаймовый зелёный</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#111111"></div><div class="meta"><div class="role">Текстовый</div><div class="hex">#111111 — чёрный</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #E5E5E5"></div><div class="meta"><div class="role">Фоновый</div><div class="hex">#FFFFFF — белый</div></div></div>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card"><h4>Типографика</h4><p>Гротеск с округлыми формами, очень плотный жирный вес в заголовках и на кнопках; основной текст — тем же гротеском, но обычным начертанием. Контраст веса — главный приём иерархии.</p></div>
+      <div class="note-card"><h4>Логотип</h4><p>Круглый знак: красное кольцо со стрелкой/меткой и белой заливкой внутри, рядом словесный блок «автошкола АЛЬТЕРНАТИВА» — на тёмном фоне текст белый, на светлом — чёрный.</p></div>
+      <div class="note-card"><h4>Фотостиль</h4><p>Живые кадры реальных учеников и инструкторов: в салоне автомобиля за рулём, в классе на теории, крупные планы рук на руле и на экзаменационном бланке. Естественный свет, никакой студийной постановки.</p></div>
+      <div class="note-card"><h4>Тон и приёмы</h4><p>Крупные плашки-таймеры и акцентные слова красным внутри чёрных заголовков — ощущение срочности сочетается со спокойной информационной подачей остального текста. Декоративные лёгкие иконки (силуэт человека, ID-карта) лаймовым контуром вокруг героя.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <p class="eyebrow">Логика цикла</p>
+    <h2 class="title">Как связаны новые темы</h2>
+    <p class="lede">Материалы этого этапа закрывают два направления, которые ещё не были раскрыты в контенте: отдельная категория услуги и логистическое преимущество сети филиалов.</p>
+    <div class="cycle">
+      <div class="step"><div class="idx">01</div><p><b>Восстановление навыков вождения</b> — новый сегмент аудитории: люди с правами, которые давно не садились за руль. Раньше в контенте не звучал.</p></div>
+      <div class="step"><div class="idx">02</div><p><b>Сеть филиалов</b> — переход от вопроса «чему и как учат» к вопросу «где удобно учиться». Раскрывает масштаб школы и логистику до экзамена.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <p class="eyebrow">Новости</p>
+    <h2 class="title">Темы для новостей — этап 2</h2>
+    <p class="lede">2 темы. Публикация — карточка компании «Альтернатива» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="news-card">
+      <span class="tag">Экспертный</span>
+      <h3>1. Восстановление навыков вождения: программа для тех, кто получил права, но давно не садился за руль</h3>
+      <ul>
+        <li>Права есть, а уверенности за рулём нет — обычная ситуация после долгого перерыва, не повод для стеснения</li>
+        <li>Программа восстановления — отдельный курс, не повторение обучения с нуля</li>
+        <li>Инструктор выстраивает практику под конкретные слабые места: город, парковка, перестроения, скоростные участки</li>
+        <li>Занятия проходят на реальных маршрутах ближайшего к ученику филиала</li>
+        <li>Количество и формат занятий подбираются индивидуально, без жёсткого шаблона</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">восстановление навыков вождения СПб</span>
+        <span class="chip-kw">курсы для неуверенных водителей</span>
+        <span class="chip-kw">боюсь ездить после получения прав</span>
+        <span class="chip-kw">повторное обучение вождению</span>
+        <span class="chip-kw">автошкола для тех кто давно не водил</span>
+      </div>
+      <div class="meta-box"><b>Meta description:</b> Восстановление навыков вождения в автошколе «Альтернатива» (СПб) — индивидуальная программа для тех, кто получил права, но давно не водил. Запись на консультацию.</div>
+      <div class="cta-line">CTA: записаться на консультацию по восстановлению навыков</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «Давно не за рулём?» + подзаголовок «Курс восстановления навыков»</li>
+          <li>Кадр: рука на руле в движении или вид из салона на городскую дорогу</li>
+          <li>Акцентный красный для ключевой фразы, лого школы в углу</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="tag">Информационный</span>
+      <h3>2. Сеть из 25+ филиалов «Альтернативы»: учитесь и сдавайте экзамен рядом с домом</h3>
+      <ul>
+        <li>25+ филиалов в Петербурге и Ленинградской области — от Парнаса и Девяткино до Красного Села, Всеволожска, Колпино</li>
+        <li>Площадку можно выбирать не только по цене, но и по расположению — рядом с домом, работой или учёбой</li>
+        <li>30+ точек для практического вождения — инструктор занимается в знакомом ученику районе</li>
+        <li>Экзамен принимают в 3 отделениях ГИБДД — меньше очередей, гибче выбор даты</li>
+        <li>В день экзамена организован бесплатный автобус до МРЭО — не нужно продумывать логистику самостоятельно</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">автошкола рядом с домом СПб</span>
+        <span class="chip-kw">филиалы автошколы Петербург</span>
+        <span class="chip-kw">автошкола Ленинградская область</span>
+        <span class="chip-kw">сдать экзамен ГИБДД без очереди</span>
+        <span class="chip-kw">автошкола Парнас Девяткино Колпино</span>
+      </div>
+      <div class="meta-box"><b>Meta description:</b> 25+ филиалов автошколы «Альтернатива» в Петербурге и Ленобласти — учитесь и сдавайте экзамен рядом с домом. Бесплатный автобус до ГИБДД в день экзамена.</div>
+      <div class="cta-line">CTA: найти ближайший филиал</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «25+ филиалов» + подзаголовок «Рядом с вами»</li>
+          <li>Визуал: карта города с точками-филиалами или сетка меток поверх городского фона</li>
+          <li>Акцентный синий/лайм для цифры «25+», лого школы</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <p class="eyebrow">Сторис</p>
+    <h2 class="title">Темы для сторис — этап 2</h2>
+    <p class="lede">2 темы, один слайд на тему. Без обложки. Только тезисы и факты.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <h3>1. Восстановление навыков вождения</h3>
+        <ul>
+          <li>Права есть, уверенности нет — это нормально</li>
+          <li>Индивидуальная программа, не обучение с нуля</li>
+          <li>Практика на маршрутах рядом с домом</li>
+          <li>Запись на консультацию</li>
+        </ul>
+        <div class="design-note"><span class="role">Дизайн слайда</span>Фон — индиго #4356E4, заголовок белым плотным гротеском, ключевая фраза выделена лаймовым #B4E61F, внизу — красная кнопка-CTA #E8382E.</div>
+      </div>
+      <div class="story-card">
+        <h3>2. Учитесь в удобном филиале рядом с домом</h3>
+        <ul>
+          <li>25+ филиалов в Петербурге и области</li>
+          <li>Экзамен — в 3 отделениях ГИБДД</li>
+          <li>Бесплатный автобус до МРЭО в день экзамена</li>
+          <li>Выберите ближайший к вам филиал</li>
+        </ul>
+        <div class="design-note"><span class="role">Дизайн слайда</span>Фон — сине-фиолетовый #5B4FE8, метки-филиалы лаймовым контуром на фоновой иллюстрации города, крупная цифра «25+» белым, CTA-кнопка красная.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <p class="eyebrow">06</p>
+    <h2 class="title">Карта тем</h2>
+
+    <details class="stage" open>
+      <summary>Этап 2 — новые темы <span class="badge">актуальный</span></summary>
+      <table>
+        <tr><th>Формат</th><th>Тема</th></tr>
+        <tr><td>Новость</td><td>Восстановление навыков вождения: программа для тех, кто получил права, но давно не садился за руль</td></tr>
+        <tr><td>Новость</td><td>Сеть из 25+ филиалов «Альтернативы»: учитесь и сдавайте экзамен рядом с домом</td></tr>
+        <tr><td>Сторис</td><td>Восстановление навыков вождения</td></tr>
+        <tr><td>Сторис</td><td>Учитесь в удобном филиале рядом с домом</td></tr>
+      </table>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 1 — переданные темы (архив) <span class="badge past">пройден</span></summary>
+      <table>
+        <tr><th>Формат</th><th>Тема</th></tr>
+        <tr><td>Новость</td><td>Почему ученики сдают экзамен увереннее именно после полноценной подготовки</td></tr>
+        <tr><td>Новость</td><td>Онлайн, очно или смешанно — какой формат обучения выбрать</td></tr>
+        <tr><td>Новость</td><td>Что действительно входит в стоимость обучения в автошколе</td></tr>
+        <tr><td>Новость</td><td>Категория А или А+В — кому подойдёт обучение сразу на две категории</td></tr>
+        <tr><td>Сторис</td><td>Бесплатное первое занятие</td></tr>
+        <tr><td>Сторис</td><td>Выберите удобный формат обучения</td></tr>
+        <tr><td>Сторис</td><td>Категория А — сезон начинается с обучения</td></tr>
+        <tr><td>Сторис</td><td>Без скрытых платежей</td></tr>
+      </table>
+    </details>
+  </div>
+</section>
+
+<footer id="sources">
+  <div class="wrap">
+    <p class="eyebrow" style="text-align:left">Источники</p>
+    <p style="font-size:13.5px"><a href="https://schooldriving.ru" target="_blank">schooldriving.ru</a> · скриншоты сайта, предоставленные заказчиком</p>
+  </div>
+</footer>
+
+</body>
+</html>
