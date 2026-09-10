@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Акчурин — ТЗ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#F5F8F8;
+    --roe:#C4572B;
+    --roe-soft:#E7A488;
+    --ink:#12252A;
+    --ink-soft:#4B6067;
+    --line:#D8E3E2;
+    --card:#FFFFFF;
+    --bg:#F5F8F8;
+    --chip-bg:#EAF2F1;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#7FC7D9;
+      --teal:#5FB3C2;
+      --ice:#0B2126;
+      --roe:#E58A5F;
+      --roe-soft:#8A4A32;
+      --ink:#EAF4F4;
+      --ink-soft:#9FB9BC;
+      --line:#1E3A40;
+      --card:#102A30;
+      --bg:#0A1D22;
+      --chip-bg:#123138;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#7FC7D9;
+    --teal:#5FB3C2;
+    --ice:#0B2126;
+    --roe:#E58A5F;
+    --roe-soft:#8A4A32;
+    --ink:#EAF4F4;
+    --ink-soft:#9FB9BC;
+    --line:#1E3A40;
+    --card:#102A30;
+    --bg:#0A1D22;
+    --chip-bg:#123138;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Public Sans', system-ui, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Bricolage Grotesque', system-ui, sans-serif;
+    margin:0;
+    color:var(--ink);
+    font-weight:700;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:.02em;}
+  a{color:inherit;}
+
+  /* Top bar */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:clamp(12px,3vw,28px);
+    padding:14px clamp(16px,4vw,32px);
+    background:color-mix(in srgb, var(--card) 88%, transparent);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .topbar .brand{
+    font-weight:800; font-size:18px; letter-spacing:.01em;
+    flex-shrink:0;
+  }
+  .topbar nav{display:flex; gap:clamp(10px,2vw,22px); flex-shrink:0;}
+  .topbar nav a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-soft); text-decoration:none;
+    padding:6px 2px; border-bottom:2px solid transparent;
+    transition:color .15s, border-color .15s;
+  }
+  .topbar nav a:hover{color:var(--roe); border-color:var(--roe);}
+
+  main{max-width:920px; margin:0 auto; padding:0 clamp(16px,4vw,32px) 80px;}
+  section{padding-top:56px; scroll-margin-top:70px;}
+  section:first-of-type{padding-top:40px;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; text-transform:uppercase; letter-spacing:.12em;
+    color:var(--roe); font-weight:600; margin-bottom:10px;
+  }
+  .section-title{font-size:clamp(24px,4vw,32px); line-height:1.18; margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft); font-size:15px; max-width:60ch; margin-bottom:28px;}
+
+  /* Hero */
+  .hero{padding-top:52px;}
+  .hero h1{font-size:clamp(34px,6vw,52px); line-height:1.08;}
+  .hero .tagline{color:var(--ink-soft); font-size:clamp(15px,2vw,18px); margin-top:14px; max-width:56ch;}
+  .facts-grid{
+    margin-top:32px;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+    gap:1px; background:var(--line);
+    border:1px solid var(--line);
+  }
+  .fact{background:var(--card); padding:16px 18px;}
+  .fact .k{font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:6px;}
+  .fact .v{font-size:15px; font-weight:600;}
+
+  /* Brandbook */
+  .swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin:24px 0 32px;}
+  .swatch{border:1px solid var(--line); border-radius:4px; overflow:hidden; background:var(--card);}
+  .swatch .chip{height:74px;}
+  .swatch .label{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; margin-top:2px;}
+
+  .bb-notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin-top:8px;}
+  .bb-note{border-left:2px solid var(--roe); padding:2px 0 2px 16px;}
+  .bb-note h4{font-size:15px; margin-bottom:6px;}
+  .bb-note p{margin:0; font-size:14px; color:var(--ink-soft); line-height:1.55;}
+
+  /* Логика цикла */
+  .cycle-flow{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:4px; overflow:hidden;}
+  .cycle-step{display:flex; gap:16px; padding:18px 20px; background:var(--card); border-bottom:1px solid var(--line);}
+  .cycle-step:last-child{border-bottom:none;}
+  .cycle-step .num{font-family:'IBM Plex Mono',monospace; color:var(--roe); font-weight:700; font-size:13px; flex-shrink:0; padding-top:2px;}
+  .cycle-step p{margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.6;}
+  .cycle-step strong{color:var(--ink);}
+
+  /* Cards: Новости */
+  .theme-card{
+    border:1px solid var(--line); border-radius:6px; background:var(--card);
+    padding:24px clamp(18px,3vw,28px); margin-bottom:22px;
+  }
+  .theme-head{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:14px;}
+  .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--teal); background:var(--chip-bg); border:1px solid var(--line);
+    padding:4px 9px; border-radius:20px;
+  }
+  .theme-card h3{font-size:clamp(18px,2.6vw,21px); line-height:1.3; margin-bottom:14px;}
+  .thesis-list{margin:0 0 16px; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .thesis-list li{
+    position:relative; padding-left:18px; font-size:14.5px; color:var(--ink-soft); line-height:1.55;
+  }
+  .thesis-list li::before{
+    content:""; position:absolute; left:0; top:8px; width:6px; height:6px; border-radius:50%; background:var(--roe);
+  }
+  .seo-chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px;}
+  .seo-chip{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ocean);
+    background:var(--chip-bg); border:1px solid var(--line); padding:4px 10px; border-radius:4px;
+  }
+  .meta-row{display:flex; flex-wrap:wrap; gap:18px; font-size:12.5px; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; margin-bottom:16px; padding-top:14px; border-top:1px dashed var(--line);}
+  .meta-row b{color:var(--ink); font-weight:600;}
+  .cta-line{font-size:14px; font-weight:600; color:var(--ink); margin-bottom:16px;}
+  .cover-block{
+    background:var(--ice); border:1px solid var(--line); border-radius:5px; padding:14px 16px; margin-top:6px;
+  }
+  .cover-block .cb-label{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--roe); margin-bottom:8px; font-weight:600;}
+  .cover-block p{margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.6;}
+  .cover-block strong{color:var(--ink);}
+
+  /* Сторис */
+  .story-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px;}
+  .story-card{border:1px solid var(--line); border-radius:6px; background:var(--card); padding:22px;}
+  .story-card .tag{margin-bottom:12px; display:inline-block;}
+  .story-card h3{font-size:17px; margin-bottom:10px; line-height:1.32;}
+  .story-card .thesis{font-size:14px; color:var(--ink-soft); line-height:1.6; margin-bottom:14px;}
+  .slide-note{
+    background:#14110D; border-radius:5px; padding:14px 16px; color:#E4D7B0;
+  }
+  .slide-note .sn-label{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:#C9AF7C; margin-bottom:7px; font-weight:600;}
+  .slide-note p{margin:0; font-size:13px; line-height:1.6; color:#D9CBAA;}
+  .slide-note b{color:#F0E6C8;}
+
+  /* Карта тем */
+  details.stage{border:1px solid var(--line); border-radius:5px; margin-bottom:12px; background:var(--card); overflow:hidden;}
+  details.stage summary{
+    cursor:pointer; padding:15px 18px; font-family:'IBM Plex Mono',monospace; font-size:13px;
+    display:flex; align-items:center; gap:10px; list-style:none;
+  }
+  details.stage summary::-webkit-details-marker{display:none;}
+  details.stage summary::before{content:"+"; color:var(--roe); font-weight:700; width:14px;}
+  details.stage[open] summary::before{content:"–";}
+  .stage-badge{
+    font-size:10px; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:20px;
+    background:var(--chip-bg); color:var(--ink-soft); font-weight:600;
+  }
+  .stage-badge.current{background:var(--roe); color:#fff;}
+  .stage-body{padding:0 18px 18px 42px;}
+  .stage-body ul{margin:0; padding-left:16px; font-size:13.5px; color:var(--ink-soft); line-height:1.8;}
+  .stage-current-list{padding:0 18px 18px 18px;}
+  .stage-current-list ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink-soft); line-height:1.8;}
+  .stage-current-list li b{color:var(--ink);}
+
+  /* Источники */
+  footer.sources{margin-top:60px; padding-top:24px; border-top:1px solid var(--line);}
+  footer.sources .eyebrow{margin-bottom:14px;}
+  footer.sources ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  footer.sources a{font-size:14px; color:var(--ocean); text-decoration:underline; text-underline-offset:3px;}
+
+  @media (max-width:560px){
+    .topbar{gap:14px;}
+    section{padding-top:40px;}
+  }
+</style>
+
+<div class="topbar">
+  <div class="brand">Акчурин</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+</div>
+
+<main>
+
+  <section id="company" class="hero">
+    <div class="eyebrow">Банкетный зал · Доставка еды и обедов · Саратов</div>
+    <h1>Акчурин</h1>
+    <p class="tagline">Банкетный зал на 50 гостей и служба доставки еды и обедов на проспекте имени 50 лет Октября. Свадьбы, юбилеи, корпоративы и поминальные обеды — без сервисного и пробкового сбора, с собственной выпечкой хлеба.</p>
+
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Саратов</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">пр. им. 50 лет Октября, 101/4</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (927) 226-46-46</div></div>
+      <div class="fact"><div class="k">Вместимость зала</div><div class="v">до 50 гостей</div></div>
+      <div class="fact"><div class="k">Рейтинг Яндекс Карт</div><div class="v">5.0 · 31 отзыв</div></div>
+      <div class="fact"><div class="k">Формат оплаты</div><div class="v">без сервисного сбора</div></div>
+      <div class="fact"><div class="k">Алкоголь</div><div class="v">свой — без пробкового сбора</div></div>
+      <div class="fact"><div class="k">Производство</div><div class="v">собственная выпечка хлеба</div></div>
+      <div class="fact"><div class="k">Доступность</div><div class="v">парковка для инвалидов, пандус</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="section-title">Фирменный стиль компании</h2>
+    <p class="section-sub">После анализа фирменных материалов компании (авторские обложки сторис на Яндекс Картах, оформление карточки) определена визуальная айдентика «Акчурин»: тёмная, статусная, ресторанного уровня подача без вычурности.</p>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#14110D;"></div>
+        <div class="label"><div class="role">Фоновый</div><div class="hex">#14110D</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#C9AF7C;"></div>
+        <div class="label"><div class="role">Акцентный</div><div class="hex">#C9AF7C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E4D7B0;"></div>
+        <div class="label"><div class="role">Второстепенный</div><div class="hex">#E4D7B0</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#7A5C42;"></div>
+        <div class="label"><div class="role">Текстовый (тени/полутона)</div><div class="hex">#7A5C42</div></div>
+      </div>
+    </div>
+
+    <div class="bb-notes">
+      <div class="bb-note">
+        <h4>Типографика</h4>
+        <p>Логотип «Акчурин» набран рукописным акцентным шрифтом с выраженным золотым контуром. Подзаголовок («Банкетный зал», «Доставка еды и обедов») — прописными буквами, разреженный трекинг, тонкое начертание без засечек. Пара «рукописный акцент + разреженный капс» — фирменный приём, переносится на все графические материалы.</p>
+      </div>
+      <div class="bb-note">
+        <h4>Фотостиль</h4>
+        <p>Глубокий тёмный фон, предметная и интерьерная съёмка с тёплым точечным светом. Акцент на фактуре — сервировка стола, блюда, хлеб, зал без гостей. Кадр «дышит»: много тёмного пространства вокруг объекта.</p>
+      </div>
+      <div class="bb-note">
+        <h4>Тон коммуникации</h4>
+        <p>Сдержанный и фактологический. Уровень сервиса подтверждается конкретикой — вместимостью, условиями по сбору, рейтингом, а не превосходными степенями.</p>
+      </div>
+      <div class="bb-note">
+        <h4>Логотип</h4>
+        <p>Золотая заливка на чёрном поле — единственное сочетание, в котором логотип встречается в фирменных материалах компании. На светлых макетах логотип не адаптируется, используется как плашка на тёмном фоне.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="section-title">Развитие тем от этапа к этапу</h2>
+    <p class="section-sub">Первые два этапа раскрыли банкетный зал изнутри — выбор площадки, состав меню, варианты рассадки, слагаемые комфорта. Третий этап выходит за пределы банкетного зала на вторую услугу компании и на отдельный, ранее не затронутый формат банкета.</p>
+
+    <div class="cycle-flow">
+      <div class="cycle-step">
+        <div class="num">01–02</div>
+        <p><strong>Банкетный зал:</strong> выбор площадки, банкетное меню, варианты рассадки, слагаемые комфорта — темы уже реализованы, база знаний о зале сформирована.</p>
+      </div>
+      <div class="cycle-step">
+        <div class="num">03</div>
+        <p><strong>Доставка еды и обедов:</strong> вторая услуга компании впервые раскрывается отдельно от банкетного зала — как самостоятельное направление с собственной кухней и собственной выпечкой.</p>
+      </div>
+      <div class="cycle-step">
+        <div class="num">03</div>
+        <p><strong>Поминальный обед:</strong> отдельный, сдержанный по тону формат банкета — ранее не затронутый в предыдущих этапах.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="section-title">Темы для текстовых SEO-публикаций</h2>
+    <p class="section-sub">Публикуются на карточке компании «Акчурин» на Яндекс Картах и в 2ГИС.</p>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="tag">Продающий</span>
+      </div>
+      <h3>1. Доставка обедов и корпоративного питания от «Акчурин»: вкусно, быстро, из ресторанной кухни</h3>
+      <ul class="thesis-list">
+        <li>Доставка обедов и еды работает на базе кухни банкетного зала «Акчурин» — тот же уровень приготовления, что и на банкете, только в формате доставки.</li>
+        <li>Подходит для заказа обеда в офис, доставки домашней еды и организации питания на корпоративное мероприятие без аренды зала.</li>
+        <li>В заказ доступен собственный хлеб производства «Акчурин» — выпекается на месте, не покупается у сторонних поставщиков.</li>
+        <li>Заказ принимается по телефону +7 (927) 226-46-46, доставка выполняется по Саратову.</li>
+        <li>То же качество кухни, что подтверждено рейтингом 5.0 и 31 отзывом на Яндекс Картах, теперь доступно без посещения банкетного зала.</li>
+      </ul>
+      <div class="seo-chips">
+        <span class="seo-chip">доставка обедов Саратов</span>
+        <span class="seo-chip">доставка еды Саратов</span>
+        <span class="seo-chip">заказать обед в офис</span>
+        <span class="seo-chip">корпоративное питание</span>
+        <span class="seo-chip">бизнес-ланч с доставкой</span>
+        <span class="seo-chip">доставка домашней еды</span>
+        <span class="seo-chip">обеды на заказ Саратов</span>
+      </div>
+      <div class="meta-row">
+        <span><b>Жанр:</b> продающий</span>
+        <span><b>SEO-плотность:</b> максимальная</span>
+        <span><b>Публикация:</b> Яндекс Карты, 2ГИС</span>
+      </div>
+      <div class="cta-line">CTA: Закажите обед с доставкой по телефону +7 (927) 226-46-46 — та же кухня, что и на банкете «Акчурин».</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку новости</div>
+        <p><strong>Тезис обложки:</strong> «Обеды с доставкой». Тёмный фон, золотая типографика по фирменному брендбуку компании, кадр с упакованным обедом или горячим блюдом крупным планом.</p>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="tag">Экспертный</span>
+      </div>
+      <h3>2. Поминальный обед в банкетном зале «Акчурин»: организация с уважением к традициям</h3>
+      <ul class="thesis-list">
+        <li>Банкетный зал «Акчурин» принимает поминальные обеды — отдельный формат, отличный от свадеб и корпоративов по подаче и организации.</li>
+        <li>Зал вместимостью до 50 гостей, отдельный вход, парковка, в том числе место для инвалидов — организация проходит без лишней суеты.</li>
+        <li>Сервисный сбор не взимается, что снимает часть организационных расходов в непростой день.</li>
+        <li>Меню составляется индивидуально, включает традиционные для поминального обеда блюда.</li>
+        <li>Запись — по телефону +7 (927) 226-46-46, зал предоставляется по предварительному бронированию.</li>
+      </ul>
+      <div class="seo-chips">
+        <span class="seo-chip">поминальный обед Саратов</span>
+        <span class="seo-chip">зал для поминок</span>
+        <span class="seo-chip">организация поминального обеда</span>
+        <span class="seo-chip">банкетный зал для поминовения</span>
+        <span class="seo-chip">заказать зал на поминки</span>
+      </div>
+      <div class="meta-row">
+        <span><b>Жанр:</b> экспертный</span>
+        <span><b>SEO-плотность:</b> максимальная</span>
+        <span><b>Публикация:</b> Яндекс Карты, 2ГИС</span>
+      </div>
+      <div class="cta-line">CTA: Узнайте условия организации поминального обеда по телефону +7 (927) 226-46-46.</div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку новости</div>
+        <p><strong>Тезис обложки:</strong> «Поминальный обед». Тёмный фон, золотая типографика, сдержанная композиция без предметной съёмки еды — фото пустого зала или деталей сервировки.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="section-title">Темы для сторис</h2>
+    <p class="section-sub">Формат — презентационный, один слайд на тему. Без обложки. Публикуются на карточке компании на Яндекс Картах.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="tag">1 слайд</span>
+        <h3>1. Хлеб собственной выпечки к каждому столу</h3>
+        <p class="thesis">Хлеб выпекается в «Акчурин» самостоятельно, подаётся тёплым к банкетному столу и к заказу на доставку, доступен для покупки отдельно, навынос.</p>
+        <div class="slide-note">
+          <div class="sn-label">Дизайн слайда</div>
+          <p>Тёмный фон <b>#14110D</b>, крупный кадр хлеба на столе с тёплым точечным светом. Заголовок и тезис — золотой акцент <b>#C9AF7C</b>, рукописный акцентный шрифт для заголовка, разреженный капс для подписи, по фирменному брендбуку компании.</p>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <span class="tag">1 слайд</span>
+        <h3>2. Доставка обедов: горячее блюдо к вашему столу</h3>
+        <p class="thesis">Обед из ресторанной кухни «Акчурин» с доставкой на дом или в офис — упаковка сохраняет тепло и вид блюда до подачи.</p>
+        <div class="slide-note">
+          <div class="sn-label">Дизайн слайда</div>
+          <p>Тёмный фон <b>#14110D</b>, предметный кадр упакованного обеда или блюда крупным планом. Золотая типографика <b>#C9AF7C</b>, тонкий разреженный капс для короткой подписи — без обложки, только смысловой слайд.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="section-title">История реализованных этапов</h2>
+
+    <details class="stage">
+      <summary>Этап 1 <span class="stage-badge">реализован</span></summary>
+      <div class="stage-body">
+        <ul>
+          <li>Новости — 4 темы (реализованы ранее)</li>
+          <li>Сторис — 6 обложек: «Атмосфера», «Комфорт», «Преимущества», «Сервировка», «Банкетное меню», «Разные блюда»</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 2 <span class="stage-badge">реализован</span></summary>
+      <div class="stage-body">
+        <ul>
+          <li>Новость: «Банкетный зал как основа успешного мероприятия: на что обратить внимание при выборе»</li>
+          <li>Новость: «Банкетное меню: как составить идеальное угощение для гостей»</li>
+          <li>Сторис: «Варианты рассадки гостей в банкетном зале»</li>
+          <li>Сторис: «Из чего складывается комфорт банкетного зала»</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary>Этап 3 <span class="stage-badge current">текущий</span></summary>
+      <div class="stage-current-list">
+        <ul>
+          <li><b>Новость:</b> Доставка обедов и корпоративного питания от «Акчурин»</li>
+          <li><b>Новость:</b> Поминальный обед в банкетном зале «Акчурин»</li>
+          <li><b>Сторис:</b> Хлеб собственной выпечки к каждому столу</li>
+          <li><b>Сторис:</b> Доставка обедов: горячее блюдо к вашему столу</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <footer class="sources" id="sources">
+    <div class="eyebrow">Источники</div>
+    <ul>
+      <li><a href="https://akchurin.clients.site/" target="_blank" rel="noopener">akchurin.clients.site — сайт компании</a></li>
+      <li><a href="https://yandex.ru/maps/-/CThbVNIT" target="_blank" rel="noopener">Яндекс Карты — карточка «Акчурин»</a></li>
+    </ul>
+  </footer>
+
+</main>
+
+</html>
