@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ПТСМ-Неруд — ТЗ на контент</title>
+<style>
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#F5F8F8;
+    --roe:#C4572B;
+    --ink:#10242A;
+    --ink-soft:#4C6169;
+    --line:#D8E4E3;
+    --card:#FFFFFF;
+    --bg:#F5F8F8;
+    --mono-bg:#EEF4F3;
+    --shadow: 0 1px 2px rgba(14,59,71,.06), 0 8px 24px -12px rgba(14,59,71,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#7FB3C0;
+      --teal:#4CB2C0;
+      --ice:#0A1F26;
+      --roe:#E2794F;
+      --ink:#EAF3F2;
+      --ink-soft:#9FB9BD;
+      --line:#1E434B;
+      --card:#102C34;
+      --bg:#0A1F26;
+      --mono-bg:#0D262E;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#7FB3C0;
+    --teal:#4CB2C0;
+    --ice:#0A1F26;
+    --roe:#E2794F;
+    --ink:#EAF3F2;
+    --ink-soft:#9FB9BD;
+    --line:#1E434B;
+    --card:#102C34;
+    --bg:#0A1F26;
+    --mono-bg:#0D262E;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.55);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans", -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:"Bricolage Grotesque", "Public Sans", sans-serif;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+  }
+  a{color:var(--teal);}
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; gap:24px;
+    padding:14px 24px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .topbar .brand{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:17px;
+    color:var(--ocean);
+    flex:0 0 auto;
+  }
+  .topbar nav{display:flex; gap:4px; flex:0 0 auto;}
+  .topbar nav a{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink-soft);
+    padding:7px 11px;
+    border-radius:7px;
+  }
+  .topbar nav a:hover{background:var(--mono-bg); color:var(--ocean);}
+
+  /* ---- shell ---- */
+  main{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 100px;
+  }
+  section{padding-top:64px;}
+  section:first-of-type{padding-top:48px;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--roe);
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:16px; height:1px; background:var(--roe);}
+
+  /* ---- hero ---- */
+  .hero h1{font-size:clamp(28px,4.4vw,40px); line-height:1.12; letter-spacing:-.01em;}
+  .hero .lede{margin-top:16px; font-size:17px; max-width:62ch;}
+
+  .factgrid{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .fact{background:var(--card); padding:18px 20px;}
+  .fact .k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:6px; display:block;
+  }
+  .fact .v{font-size:14.5px; line-height:1.45; color:var(--ink);}
+  .fact.wide{grid-column:1 / -1;}
+
+  .contactline{
+    margin-top:20px; display:flex; flex-wrap:wrap; gap:18px;
+    font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--ink-soft);
+  }
+  .contactline a{color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line);}
+  .contactline a:hover{color:var(--teal); border-color:var(--teal);}
+
+  /* ---- section head ---- */
+  .shead{margin-bottom:28px;}
+  .shead h2{font-size:clamp(22px,3vw,28px);}
+  .shead .num{
+    font-family:"IBM Plex Mono", monospace; color:var(--roe); font-size:13px; margin-right:10px;
+  }
+  .shead p{margin-top:10px; max-width:62ch; font-size:15px;}
+
+  /* ---- brandbook ---- */
+  .swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:14px; margin-top:8px;}
+  .swatch{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card);}
+  .swatch .chip{height:74px;}
+  .swatch .info{padding:11px 13px;}
+  .swatch .role{
+    font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--ink-soft); display:block; margin-bottom:4px;
+  }
+  .swatch .hex{font-family:"IBM Plex Mono", monospace; font-size:13px; font-weight:600; color:var(--ink);}
+
+  .brandnotes{margin-top:28px; display:grid; gap:16px;}
+  .bnote{
+    padding:16px 18px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+  }
+  .bnote .label{
+    font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--roe); display:block; margin-bottom:8px;
+  }
+  .bnote p{color:var(--ink); font-size:14.5px;}
+
+  /* ---- цикл ---- */
+  .cycle{display:grid; gap:14px; margin-top:8px;}
+  .cyc{
+    display:grid; grid-template-columns:44px 1fr; gap:16px;
+    padding:18px 20px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    align-items:start;
+  }
+  .cyc .n{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:20px; color:var(--roe);
+  }
+  .cyc h3{font-size:16px; margin-bottom:6px;}
+  .cyc p{font-size:14px;}
+  .cyc-arrow{
+    text-align:center; font-family:"IBM Plex Mono", monospace; color:var(--line); font-size:13px; letter-spacing:.1em;
+  }
+
+  /* ---- news cards ---- */
+  .newscard{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:26px 26px 24px; margin-bottom:22px; box-shadow:var(--shadow);
+  }
+  .newshead{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;}
+  .newshead h3{font-size:19px; line-height:1.3; max-width:58ch;}
+  .tag{
+    font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px; padding:4px 10px; white-space:nowrap;
+  }
+  .thesis{margin-top:16px; padding-left:0; list-style:none; display:grid; gap:9px;}
+  .thesis li{
+    font-size:14.5px; color:var(--ink); line-height:1.55; padding-left:16px; position:relative;
+  }
+  .thesis li::before{
+    content:""; position:absolute; left:0; top:8px; width:6px; height:1px; background:var(--roe);
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:16px;}
+  .chip-seo{
+    font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-soft);
+    background:var(--mono-bg); border-radius:6px; padding:4px 9px;
+  }
+  .meta{
+    margin-top:16px; padding:12px 14px; background:var(--mono-bg); border-radius:10px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.55;
+  }
+  .cta{margin-top:14px; font-size:14px; color:var(--ink);}
+  .cta b{color:var(--ocean);}
+  .coverblock{
+    margin-top:18px; border-top:1px dashed var(--line); padding-top:16px;
+  }
+  .coverblock .label{
+    font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--roe); display:block; margin-bottom:8px;
+  }
+  .coverblock .covertext{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:15px; color:var(--ink);
+    margin-bottom:8px;
+  }
+  .coverblock p{font-size:13.5px;}
+
+  /* ---- stories ---- */
+  .storygrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px;}
+  .storycard{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px;
+  }
+  .storycard h3{font-size:16.5px; margin-bottom:14px;}
+  .slidebox{
+    background:var(--mono-bg); border-radius:12px; padding:14px 16px; margin-bottom:14px;
+  }
+  .slidebox .slidelabel{
+    font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); display:block; margin-bottom:8px;
+  }
+  .slidebox ul{margin:0; padding-left:16px; display:grid; gap:5px;}
+  .slidebox li{font-size:13.5px; color:var(--ink);}
+  .designnote{font-size:12.5px; color:var(--ink-soft); line-height:1.55;}
+  .designnote b{color:var(--ink);}
+
+  /* ---- map / timeline ---- */
+  details.stage{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 20px; margin-bottom:12px;
+  }
+  details.stage[open]{border-color:var(--roe);}
+  summary{
+    cursor:pointer; font-family:"IBM Plex Mono", monospace; font-size:12.5px; letter-spacing:.03em;
+    color:var(--ink); display:flex; align-items:center; gap:10px; list-style:none;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::before{content:"›"; color:var(--roe); font-size:15px; transition:transform .15s;}
+  details[open] summary::before{transform:rotate(90deg);}
+  .badge-now{
+    font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    background:var(--roe); color:#fff; padding:2px 8px; border-radius:999px;
+  }
+  .stagelist{margin:14px 0 0; padding-left:18px; display:grid; gap:6px;}
+  .stagelist li{font-size:13px; color:var(--ink-soft);}
+  .stagelist b{color:var(--ink); font-weight:600;}
+
+  /* ---- footer ---- */
+  footer{
+    margin-top:70px; padding-top:22px; border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:center;
+  }
+  footer .srcs{display:flex; flex-wrap:wrap; gap:16px;}
+  footer a{
+    font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--ink-soft); text-decoration:none;
+    border-bottom:1px solid var(--line);
+  }
+  footer a:hover{color:var(--teal); border-color:var(--teal);}
+  footer .sig{font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-soft); opacity:.7;}
+
+  @media (max-width:600px){
+    .factgrid{grid-template-columns:1fr;}
+    .topbar{padding:12px 16px;}
+    main{padding:0 16px 80px;}
+  }
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<div class="topbar">
+  <div class="brand">ПТСМ-Неруд</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">ТЗ · Контент · Этап 02</div>
+    <h1>Нерудные материалы, бетон и доставка от ПТСМ-Неруд</h1>
+    <p class="lede">Пермь. Производство, контроль качества и доставка нерудных материалов и бетона — с 2010 года и собственной производственной базой.</p>
+
+    <div class="factgrid">
+      <div class="fact"><span class="k">На рынке</span><span class="v">С 2010 года — более 15 лет</span></div>
+      <div class="fact"><span class="k">Производственная база</span><span class="v">Свыше 2 га, подъездные ж/д пути</span></div>
+      <div class="fact"><span class="k">Производство</span><span class="v">Собственный бетонный завод</span></div>
+      <div class="fact"><span class="k">Подвижной состав</span><span class="v">Свыше 50 собственных полувагонов</span></div>
+      <div class="fact"><span class="k">Автопарк</span><span class="v">MAN, MAZ, KAMAZ, автомиксеры</span></div>
+      <div class="fact"><span class="k">Контроль качества</span><span class="v">Собственная лаборатория</span></div>
+      <div class="fact wide"><span class="k">Ассортимент</span><span class="v">Песок · Щебень · Бетон · ПГС · Гравий · Ж/Б изделия</span></div>
+      <div class="fact wide"><span class="k">Клиенты</span><span class="v">Крупные застройщики, нефтегазовые и коммунальные предприятия, сельхозпредприятия, частные лица — среди партнёров, к примеру, АБЗ Дорстрой, Стройинвесткомплект, Вятдорстрой</span></div>
+    </div>
+
+    <div class="contactline">
+      <a href="tel:+73422070755">+7 (342) 207-07-55</a>
+      <a href="mailto:ptsm-nerud@yandex.ru">ptsm-nerud@yandex.ru</a>
+      <a href="https://ptsm-perm.ru/" target="_blank" rel="noopener">ptsm-perm.ru</a>
+    </div>
+  </section>
+
+  <section id="brand">
+    <div class="shead">
+      <h2><span class="num">02</span>Мини-брендбук</h2>
+      <p>После анализа фирменных материалов компании (сайт, интерьер офиса, макеты историй) определена следующая визуальная система.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#CDEBBF;"></div>
+        <div class="info"><span class="role">Основной светлый</span><span class="hex">#CDEBBF</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#3B7830;"></div>
+        <div class="info"><span class="role">Акцентный</span><span class="hex">#3B7830</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:linear-gradient(135deg,#0D150C,#4F7846);"></div>
+        <div class="info"><span class="role">Фоновый тёмный</span><span class="hex">#0D150C → #4F7846</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF; border-bottom:1px solid #E5E5E5;"></div>
+        <div class="info"><span class="role">Текстовый светлый</span><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#0A0A0A;"></div>
+        <div class="info"><span class="role">Текстовый тёмный</span><span class="hex">#0A0A0A</span></div>
+      </div>
+    </div>
+
+    <div class="brandnotes">
+      <div class="bnote">
+        <span class="label">Типографика</span>
+        <p>Заголовки — плотный жирный гротеск без засечек, крупный кегль, сжатый интерлиньяж (как в заголовке «От производства до объекта» и в логотипе). Основной текст — тот же гротеск обычного начертания, спокойный, без засечек. Контраст толщин — единственный акцент, декоративные шрифты не используются.</p>
+      </div>
+      <div class="bnote">
+        <span class="label">Логотип</span>
+        <p>Диагональный орнамент из ромбов (тёмные и зелёные ромбы вперемешку) слева от названия. В названии «ПЕРМТРАНССТРОМ-НЕРУД» часть слова — тёмная, часть («-НЕРУД») — зелёная акцентная. Соотношение сохраняется на любом фоне.</p>
+      </div>
+      <div class="bnote">
+        <span class="label">Фотостиль</span>
+        <p>Реальная съёмка производства: карьеры, самосвалы, погрузчики, бетонный завод, сотрудники в оранжевой спецодежде. Естественный свет, часто золотой час. Постановочные студийные кадры и стоковые фото не используются.</p>
+      </div>
+      <div class="bnote">
+        <span class="label">Тон коммуникации</span>
+        <p>Спокойный, фактический, без превосходных степеней («надёжный», «лучший», «топовый») и без сложных формулировок вроде «инфраструктурные проекты». Язык простой, понятный любому читателю — не только специалистам и участникам тендеров.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="shead">
+      <h2><span class="num">03</span>Логика цикла</h2>
+      <p>Последовательность, в которой компания сама описывает свою работу — от отгрузки до контроля готовой продукции.</p>
+    </div>
+
+    <div class="cycle">
+      <div class="cyc">
+        <div class="n">1</div>
+        <div>
+          <h3>Логистика и отгрузка</h3>
+          <p>Собственный подвижной состав — свыше 50 полувагонов — и своя площадка погрузки-разгрузки. В черте Перми материалы доставляются железнодорожным транспортом; за пределами площадки — автотранспортом компании.</p>
+        </div>
+      </div>
+      <div class="cyc-arrow">↓</div>
+      <div class="cyc">
+        <div class="n">2</div>
+        <div>
+          <h3>Производство</h3>
+          <p>Собственный бетонный завод работает непрерывно: товарный бетон производится и отгружается вместе с подготовленными нерудными материалами.</p>
+        </div>
+      </div>
+      <div class="cyc-arrow">↓</div>
+      <div class="cyc">
+        <div class="n">3</div>
+        <div>
+          <h3>Контроль качества</h3>
+          <p>Перед отгрузкой характеристики продукции проверяет собственная лаборатория компании.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="shead">
+      <h2><span class="num">04</span>Новости</h2>
+      <p>2 темы. Публикация — карточка компании на Яндекс Картах и в 2ГИС. Тексты пишутся с максимальной SEO-оптимизацией: ключевые слова — в заголовке, первом абзаце и подзаголовках; простой язык без канцеляризмов и превосходных степеней.</p>
+    </div>
+
+    <div class="newscard">
+      <div class="newshead">
+        <h3>Материалы для дома и участка: что можно заказать у ПТСМ-Неруд без больших объёмов</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <ul class="thesis">
+        <li>ПТСМ-Неруд поставляет материалы не только на крупные объекты, но и частным заказчикам — для дома, дачи, благоустройства участка</li>
+        <li>В ассортименте песок, щебень, ПГС, гравий, бетон и железобетонные изделия</li>
+        <li>Материал отпускается под конкретную задачу — не обязательно вагонами и большими партиями</li>
+        <li>Ориентировочные цены: песок — от 800 ₽/т, ПГС — от 750 ₽/т, гравий — от 650 ₽/т, щебень — от 1300 ₽/т, бетон — от 4900 ₽/м³, Ж/Б изделия — от 2300 ₽/шт</li>
+        <li>Доставку организует сама компания собственным автотранспортом</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">песок Пермь купить</span>
+        <span class="chip-seo">щебень Пермь цена</span>
+        <span class="chip-seo">бетон для дома Пермь</span>
+        <span class="chip-seo">ПГС Пермь</span>
+        <span class="chip-seo">гравий Пермь купить</span>
+        <span class="chip-seo">доставка стройматериалов частнику</span>
+      </div>
+      <div class="cta">CTA: <b>уточнить наличие и цену материала</b> — по телефону +7 (342) 207-07-55 или сообщением в карточке компании на Яндекс Картах.</div>
+      <div class="meta">SEO: ключевые слова — в заголовке, первом абзаце, минимум одном подзаголовке. Плотность естественная, без переспама. Alt-текст фотографий — по названию материала («песок Пермь», «щебень Пермь»). Публикация — карточка на Яндекс Картах и 2ГИС.</div>
+      <div class="coverblock">
+        <span class="label">ТЗ на обложку</span>
+        <div class="covertext">Материалы для дома и участка</div>
+        <p>Фон — фактура материала крупным планом (щебень, гравий или песок) либо кадр загородного участка. Типографика и палитра — по Мини-брендбуку (акцент #3B7830, тёмный фон-градиент #0D150C→#4F7846). Без слов «надёжный», «премиальный» и подобных.</p>
+      </div>
+    </div>
+
+    <div class="newscard">
+      <div class="newshead">
+        <h3>Доставка от ПТСМ-Неруд: свой подвижной состав и площадка отгрузки в Перми</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <ul class="thesis">
+        <li>У компании собственный подвижной состав — свыше 50 полувагонов — для доставки материалов железнодорожным транспортом</li>
+        <li>Приём и отгрузка ведутся на собственной площадке с подъездными путями</li>
+        <li>В черте Перми материалы можно доставить по железной дороге; за пределами площадки — автотранспортом компании (MAN, MAZ, KAMAZ, автомиксеры для бетона)</li>
+        <li>Комбинация ж/д и автотранспорта позволяет подобрать способ доставки под объём и адрес заказа</li>
+        <li>Логистику компания организует сама — от отгрузки до прибытия материала на объект</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">доставка нерудных материалов Пермь</span>
+        <span class="chip-seo">доставка щебня Пермь</span>
+        <span class="chip-seo">жд доставка стройматериалов Пермь</span>
+        <span class="chip-seo">доставка бетона Пермь</span>
+        <span class="chip-seo">полувагоны Пермь</span>
+      </div>
+      <div class="cta">CTA: <b>рассчитать доставку</b> — по телефону +7 (342) 207-07-55 или в карточке компании на Яндекс Картах и 2ГИС.</div>
+      <div class="meta">SEO: ключевые слова — в заголовке, первом абзаце, минимум одном подзаголовке. Естественная плотность. Публикация — карточка на Яндекс Картах и 2ГИС.</div>
+      <div class="coverblock">
+        <span class="label">ТЗ на обложку</span>
+        <div class="covertext">Доставка: ж/д и автотранспорт</div>
+        <p>Фон — полувагоны на подъездных путях или грузовик на погрузке. Палитра и типографика — по Мини-брендбуку. Без слов «инфраструктурные проекты» — заменить на простое «крупные объекты» при необходимости.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="shead">
+      <h2><span class="num">05</span>Сторис</h2>
+      <p>2 темы. Формат — одна презентация, один слайд, без обложки. Текст крупный (замечание по прошлому этапу: мелкий текст не читался с телефона), минимум слов, только факты.</p>
+    </div>
+
+    <div class="storygrid">
+      <div class="storycard">
+        <h3>Что производим и поставляем</h3>
+        <div class="slidebox">
+          <span class="slidelabel">Текст на слайде</span>
+          <ul>
+            <li>Песок — от 800 ₽/т</li>
+            <li>Щебень — от 1300 ₽/т</li>
+            <li>Бетон — от 4900 ₽/м³</li>
+            <li>ПГС — от 750 ₽/т</li>
+            <li>Гравий — от 650 ₽/т</li>
+            <li>Ж/Б изделия — от 2300 ₽/шт</li>
+          </ul>
+        </div>
+        <div class="designnote"><b>Дизайн слайда:</b> тёмно-зелёный фон-градиент #0D150C→#4F7846, белый крупный текст, акцентные плашки #3B7830 под каждой позицией — по образцу прайс-блока на сайте. Без обложки, без лишних слов.</div>
+      </div>
+
+      <div class="storycard">
+        <h3>Как устроена доставка</h3>
+        <div class="slidebox">
+          <span class="slidelabel">Текст на слайде</span>
+          <ul>
+            <li>Логистика — свой подвижной состав и площадка отгрузки</li>
+            <li>Производство — бетонный завод работает без остановки</li>
+            <li>Контроль — собственная лаборатория проверяет качество</li>
+          </ul>
+        </div>
+        <div class="designnote"><b>Дизайн слайда:</b> тот же тёмно-зелёный фон-градиент, три коротких строки крупным шрифтом, акцент #3B7830 на номерах/маркерах. Без обложки.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="shead">
+      <h2><span class="num">06</span>Карта тем</h2>
+      <p>История этапов — от первого блока тем до актуального.</p>
+    </div>
+
+    <details class="stage">
+      <summary>Этап 01 — первичный контент-план (4 новости + 4 сторис)</summary>
+      <ul class="stagelist">
+        <li><b>Новость.</b> ПТСМ-Неруд — поставщик материалов для крупных строительных и инфраструктурных проектов</li>
+        <li><b>Новость.</b> Контроль качества материалов: собственная лаборатория и проверка продукции</li>
+        <li><b>Новость.</b> Полный цикл обеспечения строительства: от производства и контроля до доставки на объект</li>
+        <li><b>Новость.</b> Собственная техника и логистика: доставка материалов точно к месту строительства</li>
+        <li><b>Сторис.</b> Материалы для объектов разного масштаба</li>
+        <li><b>Сторис.</b> Контроль качества на каждом этапе</li>
+        <li><b>Сторис.</b> Собственная инфраструктура для стабильных поставок</li>
+        <li><b>Сторис.</b> Полный цикл обеспечения строительного объекта</li>
+      </ul>
+    </details>
+
+    <details class="stage" open>
+      <summary><span class="badge-now">Актуальный</span> Этап 02 — материалы для частных заказчиков и логистика</summary>
+      <ul class="stagelist">
+        <li><b>Новость.</b> Материалы для дома и участка: что можно заказать у ПТСМ-Неруд без больших объёмов</li>
+        <li><b>Новость.</b> Доставка от ПТСМ-Неруд: свой подвижной состав и площадка отгрузки в Перми</li>
+        <li><b>Сторис.</b> Что производим и поставляем</li>
+        <li><b>Сторис.</b> Как устроена доставка</li>
+      </ul>
+    </details>
+  </section>
+
+  <footer>
+    <div class="srcs">
+      <a href="https://ptsm-perm.ru/" target="_blank" rel="noopener">ptsm-perm.ru</a>
+      <a href="https://yandex.com/maps/org/ptsm_nerud/88221731886/" target="_blank" rel="noopener">Карточка на Яндекс Картах</a>
+    </div>
+    <div class="sig mono">ТЗ · ПТСМ-Неруд · Этап 02</div>
+  </footer>
+
+</main>
+</body>
+</html>
