@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СТО «ПитСТОп» — контент-план (Этап 2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --bg:var(--ice); --card:#FFFFFF; --ink:#12232A; --ink-soft:#4B6169; --line:#D8E2E2;
+    --brand-black:#0B0B0C; --brand-red:#E2231A; --brand-white:#FFFFFF; --brand-steel:#8A8F94;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,sans-serif;line-height:1.55;}
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--ink);margin:0;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  header.topbar{position:sticky;top:0;z-index:50;background:var(--ocean);color:#fff;border-bottom:3px solid var(--roe);}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;}
+  .topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:.2px;white-space:nowrap;}
+  .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+  .topbar nav::-webkit-scrollbar{display:none;}
+  .topbar nav a{font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,.85);white-space:nowrap;transition:background .15s;}
+  .topbar nav a:hover{background:rgba(255,255,255,.12);color:#fff;}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;display:block;}
+  h2.section-title{font-size:28px;font-weight:700;margin-bottom:28px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(180deg,var(--ocean),var(--teal));color:#fff;}
+  .hero .eyebrow{color:#ffd7c4;}
+  .hero h1{font-size:36px;font-weight:800;max-width:720px;}
+  .hero p.lead{max-width:640px;font-size:16px;color:rgba(255,255,255,.88);margin-top:14px;}
+  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px;}
+  .fact{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:16px;}
+  .fact .num{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;}
+  .fact .label{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;}
+
+  /* BRANDBOOK */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+  .swatch{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);}
+  .swatch .chip{height:64px;}
+  .swatch .meta{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px;}
+  .bb-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:720px){.bb-grid{grid-template-columns:1fr;}}
+  .bb-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .bb-card h4{font-size:14px;margin-bottom:8px;color:var(--roe);}
+  .bb-card p{font-size:14px;color:var(--ink-soft);margin:0;}
+
+  /* CYCLE */
+  .cycle{display:flex;flex-wrap:wrap;gap:10px;}
+  .cycle-step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .cycle-step .n{font-family:'IBM Plex Mono',monospace;color:var(--roe);}
+  .cycle-arrow{align-self:center;color:var(--ink-soft);}
+
+  /* POSTS */
+  .post-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
+  .post-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .post-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .post-title{font-size:17px;font-weight:700;margin-top:4px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:var(--ocean);color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .post-body p{font-size:14.5px;color:var(--ink);margin:0 0 10px;}
+  .post-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+  @media (max-width:640px){.post-meta{grid-template-columns:1fr;}}
+  .meta-block{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;}
+  .meta-block .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .meta-block .v{font-size:13.5px;}
+  .meta-block.full{grid-column:1 / -1;}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .chip-tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:3px 8px;border-radius:6px;}
+  :root[data-theme="dark"] .chip-tag, @media (prefers-color-scheme:dark){.chip-tag{background:transparent;}}
+  .cta-line{margin-top:12px;font-size:13.5px;font-weight:600;color:var(--roe);}
+
+  /* STORIES */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .story-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+  .story-title{font-size:16px;font-weight:700;margin-bottom:8px;}
+  .story-body p{font-size:14px;color:var(--ink);margin:0 0 12px;}
+  .story-design{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .story-design .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .story-design .v{font-size:13px;}
+  .story-note{font-size:13px;color:var(--ink-soft);margin-bottom:18px;max-width:680px;}
+
+  /* TIMELINE */
+  .timeline{display:grid;gap:14px;}
+  .tl-item{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .tl-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:4px 10px;border-radius:999px;height:fit-content;white-space:nowrap;}
+  .tl-content h4{font-size:15px;margin-bottom:4px;}
+  .tl-content p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+  details.tl-stage{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;margin-bottom:0;}
+  details.tl-stage summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;}
+  details.tl-stage summary::-webkit-details-marker{display:none;}
+  details.tl-stage summary::before{content:"▸";color:var(--roe);display:inline-block;transition:transform .15s;}
+  details.tl-stage[open] summary::before{transform:rotate(90deg);}
+  details.tl-stage .tl-stage-body{padding:0 18px 16px 42px;font-size:13.5px;color:var(--ink-soft);}
+  details.tl-stage .tl-stage-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+  footer.src{padding:32px 0 60px;}
+  footer.src .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;}
+  footer.src .links{display:flex;gap:16px;flex-wrap:wrap;}
+  footer.src a{font-size:13px;color:var(--teal);text-decoration:none;font-family:'IBM Plex Mono',monospace;}
+  footer.src .copy{font-size:12px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">СТО «ПитСТОп»</div>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="company">
+  <div class="wrap">
+    <span class="eyebrow">Контент-план · Этап 2 · Ведение группы ВК</span>
+    <h1>Автосервис «ПитСТОп», Набережные Челны</h1>
+    <p class="lead">Станция технического обслуживания иномарок с собственным магазином автозапчастей и автотоваров. Материалы публикуются в группу vk.ru/cto_pitstop — на этой базе строится контент этапа: 8 новостей и 4 сторис.</p>
+    <div class="fact-grid">
+      <div class="fact"><div class="num">17 лет</div><div class="label">на рынке техобслуживания</div></div>
+      <div class="fact"><div class="num">98 000+</div><div class="label">обслуженных автомобилей</div></div>
+      <div class="fact"><div class="num">2,8K</div><div class="label">подписчиков группы ВК</div></div>
+      <div class="fact"><div class="num">4,7</div><div class="label">рейтинг на Яндекс Картах</div></div>
+      <div class="fact"><div class="num">41</div><div class="label">параметр бесплатной диагностики</div></div>
+      <div class="fact"><div class="num">50+</div><div class="label">обслуживаемых марок авто</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <span class="eyebrow">Мини-брендбук</span>
+    <h2 class="section-title">Визуальный код «ПитСТОп»</h2>
+    <p style="max-width:680px;color:var(--ink-soft);margin-bottom:24px;">После анализа обложки, аватара и публикаций сообщества определены фирменные цвета и стиль подачи — они закладываются в дизайн каждой новости и каждого слайда сторис этого этапа.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#0B0B0C;"></div>
+        <div class="meta"><div class="role">Основной / фон</div><div class="hex">#0B0B0C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E2231A;"></div>
+        <div class="meta"><div class="role">Акцентный</div><div class="hex">#E2231A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
+        <div class="meta"><div class="role">Текстовый / контраст</div><div class="hex">#FFFFFF</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#8A8F94;"></div>
+        <div class="meta"><div class="role">Второстепенный / металлик</div><div class="hex">#8A8F94</div></div>
+      </div>
+    </div>
+    <div class="bb-grid">
+      <div class="bb-card">
+        <h4>Типографика</h4>
+        <p>Жирный конденсированный гротеск в логотипе и заголовках промо-графики, простой без засечек — в тексте карточек. В постах и сторис сохраняется контраст «крупный акцент + плотный вспомогательный текст».</p>
+      </div>
+      <div class="bb-card">
+        <h4>Фотостиль</h4>
+        <p>Репортажные кадры цеха и магазина запчастей — подъёмники, автомобили в работе, стеллажи с товаром, крупный план деталей — вперемешку с плашечной промо-графикой на чёрном фоне с красными акцентами.</p>
+      </div>
+      <div class="bb-card">
+        <h4>Логотип</h4>
+        <p>Круглый бейдж «ПитСТОп» с подписью «станция технического обслуживания», в полноразмерном варианте — вордмарк с красным подчёркиванием. Используется в обложках новостей и на каждом слайде сторис.</p>
+      </div>
+      <div class="bb-card">
+        <h4>Тон коммуникации</h4>
+        <p>Уверенный и предметный: цифры, цены, сроки, конкретные узлы и признаки неисправностей вместо общих фраз о «качественном сервисе».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <span class="eyebrow">Логика цикла</span>
+    <h2 class="section-title">Как связаны 8 новостей этапа</h2>
+    <p style="max-width:680px;color:var(--ink-soft);margin-bottom:24px;">Цикл расширяет опыт первого этапа: от охвата обслуживаемых марок — к новому направлению «магазин автозапчастей», ценам на ключевые услуги, экспертным темам и социальному доказательству на новой площадке — Яндекс Картах.</p>
+    <div class="cycle">
+      <div class="cycle-step"><span class="n">01</span>Охват марок</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">02</span>Запчасти</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">03</span>Диагностика</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">04</span>ТО</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">05</span>Развал-схождение</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">06</span>Двигатель/КПП</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">07</span>Соц. доказательство</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">08</span>Сервис / CTA</div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <span class="eyebrow">Новости · Этап 2 · 8 тем</span>
+    <h2 class="section-title">Контент-план: новости для группы ВК</h2>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 01</div><div class="post-title">50+ марок на одной эстакаде: от бюджетных иномарок до премиума</div></div>
+        <span class="tag">Охват марок</span>
+      </div>
+      <div class="post-body">
+        <p>Сервис обслуживает более 50 марок — от массовых иномарок и отечественных авто до BMW, Audi, Mercedes-Benz, Land Rover, а также коммерческий транспорт Ford Transit и Peugeot Boxer. Универсальность подтверждена реальной базой обращений, а не общей формулировкой «ремонтируем любые авто». Публикация закрепляет позиционирование сервиса как места для любого автомобиля клиента.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карусель: перечень марок иконками + итоговая цифра «50+»</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Чёрный фон, сетка мини-иконок марок, красный акцент на цифре</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Чёрная плашка с вордмарком «ПитСТОп», ряд силуэтов автомобилей разных классов, подпись «50+ марок под одной крышей»</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#автосервисдляиномарок</span><span class="chip-tag">#ремонтлюбыхмарок</span><span class="chip-tag">#питстопчелны</span></div>
+      <div class="cta-line">CTA: уточнить, обслуживается ли конкретная марка — написать в сообщения сообщества</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 02</div><div class="post-title">Запчасти под рукой: ремонт и подбор деталей в одном месте</div></div>
+        <span class="tag">Магазин запчастей</span>
+      </div>
+      <div class="post-body">
+        <p>На территории сервиса работает магазин автозапчастей и автотоваров — масла, фильтры и расходники в наличии на момент ремонта, без простоя из-за поиска детали на стороне. Направление подтверждено отдельной рубрикой на картах и положительными оценками раздела «Автозапчасти». Новость представляет магазин как логичное продолжение сервисного цикла, а не отдельный бизнес.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Фото стеллажа/витрины с товаром + короткий текст</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Светлый кадр магазина, красная плашка с категориями товара</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото полки с товаром на затемнённой подложке, крупная подпись «Запчасти в наличии», лого в углу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#магазинавтозапчастей</span><span class="chip-tag">#автотоварывналичии</span></div>
+      <div class="cta-line">CTA: уточнить наличие нужной детали по телефону или в сообщении сообщества</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 03</div><div class="post-title">Компьютерная диагностика от 500 ₽: точный список неисправностей за один визит</div></div>
+        <span class="tag">Экспертность / цена</span>
+      </div>
+      <div class="post-body">
+        <p>Комплексная компьютерная диагностика стоит от 500 рублей и выявляет реальные неисправности до начала ремонта. Итоговая стоимость фиксируется по результатам проверки, что исключает договорную накрутку. Услуга особенно актуальна перед покупкой автомобиля с пробегом и при появлении индикаторов на приборной панели.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Пост-инфографика с ценой крупным планом</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Чёрно-красная инфографика, цена «от 500 ₽» акцентом</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Крупная цифра «500 ₽», подзаголовок «Компьютерная диагностика», силуэт диагностического сканера</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#диагностикаавтоцена</span><span class="chip-tag">#диагностикапередпокупкой</span></div>
+      <div class="cta-line">CTA: записаться на диагностику по телефону или в WhatsApp</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 04</div><div class="post-title">Техобслуживание от 400 ₽: что входит в базовый регламент</div></div>
+        <span class="tag">Экспертность / цена</span>
+      </div>
+      <div class="post-body">
+        <p>Базовое техобслуживание начинается от 400 рублей и включает проверку ключевых узлов автомобиля по регламенту. Чёткий перечень работ снимает вопрос «за что именно я плачу». Регулярное ТО — основа профилактики дорогого ремонта, а не отдельная разовая услуга.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Текстовый пост с перечнем работ по пунктам</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Список работ на плашке, минимум графики, акцент на читаемость</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Цифра «от 400 ₽», подпись «Техобслуживание», иконка гаечного ключа</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#техобслуживаниецена</span><span class="chip-tag">#торегламент</span></div>
+      <div class="cta-line">CTA: записаться на ТО в удобное время</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 05</div><div class="post-title">Развал-схождение: когда руль «тянет» и что это значит</div></div>
+        <span class="tag">Экспертность</span>
+      </div>
+      <div class="post-body">
+        <p>Увод автомобиля в сторону, неравномерный износ протектора и вибрация руля — признаки нарушенного развала-схождения. Услуга доступна на месте, без записи в отдельный сервис. После шиномонтажа или ремонта подвески проверка особенно актуальна.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карусель «3 признака» — по одному на слайд</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Три карточки с иконками признаков в фирменной палитре</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Силуэт колеса с траекторией увода, подпись «Развал-схождение»</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#развалсхождение</span><span class="chip-tag">#признакиразвала</span></div>
+      <div class="cta-line">CTA: проверить развал-схождение после шиномонтажа или ремонта подвески</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 06</div><div class="post-title">Ремонт двигателя и КПП: от локального ремонта до капитального</div></div>
+        <span class="tag">Экспертность / доверие</span>
+      </div>
+      <div class="post-body">
+        <p>Работы по двигателю и коробке передач начинаются от 9000 рублей и охватывают диапазон от локального ремонта узла до капитального восстановления. Диагностика перед началом работ определяет реальный объём вмешательства, а не оценку «на глаз» — это исключает переплату за ремонт, который не требовался.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Текстовый пост с фото мастера за разборкой узла</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Кадр из цеха, минимальная графика, акцент на текст</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Цифра «от 9000 ₽», подпись «Ремонт двигателя и КПП», силуэт двигателя</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#ремонтдвигателяцена</span><span class="chip-tag">#ремонткпп</span></div>
+      <div class="cta-line">CTA: записаться на диагностику двигателя или коробки передач</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 07</div><div class="post-title">4,7 из 5 и статус Good place 2026 на Яндекс Картах</div></div>
+        <span class="tag">Соц. доказательство</span>
+      </div>
+      <div class="post-body">
+        <p>Карточка сервиса на Яндекс Картах держит рейтинг 4,7 из 5 по 68 отзывам и отмечена статусом «Good place 2026». Отдельно выделяется положительная оценка раздела «Автозапчасти» — 90% позитивных откликов. Реальные отзывы подтверждают наличие масел и фильтров на момент ремонта и адекватность цен.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-цитата с цифрой рейтинга и статусом Good place 2026</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Чёрный фон, цифра «4,7» крупным красным, бейдж статуса</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Крупная цифра «4,7», подпись «Good place 2026», лого в углу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#отзывыавтосервис</span><span class="chip-tag">#рейтингстонабчелны</span></div>
+      <div class="cta-line">CTA: оставить отзыв на Яндекс Картах после посещения сервиса</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 08</div><div class="post-title">Пока ждёте машину: кафе, Wi-Fi и оплата картой</div></div>
+        <span class="tag">Удобство / CTA</span>
+      </div>
+      <div class="post-body">
+        <p>Ожидание ремонта проходит в зоне с кафе для клиентов, бесплатным Wi-Fi и парковкой у входа. Оплата принимается картой — искать наличные на месте не нужно. Комфортные условия ожидания — часть сервиса, а не дополнительная опция, и закрывающий акцент этапа.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Фото зоны ожидания/кафе + перечень удобств иконками</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Светлый кадр интерьера, иконки удобств на плашке снизу</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото зоны ожидания, подпись «Комфортно, пока мы работаем», лого в углу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#автосервисскафе</span><span class="chip-tag">#оплатакартой</span></div>
+      <div class="cta-line">CTA: записаться на ремонт и провести время ожидания с комфортом</div>
+    </div>
+
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <span class="eyebrow">Сторис · Этап 2 · 4 темы</span>
+    <h2 class="section-title">Контент-план: сторис для группы ВК</h2>
+    <p class="story-note">Формат — один слайд на тему, без обложки. Только тезис и факт, без развёрнутого текста.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <div class="story-num">Сторис 01</div>
+        <div class="story-title">Диагностика от 500 ₽</div>
+        <div class="story-body"><p>Точная стоимость по факту проверки — без наценки «на глаз».</p></div>
+        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Чёрный фон, крупная цифра «500 ₽» красным, лого «ПитСТОп» внизу</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 02</div>
+        <div class="story-title">50+ марок автомобилей</div>
+        <div class="story-body"><p>От бюджетных иномарок до премиум-класса и коммерческого транспорта.</p></div>
+        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Чёрный фон, ряд силуэтов авто белым, цифра «50+» красным акцентом</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 03</div>
+        <div class="story-title">Запчасти в наличии</div>
+        <div class="story-body"><p>Масла, фильтры и расходники — на месте, без ожидания заказа.</p></div>
+        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Фото полки с товаром на затемнённой подложке, красная плашка с текстом</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 04</div>
+        <div class="story-title">4,7 из 5 на Яндекс Картах</div>
+        <div class="story-body"><p>68 отзывов и статус «Good place 2026».</p></div>
+        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Чёрный фон, цифра «4,7» крупно красным, бейдж статуса снизу</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="eyebrow">Карта тем</span>
+    <h2 class="section-title">Хронология этапов</h2>
+    <div class="timeline">
+      <details class="tl-stage">
+        <summary><span class="tl-stage-badge">Этап 1</span>&nbsp;— Месяц 1: оформление сообщества и запуск контент-цикла</summary>
+        <div class="tl-stage-body">Обложка группы, альбом «Прайс», описание, контакты, ссылки на ресурсы и 8 публикаций по циклу «доверие → входная услуга → экспертность → сезон → безопасность → соц. доказательство → вовлечение → CTA».</div>
+      </details>
+      <div class="tl-item">
+        <span class="tl-badge">Этап 2 · Актуальный</span>
+        <div class="tl-content">
+          <h4>8 новостей + 4 сторис — расширение на магазин автозапчастей</h4>
+          <p>Цикл новостей «охват марок → запчасти → диагностика → ТО → развал-схождение → двигатель/КПП → соц. доказательство (Яндекс Карты) → сервис/CTA»; 4 сторис-факта в формате одного слайда: диагностика, марки, запчасти, рейтинг.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="src">
+  <div class="wrap">
+    <div class="links">
+      <a href="https://vk.ru/cto_pitstop" target="_blank" rel="noopener">vk.ru/cto_pitstop</a>
+      <a href="https://yandex.ru/maps/org/pitstop/29233162254/" target="_blank" rel="noopener">Яндекс Карты</a>
+      <a href="https://pistopchelny.2gis.biz" target="_blank" rel="noopener">2ГИС</a>
+    </div>
+    <span class="copy">Контент-план · Этап 2 · СТО «ПитСТОп», Набережные Челны</span>
+  </div>
+</footer>
+
+</body>
+</html>
