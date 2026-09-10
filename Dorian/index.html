@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dorian — ТЗ на контент</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#F5F8F8;
+    --surface:#FFFFFF;
+    --surface-2:#EAF1F1;
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --roe:#C4572B;
+    --ink:#132227;
+    --ink-soft:#51656A;
+    --line:rgba(14,59,71,.15);
+    --chip-bg:rgba(27,107,120,.09);
+    --shadow:0 1px 2px rgba(14,59,71,.06), 0 10px 24px -14px rgba(14,59,71,.22);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1418;
+      --surface:#101C21;
+      --surface-2:#152227;
+      --ocean:#BFE3EA;
+      --teal:#5FB6C4;
+      --roe:#E08657;
+      --ink:#E9F2F1;
+      --ink-soft:#93AAAD;
+      --line:rgba(191,227,234,.16);
+      --chip-bg:rgba(95,182,196,.12);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 30px -16px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1418;
+    --surface:#101C21;
+    --surface-2:#152227;
+    --ocean:#BFE3EA;
+    --teal:#5FB6C4;
+    --roe:#E08657;
+    --ink:#E9F2F1;
+    --ink-soft:#93AAAD;
+    --line:rgba(191,227,234,.16);
+    --chip-bg:rgba(95,182,196,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 30px -16px rgba(0,0,0,.55);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:"Bricolage Grotesque",system-ui,sans-serif;
+    font-weight:700;
+    text-wrap:balance;
+    color:var(--ocean);
+    margin:0;
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+  a{color:var(--teal);}
+  ::selection{background:var(--roe);color:#fff;}
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+    padding:14px clamp(16px,4vw,40px);
+    background:var(--ocean);
+    color:#F5F8F8;
+    box-shadow:var(--shadow);
+  }
+  .topbar .brand{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-weight:800; font-size:19px; letter-spacing:.01em;
+    color:#F5F8F8; text-decoration:none; white-space:nowrap;
+  }
+  .topbar nav{
+    display:flex; flex-wrap:wrap; gap:4px 4px;
+  }
+  .topbar nav a{
+    color:rgba(245,248,248,.82);
+    text-decoration:none;
+    font-size:13.5px; font-weight:600;
+    padding:8px 12px; border-radius:8px;
+    white-space:nowrap;
+    transition:background .15s, color .15s;
+  }
+  .topbar nav a:hover{background:rgba(245,248,248,.12); color:#fff;}
+
+  main{max-width:920px; margin:0 auto; padding:0 clamp(16px,4vw,40px);}
+  section{padding-block:clamp(40px,7vw,68px); border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--roe); margin-bottom:10px;
+  }
+  .eyebrow::before{content:""; width:16px; height:1.5px; background:var(--roe); display:inline-block;}
+
+  h2.section-title{font-size:clamp(24px,4vw,32px); margin-bottom:6px;}
+  .section-sub{color:var(--ink-soft); font-size:15px; max-width:62ch; margin-bottom:28px;}
+
+  /* ---------- hero / company ---------- */
+  .hero{padding-top:clamp(48px,8vw,76px);}
+  .hero h1{font-size:clamp(32px,5.5vw,46px); line-height:1.08; margin-bottom:14px;}
+  .hero p.lede{font-size:17px; color:var(--ink-soft); max-width:60ch; margin-bottom:32px;}
+
+  .fact-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  }
+  .fact{background:var(--surface); padding:16px 18px;}
+  .fact .k{font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft); margin-bottom:6px;}
+  .fact .v{font-size:15px; font-weight:600; color:var(--ink);}
+
+  /* ---------- brandbook ---------- */
+  .swatch-row{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-bottom:32px;}
+  .swatch{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface);}
+  .swatch .chip{height:74px;}
+  .swatch .meta{padding:10px 12px;}
+  .swatch .role{font-family:"IBM Plex Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);}
+  .swatch .hex{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; margin-top:2px;}
+
+  .bb-notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;}
+  .bb-note h3{font-size:15px; color:var(--ocean); margin-bottom:8px;}
+  .bb-note ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
+  .bb-note li{margin-bottom:5px;}
+
+  /* ---------- cycle ---------- */
+  .cycle{display:flex; flex-wrap:wrap; align-items:center; gap:0; font-family:"IBM Plex Mono",monospace; font-size:13.5px;}
+  .cycle .step{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:999px;
+    padding:9px 16px; color:var(--ocean); font-weight:600;
+  }
+  .cycle .step.now{background:var(--roe); color:#fff; border-color:var(--roe);}
+  .cycle .arrow{color:var(--ink-soft); padding:0 10px;}
+
+  /* ---------- cards (news) ---------- */
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    padding:clamp(20px,3vw,28px); margin-bottom:22px; box-shadow:var(--shadow);
+  }
+  .card-head{display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px;}
+  .card-head h3{font-size:19px; max-width:38ch;}
+  .tag{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+    background:var(--chip-bg); color:var(--teal); border-radius:999px; padding:5px 11px; white-space:nowrap;
+  }
+  .card ul.thesis{margin:0 0 16px; padding-left:20px; font-size:14.5px;}
+  .card ul.thesis li{margin-bottom:6px;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .chip-kw{
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; background:var(--surface-2);
+    border:1px solid var(--line); color:var(--ink-soft); padding:4px 10px; border-radius:8px;
+  }
+
+  .kv{font-size:13.5px; color:var(--ink-soft); margin-bottom:8px;}
+  .kv b{color:var(--ink); font-weight:600;}
+  .cta-line{
+    font-size:14px; font-weight:600; color:var(--roe); border-top:1px dashed var(--line);
+    padding-top:14px; margin-top:14px;
+  }
+
+  .cover-box{
+    margin-top:18px; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:16px 18px;
+  }
+  .cover-box .role{font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--roe); margin-bottom:8px; font-weight:600;}
+  .cover-box ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink-soft);}
+  .cover-box li{margin-bottom:4px;}
+
+  /* ---------- stories ---------- */
+  .story-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px;}
+  .story-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow);
+  }
+  .story-card h3{font-size:16px; margin-bottom:10px; max-width:30ch;}
+  .story-card ul{margin:0 0 14px; padding-left:18px; font-size:14px;}
+  .story-card li{margin-bottom:5px;}
+  .design-note{
+    background:var(--surface-2); border-radius:10px; padding:12px 14px; font-size:13px; color:var(--ink-soft);
+  }
+  .design-note .role{font-family:"IBM Plex Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--teal); margin-bottom:6px; font-weight:600;}
+
+  /* ---------- map / timeline ---------- */
+  details.stage{
+    border:1px solid var(--line); border-radius:14px; background:var(--surface); margin-bottom:14px; overflow:hidden;
+  }
+  details.stage[open]{box-shadow:var(--shadow);}
+  details.stage summary{
+    list-style:none; cursor:pointer; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  details.stage summary::-webkit-details-marker{display:none;}
+  .stage-title{display:flex; align-items:center; gap:12px; font-weight:700; color:var(--ocean);}
+  .badge{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+    background:var(--roe); color:#fff; border-radius:999px; padding:4px 10px;
+  }
+  .stage-date{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-soft);}
+  .stage-body{padding:0 20px 20px; font-size:14px; color:var(--ink-soft);}
+  .stage-body .two-col{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:6px;}
+  .stage-body h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--teal); margin:0 0 8px; font-family:"IBM Plex Mono",monospace;}
+  .stage-body ul{margin:0; padding-left:18px;}
+  .stage-body li{margin-bottom:4px;}
+
+  /* ---------- footer / sources ---------- */
+  footer{max-width:920px; margin:0 auto; padding:32px clamp(16px,4vw,40px) 60px;}
+  footer .eyebrow{margin-bottom:14px;}
+  footer ul{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:8px;}
+  footer li{font-size:13.5px; color:var(--ink-soft);}
+  footer a{color:var(--teal); text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  @media (max-width:480px){
+    .topbar{padding:12px 16px;}
+    .card-head{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <a class="brand" href="#top">Dorian</a>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section id="company" class="hero">
+    <div class="eyebrow">ТЗ на контент · Этап 1</div>
+    <h1>Dorian — двери, гардеробные системы, системы перегородок</h1>
+    <p class="lede">Ростов-на-Дону. Собственное производство, коллаборация с итальянским архитектурным бюро Stradivari Design, сегмент «средний+» и «премиум». Материалы ниже — темы для новостных публикаций и сторис, подготовленные по анкете компании и карточке на Яндекс Картах.</p>
+
+    <div class="fact-grid">
+      <div class="fact"><div class="k">Профиль</div><div class="v">Двери, гардеробные, перегородки</div></div>
+      <div class="fact"><div class="k">Год основания</div><div class="v">2009</div></div>
+      <div class="fact"><div class="k">Производство</div><div class="v">Собственная площадка</div></div>
+      <div class="fact"><div class="k">Коллаборация</div><div class="v">Stradivari Design (Италия)</div></div>
+      <div class="fact"><div class="k">Сегмент</div><div class="v">«Средний+» и «премиум»</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">просп. М. Нагибина, 30Л, цоколь</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно, 10:00–19:00</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 918 853-43-66</div></div>
+      <div class="fact"><div class="k">Тон коммуникации</div><div class="v">Деловой, на «вы»</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Карточка компании на Яндекс Картах</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="section-title">Фирменный стиль Dorian</h2>
+    <p class="section-sub">После анализа анкеты компании определены рабочая палитра и визуальные принципы — сдержанный минимализм без ярких и пёстрых решений, тёплая нейтральная база.</p>
+
+    <div class="swatch-row">
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF; border-bottom:1px solid var(--line);"></div>
+        <div class="meta"><div class="role">Основной</div><div class="hex">#FFFFFF · белый</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F7F4EF;"></div>
+        <div class="meta"><div class="role">Фоновый</div><div class="hex">#F7F4EF · тёплый айвори</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#DAD3C8;"></div>
+        <div class="meta"><div class="role">Второстепенный</div><div class="hex">#DAD3C8 · светло-серый тёплый</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#948B7D;"></div>
+        <div class="meta"><div class="role">Акцентный</div><div class="hex">#948B7D · таупе (точечно)</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#322E29;"></div>
+        <div class="meta"><div class="role">Текстовый</div><div class="hex">#322E29 · тёплый графит</div></div>
+      </div>
+    </div>
+
+    <div class="bb-notes">
+      <div class="bb-note">
+        <h3>Палитра и запреты</h3>
+        <ul>
+          <li>База — белый и тёплый светло-серый, без холодных сизых оттенков</li>
+          <li>Акцент используется точечно — линии, теги, мелкие детали, не заливки</li>
+          <li>Пёстрые сочетания и красные оттенки исключены полностью</li>
+        </ul>
+      </div>
+      <div class="bb-note">
+        <h3>Тон и обращение</h3>
+        <ul>
+          <li>Строго деловой стиль, без юмора и разговорных оборотов</li>
+          <li>Обращение к аудитории — на «вы»</li>
+          <li>Без превосходных степеней и оценочных эпитетов</li>
+        </ul>
+      </div>
+      <div class="bb-note">
+        <h3>Визуальный лексикон</h3>
+        <ul>
+          <li>Фактуры материалов крупным планом — эмаль, шпон, HPL, массив, алюминий и стекло</li>
+          <li>Интерьер шоурума и кромки/фурнитура — сдержанный, ровный свет</li>
+          <li>Графика — тонкие прямые линии, геометрия каркасов гардеробных как мотив</li>
+        </ul>
+      </div>
+      <div class="bb-note">
+        <h3>Композиция</h3>
+        <ul>
+          <li>Много воздуха, минимум декоративных элементов</li>
+          <li>Один смысловой акцент на кадр или слайд</li>
+          <li>Логотип — предоставлен в векторном формате, используется без искажений</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="section-title">Последовательность этапа 1</h2>
+    <p class="section-sub">Первый этап: от позиционирования бренда — к продукту и приоритетным предложениям.</p>
+    <div class="cycle">
+      <span class="step">Позиционирование</span><span class="arrow">→</span>
+      <span class="step">Акция: эмаль −20%</span><span class="arrow">→</span>
+      <span class="step">Гардеробные системы</span><span class="arrow">→</span>
+      <span class="step now">Акция: −15% на комплекс</span>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="section-title">Темы для новостных публикаций</h2>
+    <p class="section-sub">4 темы, каждая — с отдельным ТЗ на обложку. SEO-блок ориентирован на Ростов-на-Дону и профильные запросы компании.</p>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>1. Скидка 20% на дверные полотна в эмали — до 30 сентября</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <ul class="thesis">
+        <li>Скидка 20% на гладкие дверные полотна, окрашенные эмалью</li>
+        <li>Срок действия — до 30 сентября, предложение ограничено по времени</li>
+        <li>Эмаль — одно из премиальных покрытий в линейке Dorian, применяется и в стеновых панелях</li>
+        <li>Продукция — собственное производство компании</li>
+        <li>Уточнить наличие и стоимость — по телефону или в шоуруме на просп. Михаила Нагибина, 30Л</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">межкомнатные двери в эмали Ростов-на-Дону</span>
+        <span class="chip-kw">скидка на двери Ростов</span>
+        <span class="chip-kw">окрашенные двери на заказ</span>
+        <span class="chip-kw">двери premium класса Ростов-на-Дону</span>
+      </div>
+      <div class="kv"><b>Meta description:</b> Скидка 20% на межкомнатные двери в эмали от Dorian — собственное производство, Ростов-на-Дону. Акция действует до 30 сентября.</div>
+      <div class="cta-line">CTA: уточните наличие и стоимость по телефону +7 918 853-43-66</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «−20% на двери в эмали» + подпись «до 30 сентября»</li>
+          <li>Фон — тёплый айвори или белый, крупный план фактуры эмалевого полотна</li>
+          <li>Акцентная линия таупе, шрифт по брендбуку Dorian, без красных и ярких элементов</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>2. Dorian: двери и гардеробные системы собственного производства</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <ul class="thesis">
+        <li>Компания на рынке с 2009 года</li>
+        <li>Собственная производственная площадка — контроль на каждом этапе, от материала до монтажа</li>
+        <li>Концепция и стиль продукции разработаны в коллаборации с итальянским архитектурным бюро Stradivari Design</li>
+        <li>Позиционирование — сегмент «средний+» и «премиум»</li>
+        <li>Ассортимент: межкомнатные двери, гардеробные и перегородочные системы, стеновые панели, паркет, мебель собственного производства</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">двери и гардеробные Ростов-на-Дону</span>
+        <span class="chip-kw">производитель дверей премиум-класса</span>
+        <span class="chip-kw">Dorian Ростов-на-Дону</span>
+        <span class="chip-kw">итальянский дизайн межкомнатных дверей</span>
+      </div>
+      <div class="kv"><b>Meta description:</b> Dorian — двери и гардеробные системы собственного производства в стиле итальянского бюро Stradivari Design. Шоурум в Ростове-на-Дону с 2009 года.</div>
+      <div class="cta-line">CTA: запишитесь на консультацию в шоуруме на просп. Михаила Нагибина, 30Л</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «Dorian с 2009 года» + подпись «собственное производство»</li>
+          <li>Визуал — интерьерный кадр шоурума или кромка двери крупным планом</li>
+          <li>Спокойная типографика, брендбук Dorian, без фото сторонних интерьеров</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>3. Гардеробные системы Dorian: четыре решения под вашу планировку</h3>
+        <span class="tag">Продуктовая</span>
+      </div>
+      <ul class="thesis">
+        <li>Arezzo — открытая система с внешними стойками</li>
+        <li>Arezzo doors — закрытая система с фасадами</li>
+        <li>Stenico — открытая система без стоевых опор</li>
+        <li>Forte — независимая система с фасадами</li>
+        <li>Все решения проектируются под конкретное помещение, в материалах и стилистике дверных коллекций Dorian</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">гардеробные системы на заказ Ростов-на-Дону</span>
+        <span class="chip-kw">гардеробная комната под ключ</span>
+        <span class="chip-kw">система хранения премиум класса</span>
+        <span class="chip-kw">шкаф-гардеробная Ростов</span>
+      </div>
+      <div class="kv"><b>Meta description:</b> Четыре системы гардеробных Dorian — открытые и закрытые конструкции под любую планировку. Собственное производство, Ростов-на-Дону.</div>
+      <div class="cta-line">CTA: обсудите проект гардеробной по телефону +7 918 853-43-66</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «4 системы гардеробных» + перечисление названий мелким шрифтом</li>
+          <li>Визуал — линейная графика каркасов систем на светло-сером фоне</li>
+          <li>Единая сетка, без фотоколлажей, брендбук Dorian</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>4. Скидка 15% при заказе из двух и более товарных групп</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <ul class="thesis">
+        <li>Скидка 15% действует при покупке продукции из разных товарных групп — например, двери и гардеробная система</li>
+        <li>Акция бессрочная</li>
+        <li>Решение подходит для комплексного оформления интерьера в едином стиле</li>
+        <li>Стоимость — в формате «от N ₽», точный расчёт по актуальному прайс-листу</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-kw">двери и гардеробные вместе Ростов-на-Дону</span>
+        <span class="chip-kw">комплексный заказ интерьера</span>
+        <span class="chip-kw">скидка на двери и гардеробную</span>
+        <span class="chip-kw">интерьерные решения под ключ Ростов</span>
+      </div>
+      <div class="kv"><b>Meta description:</b> Скидка 15% при заказе двух и более товарных групп Dorian — двери, гардеробные, перегородки в едином стиле. Ростов-на-Дону.</div>
+      <div class="cta-line">CTA: рассчитайте стоимость комплексного заказа по телефону +7 918 853-43-66</div>
+      <div class="cover-box">
+        <div class="role">ТЗ на обложку</div>
+        <ul>
+          <li>Текст: «−15% на комплексный заказ» + подпись «от двух товарных групп»</li>
+          <li>Визуал — сдержанная композиция из фактур материалов (эмаль, шпон, стекло)</li>
+          <li>Брендбук Dorian, без ярких контрастов</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="section-title">Темы для сторис</h2>
+    <p class="section-sub">4 темы, формат — 1 слайд, без обложки. Только тезисы и факты, без развёрнутых сценариев.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <h3>1. Шоурум Dorian: адрес и режим работы</h3>
+        <ul>
+          <li>просп. Михаила Нагибина, 30Л, цокольный этаж</li>
+          <li>Ежедневно, 10:00–19:00</li>
+          <li>Телефон +7 918 853-43-66</li>
+        </ul>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Фон — тёплый айвори #F7F4EF, текст графитом #322E29, тонкая разделительная линия таупе #948B7D, контактный блок крупным шрифтом внизу слайда.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>2. −20% на двери в эмали — до 30 сентября</h3>
+        <ul>
+          <li>Скидка 20% на гладкие полотна в эмали</li>
+          <li>Срок — до 30 сентября</li>
+          <li>Собственное производство Dorian</li>
+        </ul>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Белый фон, крупная цифра «−20%» графитом #322E29 по центру, подпись со сроком акции мелким шрифтом, тонкая акцентная линия таупе #948B7D, без ярких и красных элементов.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>3. 4 системы гардеробных Dorian</h3>
+        <ul>
+          <li>Arezzo, Arezzo doors, Stenico, Forte</li>
+          <li>Открытые и закрытые конструкции</li>
+          <li>Проектируются под любую планировку</li>
+        </ul>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Сетка 2×2 на фоне светло-серого #DAD3C8, каждая ячейка подписана названием системы, вместо фото — тонкая линейная графика каркаса.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>4. Скоро: обновлённый шоурум Dorian</h3>
+        <ul>
+          <li>Официальное открытие — ноябрь</li>
+          <li>Шоурум после обновления</li>
+          <li>Адрес: просп. Михаила Нагибина, 30Л</li>
+        </ul>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Тизерный формат: крупная типографика «Скоро», ниже — «Ноябрь · обновлённый шоурум Dorian», фон белый или айвори, акцент таупе точечно.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+    <p class="section-sub">Первый этап работы с Dorian — темы ниже фиксируются в реестре и не повторяются на следующих этапах.</p>
+
+    <details class="stage" open>
+      <summary>
+        <div class="stage-title">Этап 1 <span class="badge">актуальный</span></div>
+        <div class="stage-date">09.2026</div>
+      </summary>
+      <div class="stage-body">
+        <div class="two-col">
+          <div>
+            <h4>Новости</h4>
+            <ul>
+              <li>Скидка 20% на двери в эмали — до 30 сентября</li>
+              <li>Dorian: двери и гардеробные собственного производства</li>
+              <li>4 системы гардеробных Dorian</li>
+              <li>Скидка 15% на заказ из двух и более товарных групп</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Сторис</h4>
+            <ul>
+              <li>Шоурум Dorian: адрес и режим работы</li>
+              <li>−20% на двери в эмали — до 30 сентября</li>
+              <li>4 системы гардеробных Dorian</li>
+              <li>Скоро: обновлённый шоурум Dorian</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<footer id="sources">
+  <div class="eyebrow">Источники</div>
+  <ul>
+    <li>Анкета клиента «Ведение карточки на Яндекс Картах и 2ГИС», Dorian, 09.09.2026</li>
+    <li><a href="https://yandex.ru/maps/-/CThUZKME" target="_blank" rel="noopener">Карточка компании на Яндекс Картах</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
