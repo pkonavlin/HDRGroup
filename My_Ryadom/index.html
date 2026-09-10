@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мы рядом — ТЗ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E0EDEE;
+    --ink:#122127; --ink-soft:#4C6068; --line:#D8E3E3; --card:#FFFFFF; --bg:#F5F8F8;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#BFE3EA; --teal:#7FC3CE; --ice:#0B171B; --roe:#E58657; --roe-soft:#20302F;
+      --ink:#EAF3F3; --ink-soft:#9FB4BA; --line:#22383D; --card:#0F2024; --bg:#0B171B;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#BFE3EA; --teal:#7FC3CE; --ice:#0B171B; --roe:#E58657; --roe-soft:#20302F;
+    --ink:#EAF3F3; --ink-soft:#9FB4BA; --line:#22383D; --card:#0F2024; --bg:#0B171B;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;margin:0;color:var(--ink)}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+
+  /* ---- top bar ---- */
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:6px;padding:14px clamp(16px,4vw,32px);background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+  .topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:var(--ocean);margin-right:18px;flex:0 0 auto}
+  .topbar nav{display:flex;gap:4px}
+  .topbar a.navlink{flex:0 0 auto;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;text-decoration:none;color:var(--ink-soft)}
+  .topbar a.navlink:hover{background:var(--roe-soft);color:var(--ocean)}
+
+  main{max-width:920px;margin:0 auto;padding:0 clamp(16px,4vw,32px) 80px}
+  section{padding-top:56px;scroll-margin-top:70px}
+  section:first-of-type{padding-top:40px}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .eyebrow::before{content:"";width:20px;height:1px;background:var(--roe)}
+  h2.sec-title{font-size:clamp(24px,4vw,32px);font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+  .sec-desc{color:var(--ink-soft);font-size:15px;max-width:62ch;margin-bottom:28px}
+
+  /* ---- hero ---- */
+  .hero{padding-top:24px}
+  .hero .eyebrow{margin-bottom:14px}
+  .hero h1{font-size:clamp(30px,5.2vw,46px);font-weight:800;letter-spacing:-.015em;line-height:1.08;max-width:16ch}
+  .hero .sub{color:var(--ink-soft);font-size:16px;max-width:60ch;margin-top:14px}
+  .fact-grid{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .fact{background:var(--card);padding:16px 18px}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:6px}
+  .fact .v{font-size:14.5px;font-weight:600;color:var(--ink)}
+
+  /* ---- brandbook ---- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0 28px}
+  .swatch{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+  .swatch .chip{height:72px}
+  .swatch .info{padding:10px 12px}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);font-weight:600}
+  .swatch .name{font-size:13.5px;font-weight:700;margin:3px 0 2px}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft)}
+
+  .bb-note{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px}
+  .bb-note h3{font-size:15px;margin-bottom:8px}
+  .bb-note p{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .bb-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.bb-grid{grid-template-columns:1fr}}
+
+  /* ---- логика цикла ---- */
+  .cycle{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;color:var(--ink-soft);font-size:14.5px}
+  .cycle p{margin:0 0 12px}
+  .cycle p:last-child{margin-bottom:0}
+  .cycle strong{color:var(--ink)}
+
+  /* ---- news cards ---- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:20px}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .card-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--roe);font-weight:600}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;border-radius:999px;background:var(--roe-soft);color:var(--roe);font-weight:700;white-space:nowrap}
+  .card h3{font-size:19px;font-weight:700;margin:6px 0 14px;line-height:1.3}
+  .thesis-list{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:8px}
+  .thesis-list li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft)}
+  .thesis-list li::before{content:"✓";color:var(--roe);font-weight:700;flex:0 0 auto}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--ice);border:1px solid var(--line);color:var(--ink-soft);padding:4px 9px;border-radius:6px}
+  .subblock{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+  .subblock .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:6px}
+  .subblock p{margin:0;font-size:14px;color:var(--ink-soft)}
+  .meta-cta{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13px;color:var(--ink-soft);margin-top:14px}
+  .meta-cta b{color:var(--ink)}
+
+  /* ---- story cards ---- */
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:640px){.story-grid{grid-template-columns:1fr}}
+  .story-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px}
+  .story-card .card-num{display:block;margin-bottom:6px}
+  .story-card h3{font-size:16.5px;margin-bottom:12px}
+  .slide-mock{border-radius:10px;padding:16px 16px 14px;margin-bottom:14px;background:linear-gradient(155deg,#211812,#171310);border:1px solid #3a2c1f}
+  .slide-mock .st{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#C9A227;margin-bottom:8px;opacity:.85}
+  .slide-mock .stitle{color:#F3E7C9;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;margin-bottom:10px;line-height:1.25}
+  .slide-mock ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+  .slide-mock li{font-size:12.5px;color:#E7DCC0;display:flex;gap:6px}
+  .slide-mock li::before{content:"✓";color:#C9A227;font-weight:700}
+  .slide-mock .close{margin-top:10px;font-size:11.5px;color:#B79E6E;font-style:italic}
+  .design-note{font-size:13px;color:var(--ink-soft)}
+  .design-note .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);display:block;margin-bottom:4px}
+
+  /* ---- timeline / карта тем ---- */
+  details.stage{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+  details.stage[open]{border-color:var(--roe)}
+  summary.stage-head{list-style:none;cursor:pointer;padding:16px 20px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+  summary.stage-head::-webkit-details-marker{display:none}
+  .stage-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px}
+  .badge{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--roe);color:#fff;font-weight:700}
+  .badge.muted{background:var(--line);color:var(--ink-soft)}
+  .stage-body{padding:0 20px 18px}
+  .tl-row{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:13.5px;padding:8px 0;border-top:1px solid var(--line)}
+  .tl-row:first-child{border-top:none}
+  .tl-fmt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--roe);font-weight:700}
+  .tl-theme{color:var(--ink)}
+  .tl-thesis{color:var(--ink-soft);font-size:12.5px}
+
+  footer{margin-top:60px;padding:22px clamp(16px,4vw,32px) 40px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12.5px;max-width:920px;margin-left:auto;margin-right:auto}
+  footer a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="brand">Мы рядом</div>
+  <nav>
+    <a class="navlink" href="#hero">Компания</a>
+    <a class="navlink" href="#brand">Брендбук</a>
+    <a class="navlink" href="#cycle">Логика цикла</a>
+    <a class="navlink" href="#news">Новости</a>
+    <a class="navlink" href="#stories">Сторис</a>
+    <a class="navlink" href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<main>
+
+  <section class="hero" id="hero">
+    <div class="eyebrow">ТЗ · продление, этап 2</div>
+    <h1>«Мы рядом» — ритуальные услуги, Новосибирск</h1>
+    <p class="sub">2 темы для новостей с обложкой и 2 темы для сторис (формат «1 слайд») — продолжение работы после реализованных ранее 4 новостей и 4 историй.</p>
+    <div class="fact-grid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Ритуальные услуги</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Новосибирск, ул. Ползунова, 5В</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно, 24/7</div></div>
+      <div class="fact"><div class="k">Рейтинг на Картах</div><div class="v">4.4 · 7 отзывов</div></div>
+      <div class="fact"><div class="k">Ключевые услуги</div><div class="v">Похороны под ключ, кремация, зал прощания, подготовка по религиозным обычаям</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Карточка на Яндекс Картах и 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="brand">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="sec-title">Визуальный код компании</h2>
+    <p class="sec-desc">После анализа фотоматериалов офиса и зала прощания компании определены фирменные цвета, материалы и тональность коммуникации «Мы рядом».</p>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#1A1A1A"></div>
+        <div class="info"><div class="role">Основной</div><div class="name">Графит / чёрный</div><div class="hex">#1A1A1A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#C9A227"></div>
+        <div class="info"><div class="role">Акцентный</div><div class="name">Золото</div><div class="hex">#C9A227</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#B98D55"></div>
+        <div class="info"><div class="role">Второстепенный</div><div class="name">Дерево (дуб)</div><div class="hex">#B98D55</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E7DFCF"></div>
+        <div class="info"><div class="role">Фоновый</div><div class="name">Тёплый беж</div><div class="hex">#E7DFCF</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#4B372B"></div>
+        <div class="info"><div class="role">Текстовый / фон зала</div><div class="name">Тёмно-коричневый</div><div class="hex">#4B372B</div></div>
+      </div>
+    </div>
+
+    <div class="bb-grid">
+      <div class="bb-note">
+        <h3>Типографика и логотип</h3>
+        <p>Название «Мы рядом» набрано широким прописным шрифтом с засечками золотой фольгой на чёрном фоне, рядом — эмблема креста с крыльями (парящий силуэт). Мотив крыльев повторяется в декоре — фигурке ангела на витрине с урнами.</p>
+      </div>
+      <div class="bb-note">
+        <h3>Материалы интерьера</h3>
+        <p>Чёрная кожаная мебель, вертикальные деревянные рейки с тёплой подсветкой, золотые акценты в оформлении вывески и товаров, светлый каменный пол. Зал прощания — тёплые коричневые стены, иконостас, кованые подсвечники, экран для видеоряда.</p>
+      </div>
+      <div class="bb-note">
+        <h3>Товарная витрина</h3>
+        <p>Урны, ритуальный текстиль, кресты и венки выставлены бутиковым способом — с живыми цветами и точечной подсветкой, без утилитарной раскладки.</p>
+      </div>
+      <div class="bb-note">
+        <h3>Тон коммуникации</h3>
+        <p>Спокойный, поддерживающий, без нагнетания. Позиционирование строится на прямом смысле названия — компания рядом с семьёй на каждом этапе, без лишних слов.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">Логика цикла</div>
+    <h2 class="sec-title">Как новый этап продолжает предыдущий</h2>
+    <div class="cycle">
+      <p><strong>Этап 1</strong> (реализован) закрыл базовые вопросы обращения к ритуальному агентству: стоимость и её прозрачность, формат «под ключ», кремация как альтернатива, первые шаги после смерти близкого.</p>
+      <p><strong>Этап 2</strong> (текущий) раскрывает две конкретные услуги, ранее не затронутые и опирающиеся на реальные данные карточки и фотоматериалы офиса: устройство и оформление зала прощания — то, что физически видно в интерьере компании — и подготовка похорон по мусульманским обычаям, отдельная позиция в перечне услуг «Мы рядом».</p>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · 2 темы + обложка</div>
+    <h2 class="sec-title">Темы для новостных публикаций</h2>
+    <p class="sec-desc">SEO-тексты с максимальной плотностью ключевых запросов, публикация — карточка «Мы рядом» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="card">
+      <div class="card-head">
+        <div><div class="card-num">Тема 05</div><h3>Зал прощания в агентстве «Мы рядом»: как проходит церемония</h3></div>
+        <div class="tag">Экспертный</div>
+      </div>
+      <ul class="thesis-list">
+        <li>Отдельное помещение для прощания с усопшим, рассчитанное на родных и близких</li>
+        <li>Оформление зала: драпировка, рассадка гостей, подготовка места прощания</li>
+        <li>Место для обряда — иконостас, свечи, кованые подсвечники</li>
+        <li>Экран для демонстрации фотографий или видео об усопшем во время церемонии</li>
+        <li>Дополнительно — аренда шатра и стульев при большом количестве гостей</li>
+        <li>Все организационные вопросы по подготовке зала берёт на себя агентство</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">зал прощания Новосибирск</span>
+        <span class="chip-seo">прощание с усопшим</span>
+        <span class="chip-seo">организация церемонии похорон</span>
+        <span class="chip-seo">аренда ритуального зала</span>
+        <span class="chip-seo">драпировка зала прощания</span>
+        <span class="chip-seo">ритуальное агентство Новосибирск</span>
+      </div>
+      <div class="subblock">
+        <div class="lbl">ТЗ на обложку</div>
+        <p>«Как проходит прощание с близким человеком» — кадр интерьера зала прощания (тёплые коричневые стены, свечи, иконостас), золотой акцент шрифта на затемнённой подложке.</p>
+      </div>
+      <div class="meta-cta"><span>Публикация:</span> <b>карточка «Мы рядом» на Яндекс Картах и 2ГИС</b></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><div class="card-num">Тема 06</div><h3>Похороны по мусульманским обычаям в Новосибирске: как проходит подготовка</h3></div>
+        <div class="tag">Нишевый</div>
+      </div>
+      <ul class="thesis-list">
+        <li>Подготовка усопшего выполняется в соответствии с религиозными традициями</li>
+        <li>Омовение и оборачивание проводятся по установленным правилам</li>
+        <li>Специалисты агентства сопровождают семью на каждом этапе подготовки</li>
+        <li>Учитываются сроки погребения и религиозные нормы обряда</li>
+        <li>В услугу включены необходимые ритуальные принадлежности для обряда</li>
+        <li>Агентство работает круглосуточно и принимает обращения в любое время</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">похороны по мусульманским обычаям Новосибирск</span>
+        <span class="chip-seo">мусульманские похороны</span>
+        <span class="chip-seo">омовение усопшего</span>
+        <span class="chip-seo">ритуальные услуги для мусульман</span>
+        <span class="chip-seo">похороны по шариату Новосибирск</span>
+        <span class="chip-seo">ритуальное агентство круглосуточно</span>
+      </div>
+      <div class="subblock">
+        <div class="lbl">ТЗ на обложку</div>
+        <p>«Похороны по мусульманским традициям: как это происходит» — сдержанный нейтральный визуал (орнамент или эмблема вместо предметной съёмки), золото на графитовом фоне.</p>
+      </div>
+      <div class="meta-cta"><span>Публикация:</span> <b>карточка «Мы рядом» на Яндекс Картах и 2ГИС</b></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · 2 темы, формат «1 слайд»</div>
+    <h2 class="sec-title">Темы для историй</h2>
+    <p class="sec-desc">Без обложек — каждая история состоит из одного слайда: заголовок, сухие тезисы, оформление в фирменных цветах компании.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="card-num">История 05</div>
+        <h3>Зал прощания — что предусмотрено</h3>
+        <div class="slide-mock">
+          <div class="st">Слайд</div>
+          <div class="stitle">Помещение для церемонии готово:</div>
+          <ul>
+            <li>иконостас и свечи</li>
+            <li>экран для видео и фото</li>
+            <li>драпировка и рассадка</li>
+            <li>аренда шатра и стульев при необходимости</li>
+          </ul>
+          <div class="close">Всё оформление организует агентство.</div>
+        </div>
+        <div class="design-note"><span class="lbl">Дизайн слайда</span>Тёмно-коричневый фон (по мотивам зала прощания), золотой текст и иконки-галочки, тонкая деревянная рамка внизу слайда.</div>
+      </div>
+
+      <div class="story-card">
+        <div class="card-num">История 06</div>
+        <h3>Похороны по мусульманским обычаям</h3>
+        <div class="slide-mock">
+          <div class="st">Слайд</div>
+          <div class="stitle">Подготовка по традициям:</div>
+          <ul>
+            <li>омовение и оборачивание по правилам</li>
+            <li>сопровождение специалиста</li>
+            <li>соблюдение сроков погребения</li>
+            <li>необходимые принадлежности для обряда</li>
+          </ul>
+          <div class="close">Работаем круглосуточно.</div>
+        </div>
+        <div class="design-note"><span class="lbl">Дизайн слайда</span>Графитовый/чёрный фон, золотой текст, сдержанный орнаментальный акцент без предметной съёмки.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="sec-title">История публикаций</h2>
+
+    <details class="stage">
+      <summary class="stage-head">
+        <div class="stage-title">Этап 1 <span class="badge muted">реализован</span></div>
+        <span class="mono" style="font-size:12px;color:var(--ink-soft)">4 новости · 4 истории</span>
+      </summary>
+      <div class="stage-body">
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Стоимость похорон в Новосибирске: из чего складывается цена</div><div class="tl-thesis">Прозрачный разбор расходов, снятие тревоги перед обращением</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Похороны под ключ: какие услуги берёт на себя агентство</div><div class="tl-thesis">Полное сопровождение семьи на каждом этапе</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Кремация в Новосибирске: особенности процедуры и стоимость</div><div class="tl-thesis">Нейтральное объяснение альтернативного формата похорон</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Что делать после смерти близкого: первые шаги и документы</div><div class="tl-thesis">Пошаговая инструкция по оформлению</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Из чего складывается стоимость похорон</div><div class="tl-thesis">Цена зависит от комплекса услуг, принадлежностей, транспорта, формата</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Ритуальный агент: помощь в сложный момент</div><div class="tl-thesis">Оформление документов, организация услуг, подготовка церемонии</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Похороны под ключ</div><div class="tl-thesis">Консультация, документы, подбор услуг, организация церемонии</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Кремация: основные особенности</div><div class="tl-thesis">Порядок процедуры, документы, стоимость, получение урны</div></div></div>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary class="stage-head">
+        <div class="stage-title">Этап 2 <span class="badge">актуальный</span></div>
+        <span class="mono" style="font-size:12px;color:var(--ink-soft)">2 новости · 2 истории</span>
+      </summary>
+      <div class="stage-body">
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Зал прощания в агентстве «Мы рядом»: как проходит церемония</div><div class="tl-thesis">Устройство и оформление зала, обряд, сопровождение</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">Новость</div><div><div class="tl-theme">Похороны по мусульманским обычаям в Новосибирске</div><div class="tl-thesis">Подготовка усопшего по религиозным традициям</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Зал прощания — что предусмотрено</div><div class="tl-thesis">Иконостас, экран, драпировка, аренда шатра и стульев</div></div></div>
+        <div class="tl-row"><div class="tl-fmt">История</div><div><div class="tl-theme">Похороны по мусульманским обычаям</div><div class="tl-thesis">Омовение, сопровождение специалиста, сроки, принадлежности</div></div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  Источники: <a href="https://yandex.ru/maps/org/my_ryadom/40483279924/" target="_blank" rel="noopener">карточка «Мы рядом» на Яндекс Картах</a> · фотоматериалы офиса и зала прощания, предоставленные компанией.
+</footer>
+
+</body>
+</html>
