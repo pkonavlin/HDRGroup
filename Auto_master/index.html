@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Авто-Мастер — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4B5A5E; --line:#D9E1E1; --card:#FFFFFF; --bg:#F5F8F8;
+  --ocean-rgb:14,59,71;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+    --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+  --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Public Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',system-ui,sans-serif; text-wrap:balance; margin:0}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:24px}
+
+/* top bar */
+.topbar{
+  position:sticky; top:0; z-index:50; background:rgba(var(--ocean-rgb),.94);
+  backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.08);
+}
+:root[data-theme="dark"] .topbar, @supports (color:red){}
+.topbar-inner{
+  max-width:1040px; margin:0 auto; padding:14px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; color:#F5F8F8; letter-spacing:.2px}
+.brand span{color:var(--roe)}
+.navlinks{display:flex; gap:4px; flex-wrap:wrap}
+.navlinks a{
+  font-size:13px; font-weight:600; color:#DDEDEE; text-decoration:none;
+  padding:7px 12px; border-radius:7px; transition:background .15s;
+}
+.navlinks a:hover, .navlinks a:focus-visible{background:rgba(255,255,255,.12); outline:none}
+
+/* hero */
+.hero{padding:56px 0 40px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--teal); font-weight:600; margin-bottom:14px; display:block;
+}
+.hero h1{font-size:clamp(28px,4.2vw,42px); font-weight:700; color:var(--ocean); line-height:1.12; max-width:16ch}
+.hero p.lead{margin-top:14px; max-width:60ch; color:var(--ink-soft); font-size:16.5px}
+
+.factgrid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:32px;
+}
+.fact{background:var(--card); padding:16px 18px}
+.fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft)}
+.fact .v{margin-top:6px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:var(--ink); font-variant-numeric:tabular-nums}
+.fact .v small{font-family:'Public Sans',sans-serif; font-weight:500; font-size:13px; color:var(--ink-soft)}
+
+section{padding:52px 0}
+section + section{border-top:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
+.sec-num{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--roe); font-weight:600}
+.sec-head h2{font-size:clamp(22px,3vw,28px); color:var(--ocean); margin-top:6px}
+.sec-head p{margin-top:8px; color:var(--ink-soft); max-width:64ch}
+
+/* brandbook */
+.swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin-top:22px}
+.swatch{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card)}
+.swatch .chip{height:64px}
+.swatch .info{padding:10px 12px}
+.swatch .role{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft)}
+.swatch .name{font-weight:700; font-size:13.5px; margin-top:2px}
+.swatch .hex{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:2px}
+
+.bb-notes{margin-top:26px; display:grid; gap:16px}
+.bb-note{display:grid; grid-template-columns:120px 1fr; gap:16px; align-items:start}
+.bb-note .lbl{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--roe); font-weight:600; padding-top:2px}
+.bb-note p{margin:0; color:var(--ink); font-size:14.5px}
+@media(max-width:560px){.bb-note{grid-template-columns:1fr}}
+
+/* logika */
+.cycle{display:grid; gap:14px}
+.cycle-row{display:flex; gap:16px; align-items:flex-start; padding:16px 18px; background:var(--card); border:1px solid var(--line); border-radius:12px}
+.cycle-row .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--teal); white-space:nowrap; padding-top:2px}
+.cycle-row p{margin:0; font-size:14.5px; color:var(--ink)}
+
+/* theme cards - news */
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px 26px 24px; margin-top:20px;
+}
+.card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap}
+.card h3{font-size:20px; color:var(--ocean); max-width:44ch}
+.purpose{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--roe); background:rgba(196,87,43,.1); border:1px solid rgba(196,87,43,.3); border-radius:20px; padding:5px 11px; white-space:nowrap;
+}
+:root[data-theme="dark"] .purpose{background:rgba(224,130,88,.12)}
+.thesis{margin:16px 0 0; padding-left:0; list-style:none; display:grid; gap:9px}
+.thesis li{position:relative; padding-left:18px; font-size:14.5px; color:var(--ink)}
+.thesis li::before{content:"—"; position:absolute; left:0; color:var(--teal); font-weight:600}
+
+.seo-box{margin-top:18px; padding:14px 16px; background:var(--bg); border:1px solid var(--line); border-radius:10px}
+.seo-box .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:8px; display:block}
+.meta-row{display:grid; gap:6px; margin-bottom:12px; font-size:13.5px}
+.meta-row b{color:var(--ink-soft); font-weight:600; font-size:12px}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip-kw{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--card); border:1px solid var(--line);
+  border-radius:6px; padding:4px 9px; color:var(--ink-soft);
+}
+.cta-line{margin-top:14px; font-size:13.5px; color:var(--ink-soft)}
+.cta-line b{color:var(--ink); font-weight:600}
+
+.cover-box{
+  margin-top:16px; padding:16px 18px; border-radius:10px; border:1px dashed var(--line);
+  background:linear-gradient(135deg,rgba(14,59,71,.04),rgba(196,87,43,.04));
+}
+.cover-box .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--roe); margin-bottom:8px; display:block; font-weight:700}
+.cover-box .thesis-cover{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--ocean); margin-bottom:8px}
+.cover-box p{margin:0 0 6px; font-size:13.5px; color:var(--ink)}
+.cover-box p:last-child{margin-bottom:0}
+
+/* stories */
+.story-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:16px}
+.story-top{display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:flex-start}
+.story-thesis{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:var(--ocean); max-width:40ch}
+.slide-no{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); white-space:nowrap; padding-top:3px}
+.facts-line{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px}
+.fact-pill{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--bg); border:1px solid var(--line);
+  border-radius:20px; padding:5px 12px; color:var(--ink); font-weight:500;
+}
+.design-note{margin-top:14px; padding:12px 14px; background:var(--bg); border-radius:9px; font-size:13.5px; color:var(--ink-soft)}
+.design-note b{color:var(--ink); font-weight:600}
+
+/* map / timeline */
+details.stage{border:1px solid var(--line); border-radius:12px; background:var(--card); margin-top:14px; overflow:hidden}
+details.stage[open]{border-color:var(--teal)}
+details.stage summary{
+  cursor:pointer; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  list-style:none; font-weight:700; font-family:'Bricolage Grotesque',sans-serif; color:var(--ocean); font-size:15.5px;
+}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+  padding:4px 10px; border-radius:20px; font-weight:700;
+}
+.badge.actual{background:rgba(27,107,120,.14); color:var(--teal); border:1px solid rgba(27,107,120,.35)}
+.badge.archive{background:var(--bg); color:var(--ink-soft); border:1px solid var(--line)}
+.stage-body{padding:0 20px 18px; display:grid; gap:8px}
+.stage-item{font-size:13.5px; color:var(--ink-soft); display:flex; gap:8px}
+.stage-item .fmt{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--roe); font-weight:700; white-space:nowrap; padding-top:1px}
+
+footer{padding:36px 0 56px}
+footer .srcs{display:flex; flex-wrap:wrap; gap:16px; font-size:13.5px}
+footer a{color:var(--teal); text-decoration:none; font-weight:600}
+footer a:hover{text-decoration:underline}
+footer .fin{margin-top:18px; font-size:12px; color:var(--ink-soft)}
+
+@media(max-width:640px){
+  .wrap{padding-inline:16px}
+  .topbar-inner{padding:12px 16px}
+  .navlinks{width:100%; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch}
+  .navlinks a{white-space:nowrap; flex:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Авто-Мастер <span>·</span> ТЗ на контент</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero" id="company" style="padding-top:48px">
+    <span class="eyebrow">Автошкола · Мотошкола · Екатеринбург</span>
+    <h1>Авто-Мастер — ТЗ на контент, этап 2</h1>
+    <p class="lead">2 темы для новостей с обложкой + 2 темы для сторис (формат: один слайд, без обложки). Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Категории</div><div class="v">A, B</div></div>
+      <div class="fact"><div class="k">Филиалов</div><div class="v">6 <small>по городу</small></div></div>
+      <div class="fact"><div class="k">Выпускников</div><div class="v">10 068</div></div>
+      <div class="fact"><div class="k">Рейтинг ГИБДД</div><div class="v">2 место</div></div>
+      <div class="fact"><div class="k">Сдают с 1 раза</div><div class="v">80%</div></div>
+      <div class="fact"><div class="k">Автопарк</div><div class="v">23 авто <small>МКПП/АКПП</small></div></div>
+      <div class="fact"><div class="k">Тариф «Оптимальный»</div><div class="v">29 000 ₽ <small>рассрочка 80 дней</small></div></div>
+      <div class="fact"><div class="k">Тариф «Очный»</div><div class="v">34 900 ₽ <small>рассрочка 12 мес</small></div></div>
+      <div class="fact"><div class="k">Первый взнос</div><div class="v">от 5 000 ₽</div></div>
+      <div class="fact"><div class="k">Курс</div><div class="v">134ч + 56ч <small>теория / практика</small></div></div>
+      <div class="fact"><div class="k">Я.Карты</div><div class="v">4.2 <small>13 оценок</small></div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v mono" style="font-size:15px">+7 343 343-96-06</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Авто-Мастер»</h2>
+      <p>После анализа фирменных материалов компании определены цвета и визуальные принципы для дизайн-блоков сторис. Красный — доминирующий акцентный цвет по всем фирменным носителям, почти чёрный держит контрастные премиальные блоки.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#E2382D"></div>
+        <div class="info"><div class="role">Акцентный</div><div class="name">Фирменный красный</div><div class="hex">#E2382D</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#121214"></div>
+        <div class="info"><div class="role">Основной</div><div class="name">Почти чёрный</div><div class="hex">#121214</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E8E8E8"></div>
+        <div class="info"><div class="role">Второстепенный</div><div class="name">Светло-серый</div><div class="hex">#E8E8E8</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F8F8F8; border-bottom:1px solid #e2e4e7"></div>
+        <div class="info"><div class="role">Фоновый</div><div class="name">Свело-белый</div><div class="hex">#F8F8F8</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#202020"></div>
+        <div class="info"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#202020</div></div>
+      </div>
+    </div>
+
+    <div class="bb-notes">
+      <div class="bb-note"><div class="lbl">Логика палитры</div><p>Красный — сквозной акцент на всех носителях: логотип, кнопки CTA, круглые бейджи-иконки, акцентные мазки на фото. Почти чёрный держит контрастные премиальные блоки (тёмный hero с ценами и акциями) на фоне светлых информационных секций (два оттенка светло-серого).</p></div>
+      <div class="bb-note"><div class="lbl">Типографика</div><p>Крупный плотный гротеск с округлыми формами для заголовков — жирное, уверенное начертание. Логотип: слово «АВТО» красным + «ШКОЛА МАСТЕР» тёмным, рядом красный круглый знак с белым силуэтом автомобиля и водителя, всё в белой капсуле.</p></div>
+      <div class="bb-note"><div class="lbl">Фотостиль</div><p>Стилизованные композитные визуалы, а не документальные кадры: фигура человека в позе на фоне горного пейзажа, автомобиль с красным кольцом-мазком позади — фирменный приём. Круглые красные бейджи с простыми белыми пиктограммами сопровождают текстовые блоки.</p></div>
+      <div class="bb-note"><div class="lbl">Тон подачи</div><p>Фактический и спокойный: цифры и подтверждённые показатели вместо оценочных эпитетов. Компания — крупная сеть с лицензией и историей, контент говорит языком результата, а не рекламных обещаний.</p></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Связь с предыдущим этапом</h2>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">Этап 1</div><p>Закрыл базовые вопросы выбора школы: сеть филиалов по городу, условия рассрочки без банка, статистика сдачи экзамена с первого раза, обучение по категориям A и B.</p></div>
+      <div class="cycle-row"><div class="tag">Этап 2</div><p>Переводит доверие в подтверждённые цифры — официальный рейтинг ГИБДД и число выпускников — и снимает последний барьер перед стартом: бесплатная пробная неделя и тренажёр перед первым выездом на дорогу.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>2 темы, каждая — с тезисами, SEO-блоком (мета + плотный список ключей) и отдельным ТЗ на обложку.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <h3>«Авто-Мастер» — 2 место в рейтинге автошкол ГИБДД и 10 068 выпускников</h3>
+        <span class="purpose">Экспертный / доверие</span>
+      </div>
+      <ul class="thesis">
+        <li>Официальный рейтинг ГИБДД — независимая оценка качества подготовки, а не собственная реклама школы</li>
+        <li>2 место среди автошкол Екатеринбурга закрепляет статус одной из самых надёжных площадок города</li>
+        <li>За время работы школу закончили 10 068 водителей — цифра говорит о масштабе и стабильности сети</li>
+        <li>Результат складывается из системной подготовки: маршрут ГИБДД в программе обучения, на экзамене — тот же автомобиль, что и на занятиях</li>
+        <li>80% учеников сдают экзамен с первого раза — прямое следствие такого подхода</li>
+        <li>Рейтинг и статистика — ориентир для тех, кто выбирает автошколу по объективным критериям, а не по рекламным обещаниям</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Автошкола «Авто-Мастер» — 2 место в рейтинге ГИБДД по Екатеринбургу</span></div>
+        <div class="meta-row"><span><b>Title · </b>Автошкола №2 в рейтинге ГИБДД Екатеринбург | Авто-Мастер</span></div>
+        <div class="meta-row"><span><b>Description · </b>Автошкола «Авто-Мастер» — 2 место в официальном рейтинге автошкол ГИБДД Екатеринбурга, 10 068 выпускников, 80% сдают экзамен с первого раза. Категории A и B.</span></div>
+        <div class="chips">
+          <span class="chip-kw">рейтинг автошкол ГИБДД Екатеринбург</span><span class="chip-kw">лучшая автошкола Екатеринбург рейтинг</span>
+          <span class="chip-kw">автошкола 2 место в рейтинге</span><span class="chip-kw">официальный рейтинг автошкол ГИБДД</span>
+          <span class="chip-kw">надёжная автошкола Екатеринбург</span><span class="chip-kw">проверенная автошкола Екатеринбург</span>
+          <span class="chip-kw">автошкола 10000 выпускников</span><span class="chip-kw">автошкола с историей Екатеринбург</span>
+          <span class="chip-kw">топ автошкол Екатеринбурга</span><span class="chip-kw">автошкола репутация проверена</span>
+          <span class="chip-kw">выбор автошколы по рейтингу</span><span class="chip-kw">автошкола лицензия ГИБДД Екатеринбург</span>
+          <span class="chip-kw">надёжная автошкола категория B</span><span class="chip-kw">автошкола с доказанным результатом</span>
+          <span class="chip-kw">автошкола много выпускников Екатеринбург</span><span class="chip-kw">рейтинг автошкол по сдаче экзамена</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> узнать больше и записаться — auto-masta.ru или +7 (343) 343-96-06.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«2 место в рейтинге ГИБДД»</div>
+        <p>Композиция: цифра «2» или бейдж-медаль как смысловой центр, подпись мелким кеглем «рейтинг автошкол ГИБДД», ниже второй блок — «10 068 выпускников».</p>
+        <p>Цвета: фон — почти чёрный #121214 (премиальный контраст для статистики), цифра/бейдж — красный #E2382D, текст светлый #F8F8F8.</p>
+        <p>Фото-подложка (опц.): кадр учебного класса или автопарка из галереи компании, затемнение 60–70% под текст.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <h3>Бесплатная пробная неделя и тренажёр перед первым выездом на дорогу</h3>
+        <span class="purpose">Вовлекающий / снятие барьера</span>
+      </div>
+      <ul class="thesis">
+        <li>Начать обучение можно бесплатно — первые 7 дней доступны без оплаты, чтобы оценить формат и инструктора до принятия решения</li>
+        <li>Перед выездом на реальную дорогу ученики отрабатывают базовые действия на механическом тренажёре — это снимает страх первого занятия за рулём</li>
+        <li>Подход снижает риск ошибиться с выбором школы и убирает главный барьер для тех, кто откладывает обучение из-за неуверенности</li>
+        <li>После пробной недели решение об оплате принимается осознанно, а не «вслепую» по рекламе</li>
+        <li>Формат подходит и тем, кто уже пробовал учиться в другой школе и хочет сравнить условия</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Первая неделя обучения вождению в «Авто-Мастер» — бесплатно</span></div>
+        <div class="meta-row"><span><b>Title · </b>Бесплатная неделя обучения вождению в Екатеринбурге | Авто-Мастер</span></div>
+        <div class="meta-row"><span><b>Description · </b>Автошкола «Авто-Мастер» даёт 7 дней бесплатного пробного обучения и механический тренажёр перед первым выездом на дорогу. Оцените формат перед оплатой.</span></div>
+        <div class="chips">
+          <span class="chip-kw">бесплатное пробное обучение вождению</span><span class="chip-kw">автошкола Екатеринбург бесплатная неделя</span>
+          <span class="chip-kw">пробный урок вождения бесплатно</span><span class="chip-kw">механический тренажёр для начинающих</span>
+          <span class="chip-kw">симулятор вождения перед экзаменом</span><span class="chip-kw">автошкола без риска начать обучение</span>
+          <span class="chip-kw">боюсь сесть за руль автошкола</span><span class="chip-kw">адаптация новичков вождение</span>
+          <span class="chip-kw">первое занятие в автошколе бесплатно</span><span class="chip-kw">автошкола пробный период</span>
+          <span class="chip-kw">попробовать вождение перед оплатой</span><span class="chip-kw">автошкола для неуверенных водителей</span>
+          <span class="chip-kw">тренажёр вождения Екатеринбург</span><span class="chip-kw">автошкола честные условия старта</span>
+          <span class="chip-kw">начать учиться на права без риска</span><span class="chip-kw">автошкола первая неделя бесплатно</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> записаться на бесплатную пробную неделю — auto-masta.ru или +7 (343) 343-96-06.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Первая неделя — бесплатно»</div>
+        <p>Композиция: крупный акцент «7 дней / 0 ₽», рядом пиктограмма тренажёра или руля.</p>
+        <p>Цвета: фон — фирменный красный #E2382D, текст — белый #F8F8F8, мелкие акценты — почти чёрный #121214.</p>
+        <p>Фото-подложка (опц.): кадр тренажёра или класса из галереи компании, лёгкое затемнение.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>2 темы, один слайд на тему, без обложки — только тезис, сухие факты и заметка по дизайну слайда.</p>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">10 068 выпускников — 2 место в рейтинге ГИБДД</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">2 место — рейтинг ГИБДД</span>
+        <span class="fact-pill">10 068 выпускников</span>
+        <span class="fact-pill">80% сдают с 1 раза</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #121214, крупная моно-цифра «10 068» фирменным красным #E2382D, под ней бейдж «2 место — рейтинг ГИБДД» светлым текстом. Сразу контентный слайд, без обложки.</div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">Первая неделя — бесплатно + тренажёр перед стартом</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">7 дней бесплатно</span>
+        <span class="fact-pill">Механический тренажёр</span>
+        <span class="fact-pill">Перед выездом на дорогу</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон фирменный красный #E2382D, крупный текст «7 дней / 0 ₽» белым, пиктограмма тренажёра/руля белой линией. Сразу контентный слайд, без обложки.</div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">06 · Карта тем</span>
+      <h2>История этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 2 — рейтинг ГИБДД и снятие барьера входа <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость</span> «Авто-Мастер» — 2 место в рейтинге автошкол ГИБДД и 10 068 выпускников</div>
+        <div class="stage-item"><span class="fmt">Новость</span> Бесплатная пробная неделя и тренажёр перед первым выездом на дорогу</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> 10 068 выпускников — 2 место в рейтинге ГИБДД</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> Первая неделя — бесплатно + тренажёр перед стартом</div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 1 — базовый выбор школы <span class="badge archive">Архив</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость</span> Сеть автошкол по всему Екатеринбургу</div>
+        <div class="stage-item"><span class="fmt">Новость</span> Честная рассрочка без переплат и скрытых платежей</div>
+        <div class="stage-item"><span class="fmt">Новость</span> Сдают с первого раза — опытные инструкторы и продуманная подготовка</div>
+        <div class="stage-item"><span class="fmt">Новость</span> Учим и на авто, и на мотоцикл — категории A и B</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> Медосмотр в подарок</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> Первый взнос всего 5 000 рублей</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> 23 учебных автомобиля на выбор</div>
+        <div class="stage-item"><span class="fmt">Сторис</span> Учись онлайн — теория в приложении</div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num" style="margin-bottom:10px">Источники</div>
+    <div class="srcs">
+      <a href="http://auto-masta.ru/" target="_blank" rel="noopener">auto-masta.ru</a>
+      <a href="https://yandex.ru/maps/-/CThjQ8yr" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+    </div>
+    <div class="fin">Публикация — карточка компании «Авто-Мастер» на Яндекс Картах и 2ГИС.</div>
+  </footer>
+
+</div>
+</body>
+</html>
