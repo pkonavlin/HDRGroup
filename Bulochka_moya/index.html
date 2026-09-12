@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Булочка моя — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:wght@600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47;
+  --teal:#1B6B78;
+  --ice:#F5F8F8;
+  --roe:#C4572B;
+  --ink:#12232A;
+  --ink-soft:#4B6169;
+  --line:#D8E3E1;
+  --card:#FFFFFF;
+  --bg:#F5F8F8;
+  --chip-bg:#EAF1F0;
+  --mono-tint:#0E3B47;
+  --ok-bg:#EAF3EC;
+  --ok-ink:#1F6B3E;
+  --warn-bg:#FCEEE7;
+  --warn-ink:#A7431E;
+
+  --client-sage:#9EA478;
+  --client-sage-light:#D6D8B2;
+  --client-cream:#ECE3D2;
+  --client-ink:#17181A;
+  --client-caramel:#C9954E;
+  --client-cocoa:#4B3220;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#7FC4CE;
+    --teal:#4FA6B0;
+    --ice:#0B1417;
+    --roe:#E28A5C;
+    --ink:#E9F1F0;
+    --ink-soft:#9FB6BC;
+    --line:#23393F;
+    --card:#10222A;
+    --bg:#0B1417;
+    --chip-bg:#152A30;
+    --ok-bg:#123322;
+    --ok-ink:#6FCB94;
+    --warn-bg:#3A2013;
+    --warn-ink:#F0A57C;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#7FC4CE;
+  --teal:#4FA6B0;
+  --ice:#0B1417;
+  --roe:#E28A5C;
+  --ink:#E9F1F0;
+  --ink-soft:#9FB6BC;
+  --line:#23393F;
+  --card:#10222A;
+  --bg:#0B1417;
+  --chip-bg:#152A30;
+  --ok-bg:#123322;
+  --ok-ink:#6FCB94;
+  --warn-bg:#3A2013;
+  --warn-ink:#F0A57C;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:"Bricolage Grotesque", "Public Sans", sans-serif;
+  text-wrap:balance;
+  margin:0;
+  color:var(--ink);
+}
+.mono{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing:.02em;
+}
+a{color:inherit;}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:14px clamp(16px,4vw,40px);
+  background:var(--card);
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.topbar::-webkit-scrollbar{display:none;}
+.brand{
+  font-family:"Bricolage Grotesque", sans-serif;
+  font-weight:700;
+  font-size:18px;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+.brand span{color:var(--roe);}
+.topnav{
+  display:flex; gap:4px;
+  flex:0 0 auto;
+}
+.topnav a{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  text-decoration:none;
+  color:var(--ink-soft);
+  padding:8px 12px;
+  border-radius:6px;
+  white-space:nowrap;
+}
+.topnav a:hover{background:var(--chip-bg); color:var(--ink);}
+
+/* ---------- layout ---------- */
+.wrap{max-width:880px; margin:0 auto; padding:0 clamp(16px,4vw,40px);}
+section{padding-block:56px;}
+section + section{border-top:1px solid var(--line);}
+.eyebrow{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--teal);
+  margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.eyebrow::before{
+  content:"";
+  width:18px; height:1px; background:var(--roe);
+}
+h2.section-title{font-size:clamp(24px,4vw,32px); font-weight:700; margin-bottom:6px;}
+.section-lede{color:var(--ink-soft); font-size:15.5px; max-width:62ch; margin-top:10px;}
+
+/* ---------- hero ---------- */
+.hero-top{padding-top:44px;}
+.hero-title{font-size:clamp(30px,5vw,44px); font-weight:800; line-height:1.12;}
+.hero-quote{
+  margin-top:18px;
+  font-family:"Bricolage Grotesque", sans-serif;
+  font-size:clamp(18px,2.6vw,22px);
+  font-weight:500;
+  font-style:italic;
+  color:var(--teal);
+  border-left:2px solid var(--roe);
+  padding-left:16px;
+}
+.hero-body{margin-top:16px; color:var(--ink-soft); max-width:64ch;}
+
+.facts-grid{
+  margin-top:32px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+}
+.fact{
+  background:var(--card);
+  padding:16px 18px;
+}
+.fact-label{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--ink-soft);
+}
+.fact-value{
+  margin-top:6px;
+  font-family:"Bricolage Grotesque", sans-serif;
+  font-weight:700;
+  font-size:17px;
+}
+
+/* ---------- brandbook ---------- */
+.swatch-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px;
+  margin-top:24px;
+}
+.swatch{
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--card);
+}
+.swatch-color{height:74px;}
+.swatch-meta{padding:10px 12px;}
+.swatch-role{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--ink-soft);
+}
+.swatch-hex{
+  font-family:"IBM Plex Mono", monospace;
+  font-weight:600;
+  font-size:13.5px;
+  margin-top:2px;
+}
+.swatch-name{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+
+.brandbook-grid{
+  margin-top:36px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+.bb-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:20px;
+  background:var(--card);
+}
+.bb-card h4{font-size:14.5px; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+.bb-card h4 .dot{width:8px; height:8px; border-radius:50%; background:var(--roe); flex:0 0 auto;}
+.bb-card ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
+.bb-card li + li{margin-top:8px;}
+.bb-type-sample{
+  margin-top:2px;
+  padding:14px;
+  border-radius:8px;
+  background:var(--chip-bg);
+}
+.bb-serif-demo{
+  font-family:"Playfair Display","Bricolage Grotesque",serif;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-size:20px;
+}
+.bb-script-demo{
+  font-family:"Caveat", cursive;
+  font-size:22px;
+}
+.bb-caps-demo{
+  font-family:"Public Sans", sans-serif;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  font-size:16px;
+}
+
+/* ---------- cycle ---------- */
+.cycle-line{
+  margin-top:28px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  counter-reset:step;
+}
+.cycle-step{
+  flex:1 1 200px;
+  position:relative;
+  padding:18px 18px 18px 0;
+}
+.cycle-step:not(:last-child)::after{
+  content:"→";
+  position:absolute;
+  right:6px; top:18px;
+  color:var(--line);
+  font-size:18px;
+}
+.cycle-step .k{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  color:var(--teal);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.cycle-step .t{margin-top:6px; font-weight:700; font-size:15px;}
+.cycle-note{margin-top:20px; color:var(--ink-soft); max-width:66ch; font-size:14.5px;}
+
+/* ---------- theme cards (news) ---------- */
+.theme-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:26px;
+  background:var(--card);
+  margin-top:22px;
+}
+.theme-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  margin-bottom:14px;
+}
+.theme-num{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12px;
+  color:var(--ink-soft);
+}
+.theme-title{font-size:19px; font-weight:700; flex:1 1 auto; min-width:200px;}
+.purpose-tag{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  background:var(--chip-bg);
+  color:var(--teal);
+  padding:5px 10px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.theme-thesis{margin:0; padding-left:18px; color:var(--ink); font-size:15px;}
+.theme-thesis li + li{margin-top:9px;}
+.theme-block-label{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  color:var(--ink-soft);
+  margin:18px 0 8px;
+}
+.seo-chips{display:flex; flex-wrap:wrap; gap:6px;}
+.seo-chip{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12px;
+  background:var(--chip-bg);
+  color:var(--ink);
+  padding:4px 10px;
+  border-radius:20px;
+  border:1px solid var(--line);
+}
+.meta-desc{
+  font-size:14px;
+  color:var(--ink-soft);
+  font-style:italic;
+  border-left:2px solid var(--line);
+  padding-left:12px;
+}
+.cta-line{
+  font-size:14.5px;
+  font-weight:600;
+  color:var(--roe);
+}
+.cover-block{
+  margin-top:18px;
+  padding:16px;
+  border-radius:10px;
+  background:var(--chip-bg);
+  font-size:14px;
+  color:var(--ink-soft);
+}
+.cover-block b{color:var(--ink); font-weight:700;}
+
+/* ---------- stories ---------- */
+.story-grid{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+}
+.story-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px;
+  background:var(--card);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.story-num{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+}
+.story-thesis{font-weight:700; font-size:15.5px; line-height:1.4;}
+.story-facts{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  padding-left:16px;
+  margin:0;
+}
+.story-facts li + li{margin-top:5px;}
+.story-design{
+  margin-top:auto;
+  font-size:12.5px;
+  color:var(--teal);
+  padding-top:10px;
+  border-top:1px dashed var(--line);
+}
+
+/* ---------- map / timeline ---------- */
+.timeline{margin-top:26px; position:relative; padding-left:26px;}
+.timeline::before{
+  content:"";
+  position:absolute; left:6px; top:6px; bottom:6px;
+  width:1px; background:var(--line);
+}
+.tl-item{position:relative; padding-bottom:26px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{
+  content:"";
+  position:absolute; left:-26px; top:4px;
+  width:11px; height:11px; border-radius:50%;
+  background:var(--roe); border:2px solid var(--card);
+  box-shadow:0 0 0 1px var(--roe);
+}
+.tl-date{font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--ink-soft);}
+.tl-title{font-weight:700; margin-top:4px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.badge-current{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  background:var(--roe);
+  color:#fff;
+  padding:2px 8px;
+  border-radius:20px;
+}
+.tl-body{margin-top:6px; color:var(--ink-soft); font-size:14px;}
+
+/* ---------- footer ---------- */
+footer.sources{
+  padding-block:40px 60px;
+  border-top:1px solid var(--line);
+}
+.src-list{list-style:none; margin:16px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.src-list a{
+  font-size:14px;
+  text-decoration:none;
+  color:var(--teal);
+  border-bottom:1px solid transparent;
+}
+.src-list a:hover{border-bottom-color:var(--teal);}
+.foot-note{margin-top:20px; font-size:12.5px; color:var(--ink-soft);}
+
+@media (max-width:640px){
+  .cycle-step:not(:last-child)::after{display:none;}
+  .theme-title{font-size:17px;}
+}
+
+
+/* ---------- avito subpage ---------- */
+.back-link{color:var(--roe) !important;}
+.nav-forward{color:var(--roe) !important;}
+.rules-grid{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;}
+.rule-card{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:var(--card);}
+.rule-card h4{font-size:14.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.rule-card h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex:0 0 auto;}
+.rule-card ul{margin:0;padding-left:18px;color:var(--ink-soft);font-size:14px;}
+.rule-card li+li{margin-top:7px;}
+.rule-card li b{color:var(--ink);}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.pill-ok{font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--ok-bg);color:var(--ok-ink);padding:5px 10px;border-radius:20px;}
+.pill-no{font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--warn-bg);color:var(--warn-ink);padding:5px 10px;border-radius:20px;}
+.source-note{margin-top:26px;font-size:13px;color:var(--ink-soft);}
+.source-note a{color:var(--teal);text-decoration:none;border-bottom:1px solid transparent;}
+.source-note a:hover{border-bottom-color:var(--teal);}
+
+.ad-card{border:1px solid var(--line);border-radius:14px;padding:26px;background:var(--card);margin-top:22px;}
+.ad-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:6px;}
+.ad-num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
+.segment-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;background:var(--chip-bg);color:var(--teal);padding:5px 10px;border-radius:20px;white-space:nowrap;}
+.ad-title{font-size:19px;font-weight:700;margin-top:8px;}
+.char-count{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+.ad-meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.ad-meta{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-soft);background:var(--chip-bg);border:1px solid var(--line);padding:5px 10px;border-radius:8px;}
+.ad-meta b{color:var(--ink);font-weight:600;}
+.block-label{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin:20px 0 8px;}
+.ad-text{white-space:pre-wrap;font-size:15px;line-height:1.7;background:var(--chip-bg);border-radius:10px;padding:18px 20px;border:1px solid var(--line);}
+.photo-list{margin:0;padding-left:18px;color:var(--ink-soft);font-size:14px;}
+.photo-list li + li{margin-top:6px;}
+
+/* ---------- cta banner (main → avito) ---------- */
+.cta-section{padding-block:40px;}
+.cta-banner{
+  background:var(--roe);
+  border-radius:18px;
+  padding:clamp(24px,4vw,40px);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  box-shadow:0 8px 30px -12px rgba(196,87,43,.55);
+}
+.cta-banner-text{flex:1 1 320px;}
+.cta-banner h3{
+  color:#fff;
+  font-size:clamp(19px,3vw,24px);
+  font-weight:700;
+  line-height:1.25;
+}
+.cta-banner p{
+  margin-top:8px;
+  color:rgba(255,255,255,.88);
+  font-size:14.5px;
+  max-width:52ch;
+}
+.cta-button{
+  flex:0 0 auto;
+  display:inline-block;
+  background:#fff;
+  color:var(--roe);
+  font-family:"IBM Plex Mono",monospace;
+  font-weight:700;
+  font-size:13.5px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  text-decoration:none;
+  padding:16px 26px;
+  border-radius:999px;
+  white-space:nowrap;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.cta-button:hover{transform:translateY(-1px) scale(1.02); box-shadow:0 6px 16px -6px rgba(0,0,0,.3);}
+
+@media (max-width:640px){
+  .ad-title{font-size:17px;}
+  .cta-banner{flex-direction:column; align-items:stretch; text-align:center;}
+  .cta-button{text-align:center;}
+}
+</style>
+</head>
+<body>
+<div id="page-main">
+
+
+<header class="topbar">
+  <div class="brand">БУЛОЧКА МОЯ <span>· ТЗ</span></div>
+  <nav class="topnav">
+    <a href="#avito" class="nav-forward">Авито →</a>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company" class="hero-top">
+    <div class="eyebrow">Компания</div>
+    <h1 class="hero-title">Булочка моя — булочная to go с собственной пекарней</h1>
+    <p class="hero-quote">«Не про булочку — про чувства: детство, маму, дом, заботу»</p>
+    <p class="hero-body">Обещание бренда — вернуть человека туда, где ему было хорошо, одним вкусом. Формат to go: полный цикл, от теста до готовой выпечки и домашних тортов, компания производит самостоятельно. Материалы этого ТЗ предназначены для публикации на карточке компании на Яндекс Картах и в 2ГИС.</p>
+
+    <div class="facts-grid">
+      <div class="fact"><div class="fact-label">Формат</div><div class="fact-value">To go, собственная пекарня</div></div>
+      <div class="fact"><div class="fact-label">На рынке</div><div class="fact-value">3 месяца</div></div>
+      <div class="fact"><div class="fact-label">Точки</div><div class="fact-value">4 локации по городу</div></div>
+      <div class="fact"><div class="fact-label">Часы работы</div><div class="fact-value">Пн–Пт 9:00–22:00</div></div>
+      <div class="fact"><div class="fact-label">Телефон</div><div class="fact-value">8 (995) 228-03-53</div></div>
+      <div class="fact"><div class="fact-label">Instagram</div><div class="fact-value">@boolochka_moya</div></div>
+      <div class="fact"><div class="fact-label">Продукт</div><div class="fact-value">Выпечка + домашние торты</div></div>
+      <div class="fact"><div class="fact-label">Согласование</div><div class="fact-value">Каждая публикация</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">01 · Мини-брендбук</div>
+    <h2 class="section-title">Фирменный стиль компании</h2>
+    <p class="section-lede">После анализа профиля компании и фирменных материалов (вывеска точки, фартук персонала, упаковка, предметная съёмка продукции) определены фирменные цвета, типографика и визуальный стиль бренда.</p>
+
+    <div class="swatch-row">
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--client-sage);"></div>
+        <div class="swatch-meta">
+          <div class="swatch-role">Основной</div>
+          <div class="swatch-hex">#9EA478</div>
+          <div class="swatch-name">шалфейно-оливковый</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--client-sage-light);"></div>
+        <div class="swatch-meta">
+          <div class="swatch-role">Второстепенный</div>
+          <div class="swatch-hex">#D6D8B2</div>
+          <div class="swatch-name">светлый оттенок, маркиза на солнце</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--client-cream);"></div>
+        <div class="swatch-meta">
+          <div class="swatch-role">Фоновый</div>
+          <div class="swatch-hex">#ECE3D2</div>
+          <div class="swatch-name">кремовый, упаковка</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--client-ink);"></div>
+        <div class="swatch-meta">
+          <div class="swatch-role">Текстовый</div>
+          <div class="swatch-hex">#17181A</div>
+          <div class="swatch-name">графитово-чёрный</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--client-caramel);"></div>
+        <div class="swatch-meta">
+          <div class="swatch-role">Акцентный (продукт)</div>
+          <div class="swatch-hex">#C9954E</div>
+          <div class="swatch-name">карамельно-медовый</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brandbook-grid">
+      <div class="bb-card">
+        <h4><span class="dot"></span>Логотип и вывеска</h4>
+        <div class="bb-type-sample"><div class="bb-serif-demo">Булочка моя</div></div>
+        <ul>
+          <li>Тонкий контрастный серифный шрифт, заглавные буквы, широкий трекинг</li>
+          <li>Белый цвет логотипа на фирменном оливковом или тёмном фоне</li>
+          <li>Единое написание на вывеске, фартуке, стакане и борту грузовика</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h4><span class="dot"></span>Рукописный акцент</h4>
+        <div class="bb-type-sample"><div class="bb-script-demo">Вкусненько, да, моя булочка?</div></div>
+        <ul>
+          <li>Курсивный рукописный шрифт для личных, тёплых подписей на упаковке</li>
+          <li>Тёмные чернильные оттенки на крафтовой кремовой бумаге</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h4><span class="dot"></span>Обложки роликов</h4>
+        <div class="bb-type-sample"><div class="bb-caps-demo">Дегустация медовика</div></div>
+        <ul>
+          <li>Жирный конденсированный гротеск, заглавные буквы</li>
+          <li>Белый текст на тёмной подложке — для вовлекающих форматов (дегустации, розыгрыши)</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h4><span class="dot"></span>Фотостиль</h4>
+        <ul>
+          <li>Крупный макро-план текстуры выпечки: слоёное тесто, срез торта, медовый крем</li>
+          <li>Предметная съёмка тортов на деревянной подставке, фон — фирменный оливковый или графитово-чёрный</li>
+          <li>Тактильные материалы в кадре: ткань фартука, крафтовая бумага, дерево</li>
+          <li>Тёплая, немного пыльная цветокоррекция без резких контрастов</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">02 · Логика цикла</div>
+    <h2 class="section-title">Как связаны темы этапа</h2>
+    <div class="cycle-line">
+      <div class="cycle-step"><div class="k">Шаг 1</div><div class="t">Знакомство с форматом</div></div>
+      <div class="cycle-step"><div class="k">Шаг 2</div><div class="t">Продуктовая линейка</div></div>
+      <div class="cycle-step"><div class="k">Шаг 3</div><div class="t">Качество состава</div></div>
+      <div class="cycle-step"><div class="k">Шаг 4</div><div class="t">Новости и рост сети</div></div>
+    </div>
+    <p class="cycle-note">Первый этап открывает бренд для аудитории по нарастающей: от формата и идеи — к конкретному продукту, от продукта — к составу и контролю производства, от состава — к новости о расширении ассортимента и сети. Сторис этого же периода не образуют отдельного сюжета, а точечно закрывают практические вопросы читателя: часы работы, конкретный продукт, факт об ингредиентах, факт о росте.</p>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">03 · Новости</div>
+    <h2 class="section-title">Темы для новостных публикаций</h2>
+    <p class="section-lede">4 темы, тексты — с максимальной SEO-оптимизацией под карточку компании на Яндекс Картах и в 2ГИС.</p>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">Новость 01</span>
+        <h3 class="theme-title">«Булочка моя»: булочная to go с домашним характером</h3>
+        <span class="purpose-tag">Имиджевый</span>
+      </div>
+      <ul class="theme-thesis">
+        <li>Формат to go с собственной пекарней: каждая позиция выпекается на месте, без промежуточных цехов</li>
+        <li>Смысловой стержень бренда — не про булочку, а про ощущение «дом, мама, забота», знакомое с детства</li>
+        <li>Обещание бренда — вернуть гостя туда, где ему было хорошо, одним вкусом</li>
+        <li>За три месяца работы бренд открыл уже четыре точки по городу — показатель быстрого доверия аудитории</li>
+      </ul>
+      <div class="theme-block-label">SEO-ключи</div>
+      <div class="seo-chips">
+        <span class="seo-chip">булочная to go</span>
+        <span class="seo-chip">пекарня с собственным производством</span>
+        <span class="seo-chip">домашняя выпечка</span>
+        <span class="seo-chip">купить выпечку навынос</span>
+        <span class="seo-chip">кондитерская натуральные продукты</span>
+      </div>
+      <div class="theme-block-label">Мета-описание</div>
+      <p class="meta-desc">«Булочка моя» — пекарня to go с собственным производством и домашними тортами из натуральных продуктов. Как булочная возвращает вкус детства.</p>
+      <div class="theme-block-label">CTA</div>
+      <p class="cta-line">Оставить заявку на доставку в Директ Instagram или уточнить ближайшую точку по телефону</p>
+      <div class="cover-block"><b>ТЗ на обложку:</b> кадр витрины с выпечкой на фоне фирменной оливковой вывески, серифный логотип-вордмарк сверху, без стоковых образов</div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">Новость 02</span>
+        <h3 class="theme-title">Домашние торты и выпечка из детства: что печёт «Булочка моя»</h3>
+        <span class="purpose-tag">Продающий</span>
+      </div>
+      <ul class="theme-thesis">
+        <li>В производстве два направления: выпечка «из детства» (булочки, круассаны, плюшки) и домашние торты</li>
+        <li>Медовик готовится по классической многослойной технологии — более 12 тонких коржей</li>
+        <li>Есть шоколадная версия торта: та же технология, какао-коржи и шоколадный крем</li>
+        <li>Профитроли подаются с соусом Nutella и карамельно-молочным соусом — авторская подача классического десерта</li>
+      </ul>
+      <div class="theme-block-label">SEO-ключи</div>
+      <div class="seo-chips">
+        <span class="seo-chip">домашний торт на заказ</span>
+        <span class="seo-chip">медовик классический</span>
+        <span class="seo-chip">шоколадный торт</span>
+        <span class="seo-chip">купить профитроли</span>
+        <span class="seo-chip">домашняя выпечка с доставкой</span>
+      </div>
+      <div class="theme-block-label">Мета-описание</div>
+      <p class="meta-desc">Домашние торты «Булочка моя»: медовик и шоколадный торт классической рецептуры, профитроли с авторским соусом. Натуральные продукты, собственное производство.</p>
+      <div class="theme-block-label">CTA</div>
+      <p class="cta-line">Забронировать торт к дате в Директе или уточнить состав и вес порций по телефону</p>
+      <div class="cover-block"><b>ТЗ на обложку:</b> разрез торта крупным планом (слои медовика или шоколадного торта), фон — тёмный графитовый или фирменный оливковый, минимум текста</div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">Новость 03</span>
+        <h3 class="theme-title">Почему в тесте и креме только настоящие продукты</h3>
+        <span class="purpose-tag">Экспертный</span>
+      </div>
+      <ul class="theme-thesis">
+        <li>Весь цикл производства — под собственным контролем компании, от теста до готовой выпечки</li>
+        <li>В составе — настоящее сливочное масло, без заменителей</li>
+        <li>Мёд для медовика поставляют домашние пасеки Красной Поляны по прямому договору</li>
+        <li>Такой состав — осознанный выбор бренда: вкус, знакомый с детства, не подделать дешёвыми аналогами</li>
+      </ul>
+      <div class="theme-block-label">SEO-ключи</div>
+      <div class="seo-chips">
+        <span class="seo-chip">выпечка без заменителей</span>
+        <span class="seo-chip">торт на настоящем масле</span>
+        <span class="seo-chip">натуральный мёд Красная Поляна</span>
+        <span class="seo-chip">пекарня с собственным производством</span>
+        <span class="seo-chip">качественная домашняя выпечка</span>
+      </div>
+      <div class="theme-block-label">Мета-описание</div>
+      <p class="meta-desc">Собственное производство, контроль каждого этапа и только настоящие продукты — из чего готовит «Булочка моя».</p>
+      <div class="theme-block-label">CTA</div>
+      <p class="cta-line">Уточнить состав конкретной позиции в Директе или позвонить по крупному заказу</p>
+      <div class="cover-block"><b>ТЗ на обложку:</b> макро-кадр текстуры выпечки — слоёное тесто в разрезе или медовый крем, тёплый золотистый свет, без крупного логотипа</div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">Новость 04</span>
+        <h3 class="theme-title">«Булочка моя» запустила линейку домашних тортов и заключила договор с пасекой</h3>
+        <span class="purpose-tag">Инфоповод</span>
+      </div>
+      <ul class="theme-thesis">
+        <li>В ассортимент добавлена линейка домашних тортов — новое направление наравне с выпечкой</li>
+        <li>Для медовика заключён прямой договор поставки мёда с домашней пасекой</li>
+        <li>Параллельно бренд растёт территориально: за три месяца работы — уже четыре точки по городу</li>
+        <li>Оба события — часть одной стратегии: расширять ассортимент, сохраняя контроль над качеством сырья</li>
+      </ul>
+      <div class="theme-block-label">SEO-ключи</div>
+      <div class="seo-chips">
+        <span class="seo-chip">новости пекарни</span>
+        <span class="seo-chip">где купить домашний торт</span>
+        <span class="seo-chip">новая точка выпечки</span>
+        <span class="seo-chip">пекарня с доставкой открытие</span>
+      </div>
+      <div class="theme-block-label">Мета-описание</div>
+      <p class="meta-desc">«Булочка моя» расширяет ассортимент домашними тортами и открывает новые точки по городу — что изменилось.</p>
+      <div class="theme-block-label">CTA</div>
+      <p class="cta-line">Проверить актуальный адрес ближайшей точки или подписаться в Instagram на анонсы новых локаций</p>
+      <div class="cover-block"><b>ТЗ на обложку:</b> кадр фирменного грузовика доставки с иллюстрацией булки — образ роста и присутствия в городе, оливково-кремовый фон</div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">04 · Сторис</div>
+    <h2 class="section-title">Темы для историй</h2>
+    <p class="section-lede">4 темы, формат презентации — один слайд на тему, тезисно, только факты.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-num">Сторис 01</div>
+        <div class="story-thesis">Булочная to go работает ежедневно по будням, с 9:00 до 22:00</div>
+        <ul class="story-facts">
+          <li>Режим работы: Пн–Пт 9:00–22:00</li>
+          <li>Телефон: 8 (995) 228-03-53</li>
+          <li>Формат: to go</li>
+        </ul>
+        <div class="story-design">Дизайн слайда: фото фасада точки, фон — фирменный оливковый, логотип-вордмарк сверху</div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 02</div>
+        <div class="story-thesis">Медовик готовится по классической рецептуре — более 12 тонких коржей</div>
+        <ul class="story-facts">
+          <li>Медовик: 12+ слоёв</li>
+          <li>Собственное производство</li>
+        </ul>
+        <div class="story-design">Дизайн слайда: крупный план разреза торта, минимум текста</div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 03</div>
+        <div class="story-thesis">Мёд для медовика поставляют домашние пасеки Красной Поляны</div>
+        <ul class="story-facts">
+          <li>Мёд — домашние пасеки Красной Поляны</li>
+          <li>В составе — настоящее сливочное масло</li>
+        </ul>
+        <div class="story-design">Дизайн слайда: макро-текстура выпечки или мёда, тёплый золотистый тон</div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 04</div>
+        <div class="story-thesis">Три месяца работы — уже четыре точки «Булочка моя» по городу</div>
+        <ul class="story-facts">
+          <li>3 месяца на рынке</li>
+          <li>4 точки по городу</li>
+        </ul>
+        <div class="story-design">Дизайн слайда: кадр фирменного грузовика доставки, цифра «4» крупным акцентом</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-banner">
+      <div class="cta-banner-text">
+        <h3>Ещё одно направление для «Булочка моя» — объявления на Авито</h3>
+        <p>4 готовых объявления по теме «Торты на заказ»: тексты, ориентир по цене, фото-бриф и разбор правил площадки.</p>
+      </div>
+      <a href="#avito" class="cta-button">Перейти к объявлениям на Авито →</a>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="section-title">Хронология этапов</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">12.09.2026</div>
+        <div class="tl-title">Этап 1 — Запуск <span class="badge-current">актуальный</span></div>
+        <div class="tl-body">Новости ×4 (знакомство → продукт → качество → рост), Сторис ×4 (часы работы, продукт, ингредиент, рост сети)</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sources wrap">
+  <div class="eyebrow">Источники</div>
+  <ul class="src-list">
+    <li><a href="https://www.instagram.com/boolochka_moya" target="_blank" rel="noopener">instagram.com/boolochka_moya</a></li>
+    <li>Бриф компании, заполненный представителем «Булочка моя»</li>
+  </ul>
+  <p class="foot-note">ТЗ подготовлено для публикации на карточке компании на Яндекс Картах и в 2ГИС.</p>
+</footer>
+
+
+</div>
+
+<div id="page-avito" hidden>
+
+
+<header class="topbar">
+  <div class="brand">БУЛОЧКА МОЯ <span>· АВИТО</span></div>
+  <nav class="topnav">
+    <a href="#" class="back-link">← Полное ТЗ</a>
+    <a href="#avito-brief">Направление</a>
+    <a href="#avito-rules">Правила площадки</a>
+    <a href="#avito-ads">Объявления</a>
+    <a href="#avito-map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="avito-brief" class="hero-top">
+    <div class="eyebrow">Направление · Авито</div>
+    <h1 class="hero-title">Изготовление тортов на заказ — 4 объявления для Авито</h1>
+    <p class="hero-body">Объявления разведены по поводу заказа (день рождения, детский праздник, семейное торжество, корпоративный заказ), чтобы не дублировать друг друга и закрывать разные поисковые запросы. Тексты выверены по актуальным правилам площадки: без контактов в описании, без запрещённых формулировок, с распределёнными по тексту ключевыми словами.</p>
+
+    <div class="facts-grid">
+      <div class="fact"><div class="fact-label">Тема</div><div class="fact-value">Торты на заказ</div></div>
+      <div class="fact"><div class="fact-label">Категория Авито</div><div class="fact-value">Услуги → Питание, кейтеринг</div></div>
+      <div class="fact"><div class="fact-label">Точки выдачи</div><div class="fact-value">4 по городу</div></div>
+      <div class="fact"><div class="fact-label">Контакты в объявлении</div><div class="fact-value">Через поле «Телефон»/чат Авито</div></div>
+    </div>
+  </section>
+
+  <section id="avito-rules">
+    <div class="eyebrow">Правила площадки и SEO</div>
+    <h2 class="section-title">На что опирались при написании</h2>
+    <p class="section-lede">Ниже — требования Авито к объявлениям и факторы поисковой выдачи, применённые ко всем 4 текстам. Полный список источников — внизу страницы.</p>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <h4><span class="dot"></span>Заголовок</h4>
+        <ul>
+          <li>До <b>46–50 символов</b> — иначе обрезается в карточке поиска</li>
+          <li>Только название услуги + ключевой параметр, без воды</li>
+          <li>Запрещены слова: «недорого», «хорошая цена», «даром», «кликай», «заходи», «внимание»</li>
+          <li>Без КАПСА, без контактов, без транслита</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <h4><span class="dot"></span>Описание</h4>
+        <ul>
+          <li>До 7 500 символов, оптимально — 800–1 500</li>
+          <li>Первые ~200 символов видны в поиске до перехода — там должны быть суть и ключевой запрос</li>
+          <li>8–12 ключевых фраз, распределённых по тексту, без переспама в конце</li>
+          <li>Без штампов «индивидуальный подход», «лучшие цены», «кратчайшие сроки»</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <h4><span class="dot"></span>Контакты — жёсткое правило</h4>
+        <ul>
+          <li><b>Телефон, e-mail, сайт, соцсети, мессенджеры — запрещены</b> в тексте заголовка и описания</li>
+          <li>Запрещены и на фото (никаких номеров/ссылок в кадре)</li>
+          <li>Контакт указывается только в самом объявлении Авито — поле «Телефон» и встроенный чат</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <h4><span class="dot"></span>Фото</h4>
+        <ul>
+          <li>До 10 фото, минимум 1 280×960, соотношение 4:3</li>
+          <li>Только реальные фото — без водяных знаков, рамок, призывных надписей («Срочно!», скидочных плашек)</li>
+          <li>Для услуг — не только готовый торт, но и процесс/производство/точка выдачи</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <h4><span class="dot"></span>Ранжирование в поиске</h4>
+        <ul>
+          <li>Релевантность запросу (заголовок + текст), точная категория</li>
+          <li>Полнота карточки: фото, цена, характеристики</li>
+          <li>CTR и конверсия в отклик — чем быстрее отвечаете, тем выше приоритет</li>
+          <li>Рыночная цена — сильно завышенная или заниженная снижает показы</li>
+        </ul>
+      </div>
+      <div class="rule-card">
+        <h4><span class="dot"></span>Уникальность 4 объявлений</h4>
+        <ul>
+          <li>Разный повод, цена и объём — легитимное отличие, не техническая маскировка</li>
+          <li>У каждого объявления — свои фото, не переиспользовать один и тот же кадр</li>
+          <li>Технические трюки с метаданными фото не рекомендуем — риск блокировки выше выгоды</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pill-row">
+      <span class="pill-ok">✓ Ключевые слова в тексте</span>
+      <span class="pill-ok">✓ Реальная цена как ориентир</span>
+      <span class="pill-ok">✓ Фото процесса и продукта</span>
+      <span class="pill-no">✕ Телефон/соцсети в тексте</span>
+      <span class="pill-no">✕ «Недорого», «Внимание», штампы</span>
+    </div>
+  </section>
+
+  <section id="avito-ads">
+    <div class="eyebrow">Объявления</div>
+    <h2 class="section-title">4 темы объявлений</h2>
+    <p class="section-lede">Контакты не дублируются в тексте — укажите телефон в самом объявлении Авито при публикации. Цена — рыночный ориентир 2026 года, требует подтверждения перед публикацией.</p>
+
+    <div class="ad-card">
+      <div class="ad-head">
+        <span class="ad-num">Объявление 01</span>
+        <span class="segment-tag">День рождения · базовый спрос</span>
+      </div>
+      <h3 class="ad-title">Торт на заказ на день рождения | Медовик</h3>
+      <div class="char-count">40 символов</div>
+      <div class="ad-meta-row">
+        <span class="ad-meta"><b>Цена:</b> от 1 800 ₽/кг (ориентир)</span>
+        <span class="ad-meta"><b>Категория:</b> Услуги → Питание, кейтеринг</span>
+      </div>
+      <div class="block-label">Текст объявления</div>
+      <div class="ad-text">Торт на заказ к дню рождения — из собственной пекарни «Булочка моя». Полный цикл производства под своим контролем: настоящее сливочное масло без заменителей, мёд для медовика — с домашних пасек Красной Поляны.
+
+🎂 Классический медовик, 12+ тонких коржей
+🍫 Шоколадный торт на какао-коржах
+✏️ Надпись и оформление под дату и повод
+⚖️ Вес рассчитываем под число гостей
+
+Заказ оформляем по фото или по вашему описанию: согласуем начинку, вес и надпись перед изготовлением. Забрать готовый торт можно в одной из точек по городу.
+
+Напишите сообщение с датой и пожеланиями — ответим и посчитаем стоимость.</div>
+      <div class="block-label">Ключевые слова в тексте</div>
+      <div class="seo-chips">
+        <span class="seo-chip">торт на заказ</span>
+        <span class="seo-chip">торт на день рождения</span>
+        <span class="seo-chip">медовик классический</span>
+        <span class="seo-chip">шоколадный торт</span>
+        <span class="seo-chip">торт с надписью</span>
+        <span class="seo-chip">домашняя пекарня</span>
+      </div>
+      <div class="block-label">Фото к объявлению (до 10, 1280×960, 4:3)</div>
+      <ul class="photo-list">
+        <li>Главное фото: торт в разрезе крупным планом (видно слои медовика)</li>
+        <li>Торт целиком на подставке</li>
+        <li>Кадр производства/точки выдачи (без вотемарок и надписей поверх фото)</li>
+      </ul>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-head">
+        <span class="ad-num">Объявление 02</span>
+        <span class="segment-tag">Детский праздник</span>
+      </div>
+      <h3 class="ad-title">Торт на заказ ребёнку на праздник</h3>
+      <div class="char-count">33 символа</div>
+      <div class="ad-meta-row">
+        <span class="ad-meta"><b>Цена:</b> от 2 000 ₽/кг (ориентир)</span>
+        <span class="ad-meta"><b>Категория:</b> Услуги → Питание, кейтеринг</span>
+      </div>
+      <div class="block-label">Текст объявления</div>
+      <div class="ad-text">Торт на заказ ребёнку на день рождения — из собственной пекарни «Булочка моя». Готовим на своём производстве: настоящее масло, натуральные продукты в составе, без искусственных красителей и заменителей.
+
+🎈 Медовик или шоколадный торт — на выбор
+✏️ Именная надпись и оформление под тему праздника
+⚖️ Вес считаем по числу гостей
+
+Перед изготовлением согласуем макет надписи и цвет декора. Забрать торт можно в одной из точек по городу в удобное время.
+
+Напишите сообщение с датой праздника — подскажем варианты оформления и стоимость.</div>
+      <div class="block-label">Ключевые слова в тексте</div>
+      <div class="seo-chips">
+        <span class="seo-chip">детский торт на заказ</span>
+        <span class="seo-chip">торт ребёнку на день рождения</span>
+        <span class="seo-chip">торт с именной надписью</span>
+        <span class="seo-chip">торт без красителей</span>
+        <span class="seo-chip">натуральный торт</span>
+      </div>
+      <div class="block-label">Фото к объявлению (до 10, 1280×960, 4:3)</div>
+      <ul class="photo-list">
+        <li>Главное фото: торт с именной надписью кремом — снять отдельно, готового кадра в профиле нет</li>
+        <li>Разрез торта — видно натуральные коржи без красителей</li>
+        <li>Кадр нанесения надписи/декора (из процесса производства)</li>
+      </ul>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-head">
+        <span class="ad-num">Объявление 03</span>
+        <span class="segment-tag">Семейное торжество / юбилей</span>
+      </div>
+      <h3 class="ad-title">Торт на заказ на юбилей и торжество</h3>
+      <div class="char-count">35 символов</div>
+      <div class="ad-meta-row">
+        <span class="ad-meta"><b>Цена:</b> от 1 800 ₽/кг, от 20 порций (ориентир)</span>
+        <span class="ad-meta"><b>Категория:</b> Услуги → Питание, кейтеринг</span>
+      </div>
+      <div class="block-label">Текст объявления</div>
+      <div class="ad-text">Торт на заказ на юбилей или семейное торжество — из собственной пекарни «Булочка моя». Для больших поводов — тот же принцип, что и для будней: полный контроль состава, настоящее сливочное масло, мёд с домашних пасек Красной Поляны для медовика.
+
+🎉 Медовик или шоколадный торт классической рецептуры
+⚖️ Большой вес — от 20 порций
+✏️ Надпись с датой или именами по вашему макету
+
+Количество порций и повод обсуждаем заранее, чтобы точно рассчитать вес торта. Забор готового заказа — в удобной точке по городу.
+
+Напишите сообщение с датой и числом гостей — посчитаем стоимость и сроки.</div>
+      <div class="block-label">Ключевые слова в тексте</div>
+      <div class="seo-chips">
+        <span class="seo-chip">торт на юбилей</span>
+        <span class="seo-chip">торт на торжество на заказ</span>
+        <span class="seo-chip">большой торт на заказ</span>
+        <span class="seo-chip">торт на 20 порций</span>
+        <span class="seo-chip">медовик на заказ</span>
+      </div>
+      <div class="block-label">Фото к объявлению (до 10, 1280×960, 4:3)</div>
+      <ul class="photo-list">
+        <li>Главное фото: крупный торт на подставке большого диаметра</li>
+        <li>Разрез — видно плотность коржей и объём порции</li>
+        <li>Общий план накрытого стола/точки выдачи, если есть такой кадр</li>
+      </ul>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-head">
+        <span class="ad-num">Объявление 04</span>
+        <span class="segment-tag">Корпоративный заказ</span>
+      </div>
+      <h3 class="ad-title">Торты на заказ для офиса и компании</h3>
+      <div class="char-count">35 символов</div>
+      <div class="ad-meta-row">
+        <span class="ad-meta"><b>Цена:</b> от 1 700 ₽/кг при заказе от 5 кг (ориентир)</span>
+        <span class="ad-meta"><b>Категория:</b> Услуги → Питание, кейтеринг</span>
+      </div>
+      <div class="block-label">Текст объявления</div>
+      <div class="ad-text">Торты на заказ для компании — из собственной пекарни «Булочка моя». Берём заказы на несколько тортов сразу: день рождения компании, конференция, праздник для сотрудников.
+
+🏢 Несколько тортов одного или разных вкусов на один заказ
+🍯 Медовик и шоколадный торт классической рецептуры
+📋 Фиксируем количество персон и дату заранее
+
+Рассчитываем объём под число гостей и удобный формат подачи — целыми тортами или порционно. Забрать заказ можно в одной из точек по городу.
+
+Напишите количество персон и дату мероприятия — рассчитаем объём и стоимость.</div>
+      <div class="block-label">Ключевые слова в тексте</div>
+      <div class="seo-chips">
+        <span class="seo-chip">торт на заказ для компании</span>
+        <span class="seo-chip">торты для офиса</span>
+        <span class="seo-chip">торт на корпоратив</span>
+        <span class="seo-chip">заказ тортов оптом</span>
+      </div>
+      <div class="block-label">Фото к объявлению (до 10, 1280×960, 4:3)</div>
+      <ul class="photo-list">
+        <li>Главное фото: несколько тортов рядом — снять отдельно, готового кадра нет</li>
+        <li>Разрез одного из тортов крупным планом</li>
+        <li>Кадр точки/производства как подтверждение масштаба</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="avito-map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">Хронология направления «Авито»</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">12.09.2026</div>
+        <div class="tl-title">Этап 1 — Торты на заказ <span class="badge-current">актуальный</span></div>
+        <div class="tl-body">4 объявления по сегментам спроса: день рождения, детский праздник, семейное торжество, корпоративный заказ. Тексты выверены по правилам Авито (без контактов в описании, ключевые слова распределены, категория и лимиты — по актуальным источникам)</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sources wrap">
+  <div class="eyebrow">Источники</div>
+  <ul class="src-list">
+    <li><a href="https://www.instagram.com/boolochka_moya" target="_blank" rel="noopener">instagram.com/boolochka_moya</a></li>
+    <li>Бриф компании, заполненный представителем «Булочка моя»</li>
+    <li><a href="https://oborot.ru/news/kak-avito-stanovitsya-konditerskim-marketplejsom-torty-na-zakaz-tam-ishhut-vse-chashhe-i-predlozhenie-rastet-i131777.html" target="_blank" rel="noopener">Oborot.ru — торты на заказ на Авито, категория «Питание, кейтеринг»</a></li>
+    <li><a href="https://service-a5client.ru/stati/pravila-sajta/trebovaniya-k-obyavleniyam/pravila-razmeshheniya-obyavlenij/" target="_blank" rel="noopener">Требования к объявлениям — правила заголовка, описания, фото, контактов</a></li>
+    <li><a href="https://vc.ru/marketing/2626437-poisk-na-avito-kak-rabotayet-i-faktory-ranzhirovaniya-ob-yavleniy" target="_blank" rel="noopener">Факторы ранжирования в поиске Авито</a></li>
+    <li><a href="https://vc.ru/marketing/1501198-uslugi-na-avito-kak-sozdavat-obyavleniya-kotorye-obespechat-zakazami" target="_blank" rel="noopener">Как создавать объявления услуг на Авито</a></li>
+    <li><a href="https://vc.ru/marketing/1928148-kak-napisat-prodayushchee-opisanie-ob-yavleniya-na-avito" target="_blank" rel="noopener">Структура продающего описания, лимиты символов</a></li>
+    <li><a href="https://litelab.agency/blog/ynikalizacia-na-avito" target="_blank" rel="noopener">Уникализация нескольких объявлений услуг без блокировки</a></li>
+  </ul>
+  <p class="foot-note">Тексты объявлений подготовлены для публикации на Авито. Цена, точный подраздел категории, срок изготовления и зона доставки — уточнить и подтвердить перед публикацией. Контакты добавляются только через поле «Телефон» и чат в самом объявлении Авито — не в тексте.</p>
+</footer>
+
+
+</div>
+
+<script>
+(function(){
+  function applyRoute(){
+    var hash = window.location.hash;
+    var isAvito = hash === '#avito' || hash.indexOf('#avito-') === 0;
+    document.getElementById('page-main').hidden = isAvito;
+    document.getElementById('page-avito').hidden = !isAvito;
+    document.title = isAvito ? 'Булочка моя — Авито: торты на заказ' : 'Булочка моя — ТЗ на контент';
+    requestAnimationFrame(function(){
+      if(hash && hash.length > 1){
+        var el = document.getElementById(hash.slice(1));
+        if(el){ el.scrollIntoView({behavior:'auto', block:'start'}); return; }
+      }
+      window.scrollTo(0,0);
+    });
+  }
+  window.addEventListener('hashchange', applyRoute);
+  applyRoute();
+})();
+</script>
+
+</body>
+</html>
