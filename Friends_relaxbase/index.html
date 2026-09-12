@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Друзья — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --ink:#132226; --ink-soft:#4d6066; --line:#dbe4e4; --card:#ffffff; --bg:#F5F8F8;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --display: 'Bricolage Grotesque', ui-sans-serif, sans-serif;
+    --body: 'Public Sans', ui-sans-serif, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ice:#0d1719; --ink:#eaf2f2; --ink-soft:#a9bcbe; --line:#25393c; --card:#122024; --bg:#0d1719;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ice:#0d1719; --ink:#eaf2f2; --ink-soft:#a9bcbe; --line:#25393c; --card:#122024; --bg:#0d1719;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55}
+  h1,h2,h3{font-family:var(--display);margin:0 0 .4em;color:var(--ink);font-weight:600}
+  a{color:var(--teal)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  section{padding:64px 0}
+  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;font-size:12px;color:var(--roe);margin-bottom:10px;display:block}
+
+  /* top bar */
+  header.topbar{
+    position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:24px;height:60px;overflow-x:auto}
+  .brand{font-family:var(--display);font-weight:700;font-size:17px;white-space:nowrap;margin-right:auto;color:var(--ocean)}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .brand{color:#8fd6e6} }
+  :root[data-theme="dark"] .brand{color:#8fd6e6}
+  nav.toplinks{display:flex;gap:20px}
+  nav.toplinks a{font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+  nav.toplinks a:hover{color:var(--roe)}
+
+  /* hero facts */
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+  .fact{background:var(--card);padding:20px}
+  .fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:6px;display:block}
+  .fact .v{font-size:16px;font-weight:600}
+
+  /* brandbook swatches */
+  .swatch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:28px 0}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .swatch .chip{height:84px}
+  .swatch .info{padding:14px 16px}
+  .swatch .role{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:4px;display:block}
+  .swatch .hex{font-family:var(--mono);font-size:15px;font-weight:700}
+  .brandbook-notes{margin-top:20px;display:grid;gap:10px}
+  .brandbook-notes .row{display:flex;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  .brandbook-notes .row b{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);min-width:150px;flex:none}
+
+  /* logic cycle */
+  .cycle{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px}
+  .cycle .step{flex:1 1 200px;border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+  .cycle .step .n{font-family:var(--mono);color:var(--roe);font-weight:700;font-size:13px;margin-bottom:8px;display:block}
+  .cycle .arrow{align-self:center;color:var(--ink-soft);font-size:20px}
+
+  /* cards: news */
+  .news-card{border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--card);margin-bottom:22px}
+  .news-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+  .tag{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:100px;border:1px solid var(--teal);color:var(--teal)}
+  .news-card h3{font-size:21px;margin-bottom:14px}
+  .thesis-list{margin:0 0 16px;padding-left:20px}
+  .thesis-list li{margin-bottom:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+  .chip-seo{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);color:var(--ink-soft);padding:5px 10px;border-radius:8px}
+  .meta-block, .cta-block, .cover-block{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
+  .meta-block .label, .cta-block .label, .cover-block .label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:6px;display:block}
+
+  /* stories */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:24px}
+  .story-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--card)}
+  .story-card h3{font-size:18px;margin-bottom:10px}
+  .story-card .design-note{margin-top:14px;padding:12px 14px;background:var(--ice);border-radius:10px;font-size:13.5px;color:var(--ink-soft)}
+  .story-card .design-note b{color:var(--ink)}
+
+  /* map / timeline */
+  .timeline{border-left:2px solid var(--line);margin-top:24px;padding-left:24px;display:grid;gap:18px}
+  .tl-item{position:relative}
+  .tl-item::before{content:"";position:absolute;left:-30px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--roe)}
+  .tl-item .badge{font-family:var(--mono);font-size:11px;text-transform:uppercase;background:var(--roe);color:#fff;padding:3px 9px;border-radius:100px;margin-left:10px}
+  .tl-item .stage-title{font-weight:700;margin-bottom:6px}
+  .tl-item ul{margin:6px 0 0;padding-left:20px;color:var(--ink-soft);font-size:14.5px}
+
+  footer.sources{border-top:1px solid var(--line);padding:40px 0 80px}
+  footer.sources ul{padding-left:20px;color:var(--ink-soft);font-size:14px}
+  footer.sources a{color:var(--ink-soft)}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:0;background:var(--card)}
+  details.stage summary{cursor:pointer;padding:16px 20px;font-weight:600;list-style:none}
+  details.stage summary::-webkit-details-marker{display:none}
+  details.stage[open] summary{border-bottom:1px solid var(--line)}
+  details.stage .body{padding:16px 20px}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Друзья</div>
+    <nav class="toplinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="company">
+    <span class="eyebrow">01 · Компания</span>
+    <h1>База отдыха «Друзья»</h1>
+    <p style="max-width:640px;color:var(--ink-soft)">Кореновский район, Краснодарский край. Территория для отдыха семьёй и компанией друзей: беседки, домики с проживанием, бассейн, баня на дровах и зоны активного отдыха.</p>
+    <div class="facts-grid">
+      <div class="fact"><span class="k">Адрес</span><span class="v">Краснодарский край, Кореновский район, х. Малеванный, ул. Солнечная, 13</span></div>
+      <div class="fact"><span class="k">Режим работы</span><span class="v">Ежедневно, 10:00–22:00</span></div>
+      <div class="fact"><span class="k">Телефон</span><span class="v">+7 (988) 368-73-04</span></div>
+      <div class="fact"><span class="k">Instagram</span><span class="v">@baza.druzya</span></div>
+      <div class="fact"><span class="k">Рейтинг на Яндекс Картах</span><span class="v">5.0 из 5 — 105 отзывов</span></div>
+      <div class="fact"><span class="k">Беседки</span><span class="v">9 шт., от 6 до 30 человек, 5 000–20 000 ₽</span></div>
+      <div class="fact"><span class="k">Домики с проживанием</span><span class="v">На 2 человека, от 5 000 ₽/ночь</span></div>
+      <div class="fact"><span class="k">Доп. услуги</span><span class="v">Баня на дровах 1 500 ₽/ч, казан 800 ₽, чан 5 000 ₽, шампуры 40 ₽/шт.</span></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <span class="eyebrow">02 · Мини-брендбук</span>
+    <h2>Фирменный стиль базы отдыха «Друзья»</h2>
+    <p style="color:var(--ink-soft);max-width:640px">После анализа сайта и фотоматериалов базы определена фирменная цветовая палитра — тёплая, природная, построенная на контрасте шоколадно-коричневого и оливково-зелёного на фоне живой зелени территории.</p>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background:#503D2F"></div>
+        <div class="info"><span class="role">Основной / карточки</span><span class="hex">#503D2F</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#6A7F34"></div>
+        <div class="info"><span class="role">Акцентный</span><span class="hex">#6A7F34</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F9EDE5"></div>
+        <div class="info"><span class="role">Фоновый</span><span class="hex">#F9EDE5</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid #e5e5e5"></div>
+        <div class="info"><span class="role">Текстовый (на тёмном)</span><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#000000"></div>
+        <div class="info"><span class="role">Текстовый (на светлом)</span><span class="hex">#000000</span></div>
+      </div>
+    </div>
+    <div class="brandbook-notes">
+      <div class="row"><b>Формы</b><span>Крупный радиус скругления на карточках и кнопках, кнопки — пилюли с тонкой оливковой обводкой; фотографии территории и домиков оформляются круглым кадром.</span></div>
+      <div class="row"><b>Типографика</b><span>Заголовки — классический контрастный серif с засечками, тело текста — светлый гротеск; цифры прайс-листа набраны отдельным моноширинным шрифтом в стиле семисегментного дисплея.</span></div>
+      <div class="row"><b>Фотостиль</b><span>Реальные фото территории при естественном дневном свете: зелень, туи, деревянные беседки и домики, бассейн — без постановочных стоковых кадров.</span></div>
+      <div class="row"><b>Тон коммуникации</b><span>Тёплый, гостеприимный, семейный — «Отдыхайте вместе с нами»; акцент на совместный отдых с близкими, без агрессивных продающих формулировок.</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <span class="eyebrow">03 · Логика цикла</span>
+    <h2>Этап 1 — продолжение истории базы отдыха</h2>
+    <p style="color:var(--ink-soft);max-width:640px">На странице базы отдыха «Друзья» уже опубликованы вводные темы — общее знакомство, выбор беседки, домики с проживанием, комфорт и безопасность территории. Этап 1 продолжает повествование и раскрывает те элементы отдыха, которые ранее упоминались только вскользь.</p>
+    <div class="cycle">
+      <div class="step"><span class="n">01</span>Бассейн — купание в жаркий день</div>
+      <div class="arrow">→</div>
+      <div class="step"><span class="n">02</span>Баня на дровах — продолжение отдыха</div>
+      <div class="arrow">→</div>
+      <div class="step"><span class="n">03</span>Инвентарь для пикника — казан, чан, шампуры</div>
+      <div class="arrow">→</div>
+      <div class="step"><span class="n">04</span>Активный отдых — волейбол и детская площадка</div>
+    </div>
+  </section>
+
+  <section id="news">
+    <span class="eyebrow">04 · Новости</span>
+    <h2>Темы для новостей (этап 1 — продолжение)</h2>
+    <p style="color:var(--ink-soft);max-width:640px">Темы построены с учётом уже опубликованных ранее материалов (общее знакомство, выбор беседки, домики, комфорт и безопасность) — ниже раскрываются элементы отдыха, которые до этого не получали собственного материала.</p>
+
+    <div class="news-card">
+      <div class="news-head"><span class="tag">Сервисная</span></div>
+      <h3>Бассейн на базе отдыха «Друзья»: купание в жаркий день для всей компании</h3>
+      <ul class="thesis-list">
+        <li>На территории базы отдыха «Друзья» работает открытый бассейн для отдыха в тёплое время года.</li>
+        <li>Бассейн расположен рядом с беседками, что позволяет совмещать отдых у мангала с купанием.</li>
+        <li>Формат подходит и для семейного отдыха с детьми, и для компании друзей.</li>
+        <li>Территория вокруг бассейна озеленена и благоустроена — гости отмечают уход за территорией в отзывах.</li>
+        <li>Актуальную загрузку и бронирование уточняют по телефону +7 (988) 368-73-04.</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">база отдыха с бассейном Кореновский район</span>
+        <span class="chip-seo">бассейн на природе Краснодарский край</span>
+        <span class="chip-seo">отдых у бассейна Кубань</span>
+        <span class="chip-seo">база отдыха с бассейном и беседками</span>
+        <span class="chip-seo">купание на базе отдыха Кореновск</span>
+        <span class="chip-seo">семейный отдых с бассейном</span>
+      </div>
+      <div class="meta-block"><span class="label">Мета-описание</span>Открытый бассейн на базе отдыха «Друзья» в Кореновском районе — рядом с беседками, для отдыха семьёй и компанией в тёплое время года.</div>
+      <div class="cta-block"><span class="label">CTA</span>Уточнить свободные даты для отдыха у бассейна — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Бассейн на базе». Фото бассейна на территории (общий план с зеленью вокруг). Плашка шоколадно-коричневая #503D2F, текст белый #FFFFFF, тонкая оливковая обводка #6A7F34.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-head"><span class="tag">Продающая</span></div>
+      <h3>Баня на дровах на базе отдыха «Друзья»: продолжение отдыха у беседки или домика</h3>
+      <ul class="thesis-list">
+        <li>На территории базы отдыха «Друзья» работает баня на дровах.</li>
+        <li>Стоимость — 1 500 рублей в час.</li>
+        <li>Баню удобно добавить к аренде беседки или домика — как продолжение отдыха в тот же день.</li>
+        <li>Рядом расположен бассейн, что позволяет чередовать баню с купанием.</li>
+        <li>Бронирование бани и уточнение свободных часов — по телефону +7 (988) 368-73-04.</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">баня на дровах Кореновский район</span>
+        <span class="chip-seo">база отдыха с баней Краснодарский край</span>
+        <span class="chip-seo">аренда бани на дровах Кубань</span>
+        <span class="chip-seo">баня и бассейн база отдыха</span>
+        <span class="chip-seo">баня почасово Кореновск</span>
+        <span class="chip-seo">отдых с баней компанией</span>
+      </div>
+      <div class="meta-block"><span class="label">Мета-описание</span>Баня на дровах на базе отдыха «Друзья» — 1 500 ₽/час, рядом с бассейном и беседками. Кореновский район, Краснодарский край.</div>
+      <div class="cta-block"><span class="label">CTA</span>Забронировать баню на дровах и уточнить свободные часы — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Баня на дровах». Фото бани на территории. Плашка коричневая #503D2F с зелёным акцентом #6A7F34 на цене, текст белый.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-head"><span class="tag">Практическая</span></div>
+      <h3>Всё для пикника на базе отдыха «Друзья»: казан, чан и шампуры без необходимости брать своё</h3>
+      <ul class="thesis-list">
+        <li>У каждой беседки на базе отдыха «Друзья» — своя мангальная зона.</li>
+        <li>Дополнительно на месте можно взять в аренду казан с печкой (800 ₽), чан (5 000 ₽), шампуры (40 ₽/шт.) и решётку (200 ₽).</li>
+        <li>Для активного отдыха рядом с беседками — волейбольная площадка, мяч для игры также можно арендовать (200 ₽).</li>
+        <li>Гостям не нужно везти с собой инвентарь для готовки на компанию — всё есть на территории.</li>
+        <li>Актуальный список инвентаря и наличие уточняют по телефону +7 (988) 368-73-04.</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">аренда казана Кореновский район</span>
+        <span class="chip-seo">аренда чана на природе Краснодарский край</span>
+        <span class="chip-seo">беседка с мангальной зоной Кубань</span>
+        <span class="chip-seo">пикник на базе отдыха без своего инвентаря</span>
+        <span class="chip-seo">аренда шампуров и решётки</span>
+        <span class="chip-seo">отдых с казаном Кореновск</span>
+      </div>
+      <div class="meta-block"><span class="label">Мета-описание</span>Казан, чан, шампуры и решётка в аренду на базе отдыха «Друзья» — всё для пикника на месте, без необходимости брать свой инвентарь.</div>
+      <div class="cta-block"><span class="label">CTA</span>Уточнить наличие инвентаря к вашей беседке — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Всё для пикника». Фото мангальной зоны/казана на территории беседки. Плашка коричневая #503D2F, цены акцентным зелёным #6A7F34, текст белый.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-head"><span class="tag">Вовлекающая</span></div>
+      <h3>Активный отдых на базе отдыха «Друзья»: волейбольная и детская площадки для всей семьи</h3>
+      <ul class="thesis-list">
+        <li>На территории базы отдыха «Друзья» работает волейбольная площадка.</li>
+        <li>Отдельно оборудована детская игровая площадка — гости могут отдыхать компанией, пока дети заняты игрой.</li>
+        <li>Мяч для волейбола можно взять на месте (200 ₽).</li>
+        <li>Обе площадки расположены рядом с беседками и бассейном — активная часть отдыха логично сочетается с остальной территорией.</li>
+        <li>Подробности и бронирование — по телефону +7 (988) 368-73-04.</li>
+      </ul>
+      <div class="chips">
+        <span class="chip-seo">база отдыха с детской площадкой Кореновский район</span>
+        <span class="chip-seo">волейбольная площадка Краснодарский край</span>
+        <span class="chip-seo">активный отдых с детьми Кубань</span>
+        <span class="chip-seo">база отдыха для семьи с детьми Кореновск</span>
+        <span class="chip-seo">отдых компанией с волейболом</span>
+      </div>
+      <div class="meta-block"><span class="label">Мета-описание</span>Волейбольная и детская площадки на базе отдыха «Друзья» в Кореновском районе — активный отдых для всей семьи рядом с беседками и бассейном.</div>
+      <div class="cta-block"><span class="label">CTA</span>Уточнить детали отдыха для компании с детьми — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Активный отдых». Фото волейбольной или детской площадки на территории. Плашка коричневая #503D2F с зелёным акцентом #6A7F34, текст белый.</div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <span class="eyebrow">05 · Сторис</span>
+    <h2>Темы для сторис (1 слайд, без обложки)</h2>
+    <div class="story-grid">
+      <div class="story-card">
+        <h3>1. Бассейн</h3>
+        <ul class="thesis-list">
+          <li>Открытый бассейн на территории</li>
+          <li>Рядом с беседками</li>
+          <li>Подходит для семьи и компании</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> фото бассейна общим планом. Плашка снизу #503D2F, текст белый #FFFFFF, тонкая линия-разделитель #6A7F34.</div>
+      </div>
+      <div class="story-card">
+        <h3>2. Баня на дровах</h3>
+        <ul class="thesis-list">
+          <li>1 500 ₽/час</li>
+          <li>Продолжение отдыха у беседки/домика</li>
+          <li>Рядом бассейн</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> фото бани на территории. Коричневая подложка #503D2F, цена выделена зелёным акцентом #6A7F34.</div>
+      </div>
+      <div class="story-card">
+        <h3>3. Всё для пикника</h3>
+        <ul class="thesis-list">
+          <li>Казан — 800 ₽</li>
+          <li>Чан — 5 000 ₽</li>
+          <li>Шампуры — 40 ₽/шт.</li>
+          <li>Решётка — 200 ₽</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> фото мангальной зоны/казана. Коричневый фон #503D2F, цены акцентным зелёным #6A7F34.</div>
+      </div>
+      <div class="story-card">
+        <h3>4. Активный отдых</h3>
+        <ul class="thesis-list">
+          <li>Волейбольная площадка</li>
+          <li>Детская площадка</li>
+          <li>Мяч в аренду — 200 ₽</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> фото волейбольной или детской площадки. Коричневая плашка #503D2F, зелёный акцент #6A7F34, текст белый.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <span class="eyebrow">06 · Карта тем</span>
+    <h2>История и текущий этап</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="stage-title">Этап 1 — продолжение истории<span class="badge">актуальный</span></span>
+        <ul>
+          <li>Новости: бассейн · баня на дровах · инвентарь для пикника · активный отдых (волейбол + дети)</li>
+          <li>Сторис: те же 4 темы, зеркально, 1 слайд без обложки</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="sources">
+  <div class="wrap">
+    <span class="eyebrow">Источники</span>
+    <ul>
+      <li><a href="https://bazaotdykha-druzya.ru/" target="_blank" rel="noopener">bazaotdykha-druzya.ru</a> — сайт базы отдыха</li>
+      <li>Фотоматериалы сайта, предоставленные компанией — попиксельный анализ для определения фирменных цветов</li>
+      <li>Карточка «Друзья» на Яндекс Картах — адрес, рейтинг, отзывы</li>
+      <li>Документ «Стратегия контента» с историей ранее опубликованных тем — учтён при выборе новых тем, чтобы не дублировать уже раскрытые</li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
