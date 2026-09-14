@@ -59,12 +59,6 @@
   .swatch .meta{padding:10px 12px;}
   .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
   .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px;}
-  .bb-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-  @media (max-width:720px){.bb-grid{grid-template-columns:1fr;}}
-  .bb-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
-  .bb-card h4{font-size:14px;margin-bottom:8px;color:var(--roe);}
-  .bb-card p{font-size:14px;color:var(--ink-soft);margin:0;}
-
   /* LEGAL NOTE */
   .legal-note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--roe);border-radius:10px;padding:16px 18px;margin-top:24px;font-size:13.5px;color:var(--ink-soft);}
   .legal-note b{color:var(--ink);}
@@ -158,38 +152,20 @@
     <p style="max-width:680px;color:var(--ink-soft);margin-bottom:24px;">Фирменные цвета — красный, чёрный и золотистый — определены самой компанией. На этой палитре строится дизайн обложек новостей и каждого слайда сторис этого этапа.</p>
     <div class="swatches">
       <div class="swatch">
-        <div class="chip" style="background:#0E0C0A;"></div>
-        <div class="meta"><div class="role">Основной / фон</div><div class="hex">#0E0C0A · чёрный</div></div>
+        <div class="chip" style="background:#EA3323;"></div>
+        <div class="meta"><div class="role">Акцентный</div><div class="hex">#EA3323 · красный</div></div>
       </div>
       <div class="swatch">
-        <div class="chip" style="background:#A6231E;"></div>
-        <div class="meta"><div class="role">Акцентный</div><div class="hex">#A6231E · красный</div></div>
+        <div class="chip" style="background:#333333;"></div>
+        <div class="meta"><div class="role">Основной / текстовый</div><div class="hex">#333333 · чёрный</div></div>
       </div>
       <div class="swatch">
-        <div class="chip" style="background:#B8912F;"></div>
-        <div class="meta"><div class="role">Премиальный акцент</div><div class="hex">#B8912F · золотистый</div></div>
+        <div class="chip" style="background:#F1D67B;"></div>
+        <div class="meta"><div class="role">Премиальный акцент</div><div class="hex">#F1D67B · золотистый</div></div>
       </div>
       <div class="swatch">
         <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
-        <div class="meta"><div class="role">Текстовый / контраст</div><div class="hex">#FFFFFF</div></div>
-      </div>
-    </div>
-    <div class="bb-grid">
-      <div class="bb-card">
-        <h4>Типографика</h4>
-        <p>Плотный гротеск без засечек, ровные пропорции, минимум декоративных элементов — сдержанный минимализм, который клиент задал напрямую как стилистику публикаций и прайс-листа.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Фотостиль</h4>
-        <p>Кадры зала приёма и витрин с залоговым имуществом — золото, техника, инструмент — на тёмном или нейтральном фоне, без лишнего декора. Архив фотографий уже собран в карточке компании.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Логотип</h4>
-        <p>Векторный файл предоставлен компанией. На обложках новостей и слайдах сторис используется как фиксирующий элемент — постоянное расположение, не смещается от публикации к публикации.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Тон коммуникации</h4>
-        <p>Обращение на «Вы», деловой и предметный тон без вычурности: конкретные ставки, сроки и условия вместо общих фраз о «выгодных условиях».</p>
+        <div class="meta"><div class="role">Фоновый / контраст</div><div class="hex">#FFFFFF</div></div>
       </div>
     </div>
     <div class="legal-note"><b>Юридическая пометка компании (везде, где фигурируют ставки/проценты/сроки займа):</b> «Оценивайте свои финансовые возможности и риски» — размещается заметной, но некрупной надписью на изображении или в подписи к публикации.</div>
@@ -205,7 +181,7 @@
       <div class="cycle-step"><span class="n">01</span>Доверие и статус</div><div class="cycle-arrow">→</div>
       <div class="cycle-step"><span class="n">02</span>Займ под золото</div><div class="cycle-arrow">→</div>
       <div class="cycle-step"><span class="n">03</span>Ассортимент залога</div><div class="cycle-arrow">→</div>
-      <div class="cycle-step"><span class="n">04</span>Сеть / акция / CTA</div>
+      <div class="cycle-step"><span class="n">04</span>Акция / CTA</div>
     </div>
   </div>
 </section>
@@ -272,19 +248,19 @@
 
     <div class="post-card">
       <div class="post-head">
-        <div><div class="post-num">Новость 04</div><div class="post-title">Круглосуточно на Волховской: первые 10 дней займа — без процентов</div></div>
-        <span class="tag">Сеть / акция / CTA</span>
+        <div><div class="post-num">Новость 04</div><div class="post-title">Первые 10 дней займа — без процентов</div></div>
+        <span class="tag">Акция / CTA</span>
       </div>
       <div class="post-body">
-        <p>Филиал на Волховской, 38к1 работает круглосуточно (займы оформляются с 9:00 до 23:00), филиал на Гусинобродском шоссе, 11/1 стр. 3 — с 9:00 до 23:00. Для новых займов действует акция: первые 10 дней — без процентов. Карточка компании на Яндекс Картах держит рейтинг 4,7, что подтверждает лояльное отношение к клиентам реальными оценками, а не только словами компании.</p>
+        <p>Для новых займов действует акция: первые 10 дней — без процентов. Это снимает главный барьер для тех, кто обращается в ломбард впервые и опасается переплаты в первые дни. Карточка компании на Яндекс Картах держит рейтинг 4,7, что подтверждает лояльное отношение к клиентам реальными оценками, а не только словами компании.</p>
       </div>
       <div class="post-meta">
-        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-факт с адресами, режимом работы и акцией</div></div>
-        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Чёрный фон, золотистая плашка с адресами, красный акцент на «10 дней без процентов»</div></div>
-        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмный фон, крупная надпись «10 дней без %» золотистым, ниже — адреса и режим работы мелким шрифтом, рейтинг «4,7» с иконкой звезды в углу</div></div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-факт с акцией и рейтингом</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Чёрный фон, золотистая плашка с условием акции, красный акцент на «без процентов»</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмный фон, крупная надпись «10 дней без %» золотистым, рейтинг «4,7» с иконкой звезды в углу</div></div>
         <div class="meta-block legal"><div class="k">Юридическая пометка</div><div class="v">«Оценивайте свои финансовые возможности и риски» — мелким шрифтом внизу изображения</div></div>
       </div>
-      <div class="chips"><span class="chip-tag">#ломбардволховская</span><span class="chip-tag">#ломбардкруглосуточно</span><span class="chip-tag">#займбезпроцентов</span></div>
+      <div class="chips"><span class="chip-tag">#займбезпроцентов</span><span class="chip-tag">#акцияломбард</span><span class="chip-tag">#ломбардновосибирск</span></div>
       <div class="cta-line">CTA: оставить отзыв на Яндекс Картах после посещения филиала</div>
     </div>
 
@@ -322,8 +298,8 @@
       <div class="story-card">
         <div class="story-num">Сторис 04</div>
         <div class="story-title">10 дней без процентов</div>
-        <div class="story-body"><p>Акция для новых займов. Волховская, 38к1 — круглосуточно.</p></div>
-        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Чёрный фон, крупная надпись «10 дней без %» золотистым, красная плашка с адресом внизу</div></div>
+        <div class="story-body"><p>Акция для новых займов — первые 10 дней без процентов.</p></div>
+        <div class="story-design"><div class="k">Дизайн слайда</div><div class="v">Чёрный фон, крупная надпись «10 дней без %» золотистым, красная плашка снизу</div></div>
       </div>
 
     </div>
@@ -339,7 +315,7 @@
         <span class="tl-badge">Этап 1 · Актуальный</span>
         <div class="tl-content">
           <h4>4 новости + обложки, 4 сторис — запуск ведения карточки</h4>
-          <p>Цикл новостей «доверие и статус → займ под золото → ассортимент залога → сеть/акция/CTA»; 4 сторис-факта в формате одного слайда: стаж и реестр ЦБ, оценка золота, ассортимент залога, акция «10 дней без процентов».</p>
+          <p>Цикл новостей «доверие и статус → займ под золото → ассортимент залога → акция/CTA»; 4 сторис-факта в формате одного слайда: стаж и реестр ЦБ, оценка золота, ассортимент залога, акция «10 дней без процентов».</p>
         </div>
       </div>
     </div>
