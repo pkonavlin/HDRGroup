@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kill Car Studio — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4A5A5D; --line:#D8E2E2; --card:#FFFFFF; --bg:#F5F8F8;
+  --kc-accent:#3465BC; --kc-dark:#101423; --kc-bg:#FFFFFF; --kc-text:#232323;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#7FD1E0; --teal:#5FB8C9; --ice:#0B1416; --ink:#EAF2F2; --ink-soft:#A9BCBE;
+    --line:#233234; --card:#0F1B1D; --bg:#0B1416;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#7FD1E0; --teal:#5FB8C9; --ice:#0B1416; --ink:#EAF2F2; --ink-soft:#A9BCBE;
+  --line:#233234; --card:#0F1B1D; --bg:#0B1416;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;letter-spacing:-0.01em;color:var(--ink);margin:0}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+a{color:inherit}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ocean);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar .wrap{display:flex;align-items:center;gap:28px;height:64px;overflow-x:auto;scrollbar-width:none}
+.topbar .wrap::-webkit-scrollbar{display:none}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:#fff;font-size:18px;white-space:nowrap;flex:none}
+.topnav{display:flex;gap:4px;flex-wrap:nowrap}
+.topnav a{white-space:nowrap;color:rgba(255,255,255,.78);text-decoration:none;font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:8px;transition:background .15s,color .15s}
+.topnav a:hover{background:rgba(255,255,255,.12);color:#fff}
+
+section{padding:64px 0}
+section + section{border-top:1px solid var(--line)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px;display:block}
+h2.htitle{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px}
+.lede{color:var(--ink-soft);font-size:16px;max-width:70ch;margin-bottom:32px}
+
+/* HERO */
+.hero{padding-top:56px}
+.hero h1{font-size:clamp(32px,5vw,52px);margin-bottom:8px}
+.hero .sub{color:var(--ink-soft);font-size:17px;max-width:68ch;margin-bottom:8px}
+.hero .alias{font-size:14px;color:var(--ink-soft);margin-bottom:30px}
+.hero .alias b{color:var(--ink)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--card);padding:18px 20px}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin-bottom:6px;display:block}
+.fact .v{font-size:15px;font-weight:600}
+.callout{margin-top:24px;border:1px solid var(--roe);background:color-mix(in srgb, var(--roe) 8%, var(--card));border-radius:12px;padding:16px 20px;font-size:14.5px;display:flex;gap:12px;align-items:flex-start}
+.callout .dot{width:8px;height:8px;border-radius:50%;background:var(--roe);margin-top:7px;flex:none}
+
+/* BRANDBOOK */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.swatch .chip{height:96px}
+.swatch .info{padding:14px 16px}
+.swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin-bottom:4px;display:block}
+.swatch .hex{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px}
+.swatch .name{font-size:13px;color:var(--ink-soft);margin-top:2px}
+
+/* LOGIC */
+.logic-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.logic-item{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.logic-item .n{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--teal);flex:none;width:28px}
+.logic-item .t{font-weight:600;margin-bottom:3px}
+.logic-item .d{color:var(--ink-soft);font-size:14.5px}
+
+/* CARDS: news */
+.card-grid{display:grid;gap:20px}
+.ncard{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px}
+.ncard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px}
+.ncard h3{font-size:20px;max-width:70ch}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:5px 10px;border-radius:999px;background:var(--teal);color:#fff;white-space:nowrap;flex:none}
+.tag.acc{background:var(--roe)}
+.thesis{margin:0 0 16px;padding:0;list-style:none}
+.thesis li{position:relative;padding-left:18px;margin-bottom:8px;font-size:14.5px;color:var(--ink)}
+.thesis li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chips span{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ice);border:1px solid var(--line);color:var(--ink-soft);padding:4px 10px;border-radius:8px}
+.meta-row{font-size:13.5px;color:var(--ink-soft);margin-bottom:10px}
+.meta-row b{color:var(--ink)}
+.cta-row{font-size:14px;font-weight:600;color:var(--ocean);margin-bottom:16px}
+.cover-block{border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
+.cover-block .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);display:block;margin-bottom:6px}
+.cover-block p{margin:0;font-size:14px;color:var(--ink-soft)}
+.swpair{display:inline-flex;gap:4px;vertical-align:middle;margin:0 4px}
+.swdot{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.1)}
+
+/* STORIES */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.scard{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px 24px}
+.scard h3{font-size:17px;margin-bottom:10px}
+.scard .thesis-main{font-size:14.5px;font-weight:600;margin-bottom:10px}
+.scard ul{margin:0 0 14px;padding-left:18px}
+.scard ul li{font-size:13.5px;color:var(--ink-soft);margin-bottom:5px}
+.scard .design-note{border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--ink-soft)}
+.scard .design-note b{color:var(--ink)}
+
+/* MAP */
+.timeline{border-left:2px solid var(--line);margin-left:6px}
+.stage{position:relative;padding:4px 0 28px 26px}
+.stage::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ocean);border:2px solid var(--bg)}
+.stage .head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.stage .head h3{font-size:16px}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px}
+.stage .date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+.stage-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 20px;list-style:none;margin:0;padding:0}
+.stage-items li{font-size:13.5px;color:var(--ink-soft);padding-left:14px;position:relative}
+.stage-items li::before{content:"—";position:absolute;left:0;color:var(--line)}
+.stage-items li b{color:var(--ink);font-weight:600}
+
+footer.sources{padding:40px 0 64px}
+footer.sources .wrap{display:flex;flex-direction:column;gap:8px}
+footer.sources a{font-size:14px;color:var(--ocean);text-decoration:none}
+footer.sources a:hover{text-decoration:underline}
+footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:6px}
+
+@media (max-width:640px){
+  section{padding:44px 0}
+  .ncard{padding:20px}
+}
+</style>
+
+
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Kill Car Studio</div>
+    <nav class="topnav">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#logic">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+      <a href="#sources">Источники</a>
+    </nav>
+  </div>
+</div>
+
+<section id="company" class="hero">
+  <div class="wrap">
+    <span class="eyebrow">ТЗ на контент · Этап 01</span>
+    <h1>Kill Car Studio</h1>
+    <p class="sub">Детейлинг-студия полного цикла в Москве: комплексный детейлинг, оклейка автомобилей плёнкой, кузовной ремонт без покраски.</p>
+    <p class="alias">На сайте и в сообществе ВК компания представлена как <b>Kill Car Detailing</b>; на Яндекс Картах и в 2ГИС карточка зарегистрирована как <b>Kill Car Studio</b> — платформа Яндекса не пропускает слово «detailing» в названии. Во всех текстах для Яндекс Карт и 2ГИС используется название <b>Kill Car Studio</b>.</p>
+
+    <div class="facts">
+      <div class="fact"><span class="k">Сфера</span><span class="v">Автодетейлинг, оклейка авто плёнкой, кузовной ремонт</span></div>
+      <div class="fact"><span class="k">Опыт</span><span class="v">На рынке с 2016 года — 10 лет</span></div>
+      <div class="fact"><span class="k">Адрес</span><span class="v">Москва, ул. Саянская, 13с3 — рядом с МКАД</span></div>
+      <div class="fact"><span class="k">Режим работы</span><span class="v">Ежедневно, 10:00–20:00, без выходных</span></div>
+      <div class="fact"><span class="k">Телефон</span><span class="v">+7 (999) 900-40-35 · Игорь, руководитель</span></div>
+      <div class="fact"><span class="k">Рейтинг</span><span class="v">5.0 на Яндекс Картах, 260 отзывов</span></div>
+      <div class="fact"><span class="k">Статус</span><span class="v">Отметка «Хорошее место 2026»</span></div>
+      <div class="fact"><span class="k">Клиенты</span><span class="v">200+ отзывов, 1000+ клиентов</span></div>
+      <div class="fact"><span class="k">Оплата</span><span class="v">Любая удобная форма оплаты</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <span class="eyebrow">02 · Визуальная идентичность</span>
+    <h2 class="htitle">Мини-брендбук</h2>
+    <p class="lede">После анализа визуальных материалов компании (сайт killcar.net, обложка и аватар сообщества ВК) методом пиксель-сэмплинга определена рабочая цветовая палитра Kill Car Studio — цвет повторяется в обоих независимых источниках, что подтверждает его как фирменный.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#3465BC"></div>
+        <div class="info"><span class="role">Акцентный</span><span class="hex">#3465BC</span><div class="name">Кобальтовый синий — кнопки, хедер сайта, неоновый акцент обложки ВК</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#101423"></div>
+        <div class="info"><span class="role">Второстепенный</span><span class="hex">#101423</span><div class="name">Графитово-чёрный — фон логотипа/аватара, обложка сообщества ВК</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div>
+        <div class="info"><span class="role">Фоновый</span><span class="hex">#FFFFFF</span><div class="name">Белый — основной фон сайта и карточек услуг</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#232323"></div>
+        <div class="info"><span class="role">Текстовый</span><span class="hex">#232323</span><div class="name">Тёмно-серый — основной текст на светлом фоне</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="logic">
+  <div class="wrap">
+    <span class="eyebrow">03 · Последовательность</span>
+    <h2 class="htitle">Логика цикла</h2>
+    <p class="lede">Первый этап открывает три направления, обозначенные компанией (детейлинг, оклейка, кузовной ремонт), и сразу выводит вперёд два приоритетных: оклейку автомобилей и полировку с защитой кузова.</p>
+    <div class="logic-list">
+      <div class="logic-item"><span class="n">01</span><div><div class="t">Знакомство со студией</div><div class="d">Формат работы, опыт с 2016 года, локация и принцип честного сервиса — новость-интро.</div></div></div>
+      <div class="logic-item"><span class="n">02</span><div><div class="t">Оклейка автомобилей плёнкой</div><div class="d">Приоритетное направление — защитная, матовая и цветная плёнка.</div></div></div>
+      <div class="logic-item"><span class="n">03</span><div><div class="t">Полировка и защита кузова</div><div class="d">Второе приоритетное направление — полировка, керамика, жидкое стекло.</div></div></div>
+      <div class="logic-item"><span class="n">04</span><div><div class="t">Кузовной ремонт</div><div class="d">Удаление вмятин без покраски — третье заявленное направление компании.</div></div></div>
+      <div class="logic-item"><span class="n">05</span><div><div class="t">Сторис — акции и сервис</div><div class="d">Конкретные, снимаемые факты: действующие акции студии и шумоизоляция как отдельная услуга.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <span class="eyebrow">04 · Новостные публикации</span>
+    <h2 class="htitle">Новости — 4 темы + обложка</h2>
+    <p class="lede">Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
+    <div class="card-grid">
+
+      <div class="ncard">
+        <div class="top"><h3>Kill Car Studio — детейлинг-центр комплексного ухода за автомобилем в Москве</h3><span class="tag">Имиджевый</span></div>
+        <ul class="thesis">
+          <li>Kill Car Studio — детейлинг-студия в Москве: комплексный детейлинг, оклейка автомобилей плёнкой, кузовной ремонт без покраски.</li>
+          <li>Компания работает с 2016 года — 10 лет практического опыта в уходе за автомобилями всех марок.</li>
+          <li>Студия расположена рядом с МКАД — удобный подъезд для клиентов со всей Москвы и области.</li>
+          <li>Рейтинг 5.0 на Яндекс Картах и 260 отзывов подтверждают стабильное качество детейлинга.</li>
+          <li>Принцип работы — честность без навязывания лишних услуг: специалисты предлагают только то, что действительно нужно автомобилю.</li>
+          <li>В работе используются современные материалы для полировки, керамической защиты, оклейки плёнкой и химчистки салона.</li>
+          <li>Оплата любым удобным способом — наличные, карта, безналичный расчёт.</li>
+        </ul>
+        <div class="chips"><span>детейлинг Москва</span><span>детейлинг-студия</span><span>комплексный уход за автомобилем</span><span>детейлинг Саянская</span><span>автодетейлинг МКАД</span><span>полировка и оклейка авто Москва</span></div>
+        <div class="meta-row"><b>Meta:</b> Детейлинг-студия Kill Car Studio в Москве — комплексный уход за автомобилем: полировка, оклейка плёнкой, кузовной ремонт. Опыт с 2016 года, рейтинг 5.0.</div>
+        <div class="cta-row">CTA: Записаться на диагностику автомобиля в Kill Car Studio.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон <span class="swpair"><span class="swdot" style="background:#101423"></span></span>#101423, акцент <span class="swpair"><span class="swdot" style="background:#3465BC"></span></span>#3465BC. Крупный тезис «10 лет ухода за автомобилями», логотип студии, мелкая строка «Kill Car Studio · Москва».</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Оклейка автомобиля плёнкой в Kill Car Studio: защита кузова и смена образа</h3><span class="tag acc">Продающий</span></div>
+        <ul class="thesis">
+          <li>Оклейка автомобиля плёнкой в Kill Car Studio решает две задачи сразу — защищает лакокрасочное покрытие и меняет визуальный образ автомобиля.</li>
+          <li>Защитная прозрачная плёнка (антигравийная оклейка кузова) принимает на себя сколы, царапины и мелкие механические повреждения вместо ЛКП.</li>
+          <li>Матовая оклейка автомобиля меняет фактуру кузова, делая образ строгим и статусным без перекраски.</li>
+          <li>Цветная оклейка плёнкой — способ сменить цвет автомобиля без покраски и без повреждения заводского лакокрасочного покрытия.</li>
+          <li>Оклейку выполняют мастера с опытом работы с 2016 года, с проверенными плёночными материалами.</li>
+          <li>Услуга доступна для автомобилей любых марок — студия расположена в Москве рядом с МКАД.</li>
+        </ul>
+        <div class="chips"><span>оклейка авто плёнкой Москва</span><span>защитная плёнка на кузов</span><span>антигравийная плёнка авто</span><span>матовая оклейка автомобиля</span><span>цветная оклейка плёнкой</span><span>оклейка кузова без покраски</span></div>
+        <div class="meta-row"><b>Meta:</b> Оклейка автомобиля плёнкой в Москве — защитная, матовая и цветная плёнка на кузов в Kill Car Studio. Защита ЛКП и смена образа без покраски.</div>
+        <div class="cta-row">CTA: Уточнить стоимость оклейки автомобиля плёнкой в Kill Car Studio.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #101423, акцент #3465BC. Тезис «Оклейка кузова плёнкой», графичный акцент — силуэт кузова с линией плёнки.</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Полировка и керамическая защита кузова от Kill Car Studio</h3><span class="tag acc">Продающий</span></div>
+        <ul class="thesis">
+          <li>Полировка кузова в Kill Car Studio убирает паутинку и мелкие царапины, возвращая лакокрасочному покрытию глубину цвета и блеск.</li>
+          <li>После полировки кузова наносится защитный состав — керамика или жидкое стекло, создающие гидрофобный слой на кузове.</li>
+          <li>Керамическая защита и жидкое стекло усиливают блеск ЛКП и защищают кузов от солнца, дождя и грязи.</li>
+          <li>Полировка автостёкол возвращает прозрачность, убирает мелкие сколы и трещины — повышает безопасность и комфорт в движении.</li>
+          <li>Комплекс «химчистка + полировка + керамика» в Kill Car Studio предоставляется со скидкой 10% — решение для полного обновления автомобиля.</li>
+          <li>Работы выполняются на профессиональном оборудовании с использованием сертифицированных защитных составов.</li>
+        </ul>
+        <div class="chips"><span>полировка кузова Москва</span><span>керамическая защита автомобиля</span><span>жидкое стекло на кузов</span><span>полировка стёкол автомобиля</span><span>защита ЛКП от царапин</span><span>детейлинг полировка Москва</span></div>
+        <div class="meta-row"><b>Meta:</b> Полировка кузова и керамическая защита автомобиля в Kill Car Studio (Москва) — устранение паутинки, глубина цвета, гидрофобный слой на кузове.</div>
+        <div class="cta-row">CTA: Записаться на полировку и керамическую защиту кузова.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #101423, акцент #3465BC. Тезис «Полировка и защита кузова», графичный акцент — капли гидрофобного эффекта на кузове.</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Удаление вмятин без покраски в Kill Car Studio — кузовной ремонт с сохранением заводского ЛКП</h3><span class="tag">Экспертный</span></div>
+        <ul class="thesis">
+          <li>Удаление вмятин без покраски (PDR) в Kill Car Studio — кузовной ремонт, при котором форма детали восстанавливается без нарушения заводского лакокрасочного покрытия.</li>
+          <li>Метод подходит для мелких и средних вмятин на капоте, дверях, крыльях и крыше — без покраски и без потери заводского ЛКП.</li>
+          <li>Кузовной ремонт без покраски сохраняет заводскую толщину лакокрасочного слоя — это важно при последующей продаже автомобиля.</li>
+          <li>Ремонт вмятин выполняют мастера с опытом работы с 2016 года, с использованием профессионального инструмента для беспокрасочной рихтовки.</li>
+          <li>Услуга сочетается с полировкой кузова и керамической защитой для полного восстановления внешнего вида автомобиля.</li>
+        </ul>
+        <div class="chips"><span>удаление вмятин без покраски Москва</span><span>кузовной ремонт без покраски</span><span>беспокрасочная рихтовка авто</span><span>PDR ремонт вмятин</span><span>ремонт кузова без покраски Москва</span></div>
+        <div class="meta-row"><b>Meta:</b> Удаление вмятин без покраски в Kill Car Studio — кузовной ремонт в Москве с сохранением заводского ЛКП автомобиля.</div>
+        <div class="cta-row">CTA: Оценить стоимость удаления вмятины без покраски.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #101423, акцент #3465BC. Тезис «Вмятина? Без покраски», графичный акцент — контур двери или капота.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <span class="eyebrow">05 · Сторис</span>
+    <h2 class="htitle">Сторис — 4 темы, формат «1 слайд»</h2>
+    <p class="lede">Каждая сторис — один слайд: тезис и сухие факты, без обложки. Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
+    <div class="story-grid">
+
+      <div class="scard">
+        <h3>Полировка лобового стекла — антидождь в подарок</h3>
+        <div class="thesis-main">При полировке лобового стекла в Kill Car Studio нанесение антидождя — в подарок.</div>
+        <ul>
+          <li>Устраняет мелкие сколы и потёртости на стекле</li>
+          <li>Улучшает видимость во время дождя</li>
+          <li>Повышает безопасность движения</li>
+        </ul>
+        <div class="chips"><span>полировка лобового стекла</span><span>антидождь на стекло</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок капли, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Химчистка салона — озонация в подарок</h3>
+        <div class="thesis-main">При заказе химчистки салона в Kill Car Studio озонация салона — в подарок.</div>
+        <ul>
+          <li>Устраняет посторонние запахи в салоне</li>
+          <li>Обеззараживает поверхности салона</li>
+          <li>Дополняет полную химчистку автомобиля</li>
+        </ul>
+        <div class="chips"><span>химчистка салона Москва</span><span>озонация автомобиля</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок распыления, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Химчистка + полировка + керамика — скидка 10%</h3>
+        <div class="thesis-main">Комплекс «химчистка + полировка + керамика» в Kill Car Studio — скидка 10% на полное обновление автомобиля.</div>
+        <ul>
+          <li>Салон и кузов приводятся в порядок за один визит</li>
+          <li>Керамическая защита ЛКП входит в комплекс</li>
+          <li>Экономия на комплексном заказе услуг</li>
+        </ul>
+        <div class="chips"><span>комплекс детейлинга Москва</span><span>скидка на детейлинг</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок процента, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Шумоизоляция — тишина и комфорт в салоне</h3>
+        <div class="thesis-main">Шумоизоляция в Kill Car Studio снижает уровень шума и вибраций в салоне автомобиля.</div>
+        <ul>
+          <li>Многослойная обработка ключевых зон кузова</li>
+          <li>Комфорт на трассе и в городском потоке</li>
+          <li>Актуально перед зимним сезоном эксплуатации</li>
+        </ul>
+        <div class="chips"><span>шумоизоляция автомобиля Москва</span><span>шумоизоляция салона</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок звуковой волны, факты — мелким текстом внизу.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="eyebrow">06 · Карта тем</span>
+    <h2 class="htitle">Карта тем</h2>
+    <div class="timeline">
+      <div class="stage">
+        <div class="head">
+          <h3>Этап 01</h3>
+          <span class="badge">Актуальный</span>
+          <span class="date">15.09.2026</span>
+        </div>
+        <ul class="stage-items">
+          <li><b>Новость:</b> Kill Car Studio — комплексный детейлинг-центр</li>
+          <li><b>Новость:</b> Оклейка автомобиля плёнкой</li>
+          <li><b>Новость:</b> Полировка и керамическая защита кузова</li>
+          <li><b>Новость:</b> Удаление вмятин без покраски</li>
+          <li><b>Сторис:</b> Антидождь в подарок при полировке стекла</li>
+          <li><b>Сторис:</b> Озонация в подарок при химчистке</li>
+          <li><b>Сторис:</b> Скидка 10% на комплекс услуг</li>
+          <li><b>Сторис:</b> Шумоизоляция салона</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="sources" id="sources">
+  <div class="wrap">
+    <span class="lbl">Источники</span>
+    <a href="http://www.killcar.net" target="_blank" rel="noopener">killcar.net — официальный сайт</a>
+    <a href="https://vk.ru/killcardetailing" target="_blank" rel="noopener">vk.ru/killcardetailing — сообщество ВК</a>
+    <a href="https://yandex.ru/maps/-/CTxEqXml" target="_blank" rel="noopener">Kill Car Studio — карточка на Яндекс Картах</a>
+    <span class="lbl" style="margin-top:10px">Анкета «Старт проекта» — заполнена 15.09.2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
