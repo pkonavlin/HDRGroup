@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}
+img{max-width:100%}
+[hidden]:not([hidden=until-found i]){display:none!important}
+</style>
+</head>
+<body>
+<title>Артдент Камилова — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4A5A5D; --line:#D8E2E2; --card:#FFFFFF; --bg:#F5F8F8;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#7FD1E0; --teal:#5FB8C9; --ice:#0B1416; --ink:#EAF2F2; --ink-soft:#A9BCBE;
+    --line:#233234; --card:#0F1B1D; --bg:#0B1416;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#7FD1E0; --teal:#5FB8C9; --ice:#0B1416; --ink:#EAF2F2; --ink-soft:#A9BCBE;
+  --line:#233234; --card:#0F1B1D; --bg:#0B1416;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;letter-spacing:-0.01em;color:var(--ink);margin:0}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+a{color:inherit}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ocean);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar .wrap{display:flex;align-items:center;gap:28px;height:64px;overflow-x:auto;scrollbar-width:none}
+.topbar .wrap::-webkit-scrollbar{display:none}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:#fff;font-size:18px;white-space:nowrap;flex:none}
+.topnav{display:flex;gap:4px;flex-wrap:nowrap}
+.topnav a{white-space:nowrap;color:rgba(255,255,255,.78);text-decoration:none;font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:8px;transition:background .15s,color .15s}
+.topnav a:hover{background:rgba(255,255,255,.12);color:#fff}
+
+section{padding:64px 0}
+section + section{border-top:1px solid var(--line)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px;display:block}
+h2.htitle{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px}
+.lede{color:var(--ink-soft);font-size:16px;max-width:70ch;margin-bottom:32px}
+
+/* HERO */
+.hero{padding-top:56px}
+.hero h1{font-size:clamp(32px,5vw,52px);margin-bottom:8px}
+.hero .sub{color:var(--ink-soft);font-size:17px;max-width:68ch;margin-bottom:30px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--card);padding:18px 20px}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin-bottom:6px;display:block}
+.fact .v{font-size:15px;font-weight:600}
+
+/* BRANDBOOK */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.swatch .chip{height:96px}
+.swatch .info{padding:14px 16px}
+.swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin-bottom:4px;display:block}
+.swatch .hex{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px}
+.swatch .name{font-size:13px;color:var(--ink-soft);margin-top:2px}
+
+/* LOGIC */
+.logic-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.logic-item{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.logic-item .n{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--teal);flex:none;width:28px}
+.logic-item .t{font-weight:600;margin-bottom:3px}
+.logic-item .d{color:var(--ink-soft);font-size:14.5px}
+
+/* CARDS: news */
+.card-grid{display:grid;gap:20px}
+.ncard{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px}
+.ncard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px}
+.ncard h3{font-size:20px;max-width:70ch}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:5px 10px;border-radius:999px;background:var(--teal);color:#fff;white-space:nowrap;flex:none}
+.tag.acc{background:var(--roe)}
+.thesis{margin:0 0 16px;padding:0;list-style:none}
+.thesis li{position:relative;padding-left:18px;margin-bottom:8px;font-size:14.5px;color:var(--ink)}
+.thesis li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chips span{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ice);border:1px solid var(--line);color:var(--ink-soft);padding:4px 10px;border-radius:8px}
+.meta-row{font-size:13.5px;color:var(--ink-soft);margin-bottom:10px}
+.meta-row b{color:var(--ink)}
+.cta-row{font-size:14px;font-weight:600;color:var(--ocean);margin-bottom:16px}
+.cover-block{border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
+.cover-block .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);display:block;margin-bottom:6px}
+.cover-block p{margin:0;font-size:14px;color:var(--ink-soft)}
+.swpair{display:inline-flex;gap:4px;vertical-align:middle;margin:0 4px}
+.swdot{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.1)}
+
+/* STORIES */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.scard{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px 24px}
+.scard h3{font-size:17px;margin-bottom:10px}
+.scard .thesis-main{font-size:14.5px;font-weight:600;margin-bottom:10px}
+.scard ul{margin:0 0 14px;padding-left:18px}
+.scard ul li{font-size:13.5px;color:var(--ink-soft);margin-bottom:5px}
+.scard .design-note{border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--ink-soft)}
+.scard .design-note b{color:var(--ink)}
+
+/* MAP */
+.timeline{border-left:2px solid var(--line);margin-left:6px}
+.stage{position:relative;padding:4px 0 28px 26px}
+.stage::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ocean);border:2px solid var(--bg)}
+.stage .head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.stage .head h3{font-size:16px}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px}
+.stage .date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+.stage-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 20px;list-style:none;margin:0;padding:0}
+.stage-items li{font-size:13.5px;color:var(--ink-soft);padding-left:14px;position:relative}
+.stage-items li::before{content:"—";position:absolute;left:0;color:var(--line)}
+.stage-items li b{color:var(--ink);font-weight:600}
+
+footer.sources{padding:40px 0 64px}
+footer.sources .wrap{display:flex;flex-direction:column;gap:8px}
+footer.sources a{font-size:14px;color:var(--ocean);text-decoration:none}
+footer.sources a:hover{text-decoration:underline}
+footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:6px}
+
+@media (max-width:640px){
+  section{padding:44px 0}
+  .ncard{padding:20px}
+}
+</style>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Артдент Камилова</div>
+    <nav class="topnav">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#logic">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+      <a href="#sources">Источники</a>
+    </nav>
+  </div>
+</div>
+
+<section id="company" class="hero">
+  <div class="wrap">
+    <span class="eyebrow">ТЗ на контент · Этап 01</span>
+    <h1>Артдент Камилова</h1>
+    <p class="sub">Частная стоматологическая клиника в Челябинске. Клиника сама назвала приоритет первого этапа — терапия (лечение кариеса и его осложнений, реставрация зубов) и ортодонтия (брекеты, элайнеры), поэтому весь новостной блок этапа 01 построен на этих двух направлениях.</p>
+
+    <div class="facts">
+      <div class="fact"><span class="k">Сфера</span><span class="v">Частная стоматологическая клиника</span></div>
+      <div class="fact"><span class="k">Направления</span><span class="v">Терапия, хирургия, ортодонтия, ортопедия</span></div>
+      <div class="fact"><span class="k">Адрес</span><span class="v">Челябинск, ул. Мусы Джалиля, 7, пом. 379</span></div>
+      <div class="fact"><span class="k">Режим работы</span><span class="v">Пн–Сб 9:00–20:30, Вс — выходной</span></div>
+      <div class="fact"><span class="k">Телефон</span><span class="v">+7 (351) 230-01-01</span></div>
+      <div class="fact"><span class="k">Главный врач</span><span class="v">Камилов Камил Хасилжанович — хирург-имплантолог, ортопед</span></div>
+      <div class="fact"><span class="k">Команда</span><span class="v">3 стоматолога, 2 дополнительных врача, 5 ассистентов</span></div>
+      <div class="fact"><span class="k">Рейтинг</span><span class="v">5.0 на Яндекс Картах · 5.0 на 2ГИС</span></div>
+      <div class="fact"><span class="k">Оплата</span><span class="v">Карта, наличные, рассрочка</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <span class="eyebrow">02 · Визуальная идентичность</span>
+    <h2 class="htitle">Мини-брендбук</h2>
+    <p class="lede">После анализа визуальных материалов компании (скриншоты официального сайта artdent-kamilova.ru) методом пиксель-сэмплинга определена рабочая цветовая палитра Артдент Камилова — тёмно-синий фон и бирюзово-синий акцент повторяются на всех разделах сайта, что подтверждает их как фирменные.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#255472"></div>
+        <div class="info"><span class="role">Акцентный</span><span class="hex">#255472</span><div class="name">Тёмный бирюзово-синий — интерактивные элементы, кнопки на сайте</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#0D151F"></div>
+        <div class="info"><span class="role">Второстепенный</span><span class="hex">#0D151F</span><div class="name">Почти чёрный тёмно-синий — фон хедера и тёмных секций сайта</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#D4E6F2;border-bottom:1px solid var(--line)"></div>
+        <div class="info"><span class="role">Фоновый</span><span class="hex">#D4E6F2</span><div class="name">Бледно-голубой — фон карточек на светлых секциях сайта</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#1C1D25"></div>
+        <div class="info"><span class="role">Текстовый</span><span class="hex">#1C1D25</span><div class="name">Тёмно-серый — основной текст и кнопки «Написать в Telegram/MAX»</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="logic">
+  <div class="wrap">
+    <span class="eyebrow">03 · Последовательность</span>
+    <h2 class="htitle">Логика цикла</h2>
+    <p class="lede">Клиника явно обозначила приоритет первого этапа в анкете — терапию и ортодонтию. Все 4 новостные темы отданы этим двум направлениям (по две на каждое), сторис закрывают процесс лечения, который относится к обоим направлениям.</p>
+    <div class="logic-list">
+      <div class="logic-item"><span class="n">01</span><div><div class="t">Лечение кариеса и его осложнений</div><div class="d">Терапия, приоритет №1 — кариес, пульпит, периодонтит, лечение без боли.</div></div></div>
+      <div class="logic-item"><span class="n">02</span><div><div class="t">Реставрация зубов и гигиена</div><div class="d">Терапия — сильнейшее УТП клиники: самая качественная реставрация в Челябинске.</div></div></div>
+      <div class="logic-item"><span class="n">03</span><div><div class="t">Брекет-системы</div><div class="d">Ортодонтия, приоритет №2 — классическое исправление прикуса.</div></div></div>
+      <div class="logic-item"><span class="n">04</span><div><div class="t">Элайнеры</div><div class="d">Ортодонтия — незаметное исправление прикуса как альтернатива брекетам.</div></div></div>
+      <div class="logic-item"><span class="n">05</span><div><div class="t">Сторис — шаги приёма пациента</div><div class="d">Конкретные, снимаемые факты: консультация, анестезия, план лечения, фотопротокол — применимо и к терапии, и к ортодонтии.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <span class="eyebrow">04 · Новостные публикации</span>
+    <h2 class="htitle">Новости — 4 темы + обложка</h2>
+    <p class="lede">Клиника явно обозначила приоритет в анкете — терапия (artdent-kamilova.ru/therapy) и ортодонтия (artdent-kamilova.ru/orthodontics). Все 4 новостные темы построены только на этих двух направлениях — по две на каждое. Публикация — карточка Артдент Камилова на Яндекс Картах и в 2ГИС.</p>
+    <div class="card-grid">
+
+      <div class="ncard">
+        <div class="top"><h3>Лечение кариеса, пульпита и периодонтита в Артдент Камилова — спасаем зуб на любой стадии</h3><span class="tag">Терапия</span></div>
+        <ul class="thesis">
+          <li>Лечение кариеса в Артдент Камилова останавливает разрушение зуба на самой ранней стадии — до перехода в пульпит.</li>
+          <li>Лечение пульпита в клинике сохраняет зуб живым там, где раньше требовалось удаление нерва без альтернатив.</li>
+          <li>Лечение периодонтита в Артдент Камилова снимает воспаление у корня зуба и останавливает его разрушение.</li>
+          <li>Качество терапевтического лечения зубов в Артдент Камилова выше, чем у большинства клиник Челябинска.</li>
+          <li>Лечение кариеса и его осложнений в клинике проходит с современной анестезией — без боли.</li>
+          <li>Каждый этап лечения зуба фиксируется в фотопротоколе — от приёма до полного выздоровления.</li>
+          <li>Цены на лечение кариеса, пульпита и периодонтита в Артдент Камилова честные и ниже, чем у конкурентов в Челябинске.</li>
+        </ul>
+        <div class="chips"><span>лечение кариеса Челябинск</span><span>лечение пульпита Челябинск</span><span>лечение периодонтита Челябинск</span><span>стоматолог-терапевт Челябинск</span><span>лечение зуба без боли Челябинск</span><span>стоматология Мусы Джалиля</span></div>
+        <div class="meta-row"><b>Meta:</b> Лечение кариеса, пульпита и периодонтита в Артдент Камилова (Челябинск) — терапевтическая стоматология без боли, честные цены, фотопротокол лечения.</div>
+        <div class="cta-row">CTA: Записаться на лечение кариеса в Артдент Камилова.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон <span class="swpair"><span class="swdot" style="background:#0D151F"></span></span>#0D151F, акцент <span class="swpair"><span class="swdot" style="background:#255472"></span></span>#255472. Крупный тезис «Спасаем зуб на любой стадии», графичный акцент — контур зуба, мелкая строка «Артдент Камилова · Челябинск».</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Реставрация зубов в Артдент Камилова — самая качественная в Челябинске, плюс профессиональная гигиена</h3><span class="tag acc">Продающий</span></div>
+        <ul class="thesis">
+          <li>Реставрация зубов в Артдент Камилова — самая качественная в Челябинске: врачи восстанавливают анатомическую форму зуба с высокой точностью.</li>
+          <li>Реставрация подходит для жевательной и фронтальной группы зубов — форма и цвет восстанавливаются незаметно для глаза.</li>
+          <li>Профессиональная гигиена полости рта в Артдент Камилова — основа здоровья дёсен и профилактика кариеса.</li>
+          <li>Комплексная чистка зубов в клинике убирает налёт и камень, которые обычная домашняя чистка не устраняет.</li>
+          <li>Реставрация и гигиена в Артдент Камилова проводятся с современной анестезией — без боли и дискомфорта.</li>
+          <li>Результат каждой реставрации фиксируется в фотопротоколе — пациент видит форму зуба до и после лечения.</li>
+          <li>Цены на реставрацию зубов в Артдент Камилова честные и ниже, чем у конкурентов в Челябинске.</li>
+        </ul>
+        <div class="chips"><span>реставрация зубов Челябинск</span><span>лучшая реставрация зубов Челябинск</span><span>художественная реставрация зуба</span><span>профессиональная чистка зубов Челябинск</span><span>гигиена полости рта Челябинск</span><span>стоматология Курчатовский район</span></div>
+        <div class="meta-row"><b>Meta:</b> Реставрация зубов в Артдент Камилова — самая качественная в Челябинске, плюс профессиональная гигиена полости рта. Честные цены, фотопротокол результата.</div>
+        <div class="cta-row">CTA: Записаться на реставрацию зубов в Артдент Камилова.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #0D151F, акцент #255472. Тезис «Лучшая реставрация зубов в Челябинске», графичный акцент — улыбка/зуб до-после.</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Брекет-системы в Артдент Камилова — надёжное исправление прикуса для подростков и взрослых</h3><span class="tag">Ортодонтия</span></div>
+        <ul class="thesis">
+          <li>Брекет-системы в Артдент Камилова — проверенный способ выровнять зубной ряд и исправить прикус у подростков и взрослых.</li>
+          <li>Ортодонтическое лечение брекетами в клинике подходит для сложных случаев прикуса, которые не всегда решаются элайнерами.</li>
+          <li>Направление ортодонтии в Артдент Камилова ведёт врач-ортодонт — специалист по брекет-системам и ортодонтической аппаратуре.</li>
+          <li>Перед установкой брекетов в клинике проводится бесплатная консультация ортодонта с полной диагностикой прикуса.</li>
+          <li>Ход ортодонтического лечения брекетами в Артдент Камилова фиксируется в фотопротоколе на каждом визите.</li>
+          <li>Цены на брекет-системы в Артдент Камилова честные и ниже, чем у конкурентов в Челябинске.</li>
+        </ul>
+        <div class="chips"><span>брекеты Челябинск</span><span>брекет-система Челябинск</span><span>исправление прикуса Челябинск</span><span>ортодонт Челябинск</span><span>лечение брекетами Артдент Камилова</span><span>ортодонтия Мусы Джалиля</span></div>
+        <div class="meta-row"><b>Meta:</b> Брекет-системы в Артдент Камилова (Челябинск) — исправление прикуса для подростков и взрослых, бесплатная консультация ортодонта.</div>
+        <div class="cta-row">CTA: Записаться на бесплатную консультацию ортодонта.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #0D151F, акцент #255472. Тезис «Ровные зубы — брекеты в Артдент Камилова», графичный акцент — брекет-дуга.</p>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <div class="top"><h3>Элайнеры в Артдент Камилова — незаметное исправление прикуса для взрослых</h3><span class="tag acc">Продающий</span></div>
+        <ul class="thesis">
+          <li>Элайнеры в Артдент Камилова — прозрачные капы для исправления прикуса, незаметные на зубах во время лечения.</li>
+          <li>Элайнеры эффективно выравнивают зубы и корректируют прикус — так же, как брекеты, но без металлических дуг.</li>
+          <li>Съёмная конструкция элайнеров позволяет снимать капы на время еды и чистки зубов.</li>
+          <li>Врач-ортодонт Артдент Камилова подбирает элайнеры индивидуально — по слепкам и плану лечения.</li>
+          <li>Прогресс исправления прикуса элайнерами фиксируется в фотопротоколе на каждом этапе.</li>
+          <li>Перед началом лечения элайнерами в Артдент Камилова — бесплатная консультация ортодонта.</li>
+        </ul>
+        <div class="chips"><span>элайнеры Челябинск</span><span>прозрачные капы для зубов Челябинск</span><span>исправление прикуса без брекетов</span><span>элайнеры для взрослых Челябинск</span><span>ортодонт Артдент Камилова</span></div>
+        <div class="meta-row"><b>Meta:</b> Элайнеры в Артдент Камилова (Челябинск) — незаметное исправление прикуса для взрослых, бесплатная консультация ортодонта.</div>
+        <div class="cta-row">CTA: Узнать, подходят ли элайнеры — бесплатная консультация.</div>
+        <div class="cover-block">
+          <span class="lbl">ТЗ на обложку</span>
+          <p>Фон #0D151F, акцент #255472. Тезис «Незаметное лечение прикуса — элайнеры», графичный акцент — прозрачная капа.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <span class="eyebrow">05 · Сторис</span>
+    <h2 class="htitle">Сторис — 4 темы, формат «1 слайд»</h2>
+    <p class="lede">Каждая сторис — один слайд: тезис и сухие факты, без обложки. Публикация — карточка Артдент Камилова на Яндекс Картах и в 2ГИС.</p>
+    <div class="story-grid">
+
+      <div class="scard">
+        <h3>Первичная консультация и диагностика</h3>
+        <div class="thesis-main">Первичная консультация в Артдент Камилова — подробный разбор ситуации и диагностика, при необходимости с рентген-снимком.</div>
+        <ul>
+          <li>Врач отвечает на все вопросы перед началом лечения</li>
+          <li>Диагностика включает рентген при необходимости</li>
+          <li>Консультация — первый шаг к плану лечения</li>
+        </ul>
+        <div class="chips"><span>первичная консультация стоматолога</span><span>диагностика зубов Челябинск</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #0D151F, акцент #255472, крупный тезис + иконка рентген-снимка, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Современная анестезия — лечение без боли</h3>
+        <div class="thesis-main">В Артдент Камилова процедуры проходят с современной анестезией — лечить зубы не больно.</div>
+        <ul>
+          <li>Перед уколом наносится гель — укол незаметен</li>
+          <li>Современные методы обезболивания</li>
+          <li>Комфорт и спокойствие на приёме</li>
+        </ul>
+        <div class="chips"><span>анестезия в стоматологии Челябинск</span><span>лечение зубов без боли</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #0D151F, акцент #255472, крупный тезис + иконка капли, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Индивидуальный план лечения</h3>
+        <div class="thesis-main">В Артдент Камилова план лечения составляется индивидуально — с учётом пожеланий и бюджета пациента.</div>
+        <ul>
+          <li>Подробный план после диагностики</li>
+          <li>Учитываются пожелания и бюджет пациента</li>
+          <li>Врач предлагает оптимальные варианты лечения</li>
+        </ul>
+        <div class="chips"><span>план лечения зубов Челябинск</span><span>индивидуальный подход стоматология</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #0D151F, акцент #255472, крупный тезис + иконка чек-листа, факты — мелким текстом внизу.</div>
+      </div>
+
+      <div class="scard">
+        <h3>Фотопротокол лечения</h3>
+        <div class="thesis-main">Каждый этап лечения в Артдент Камилова фиксируется в фотопротоколе — от приёма до завершения.</div>
+        <ul>
+          <li>Пациент видит прогресс на каждом этапе</li>
+          <li>Прозрачность лечения без сюрпризов</li>
+          <li>Уникальный подход клиники к контролю качества</li>
+        </ul>
+        <div class="chips"><span>фотопротокол лечения зубов</span><span>прозрачная стоматология Челябинск</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #0D151F, акцент #255472, крупный тезис + иконка фотоаппарата, факты — мелким текстом внизу.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="eyebrow">06 · Карта тем</span>
+    <h2 class="htitle">Карта тем</h2>
+    <div class="timeline">
+      <div class="stage">
+        <div class="head">
+          <h3>Этап 01</h3>
+          <span class="badge">Актуальный</span>
+          <span class="date">15.09.2026</span>
+        </div>
+        <ul class="stage-items">
+          <li><b>Новость:</b> Лечение кариеса, пульпита и периодонтита</li>
+          <li><b>Новость:</b> Реставрация зубов — лучшая в Челябинске</li>
+          <li><b>Новость:</b> Брекет-системы</li>
+          <li><b>Новость:</b> Элайнеры</li>
+          <li><b>Сторис:</b> Первичная консультация и диагностика</li>
+          <li><b>Сторис:</b> Современная анестезия без боли</li>
+          <li><b>Сторис:</b> Индивидуальный план лечения</li>
+          <li><b>Сторис:</b> Фотопротокол лечения</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="sources" id="sources">
+  <div class="wrap">
+    <span class="lbl">Источники</span>
+    <a href="https://artdent-kamilova.ru/" target="_blank" rel="noopener">artdent-kamilova.ru — официальный сайт</a>
+    <a href="https://vk.ru/ardentkamilova" target="_blank" rel="noopener">vk.ru/ardentkamilova — сообщество ВК</a>
+    <a href="https://yandex.ru/maps/-/CTxIBZ-p" target="_blank" rel="noopener">Артдент Камилова — карточка на Яндекс Картах</a>
+    <a href="https://2gis.ru/chelyabinsk/search/артдент%20камилова/firm/70000001101558447/61.285522%2C55.212502" target="_blank" rel="noopener">Артдент Камилова — карточка на 2ГИС</a>
+    <span class="lbl" style="margin-top:10px">Анкета «Старт проекта» — заполнена 10.09.2026</span>
+  </div>
+</footer>
+</body>
+</html>
