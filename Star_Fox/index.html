@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StarFox — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean:#0E3B47; --header-bg:#0A2C35; --teal:#5FC2CF; --ice:#F5F8F8; --roe:#D9673A;
+    --ink:#EEF6F6; --ink-soft:#A9C1C6; --line:rgba(255,255,255,.12); --card:#15414D; --bg:#0E3B47;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Public Sans',sans-serif; background:var(--bg); color:var(--ink); line-height:1.55;}
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif; color:var(--ink);}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--teal);}
+
+  header.topbar{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:28px;
+    background:rgba(10,44,53,.97); backdrop-filter:blur(6px); color:#fff;
+    padding:14px 32px; flex-wrap:wrap;
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:20px; margin-right:auto;}
+  header.topbar nav{display:flex; gap:18px; flex-wrap:wrap;}
+  header.topbar nav a{color:#CFE3E7; text-decoration:none; font-size:14px; font-weight:600;}
+  header.topbar nav a:hover{color:#fff;}
+
+  main{max-width:920px; margin:0 auto; padding:48px 24px 100px;}
+  section{margin-bottom:64px; scroll-margin-top:70px;}
+  section > h2{font-size:clamp(24px,4vw,32px); margin-bottom:6px;}
+  section > .lead{color:var(--ink-soft); margin-bottom:28px; max-width:640px;}
+
+  .facts-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:8px;}
+  .fact{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--roe); margin-bottom:6px;}
+  .fact .v{font-weight:600; font-size:15px;}
+
+  .swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin:20px 0 28px;}
+  .swatch{border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--card);}
+  .swatch .chip{height:64px;}
+  .swatch .meta{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;}
+
+  .note-block{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+  .note-block h4{font-size:14px; color:var(--ink); margin-bottom:8px;}
+  .note-block p, .note-block li{font-size:14px; color:var(--ink-soft);}
+  .note-block ul{padding-left:18px;}
+
+  .cycle-steps{display:flex; flex-direction:column; gap:0; border-left:2px solid var(--line); padding-left:20px; margin-top:10px;}
+  .cycle-step{position:relative; padding-bottom:22px;}
+  .cycle-step::before{content:""; position:absolute; left:-26px; top:4px; width:10px; height:10px; border-radius:50%; background:var(--teal);}
+  .cycle-step .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--roe); text-transform:uppercase; margin-bottom:4px;}
+  .cycle-step .txt{font-size:14.5px; color:var(--ink);}
+
+  .stage-label{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; background:var(--header-bg); color:#fff; padding:4px 10px; border-radius:6px; margin:22px 0 14px;}
+  details.stage{margin-bottom:8px;}
+  details.stage > summary{cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px; font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); padding:10px 0; border-top:1px solid var(--line);}
+  details.stage > summary::-webkit-details-marker{display:none;}
+  details.stage > summary::before{content:"▸"; color:var(--roe); transition:transform .15s;}
+  details.stage[open] > summary::before{transform:rotate(90deg);}
+  details.stage > summary .badge{background:rgba(255,255,255,.08); color:var(--ink-soft); padding:2px 8px; border-radius:20px; font-size:10px;}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-bottom:16px;}
+  .card .top-row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px;}
+  .card h3{font-size:18px; color:var(--ink); max-width:80%;}
+  .card .purpose{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; background:rgba(196,87,43,.1); color:var(--roe); padding:4px 9px; border-radius:20px; white-space:nowrap;}
+  .card .body-txt{font-size:14.5px; color:var(--ink-soft); margin-bottom:12px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:rgba(255,255,255,.06); color:var(--teal); padding:4px 10px; border-radius:6px;}
+  .cover-box{background:rgba(0,0,0,.18); border:1px dashed var(--line); border-radius:10px; padding:12px 14px; font-size:13.5px;}
+  .cover-box .k{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; color:var(--roe); margin-bottom:4px;}
+
+  .story-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-bottom:16px;}
+  .story-card h3{font-size:17px; margin-bottom:10px;}
+  .story-card ul{padding-left:18px; margin-bottom:12px;}
+  .story-card li{font-size:14.5px; color:var(--ink-soft); margin-bottom:4px;}
+  .design-note{background:rgba(0,0,0,.18); border-radius:10px; padding:10px 14px; font-size:13px; color:var(--ink-soft);}
+  .design-note b{color:var(--ink);}
+
+  .timeline{border-left:2px solid var(--line); padding-left:20px; margin-top:14px;}
+  .t-item{position:relative; padding-bottom:24px;}
+  .t-item::before{content:""; position:absolute; left:-27px; top:3px; width:12px; height:12px; border-radius:50%; border:2px solid var(--teal); background:var(--bg);}
+  .t-item.active::before{background:var(--roe); border-color:var(--roe);}
+  .t-item .head{display:flex; align-items:center; gap:10px; margin-bottom:4px;}
+  .t-item .stg{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px;}
+  .t-item .st{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; padding:2px 8px; border-radius:20px;}
+  .t-item.active .st{background:rgba(217,103,58,.18); color:var(--roe);}
+  .t-item:not(.active) .st{background:rgba(255,255,255,.08); color:var(--ink-soft);}
+  .t-item .desc{font-size:13.5px; color:var(--ink-soft);}
+
+  footer{border-top:1px solid var(--line); padding:28px 24px; text-align:center;}
+  footer .srcs{font-size:13px; color:var(--ink-soft);}
+  footer .srcs a{margin:0 8px;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">StarFox</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section id="company">
+    <h2>StarFox — квесты и мероприятия в реальности</h2>
+    <p class="lead">Пермь · комната квестов и организация мероприятий</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Ниша</div><div class="v">Хоррор-квесты в реальности + организация мероприятий</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Пермь</div></div>
+      <div class="fact"><div class="k">Формат</div><div class="v">Квесты с живыми актёрами и перформансами</div></div>
+      <div class="fact"><div class="k">Площадка публикации</div><div class="v">Карточка компании на Яндекс Картах и 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="brand">
+    <h2>Мини-брендбук</h2>
+    <p class="lead">После анализа визуальных материалов компании (сайт, промо-публикация ВК) определена следующая визуальная система бренда.</p>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#17181D;"></div>
+        <div class="meta"><div class="role">Фоновый</div><div class="hex">#17181D</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E5342B;"></div>
+        <div class="meta"><div class="role">Акцентный</div><div class="hex">#E5342B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#8C1F1F;"></div>
+        <div class="meta"><div class="role">Второстепенный</div><div class="hex">#8C1F1F</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F4EFE6; border-bottom:1px solid #eee;"></div>
+        <div class="meta"><div class="role">Текстовый (на тёмном)</div><div class="hex">#FFFFFF / #F4EFE6</div></div>
+      </div>
+    </div>
+
+    <div class="note-block">
+      <h4>Типографика</h4>
+      <p>Заголовки и логотип — рваный, «кровавый» дисплейный шрифт с эффектом потёков и потёртости. Основной текст — жирный гротеск без засечек, белый на тёмном фоне, высокий контраст.</p>
+    </div>
+    <div class="note-block">
+      <h4>Фото и графика</h4>
+      <p>Тёмные атмосферные кадры локаций и актёров в образе, низкий ключ освещения, приглушённые цвета с красным акцентом. В промо-графике — текстуры потёртой бумаги, кровавые пятна и потёки как декоративный элемент.</p>
+    </div>
+    <div class="note-block">
+      <h4>Тон коммуникации</h4>
+      <p>Интригующий, напористый, с прямым обращением и восклицаниями в акциях («Успей забронировать!»). Короткие хлёсткие фразы, вопросы-провокации.</p>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <h2>Логика цикла</h2>
+    <p class="lead">Темы выстроены последовательно — от знакомства с форматом к более глубокому раскрытию подхода компании.</p>
+    <div class="cycle-steps">
+      <div class="cycle-step">
+        <div class="tag">Этап 1 · Знакомство</div>
+        <div class="txt">Аудитория узнаёт формат — полное погружение и командный опыт как основное УТП компании.</div>
+      </div>
+      <div class="cycle-step">
+        <div class="tag">Этап 1 · Экспертиза</div>
+        <div class="txt">Раскрывается механика: как устроен страх и почему живой актёр меняет каждое прохождение.</div>
+      </div>
+      <div class="cycle-step">
+        <div class="tag">Этап 2 · Расширение формата</div>
+        <div class="txt">Компания показывается шире квеста — как организатор мероприятия под конкретный повод.</div>
+      </div>
+      <div class="cycle-step">
+        <div class="tag">Этап 2 · Доверие</div>
+        <div class="txt">Закрывается возможное возражение аудитории — интенсивный опыт остаётся управляемым и безопасным.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <h2>Новости</h2>
+    <p class="lead">SEO-тексты для карточки на Яндекс Картах и 2ГИС.</p>
+
+    <details class="stage">
+      <summary>Этап 1 <span class="badge">4 темы</span></summary>
+
+      <div class="card">
+        <div class="top-row"><h3>StarFox: полное погружение — не просто квест-комната</h3><span class="purpose">вовлекающий</span></div>
+        <p class="body-txt">Живые актёры, детальные декорации и атмосфера полного погружения в сюжет — чем StarFox отличается от обычных квестов.</p>
+        <div class="chips">
+          <span class="chip-seo">квесты Пермь</span><span class="chip-seo">квест в реальности с актёром</span><span class="chip-seo">атмосферный квест</span><span class="chip-seo">погружение в сюжет</span>
+        </div>
+        <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Погружение без компромиссов». Дизайн: тёмный фон #17181D, акцент #E5342B, дисплейный шрифт с эффектом потёков.</div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>StarFox для команды: тимбилдинг через адреналин</h3><span class="purpose">продающий</span></div>
+        <p class="body-txt">Формат для друзей, коллег, компаний — как квест укрепляет команду через совместное решение задач в стрессе.</p>
+        <div class="chips">
+          <span class="chip-seo">тимбилдинг Пермь</span><span class="chip-seo">квест для компании</span><span class="chip-seo">командный квест</span><span class="chip-seo">корпоратив квест в реальности</span>
+        </div>
+        <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Команда, которая прошла квест». Дизайн: тёмный фон, силуэты группы, акцент #E5342B на заголовке.</div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>Психология страха: как устроен настоящий хоррор-квест</h3><span class="purpose">экспертный</span></div>
+        <p class="body-txt">Страх в StarFox строится не на дешёвых скримерах, а на темпе, деталях и паузах — почему медленно нарастающее напряжение работает сильнее внезапного испуга.</p>
+        <div class="chips">
+          <span class="chip-seo">психология страха квест</span><span class="chip-seo">что делает квест страшным</span><span class="chip-seo">авторский хоррор квест Пермь</span><span class="chip-seo">настоящий страх в квесте</span>
+        </div>
+        <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Страх — это мастерство». Дизайн: крупный дисплейный заголовок с потёками, тёмный фон.</div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>Живой актёр меняет всё: чем интерактив отличается от декораций</h3><span class="purpose">экспертный</span></div>
+        <p class="body-txt">Актёр не по сценарию читает реплики, а реагирует на поведение команды — импровизация и непредсказуемость делают каждое прохождение уникальным.</p>
+        <div class="chips">
+          <span class="chip-seo">квест с живым актёром Пермь</span><span class="chip-seo">интерактивный хоррор квест</span><span class="chip-seo">реальный актёр в квесте</span>
+        </div>
+        <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Нет двух одинаковых прохождений». Дизайн: портрет актёра в образе, акцентный красный на тексте.</div>
+      </div>
+    </details>
+
+    <div class="stage-label">Этап 2 · актуальный</div>
+
+    <div class="card">
+      <div class="top-row"><h3>StarFox — не просто квест, а мероприятие под ключ</h3><span class="purpose">продающий</span></div>
+      <p class="body-txt">Сценарий и роль актёра адаптируются под повод — день рождения, корпоратив, особое событие; StarFox не ограничивается стандартным прохождением, а выстраивает опыт под конкретный запрос.</p>
+      <div class="chips">
+        <span class="chip-seo">организация мероприятия Пермь</span><span class="chip-seo">квест на день рождения под ключ</span><span class="chip-seo">необычный корпоратив Пермь</span><span class="chip-seo">шоу с актёрами на заказ</span>
+      </div>
+      <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Мероприятие, которое запомнят». Дизайн: тёмный фон, акцентная типографика, элемент декора локации.</div>
+    </div>
+
+    <div class="card">
+      <div class="top-row"><h3>Как устроена безопасность: страх настоящий, риск — нет</h3><span class="purpose">экспертный</span></div>
+      <p class="body-txt">Инструктаж перед стартом, контроль состояния гостей, подготовленные актёры и чёткие протоколы — почему интенсивный опыт остаётся полностью безопасным.</p>
+      <div class="chips">
+        <span class="chip-seo">безопасный квест Пермь</span><span class="chip-seo">инструктаж перед квестом</span><span class="chip-seo">профессиональный хоррор квест</span><span class="chip-seo">контроль на квесте</span>
+      </div>
+      <div class="cover-box"><div class="k">ТЗ на обложку</div>Тезис: «Адреналин под контролем». Дизайн: спокойнее по тону — меньше «крови», больше строгой типографики.</div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <h2>Сторис</h2>
+    <p class="lead">Формат: 1 слайд, без обложки.</p>
+
+    <details class="stage">
+      <summary>Этап 1 <span class="badge">4 темы</span></summary>
+
+      <div class="story-card">
+        <h3>Декорации, в которые веришь</h3>
+        <ul>
+          <li>Реальные текстуры, предметы, запахи и звук в каждой комнате</li>
+          <li>Пугает не картинка, а физическое пространство вокруг тебя</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> макро-кадр реквизита/декора, тёмный фон #17181D, короткая подпись акцентом #E5342B.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Актёр не в костюме — он проживает роль</h3>
+        <ul>
+          <li>Живая реакция на действия команды</li>
+          <li>Импровизация вместо сценария</li>
+          <li>Каждое прохождение уникально</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> портрет актёра в образе крупным планом, тёмный фон, минимум текста.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Один на один с темнотой</h3>
+        <ul>
+          <li>Полная темнота и ограниченное пространство</li>
+          <li>Страх работает на теле, а не на разуме</li>
+          <li>Никакого экрана между тобой и комнатой</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> тёмный кадр с лучом света/фонарика, почти чёрный фон, минимальный текст.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Каждый сюжет — отдельная вселенная</h3>
+        <ul>
+          <li>Авторские легенды под каждый квест</li>
+          <li>Проработка деталей, а не шаблонные декорации</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> коллаж/кадр интерьера одной из локаций, акцентный заголовок с эффектом потёков.</div>
+      </div>
+    </details>
+
+    <div class="stage-label">Этап 2 · актуальный</div>
+
+    <div class="story-card">
+      <h3>Мероприятие, которое запомнят</h3>
+      <ul>
+        <li>Сценарий и актёр подстраиваются под повод</li>
+        <li>Подходит для дня рождения, корпоратива, особого события</li>
+      </ul>
+      <div class="design-note"><b>Дизайн слайда:</b> кадр с группой/событием на локации, акцент #E5342B в заголовке.</div>
+    </div>
+
+    <div class="story-card">
+      <h3>Страшно, но под контролем</h3>
+      <ul>
+        <li>Инструктаж перед стартом</li>
+        <li>Подготовленные актёры</li>
+        <li>Адреналин без реального риска</li>
+      </ul>
+      <div class="design-note"><b>Дизайн слайда:</b> спокойный кадр (например, актёр без маски/бытовая деталь), сдержанная типографика без потёков.</div>
+    </div>
+  </section>
+
+  <section id="map">
+    <h2>Карта тем</h2>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="head"><span class="stg">Этап 1</span><span class="st">готово</span></div>
+        <div class="desc">Погружение, тимбилдинг, психология страха, живой актёр — 4 новости + 4 сториз.</div>
+      </div>
+      <div class="t-item active">
+        <div class="head"><span class="stg">Этап 2</span><span class="st">актуальный</span></div>
+        <div class="desc">Мероприятия под ключ и безопасность процесса — 2 новости + 2 сториз.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="srcs">Источники: <a href="https://questimstarfox.ru" target="_blank">questimstarfox.ru</a><a href="https://vk.ru/questimstarfox" target="_blank">vk.ru/questimstarfox</a></div>
+</footer>
+
+</body>
+</html>
