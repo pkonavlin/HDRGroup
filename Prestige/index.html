@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Престиж — ТЗ на контент</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ocean:#0E3B47;
+  --teal:#1B6B78;
+  --ice:#F5F8F8;
+  --roe:#C4572B;
+  --ink:#132A2F;
+  --ink-soft:rgba(19,42,47,.66);
+  --line:rgba(19,42,47,.14);
+  --card:#FFFFFF;
+  --bg:var(--ice);
+  --bg-2:#EDF3F3;
+  --shadow:0 18px 40px -22px rgba(14,59,71,.35);
+  --radius:18px;
+  --accent-ink:var(--ocean);
+  --accent-ink-2:var(--teal);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EAF3F2;
+    --ink-soft:rgba(234,243,242,.68);
+    --line:rgba(234,243,242,.16);
+    --card:#12292E;
+    --bg:#0A1B1F;
+    --bg-2:#0F2327;
+    --shadow:0 18px 40px -22px rgba(0,0,0,.6);
+    --accent-ink:#8FD6CE;
+    --accent-ink-2:#8FD6CE;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EAF3F2;
+  --ink-soft:rgba(234,243,242,.68);
+  --line:rgba(234,243,242,.16);
+  --card:#12292E;
+  --bg:#0A1B1F;
+  --bg-2:#0F2327;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.6);
+  --accent-ink:#8FD6CE;
+  --accent-ink-2:#8FD6CE;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Public Sans',system-ui,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',system-ui,sans-serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+img{max-width:100%;}
+[hidden]{display:none!important;}
+a{color:inherit;}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+
+/* Topbar — single sticky horizontal bar, company name left, nav follows in same row */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  background:color-mix(in srgb, var(--ocean) 94%, black 0%);
+  background:var(--ocean);
+  color:#EAF6F5;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topbar-inner{
+  max-width:1120px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;gap:28px;flex-wrap:wrap;
+}
+.brand{font-weight:800;font-size:17px;letter-spacing:.01em;white-space:nowrap;}
+.brand span{color:#8FD6CE;}
+.topnav{display:flex;gap:4px;flex-wrap:wrap;overflow-x:auto;}
+.topnav a{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.03em;
+  text-transform:uppercase;color:rgba(234,246,245,.72);text-decoration:none;
+  padding:7px 11px;border-radius:999px;white-space:nowrap;transition:.15s;
+}
+.topnav a:hover{background:rgba(255,255,255,.1);color:#fff;}
+
+/* Hero */
+.hero{padding:64px 0 40px;}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--roe);font-weight:600;
+}
+.section-title{font-size:clamp(28px,4vw,40px);line-height:1.12;margin:10px 0 14px;font-weight:800;}
+.lede{font-size:16.5px;color:var(--ink-soft);max-width:66ch;line-height:1.6;margin:0 0 30px;}
+
+.fact-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+}
+.fact{background:var(--card);padding:20px 22px;}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+.fact .v{font-size:15px;font-weight:600;line-height:1.4;}
+.fact .v small{display:block;font-weight:400;font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+/* generic section */
+section{padding:56px 0;}
+section + section{border-top:1px solid var(--line);}
+.section-head{margin-bottom:28px;}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--roe);letter-spacing:.06em;}
+
+/* Brandbook — swatches only, no text blocks */
+.brand-note{font-size:15px;color:var(--ink-soft);max-width:70ch;line-height:1.65;margin:0 0 26px;}
+.swatch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;}
+.swatch{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);}
+.swatch-color{height:88px;}
+.swatch-info{padding:13px 15px;}
+.swatch-role{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+.swatch-hex{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;margin-top:3px;}
+
+/* Логика цикла */
+.cycle-row{display:flex;flex-wrap:wrap;gap:0;counter-reset:step;}
+.cycle-step{
+  flex:1 1 210px;padding:20px;background:var(--card);border:1px solid var(--line);
+  position:relative;
+}
+.cycle-step:not(:first-child){border-left:none;}
+.cycle-step .num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--roe);font-weight:600;}
+.cycle-step h4{margin:8px 0 6px;font-size:16px;}
+.cycle-step p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+.cycle-row .cycle-step:not(:last-child):after{
+  content:"→";position:absolute;right:-11px;top:50%;transform:translateY(-50%);
+  color:var(--ink-soft);font-size:14px;z-index:2;display:none;
+}
+@media(min-width:860px){.cycle-row .cycle-step:not(:last-child):after{display:block;}}
+
+/* Post / theme cards */
+.post-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px 28px;margin-bottom:20px;box-shadow:var(--shadow);
+}
+.post-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.post-num{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em;}
+.post-title{font-size:19px;font-weight:700;margin:2px 0 0;line-height:1.32;}
+.tag{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;
+  background:var(--bg-2);border:1px solid var(--line);color:var(--accent-ink-2);
+  padding:5px 11px;border-radius:999px;white-space:nowrap;height:fit-content;
+}
+.post-body p{font-size:14.5px;line-height:1.68;color:var(--ink);margin:0 0 14px;}
+.post-meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:14px 0;
+}
+.meta-block{background:var(--bg-2);padding:12px 15px;}
+.meta-block.full{grid-column:1/-1;}
+.meta-block .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:4px;}
+.meta-block .v{font-size:13.5px;line-height:1.5;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 12px;}
+.chip-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent-ink-2);
+  background:rgba(27,107,120,.09);padding:4px 10px;border-radius:999px;
+}
+.cta-line{font-size:13.5px;font-weight:600;color:var(--accent-ink);border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;}
+
+/* Stories */
+.story-note{font-size:14px;color:var(--ink-soft);margin:-8px 0 26px;}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+.story-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px;box-shadow:var(--shadow);
+}
+.story-card .post-num{display:block;margin-bottom:6px;}
+.story-card h4{font-size:17px;margin:0 0 10px;line-height:1.3;}
+.story-thesis{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;
+  background:var(--bg-2);border-left:3px solid var(--roe);padding:10px 13px;border-radius:0 10px 10px 0;
+  margin-bottom:12px;line-height:1.4;
+}
+.story-design{font-size:13px;color:var(--ink-soft);line-height:1.55;}
+.story-design b{color:var(--ink);}
+
+/* Карта тем / timeline */
+.timeline{border-left:2px solid var(--line);padding-left:22px;margin-left:6px;}
+.tl-stage{position:relative;padding-bottom:28px;}
+.tl-stage:last-child{padding-bottom:0;}
+.tl-stage:before{
+  content:"";position:absolute;left:-28px;top:3px;width:11px;height:11px;border-radius:50%;
+  background:var(--roe);border:2px solid var(--bg);
+}
+.tl-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.tl-title{font-weight:700;font-size:15.5px;}
+.badge{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:rgba(197,87,43,.12);color:var(--roe);padding:3px 9px;border-radius:999px;font-weight:600;
+}
+.tl-list{margin:6px 0 0;padding:0;list-style:none;font-size:13.5px;color:var(--ink-soft);}
+.tl-list li{padding:3px 0;}
+.tl-list b{color:var(--ink);font-weight:600;}
+
+/* Sources */
+.sources-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+.sources-list li{font-size:14px;color:var(--ink-soft);}
+.sources-list a{color:var(--accent-ink-2);text-decoration:none;font-weight:600;}
+.sources-list a:hover{text-decoration:underline;}
+footer.foot{padding:40px 0 56px;}
+
+@media(max-width:640px){
+  .topbar-inner{gap:14px;}
+  section{padding:40px 0;}
+  .post-card{padding:20px 18px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Престиж <span>· ТЗ</span></div>
+    <nav class="topnav">
+      <a href="#hero">Компания</a>
+      <a href="#brand">Брендбук</a>
+      <a href="#cycle">Логика</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+      <a href="#sources">Источники</a>
+    </nav>
+  </div>
+</header>
+
+<section id="hero" class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Этап 1 · Яндекс Карты и 2ГИС</span>
+    <h1 class="section-title">Кафе «Престиж», Саратов</h1>
+    <p class="lede">Контент-план для карточки компании на Яндекс Картах и 2ГИС: 4 новости с обложкой и 4 сторис в формате презентации (один слайд на тему). Темы построены на банкетном направлении, кухне, кондитерском цехе и банном комплексе кафе «Престиж».</p>
+    <div class="fact-grid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Банкеты и кейтеринг<small>кафе-ресторан для мероприятий</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Танкистов, 51А<small>Саратов</small></div></div>
+      <div class="fact"><div class="k">График</div><div class="v">Ежедневно 11:00–24:00</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (8452) 69-33-77</div></div>
+      <div class="fact"><div class="k">Формат</div><div class="v">5 банкетных залов на 10–70 чел.<small>+ закрытые кабинки, летняя веранда</small></div></div>
+      <div class="fact"><div class="k">Доп. сервис</div><div class="v">Баня, сауна, бассейн, хамам<small>отдельное двухэтажное здание</small></div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карты</div><div class="v">4,5<small>1298 оценок · 528 отзывов</small></div></div>
+      <div class="fact"><div class="k">Средний чек</div><div class="v">от 1500 ₽</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">02 · Мини-брендбук</span>
+      <h2 class="section-title">Фирменная палитра</h2>
+    </div>
+    <p class="brand-note">После анализа официального сайта kafe-prestig.ru определена фирменная палитра кафе «Престиж»: насыщенный малиново-бордовый акцент в логотипе, кнопках и активных элементах интерфейса, тёплый тёмный текстовый оттенок и светлые нейтральные фоны. Цвета сняты напрямую из CSS-переменных сайта.</p>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#B92E56;"></div>
+        <div class="swatch-info"><div class="swatch-role">Акцентный</div><div class="swatch-hex">#B92E56</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#922343;"></div>
+        <div class="swatch-info"><div class="swatch-role">Акцентный · hover</div><div class="swatch-hex">#922343</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#423A2E;"></div>
+        <div class="swatch-info"><div class="swatch-role">Текстовый</div><div class="swatch-hex">#423A2E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F3F3F3;border-bottom:1px solid #e2e2e2;"></div>
+        <div class="swatch-info"><div class="swatch-role">Фоновый · светлый</div><div class="swatch-hex">#F3F3F3</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FFFFFF;border-bottom:1px solid #e2e2e2;"></div>
+        <div class="swatch-info"><div class="swatch-role">Фоновый · базовый</div><div class="swatch-hex">#FFFFFF</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">03 · Логика цикла</span>
+      <h2 class="section-title">Последовательность этапа 1</h2>
+    </div>
+    <div class="cycle-row">
+      <div class="cycle-step"><div class="num">01</div><h4>Банкеты и залы</h4><p>Знакомство с банкетной инфраструктурой — пять залов, кабинки, веранда</p></div>
+      <div class="cycle-step"><div class="num">02</div><h4>Кухня</h4><p>Мясо на мангале и банкетное меню — качество продукции</p></div>
+      <div class="cycle-step"><div class="num">03</div><h4>Кондитерский цех</h4><p>Собственное производство десертов для сладкого стола</p></div>
+      <div class="cycle-step"><div class="num">04</div><h4>Баня и сауна</h4><p>Дополнительный сервис — отличие от других банкетных площадок</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">04 · Новости</span>
+      <h2 class="section-title">Контент-план: новости для карточки компании</h2>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 01</div><div class="post-title">Банкетные залы кафе «Престиж» в Саратове: пространство для торжества любого масштаба</div></div>
+        <span class="tag">Имиджевая</span>
+      </div>
+      <div class="post-body">
+        <p>Кафе «Престиж» на улице Танкистов, 51А в Саратове предлагает пять банкетных залов вместимостью от 10 до 70 гостей — для свадьбы, юбилея, корпоратива или дня рождения. Закрытые кабинки до 10 человек подходят для камерной встречи, а летняя веранда — для тёплого сезона. В залах — современный дизайнерский интерьер, кондиционеры, музыкальное оборудование и караоке, отдельные столики для чайной церемонии и подарков. Аренда банкетного зала включает обслуживание несколькими официантами, а гости могут принести на банкет собственный алкоголь. По данным Яндекс Карт направление «Мероприятия» набирает 92% положительных отзывов, а «Банкетный зал» — 89%. Забронировать банкетный зал в кафе «Престиж» в Саратове можно заранее по телефону.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-обзор + сетка фото пяти залов</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Интерьерные фото залов, светлая подложка, вместимость крупным числом</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото самого просторного зала (до 70 человек) с сервированными столами, надпись «5 залов для банкета», лого в углу</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip-tag">#банкетныйзалсаратов</span>
+        <span class="chip-tag">#кафедлябанкетасаратов</span>
+        <span class="chip-tag">#свадьбасаратов</span>
+        <span class="chip-tag">#юбилейсаратов</span>
+        <span class="chip-tag">#деньрожденияресторансаратов</span>
+      </div>
+      <div class="cta-line">CTA: забронировать банкетный зал в кафе «Престиж» — по телефону, указанному в карточке на Яндекс Картах</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 02</div><div class="post-title">Кухня кафе «Престиж»: банкетное меню и мясо на мангале</div></div>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="post-body">
+        <p>Меню кафе «Престиж» в Саратове построено вокруг банкетной и мангальной кухни: горячие мясные блюда готовятся на углях, в зале работает соус-бар, а гостям доступны блюда из баранины, говядины, свинины, птицы и рыбы. Отдельное направление — холодные закуски, фуршетное и банкетное меню для больших мероприятий, а по запросу повара готовят блюда, которых нет в основном меню. Качество продукции — ключевое преимущество заведения: по отзывам на Яндекс Картах категория «Еда» набирает 87% положительных оценок, а «Чистота» — 93%. Такой подход к банкетному меню делает кафе «Престиж» удобным выбором для организации застолья в Саратове на любое количество гостей.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка с фото блюда крупным планом</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Тёплый предметный кадр блюда на мангале, короткая подпись сверху</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Крупное фото мясного блюда на углях, подпись «Мясо на мангале», лого в углу</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip-tag">#банкетноеменюсаратов</span>
+        <span class="chip-tag">#мясонамангалесаратов</span>
+        <span class="chip-tag">#шашлыксаратов</span>
+        <span class="chip-tag">#кухнянабанкет</span>
+        <span class="chip-tag">#кафепрестижсаратов</span>
+      </div>
+      <div class="cta-line">CTA: посмотреть полное меню кафе «Престиж» и выбрать блюда для банкета</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 03</div><div class="post-title">Кондитерский цех кафе «Престиж»: сладкий стол для любого праздника</div></div>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="post-body">
+        <p>В кафе «Престиж» работает собственный кондитерский цех, который готовит десерты и выпечку для банкетного стола — от классического чизкейка и тирамису до авторского штруделя «Престиж» и горячего макового торта. Хачапури, тарталетки и профитроли из фуршетного меню дополняют сладкую часть праздничного стола. По отзывам на Яндекс Картах категория «Выпечка» получает 89% положительных оценок — один из самых высоких показателей карточки заведения. Десерты собственного производства избавляют от необходимости заказывать сладкий стол отдельно и делают организацию банкета в кафе «Престиж» комплексной.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-подборка из 3–4 десертов</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Светлый предметный кадр десертов на сервированном столе</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото сладкого стола или торта, подпись «Свой кондитерский цех», лого в углу</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip-tag">#кондитерскаясаратов</span>
+        <span class="chip-tag">#десертынабанкетсаратов</span>
+        <span class="chip-tag">#выпечкасаратов</span>
+        <span class="chip-tag">#сладкийстолсаратов</span>
+        <span class="chip-tag">#тортнабанкетсаратов</span>
+      </div>
+      <div class="cta-line">CTA: уточнить состав сладкого стола на банкет по телефону кафе «Престиж»</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 04</div><div class="post-title">Баня и сауна при кафе «Престиж»: банный комплекс с бассейном и хамамом в центре Саратова</div></div>
+        <span class="tag">Дифференцирующая</span>
+      </div>
+      <div class="post-body">
+        <p>При кафе «Престиж» на улице Танкистов, 51А работает собственный банный комплекс — двухэтажное здание с бассейном, хамамом и русской баней в центре Саратова. Формат подходит для отдыха компанией друзей или всей семьёй, а при заказе бани или сауны гости получают скидку на кухню кафе. Провести банкет и попариться в бане можно в одном месте, без переезда между локациями. По отзывам на Яндекс Картах направление «Баня» набирает 71% положительных оценок. Сочетание банкетного зала и банного комплекса делает кафе «Престиж» удобной площадкой для больших семейных праздников в Саратове.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка с фото банного комплекса</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Интерьерное фото бани или бассейна, акцент на «2 этажа»</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото бассейна или парной, подпись «Баня и сауна при кафе», лого в углу</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip-tag">#банясаратов</span>
+        <span class="chip-tag">#саунасаратов</span>
+        <span class="chip-tag">#банясбассейномсаратов</span>
+        <span class="chip-tag">#хамамсаратов</span>
+        <span class="chip-tag">#кафесбанейсаратов</span>
+      </div>
+      <div class="cta-line">CTA: забронировать баню или сауну при кафе «Престиж» — скидка на кухню при заказе</div>
+    </div>
+
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">05 · Сторис</span>
+      <h2 class="section-title">Контент-план: сторис в формате презентации</h2>
+    </div>
+    <p class="story-note">Формат — один слайд на тему, без обложки. Темы зеркалят новости этапа 1.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <span class="post-num">Сторис 01</span>
+        <h4>Банкетные залы</h4>
+        <div class="story-thesis">5 залов на 10–70 гостей + закрытые кабинки</div>
+        <div class="story-design"><b>Дизайн слайда:</b> фото зала с сервировкой на весь кадр, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="post-num">Сторис 02</span>
+        <h4>Кухня</h4>
+        <div class="story-thesis">Мясо на мангале + банкетное меню</div>
+        <div class="story-design"><b>Дизайн слайда:</b> крупный предметный кадр блюда на углях, тезис малиново-бордовым (#B92E56) в верхней части слайда, логотип в углу.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="post-num">Сторис 03</span>
+        <h4>Кондитерский цех</h4>
+        <div class="story-thesis">Свой кондитерский цех — десерты для банкета</div>
+        <div class="story-design"><b>Дизайн слайда:</b> светлый предметный кадр десерта крупным планом, тезис тёмным (#423A2E) на светлой плашке, акцентная линия #B92E56, логотип в углу.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="post-num">Сторис 04</span>
+        <h4>Баня и сауна</h4>
+        <div class="story-thesis">Баня, сауна и бассейн в одном здании</div>
+        <div class="story-design"><b>Дизайн слайда:</b> интерьерное фото бани или бассейна, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">06 · Карта тем</span>
+      <h2 class="section-title">История публикаций</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-stage">
+        <div class="tl-head"><span class="tl-title">Этап 1 — 15.09.2026</span><span class="badge">актуальный</span></div>
+        <ul class="tl-list">
+          <li><b>Новости:</b> Банкетные залы · Кухня и мангал · Кондитерский цех · Баня и сауна</li>
+          <li><b>Сторис:</b> Банкетные залы · Кухня · Кондитерский цех · Баня и сауна</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot" id="sources">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Источники</span>
+    </div>
+    <ul class="sources-list">
+      <li><a href="https://kafe-prestig.ru/" target="_blank" rel="noopener">kafe-prestig.ru</a> — главная, «Кабинки и залы», «Баня и сауна», «Меню»</li>
+      <li><a href="https://yandex.ru/maps/-/CTx4i6le" target="_blank" rel="noopener">Карточка «Престиж» на Яндекс Картах</a></li>
+      <li>Анкета «Старт проекта» — заполнена 12.09.2026</li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
