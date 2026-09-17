@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>«Оконный Дизайн» — контент-план (Этап 1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite:#111111; --graphite-2:#2A2A2A; --red:#E50040; --coral:#F95D51; --paper:#F5F5F5;
+    --bg:var(--paper); --card:#FFFFFF; --ink:#111111; --ink-soft:#5E5E5E; --line:#E0E0E0; --soft:#F5F5F5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D0D0D; --card:#181818; --ink:#F2F2F2; --ink-soft:#A8A8A8; --line:#2C2C2C; --soft:#111111;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D0D0D; --card:#181818; --ink:#F2F2F2; --ink-soft:#A8A8A8; --line:#2C2C2C; --soft:#111111;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',Arial,system-ui,sans-serif;line-height:1.55;}
+  h1,h2,h3,h4{font-family:'Inter',Arial,sans-serif;color:var(--ink);margin:0;letter-spacing:-.01em;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  @media (max-width:640px){.wrap{padding:0 16px;}}
+
+  header.topbar{position:sticky;top:0;z-index:50;background:var(--graphite);color:#fff;border-bottom:3px solid var(--red);}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;}
+  .topbar .brand{font-weight:800;font-size:18px;white-space:nowrap;}
+  .topbar .brand span{color:var(--red);}
+  .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+  .topbar nav::-webkit-scrollbar{display:none;}
+  .topbar nav a{font-size:13px;font-weight:600;padding:8px 12px;border-radius:0;text-decoration:none;color:rgba(255,255,255,.85);white-space:nowrap;}
+  .topbar nav a:hover{background:rgba(255,255,255,.12);color:#fff;}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:10px;display:block;}
+  h2.section-title{font-size:28px;font-weight:800;margin-bottom:28px;}
+  .intro{max-width:720px;color:var(--ink-soft);margin:-12px 0 24px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(180deg,var(--graphite),var(--graphite-2));color:#fff;}
+  .hero .eyebrow{color:#FF8FAE;}
+  .hero h1{font-size:36px;font-weight:800;max-width:760px;color:#fff;}
+  .hero h1 span{color:var(--red);}
+  .hero p.lead{max-width:680px;font-size:16px;color:rgba(255,255,255,.88);margin-top:14px;}
+  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px;}
+  .fact{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-left:3px solid var(--red);padding:16px;}
+  .fact .num{font-size:24px;font-weight:800;}
+  .fact .label{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;}
+  .contacts{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:24px;font-size:13.5px;color:rgba(255,255,255,.8);}
+  .contacts b{color:#fff;}
+
+  /* BRANDBOOK */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px;}
+  .swatch{overflow:hidden;border:1px solid var(--line);background:var(--card);}
+  .swatch .chip{height:64px;}
+  .swatch .meta{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px;}
+  .bb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+  .bb-card{background:var(--card);border:1px solid var(--line);padding:18px 20px;}
+  .bb-card h3{font-size:15px;font-weight:700;margin-bottom:10px;}
+  .bb-card ul{margin:0;padding-left:18px;}
+  .bb-card li{font-size:13.5px;margin-bottom:6px;}
+  .type-sample{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
+  .type-sample .big{font-size:30px;font-weight:800;}
+  .type-sample .red{color:var(--red);}
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);padding:16px 18px;margin-top:24px;font-size:13.5px;color:var(--ink-soft);}
+  .note b{color:var(--ink);}
+
+  /* CYCLE */
+  .cycle{display:flex;flex-wrap:wrap;gap:10px;}
+  .cycle-step{background:var(--card);border:1px solid var(--line);padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .cycle-step .n{font-family:'IBM Plex Mono',monospace;color:var(--red);}
+  .cycle-arrow{align-self:center;color:var(--ink-soft);}
+
+  /* SEO RULES */
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;}
+  .rule{background:var(--card);border:1px solid var(--line);padding:14px 16px;}
+  .rule .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .rule .v{font-size:13.5px;font-weight:500;}
+
+  /* POSTS */
+  .post-card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--red);padding:22px;margin-bottom:16px;}
+  .post-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .post-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .post-title{font-size:18px;font-weight:700;margin-top:4px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:var(--graphite);color:#fff;padding:4px 10px;white-space:nowrap;}
+  :root[data-theme="dark"] .tag{background:var(--red);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag{background:var(--red);}}
+  .post-body p{font-size:14.5px;margin:0 0 10px;}
+  .post-body ul{margin:0 0 10px;padding-left:18px;font-size:14px;}
+  .post-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+  @media (max-width:640px){.post-meta{grid-template-columns:1fr;}}
+  .meta-block{background:var(--soft);border:1px solid var(--line);padding:12px;min-width:0;}
+  .meta-block .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .meta-block .v{font-size:13.5px;overflow-wrap:anywhere;}
+  .meta-block.full{grid-column:1 / -1;}
+  .meta-block.seo{border-left:3px solid var(--red);}
+  .meta-block.warn .v{color:var(--red);font-weight:600;}
+  .kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .kw span{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--card);border:1px solid var(--line);padding:3px 8px;}
+  .kw span.main{background:var(--red);border-color:var(--red);color:#fff;}
+  .cta-line{margin-top:12px;font-size:13.5px;font-weight:600;color:var(--red);}
+
+  /* STORIES */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
+  .story-card{background:var(--card);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:10px;}
+  .story-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .story-title{font-size:16px;font-weight:700;}
+  .slide{border:1px solid var(--line);background:var(--soft);padding:10px 12px;}
+  .slide .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--red);margin-bottom:4px;font-weight:600;}
+  .slide .v{font-size:13px;}
+  .slide .v ul{margin:4px 0 0;padding-left:16px;}
+  .slide .d{font-size:12.5px;color:var(--ink-soft);margin-top:6px;border-top:1px dashed var(--line);padding-top:6px;}
+
+  /* TIMELINE */
+  .timeline{display:grid;gap:14px;}
+  .tl-item{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);padding:16px 18px;flex-wrap:wrap;}
+  .tl-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--red);color:#fff;padding:4px 10px;height:fit-content;white-space:nowrap;}
+  .tl-content{flex:1;min-width:220px;}
+  .tl-content h4{font-size:15px;margin-bottom:4px;}
+  .tl-content p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 10px;}
+  table.spec th,table.spec td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+  table.spec th{background:var(--soft);font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);}
+  .tbl{overflow-x:auto;}
+
+  footer.src{padding:32px 0 60px;}
+  footer.src .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;}
+  footer.src .links{display:flex;gap:16px;flex-wrap:wrap;}
+  footer.src a{font-size:13px;color:var(--red);text-decoration:none;font-family:'IBM Plex Mono',monospace;}
+  footer.src .copy{font-size:12px;color:var(--ink-soft);}
+  @media (max-width:640px){.hero h1{font-size:28px;} h2.section-title{font-size:23px;}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Оконный <span>Дизайн</span></div>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#seo">SEO-требования</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="company">
+  <div class="wrap">
+    <span class="eyebrow">Контент-план · Этап 1 · Ведение карточки на Яндекс Картах</span>
+    <h1>«Оконный Дизайн», <span>Ставрополь</span></h1>
+    <p class="lead">Пластиковые окна и двери РЕХАУ, остекление и отделка балконов, лоджий, беседок и веранд, панорамное (французское) остекление, раздвижные системы и порталы, алюминиевые конструкции, остекление фасадов и витражей. «Работаем с 2006 года», собственное производство. Этап 1: 4 SEO-новости с обложками и 4 сторис.</p>
+    <div class="fact-grid">
+      <div class="fact"><div class="num">с 2006</div><div class="label">года работает компания</div></div>
+      <div class="fact"><div class="num">−30%</div><div class="label">дешевле за счёт собственного производства</div></div>
+      <div class="fact"><div class="num">от 3 дней</div><div class="label">производство и установка</div></div>
+      <div class="fact"><div class="num">5 лет</div><div class="label">гарантия</div></div>
+      <div class="fact"><div class="num">0%</div><div class="label">кредит и рассрочка</div></div>
+      <div class="fact"><div class="num">4,7</div><div class="label">рейтинг Яндекс Карт (15 оценок, 13 отзывов)</div></div>
+    </div>
+    <div class="contacts">
+      <span><b>Адрес:</b> г. Ставрополь, ул. 50 лет ВЛКСМ, 59А</span>
+      <span><b>Тел.:</b> +7 968 269-33-29 (WhatsApp), +7 918 862-71-99</span>
+      <span><b>График (сайт):</b> будни 10:00–18:00, сб 10:00–13:00</span>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <span class="eyebrow">Мини-брендбук</span>
+    <h2 class="section-title">Визуальный код «Оконного Дизайна»</h2>
+    <p class="intro">Палитра и шрифты сняты со стилей сайта okna-stav.ru: белый фон, чёрная типографика, один сильный акцент — малиново-красный (цвет кнопок «Получить консультацию»). По этой системе делаются все обложки новостей и слайды сторис.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#E50040;"></div><div class="meta"><div class="role">Акцент · 10%</div><div class="hex">#E50040 · малиновый</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#111111;"></div><div class="meta"><div class="role">Текст / тёмный фон · 20%</div><div class="hex">#111111 · графит</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #E0E0E0;"></div><div class="meta"><div class="role">Основной фон · 70%</div><div class="hex">#FFFFFF · белый</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#F5F5F5;border-bottom:1px solid #E0E0E0;"></div><div class="meta"><div class="role">Подложка карточек</div><div class="hex">#F5F5F5 · светло-серый</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#F95D51;"></div><div class="meta"><div class="role">Доп. акцент (точечно)</div><div class="hex">#F95D51 · коралловый</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#777777;"></div><div class="meta"><div class="role">Подписи, сноски</div><div class="hex">#777777 · серый</div></div></div>
+    </div>
+    <div class="bb-grid">
+      <div class="bb-card">
+        <h3>Шрифты</h3>
+        <div class="type-sample"><span class="big">Окна <span class="red">за 3 дня</span></span></div>
+        <ul>
+          <li>Заголовки — Inter Bold/ExtraBold (700–800), без капса</li>
+          <li>Текст — Inter Regular 400; замена — Arial</li>
+          <li>Бренд — как на сайте: «РЕХАУ» кириллицей; профили капсом: BLITZ, GRAZIO, INTELIO 80</li>
+          <li>Цифры (сроки, %, цены) — Inter ExtraBold, крупно, #E50040</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h3>Графика</h3>
+        <ul>
+          <li>Прямые углы: плашки и кнопки со скруглением 0 px</li>
+          <li>Кнопка/плашка: заливка #E50040, текст белый</li>
+          <li>Иконки — линейные, монохром (чёрные или красные)</li>
+          <li>Мотив «оконная рама»: тонкая рамка 2–4 px вокруг фото или заголовка</li>
+          <li>Без теней, текстур и пёстрых градиентов</li>
+          <li>Логотип logo-okdiz.png — верхний левый угол, на белой плашке</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h3>Фото</h3>
+        <ul>
+          <li>Только реальные объекты компании (блок «Наши окна в Ставрополе»)</li>
+          <li>Светлые кадры, дневной свет, белые интерьеры, вид изнутри наружу</li>
+          <li>Под текстом — затемнение rgba(0,0,0,0.6) или белая плашка</li>
+          <li>Сток — только при отсутствии своего фото, без «стоковых» моделей</li>
+        </ul>
+      </div>
+      <div class="bb-card">
+        <h3>Тон и тексты на макетах</h3>
+        <ul>
+          <li>На «вы», по делу, без восклицательных знаков и эмодзи</li>
+          <li>Формула заголовка: выгода + цифра</li>
+          <li>Всегда гео: «в Ставрополе»</li>
+          <li>CTA сайта: «Записаться на замер», «Рассчитать стоимость», «Получить консультацию»</li>
+          <li>На макете не больше 12–15 слов</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note"><b>Расхождения в источниках компании (уточнить у заказчика до публикации):</b><br>
+1) График: на сайте будни до 18:00, на Яндекс Картах — до 17:00.<br>
+2) Гарантия: на сайте 5 лет, в отзыве клиента на Яндекс Картах (24.09.2025) — «Гарантия — 3 года».<br>
+3) В прайсе сайта есть профиль CONSTATA, в описании профилей его нет (там THERMO и INTELIO 80, у которых нет цен).<br>
+4) На Яндекс Картах цена «Рехау Блиц 1380×1420» — 12 000 ₽ (с пометкой «давно не обновлялось»), на сайте — Blitz 1200×1400 от 10 200 ₽.<br>
+В материалах используются данные сайта.</div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <span class="eyebrow">Логика цикла</span>
+    <h2 class="section-title">Как связаны 4 новости этапа</h2>
+    <p class="intro">От доверия к действию: сначала производство и цена, затем экспертный выбор профиля, далее расширение ассортимента (двери, витражи, порталы), в финале — сезонный повод перед отоплением и призыв записаться на замер.</p>
+    <div class="cycle">
+      <div class="cycle-step"><span class="n">01</span>Производство и цена</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">02</span>Выбор профиля РЕХАУ</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">03</span>Двери, витражи, порталы</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">04</span>Сезон / акция / CTA</div>
+    </div>
+  </div>
+</section>
+
+<section id="seo">
+  <div class="wrap">
+    <span class="eyebrow">Общие SEO-требования к новостям</span>
+    <h2 class="section-title">Правила для копирайтера</h2>
+    <div class="rules">
+      <div class="rule"><div class="k">Объём</div><div class="v">1 200–1 800 знаков без пробелов</div></div>
+      <div class="rule"><div class="k">Главный ключ</div><div class="v">В заголовке, в первом предложении (до 100 знаков) и 1 раз в конце</div></div>
+      <div class="rule"><div class="k">Плотность</div><div class="v">Главный ключ 1,5–2%; дополнительные — по 1 разу; LSI — свободно</div></div>
+      <div class="rule"><div class="k">Гео</div><div class="v">«Ставрополь / в Ставрополе» — минимум 2 раза, естественно</div></div>
+      <div class="rule"><div class="k">Заголовок</div><div class="v">До 60 символов, ключ в начале, цифра или выгода</div></div>
+      <div class="rule"><div class="k">Уникальность / вода</div><div class="v">Text.ru ≥ 90%, «вода» ≤ 15%, тошнота ≤ 7%, Главред ≥ 7,5</div></div>
+      <div class="rule"><div class="k">Структура</div><div class="v">Абзацы по 2–3 предложения, 1 маркированный список, цифры и факты</div></div>
+      <div class="rule"><div class="k">Финал</div><div class="v">CTA + телефон +7 968 269-33-29 и адрес ул. 50 лет ВЛКСМ, 59А</div></div>
+      <div class="rule"><div class="k">Запрещено</div><div class="v">Переспам, «лучшие/№1» без подтверждения, выдуманные цифры</div></div>
+      <div class="rule"><div class="k">Обложка</div><div class="v">1200×800 px (3:2), JPG/PNG до 5 МБ, текст в центральной безопасной зоне</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <span class="eyebrow">Новости · Этап 1 · 4 темы</span>
+    <h2 class="section-title">Контент-план: новости для карточки на Яндекс Картах</h2>
+
+    <!-- NEWS 01 -->
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 01</div><div class="post-title">Пластиковые окна РЕХАУ в Ставрополе на 30% дешевле: собственное производство с 2006 года</div></div>
+        <span class="tag">Доверие и цена</span>
+      </div>
+      <div class="post-body">
+        <p>«Оконный Дизайн» работает с 2006 года и устанавливает пластиковые окна РЕХАУ в Ставрополе. Формулировка сайта: «на 30% дешевле за счёт собственного производства». Производство и установка — от 3-х дней.</p>
+        <p>Факты для текста:</p>
+        <ul>
+          <li>бесплатный замер и доставка; гарантия 5 лет; кредит и рассрочка 0%</li>
+          <li>замерщик рассчитает точную стоимость окон</li>
+          <li>из отзыва на Яндекс Картах (03.12.2024): «В квартире стало тепло, а главное тихо»; рейтинг 4,7</li>
+        </ul>
+        <p>Цены с сайта (₽, «от»):</p>
+        <div class="tbl"><table class="spec">
+          <tr><th>Конструкция</th><th>Blitz</th><th>CONSTATA</th><th>GRAZIO</th><th>DELIGHT</th></tr>
+          <tr><td>Двухстворчатое окно 1200×1400 мм (поворотно-откидная + глухая)</td><td>10 200</td><td>10 600</td><td>11 200</td><td>11 800</td></tr>
+          <tr><td>Трёхстворчатое окно 1800×1400 мм (поворотно-откидная + 2 глухих)</td><td>13 000</td><td>13 600</td><td>14 300</td><td>15 000</td></tr>
+          <tr><td>Балконный блок 1800×2100 мм (2 глухих + дверь)</td><td>20 000</td><td>21 000</td><td>22 000</td><td>23 000</td></tr>
+        </table></div>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block seo full"><div class="k">SEO · ключевые слова</div>
+          <div class="kw"><span class="main">пластиковые окна Ставрополь</span><span>окна РЕХАУ Ставрополь</span><span>окна от производителя</span><span>цена пластиковых окон</span><span>установка окон</span></div>
+          <div class="v" style="margin-top:8px;"><b>LSI:</b> профиль, стеклопакет, монтаж, замер, производство, недорого, под ключ</div>
+        </div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Текстовый пост + обложка, акцент на «−30%» и «с 2006 года»</div></div>
+        <div class="meta-block"><div class="k">Структура</div><div class="v">Лид с ключом → своё производство → цены «от» → гарантия и условия → CTA</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото белого окна РЕХАУ в светлом интерьере. Слева белая плашка: заголовок «Окна РЕХАУ на 30% дешевле» (Inter ExtraBold, «30%» — #E50040), ниже «Собственное производство · с 2006 года» #111. Логотип сверху слева, внизу красная полоса 8 px.</div></div>
+        <div class="meta-block warn full"><div class="k">Важно</div><div class="v">Цены — только из таблицы выше (данные сайта); профиль CONSTATA в тексте не описывать — на сайте нет его характеристик</div></div>
+      </div>
+      <div class="cta-line">CTA: записаться на бесплатный замер — +7 968 269-33-29, +7 918 862-71-99</div>
+    </div>
+
+    <!-- NEWS 02 -->
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 02</div><div class="post-title">Какой профиль РЕХАУ выбрать: сравнение BLITZ, THERMO, GRAZIO, DELIGHT и INTELIO 80</div></div>
+        <span class="tag">Экспертность</span>
+      </div>
+      <div class="post-body">
+        <p>Статья-помощник: чем отличаются 5 профилей РЕХАУ из раздела сайта «РЕХАУ — самый покупаемый профиль в России». Параметры и особенности — строго по описаниям на сайте.</p>
+        <div class="tbl"><table class="spec">
+          <tr><th>Профиль</th><th>Глубина, мм</th><th>Камер</th><th>Теплоизоляция, м²·°C/Вт</th><th>Особенность (с сайта)</th></tr>
+          <tr><td>BLITZ</td><td>60</td><td>3</td><td>0,70</td><td>для бережливых покупателей; цена ниже, чем у других систем</td></tr>
+          <tr><td>THERMO</td><td>60</td><td>4</td><td>0,78</td><td>по испытаниям — для регионов с морозами до −40 °С</td></tr>
+          <tr><td>GRAZIO</td><td>70</td><td>5</td><td>0,85</td><td>двухкамерный стеклопакет до 40 мм; климат со средней зимней ниже −30 °С</td></tr>
+          <tr><td>DELIGHT</td><td>70</td><td>5</td><td>0,94</td><td>на 10% больше света, чем у обычных окон</td></tr>
+          <tr><td>INTELIO 80</td><td>80</td><td>6</td><td>0,98</td><td>максимальная шумоизоляция; гладкая HDF-поверхность, пыль не оседает</td></tr>
+        </table></div>
+        <p>Не добавлять рекомендации «для квартиры / для дома», которых нет на сайте, — только перечисленные факты.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block seo full"><div class="k">SEO · ключевые слова</div>
+          <div class="kw"><span class="main">какой профиль РЕХАУ выбрать</span><span>Rehau Blitz</span><span>Rehau Grazio</span><span>Rehau Intelio 80</span><span>окна Рехау Ставрополь</span></div>
+          <div class="v" style="margin-top:8px;"><b>LSI:</b> камеры профиля, монтажная глубина, теплоизоляция, шумоизоляция, энергосбережение, сравнение</div>
+        </div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Пост-сравнение: таблица + 1 абзац-рекомендация на каждый профиль</div></div>
+        <div class="meta-block"><div class="k">Структура</div><div class="v">Лид → на что смотреть (глубина, камеры, теплоизоляция) → таблица → особенности каждого → CTA</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Белый фон, 5 срезов профиля в ряд (от узкого к широкому), под каждым название капсом и число камер (3 · 4 · 5 · 5 · 6). Заголовок сверху: «Какой профиль РЕХАУ выбрать» #111, «5 профилей» — красная плашка. Логотип сверху слева.</div></div>
+      </div>
+      <div class="cta-line">CTA: получить консультацию по профилям и записаться на бесплатный замер</div>
+      <div class="post-meta"><div class="meta-block warn full"><div class="k">Важно</div><div class="v">Цены по THERMO и INTELIO 80 на сайте не указаны — в тексте цены этих профилей не называть</div></div></div>
+    </div>
+
+    <!-- NEWS 03 -->
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 03</div><div class="post-title">Двери, витражи и порталы в Ставрополе: остекление из ПВХ и алюминия</div></div>
+        <span class="tag">Ассортимент</span>
+      </div>
+      <div class="post-body">
+        <p>Публикация расширяет представление о компании: не только окна. Три направления — категории карточки «Двери» и «Изготовление витражей» + раздел сайта «Раздвижные системы и порталы».</p>
+        <ul>
+          <li><b>Двери</b> (Яндекс Карты): раздвижные, стеклянные, межкомнатные, входные, пластиковые, купе; межкомнатные перегородки</li>
+          <li><b>Алюминий и витражи</b> (сайт): остекление окон, дверей, фасадов и витражей; рамное и безрамное, тёплое и холодное, раздвижное и распашное; дешевле ПВХ, лёгкое и прочное — снижает нагрузку на перекрытия, стойкое к коррозии</li>
+          <li><b>Раздвижные системы и порталы</b> (сайт): экономят место, не закрываются от сквозняка, визуально увеличивают комнату; из ПВХ или алюминиевого профиля</li>
+          <li><b>Балконы, лоджии, беседки, веранды</b> (сайт): панорамное (французское) остекление, распашные, откидные и раздвижные створки, от эконом до премиум</li>
+        </ul>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block seo full"><div class="k">SEO · ключевые слова</div>
+          <div class="kw"><span class="main">изготовление витражей Ставрополь</span><span>двери на заказ Ставрополь</span><span>раздвижные порталы</span><span>алюминиевое остекление</span><span>панорамное остекление</span></div>
+          <div class="v" style="margin-top:8px;"><b>LSI:</b> входные двери, межкомнатные перегородки, веранда, беседка, фасадное остекление, безрамное остекление</div>
+        </div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Пост-обзор трёх направлений, по 1 абзацу + список</div></div>
+        <div class="meta-block"><div class="k">Структура</div><div class="v">Лид → двери → алюминий и витражи → порталы → балконы и веранды → CTA</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Коллаж 3 фото объектов (дверь / витраж / портал) в тонких чёрных «рамах», разделённых белым. Внизу чёрная плашка: «Двери · Витражи · Порталы» белым, точки-разделители #E50040.</div></div>
+        <div class="meta-block warn full"><div class="k">Важно</div><div class="v">Виды дверей взяты из карточки Яндекс Карт (на сайте их нет) — перечислять только их. Запросить у заказчика фото дверей и витражей</div></div>
+      </div>
+      <div class="cta-line">CTA: записаться на бесплатный замер — замерщик рассчитает точную стоимость; WhatsApp +7 968 269-33-29</div>
+    </div>
+
+    <!-- NEWS 04 -->
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 04</div><div class="post-title">Утеплиться до отопительного сезона: энергосберегающий стеклопакет в подарок и рассрочка 0%</div></div>
+        <span class="tag">Сезон / акция / CTA</span>
+      </div>
+      <div class="post-body">
+        <p>Сезонный повод (осень): заменить окна до холодов. Главная выгода с сайта — «Многофункциональный стеклопакет в подарок», плюс кредит и рассрочка 0% и производство и установка от 3-х дней.</p>
+        <ul>
+          <li>энергосберегающее покрытие — защитное напыление из множества слоёв толщиной 300 нм</li>
+          <li>летом препятствует нагреву от солнца, зимой удерживает тепло</li>
+          <li>сохранение тепла помещения 80%, теплопотери зимой всего 20%</li>
+          <li>блокирует 47% солнечного тепла</li>
+          <li>пропускает видимый свет 75%, нейтральный внешний вид</li>
+          <li>гарантия 5 лет, бесплатный замер и доставка</li>
+        </ul>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block seo full"><div class="k">SEO · ключевые слова</div>
+          <div class="kw"><span class="main">замена окон Ставрополь</span><span>энергосберегающие стеклопакеты</span><span>окна в рассрочку</span><span>тёплые окна</span><span>акция на окна</span></div>
+          <div class="v" style="margin-top:8px;"><b>LSI:</b> отопительный сезон, многофункциональный стеклопакет, энергосберегающее покрытие, теплопотери, до холодов</div>
+        </div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-акция с цифрами 80% / 47% / 75%</div></div>
+        <div class="meta-block"><div class="k">Структура</div><div class="v">Сезонный лид → что даёт стеклопакет (список) → условия → срок → CTA</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото окна изнутри, за стеклом осень. Сверху белая плашка «Стеклопакет в подарок», ниже три цифры-столбика «80% · 47% · 75%» #E50040 с подписями. В правом нижнем углу красная плашка «Рассрочка 0%».</div></div>
+        <div class="meta-block warn full"><div class="k">Важно</div><div class="v">Срок действия на сайте не указан — не писать «до конца месяца» и т. п. без подтверждения заказчика</div></div>
+      </div>
+      <div class="cta-line">CTA: записаться на бесплатный замер — +7 968 269-33-29, г. Ставрополь, ул. 50 лет ВЛКСМ, 59А</div>
+    </div>
+
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <span class="eyebrow">Сторис · Этап 1 · 4 темы</span>
+    <h2 class="section-title">Контент-план: сторис для карточки на Яндекс Картах</h2>
+    <p class="intro">Формат — 1 слайд на тему, 1080×1920 px (9:16). Текст в безопасной зоне: 250 px сверху и снизу, 80 px по бокам. Только тезис и факт. Шрифт Inter, фон белый или #111, акцент #E50040, логотип на слайде.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <div class="story-num">Сторис 01</div>
+        <div class="story-title">Окна РЕХАУ от 3-х дней</div>
+        <div class="slide"><div class="k">Слайд</div><div class="v"><ul><li>Производство и установка от 3-х дней</li><li>На 30% дешевле за счёт собственного производства</li><li>Бесплатный замер и доставка</li></ul></div><div class="d">Белый фон, «3 дня» крупно #E50040, 3 строки с красными маркерами-квадратами, кнопка «Записаться на замер»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 02</div>
+        <div class="story-title">Многофункциональный стеклопакет в подарок</div>
+        <div class="slide"><div class="k">Слайд</div><div class="v"><ul><li>Сохранение тепла помещения 80%</li><li>Блокирует 47% солнечного тепла</li><li>Пропускает видимый свет 75%</li></ul></div><div class="d">Белый фон, заголовок «Стеклопакет в подарок», три крупные цифры #E50040 столбиком, подписи #111</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 03</div>
+        <div class="story-title">Двери, витражи, порталы</div>
+        <div class="slide"><div class="k">Слайд</div><div class="v"><ul><li>Двери: входные, межкомнатные, раздвижные, купе</li><li>Остекление фасадов и витражей из алюминия</li><li>Раздвижные системы и порталы из ПВХ или алюминия</li></ul></div><div class="d">Заголовок «Не только окна», 3 фото в «рамах» друг под другом, подписи на чёрных плашках</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 04</div>
+        <div class="story-title">Замер бесплатно, гарантия 5 лет</div>
+        <div class="slide"><div class="k">Слайд</div><div class="v"><ul><li>Гарантия 5 лет</li><li>Кредит и рассрочка 0%</li><li>Рейтинг 4,7 на Яндекс Картах</li><li>+7 968 269-33-29 · ул. 50 лет ВЛКСМ, 59А</li></ul></div><div class="d">Чёрный фон, «5 лет» крупно #E50040, звезда рейтинга, красная кнопка «Записаться на замер»</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="eyebrow">Карта тем</span>
+    <h2 class="section-title">Хронология этапов</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-badge">Этап 1 · Актуальный</span>
+        <div class="tl-content">
+          <h4>4 новости + обложки, 4 сторис — запуск ведения карточки</h4>
+          <p>Цикл новостей «производство и цена → выбор профиля РЕХАУ → двери, витражи, порталы → сезон и акция»; 4 сторис по 1 слайду: окна от 3-х дней, стеклопакет в подарок, «не только окна», гарантия и контакты.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="src">
+  <div class="wrap">
+    <div class="links">
+      <a href="http://okna-stav.ru/" target="_blank" rel="noopener">okna-stav.ru</a>
+      <a href="https://yandex.ru/maps/org/okonny_dizayn/25271601076/" target="_blank" rel="noopener">Яндекс Карты</a>
+    </div>
+    <span class="copy">Контент-план · Этап 1 · «Оконный Дизайн», Ставрополь</span>
+  </div>
+</footer>
+
+</body>
+</html>
