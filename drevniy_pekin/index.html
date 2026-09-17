@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>«Древний Пекин» — контент-план (Этап 1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --bg:var(--ice); --card:#FFFFFF; --ink:#12232A; --ink-soft:#4B6169; --line:#D8E2E2;
+    --brand-red:#A62128; --brand-brown:#4A2C1D; --brand-gold:#C9A227;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E; }
+  }
+  :root[data-theme="dark"]{ --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E; }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,sans-serif;line-height:1.55;}
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--ink);margin:0;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  header.topbar{position:sticky;top:0;z-index:50;background:var(--ocean);color:#fff;border-bottom:3px solid var(--roe);}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;}
+  .topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;white-space:nowrap;}
+  .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+  .topbar nav::-webkit-scrollbar{display:none;}
+  .topbar nav a{font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,.85);white-space:nowrap;transition:background .15s;}
+  .topbar nav a:hover{background:rgba(255,255,255,.12);color:#fff;}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;display:block;}
+  h2.section-title{font-size:28px;font-weight:700;margin-bottom:14px;}
+  p.section-hint{max-width:680px;color:var(--ink-soft);margin-bottom:28px;font-size:14.5px;}
+
+  .hero{background:linear-gradient(180deg,var(--ocean),var(--teal));color:#fff;}
+  .hero .eyebrow{color:#ffd7c4;}
+  .hero h1{font-size:34px;font-weight:800;max-width:740px;}
+  .hero p.lead{max-width:660px;font-size:15.5px;color:rgba(255,255,255,.88);margin-top:14px;}
+  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px;}
+  .fact{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:16px;}
+  .fact .num{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;}
+  .fact .label{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:16px;}
+  .swatch{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);}
+  .swatch .chip{height:64px;}
+  .swatch .meta{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px;}
+  .bb-note{font-size:13px;color:var(--ink-soft);max-width:680px;}
+  .bb-note b{color:var(--ink);}
+
+  .cycle{display:flex;flex-wrap:wrap;gap:10px;}
+  .cycle-step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .cycle-step .n{font-family:'IBM Plex Mono',monospace;color:var(--roe);}
+  .cycle-arrow{align-self:center;color:var(--ink-soft);}
+
+  .post-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
+  .post-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .post-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .post-title{font-size:17px;font-weight:700;margin-top:4px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:var(--ocean);color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .post-body p{font-size:14.5px;color:var(--ink);margin:0 0 10px;}
+  .post-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+  @media (max-width:640px){.post-meta{grid-template-columns:1fr;}}
+  .meta-block{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;}
+  .meta-block .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .meta-block .v{font-size:13.5px;}
+  .meta-block.full{grid-column:1 / -1;}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .chip-tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:3px 8px;border-radius:6px;}
+  :root[data-theme="dark"] .chip-tag{background:transparent;}
+  .cta-line{margin-top:12px;font-size:13.5px;font-weight:600;color:var(--roe);}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .story-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+  .story-title{font-size:16px;font-weight:700;margin-bottom:10px;}
+  .story-screen{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+  .story-screen .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .story-screen .v{font-size:13px;}
+  .story-note{font-size:13px;color:var(--ink-soft);margin-bottom:18px;max-width:680px;}
+
+  .timeline{display:grid;gap:14px;}
+  .tl-item{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .tl-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:4px 10px;border-radius:999px;height:fit-content;white-space:nowrap;}
+  .tl-content h4{font-size:15px;margin-bottom:4px;}
+  .tl-content p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+
+  footer.src{padding:32px 0 60px;}
+  footer.src .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;}
+  footer.src .links{display:flex;gap:16px;flex-wrap:wrap;}
+  footer.src a{font-size:13px;color:var(--teal);text-decoration:none;font-family:'IBM Plex Mono',monospace;}
+  footer.src .copy{font-size:12px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">«Древний Пекин»</div>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="company">
+  <div class="wrap">
+    <span class="eyebrow">Контент-план · Этап 1 · Ведение карточки на Яндекс Картах и 2ГИС</span>
+    <h1>Ресторан китайской кухни «Древний Пекин», Краснодар</h1>
+    <p class="lead">Ресторан кухни северных провинций Китая с традиционной подачей блюд, повара — китайцы. Два зала, кабинка на 10 человек и банкетный зал до 40 человек, можно со своим алкоголем. По прямому приоритету заказчика (анкета, вопрос 27 — «только блюда») этап 1 целиком посвящён меню: 4 новости и 4 сторис раскрывают фирменные блюда ресторана.</p>
+    <div class="fact-grid">
+      <div class="fact"><div class="num">4,8</div><div class="label">рейтинг на Яндекс Картах</div></div>
+      <div class="fact"><div class="num">1585</div><div class="label">оценок на Яндекс Картах</div></div>
+      <div class="fact"><div class="num">835</div><div class="label">отзывов</div></div>
+      <div class="fact"><div class="num">11:00–23:00</div><div class="label">ежедневно</div></div>
+      <div class="fact"><div class="num">до 40</div><div class="label">гостей в банкетном зале</div></div>
+      <div class="fact"><div class="num">10</div><div class="label">мест в VIP-кабинке</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="wrap">
+    <span class="eyebrow">Мини-брендбук</span>
+    <h2 class="section-title">Фирменные цвета «Древнего Пекина»</h2>
+    <p class="section-hint">Цвета и шрифт — прямые ответы клиента в анкете «Старт проекта» (вопросы 13 и 16), визуального источника (логотип, скриншоты) на момент сдачи ТЗ не предоставлено.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#A62128;"></div>
+        <div class="meta"><div class="role">Акцентный</div><div class="hex">#A62128 · красный</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#4A2C1D;"></div>
+        <div class="meta"><div class="role">Основной / фон</div><div class="hex">#4A2C1D · коричневый</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#C9A227;"></div>
+        <div class="meta"><div class="role">Второстепенный акцент</div><div class="hex">#C9A227 · золото</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
+        <div class="meta"><div class="role">Фоновый / нейтральный</div><div class="hex">#FFFFFF</div></div>
+      </div>
+    </div>
+    <p class="bb-note"><b>Шрифт (утверждён клиентом):</b> Oskord. <b>Стилистика (по анкете):</b> сдержанный минимализм. Логотип в векторе клиент предоставит отдельным файлом — при получении сверить точность цветов с реальным файлом.</p>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <span class="eyebrow">Логика цикла</span>
+    <h2 class="section-title">Как связаны 4 новости этапа</h2>
+    <p class="section-hint">Цикл строится вокруг меню — от блюда-визитки, давшего ресторану имя, через кухонные традиции севера Китая к фирменным авторским позициям.</p>
+    <div class="cycle">
+      <div class="cycle-step"><span class="n">01</span>Утка по-пекински</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">02</span>Пельмени и гёдза</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">03</span>Wok и рис</div><div class="cycle-arrow">→</div>
+      <div class="cycle-step"><span class="n">04</span>Фирменные блюда</div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <span class="eyebrow">Новости · Этап 1 · 4 темы</span>
+    <h2 class="section-title">Контент-план: новости для карточки на Яндекс Картах и 2ГИС</h2>
+    <p class="section-hint">Максимальная SEO-плотность: ключевые фразы «китайская кухня краснодар» / «ресторан древний пекин» и производные встроены в каждый абзац текста, а не только в SEO-блок.</p>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 01</div><div class="post-title">Утка по-пекински в ресторане китайской кухни «Древний Пекин»</div></div>
+        <span class="tag">Блюдо-визитка</span>
+      </div>
+      <div class="post-body">
+        <p>Утка по-пекински — главное блюдо ресторана китайской кухни «Древний Пекин» в Краснодаре, чьё название напрямую отсылает к столице северного Китая, где веками готовят это блюдо. Утку по-пекински в «Древнем Пекине» готовят по традиционному рецепту северных провинций Китая: хрустящая карамелизированная кожица, сочное мясо, подача с тонкими блинчиками, соусом хойсин и свежими овощами — так же, как подают утку по-пекински в ресторанах самого Пекина.</p>
+        <p>На кухне ресторана китайской кухни «Древний Пекин» работают повара родом из Китая — это гарантирует аутентичный вкус утки по-пекински, а не адаптированную под местные привычки версию. Утка по-пекински в Краснодаре — эффектный выбор для дня рождения, юбилея или делового обеда: блюдо рассчитано на компанию и хорошо смотрится на столе.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">H1</div><div class="v">Утка по-пекински в Краснодаре — ресторан «Древний Пекин»</div></div>
+        <div class="meta-block"><div class="k">Title</div><div class="v">Утка по-пекински в Краснодаре | Ресторан «Древний Пекин»</div></div>
+        <div class="meta-block full"><div class="k">Description</div><div class="v">Утка по-пекински по традиционному рецепту северных провинций Китая — готовят повара из Китая. Ресторан китайской кухни «Древний Пекин» в Краснодаре, ул. Фрунзе, 105.</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмно-коричневый фон, крупное фото утки по-пекински в разделке на подложке, золотая обводка кадра, логотип «Древний Пекин» внизу, подпись «Утка по-пекински» шрифтом Oskord красным</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#уткапопекинскикраснодар</span><span class="chip-tag">#ресторанкитайскойкухникраснодар</span><span class="chip-tag">#древнийпекинкраснодар</span><span class="chip-tag">#аутентичнаякитайскаякухня</span></div>
+      <div class="cta-line">CTA: забронировать столик или VIP-кабинку на 10 человек — можно со своим алкоголем — по телефону +7 989 280-38-88</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 02</div><div class="post-title">Пельмени, гёдза и манты ручной лепки в «Древнем Пекине»</div></div>
+        <span class="tag">Кухня севера Китая</span>
+      </div>
+      <div class="post-body">
+        <p>В ресторане китайской кухни «Древний Пекин» пельмени, гёдза и манты лепят вручную — это базовая традиция кухни северных провинций Китая, где тесто с начинкой было главным блюдом на каждый день. Пельмени в «Древнем Пекине» подают жареными или варёными на выбор, гёдза готовится с хрустящей поджаристой корочкой, а к ним же на меню — пянсе, ещё один вид лепёшек с начинкой из этой же кулинарной традиции.</p>
+        <p>Ручная лепка пельменей и гёдза в ресторане китайской кухни «Древний Пекин» в Краснодаре — то, что отличает домашнюю китайскую кухню от фастфуда: каждая партия готовится под заказ, а не разогревается из заготовки.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">H1</div><div class="v">Пельмени и гёдза ручной лепки — «Древний Пекин», Краснодар</div></div>
+        <div class="meta-block"><div class="k">Title</div><div class="v">Пельмени, гёдза, манты в Краснодаре | «Древний Пекин»</div></div>
+        <div class="meta-block full"><div class="k">Description</div><div class="v">Пельмени, гёдза и манты ручной лепки по рецептам северного Китая — жарим или варим на выбор. Ресторан китайской кухни «Древний Пекин», Краснодар, ул. Фрунзе, 105.</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмно-коричневый фон, крупный план пельменей/гёдза на бамбуковой пароварке, золотой контур пара, красная плашка «Ручная лепка», логотип внизу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#пельменикраснодар</span><span class="chip-tag">#гёдзакраснодар</span><span class="chip-tag">#мантыкитайскаякухня</span><span class="chip-tag">#северодкитайскаякухнякраснодар</span></div>
+      <div class="cta-line">CTA: заказать столик и попробовать пельмени/гёдза — телефон +7 989 280-38-88</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 03</div><div class="post-title">Wok-лапша и рис вок в «Древнем Пекине»: быстрый обед в китайском стиле</div></div>
+        <span class="tag">Быстрый обед</span>
+      </div>
+      <div class="post-body">
+        <p>Wok-лапша и рис вок в ресторане китайской кухни «Древний Пекин» — быстрый и сытный обед в китайском стиле: рис с яйцом и овощами или рис с яйцом и креветками — компактная порция для быстрого перекуса. Блюда вок в «Древнем Пекине» готовятся на раскалённой сковороде за несколько минут — это тот же принцип, что и в уличной кухне Китая, только с точной рецептурой ресторана.</p>
+        <p>Wok из «Древнего Пекина» доступен и с доставкой по Краснодару, и как часть бизнес-ланча — удобный вариант для обеда в будни, когда нет времени на долгое ожидание блюд китайской кухни.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">H1</div><div class="v">Wok и рис вок в Краснодаре — «Древний Пекин»</div></div>
+        <div class="meta-block"><div class="k">Title</div><div class="v">Wok-лапша и рис вок в Краснодаре | «Древний Пекин»</div></div>
+        <div class="meta-block full"><div class="k">Description</div><div class="v">Рис с яйцом и овощами или креветками, wok-обед и доставка wok от ресторана китайской кухни «Древний Пекин» в Краснодаре.</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмно-коричневый фон, вок-сковорода с дымом/паром в кадре, крупная надпись «wok» золотым, красный акцент, логотип внизу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#wokкраснодар</span><span class="chip-tag">#рисвоккраснодар</span><span class="chip-tag">#бизнесланчкитайскаякухня</span><span class="chip-tag">#доставкаwokкраснодар</span></div>
+      <div class="cta-line">CTA: заказать wok с доставкой или на бизнес-ланч — телефон +7 989 280-38-88</div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div><div class="post-num">Новость 04</div><div class="post-title">Фирменные блюда «Древнего Пекина»: Золото нации, Гобожоу и другие</div></div>
+        <span class="tag">Авторское меню</span>
+      </div>
+      <div class="post-body">
+        <p>Фирменные блюда ресторана китайской кухни «Древний Пекин» — авторские позиции с образными названиями, за которыми стоят конкретные рецепты северных провинций Китая: «Золото нации», «Любимое блюдо Конфуция», «Двое в красном море» и «Гобожоу» — свинина в кисло-сладком кляре, классика китайской кухни.</p>
+        <p>Каждое фирменное блюдо «Древнего Пекина» — повод заказать что-то новое из меню китайской кухни, а не ограничиваться привычными наггетсами и картофелем фри: названия отражают культурный контекст блюда и сразу цепляют внимание гостя.</p>
+      </div>
+      <div class="post-meta">
+        <div class="meta-block"><div class="k">H1</div><div class="v">Фирменные блюда китайской кухни — «Древний Пекин», Краснодар</div></div>
+        <div class="meta-block"><div class="k">Title</div><div class="v">Фирменные блюда китайской кухни в Краснодаре | «Древний Пекин»</div></div>
+        <div class="meta-block full"><div class="k">Description</div><div class="v">Золото нации, Гобожоу, Двое в красном море — авторские блюда северной китайской кухни ресторана «Древний Пекин», Краснодар, ул. Фрунзе, 105.</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Тёмно-коричневый фон, сетка 2×2 из фото четырёх фирменных блюд, золотые подписи названий, красная рамка кадра, логотип внизу</div></div>
+      </div>
+      <div class="chips"><span class="chip-tag">#фирменныеблюдакитайскойкухни</span><span class="chip-tag">#менюкитайскойкухникраснодар</span><span class="chip-tag">#авторскиеблюдаресторанкраснодар</span></div>
+      <div class="cta-line">CTA: забронировать столик и попробовать фирменные блюда — телефон +7 989 280-38-88</div>
+    </div>
+
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <span class="eyebrow">Сторис · Этап 1 · 4 темы</span>
+    <h2 class="section-title">Контент-план: сторис для карточки на Яндекс Картах и 2ГИС</h2>
+    <p class="story-note">Формат — обложка + 1 слайд (максимум 2 экрана), зеркалят новости 1:1. Только сухие факты, без развёрнутого текста.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <div class="story-num">Сторис 01</div>
+        <div class="story-title">Утка по-пекински</div>
+        <div class="story-screen"><div class="k">Обложка</div><div class="v">Крупный план утки по-пекински, тёмно-коричневый фон, золотая обводка, подпись «Утка по-пекински» шрифтом Oskord</div></div>
+        <div class="story-screen"><div class="k">Слайд</div><div class="v">Готовим по рецепту северных провинций Китая. Повара — из Китая. Подача с блинчиками и соусом хойсин.</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 02</div>
+        <div class="story-title">Пельмени и гёдза ручной лепки</div>
+        <div class="story-screen"><div class="k">Обложка</div><div class="v">Пельмени/гёдза на бамбуковой пароварке крупным планом, пар золотым контуром, красная плашка «Ручная лепка»</div></div>
+        <div class="story-screen"><div class="k">Слайд</div><div class="v">Лепим вручную. Жарим или варим — на выбор. Пянсе и манты — тоже в меню.</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 03</div>
+        <div class="story-title">Wok и рис вок</div>
+        <div class="story-screen"><div class="k">Обложка</div><div class="v">Вок-сковорода с паром крупным планом, надпись «wok» золотым, красный акцент</div></div>
+        <div class="story-screen"><div class="k">Слайд</div><div class="v">Рис с креветками или рис с овощами — на выбор. Готовим за несколько минут на раскалённом воке. Доступна доставка.</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-num">Сторис 04</div>
+        <div class="story-title">Фирменные блюда</div>
+        <div class="story-screen"><div class="k">Обложка</div><div class="v">Сетка 2×2 фото фирменных блюд, золотые подписи названий, красная рамка</div></div>
+        <div class="story-screen"><div class="k">Слайд</div><div class="v">Золото нации. Любимое блюдо Конфуция. Двое в красном море. Гобожоу — свинина в кисло-сладком кляре. Авторские блюда северной кухни Китая.</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="eyebrow">Карта тем</span>
+    <h2 class="section-title">Хронология этапов</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-badge">Этап 1 · Актуальный</span>
+        <div class="tl-content">
+          <h4>4 новости + обложки, 4 сторис (обложка + слайд) — фокус на меню</h4>
+          <p>По приоритету заказчика (анкета, вопрос 27) весь этап посвящён блюдам: утка по-пекински → пельмени и гёдза ручной лепки → wok и рис вок → фирменные авторские блюда.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="src">
+  <div class="wrap">
+    <div class="links">
+      <a href="https://3237499103217336.2gis.biz/" target="_blank" rel="noopener">2ГИС</a>
+      <a href="https://yandex.ru/maps/-/CTxVqYN5" target="_blank" rel="noopener">Яндекс Карты</a>
+    </div>
+    <span class="copy">Контент-план · Этап 1 · Ресторан китайской кухни «Древний Пекин», Краснодар</span>
+  </div>
+</footer>
+
+</body>
+</html>
