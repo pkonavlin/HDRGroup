@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Жемчужная Лагуна — ТЗ</title>
+</head>
+<body>
+
+<style>
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#F5F8F8;
+    --roe:#C4572B;
+    --ink:#12262B;
+    --ink-soft:#4B6067;
+    --line:#D8E4E3;
+    --card:#FFFFFF;
+    --bg:#F5F8F8;
+    --head-h:64px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#8FD3E2;
+      --teal:#5FC3B4;
+      --ice:#0B1B20;
+      --roe:#E2895C;
+      --ink:#EAF3F2;
+      --ink-soft:#9FB6B8;
+      --line:#1E3339;
+      --card:#0F2229;
+      --bg:#0A1A1F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#8FD3E2;
+    --teal:#5FC3B4;
+    --ice:#0B1B20;
+    --roe:#E2895C;
+    --ink:#EAF3F2;
+    --ink-soft:#9FB6B8;
+    --line:#1E3339;
+    --card:#0F2229;
+    --bg:#0A1A1F;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-inline:0;
+  }
+  h1,h2,h3{
+    font-family:"Bricolage Grotesque", "Public Sans", sans-serif;
+    color:var(--ink);
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    letter-spacing:.02em;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  [hidden]{display:none!important;}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky;
+    top:env(safe-area-inset-top,0px);
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:24px;
+    padding:14px 20px;
+    background:color-mix(in srgb, var(--card) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .topbar::-webkit-scrollbar{display:none;}
+  .brand{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:16px;
+    white-space:nowrap;
+    color:var(--ocean);
+    flex:0 0 auto;
+  }
+  .navlinks{display:flex;gap:18px;flex-wrap:nowrap;}
+  .navlinks a{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    text-decoration:none;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    padding:4px 0;
+    border-bottom:2px solid transparent;
+  }
+  .navlinks a:hover{color:var(--roe);border-color:var(--roe);}
+
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px;}
+  section{padding-block:56px;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--roe);
+    margin-bottom:10px;
+    display:block;
+  }
+  h1{font-size:clamp(30px,5vw,44px);font-weight:800;line-height:1.1;}
+  h2{font-size:clamp(24px,4vw,30px);font-weight:700;margin-bottom:6px;}
+  .lead{color:var(--ink-soft);font-size:17px;max-width:62ch;margin-top:14px;}
+
+  /* facts grid */
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    margin-top:28px;
+  }
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .fact .v{font-size:15px;font-weight:600;}
+
+  /* swatches */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:26px;}
+  .swatch{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:74px;}
+  .swatch .label{padding:10px 12px;}
+  .swatch .role{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);letter-spacing:.05em;}
+  .swatch .hex{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:14px;margin-top:2px;}
+
+  /* логика цикла */
+  .cycle{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;align-items:center;}
+  .cycle .node{
+    display:flex;align-items:center;gap:10px;
+    border:1px solid var(--line);border-radius:999px;
+    padding:10px 18px;background:var(--card);
+  }
+  .cycle .num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--roe);font-weight:700;}
+  .cycle .txt{font-size:14px;font-weight:600;}
+  .cycle .arrow{color:var(--ink-soft);font-size:18px;}
+
+  /* theme cards (news) */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 26px 24px;
+    margin-top:22px;
+  }
+  .card-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px;}
+  .tag{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+    padding:4px 10px;border-radius:999px;
+    background:color-mix(in srgb, var(--teal) 14%, transparent);
+    color:var(--teal);
+    border:1px solid color-mix(in srgb, var(--teal) 35%, transparent);
+  }
+  .card h3{font-size:20px;font-weight:700;line-height:1.3;}
+  .card .thesis-list{margin:14px 0 0;padding-left:20px;}
+  .card .thesis-list li{margin-bottom:7px;font-size:15px;}
+  .cover-thesis{
+    margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-thesis b{color:var(--ink);}
+  .seo{
+    margin-top:16px;
+    display:flex;flex-wrap:wrap;gap:7px;
+  }
+  .seo span{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    background:var(--ice);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:4px 8px;
+    color:var(--ink-soft);
+  }
+  .meta{margin-top:16px;font-size:14px;color:var(--ink-soft);border-left:3px solid var(--line);padding-left:12px;}
+  .cta{margin-top:14px;font-size:14px;font-weight:600;color:var(--roe);}
+  .cover-tz{
+    margin-top:18px;
+    background:var(--ice);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .cover-tz .h{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:8px;}
+  .cover-tz p{margin:0;font-size:14px;}
+  .cover-tz .dots{margin-top:8px;display:flex;gap:8px;}
+  .cover-tz .dot{width:16px;height:16px;border-radius:4px;border:1px solid var(--line);}
+
+  /* stories */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:22px;}
+  .story{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
+  }
+  .story h3{font-size:17px;font-weight:700;margin-bottom:10px;}
+  .story p{margin:0;font-size:14.5px;}
+  .story .design-note{
+    margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);
+    font-size:13.5px;color:var(--ink-soft);
+  }
+  .story .design-note b{color:var(--ink);}
+
+  /* timeline */
+  details.stage{
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 18px;margin-top:14px;background:var(--card);
+  }
+  details.stage[open]{border-color:var(--roe);}
+  summary{cursor:pointer;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;}
+  .badge-active{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;
+    background:var(--roe);color:#fff;border-radius:999px;padding:2px 9px;
+  }
+  .stage-body{margin-top:10px;font-size:14px;color:var(--ink-soft);}
+  .stage-body ul{margin:8px 0 0;padding-left:18px;}
+
+  footer.sources{padding-block:40px 60px;}
+  footer.sources ul{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  footer.sources a{font-size:14px;color:var(--ink-soft);text-decoration:underline;text-underline-offset:3px;}
+
+  @media (max-width:560px){
+    .navlinks{gap:14px;}
+    section{padding-block:40px;}
+  }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="topbar">
+  <div class="brand">Жемчужная Лагуна</div>
+  <nav class="navlinks">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <section id="company">
+    <span class="eyebrow mono">ТЗ · Этап 01</span>
+    <h1>Гостиница «Жемчужная Лагуна» — контент для Яндекс Карт и 2ГИС</h1>
+    <p class="lead">Гостиница в Воронеже на левом берегу, в двух шагах от Воронежского водохранилища. Материал ниже — 2 новости с обложками и 2 сторис в формате презентации (1 слайд) для карточки компании на Яндекс Картах и в 2ГИС.</p>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Адрес</div><div class="v">Воронеж, ул. Набережная, 15 (левый берег)</div></div>
+      <div class="fact"><div class="k">Расположение</div><div class="v">49 м от Воронежского водохранилища, 3,5 км до центра</div></div>
+      <div class="fact"><div class="k">Рейтинг Яндекс Карты</div><div class="v">4,7 из 5 · 228 отзывов</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточная стойка регистрации</div></div>
+      <div class="fact"><div class="k">Заезд / выезд</div><div class="v">С 15:00 / до 12:00, без предоплаты</div></div>
+      <div class="fact"><div class="k">Цены</div><div class="v">800–3300 ₽/сутки, эконом от 1000 ₽</div></div>
+      <div class="fact"><div class="k">Номера</div><div class="v">«Комфорт» 2-местный 12 м², «Полулюкс» до 4 гостей 24 м², семейные номера</div></div>
+      <div class="fact"><div class="k">Оснащение номеров</div><div class="v">Wi-Fi, СВЧ, стиральная машина, ТВ, холодильник, чайник, душ</div></div>
+      <div class="fact"><div class="k">Территория и сервис</div><div class="v">Зелёный двор, прокат велосипедов, парковка, трансфер (платно)</div></div>
+      <div class="fact"><div class="k">Особенность</div><div class="v">Размещение с животными без доплаты</div></div>
+      <div class="fact"><div class="k">Аудитория</div><div class="v">Туристы, семьи, командировочные, туристические группы, спортивные команды</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Карточка компании на Яндекс Картах и в 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <span class="eyebrow mono">02 · Мини-брендбук</span>
+    <h2>Фирменные цвета «Жемчужной Лагуны»</h2>
+    <p class="lead">После анализа сайта, обложек сторис и презентационных слайдов компании определена фирменная палитра — контрастное сочетание графитово-чёрного, белого и тёплого золота.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#1C1C1C;"></div>
+        <div class="label"><div class="role">Основной / тёмный фон</div><div class="hex">#1C1C1C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#BB9D7B;"></div>
+        <div class="label"><div class="role">Акцентный / золото</div><div class="hex">#BB9D7B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
+        <div class="label"><div class="role">Фоновый / светлый</div><div class="hex">#FFFFFF</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#1A1A1A;"></div>
+        <div class="label"><div class="role">Текст на светлом фоне</div><div class="hex">#1A1A1A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;">Aa</div>
+        <div class="label"><div class="role">Текст на тёмном фоне</div><div class="hex">#FFFFFF</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <span class="eyebrow mono">03 · Логика цикла</span>
+    <h2>Как связаны темы этапа</h2>
+    <p class="lead">Этап открывает новую аудиторию — группы и команды — и сразу закрепляет её ценностным предложением по цене и условиям заезда. Сторис дают конкретные визуальные детали территории и заселения.</p>
+    <div class="cycle">
+      <div class="node"><span class="num mono">01</span><span class="txt">Групповое размещение</span></div>
+      <span class="arrow">→</span>
+      <div class="node"><span class="num mono">02</span><span class="txt">Комфорт по бюджету</span></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <span class="eyebrow mono">04 · Новости</span>
+    <h2>Темы новостных постов (2)</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="tag">Вовлекающая / продающая</span>
+      </div>
+      <h3>Гостиница «Жемчужная Лагуна» для туристических групп и спортивных команд в Воронеже</h3>
+      <ul class="thesis-list">
+        <li>Компактное размещение группы в одном месте — рядом с Воронежским водохранилищем, в 3,5 км от центра Воронежа</li>
+        <li>Трансфер по городу (платно) — группе не нужно самостоятельно искать транспорт</li>
+        <li>Общая кухня с плитой, СВЧ и холодильником — команда готовит самостоятельно и экономит на питании</li>
+        <li>Зелёный двор — место сбора и отдыха группы между поездками, тренировками, экскурсиями</li>
+        <li>Круглосуточная стойка регистрации — заезд большой группой в любое время суток</li>
+      </ul>
+      <div class="cover-thesis">Тезис обложки: <b>«Гостиница для команд»</b></div>
+      <div class="seo">
+        <span>гостиница для группы Воронеж</span>
+        <span>размещение спортивной команды Воронеж</span>
+        <span>гостиница для туристической группы</span>
+        <span>бронирование гостиницы группой</span>
+        <span>трансфер для группы Воронеж</span>
+        <span>гостиница у водохранилища для команды</span>
+        <span>недорогая гостиница для большой компании</span>
+        <span>гостиница на Набережной для группы</span>
+        <span>размещение сборной Воронеж</span>
+        <span>гостиница для делегации Воронеж</span>
+      </div>
+      <div class="meta">Мета-описание: Гостиница «Жемчужная Лагуна» в Воронеже принимает туристические группы и спортивные команды — компактное размещение у водохранилища, трансфер по городу, общая кухня и зелёный двор для отдыха.</div>
+      <div class="cta">CTA: Забронируйте номера для группы в «Жемчужной Лагуне» — уточните условия по телефону +7 (473) 205-99-83</div>
+      <div class="cover-tz">
+        <div class="h mono">ТЗ на обложку</div>
+        <p>Тёмный фон #1C1C1C, заголовок белым крупным начертанием, золотой акцент #BB9D7B в эйбрау-метке «Групповое размещение» и разделительной линии. Фото: зелёный двор гостиницы или групповой кадр у входа/велосипедов. Без логотипа поверх фото.</p>
+        <div class="dots"><span class="dot" style="background:#1C1C1C;"></span><span class="dot" style="background:#BB9D7B;"></span><span class="dot" style="background:#FFFFFF;"></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="tag">Продающая / практическая</span>
+      </div>
+      <h3>Номера от 1000 рублей без предоплаты: бюджетное размещение в «Жемчужной Лагуне»</h3>
+      <ul class="thesis-list">
+        <li>Цены на номера — от 800 до 3300 ₽ за сутки, есть эконом-вариант от 1000 ₽</li>
+        <li>Бронирование без предоплаты — оплата по факту заезда</li>
+        <li>Круглосуточное заселение — заехать можно в любое время суток</li>
+        <li>В номерах есть всё для самостоятельного проживания: Wi-Fi, стиральная машина, СВЧ, холодильник, чайник — экономия на кафе и прачечной</li>
+        <li>Рядом магазины «Пятёрочка» и «Магнит» — удобно для повседневных покупок</li>
+      </ul>
+      <div class="cover-thesis">Тезис обложки: <b>«Комфорт по бюджету»</b></div>
+      <div class="seo">
+        <span>недорогая гостиница Воронеж</span>
+        <span>номер от 1000 рублей Воронеж</span>
+        <span>бюджетная гостиница на Набережной</span>
+        <span>бронирование без предоплаты Воронеж</span>
+        <span>гостиница эконом класса Воронеж</span>
+        <span>дешёвый номер посуточно Воронеж</span>
+        <span>гостиница круглосуточное заселение</span>
+        <span>гостиница рядом с магазинами Воронеж</span>
+        <span>снять номер недорого Воронеж</span>
+        <span>гостиница на левом берегу Воронеж</span>
+      </div>
+      <div class="meta">Мета-описание: В «Жемчужной Лагуне» в Воронеже номера от 1000 ₽ без предоплаты и круглосуточное заселение — комфортное бюджетное размещение с Wi-Fi, кухней и стиральной машиной в номере.</div>
+      <div class="cta">CTA: Забронируйте номер в «Жемчужной Лагуне» без предоплаты — уточните цены по телефону +7 (473) 205-99-83</div>
+      <div class="cover-tz">
+        <div class="h mono">ТЗ на обложку</div>
+        <p>Светлый фон #FFFFFF, заголовок тёмным #1A1A1A крупным начертанием, золотой акцент #BB9D7B на цифре «от 1000 ₽» и разделительной линии. Фото: уютный интерьер номера. Без логотипа поверх фото.</p>
+        <div class="dots"><span class="dot" style="background:#FFFFFF;"></span><span class="dot" style="background:#BB9D7B;"></span><span class="dot" style="background:#1A1A1A;"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <span class="eyebrow mono">05 · Сторис</span>
+    <h2>Темы сторис (2, формат презентации — 1 слайд)</h2>
+    <div class="story-grid">
+      <div class="story">
+        <h3>Зелёный двор и прокат велосипедов</h3>
+        <p>На территории гостиницы — благоустроенный зелёный двор и прокат велосипедов: до Воронежского водохранилища можно доехать за пару минут.</p>
+        <div class="design-note"><b>Дизайн слайда:</b> тёмный фон #1C1C1C, фото двора и велосипедов на всю ширину, заголовок белым, короткая подпись золотым #BB9D7B внизу слайда.</div>
+      </div>
+      <div class="story">
+        <h3>Заселение круглосуточно, без предоплаты</h3>
+        <p>Заехать в «Жемчужную Лагуну» можно в любое время суток — стойка регистрации работает круглосуточно, предоплата не требуется.</p>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #FFFFFF, тёмный текст #1A1A1A, золотой акцент #BB9D7B на иконке часов/цифре «24», фото стойки регистрации или входа в гостиницу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <span class="eyebrow mono">06 · Карта тем</span>
+    <h2>Хронология этапов</h2>
+    <details class="stage" open>
+      <summary>Этап 01 — групповое размещение и бюджет <span class="badge-active mono">актуальный</span></summary>
+      <div class="stage-body">
+        <p>Первая поставка для этой карточки: 2 новости с обложками + 2 сторис.</p>
+        <ul>
+          <li>Новость — Гостиница для туристических групп и спортивных команд</li>
+          <li>Новость — Номера от 1000 рублей без предоплаты</li>
+          <li>Сторис — Зелёный двор и прокат велосипедов</li>
+          <li>Сторис — Заселение круглосуточно, без предоплаты</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <footer class="sources" id="sources">
+    <span class="eyebrow mono">Источники</span>
+    <ul>
+      <li><a href="http://жемчужная-лагуна.рф/" target="_blank" rel="noopener">Сайт компании — жемчужная-лагуна.рф</a></li>
+      <li><a href="https://yandex.ru/maps/-/CTxEqXml" target="_blank" rel="noopener">Карточка на Яндекс Картах</a></li>
+      <li><a href="https://2gis.ru/voronezh/firm/70000001052618292" target="_blank" rel="noopener">Карточка в 2ГИС</a></li>
+    </ul>
+  </footer>
+
+</div>
+
+</body>
+</html>
