@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лесной рай — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --ink:#14242A; --ink-soft:#4A6068; --line:#D9E3E3; --card:#FFFFFF; --bg:#F5F8F8;
+    --mono-bg:#EEF3F3;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#4FA9BD; --teal:#67C2CE; --ice:#0A1A1F; --roe:#E0864F;
+      --ink:#EAF3F3; --ink-soft:#9FB6BA; --line:rgba(234,243,243,.14); --card:#102A31; --bg:#0A1A1F;
+      --mono-bg:#0E2229;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#4FA9BD; --teal:#67C2CE; --ice:#0A1A1F; --roe:#E0864F;
+    --ink:#EAF3F3; --ink-soft:#9FB6BA; --line:rgba(234,243,243,.14); --card:#102A31; --bg:#0A1A1F;
+    --mono-bg:#0E2229;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.5;padding:0 16px}
+  h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;text-wrap:balance;margin:0}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  a{color:inherit}
+  img{max-width:100%}
+  .wrap{max-width:920px;margin:0 auto;padding-top:var(--head-h,132px)}
+
+  /* fixed top bar: always visible, never scrolls away */
+  header.topbar{
+    position:fixed;top:0;left:0;right:0;width:100%;z-index:999;
+    background:var(--ocean);color:var(--ice);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .switcher{display:flex;gap:6px;flex-shrink:0}
+  .switch-btn{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.03em;
+    background:transparent;border:1px solid rgba(255,255,255,.3);color:var(--ice);opacity:.75;
+    padding:7px 12px;border-radius:20px;cursor:pointer;white-space:nowrap;
+  }
+  .switch-btn.active{opacity:1;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55);font-weight:600}
+  header.topbar nav{display:flex;gap:4px;overflow-x:auto;flex-wrap:wrap}
+  header.topbar nav a{
+    font-size:13px;padding:6px 10px;border-radius:6px;text-decoration:none;white-space:nowrap;
+    color:var(--ice);opacity:.82;
+  }
+  header.topbar nav a:hover{opacity:1;background:rgba(255,255,255,.1)}
+
+  main{padding-block:36px 64px;display:flex;flex-direction:column;gap:52px}
+  section{scroll-margin-top:70px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+  .sec-title{font-size:clamp(22px,3.6vw,30px);margin-top:6px}
+  .sec-intro{color:var(--ink-soft);margin-top:8px;max-width:60ch}
+
+  .hero-top{display:flex;flex-direction:column;gap:6px}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:22px}
+  .fact{background:var(--card);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+  .fact .k{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  .fact .v{font-size:15px;font-weight:600}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:22px}
+  .swatch{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .swatch .chip{height:90px}
+  .swatch .info{padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+  .swatch .role{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+  .swatch .hex{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600}
+
+  .cycle{display:flex;flex-direction:column;gap:0;margin-top:22px;border-left:2px solid var(--line);padding-left:22px}
+  .stage{position:relative;padding:4px 0 22px}
+  .stage:last-child{padding-bottom:0}
+  .stage::before{content:"";position:absolute;left:-27px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+  .stage.done::before{background:var(--teal)}
+  .stage .stg-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .stage .stg-h b{font-family:"Bricolage Grotesque",sans-serif;font-size:16px}
+  .badge{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid var(--line)}
+  .badge.active{background:var(--roe);color:#fff;border-color:transparent}
+  .stage p{color:var(--ink-soft);margin-top:6px;max-width:62ch;font-size:14.5px}
+
+  .cards{display:flex;flex-direction:column;gap:18px;margin-top:22px}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:22px 24px}
+  .card .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:3px 9px;margin-bottom:10px}
+  .card h3{font-size:19px}
+  .card .thesis{margin-top:14px;display:flex;flex-direction:column;gap:7px}
+  .card .thesis li{font-size:14.5px;color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .chip-seo{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--mono-bg);color:var(--ink-soft);padding:4px 9px;border-radius:6px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .meta-row .m{display:flex;flex-direction:column;gap:2px}
+  .meta-row .m .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+  .meta-row .m .v{font-size:14px;font-weight:600}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:var(--mono-bg);font-size:13.5px;color:var(--ink-soft)}
+  .cover-block b{color:var(--ink);font-weight:600}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+  .story{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+  .story h3{font-size:17px}
+  .story ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+  .story li{font-size:14px;color:var(--ink)}
+  .story .design-note{font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+  .story .cta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--roe)}
+
+  details.stage-d{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:2px 18px;margin-top:12px}
+  details.stage-d summary{cursor:pointer;padding:14px 0;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px}
+  details.stage-d .inner{padding:0 0 18px;display:flex;flex-direction:column;gap:8px}
+  details.stage-d .inner .row{font-size:14px;color:var(--ink-soft)}
+  details.stage-d .inner .row b{color:var(--ink);font-weight:600}
+  .timeline-current{border:1px solid var(--roe);border-radius:12px;background:var(--card);padding:18px;margin-top:12px}
+
+  footer{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:8px;padding-bottom:40px}
+  footer a{font-size:13.5px;color:var(--teal);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  footer .f-label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+
+  @media (max-width:640px){
+    header.topbar{gap:10px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="switcher">
+    <button class="switch-btn" data-switch="lesnoy" type="button">Лесной рай</button>
+    <button class="switch-btn" data-switch="teremok" type="button">Теремок</button>
+  </div>
+  <nav data-company="lesnoy">
+    <a href="#lesnoy-company">Компания</a>
+    <a href="#lesnoy-brandbook">Брендбук</a>
+    <a href="#lesnoy-cycle">Логика цикла</a>
+    <a href="#lesnoy-news">Новости</a>
+    <a href="#lesnoy-stories">Сторис</a>
+    <a href="#lesnoy-map">Карта тем</a>
+    <a href="#lesnoy-sources">Источники</a>
+  </nav>
+  <nav data-company="teremok">
+    <a href="#teremok-company">Компания</a>
+    <a href="#teremok-brandbook">Брендбук</a>
+    <a href="#teremok-cycle">Логика цикла</a>
+    <a href="#teremok-news">Новости</a>
+    <a href="#teremok-stories">Сторис</a>
+    <a href="#teremok-map">Карта тем</a>
+    <a href="#teremok-sources">Источники</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<main data-company="lesnoy">
+
+  <section id="lesnoy-company">
+    <div class="hero-top">
+      <div class="eyebrow">ТЗ · Яндекс Карты и 2ГИС</div>
+      <h1 class="sec-title">Гостевой дом «Лесной рай»</h1>
+      <p class="sec-intro">Гостевой дом сети «Лесной рай» на Лесной улице в селе Малая Царевщина Самарской области. Контент готовится для публикации на карточке компании на Яндекс Картах и в 2ГИС.</p>
+    </div>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Категория</div><div class="v">Гостевой дом</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">с. Малая Царевщина, ул. Лесная, 11А, Красноярский район, Самарская область</div></div>
+      <div class="fact"><div class="k">Расположение</div><div class="v">Окраина соснового бора, лесные тропы на несколько км</div></div>
+      <div class="fact"><div class="k">Планировка</div><div class="v">4 спальни, 3 санузла, гостиная</div></div>
+      <div class="fact"><div class="k">Вместимость</div><div class="v">До 8 человек на выходные, до 4 в будни</div></div>
+      <div class="fact"><div class="k">Ключевые удобства</div><div class="v">Крытый бассейн, баня, камин, мангальная зона</div></div>
+      <div class="fact"><div class="k">Особенность</div><div class="v">Размещение с собаками разрешено</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Яндекс Карты, 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="lesnoy-brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="sec-title">Фирменный стиль</h2>
+    <p class="sec-intro">После анализа фирменных материалов компании (обложки сторис и новостных слайдов) определены два фирменных цвета — тёмно-зелёный и кремовый, точные значения сняты пиксель-семплингом с присланных изображений. Палитра лаконичная, двухцветная: тёмный фон в паре со светлым текстом и наоборот, без дополнительных акцентных цветов.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#334633"></div>
+        <div class="info"><div class="role">Основной</div><div class="hex">#334633</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F8F8EB;border-bottom:1px solid var(--line)"></div>
+        <div class="info"><div class="role">Фоновый / светлый</div><div class="hex">#F8F8EB</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#334633;display:flex;align-items:center;justify-content:center">
+          <span style="font-family:'IBM Plex Mono',monospace;color:#F8F8EB;font-size:12px;letter-spacing:.05em">ТЕКСТ НА ТЁМНОМ</span>
+        </div>
+        <div class="info"><div class="role">Текстовый на тёмном фоне</div><div class="hex">#F8F8EB</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F8F8EB;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:'IBM Plex Mono',monospace;color:#334633;font-size:12px;letter-spacing:.05em">ТЕКСТ НА СВЕТЛОМ</span>
+        </div>
+        <div class="info"><div class="role">Текстовый на светлом фоне</div><div class="hex">#334633</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lesnoy-cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="sec-title">Последовательность тем</h2>
+    <div class="cycle">
+      <div class="stage done">
+        <div class="stg-h"><b>Этап 1</b><span class="badge">опубликовано</span></div>
+        <p>Позиционирование загородного отдыха: почему выбирать базу отдыха на природе, критерии выбора, преимущества отдыха вне города. Общий, вводный уровень — знакомство с компанией.</p>
+      </div>
+      <div class="stage">
+        <div class="stg-h"><b>Этап 2</b><span class="badge active">актуальный</span></div>
+        <p>Переход от общего позиционирования к конкретным условиям дома: состав удобств (баня, бассейн, мангальная зона), планировка и вместимость, размещение с животными. Тексты и сторис опираются на проверенные факты сайта и карточки компании.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="lesnoy-news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="sec-title">Темы новостей</h2>
+    <p class="sec-intro">2 темы, SEO-оптимизированный текст, ключевые слова используются плотно, почти в каждом предложении.</p>
+    <div class="cards">
+
+      <div class="card">
+        <span class="tag">Экспертный · Удобства дома</span>
+        <h3>Баня, тёплый бассейн и мангальная зона: что есть в гостевом доме «Лесной рай» для отдыха в любую погоду</h3>
+        <ul class="thesis">
+          <li>Крытый бассейн с подогревом воды — доступен для отдыха и летом, и зимой, без привязки к сезону.</li>
+          <li>Рядом с домом баня для банного отдыха и мангальная зона с инвентарём и раковиной — всё для отдыха на одной территории.</li>
+          <li>В доме камин для уюта в прохладные месяцы и кондиционер для комфорта в жару — гостевой дом с баней и бассейном работает круглый год.</li>
+          <li>Открытая веранда с качелями — место для отдыха на свежем воздухе у соснового бора.</li>
+          <li>Актуальные фото территории и условия — на карточке «Лесной рай» на Яндекс Картах и 2ГИС.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом с баней</span>
+          <span class="chip-seo">дом с бассейном Самарская область</span>
+          <span class="chip-seo">база отдыха с мангалом</span>
+          <span class="chip-seo">аренда дома с сауной</span>
+          <span class="chip-seo">крытый бассейн для отдыха</span>
+          <span class="chip-seo">гостевой дом Красноярский район</span>
+          <span class="chip-seo">дом отдыха с камином</span>
+          <span class="chip-seo">база отдыха круглый год</span>
+          <span class="chip-seo">дом у соснового леса</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Экспертная / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Узнать условия на Яндекс Картах</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Баня. Бассейн. Мангал.» — фон тёмно-зелёный #334633, текст и элементы бренда кремовые #F8F8EB, по мини-брендбуку.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Продающий · Размещение и бронирование</span>
+        <h3>Гостевой дом «Лесной рай» на компанию до 8 человек: планировка, условия размещения и можно с питомцем</h3>
+        <ul class="thesis">
+          <li>Четыре спальни, три санузла и просторная гостиная — планировка рассчитана на групповой и семейный отдых.</li>
+          <li>Разные условия размещения на будни и на выходные — компания может остаться на своих условиях без лишних доплат за формат.</li>
+          <li>Полностью оборудованная кухня и два холодильника — готовить для большой компании можно без ограничений.</li>
+          <li>На территории открытая парковка, номера — для некурящих.</li>
+          <li>Отдельное условие гостевого дома «Лесной рай»: размещение разрешено вместе с собаками.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом на компанию</span>
+          <span class="chip-seo">аренда дома для группового отдыха</span>
+          <span class="chip-seo">дом для семейного отдыха Самарская область</span>
+          <span class="chip-seo">гостевой дом до 8 человек</span>
+          <span class="chip-seo">база отдыха с животными</span>
+          <span class="chip-seo">дом с четырьмя спальнями</span>
+          <span class="chip-seo">аренда дома выходного дня</span>
+          <span class="chip-seo">отдых с собакой за городом</span>
+          <span class="chip-seo">гостевой дом Малая Царевщина</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Продающий / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Уточнить даты и условия на карточке</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Дом для компании» — фон кремовый #F8F8EB, текст и элементы бренда тёмно-зелёные #334633, по мини-брендбуку.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="lesnoy-stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="sec-title">Темы сторис</h2>
+    <p class="sec-intro">2 темы, формат — один слайд-презентация. Только тезисы и сухие факты.</p>
+    <div class="story-grid">
+
+      <div class="story">
+        <h3>Тёплый бассейн — в любое время года</h3>
+        <ul>
+          <li>Крытый бассейн с подогревом воды.</li>
+          <li>Доступен для отдыха и летом, и зимой.</li>
+          <li>Расположен на территории гостевого дома «Лесной рай».</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото бассейна крупным планом, тёплый свет воды. Текстовая плашка — тёмно-зелёный фон #334633, кремовый текст #F8F8EB, логотип по мини-брендбуку.</div>
+        <div class="cta">CTA: «Бронируйте отдых с бассейном»</div>
+      </div>
+
+      <div class="story">
+        <h3>Отдых вместе с питомцем</h3>
+        <ul>
+          <li>Размещение в доме разрешено вместе с собаками.</li>
+          <li>Рядом сосновый лес — есть где гулять с питомцем.</li>
+          <li>Не нужно искать для животного отдельное место — оно живёт в доме вместе с хозяевами.</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото собаки на веранде или территории дома, естественный свет. Текстовая плашка — кремовый фон #F8F8EB, тёмно-зелёный текст #334633, логотип по мини-брендбуку.</div>
+        <div class="cta">CTA: «Приезжайте вместе с любимцем»</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="lesnoy-map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="sec-title">История и текущий этап</h2>
+
+    <details class="stage-d">
+      <summary>Этап 1 — опубликовано</summary>
+      <div class="inner">
+        <div class="row"><b>Новость.</b> «Как выбрать базу отдыха, чтобы отпуск действительно оправдал ожидания» — критерии выбора базы отдыха.</div>
+        <div class="row"><b>Новость.</b> «Почему всё больше людей выбирают отдых на природе вместо городских развлечений» — тренды на загородный отдых.</div>
+        <div class="row"><b>Сторис.</b> «Почему загородный отдых остаётся лучшим выбором в любое время года».</div>
+        <div class="row"><b>Сторис.</b> «Что делает хороший отдых по-настоящему комфортным».</div>
+      </div>
+    </details>
+
+    <div class="timeline-current">
+      <div class="stg-h" style="margin-bottom:10px"><b>Этап 2</b><span class="badge active">актуальный</span></div>
+      <div class="row" style="font-size:14px;color:var(--ink-soft)"><b style="color:var(--ink);font-weight:600">Новости:</b> удобства дома (баня/бассейн/мангал) · планировка, вместимость и размещение с животными</div>
+      <div class="row" style="font-size:14px;color:var(--ink-soft);margin-top:6px"><b style="color:var(--ink);font-weight:600">Сторис:</b> тёплый бассейн · отдых с питомцем</div>
+    </div>
+  </section>
+
+  <footer id="lesnoy-sources">
+    <div class="f-label">Источники</div>
+    <a href="https://gostevoj-dom-terem-lesnaja-ulitsa.clients.site/" target="_blank" rel="noopener">Сайт гостевого дома</a>
+    <a href="https://yandex.ru/maps/-/CTxp74n7" target="_blank" rel="noopener">Карточка «Лесной рай» на Яндекс Картах</a>
+  </footer>
+
+</main>
+
+<main data-company="teremok" hidden>
+
+  <section id="teremok-company">
+    <div class="hero-top">
+      <div class="eyebrow">ТЗ · Яндекс Карты и 2ГИС</div>
+      <h1 class="sec-title">Гостевой дом «Теремок»</h1>
+      <p class="sec-intro">Гостевой дом «Теремок» на Сосновой улице в селе Малая Царевщина Самарской области. Контент готовится для публикации на карточке компании на Яндекс Картах и в 2ГИС.</p>
+    </div>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Категория</div><div class="v">Гостевой дом</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">с. Малая Царевщина, ул. Сосновая, 2, Самарская область</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+      <div class="fact"><div class="k">Рейтинг</div><div class="v">4,9 из 5, 21 отзыв, отметка Good place 2026</div></div>
+      <div class="fact"><div class="k">Услуги</div><div class="v">Баня на дровах с бассейном, бассейн 31°C отдельно</div></div>
+      <div class="fact"><div class="k">Ключевые удобства</div><div class="v">Мангальная зона, качели, кухня, завтрак, детская кроватка</div></div>
+      <div class="fact"><div class="k">Особенность</div><div class="v">Размещение с домашними животными разрешено</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Яндекс Карты, 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="teremok-brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="sec-title">Фирменный стиль</h2>
+    <p class="sec-intro">После анализа фирменных материалов компании (обложки и слайды сторис) определена фирменная цветовая палитра — тёплая, природная, на контрасте тёплого дерева и тёмного фотографического оверлея. Все значения сняты пиксель-семплингом с присланных изображений: акцентный цвет используется в заголовках слайдов и кнопке CTA, тёмный — как оверлей поверх фото для читаемости текста, древесные тона — как визуальный код материалов (бревенчатые домики, тёмная вагонка бани).</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#D9A876"></div>
+        <div class="info"><div class="role">Акцентный (заголовки / CTA)</div><div class="hex">#D9A876</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#A27E4E"></div>
+        <div class="info"><div class="role">Дополнительный золотистый (природа / лес)</div><div class="hex">#A27E4E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#5F4B30"></div>
+        <div class="info"><div class="role">Вторичный тёплый (дерево / фактура домиков)</div><div class="hex">#5F4B30</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#171812"></div>
+        <div class="info"><div class="role">Тёмный (фотооверлей / фон под текст)</div><div class="hex">#171812</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="teremok-cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="sec-title">Последовательность тем</h2>
+    <div class="cycle">
+      <div class="stage">
+        <div class="stg-h"><b>Этап 1</b><span class="badge active">актуальный</span></div>
+        <p>Первый этап для компании: знакомство с гостевым домом через конкретные услуги и факты — баня и бассейн, условия проживания, территория для отдыха с детьми и животными, рейтинг и отметка Good place 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="teremok-news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="sec-title">Темы новостей</h2>
+    <p class="sec-intro">4 темы, SEO-оптимизированный текст, ключевые слова используются плотно, почти в каждом предложении.</p>
+    <div class="cards">
+
+      <div class="card">
+        <span class="tag">Экспертный · Услуги</span>
+        <h3>Баня на дровах и бассейн с подогретой водой: что предлагает гостевой дом «Теремок» в Малой Царевщине</h3>
+        <ul class="thesis">
+          <li>Баня на дровах с собственным бассейном — классический банный отдых за городом, без городской суеты.</li>
+          <li>Бассейн с водой 31°C доступен отдельно от бани, вмещает до 4 человек.</li>
+          <li>Баня и бассейн расположены на закрытой территории гостевого дома «Теремок».</li>
+          <li>Формат подходит и для компании до 4 человек, и для семейного отдыха выходного дня.</li>
+          <li>Актуальные цены и свободные даты — на карточке «Теремок» на Яндекс Картах и 2ГИС.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом с баней</span>
+          <span class="chip-seo">баня на дровах Самарская область</span>
+          <span class="chip-seo">бассейн с подогретой водой</span>
+          <span class="chip-seo">аренда бани с бассейном</span>
+          <span class="chip-seo">отдых в бане за городом</span>
+          <span class="chip-seo">гостевой дом Малая Царевщина</span>
+          <span class="chip-seo">баня для компании</span>
+          <span class="chip-seo">бассейн 31 градус</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Экспертная / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Забронировать баню на карточке</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Баня. Бассейн. Дрова.» — фото бани/бассейна, тёмный градиент, текст акцентным цветом #D9A876.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Продающий · Условия проживания</span>
+        <h3>Что входит в проживание в гостевом доме «Теремок»: завтрак, детская кроватка и оборудованная кухня</h3>
+        <ul class="thesis">
+          <li>Номера рассчитаны на разные форматы отдыха — от компактного размещения до отдыха всей семьёй.</li>
+          <li>В проживание включён завтрак — готовить с утра самостоятельно не обязательно.</li>
+          <li>Для гостей с детьми предусмотрена детская кроватка.</li>
+          <li>Кухня полностью оборудована для самостоятельного приготовления еды.</li>
+          <li>Чистота номеров и качественное постельное бельё — то, что гости отдельно отмечают в отзывах.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом с завтраком</span>
+          <span class="chip-seo">номера с детской кроваткой</span>
+          <span class="chip-seo">гостевой дом для семьи с детьми</span>
+          <span class="chip-seo">аренда дома с кухней</span>
+          <span class="chip-seo">гостевой дом Самарская область</span>
+          <span class="chip-seo">размещение с завтраком</span>
+          <span class="chip-seo">чистые номера гостевого дома</span>
+          <span class="chip-seo">дом для отдыха с детьми</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Продающий / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Уточнить свободные номера на карточке</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Всё включено с утра» — фото номера/завтрака, тёмный градиент, текст акцентным цветом #D9A876.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Экспертный · Территория</span>
+        <h3>Территория гостевого дома «Теремок»: закрытая мангальная зона, качели и размещение с питомцами</h3>
+        <ul class="thesis">
+          <li>Закрытая освещённая мангальная зона — готовить на мангале можно в любое время суток.</li>
+          <li>На территории качели — есть чем занять детей между баней и бассейном.</li>
+          <li>Парковка расположена прямо на территории гостевого дома.</li>
+          <li>Размещение разрешено вместе с домашними животными — искать питомцу отдельное место не нужно.</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом с мангальной зоной</span>
+          <span class="chip-seo">дом с закрытой территорией</span>
+          <span class="chip-seo">гостевой дом с качелями для детей</span>
+          <span class="chip-seo">база отдыха с животными</span>
+          <span class="chip-seo">гостевой дом с парковкой</span>
+          <span class="chip-seo">отдых с собакой Самарская область</span>
+          <span class="chip-seo">территория для семейного отдыха</span>
+          <span class="chip-seo">гостевой дом Малая Царевщина</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Экспертная / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Смотреть территорию на карточке</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Территория для своих» — фото мангальной зоны/качелей, тёмный градиент, текст акцентным цветом #D9A876.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Имиджевый · Доверие</span>
+        <h3>Гостевой дом «Теремок» — обладатель отметки Good place 2026 на Яндекс Картах</h3>
+        <ul class="thesis">
+          <li>Гостевой дом «Теремок» получил отметку Good place 2026 — награду от пользователей Яндекс Карт.</li>
+          <li>Рейтинг гостевого дома — 4,9 из 5 по 21 отзыву гостей.</li>
+          <li>Гости отдельно отмечают чистоту, уют и внимательное отношение хозяйки.</li>
+          <li>Отметка Good place 2026 подтверждает стабильное качество сервиса гостевого дома «Теремок».</li>
+        </ul>
+        <div class="chips">
+          <span class="chip-seo">гостевой дом Good place</span>
+          <span class="chip-seo">отзывы о гостевом доме Теремок</span>
+          <span class="chip-seo">гостевой дом с рейтингом 4,9</span>
+          <span class="chip-seo">надёжный гостевой дом</span>
+          <span class="chip-seo">гостевой дом с хорошими отзывами</span>
+          <span class="chip-seo">награда Яндекс Карт гостевой дом</span>
+          <span class="chip-seo">гостевой дом Малая Царевщина</span>
+        </div>
+        <div class="meta-row">
+          <div class="m"><div class="k">Цель</div><div class="v">Имиджевая / SEO</div></div>
+          <div class="m"><div class="k">CTA</div><div class="v">Посмотреть отзывы на Яндекс Картах</div></div>
+        </div>
+        <div class="cover-block"><b>ТЗ на обложку:</b> тезис «Отмечены гостями» — значок Good place 2026/рейтинг, тёмный градиент, текст акцентным цветом #D9A876.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="teremok-stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="sec-title">Темы сторис</h2>
+    <p class="sec-intro">4 темы, формат — один слайд-презентация. Только тезисы и сухие факты.</p>
+    <div class="story-grid">
+
+      <div class="story">
+        <h3>Баня на дровах с бассейном</h3>
+        <ul>
+          <li>Баня на дровах.</li>
+          <li>Собственный бассейн с водой 31°C.</li>
+          <li>Вмещает до 4 человек.</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото бани/бассейна крупным планом, тёмный градиент снизу для читаемости, заголовок и CTA акцентным цветом #D9A876.</div>
+        <div class="cta">CTA: «Забронируйте баню»</div>
+      </div>
+
+      <div class="story">
+        <h3>Мангальная зона — доступна в любое время</h3>
+        <ul>
+          <li>Закрытая, освещённая мангальная зона.</li>
+          <li>Готовить можно днём и вечером.</li>
+          <li>Расположена на территории гостевого дома «Теремок».</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото мангальной зоны в вечернем освещении, тёмный градиент, заголовок и CTA акцентным цветом #D9A876.</div>
+        <div class="cta">CTA: «Приезжайте на шашлыки»</div>
+      </div>
+
+      <div class="story">
+        <h3>Оборудованная кухня — готовьте самостоятельно</h3>
+        <ul>
+          <li>Кухня полностью оборудована.</li>
+          <li>Можно готовить самостоятельно, не только на мангале.</li>
+          <li>Вариант для отдыха на несколько дней.</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото кухни, тёмный градиент, заголовок и CTA акцентным цветом #D9A876.</div>
+        <div class="cta">CTA: «Готовьте, как дома»</div>
+      </div>
+
+      <div class="story">
+        <h3>Детская кроватка и качели — комфортно с детьми</h3>
+        <ul>
+          <li>В номере предусмотрена детская кроватка.</li>
+          <li>На территории качели.</li>
+          <li>Завтрак входит в проживание.</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: фото качелей/территории с детьми, тёмный градиент, заголовок и CTA акцентным цветом #D9A876.</div>
+        <div class="cta">CTA: «Отдыхайте всей семьёй»</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="teremok-map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="sec-title">История и текущий этап</h2>
+
+    <div class="timeline-current">
+      <div class="stg-h" style="margin-bottom:10px"><b>Этап 1</b><span class="badge active">актуальный</span></div>
+      <div class="row" style="font-size:14px;color:var(--ink-soft)"><b style="color:var(--ink);font-weight:600">Новости:</b> баня и бассейн · условия проживания · территория и питомцы · рейтинг и Good place 2026</div>
+      <div class="row" style="font-size:14px;color:var(--ink-soft);margin-top:6px"><b style="color:var(--ink);font-weight:600">Сторис:</b> баня с бассейном · мангальная зона · кухня · дети и качели</div>
+    </div>
+  </section>
+
+  <footer id="teremok-sources">
+    <div class="f-label">Источники</div>
+    <a href="https://yandex.ru/maps/-/CTxtiE0k" target="_blank" rel="noopener">Карточка «Теремок» на Яндекс Картах</a>
+  </footer>
+
+</main>
+
+</div>
+
+<script>
+(function(){
+  function syncHeadH(){
+    var header = document.querySelector('header.topbar');
+    if(!header) return;
+    document.documentElement.style.setProperty('--head-h', header.offsetHeight + 'px');
+  }
+  function trkSetCompany(name, opts){
+    document.querySelectorAll('[data-company]').forEach(function(el){
+      el.hidden = el.getAttribute('data-company') !== name;
+    });
+    document.querySelectorAll('.switch-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-switch') === name);
+    });
+    try{ localStorage.setItem('trk_lr_company', name); }catch(e){}
+    syncHeadH();
+    if(!opts || !opts.skipScroll){
+      window.scrollTo({top:0, behavior:'auto'});
+    }
+  }
+  document.querySelectorAll('.switch-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      trkSetCompany(b.getAttribute('data-switch'));
+    });
+  });
+  window.addEventListener('resize', syncHeadH);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(syncHeadH); }
+  var initial = 'lesnoy';
+  try{
+    var saved = localStorage.getItem('trk_lr_company');
+    if(saved === 'lesnoy' || saved === 'teremok') initial = saved;
+  }catch(e){}
+  trkSetCompany(initial, {skipScroll:true});
+  syncHeadH();
+})();
+</script>
+</body>
+</html>
