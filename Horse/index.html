@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HORSE — ТЗ на контент, этап 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #0E3B47;
+    --teal: #1B6B78;
+    --ice: #F5F8F8;
+    --roe: #C4572B;
+    --bg: #F5F8F8;
+    --card: #FFFFFF;
+    --ink: #0E3B47;
+    --ink-soft: #4C6670;
+    --line: #D9E4E4;
+    --accent: #1B6B78;
+    --accent-2: #C4572B;
+    --chip-bg: #EAF2F2;
+    --shadow: 0 1px 2px rgba(14,59,71,0.06), 0 10px 28px rgba(14,59,71,0.06);
+    --font-display: 'Bricolage Grotesque', Georgia, serif;
+    --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #081A1F;
+      --card: #0E282E;
+      --ink: #E9F4F4;
+      --ink-soft: #9BB8BC;
+      --line: #1C3A40;
+      --accent: #4FB8C4;
+      --accent-2: #E1804F;
+      --chip-bg: #12333A;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 14px 32px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #081A1F;
+    --card: #0E282E;
+    --ink: #E9F4F4;
+    --ink-soft: #9BB8BC;
+    --line: #1C3A40;
+    --accent: #4FB8C4;
+    --accent-2: #E1804F;
+    --chip-bg: #12333A;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 14px 32px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+
+  /* ---- Sticky top bar ---- */
+  header.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 14px 24px;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .brandmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  nav.topnav {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+  }
+  nav.topnav a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 7px 11px;
+    border-radius: 7px;
+    white-space: nowrap;
+  }
+  nav.topnav a:hover { background: var(--chip-bg); color: var(--ink); }
+  .topbar-tag {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    background: var(--chip-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(30px, 4.5vw, 42px);
+    margin: 0 0 6px;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    margin: 0 0 6px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin: 0 0 10px;
+  }
+  .lede {
+    color: var(--ink-soft);
+    max-width: 68ch;
+    font-size: 15.5px;
+    margin: 0 0 26px;
+  }
+
+  /* facts grid */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .fact {
+    background: var(--card);
+    padding: 16px 18px;
+  }
+  .fact dt {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 6px;
+  }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 600; }
+
+  /* brandbook swatches */
+  .bb-group { margin-bottom: 30px; }
+  .bb-group:last-child { margin-bottom: 0; }
+  .bb-group h3 {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .swatch-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+  }
+  .swatch {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--card);
+  }
+  .swatch-fill { height: 64px; }
+  .swatch-meta { padding: 10px 12px; }
+  .swatch-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-soft);
+    margin: 0 0 3px;
+  }
+  .swatch-hex {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* sequence */
+  .sequence { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 0; }
+  .seq-chip {
+    display: flex; align-items: baseline; gap: 8px;
+    background: var(--chip-bg); border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 16px; font-size: 13.5px;
+  }
+  .seq-chip b { font-family: var(--font-mono); color: var(--accent-2); font-size: 12px; }
+  .seq-chip.done { opacity: 0.55; }
+  .seq-arrow { color: var(--ink-soft); }
+
+  /* theme cards */
+  .theme-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .theme-card:last-child { margin-bottom: 0; }
+  .theme-head {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 20px 22px 16px;
+  }
+  .theme-num { font-family: var(--font-mono); font-size: 13px; color: var(--accent-2); }
+  .theme-head h3 { font-family: var(--font-display); font-size: 19px; font-weight: 700; margin: 0; }
+  .purpose-tag {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    background: var(--chip-bg);
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .theme-body { padding: 0 22px 22px; }
+  .theme-body ul.dev { margin: 0 0 14px; padding-left: 20px; font-size: 14.5px; }
+  .theme-body ul.dev li { margin-bottom: 6px; }
+  .kw-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px; }
+  .kw {
+    font-family: var(--font-mono); font-size: 11.5px;
+    background: var(--chip-bg); border: 1px solid var(--line);
+    border-radius: 5px; padding: 3px 9px;
+  }
+  .meta-block {
+    font-size: 13.5px; color: var(--ink-soft);
+    border-top: 1px dashed var(--line);
+    padding-top: 12px; margin-top: 4px;
+  }
+  .meta-block b { color: var(--ink); font-weight: 600; }
+  .cover-tz {
+    margin-top: 14px; padding: 12px 14px;
+    background: var(--chip-bg); border-radius: 8px;
+    font-size: 13.5px;
+  }
+  .cover-tz .lbl {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--accent-2); margin-bottom: 4px; display:block;
+  }
+  .cta-line { margin-top: 12px; font-weight: 600; color: var(--accent-2); font-size: 14px; }
+
+  /* story cards (no cover) */
+  .story-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 18px;
+  }
+  .story-card:last-child { margin-bottom: 0; }
+  .story-card h3 { font-family: var(--font-display); font-size: 18px; margin: 0 0 10px; }
+  .story-card ul { margin: 0 0 14px; padding-left: 20px; font-size: 14.5px; }
+  .story-card ul li { margin-bottom: 5px; }
+  .design-note {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13.5px; background: var(--chip-bg); border-radius: 8px; padding: 10px 12px;
+  }
+  .design-note .dot { width: 14px; height: 14px; border-radius: 4px; flex: none; border: 1px solid rgba(0,0,0,.15); }
+  .design-note .lbl {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--accent-2); margin-right: 4px;
+  }
+
+  /* timeline / Карта тем */
+  details.stage { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; background: var(--card); overflow: hidden; }
+  details.stage[open] { border-color: var(--accent); }
+  details.stage summary {
+    cursor: pointer; list-style: none; padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 13px;
+  }
+  details.stage summary::-webkit-details-marker { display: none; }
+  .stage-badge {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 3px 9px; border-radius: 999px;
+  }
+  .stage-badge.active { background: var(--accent-2); color: #fff; }
+  .stage-badge.done { background: var(--chip-bg); color: var(--ink-soft); }
+  .stage-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--ink); }
+  .stage-list { padding: 0 18px 16px 18px; }
+  .stage-list ol { margin: 0; padding-left: 20px; font-size: 14px; }
+  .stage-list li { margin-bottom: 6px; }
+  .stage-list li b { font-weight: 600; }
+
+  footer { padding: 40px 0 60px; font-size: 13.5px; color: var(--ink-soft); }
+  footer h4 {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink); margin: 0 0 10px;
+  }
+  footer ul { margin: 0; padding-left: 18px; }
+  footer li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brandmark">HORSE</div>
+  <nav class="topnav">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+  <span class="topbar-tag">Этап 02 · 2 новости + 2 сториз</span>
+</header>
+
+<div class="wrap">
+
+  <section id="company">
+    <p class="eyebrow">ТЗ на контент · Яндекс Карты + 2ГИС</p>
+    <h1>HORSE</h1>
+    <p class="lede">Ночной клуб / мужской стриптиз-клуб для женщин / бар, Нижний Новгород. Публикация — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <dl class="facts-grid">
+      <div class="fact"><dt>Формат</dt><dd>Клуб + бар + шоу-программа</dd></div>
+      <div class="fact"><dt>Адрес</dt><dd>Нижне-Волжская наб., 17</dd></div>
+      <div class="fact"><dt>Режим</dt><dd>Ежедневно, 21:00–06:00</dd></div>
+      <div class="fact"><dt>Аудитория</dt><dd>Женщины, компании подруг</dd></div>
+    </dl>
+  </section>
+
+  <section id="brandbook">
+    <p class="eyebrow">Раздел 02</p>
+    <h2>Мини-брендбук</h2>
+    <p class="lede">По сайту и утверждённому дизайну карточки определены две актуальные палитры HORSE.</p>
+
+    <div class="bb-group">
+      <h3>Палитра сайта</h3>
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#000000"></div>
+          <div class="swatch-meta"><p class="swatch-role">Фоновый</p><p class="swatch-hex">#000000</p></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#E83020"></div>
+          <div class="swatch-meta"><p class="swatch-role">Акцентный</p><p class="swatch-hex">#E83020</p></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#F0F0F0"></div>
+          <div class="swatch-meta"><p class="swatch-role">Текстовый</p><p class="swatch-hex">#F0F0F0</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bb-group">
+      <h3>Палитра карточки на Яндекс Картах (утверждённый дизайн)</h3>
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#661626"></div>
+          <div class="swatch-meta"><p class="swatch-role">Фоновый</p><p class="swatch-hex">#661626</p></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#E0567A"></div>
+          <div class="swatch-meta"><p class="swatch-role">Акцентный</p><p class="swatch-hex">#E0567A</p></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-fill" style="background:#000000"></div>
+          <div class="swatch-meta"><p class="swatch-role">Второстепенный</p><p class="swatch-hex">#000000</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <p class="eyebrow">Раздел 03</p>
+    <h2>Логика цикла</h2>
+    <p class="lede">Этап 02 продолжает этап 01 (знакомство → пространство → повод → шоу-программа), уходя из общего представления клуба в конкретные части вечера, ещё не раскрытые.</p>
+    <div class="sequence">
+      <div class="seq-chip done"><b>01–04</b> Этап 01</div>
+      <span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>05</b> Бар и напитки</div>
+      <span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>06</b> Танцоры и состав шоу</div>
+    </div>
+  </section>
+
+  <section id="news">
+    <p class="eyebrow">Раздел 04</p>
+    <h2>Новости</h2>
+    <p class="lede">SEO-тексты для карточки на Яндекс Картах и 2ГИС.</p>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">05</span>
+        <h3>Бар и напитки в HORSE</h3>
+        <span class="purpose-tag">Атмосферный</span>
+      </div>
+      <div class="theme-body">
+        <ul class="dev">
+          <li>Бар HORSE — самостоятельная часть вечера, а не дополнение к шоу-программе: напитки подаются на протяжении всего вечера</li>
+          <li>Формат подачи — столик компанией, барная карта в едином стиле с залом и программой</li>
+          <li>По средам компании от 4 девушек получают бутылку игристого в подарок, а вход с 21:00 до 23:00 — со скидкой 30%</li>
+          <li>Посидеть в баре HORSE можно и отдельно от полной программы, компанией подруг</li>
+        </ul>
+        <div class="kw-row">
+          <span class="kw">бар нижний новгород</span>
+          <span class="kw">ночной бар для женщин нижний новгород</span>
+          <span class="kw">бар нижне-волжская набережная</span>
+          <span class="kw">коктейльный бар horse</span>
+        </div>
+        <div class="meta-block"><b>Meta:</b> HORSE — бар и напитки в клубе для женщин на Нижне-Волжской набережной, Нижний Новгород. Ежедневно с 21:00.</div>
+        <div class="cover-tz"><span class="lbl">ТЗ на обложку</span>Тёмный фон, барная стойка и бокалы крупным планом, заголовок «Бар HORSE»</div>
+        <div class="cta-line">Забронировать столик в баре</div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-head">
+        <span class="theme-num">06</span>
+        <h3>Танцоры HORSE: кто выступает</h3>
+        <span class="purpose-tag">Продуктовый</span>
+      </div>
+      <div class="theme-body">
+        <ul class="dev">
+          <li>В шоу-программе HORSE выступают танцоры, отобранные кастингом</li>
+          <li>Формат «Гарем» — выступление сразу двух танцоров на одну гостью</li>
+          <li>Комфорт и приватность гостьи — приоритет при построении программы вечера</li>
+          <li>Состав и формат вечера можно уточнить заранее при бронировании столика</li>
+        </ul>
+        <div class="kw-row">
+          <span class="kw">танцоры horse нижний новгород</span>
+          <span class="kw">мужской стриптиз шоу нижний новгород</span>
+          <span class="kw">кастинг танцоров стриптиз клуб</span>
+          <span class="kw">шоу-программа horse</span>
+        </div>
+        <div class="meta-block"><b>Meta:</b> Танцоры HORSE — мужской стриптиз-шоу и формат «Гарем» в клубе для женщин, Нижний Новгород.</div>
+        <div class="cover-tz"><span class="lbl">ТЗ на обложку</span>Тёмный фон, силуэт танцора в контровом свете, заголовок «Танцоры HORSE»</div>
+        <div class="cta-line">Уточнить состав программы при бронировании</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <p class="eyebrow">Раздел 05</p>
+    <h2>Сторис</h2>
+    <p class="lede">Один слайд на тему, только тезисы. Дизайн — по утверждённой палитре карточки.</p>
+
+    <div class="story-card">
+      <h3>05 · Бар HORSE</h3>
+      <ul>
+        <li>Бар работает весь вечер параллельно с программой</li>
+        <li>По средам — бутылка игристого в подарок компании от 4 человек</li>
+      </ul>
+      <div class="design-note">
+        <span class="dot" style="background:#661626"></span>
+        <span class="dot" style="background:#E0567A"></span>
+        <span><span class="lbl">Дизайн слайда</span>Фон бордо/чёрный, заголовок «БАР HORSE» неоновым розовым, силуэт бокалов/барной стойки</span>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <h3>06 · Танцоры HORSE</h3>
+      <ul>
+        <li>Танцоры отбираются кастингом</li>
+        <li>Формат «Гарем» — сразу два танцора на программе</li>
+      </ul>
+      <div class="design-note">
+        <span class="dot" style="background:#661626"></span>
+        <span class="dot" style="background:#E0567A"></span>
+        <span><span class="lbl">Дизайн слайда</span>Фон бордо/чёрный, заголовок «ТАНЦОРЫ HORSE» неоновым розовым, силуэт в контровом свете, без откровенных кадров</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <p class="eyebrow">Раздел 06</p>
+    <h2>Карта тем</h2>
+
+    <details class="stage">
+      <summary>
+        <span class="stage-badge done">Готово</span>
+        <span class="stage-title">Этап 01 — знакомство с клубом</span>
+      </summary>
+      <div class="stage-list">
+        <ol>
+          <li><b>Знакомство с клубом</b> — что такое HORSE и для кого</li>
+          <li><b>Пространство клуба</b> — джакузи, караоке, зона для компаний</li>
+          <li><b>Повод визита</b> — девичник/день рождения, подарок от клуба</li>
+          <li><b>Шоу-программа и форматы</b> — приватный танец, Гарем, цены</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary>
+        <span class="stage-badge active">Актуальный</span>
+        <span class="stage-title">Этап 02 — бар и состав шоу</span>
+      </summary>
+      <div class="stage-list">
+        <ol start="5">
+          <li><b>Бар и напитки в HORSE</b> — бар как часть вечера, акция по средам</li>
+          <li><b>Танцоры HORSE</b> — кастинг, формат «Гарем», забота о госте</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <footer id="sources">
+    <h4>Источники</h4>
+    <ul>
+      <li>nnhorse.ru — структура, услуги, цены, контакты</li>
+      <li>Скриншоты сайта и утверждённого дизайна карточки, предоставленные компанией — источник палитр (раздел «Мини-брендбук»)</li>
+    </ul>
+  </footer>
+
+</div>
+
+</body>
+</html>
