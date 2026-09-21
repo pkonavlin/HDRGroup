@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТЗ — «К Мостовой» — Этап 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#F5F8F8;
+    --roe:#C4572B;
+    --roe-soft:#E39B7B;
+    --ink:#10262B;
+    --ink-soft:#4C6067;
+    --line:#D7E2E1;
+    --card:#FFFFFF;
+    --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#BFE3EC;
+      --teal:#7FD1DD;
+      --ice:#0B1A1E;
+      --ink:#EAF3F2;
+      --ink-soft:#9FB6BA;
+      --line:#233A3F;
+      --card:#0F2226;
+      --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA; --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Public Sans',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;margin:0;color:var(--ink);}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--teal);}
+
+  /* Sticky top bar */
+  header.topbar{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;gap:18px;
+    padding:14px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  header.topbar .brand{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:700;font-size:19px;letter-spacing:.2px;
+    color:var(--ocean);white-space:nowrap;margin-right:auto;
+  }
+  header.topbar nav{display:flex;gap:4px;flex-wrap:wrap;}
+  header.topbar nav a{
+    text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;
+    padding:8px 12px;border-radius:8px;transition:.15s;
+  }
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;
+  }
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin-bottom:28px;max-width:640px;}
+
+  /* Hero */
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:620px;margin-bottom:32px;}
+  .facts-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  }
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;}
+
+  /* Brandbook swatches */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+
+  /* Theme cards */
+  .card{
+    border:1px solid var(--line);border-radius:16px;background:var(--card);
+    padding:26px 28px;margin-bottom:20px;
+  }
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;max-width:70%;}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;
+  }
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  .block-label:first-of-type{margin-top:0;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);
+    color:var(--teal);padding:5px 10px;border-radius:8px;
+  }
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);}
+  .cover-block{
+    margin-top:16px;padding:14px 16px;border-radius:10px;
+    background:color-mix(in srgb, var(--roe) 8%, transparent);
+    border:1px dashed var(--roe-soft);
+  }
+  .cover-block .block-label{margin-top:0;}
+
+  /* Story cards */
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .design-note{
+    margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--ice);
+    font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);
+  }
+  .story-card .design-note b{color:var(--ink);}
+
+  /* Timeline */
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:12px;background:var(--card);}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;
+    padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;
+  }
+
+  /* Vertical roadmap inside a stage */
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{
+    content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;
+    background:var(--line);
+  }
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{
+    position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;
+    background:var(--card);border:3px solid var(--roe);
+  }
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{
+    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;
+  }
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:640px;}
+
+  footer.sources{padding:40px 0 10px;}
+  footer.sources ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+  footer.sources a{font-size:14px;}
+
+  @media(max-width:560px){
+    header.topbar{padding:12px 16px;}
+    section{padding:40px 0;}
+    .card{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">К Мостовой</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">Этап 01 · ТЗ на контент</div>
+    <h1>Пространство красоты «К Мостовой»</h1>
+    <p class="lead">Бьюти-пространство полного цикла: ногтевой сервис, оформление и ламинирование бровей, макияж и укладки. Работает в формате «4 и 6 рук» — несколько мастеров обслуживают гостя одновременно.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Ставрополь</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Дзержинского, 138–140</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–Вс, 9:00–20:00</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 928 397-14-33</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">4,9 из 5 · 130 оценок</div></div>
+      <div class="fact"><div class="k">Отзывы</div><div class="v">76 отзывов</div></div>
+      <div class="fact"><div class="k">Услуги</div><div class="v">Маникюр, педикюр, брови, макияж, укладки</div></div>
+      <div class="fact"><div class="k">Формат работы</div><div class="v">В 4 и 6 рук одновременно</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра</h2>
+    <p class="section-sub">После анализа фирменных материалов пространства (логотип, оформление сторис, меню) определена рабочая палитра бренда.</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#4E6A8D;"></div>
+        <div class="info"><div class="role">Акцентный</div><div class="hex">#4E6A8D</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#546183;"></div>
+        <div class="info"><div class="role">Фоновый тёмный</div><div class="hex">#546183</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E6E1D6;"></div>
+        <div class="info"><div class="role">Фоновый светлый</div><div class="hex">#E6E1D6</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#B7C08B;"></div>
+        <div class="info"><div class="role">Второстепенный (оливковый)</div><div class="hex">#B7C08B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#5D4C3C;"></div>
+        <div class="info"><div class="role">Текстовый тёплый</div><div class="hex">#5D4C3C</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · Яндекс Карты и 2ГИС</div>
+    <h2 class="section-title">4 темы для новостей</h2>
+    <p class="section-sub">Старт проработки карточки на Яндекс Картах и 2ГИС с нуля: по одной теме на салон и на школу плюс две самостоятельные темы — команда мастеров и бондирование волос, реальная услуга из актуального Instagram-пространства, ещё не раскрытая в контенте. SEO-ключи подобраны по данным Яндекс Вордстат (частотность — запросы в месяц).</p>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Салон красоты «К Мостовой» — маникюр, педикюр, брови, причёски и макияж в одном пространстве</h3>
+        <span class="tag">Имиджевая</span>
+      </div>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Салон красоты «К Мостовой» — первое направление бренда, бьюти-пространство полного цикла на ул. Дзержинского, 138</li>
+        <li>Пять услуг под одной крышей: маникюр, педикюр, оформление и ламинирование бровей, причёски, макияж</li>
+        <li>Формат «4 и 6 рук» — несколько мастеров работают с гостем одновременно, что сокращает время визита</li>
+        <li>Бесплатная парковка у входа, рейтинг 4,9 на Яндекс Картах — 130 оценок, 76 отзывов</li>
+      </ul>
+      <div class="block-label">SEO-ключи (по данным Wordstat, запросов/мес)</div>
+      <div class="chips">
+        <span class="chip-seo">салон красоты Ставрополь — 2 364</span>
+        <span class="chip-seo">маникюр Ставрополь — 2 507</span>
+        <span class="chip-seo">брови Ставрополь — 836</span>
+        <span class="chip-seo">макияж Ставрополь — 306</span>
+        <span class="chip-seo">маникюр педикюр Ставрополь — 75</span>
+        <span class="chip-seo">маникюр в 4 руки Ставрополь — 10</span>
+      </div>
+      <div class="cta">CTA: записывайтесь в салон красоты «К Мостовой» через карточку на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Интерьер салона или кадр работы нескольких мастеров с гостем одновременно. Фон — фоновый светлый #E6E1D6, акцент — #4E6A8D. Подпись «САЛОН КРАСОТЫ» крупно.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Школа красоты «К Мостовой» — курсы маникюра, педикюра и бровей для будущих мастеров</h3>
+        <span class="tag">Имиджевая</span>
+      </div>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Школа красоты «К Мостовой» — второе направление бренда: обучение будущих мастеров ногтевого сервиса</li>
+        <li>Курсы маникюра и педикюра, отдельный базовый курс по оформлению бровей</li>
+        <li>У преподавателя школы 9 лет опыта в бьюти-индустрии</li>
+        <li>90% выпускниц школы становятся востребованными топ-мастерами</li>
+        <li>Набор в группы идёт потоками — актуальное расписание уточняется в школе</li>
+      </ul>
+      <div class="block-label">SEO-ключи (по данным Wordstat, запросов/мес)</div>
+      <div class="chips">
+        <span class="chip-seo">курсы маникюра Ставрополь — 137</span>
+        <span class="chip-seo">школа маникюра Ставрополь — 27</span>
+        <span class="chip-seo">обучение маникюру Ставрополь — 128</span>
+        <span class="chip-seo">мастер маникюра обучение Ставрополь — 20</span>
+        <span class="chip-seo">курсы бровиста Ставрополь — 21</span>
+        <span class="chip-seo">курсы маникюра в Ставрополе обучение — 18</span>
+      </div>
+      <div class="cta">CTA: записывайтесь в школу «К Мостовой» на новый поток курсов</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Кадр учебного процесса — руки преподавателя и ученицы за практикой. Фон тёмный #546183, текст кремовый #E6E1D6. Подпись «ШКОЛА КРАСОТЫ» крупно.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Команда мастеров «К Мостовой»</h3>
+        <span class="tag">Имиджевая</span>
+      </div>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Гостей «К Мостовой» встречает команда мастеров разных специализаций — ногтевой сервис, брови, причёски и макияж</li>
+        <li>Формат «4 и 6 рук» работает именно благодаря команде: несколько специалистов ведут одного гостя параллельно</li>
+        <li>В команде есть и опытные мастера, и стажёры, которые растут внутри пространства</li>
+        <li>Каждый мастер отвечает за свою специализацию — гость выбирает того, кто нужен именно ему</li>
+      </ul>
+      <div class="block-label">SEO-ключи (по данным Wordstat, запросов/мес)</div>
+      <div class="chips">
+        <span class="chip-seo">мастер маникюра Ставрополь — 277</span>
+        <span class="chip-seo">мастер бровист Ставрополь — 20</span>
+        <span class="chip-seo">маникюр Ставрополь — 2 507</span>
+        <span class="chip-seo">брови Ставрополь — 836</span>
+      </div>
+      <div class="cta">CTA: выбирайте своего мастера и записывайтесь через карточку «К Мостовой» на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Коллаж или групповой кадр мастеров за работой. Фон — фоновый светлый #E6E1D6, акцент — #4E6A8D. Подпись «КОМАНДА» крупно.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Бондирование волос — восстанавливающий уход в «К Мостовой»</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>В «К Мостовой» отдельно выделено бондирование волос — восстанавливающий уход, который дополняет причёски и макияж</li>
+        <li>Процедура помогает укрепить структуру волос перед укладкой или окрашиванием</li>
+        <li>Подойдёт тем, кто готовится к важному образу и хочет, чтобы волосы держали форму дольше</li>
+        <li>Уточнить детали и записаться можно тем же способом, что и на другие услуги пространства</li>
+      </ul>
+      <div class="block-label">SEO-ключи (по данным Wordstat, запросов/мес)</div>
+      <div class="chips">
+        <span class="chip-seo">бондирование волос — 17</span>
+        <span class="chip-seo">укладка волос Ставрополь</span>
+        <span class="chip-seo">макияж прически Ставрополь — 13</span>
+        <span class="chip-seo">салон красоты Ставрополь — 2 364</span>
+      </div>
+      <div class="cta">CTA: записывайтесь на бондирование волос через карточку «К Мостовой» на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Крупный план ухоженных волос после процедуры. Фон тёмный #546183, текст кремовый #E6E1D6.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · один слайд</div>
+    <h2 class="section-title">4 темы для сторис</h2>
+    <p class="section-sub">Формат презентации, один слайд — один факт. По одной теме на салон и на школу плюс две самостоятельные темы — команда мастеров и бондирование волос.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <h3>Салон красоты «К Мостовой»</h3>
+        <ul class="tezis">
+          <li>Один адрес — пять услуг: маникюр, педикюр, брови, причёски, макияж</li>
+          <li>Бесплатная парковка у входа</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #E6E1D6, заголовок акцентным синим #4E6A8D, крупное фото пространства или мастера за работой.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Школа красоты «К Мостовой»</h3>
+        <ul class="tezis">
+          <li>Курсы маникюра, педикюра и бровей для будущих мастеров</li>
+          <li>90% выпускниц становятся топ-мастерами</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> тёмный фон #546183, текст кремовый #E6E1D6, цифра «90%» — акцент оливковый #B7C08B.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Команда мастеров</h3>
+        <ul class="tezis">
+          <li>Несколько специалистов — маникюр, педикюр, брови, причёски, макияж</li>
+          <li>Опытные мастера и стажёры, растущие внутри пространства</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #E6E1D6, заголовок акцентным синим #4E6A8D, коллаж мастеров за работой.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Бондирование волос</h3>
+        <ul class="tezis">
+          <li>Восстанавливающий уход перед укладкой или окрашиванием</li>
+          <li>Дополняет причёски и макияж в одном визите</li>
+        </ul>
+        <div class="design-note"><b>Дизайн слайда:</b> тёмный фон #546183, текст кремовый #E6E1D6, крупный кадр волос после процедуры.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+    <details class="stage" open>
+      <summary>Этап 1 · 21.09.2026 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item">
+          <div class="road-dot"></div>
+          <div class="road-label">Новость 1</div>
+          <div class="road-text">Салон красоты «К Мостовой» — пять услуг в одном пространстве (маникюр, педикюр, брови, причёски, макияж), формат «4 и 6 рук», рейтинг 4,9 на Яндекс Картах</div>
+        </div>
+        <div class="road-item is-story">
+          <div class="road-dot"></div>
+          <div class="road-label">История 1</div>
+          <div class="road-text">Салон красоты «К Мостовой» — один адрес, пять услуг, бесплатная парковка у входа</div>
+        </div>
+        <div class="road-item">
+          <div class="road-dot"></div>
+          <div class="road-label">Новость 2</div>
+          <div class="road-text">Школа красоты «К Мостовой» — курсы маникюра, педикюра и бровей для будущих мастеров, 9 лет опыта у преподавателя, 90% выпускниц становятся топ-мастерами</div>
+        </div>
+        <div class="road-item is-story">
+          <div class="road-dot"></div>
+          <div class="road-label">История 2</div>
+          <div class="road-text">Школа красоты «К Мостовой» — курсы для будущих мастеров, 90% выпускниц становятся топ-мастерами</div>
+        </div>
+        <div class="road-item">
+          <div class="road-dot"></div>
+          <div class="road-label">Новость 3</div>
+          <div class="road-text">Команда мастеров «К Мостовой» — специалисты разных направлений, формат «4 и 6 рук» держится именно на команде, есть опытные мастера и растущие стажёры</div>
+        </div>
+        <div class="road-item is-story">
+          <div class="road-dot"></div>
+          <div class="road-label">История 3</div>
+          <div class="road-text">Команда мастеров — несколько специалистов, опытные мастера и стажёры, растущие внутри пространства</div>
+        </div>
+        <div class="road-item">
+          <div class="road-dot"></div>
+          <div class="road-label">Новость 4</div>
+          <div class="road-text">Бондирование волос — восстанавливающий уход в «К Мостовой», ранее не раскрытая услуга, укрепляет волосы перед укладкой и окрашиванием</div>
+        </div>
+        <div class="road-item is-story">
+          <div class="road-dot"></div>
+          <div class="road-label">История 4</div>
+          <div class="road-text">Бондирование волос — восстанавливающий уход перед укладкой или окрашиванием, дополняет причёски и макияж в одном визите</div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <footer class="sources" id="sources">
+    <div class="eyebrow">Источники</div>
+    <ul>
+      <li><a href="https://yandex.com/maps/-/CXEAYC~l" target="_blank" rel="noopener">Карточка компании на Яндекс Картах</a></li>
+      <li><a href="https://taplink.cc/k_mostovoy_za_krasotoy" target="_blank" rel="noopener">Taplink — ссылки на запись и соцсети</a></li>
+      <li><a href="https://www.instagram.com/k_mostovoy_za_krasotoy/" target="_blank" rel="noopener">Instagram салона — @k_mostovoy_za_krasotoy</a></li>
+      <li><a href="https://www.instagram.com/k_mostovoy_school/" target="_blank" rel="noopener">Instagram школы — @k_mostovoy_school</a></li>
+      <li>Яндекс Вордстат — частотность SEO-ключей</li>
+      <li>Анкета «Старт проекта» — заполнена компанией 17.09.2026</li>
+      <li>Фирменные материалы: скриншоты логотипа, сторис-архива и меню, присланные для анализа палитры</li>
+    </ul>
+  </footer>
+
+</main>
+
+</body>
+</html>
