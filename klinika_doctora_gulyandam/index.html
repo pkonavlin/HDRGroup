@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Клиника доктора Гуляндам — ТЗ на контент</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12232A; --ink-soft:#4C6169; --line:#DCE6E7; --card:#FFFFFF; --bg:#F5F8F8;
+  --client-accent:#AE8575; --client-ink:#5E4642; --client-bg:#E9DACC; --client-bg2:#EADBCE; --client-milk:#F4EEEA;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#7FD4E8; --teal:#5FC2CF; --ice:#0B1A1F; --roe:#E38358;
+    --ink:#E9F3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#102227; --bg:#0B1A1F;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#7FD4E8; --teal:#5FC2CF; --ice:#0B1A1F; --roe:#E38358;
+  --ink:#E9F3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#102227; --bg:#0B1A1F;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Public Sans',sans-serif; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',sans-serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:var(--teal)}
+
+/* TOPBAR */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; gap:24px;
+  padding:14px 28px; background:var(--card);
+  border-bottom:1px solid var(--line);
+  overflow-x:auto; white-space:nowrap;
+}
+.topbar .brand{font-weight:800; font-size:17px; color:var(--ocean); margin-right:8px;}
+.topbar nav{display:flex; gap:18px;}
+.topbar nav a{
+  color:var(--ink-soft); text-decoration:none; font-size:14px; font-weight:600;
+  padding:6px 2px; border-bottom:2px solid transparent;
+}
+.topbar nav a:hover{color:var(--ocean); border-color:var(--teal);}
+
+.wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+
+/* HERO */
+.hero{padding:56px 0 32px;}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--roe); margin-bottom:10px; font-weight:600;
+}
+.hero h1{font-size:clamp(28px,4.5vw,42px); line-height:1.12; margin:0 0 10px; color:var(--ink);}
+.hero p.lead{color:var(--ink-soft); font-size:17px; max-width:640px; margin:0 0 28px;}
+
+.facts-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+}
+.fact{background:var(--card); padding:16px 18px;}
+.fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;}
+.fact .v{font-size:15px; font-weight:600; color:var(--ink);}
+
+section{padding:44px 0; border-top:1px solid var(--line);}
+section .tag{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--roe); font-weight:600;
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;
+}
+section h2{font-size:clamp(22px,3vw,30px); margin:0 0 22px; color:var(--ink);}
+
+/* BRANDBOOK */
+.swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:28px;}
+.swatch{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card);}
+.swatch .chip{height:64px;}
+.swatch .info{padding:10px 12px;}
+.swatch .role{font-size:12px; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+.swatch .hex{font-weight:700; font-size:14px; margin-top:2px;}
+
+.design-notes{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;
+}
+.note-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px;}
+.note-card h4{margin:0 0 10px; font-size:14px; font-family:'IBM Plex Mono',monospace; color:var(--roe); text-transform:uppercase; letter-spacing:.05em;}
+.note-card ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink-soft);}
+.note-card li{margin-bottom:6px;}
+
+/* LOGIC CYCLE */
+.cycle-flow{display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+.cycle-step{
+  background:var(--card); border:1px solid var(--line); border-radius:999px;
+  padding:9px 16px; font-size:14px; font-weight:600; color:var(--ink);
+}
+.cycle-arrow{color:var(--ink-soft); font-size:16px;}
+.cycle-note{margin-top:16px; color:var(--ink-soft); font-size:15px;}
+
+/* NEWS CARDS */
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:26px 28px; margin-bottom:22px;
+}
+.card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:14px;}
+.card-head h3{margin:0; font-size:19px; color:var(--ink); max-width:600px;}
+.purpose{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+  background:var(--ice); color:var(--teal); border:1px solid var(--line);
+  padding:5px 10px; border-radius:999px; white-space:nowrap; font-weight:600;
+}
+.card ul.thesis{margin:0 0 16px; padding-left:20px; font-size:14.5px; color:var(--ink);}
+.card ul.thesis li{margin-bottom:7px;}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;}
+.chip-seo{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--bg);
+  border:1px solid var(--line); color:var(--ink-soft); padding:4px 9px; border-radius:8px;
+}
+.meta-row{display:flex; flex-wrap:wrap; gap:14px; font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+.meta-row b{color:var(--ink);}
+.cta{
+  display:inline-block; font-size:13.5px; font-weight:700; color:var(--roe);
+  border:1px solid var(--roe); padding:7px 14px; border-radius:999px;
+}
+.cover-block{
+  margin-top:16px; padding:16px 18px; border-radius:12px;
+  background:var(--client-bg); border:1px solid var(--client-bg2);
+}
+.cover-block .cb-label{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--client-ink); font-weight:700; margin-bottom:8px; letter-spacing:.05em;}
+.cover-block .cb-title{font-weight:800; font-size:16px; color:var(--client-ink); margin-bottom:4px;}
+.cover-block .cb-sub{font-size:13.5px; color:var(--client-ink); opacity:.85; margin-bottom:8px;}
+.cover-block .cb-visual{font-size:13.5px; color:var(--client-ink);}
+
+/* STORIES */
+.story-card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:24px 26px; margin-bottom:18px;
+}
+.story-card h3{margin:0 0 12px; font-size:17px;}
+.story-card ul{margin:0 0 14px; padding-left:20px; font-size:14.5px;}
+.story-card li{margin-bottom:6px;}
+.slide-design{
+  background:var(--client-milk); border:1px solid var(--client-bg2); border-radius:12px;
+  padding:14px 16px; font-size:13.5px; color:var(--client-ink);
+}
+.slide-design b{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:6px; color:var(--client-accent);}
+
+/* TIMELINE / MAP */
+.timeline{border-left:2px solid var(--line); padding-left:22px; margin-left:6px;}
+.tl-stage{margin-bottom:26px; position:relative;}
+.tl-stage::before{
+  content:''; position:absolute; left:-28px; top:4px; width:10px; height:10px;
+  border-radius:50%; background:var(--teal); border:2px solid var(--card);
+}
+.tl-stage.current::before{background:var(--roe);}
+.tl-stage summary{cursor:pointer; font-weight:700; font-size:15px; list-style:none; display:flex; align-items:center; gap:10px;}
+.tl-stage summary::-webkit-details-marker{display:none;}
+.badge{
+  font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase;
+  padding:3px 9px; border-radius:999px; font-weight:700;
+}
+.badge.done{background:var(--ice); color:var(--teal); border:1px solid var(--line);}
+.badge.active{background:var(--roe); color:#fff;}
+table.reg{width:100%; border-collapse:collapse; margin-top:12px; font-size:13.5px;}
+table.reg th{
+  text-align:left; font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+  color:var(--ink-soft); padding:8px 10px; border-bottom:1px solid var(--line);
+}
+table.reg td{padding:9px 10px; border-bottom:1px solid var(--line); color:var(--ink);}
+table.reg tr:last-child td{border-bottom:none;}
+
+footer{padding:36px 0 60px; border-top:1px solid var(--line);}
+footer .src-title{font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px;}
+footer ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;}
+footer a{font-size:14px;}
+
+@media (max-width:600px){
+  .topbar{padding:12px 16px; gap:14px;}
+  .wrap{padding:0 16px;}
+  .card{padding:20px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">Клиника доктора Гуляндам</span>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Мини-брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<section class="hero" id="company" style="border-top:none;">
+  <div class="eyebrow">ТЗ на контент · этап 02</div>
+  <h1>Клиника доктора Гуляндам, Казань</h1>
+  <p class="lead">Косметология, салон красоты, медицинский центр. 2 темы для новостей с обложкой и 2 темы для сторис в формате презентации — продолжение уже реализованных на карточке материалов.</p>
+
+  <div class="facts-grid">
+    <div class="fact"><div class="k">Адрес</div><div class="v">Казань, ул. Чистопольская, 73, этаж 1</div></div>
+    <div class="fact"><div class="k">Телефон</div><div class="v">+7 (903) 305-40-63</div></div>
+    <div class="fact"><div class="k">Рейтинг</div><div class="v">4,8 · 22 отзыва на Яндекс Картах</div></div>
+    <div class="fact"><div class="k">Рубрики</div><div class="v">Косметология / Салон красоты / Медцентр, клиника</div></div>
+    <div class="fact"><div class="k">Врач</div><div class="v">Гуляндам Фаритовна — 15 лет в косметологии</div></div>
+    <div class="fact"><div class="k">Квалификация врача</div><div class="v">Челюстно-лицевой хирург, онколог, косметолог</div></div>
+    <div class="fact"><div class="k">Инъекционные направления</div><div class="v">Биоревитализация, полимолочная кислота, мезотерапия, PRP, ботулинотерапия</div></div>
+    <div class="fact"><div class="k">Аппаратные направления</div><div class="v">Fotona SP Dynamis, Fraxor, Lumecca</div></div>
+    <div class="fact"><div class="k">Публикация</div><div class="v">Карточка компании на Яндекс Картах и в 2ГИС</div></div>
+  </div>
+</section>
+
+<section id="brand">
+  <div class="tag">01 · Мини-брендбук</div>
+  <h2>Фирменная палитра и визуальный стиль</h2>
+  <p style="color:var(--ink-soft); margin-top:-10px; margin-bottom:22px;">После анализа сайта клиники и скриншотов её ресурсов определены фирменные цвета и графические особенности. Используются только в дизайн-заметках новостей и сторис — навигация и оформление самого документа ТЗ держатся на палитре студии.</p>
+
+  <div class="swatches">
+    <div class="swatch">
+      <div class="chip" style="background:#AE8575;"></div>
+      <div class="info"><div class="role">Акцентный</div><div class="hex">#AE8575</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#5E4642;"></div>
+      <div class="info"><div class="role">Текстовый</div><div class="hex">#5E4642</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#E9DACC;"></div>
+      <div class="info"><div class="role">Фоновый основной</div><div class="hex">#E9DACC</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#EADBCE;"></div>
+      <div class="info"><div class="role">Фоновый второстепенный</div><div class="hex">#EADBCE</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#F4EEEA;"></div>
+      <div class="info"><div class="role">Молочно-белый (карточки)</div><div class="hex">#F4EEEA</div></div>
+    </div>
+  </div>
+
+  <div class="design-notes">
+    <div class="note-card">
+      <h4>Типографика</h4>
+      <ul>
+        <li>Заголовки — контрастный serif, крупный кегль, короткие строки</li>
+        <li>Основной текст — нейтральный современный sans-serif</li>
+        <li>Заглавные буквы в подписях и лейблах с широким трекингом</li>
+        <li>Максимум 2 шрифта на макет</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Фотостиль</h4>
+      <ul>
+        <li>Портрет врача — приоритетный визуал</li>
+        <li>Интерьер клиники и аппаратура в кадре</li>
+        <li>Естественный свет, без чрезмерной ретуши</li>
+        <li>Без агрессивных «до/после» и крупных планов игл</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Композиция</h4>
+      <ul>
+        <li>Много свободного пространства, спокойная асимметрия</li>
+        <li>Тонкие декоративные линии-разделители</li>
+        <li>Круглые кнопки-стрелки и нумерованные кружки как фирменный приём</li>
+        <li>Пилюли-бейджи для коротких фактов («15 лет в косметологии»)</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Тон</h4>
+      <ul>
+        <li>Премиальная медицинская эстетика без визуальной агрессии</li>
+        <li>Спокойная, дорогая, чистая, профессиональная подача</li>
+        <li>Без «инстаграмной бьюти-рекламы» и кислотных цветов</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="tag">02 · Логика цикла</div>
+  <h2>Как этап 2 продолжает уже реализованное</h2>
+  <div class="cycle-flow">
+    <div class="cycle-step">Этап 1: экспертиза врача и инъекционные направления</div>
+    <span class="cycle-arrow">→</span>
+    <div class="cycle-step">На карточке вышли первые аппаратные темы</div>
+    <span class="cycle-arrow">→</span>
+    <div class="cycle-step">Этап 2: оставшиеся аппаратные направления</div>
+  </div>
+  <p class="cycle-note">Этап 1 закрыл фигуру врача, принцип индивидуального подбора и пять инъекционных методик. После этого на карточке уже опубликованы материалы про аппаратную работу — «Эндолифтинг» и «Fotona SP Dynamis». В прайсе карточки при этом остаются ещё два аппаратных направления без собственной новости — Fraxor и Lumecca. Этап 2 закрывает именно их и одновременно знакомит аудиторию с самим форматом аппаратной процедуры в клинике — тема, которую этап 1 не затрагивал вовсе.</p>
+</section>
+
+<section id="news">
+  <div class="tag">03 · Новости</div>
+  <h2>Темы для новостей (2)</h2>
+
+  <div class="card">
+    <div class="card-head">
+      <h3>Лазерное омоложение Fraxor: обновление текстуры кожи без разрезов</h3>
+      <span class="purpose">Экспертная</span>
+    </div>
+    <ul class="thesis">
+      <li>Fraxor — фракционная лазерная методика, точечное воздействие на верхние слои кожи</li>
+      <li>Запускает естественное обновление тканей и синтез коллагена</li>
+      <li>Применяется при неровной текстуре кожи, расширенных порах, поверхностных рубцах и тусклом цвете лица</li>
+      <li>Короткий восстановительный период по сравнению с классической шлифовкой</li>
+      <li>В клинике доступна в формате «Лицо + шея»</li>
+      <li>Сочетается с другими методиками клиники по назначению врача</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-seo">лазерное омоложение Казань</span>
+      <span class="chip-seo">Fraxor Казань</span>
+      <span class="chip-seo">фракционный лазер лицо</span>
+      <span class="chip-seo">омоложение кожи лазером Казань</span>
+      <span class="chip-seo">аппаратная косметология Казань</span>
+      <span class="chip-seo">клиника косметологии Казань</span>
+      <span class="chip-seo">косметолог Казань</span>
+    </div>
+    <div class="meta-row"><span><b>Публикация:</b> карточка на Яндекс Картах и в 2ГИС</span></div>
+    <span class="cta">Записаться на консультацию по Fraxor</span>
+    <div class="cover-block">
+      <div class="cb-label">ТЗ на обложку</div>
+      <div class="cb-title">Fraxor: лазерное обновление кожи</div>
+      <div class="cb-sub">Аппаратная методика клиники доктора Гуляндам</div>
+      <div class="cb-visual">Визуал: кадр процедуры или аппарата, терракотовый акцент #AE8575, логотип клиники в углу</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h3>Фотоомоложение Lumecca: работа с пигментацией и сосудистой сеточкой</h3>
+      <span class="purpose">Экспертная</span>
+    </div>
+    <ul class="thesis">
+      <li>Lumecca — методика на основе интенсивного импульсного света (IPL)</li>
+      <li>Направлена на пигментные пятна, покраснения и сосудистую сеточку</li>
+      <li>Воздействует точечно на конкретные несовершенства, не затрагивая здоровую кожу вокруг</li>
+      <li>В клинике доступна в формате «Лицо» и «Лицо + шея»</li>
+      <li>Дополняет инъекционные методики клиники, когда задача пациента — тон и пигментация, а не объём или морщины</li>
+      <li>Параметры процедуры подбираются под тип кожи пациента</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-seo">фотоомоложение Казань</span>
+      <span class="chip-seo">Lumecca Казань</span>
+      <span class="chip-seo">IPL омоложение</span>
+      <span class="chip-seo">лечение пигментации Казань</span>
+      <span class="chip-seo">сосудистая сеточка косметология</span>
+      <span class="chip-seo">купероз лечение Казань</span>
+      <span class="chip-seo">клиника косметологии Казань</span>
+    </div>
+    <div class="meta-row"><span><b>Публикация:</b> карточка на Яндекс Картах и в 2ГИС</span></div>
+    <span class="cta">Записаться на консультацию по Lumecca</span>
+    <div class="cover-block">
+      <div class="cb-label">ТЗ на обложку</div>
+      <div class="cb-title">Lumecca: свет против пигментации</div>
+      <div class="cb-sub">Аппаратная методика клиники доктора Гуляндам</div>
+      <div class="cb-visual">Визуал: кадр процедуры или аппарата, терракотовый акцент #AE8575, логотип клиники в углу</div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="tag">04 · Сторис</div>
+  <h2>Темы для сторис (2)</h2>
+
+  <div class="story-card">
+    <h3>Аппаратная косметология клиники: три направления</h3>
+    <ul>
+      <li>Fotona SP Dynamis — лазерная работа с качеством кожи</li>
+      <li>Fraxor — лазерное обновление текстуры кожи</li>
+      <li>Lumecca — фотоомоложение против пигментации и сосудистой сеточки</li>
+      <li>Каждое направление решает свою задачу и подбирается под запрос пациента</li>
+      <li>Дополняет инъекционные методики клиники</li>
+    </ul>
+    <div class="slide-design">
+      <b>Дизайн слайда</b>
+      Фон #E9DACC, заголовок #5E4642, акцентные элементы #AE8575. Крупное фото аппарата или кабинета, логотип клиники небольшого размера в углу.
+    </div>
+  </div>
+
+  <div class="story-card">
+    <h3>Как проходит аппаратная процедура в клинике</h3>
+    <ul>
+      <li>Консультация и определение задачи — текстура кожи, пигментация или её общее качество</li>
+      <li>Подбор конкретного аппарата и параметров под пациента</li>
+      <li>Сама процедура — без разрезов, контролируемое воздействие</li>
+      <li>Короткий восстановительный период</li>
+      <li>Курс процедур определяется индивидуально</li>
+    </ul>
+    <div class="slide-design">
+      <b>Дизайн слайда</b>
+      Фон #F4EEEA, заголовок #5E4642, акцентные элементы #AE8575. Фото процесса процедуры или кабинета, логотип клиники небольшого размера в углу.
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="tag">06 · Карта тем</div>
+  <h2>История и текущий этап</h2>
+
+  <div class="timeline">
+    <details class="tl-stage">
+      <summary>Этап 1 — экспертиза врача и инъекционные направления <span class="badge done">реализовано</span></summary>
+      <table class="reg">
+        <tr><th>№</th><th>Формат</th><th>Тема</th></tr>
+        <tr><td>1</td><td>Новость</td><td>Не просто косметолог: медицинская экспертиза доктора Гуляндам</td></tr>
+        <tr><td>2</td><td>Новость</td><td>Как в клинике подбирают косметологические процедуры</td></tr>
+        <tr><td>3</td><td>Новость</td><td>Какие процедуры доступны в клинике доктора Гуляндам</td></tr>
+        <tr><td>4</td><td>Новость</td><td>Официальные препараты и проверенные методики: что это значит для пациента</td></tr>
+        <tr><td>5</td><td>Сторис</td><td>Доктор Гуляндам: опыт и специализация</td></tr>
+        <tr><td>6</td><td>Сторис</td><td>Естественный результат — один из принципов клиники</td></tr>
+        <tr><td>7</td><td>Сторис</td><td>5 основных направлений инъекционной косметологии</td></tr>
+        <tr><td>8</td><td>Сторис</td><td>Почему в косметологии важен врач, а не только процедура</td></tr>
+        <tr><td>9</td><td>Новость (карточка)</td><td>Медицинская квалификация — основа безопасной и эффективной косметологии</td></tr>
+        <tr><td>10</td><td>Новость (карточка)</td><td>Эндолифтинг: технология преображения изнутри</td></tr>
+        <tr><td>11</td><td>Новость (карточка)</td><td>Аппаратное омоложение на Fotona SP Dynamis: комплексная работа с качеством кожи</td></tr>
+      </table>
+    </details>
+
+    <details class="tl-stage current" open>
+      <summary>Этап 2 — оставшиеся аппаратные направления <span class="badge active">актуальный</span></summary>
+      <table class="reg">
+        <tr><th>№</th><th>Формат</th><th>Тема</th></tr>
+        <tr><td>12</td><td>Новость</td><td>Лазерное омоложение Fraxor: обновление текстуры кожи без разрезов</td></tr>
+        <tr><td>13</td><td>Новость</td><td>Фотоомоложение Lumecca: работа с пигментацией и сосудистой сеточкой</td></tr>
+        <tr><td>14</td><td>Сторис</td><td>Аппаратная косметология клиники: три направления</td></tr>
+        <tr><td>15</td><td>Сторис</td><td>Как проходит аппаратная процедура в клинике</td></tr>
+      </table>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="src-title">Источники</div>
+  <ul>
+    <li><a href="http://clinic-gulyandam.ru/" target="_blank">clinic-gulyandam.ru</a></li>
+    <li><a href="https://yandex.ru/maps/-/CXA-RFOD" target="_blank">Карточка клиники на Яндекс Картах</a></li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>
