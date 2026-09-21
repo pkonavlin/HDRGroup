@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сыроварня Воронеж — ТЗ на контент</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --ice-text:#122024; --roe:#C4572B;
+    --ink:#122024; --ink-soft:#4B6067; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+    --brand-bg:#E4E0D5; --brand-wood:#DCBEA4; --brand-ink:#343433; --brand-white:#FFFFFF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#EAF2F2; --ink-soft:#A9BEC2; --line:#20393D; --card:#0E2226; --bg:#0A1A1D; --ice:#173236; --ice-text:#EAF2F2; }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',sans-serif;line-height:1.55;}
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;margin:0 0 .4em;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--roe);}
+
+  header.topbar{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:24px;
+    background:var(--ocean); color:#fff; padding:14px 28px; flex-wrap:wrap;
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:18px; margin-right:auto;}
+  header.topbar nav{display:flex; gap:18px; flex-wrap:wrap;}
+  header.topbar nav a{color:#CFE7E9; text-decoration:none; font-size:14px; font-family:'IBM Plex Mono',monospace;}
+  header.topbar nav a:hover{color:#fff;}
+
+  main{max-width:980px; margin:0 auto; padding:40px 24px 100px;}
+  section{margin-bottom:64px; scroll-margin-top:80px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.08em; font-size:12px; color:var(--teal); margin-bottom:8px;}
+
+  .facts-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:20px;}
+  .fact{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;}
+  .fact .v{font-size:15px; font-weight:600;}
+
+  .swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-top:20px;}
+  .swatch{border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card);}
+  .swatch .chip{height:72px;}
+  .swatch .info{padding:10px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:14px; margin-top:2px;}
+  .bb-note{margin-top:18px; color:var(--ink-soft); font-size:14px; max-width:640px;}
+
+  .cycle{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; font-size:15px; color:var(--ink-soft);}
+  .cycle b{color:var(--ink);}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 26px; margin-bottom:22px;}
+  .card-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;}
+  .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; background:var(--ice); border:1px solid var(--line); color:var(--teal); border-radius:999px; padding:4px 12px;}
+  .card h3{font-size:20px;}
+  .thesis{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--roe); margin-bottom:14px;}
+  .card p{margin:0 0 12px; font-size:14.5px;}
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin:12px 0;}
+  .chip{font-size:12px; background:var(--ice); border:1px solid var(--line); border-radius:6px; padding:4px 9px; color:var(--ice-text);}
+  .meta-row{display:flex; gap:22px; flex-wrap:wrap; font-size:13px; color:var(--ink-soft); margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);}
+  .meta-row b{color:var(--ink);}
+  .cover-block{margin-top:16px; background:var(--ice); border-radius:10px; padding:14px 16px; font-size:13.5px; color:var(--ice-text);}
+  .cover-block b{color:var(--ink);}
+
+  .story-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin-bottom:18px;}
+  .story-card h3{font-size:17px; margin-bottom:8px;}
+  .story-card .design-note{margin-top:12px; background:var(--ice); border-radius:8px; padding:10px 14px; font-size:13.5px; color:var(--ice-text);}
+
+  details.stage{border:1px solid var(--line); border-radius:12px; margin-bottom:12px; background:var(--card); padding:4px 0;}
+  details.stage summary{cursor:pointer; padding:14px 20px; font-weight:600; list-style:none;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .stage-body{padding:0 20px 16px; font-size:14px; color:var(--ink-soft);}
+  .stage.current{border-color:var(--roe);}
+  .badge-current{display:inline-block; margin-left:10px; font-family:'IBM Plex Mono',monospace; font-size:11px; background:var(--roe); color:#fff; border-radius:999px; padding:2px 9px;}
+
+  footer.sources{border-top:1px solid var(--line); padding-top:20px; font-size:13.5px; color:var(--ink-soft);}
+  footer.sources a{color:var(--teal);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Сыроварня · Воронеж</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1>Ресторан «Сыроварня», Воронеж</h1>
+    <p style="max-width:640px;color:var(--ink-soft)">Деревенский ресторан и сырная лавка сети Аркадия Новикова. Материал этапа продолжает раскрытие ресторана — от продукта и атмосферы к практическим поводам обратиться в «Сыроварню» вне обычного визита.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Адрес</div><div class="v">г. Воронеж, ул. Ленина, 10, Центральный парк «Динамо»</div></div>
+      <div class="fact"><div class="k">Сеть</div><div class="v">Рестораны Аркадия Новикова, десятки городов России, с 2026 года — Дубай</div></div>
+      <div class="fact"><div class="k">Вместимость</div><div class="v">240 мест на двух этажах + летняя веранда на 150 мест</div></div>
+      <div class="fact"><div class="k">Парковка</div><div class="v">Бесплатная, 220 машиномест</div></div>
+      <div class="fact"><div class="k">Производство</div><div class="v">Собственная сыроварня в зале + сырная лавка навынос</div></div>
+      <div class="fact"><div class="k">Кухня</div><div class="v">Дровяная печь (пицца, хлеб), паста, фокачча с бурратой</div></div>
+      <div class="fact"><div class="k">Завтраки</div><div class="v">10:00–12:00, включая английский завтрак</div></div>
+      <div class="fact"><div class="k">Доставка</div><div class="v">Служба доставки 8 (800) 707-50-76, приложение App Store / Google Play</div></div>
+      <div class="fact"><div class="k">Программа лояльности</div><div class="v">Бонусная система для постоянных гостей</div></div>
+      <div class="fact"><div class="k">Аренда</div><div class="v">Зал и веранда — под банкеты и мероприятия</div></div>
+      <div class="fact"><div class="k">Доступность</div><div class="v">Комната матери и ребёнка, доступная среда, можно с собакой</div></div>
+      <div class="fact"><div class="k">Бронирование</div><div class="v">+7 (473) 202-05-00</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2>Фирменная палитра «Сыроварни»</h2>
+    <p style="color:var(--ink-soft);max-width:640px">После анализа фирменных материалов ресторана определена спокойная, тёплая палитра деревенского стиля: кремовый фон, тёплое дерево и графитовый текст — без ярких акцентных цветов.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#E4E0D5"></div><div class="info"><div class="role">Основной / фоновый</div><div class="hex">#E4E0D5</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#DCBEA4"></div><div class="info"><div class="role">Второстепенный / тёплое дерево</div><div class="hex">#DCBEA4</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#343433"></div><div class="info"><div class="role">Текстовый</div><div class="hex">#343433</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #DCE6E6"></div><div class="info"><div class="role">Фоновый / карточный</div><div class="hex">#FFFFFF</div></div></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2>Как строится этот этап</h2>
+    <div class="cycle">Предыдущие этапы раскрыли <b>продукт</b> (собственный сыр, дровяная кухня) и <b>атмосферу</b> (веранда с видом на парк, вместимость, завтраки, сеть Аркадия Новикова). Этот этап логично продолжает историю ресторана в сторону <b>практических поводов обратиться в «Сыроварню» вне обычного визита</b>: заказать блюда домой, провести здесь собственное мероприятие и получать выгоду от постоянных визитов.</div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2>Темы новостных публикаций — 3 темы</h2>
+
+    <div class="card">
+      <div class="card-head"><h3>Доставка блюд ресторана «Сыроварня» на дом</h3><span class="tag">сервисный</span></div>
+      <div class="thesis">Тезис на обложку: «Сыроварня у вас дома»</div>
+      <p>Раскрыть доставку как способ получить кухню Сыроварни Воронеж не выходя из дома: весь фирменный ассортимент ресторана — пицца и хлеб из дровяной печи, паста, фокачча с бурратой, авторские сыры собственного производства — доступен на дом через службу доставки Сыроварни Воронеж. Подчеркнуть удобство заказа через мобильное приложение (App Store, Google Play) или по телефону службы доставки. Сделать акцент на том, что качество и свежесть блюд ресторана Воронежа сохраняются и при доставке — фирменная упаковка, быстрая доставка по городу. Это отличный повод для тех, кто ищет ресторан с доставкой в Воронеже и хочет получить кухню Сыроварни Воронеж в любой точке города.</p>
+      <div class="chips">
+        <span class="chip">Сыроварня Воронеж доставка</span><span class="chip">доставка еды Воронеж</span><span class="chip">заказать пиццу на дом Воронеж</span><span class="chip">доставка итальянской кухни Воронеж</span><span class="chip">доставка пасты Воронеж</span><span class="chip">ресторан с доставкой Воронеж</span><span class="chip">заказать ужин на дом Воронеж</span><span class="chip">приложение Сыроварня Воронеж</span><span class="chip">доставка сыра на дом Воронеж</span><span class="chip">служба доставки ресторана Воронеж</span>
+      </div>
+      <div class="meta-row"><span><b>CTA:</b> заказать доставку по телефону 8 (800) 707-50-76 или в приложении «Сыроварня»</span></div>
+      <div class="cover-block"><b>ТЗ на обложку:</b> крупный план фирменной упаковки на вынос (коробка с пиццей или фокаччей), тёплые тона, минимум текста поверх фото.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Аренда зала ресторана «Сыроварня» для банкетов и торжеств</h3><span class="tag">продающий</span></div>
+      <div class="thesis">Тезис на обложку: «Ваш праздник здесь»</div>
+      <p>Показать Сыроварню Воронеж как ресторан для проведения мероприятий: вместимость 240 мест на двух этажах и летняя веранда на 150 мест позволяют разместить банкет, день рождения, корпоратив или свадебное торжество любого масштаба. Раскрыть, что для мероприятия можно арендовать как основной зал ресторана Воронежа, так и веранду с видом на Центральный парк «Динамо». Подчеркнуть, что гостям мероприятия доступно фирменное меню ресторана — паста, дровяная пицца, фокачча с бурратой — и винная карта Сыроварни Воронеж. Это ответ на запрос тех, кто ищет ресторан для банкета в Воронеже, зал для корпоратива в Воронеже или место для свадебного торжества в ресторане Воронежа.</p>
+      <div class="chips">
+        <span class="chip">аренда зала Воронеж</span><span class="chip">банкетный зал Воронеж</span><span class="chip">ресторан для свадьбы Воронеж</span><span class="chip">ресторан для корпоратива Воронеж</span><span class="chip">ресторан для дня рождения Воронеж</span><span class="chip">аренда веранды Воронеж</span><span class="chip">организация банкета Воронеж</span><span class="chip">зал для мероприятий Воронеж</span><span class="chip">ресторан для торжества Воронеж</span>
+      </div>
+      <div class="meta-row"><span><b>CTA:</b> забронировать зал по телефону +7 (473) 202-05-00</span></div>
+      <div class="cover-block"><b>ТЗ на обложку:</b> сервированный банкетный стол в зале или на веранде ресторана, широкий план, тёплый свет.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Программа лояльности ресторана «Сыроварня»</h3><span class="tag">вовлекающий</span></div>
+      <div class="thesis">Тезис на обложку: «Бонусы за визиты»</div>
+      <p>Рассказать о программе лояльности Сыроварни Воронеж — системе, которая делает каждый следующий визит в ресторан выгоднее. Подчеркнуть, что постоянные гости ресторана Воронежа накапливают бонусы за визиты и могут использовать их при следующих заказах — в зале или при доставке. Подключиться к программе лояльности Сыроварни Воронеж можно через мобильное приложение или у администратора зала при визите. Такая механика работает на удержание гостей и делает Сыроварню Воронеж не разовым, а постоянным местом для визитов.</p>
+      <div class="chips">
+        <span class="chip">программа лояльности ресторан Воронеж</span><span class="chip">бонусы ресторан Воронеж</span><span class="chip">скидка постоянным гостям Воронеж</span><span class="chip">накопительная система ресторан Воронеж</span><span class="chip">выгодный ресторан Воронеж</span><span class="chip">карта лояльности Воронеж</span>
+      </div>
+      <div class="meta-row"><span><b>CTA:</b> подключить программу лояльности при следующем визите</span></div>
+      <div class="cover-block"><b>ТЗ на обложку:</b> смартфон с открытым приложением лояльности на фоне интерьера ресторана.</div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2>Темы сторис — 3 темы (один слайд)</h2>
+
+    <div class="story-card">
+      <h3>Доставка навынос</h3>
+      <p>Коротко: весь ассортимент Сыроварни Воронеж — пицца, паста, фокачча с бурратой — теперь доступен с доставкой на дом. Заказ через приложение или по телефону службы доставки.</p>
+      <div class="chips"><span class="chip">доставка Сыроварня Воронеж</span><span class="chip">еда навынос Воронеж</span><span class="chip">доставка пиццы Воронеж</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото блюда в фирменной упаковке крупным планом на фоне #E4E0D5, текст тезиса графитом #343433.</div>
+    </div>
+
+    <div class="story-card">
+      <h3>Праздник в Сыроварне</h3>
+      <p>Коротко: зал и веранда Сыроварни Воронеж — готовое место для банкета, дня рождения или корпоратива. Бронирование по телефону.</p>
+      <div class="chips"><span class="chip">банкет Воронеж</span><span class="chip">аренда зала Воронеж</span><span class="chip">мероприятие в ресторане Воронеж</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото сервированного стола в зале/на веранде, тёплый свет, акцент — дерево #DCBEA4.</div>
+    </div>
+
+    <div class="story-card">
+      <h3>Бонусы за визиты</h3>
+      <p>Коротко: программа лояльности Сыроварни Воронеж — бонусы за каждый визит. Подключение в приложении.</p>
+      <div class="chips"><span class="chip">программа лояльности Воронеж</span><span class="chip">бонусы ресторан Воронеж</span><span class="chip">приложение Сыроварня</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> смартфон с экраном приложения в руке на фоне интерьера ресторана, фон #E4E0D5.</div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2>История и текущий этап</h2>
+
+    <details class="stage">
+      <summary>История — темы, уже реализованные на карточке и сайте компании</summary>
+      <div class="stage-body">
+        Новости: своя сыроварня и сырная лавка; ресторан с видом на парк «Динамо» и летней верандой; кухня из дровяной печи (пицца, паста, фокачча с бурратой); вместимость и парковка для больших компаний и семей; завтраки; принадлежность к сети Аркадия Новикова; праздник для школьников 1 сентября; акция «Сырная пятёрка»; гастрономический вечер с мраморной свининой дюрок; сезон лисичек в меню; открытие ресторана в Дубае.<br><br>
+        Сторис: собственное производство сыра; веранда с видом на парк; пицца из дровяной печи; удобство для гостей (парковка, вместимость, бронь); винная карта; гостеприимство (можно с собакой, доступная среда); анонс 1 сентября; акция «сыр в подарок к вину».
+      </div>
+    </details>
+
+    <details class="stage current" open>
+      <summary>Этап 01 — текущий <span class="badge-current">актуальный</span></summary>
+      <div class="stage-body">
+        Новости: доставка блюд на дом; аренда зала для банкетов и мероприятий; программа лояльности.<br>
+        Сторис: доставка навынос; праздник в Сыроварне (аренда); бонусы за визиты (лояльность).
+      </div>
+    </details>
+  </section>
+
+  <footer class="sources">
+    Публикация — карточка ресторана «Сыроварня» на Яндекс Картах и в 2ГИС.<br>
+    Источники: <a href="https://www.syrovarnya.com/" target="_blank">syrovarnya.com</a>, карточка на Яндекс Картах, скриншоты фирменных материалов компании.
+  </footer>
+
+</main>
+</body>
+</html>
