@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Эко Дом Сервис — ТЗ</title>
+<style>
+  :root{
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+    --ink:#16232A; --ink-soft:#4E6266; --line:#D8E2E2; --card:#FFFFFF; --bg:#F5F8F8;
+    --mono-bg:#EAF1F1;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#0E3B47; --teal:#3FA8B8; --ice:#0F1B1E; --roe:#E17A4D;
+      --ink:#EAF3F3; --ink-soft:#9FB6B8; --line:#233436; --card:#132224; --bg:#0B1517;
+      --mono-bg:#182828;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#0E3B47; --teal:#3FA8B8; --ice:#0F1B1E; --roe:#E17A4D;
+    --ink:#EAF3F3; --ink-soft:#9FB6B8; --line:#233436; --card:#132224; --bg:#0B1517;
+    --mono-bg:#182828;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Public Sans', system-ui, sans-serif;
+    font-size:16px; line-height:1.55;
+    padding-inline:0;
+  }
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque', 'Public Sans', sans-serif; margin:0; text-wrap:balance;}
+  .mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+  a{color:inherit}
+
+  .wrap{max-width:960px; margin:0 auto; padding-inline:20px;}
+
+  /* ---- sticky top bar ---- */
+  header.topbar{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:960px; margin:0 auto; padding:14px 20px;
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; letter-spacing:-0.01em; white-space:nowrap;}
+  nav.seclinks{display:flex; gap:16px; flex-wrap:wrap; overflow-x:auto;}
+  nav.seclinks a{
+    font-size:13px; color:var(--ink-soft); text-decoration:none; white-space:nowrap;
+    padding-block:4px; border-bottom:2px solid transparent;
+  }
+  nav.seclinks a:hover{color:var(--teal); border-color:var(--teal);}
+
+  section{padding-block:56px; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--roe); margin-bottom:10px; display:block;
+  }
+  h2.sectitle{font-size:clamp(24px,4vw,32px); margin-bottom:8px;}
+  p.lede{color:var(--ink-soft); max-width:640px; margin-top:6px;}
+
+  /* ---- hero / company facts ---- */
+  .hero-top{padding-top:64px;}
+  .hero-title{font-size:clamp(30px,5.4vw,46px); line-height:1.08; max-width:760px;}
+  .hero-sub{color:var(--ink-soft); max-width:600px; margin-top:14px; font-size:16px;}
+  .facts{
+    margin-top:36px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  }
+  .fact{background:var(--card); padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);}
+  .fact .v{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; margin-top:4px;}
+
+  /* ---- brandbook ---- */
+  .bb-group{margin-top:28px;}
+  .bb-group h3{font-size:18px; margin-bottom:4px;}
+  .bb-group .site{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft);}
+  .swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:14px;}
+  .swatch{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card);}
+  .swatch .chip{height:64px;}
+  .swatch .label{padding:10px 12px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace; font-size:13px; margin-top:2px;}
+
+  /* ---- логика цикла ---- */
+  .cycle{margin-top:20px; display:flex; flex-direction:column; gap:14px;}
+  .cycle p{margin:0; color:var(--ink-soft); max-width:720px;}
+
+  /* ---- news cards ---- */
+  .news-list{display:flex; flex-direction:column; gap:20px; margin-top:28px;}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px;
+  }
+  .card .tag{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--teal);
+    border:1px solid var(--teal); border-radius:999px; padding:3px 10px; margin-bottom:12px;
+  }
+  .card h3{font-size:20px; margin-bottom:12px;}
+  .card ul{margin:0 0 16px; padding-left:18px; color:var(--ink);}
+  .card ul li{margin-bottom:6px;}
+  .seo-row{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--mono-bg);
+    border:1px solid var(--line); border-radius:6px; padding:4px 9px; color:var(--ink-soft);
+  }
+  .meta-row{display:flex; flex-wrap:wrap; gap:20px; font-size:13.5px; color:var(--ink-soft); margin-bottom:14px;}
+  .meta-row b{color:var(--ink); font-weight:600;}
+  .cta{font-size:14.5px; padding:10px 14px; background:var(--ice); border-left:3px solid var(--roe); border-radius:6px;}
+  .cover-tz{margin-top:14px; padding:14px 16px; border:1px dashed var(--line); border-radius:10px; font-size:13.5px; color:var(--ink-soft);}
+  .cover-tz b{color:var(--ink);}
+
+  /* ---- stories ---- */
+  .story-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:28px;}
+  .story-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px;}
+  .story-card .tag{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--roe);
+    border:1px solid var(--roe); border-radius:999px; padding:3px 10px; margin-bottom:10px;
+  }
+  .story-card h4{font-size:16.5px; margin-bottom:10px;}
+  .story-card ul{margin:0 0 12px; padding-left:16px; font-size:14.5px;}
+  .story-card ul li{margin-bottom:4px;}
+  .design-note{font-size:12.5px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:10px; margin-top:4px;}
+
+  /* ---- roadmap ---- */
+  .roadmap{margin-top:28px; position:relative; padding-left:26px;}
+  .roadmap::before{content:"";position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:var(--line);}
+  .stage{margin-bottom:20px;}
+  .stage-head{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .stage-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em;
+    background:var(--roe); color:#fff; border-radius:999px; padding:3px 11px;
+  }
+  .rm-item{position:relative; padding:10px 0 10px 18px; border-left:2px solid var(--line); margin-left:-27px; padding-left:27px;}
+  .rm-item::before{
+    content:""; position:absolute; left:-5px; top:16px; width:10px; height:10px; border-radius:50%;
+    background:var(--teal); border:2px solid var(--bg);
+  }
+  .rm-item .rm-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--teal); text-transform:uppercase; letter-spacing:.05em;}
+  .rm-item .rm-title{font-weight:600; margin-top:2px;}
+  .rm-item .rm-thesis{font-size:13.5px; color:var(--ink-soft); margin-top:2px;}
+
+  footer.src{padding-block:40px 60px;}
+  footer.src ul{list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:6px;}
+  footer.src a{font-size:13.5px; color:var(--ink-soft); text-decoration:underline;}
+
+  @media (max-width:640px){
+    section{padding-block:40px;}
+    .topbar-inner{padding-block:12px;}
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Эко Дом Сервис</div>
+    <nav class="seclinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#roadmap">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="company" class="hero-top">
+    <span class="eyebrow">Компания · Этап 1</span>
+    <h1 class="hero-title">Два направления одной команды: окна и натяжные потолки в Чебоксарах</h1>
+    <p class="hero-sub">ООО «Эко Дом Сервис» ведёт продвижение на Яндекс Картах и в 2ГИС так, чтобы обе линии бизнеса — пластиковые окна и натяжные потолки — получали равное внимание и вели на собственные сайты каждого направления.</p>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Компания</div><div class="v">ООО «Эко Дом Сервис»</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Чебоксары</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">пр. Тракторостроителей, 11, офис 508</div></div>
+      <div class="fact"><div class="k">На рынке</div><div class="v">С 2011 года</div></div>
+      <div class="fact"><div class="k">Направление 1</div><div class="v">Окна · остекление балконов</div></div>
+      <div class="fact"><div class="k">Направление 2</div><div class="v">Натяжные потолки</div></div>
+      <div class="fact"><div class="k">Категории на Яндекс Картах</div><div class="v">Окна · Потолочные системы · Остекление балконов и лоджий</div></div>
+      <div class="fact"><div class="k">Рейтинг</div><div class="v">5.0 · 53 оценки</div></div>
+      <div class="fact"><div class="k">Сайт окон</div><div class="v">ekodomokna.ru</div></div>
+      <div class="fact"><div class="k">Сайт потолков</div><div class="v">ekodompotolki.ru</div></div>
+      <div class="fact"><div class="k">Команда</div><div class="v">26 аттестованных специалистов</div></div>
+      <div class="fact"><div class="k">Публикация</div><div class="v">Карточка на Яндекс Картах и в 2ГИС</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <span class="eyebrow">02 · Мини-брендбук</span>
+    <h2 class="sectitle">Фирменные палитры направлений</h2>
+    <p class="lede">После анализа сайтов ekodomokna.ru и ekodompotolki.ru определены две самостоятельные фирменные палитры — по одной на каждое направление. Оба цвета сняты пиксель-семплингом с кнопок и акцентов на присланных скриншотах.</p>
+
+    <div class="bb-group">
+      <h3>Направление «Окна»</h3>
+      <div class="site">ekodomokna.ru</div>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background:#D13731"></div><div class="label"><div class="role">Акцентный</div><div class="hex">#D13731</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#0A0A0A"></div><div class="label"><div class="role">Фоновый тёмный</div><div class="hex">#0A0A0A</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #eee"></div><div class="label"><div class="role">Фоновый светлый</div><div class="hex">#FFFFFF</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#1A1A1A"></div><div class="label"><div class="role">Текстовый</div><div class="hex">#1A1A1A</div></div></div>
+      </div>
+    </div>
+
+    <div class="bb-group">
+      <h3>Направление «Натяжные потолки»</h3>
+      <div class="site">ekodompotolki.ru</div>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background:#448CEC"></div><div class="label"><div class="role">Акцентный</div><div class="hex">#448CEC</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#100F18"></div><div class="label"><div class="role">Фоновый тёмный</div><div class="hex">#100F18</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid #eee"></div><div class="label"><div class="role">Фоновый светлый</div><div class="hex">#FFFFFF</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#1A1A1A"></div><div class="label"><div class="role">Текстовый</div><div class="hex">#1A1A1A</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <span class="eyebrow">03 · Логика цикла</span>
+    <h2 class="sectitle">Как связаны темы этапа</h2>
+    <div class="cycle">
+      <p>Этап открывается общей темой о компании, которая сразу показывает оба направления и обе ссылки — на ekodomokna.ru и ekodompotolki.ru, — чтобы аудитория сориентировалась с первого материала.</p>
+      <p>Далее темы идут поочерёдно по направлениям: окна раскрываются через партнёрство с REHAU и гарантии, потолки — через виды полотна и защиту от протечек. Так оба направления получают равный объём внимания.</p>
+      <p>Завершает блок тема об остеклении и обшивке балконов — она объединяет окна и отделку в одной услуге и логично продолжает оконную линию.</p>
+      <p>Сторис закрепляют по два факта на направление: гарантия и рассрочка по окнам, ассортимент и скорость монтажа по потолкам — синхронно с новостными темами.</p>
+    </div>
+  </section>
+
+  <section id="news">
+    <span class="eyebrow">04 · Новости</span>
+    <h2 class="sectitle">4 темы + обложка</h2>
+    <p class="lede">Публикация — карточка «Эко Дом Сервис» на Яндекс Картах и в 2ГИС. Каждый текст ведёт на сайт своего направления.</p>
+
+    <div class="news-list">
+
+      <div class="card">
+        <span class="tag">Имиджевая</span>
+        <h3>Эко Дом Сервис: окна и потолки от одной команды за 14 лет работы в Чебоксарах</h3>
+        <ul>
+          <li>ООО «Эко Дом Сервис» работает в Чебоксарах и Чувашии с 2011 года, офис — пр. Тракторостроителей, 11</li>
+          <li>Два направления под одной командой: пластиковые окна и натяжные потолки, 26 аттестованных специалистов</li>
+          <li>Компания — официальный партнёр REHAU по оконным профилям</li>
+          <li>Собственный опыт: свыше 5000 установленных окон и более 206 000 м² смонтированных натяжных потолков</li>
+          <li>75% заказчиков по окнам и 72% по потолкам приходят по рекомендации</li>
+          <li>Бесплатный замер по обоим направлениям, рассрочка 0% без банков до 12 месяцев</li>
+        </ul>
+        <div class="seo-row">
+          <span class="chip">эко дом сервис чебоксары</span>
+          <span class="chip">окна и потолки чебоксары</span>
+          <span class="chip">натяжные потолки и пластиковые окна</span>
+          <span class="chip">ремонт квартиры под ключ чебоксары</span>
+          <span class="chip">компания эко дом сервис</span>
+        </div>
+        <div class="meta-row"><span><b>Цель:</b> имиджевая</span><span><b>Ссылка:</b> ekodomokna.ru + ekodompotolki.ru</span></div>
+        <div class="cta">CTA (словами, без телефона): «Смотрите каталог окон на ekodomokna.ru и виды потолков на ekodompotolki.ru — оставляйте заявку на бесплатный замер»</div>
+        <div class="cover-tz"><b>ТЗ на обложку:</b> тезис «Окна + потолки». Композиция — разделённый пополам кадр: слева фрагмент окна на красном фоне #D13731, справа фрагмент потолка с подсветкой на синем фоне #448CEC. Логотип компании — сверху по центру.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Направление · Окна</span>
+        <h3>Пластиковые окна REHAU в Чебоксарах: гарантия 10 лет и рассрочка без банков</h3>
+        <ul>
+          <li>Официальный партнёр REHAU — сертификат «Салон энергосберегающих окон REHAU»</li>
+          <li>Профили Brusbox и REHAU 70 мм, антирезонансные стеклопакеты снижают уличный шум в 3 раза</li>
+          <li>Гарантия на окна — 10 лет, на оконный профиль — от 40 лет, на монтаж — от 1 года</li>
+          <li>Монтаж окна занимает 1 день, изготовление стандартного окна — 3 рабочих дня</li>
+          <li>Демонтаж старых окон включён в стоимость</li>
+          <li>Рассрочка 0% без банков до 12 месяцев, бесплатный замер в течение дня</li>
+        </ul>
+        <div class="seo-row">
+          <span class="chip">пластиковые окна чебоксары</span>
+          <span class="chip">окна рехау чебоксары</span>
+          <span class="chip">установка окон чебоксары</span>
+          <span class="chip">окна чебоксары цена</span>
+          <span class="chip">замена окон чебоксары</span>
+          <span class="chip">гарантия на окна</span>
+        </div>
+        <div class="meta-row"><span><b>Цель:</b> продающая</span><span><b>Ссылка:</b> ekodomokna.ru</span></div>
+        <div class="cta">CTA (словами, без телефона): «Рассчитывайте стоимость окна на ekodomokna.ru — без выезда замерщика»</div>
+        <div class="cover-tz"><b>ТЗ на обложку:</b> тезис «REHAU. 10 лет гарантии». Крупный кадр монтажа окна крупным планом, акцентный элемент — красный #D13731 бейдж с текстом гарантии.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Направление · Потолки</span>
+        <h3>Натяжные потолки в Чебоксарах: 6 видов полотна и защита от протечек соседей</h3>
+        <ul>
+          <li>400 цветов и фактур в ассортименте: матовые и глянцевые — от 200 руб/м², тканевые — от 800 руб/м², с фотопечатью — от 850 руб/м²</li>
+          <li>Многоуровневые и парящие конструкции — от 1500 руб за погонный метр</li>
+          <li>Полотно выдерживает до 100 литров воды на квадратный метр — защита при протечке соседей сверху</li>
+          <li>Гарантия 10 лет по договору, срок службы полотна — от 50 лет</li>
+          <li>Монтаж силами 5 профессиональных бригад занимает от 2 до 3 часов</li>
+          <li>Экологичные материалы без запаха, безопасные композитные баллоны при установке</li>
+        </ul>
+        <div class="seo-row">
+          <span class="chip">натяжные потолки чебоксары</span>
+          <span class="chip">натяжные потолки цена чебоксары</span>
+          <span class="chip">матовый потолок чебоксары</span>
+          <span class="chip">потолок с фотопечатью</span>
+          <span class="chip">парящий потолок чебоксары</span>
+          <span class="chip">монтаж натяжного потолка</span>
+        </div>
+        <div class="meta-row"><span><b>Цель:</b> продающая</span><span><b>Ссылка:</b> ekodompotolki.ru</span></div>
+        <div class="cta">CTA (словами, без телефона): «Рассчитывайте стоимость своего потолка на ekodompotolki.ru — расчёт без выезда замерщика»</div>
+        <div class="cover-tz"><b>ТЗ на обложку:</b> тезис «6 видов потолка». Сетка из 6 небольших кадров фактур полотна (матовая, глянцевая, тканевая, фотопечать, парящая, многоуровневая), синий #448CEC акцент по периметру.</div>
+      </div>
+
+      <div class="card">
+        <span class="tag">Направление · Окна</span>
+        <h3>Остекление и обшивка балкона в Чебоксарах под ключ, скидка до 40%</h3>
+        <ul>
+          <li>Остекление балконов и лоджий — от эконом до элитных вариантов отделки, под ключ</li>
+          <li>Скидка на балконный блок — до 40%</li>
+          <li>Профили ПВХ Brusbox и Exprof Experta 70 мм, алюминиевый профиль Tatprof — для крупных остеклений</li>
+          <li>Обшивка балкона панелями, утепление и полная отделка помещения</li>
+          <li>Бесплатный замер и доставка материалов на объект</li>
+          <li>Рассрочка 0% без банков до 12 месяцев на остекление и отделку</li>
+        </ul>
+        <div class="seo-row">
+          <span class="chip">остекление балконов чебоксары</span>
+          <span class="chip">обшивка балконов чебоксары</span>
+          <span class="chip">остекление лоджии чебоксары</span>
+          <span class="chip">балкон под ключ чебоксары</span>
+          <span class="chip">холодное остекление балкона</span>
+          <span class="chip">скидка на балкон</span>
+        </div>
+        <div class="meta-row"><span><b>Цель:</b> продающая</span><span><b>Ссылка:</b> ekodomokna.ru</span></div>
+        <div class="cta">CTA (словами, без телефона): «Уточняйте варианты остекления балкона на ekodomokna.ru — оставляйте заявку на бесплатный замер»</div>
+        <div class="cover-tz"><b>ТЗ на обложку:</b> тезис «Балкон под ключ −40%». Кадр застеклённого и отделанного балкона, красный #D13731 бейдж со скидкой в углу.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="stories">
+    <span class="eyebrow">05 · Сторис этапа</span>
+    <h2 class="sectitle">4 темы, один слайд — один факт</h2>
+    <p class="lede">Публикация — карточка «Эко Дом Сервис» на Яндекс Картах и в 2ГИС. Формат — презентационный, каждая тема закрывается одним слайдом.</p>
+
+    <div class="story-grid">
+
+      <div class="story-card">
+        <span class="tag">Окна</span>
+        <h4>Гарантия 10 лет на окна REHAU</h4>
+        <ul>
+          <li>Официальный партнёр REHAU</li>
+          <li>Гарантия на профиль — от 40 лет</li>
+          <li>Гарантия на окно — 10 лет по договору</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: тёмный фон #0A0A0A, акцентный текст и бейдж «10 лет» — красный #D13731, крупный кадр окна крупным планом.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="tag">Окна</span>
+        <h4>Рассрочка 0% на 12 месяцев</h4>
+        <ul>
+          <li>Без банков и переплат</li>
+          <li>Бесплатный замер в течение дня</li>
+          <li>Демонтаж старого окна — в подарок</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: белый фон, крупная цифра «0%» красным #D13731, мелкий текст условий — тёмно-серым #1A1A1A.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="tag">Потолки</span>
+        <h4>6 видов потолка от 200 руб/м²</h4>
+        <ul>
+          <li>Матовый и глянцевый — от 200 руб/м²</li>
+          <li>Тканевый — от 800 руб/м²</li>
+          <li>С фотопечатью — от 850 руб/м²</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: белый фон, синий #448CEC акцент на ценах, коллаж из фактур полотна по центру.</div>
+      </div>
+
+      <div class="story-card">
+        <span class="tag">Потолки</span>
+        <h4>Потолок за 2–3 часа монтажа</h4>
+        <ul>
+          <li>5 профессиональных бригад монтажников</li>
+          <li>Полотно держит до 100 л воды на м²</li>
+          <li>Возможен на любом этапе ремонта</li>
+        </ul>
+        <div class="design-note">Дизайн слайда: тёмный фон #100F18, синий #448CEC таймер-иконка с цифрой «2–3 ч», кадр монтажа потолка.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="roadmap">
+    <span class="eyebrow">06 · Карта тем</span>
+    <h2 class="sectitle">Дорожная карта этапов</h2>
+
+    <div class="roadmap">
+      <div class="stage">
+        <div class="stage-head"><span class="stage-badge">Этап 1 · актуальный</span></div>
+
+        <div class="rm-item">
+          <div class="rm-tag">Новость 1</div>
+          <div class="rm-title">Эко Дом Сервис: окна и потолки от одной команды</div>
+          <div class="rm-thesis">Общее знакомство, обе ссылки — ekodomokna.ru и ekodompotolki.ru</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">История 1</div>
+          <div class="rm-title">Гарантия 10 лет на окна REHAU</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">История 2</div>
+          <div class="rm-title">Рассрочка 0% на 12 месяцев</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">Новость 2</div>
+          <div class="rm-title">Пластиковые окна REHAU: гарантия 10 лет</div>
+          <div class="rm-thesis">Партнёрство REHAU, гарантии, рассрочка</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">Новость 3</div>
+          <div class="rm-title">Натяжные потолки: 6 видов полотна</div>
+          <div class="rm-thesis">Ассортимент, защита от протечек, гарантия</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">История 3</div>
+          <div class="rm-title">6 видов потолка от 200 руб/м²</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">История 4</div>
+          <div class="rm-title">Потолок за 2–3 часа монтажа</div>
+        </div>
+        <div class="rm-item">
+          <div class="rm-tag">Новость 4</div>
+          <div class="rm-title">Остекление и обшивка балкона под ключ</div>
+          <div class="rm-thesis">Балконная линия объединяет окна и отделку, скидка до 40%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="src">
+    <span class="eyebrow">Источники</span>
+    <ul>
+      <li><a href="https://ekodomokna.ru/" target="_blank" rel="noopener">ekodomokna.ru</a></li>
+      <li><a href="https://ekodompotolki.ru/" target="_blank" rel="noopener">ekodompotolki.ru</a></li>
+      <li><a href="https://vk.ru/public211099358" target="_blank" rel="noopener">Группа ВК — vk.ru/public211099358</a></li>
+      <li><a href="https://yandex.ru/maps/-/CXEBfP62" target="_blank" rel="noopener">Карточка на Яндекс Картах</a></li>
+    </ul>
+  </footer>
+
+</div>
+</body>
+</html>
