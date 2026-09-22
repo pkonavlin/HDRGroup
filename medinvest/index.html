@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Мединвест — ТЗ</title>
+</head>
+<body>
+
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E08052;
+  --ink:#12232A; --ink-soft:#4E6870; --line:#D8E4E5; --card:#FFFFFF; --bg:#EEF4F4;
+  --mono-bg:#0E3B47;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#EAF3F4; --teal:#7FCBD8; --ice:#0C1A1E; --roe:#E08052; --roe-soft:#C4572B;
+    --ink:#EAF3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#0F2226; --bg:#0A1518;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#EAF3F4; --teal:#7FCBD8; --ice:#0C1A1E; --roe:#E08052; --roe-soft:#C4572B;
+  --ink:#EAF3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#0F2226; --bg:#0A1518;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;margin:0;padding-block:0;line-height:1.5}
+h1,h2,h3,.display{font-family:'Bricolage Grotesque',system-ui,sans-serif;text-wrap:balance}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* topbar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ocean);color:var(--ice);
+  display:flex;align-items:center;gap:24px;padding:14px 20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;letter-spacing:.2px;flex:0 0 auto}
+.topbar nav{display:flex;gap:18px}
+.topbar nav a{font-size:13px;opacity:.82;text-decoration:none;font-weight:600}
+.topbar nav a:hover{opacity:1}
+
+section{padding:56px 0}
+section + section{border-top:1px solid var(--line)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin:0 0 10px}
+h2{font-size:clamp(24px,4vw,32px);margin:0 0 28px}
+.lede{color:var(--ink-soft);max-width:62ch;margin:-16px 0 28px}
+
+/* hero / facts */
+.hero-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:28px}
+.hero-title{font-size:clamp(30px,5vw,44px);margin:0;font-weight:800}
+.hero-sub{color:var(--ink-soft);margin-top:8px;max-width:56ch}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;
+  background:var(--card);border:1px solid var(--line);border-radius:100px;padding:6px 12px;color:var(--teal)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--card);padding:20px}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:15px;margin-top:6px;font-weight:600}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:12.5px;margin-top:3px}
+
+/* brandbook swatches */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.swatch .chip{height:74px}
+.swatch .info{padding:12px 14px}
+.swatch .role{font-size:11px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--roe)}
+.swatch .name{font-weight:700;font-size:14px;margin-top:3px}
+.swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+/* логика цикла */
+.cycle{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:8px;padding-left:24px}
+.cycle .step{position:relative;padding:0 0 26px}
+.cycle .step:last-child{padding-bottom:0}
+.cycle .step::before{content:"";position:absolute;left:-31px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--roe)}
+.cycle .step .t{font-weight:700}
+.cycle .step .d{color:var(--ink-soft);font-size:14.5px;margin-top:3px;max-width:60ch}
+
+/* news cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:20px}
+.card-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:14px}
+.card h3{margin:0;font-size:20px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+  background:var(--ice);border:1px solid var(--line);color:var(--teal);border-radius:100px;padding:5px 10px;white-space:nowrap}
+.cover-thesis{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--roe);white-space:nowrap}
+.thesis-list{margin:0 0 16px;padding-left:20px;color:var(--ink);font-size:14.5px}
+.thesis-list li{margin-bottom:7px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chip-kw{font-size:12px;background:var(--ice);border:1px solid var(--line);border-radius:100px;padding:4px 10px;color:var(--ink-soft)}
+.meta-row{display:flex;flex-wrap:wrap;gap:18px;font-size:12.5px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:14px;margin-bottom:14px}
+.meta-row b{color:var(--ink);font-weight:600}
+.cta{display:inline-block;font-size:13.5px;font-weight:700;color:var(--roe)}
+.cover-box{margin-top:16px;background:var(--ice);border:1px dashed var(--line);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--ink-soft)}
+.cover-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--teal);margin-bottom:6px;letter-spacing:.05em}
+
+/* stories */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.story-card h3{margin:0 0 10px;font-size:17px}
+.story-card p{margin:0 0 14px;font-size:14px;color:var(--ink)}
+.design-note{background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft)}
+.design-note .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--teal);margin-bottom:5px;letter-spacing:.05em;display:block}
+
+/* map / timeline */
+.timeline{border-left:2px solid var(--line);margin-left:8px}
+.tl-stage{padding-left:24px;position:relative;margin-bottom:8px}
+.tl-stage .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.tl-stage .stage-head::before{content:"";position:absolute;left:-8px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--roe);border:3px solid var(--bg)}
+.stage-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;background:var(--roe);color:#fff;border-radius:100px;padding:4px 10px}
+.tl-item{display:flex;gap:14px;padding:9px 0;font-size:14px;border-top:1px solid var(--line)}
+.tl-item:first-of-type{border-top:none}
+.tl-item .tl-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);flex:0 0 96px}
+.tl-item .tl-txt{color:var(--ink-soft)}
+.tl-item .tl-txt b{color:var(--ink);font-weight:600}
+
+footer{padding:40px 0 60px;font-size:13px;color:var(--ink-soft)}
+footer a{color:var(--teal);text-decoration:none}
+footer ul{padding-left:18px;margin:10px 0 0}
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="topbar">
+  <div class="brand">Мединвест</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+    <a href="#sources">Источники</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<section id="company">
+  <div class="hero-top">
+    <div>
+      <p class="eyebrow">ТЗ · контент для Яндекс Карт и 2ГИС</p>
+      <h1 class="hero-title">Глазная клиника «Мединвест»</h1>
+      <p class="hero-sub">Офтальмологический центр микрохирургии глаза в Челябинске: медцентр и клиника, коррекция зрения, оптика. Этап 1 — 4 новости и 4 сторис.</p>
+    </div>
+    <span class="badge">● Челябинск, ул. Университетская набережная, 50</span>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">Профиль</div><div class="v">Медцентр, клиника<br>Оптика · Коррекция зрения</div></div>
+    <div class="fact"><div class="k">Год основания</div><div class="v">1995<small>по официальному логотипу компании</small></div></div>
+    <div class="fact"><div class="k">Опыт</div><div class="v">30+ лет работы<small>75 000+ операций (по анкете клиники)</small></div></div>
+    <div class="fact"><div class="k">Исторический факт</div><div class="v">Первая в России лазерная коррекция ФРК<small>выполнена в «Мединвесте» в 1996 году</small></div></div>
+    <div class="fact"><div class="k">География пациентов</div><div class="v">США, Турция, Италия<small>Австрия, Израиль, ОАЭ и др.</small></div></div>
+    <div class="fact"><div class="k">Врачи и оборудование</div><div class="v">Постоянное повышение квалификации<small>клиника следит за развитием офтальмологии в мире</small></div></div>
+    <div class="fact"><div class="k">Направления</div><div class="v">Диагностика и лечение<small>Лазерные операции · Хирургия · Детская офтальмология · Ортокератология · Оптика</small></div></div>
+    <div class="fact"><div class="k">Яндекс Карты</div><div class="v">5,0 · 277 отзывов<small>отметка «Good place 2026»</small></div></div>
+    <div class="fact"><div class="k">Публикация</div><div class="v">Карточка на Яндекс Картах<small>и 2ГИС — новости и сторис</small></div></div>
+    <div class="fact"><div class="k">Тон общения</div><div class="v">На «Вы»<small>уместен лёгкий неформальный тон</small></div></div>
+  </div>
+</section>
+
+<section id="brand">
+  <p class="eyebrow">Раздел 02</p>
+  <h2>Мини-брендбук</h2>
+  <p class="lede">По официальному «Руководству по использованию логотипа компании «Мединвест»» — точные значения HTML/CMYK/Pantone. Ниже также — дополнительные оттенки, реально встречающиеся на сайте и в презентационных материалах клиники (не входят в формальную гамму гайдлайна, но пригодны для фона и доп. плашек).</p>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#0ABAEE"></div><div class="info"><div class="role">Основной</div><div class="name">Фирменный голубой</div><div class="hex">#0ABAEE · Pantone 298 C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#E30513"></div><div class="info"><div class="role">Акцентный</div><div class="name">Фирменный красный</div><div class="hex">#E30513 · Pantone 485 C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#438DBE"></div><div class="info"><div class="role">Дополнительный</div><div class="name">Глубокий синий (с сайта)</div><div class="hex">#438DBE</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#6FB6D7"></div><div class="info"><div class="role">Дополнительный</div><div class="name">Синий презентаций (свет.)</div><div class="hex">#6FB6D7</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#65A4C9"></div><div class="info"><div class="role">Дополнительный</div><div class="name">Синий презентаций (тём.)</div><div class="hex">#65A4C9</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#8AD2FA"></div><div class="info"><div class="role">Фоновый</div><div class="name">Голубая заливка (с сайта)</div><div class="hex">#8AD2FA</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#F6F8F9;border-bottom:1px solid #e3e8e9"></div><div class="info"><div class="role">Фоновый</div><div class="name">Светлый нейтральный</div><div class="hex">#F6F8F9</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#333333"></div><div class="info"><div class="role">Текстовый</div><div class="name">Тёмно-серый текст</div><div class="hex">#333333</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#12232A;display:flex;align-items:center;justify-content:center;gap:6px;color:#fff">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Days</span><span style="opacity:.5;font-size:12px">/</span><span style="font-family:Georgia,serif;font-size:13px">Myriad Pro</span>
+    </div><div class="info"><div class="role">Шрифты</div><div class="name">Days (заголовки) · Myriad Pro (текст)</div><div class="hex">по официальному руководству</div></div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <p class="eyebrow">Раздел 03</p>
+  <h2>Логика цикла</h2>
+  <div class="cycle">
+    <div class="step"><div class="t">1. Историческое доверие</div><div class="d">Открываем с факта, который формирует доверие к клинике как к пионеру направления — первая лазерная коррекция ФРК в России выполнена именно в «Мединвесте».</div></div>
+    <div class="step"><div class="t">2. Операционные методы сегодня</div><div class="d">От истории — к действующим методикам: лазерная коррекция (SBK, FEMTO SUPER LASIK) и факоэмульсификация катаракты как два основных хирургических направления клиники.</div></div>
+    <div class="step"><div class="t">3. Альтернатива без операции</div><div class="d">Ортокератология — решение для тех, кто пока не готов к операции или кому она не показана: коррекция зрения ночными линзами.</div></div>
+    <div class="step"><div class="t">4. Полный цикл — оптика</div><div class="d">Цикл закрывается оптикой: специализированные линзы для сложных случаев и контроль миопии у детей — клиника сопровождает пациента на всех этапах, от диагностики до подбора очков и линз.</div></div>
+  </div>
+</section>
+
+<section id="news">
+  <p class="eyebrow">Раздел 04 · Этап 1</p>
+  <h2>Новости</h2>
+  <p class="lede">Публикуются в карточке компании на Яндекс Картах и 2ГИС. До 3000 знаков с пробелами, CTA — без телефона и e-mail в тексте (контакты — в карточке компании).</p>
+
+  <div class="card">
+    <div class="card-top">
+      <div><h3>Лазерная коррекция зрения: первая в России методика родом из Челябинска</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертно-продающий</span><span class="cover-thesis">обложка: «1996 год»</span></div>
+    </div>
+    <ul class="thesis-list">
+      <li>Методика ФРК применяется в «Мединвесте» с 1996 года — тогда в России она была выполнена впервые; сегодня клиника также проводит SBK SUPER LASIK и FEMTO SUPER LASIK</li>
+      <li>Клиника работает более 30 лет, суммарный опыт по всем направлениям — 75 000+ операций (по анкете клиники); персонал проходит постоянное повышение квалификации, клиника следит за развитием офтальмологии в мире</li>
+      <li>До 30 сентября — коррекция обоих глаз от 50 000 ₽ вместо 60 000 ₽ (формат цены — «от N ₽»)</li>
+      <li>Перед коррекцией — бесплатное комплексное обследование; после операции — наблюдение врача в течение 1 месяца бесплатно</li>
+      <li>Формулировки нейтральные: «современная методика», «применяется с 1996 года» — без слов «безопасно/эффективно» без документального подтверждения (медуслуги)</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-kw">лазерная коррекция зрения Челябинск</span><span class="chip-kw">ФРК коррекция зрения</span><span class="chip-kw">SBK SUPER LASIK</span><span class="chip-kw">FEMTO SUPER LASIK</span><span class="chip-kw">глазная клиника Мединвест</span><span class="chip-kw">коррекция зрения лазером</span><span class="chip-kw">офтальмологическая клиника Челябинск</span><span class="chip-kw">зрение без очков</span>
+    </div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на обследование</span></div>
+    <span class="cta">CTA: «Записывайтесь на бесплатное обследование перед коррекцией»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото операционной / лазерного оборудования либо портрет хирурга (из архива клиники). Спокойная голубая гамма — фирменный голубой #0ABAEE, фон может быть на оттенке #8AD2FA (с сайта). Логотип и текст — не более 20% площади. Без слов «акция», «купить», без фото «до/после».</div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <div><h3>Факоэмульсификация катаракты: как проходит замена хрусталика на ИОЛ</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертно-продающий</span><span class="cover-thesis">обложка: «Замена хрусталика»</span></div>
+    </div>
+    <ul class="thesis-list">
+      <li>ФЭК — современный метод лечения катаракты: помутневший хрусталик заменяется на интраокулярную линзу (ИОЛ)</li>
+      <li>До 30 сентября — установка американского хрусталика от 41 500 ₽ вместо 48 000 ₽</li>
+      <li>Пенсионерам — скидка 15% до 30 сентября (можно указать применимость к диагностике и операции)</li>
+      <li>После операции — наблюдение врача в течение 1 месяца бесплатно</li>
+      <li>Без превосходных степеней («лучший хрусталик» и т.п.) — характеристики хрусталика давать нейтрально, по факту происхождения</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-kw">факоэмульсификация катаракты Челябинск</span><span class="chip-kw">замена хрусталика глаза</span><span class="chip-kw">лечение катаракты</span><span class="chip-kw">ИОЛ хрусталик</span><span class="chip-kw">американский хрусталик</span><span class="chip-kw">операция катаракты цена</span><span class="chip-kw">глазная клиника Мединвест</span><span class="chip-kw">хирургия катаракты</span>
+    </div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на диагностику</span></div>
+    <span class="cta">CTA: «Записывайтесь на диагностику катаракты»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото операционного микроскопа или пациента старшего возраста на приёме (из архива клиники). Фирменный красный #E30513 — акцентной плашкой, не основным фоном. Без слов «акция», без фото «до/после».</div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <div><h3>Ночные линзы для взрослых: зрение без операции и без очков днём</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертный</span><span class="cover-thesis">обложка: «Ночные линзы»</span></div>
+    </div>
+    <ul class="thesis-list">
+      <li>Ортокератологические линзы надеваются на ночь и временно меняют форму роговицы — днём человек видит чётко без очков и без дневных контактных линз</li>
+      <li>Аудитория темы — взрослые с миопией и астигматизмом (тема детских ночных линз уже публиковалась на карточке 25.08.2026 — не дублировать, делать акцент на взрослых)</li>
+      <li>До 30 сентября — ночные линзы от 38 500 ₽ вместо 41 500 ₽; линзы с астигматическим дизайном — 40 000 ₽</li>
+      <li>Метод — альтернатива для тех, кому пока не подходит лазерная коррекция или кто не готов к операции</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-kw">ортокератология Челябинск</span><span class="chip-kw">ночные линзы для зрения</span><span class="chip-kw">ночные линзы цена</span><span class="chip-kw">коррекция зрения без операции</span><span class="chip-kw">астигматизм ночные линзы</span><span class="chip-kw">миопия без очков</span><span class="chip-kw">глазная клиника Мединвест</span>
+    </div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на подбор линз</span></div>
+    <span class="cta">CTA: «Записывайтесь на подбор ночных линз»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Макро-фото линзы или глаза (из архива клиники). Холодная голубая гамма — фирменный голубой #0ABAEE, фон #8AD2FA (с сайта). Без слов «акция», без фото «до/после», без крупного текста поверх снимка.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <div><h3>Оптика «Мединвеста»: линзы для сложных случаев и контроль миопии у детей</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">имиджево-экспертный</span><span class="cover-thesis">обложка: «Оптика и линзы»</span></div>
+    </div>
+    <ul class="thesis-list">
+      <li>В оптике клиники — жёсткие газопроницаемые линзы, склеральные линзы, призматическая коррекция для сложных случаев (кератоконус, высокая степень астигматизма)</li>
+      <li>Отдельно — очковые линзы Stellest® (Essilor®) для контроля прогрессирования близорукости у детей</li>
+      <li>Мягкие контактные линзы — базовый подбор для взрослых и подростков</li>
+      <li>Подбор — только после полной диагностики зрения у офтальмолога клиники</li>
+    </ul>
+    <div class="chips">
+      <span class="chip-kw">оптика Челябинск</span><span class="chip-kw">контактные линзы Мединвест</span><span class="chip-kw">склеральные линзы</span><span class="chip-kw">жёсткие газопроницаемые линзы</span><span class="chip-kw">линзы Stellest</span><span class="chip-kw">контроль миопии у детей</span><span class="chip-kw">подбор линз Челябинск</span>
+    </div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Цель:</b> запись на подбор линз</span></div>
+    <span class="cta">CTA: «Записывайтесь на подбор линз»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото витрины оптики или подбора линз пациенту (из архива клиники). Светлый фон (#F6F8F9), фирменный голубой #0ABAEE — акцентом.</div>
+  </div>
+</section>
+
+<section id="stories">
+  <p class="eyebrow">Раздел 05 · Этап 1</p>
+  <h2>Сторис</h2>
+  <p class="lede">Один слайд — один факт. Публикуются в карточке на Яндекс Картах и 2ГИС.</p>
+  <div class="story-grid">
+    <div class="story-card">
+      <h3>1996 год</h3>
+      <p>В «Мединвесте» в России впервые проведена лазерная коррекция зрения методом ФРК.</p>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупная цифра «1996» на плашке фирменного красного (#E30513), тезис — белым текстом ниже, фон — голубой градиент (#8AD2FA, оттенок с сайта), логотип клиники внизу.</div>
+    </div>
+    <div class="story-card">
+      <h3>75 000+ операций</h3>
+      <p>Более 30 лет работы — «Мединвесту» доверяют пациенты из США, Турции, Италии, Австрии, Израиля и ОАЭ.</p>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупная цифра «75 000+» акцентом на плашке фирменного голубого (#0ABAEE) или доп. оттенков презентаций (#6FB6D7 / #65A4C9), под ней — тезис о географии пациентов.</div>
+    </div>
+    <div class="story-card">
+      <h3>Линзы на ночь</h3>
+      <p>Ортокератологические линзы надеваются перед сном — днём видно чётко без очков и без дневных линз.</p>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупное макро-фото линзы или глаза на весь слайд, плашка с тезисом на фирменном голубом (#0ABAEE), логотип внизу.</div>
+    </div>
+    <div class="story-card">
+      <h3>Stellest для детей</h3>
+      <p>Очковые линзы Stellest® замедляют прогрессирование близорукости у детей — в оптике «Мединвеста».</p>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Фото ребёнка в очках или очковых линз (из архива клиники), светлый фон (#F6F8F9), акцентная плашка фирменного красного (#E30513).</div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <p class="eyebrow">Раздел 06</p>
+  <h2>Карта тем</h2>
+  <div class="timeline">
+    <div class="tl-stage">
+      <div class="stage-head"><b>Этап 1</b><span class="stage-badge">актуальный</span></div>
+      <div class="tl-item"><span class="tl-tag">Новость 1</span><span class="tl-txt"><b>Лазерная коррекция зрения</b> — 1996 год, первая ФРК в России, акция до 30.09</span></div>
+      <div class="tl-item"><span class="tl-tag">История 1</span><span class="tl-txt"><b>1996 год</b> — факт-цифра о первой ФРК в России</span></div>
+      <div class="tl-item"><span class="tl-tag">Новость 2</span><span class="tl-txt"><b>Факоэмульсификация катаракты</b> — замена хрусталика на ИОЛ, американский хрусталик по акции</span></div>
+      <div class="tl-item"><span class="tl-tag">История 2</span><span class="tl-txt"><b>75 000+ операций</b> — опыт клиники и география пациентов</span></div>
+      <div class="tl-item"><span class="tl-tag">Новость 3</span><span class="tl-txt"><b>Ночные линзы для взрослых</b> — ортокератология как альтернатива операции</span></div>
+      <div class="tl-item"><span class="tl-tag">История 3</span><span class="tl-txt"><b>Линзы на ночь</b> — как работает ортокератология</span></div>
+      <div class="tl-item"><span class="tl-tag">Новость 4</span><span class="tl-txt"><b>Оптика</b> — линзы для сложных случаев и контроль миопии у детей</span></div>
+      <div class="tl-item"><span class="tl-tag">История 4</span><span class="tl-txt"><b>Stellest для детей</b> — контроль близорукости очковыми линзами</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="sources">
+  <div class="eyebrow" style="margin-bottom:6px">Источники</div>
+  <ul>
+    <li><a href="https://medinvestltd.ru/" target="_blank">medinvestltd.ru</a> — официальный сайт клиники</li>
+    <li><a href="https://yandex.ru/profile/-/CXEmjU7v" target="_blank">Карточка «Мединвест» на Яндекс Картах</a></li>
+    <li>Анкета клиента «Старт проекта» — ответы от 22.09.2026</li>
+  </ul>
+</footer>
+
+</div>
+
+</body>
+</html>
