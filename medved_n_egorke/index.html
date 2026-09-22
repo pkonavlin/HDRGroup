@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Медведь на Егорке</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39775;
+  --ink:#10181C; --ink-soft:#4B5B60; --line:#D8E2E2; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono-bg:#EEF3F3;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD4E6; --teal:#5FBCC9; --ice:#0B1518; --roe:#E39775; --roe-soft:#C4572B;
+    --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#233234; --card:#101C1F; --bg:#0B1518;
+    --mono-bg:#152225;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD4E6; --teal:#5FBCC9; --ice:#0B1518; --roe:#E39775; --roe-soft:#C4572B;
+  --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#233234; --card:#101C1F; --bg:#0B1518;
+  --mono-bg:#152225;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",sans-serif;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:920px;margin:0 auto;padding-inline:20px}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb, var(--card) 88%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:920px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.navlinks a{font-size:13px;padding:7px 11px;border-radius:8px;text-decoration:none;color:var(--ink-soft);transition:background .15s,color .15s}
+.navlinks a:hover{background:var(--mono-bg);color:var(--ink)}
+
+section{padding-block:52px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--teal)}
+h2.section-title{font-size:clamp(24px,3.6vw,32px);font-weight:700;letter-spacing:-.01em;margin-bottom:28px}
+
+/* hero */
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--mono-bg);border:1px solid var(--line);padding:5px 12px;border-radius:999px;color:var(--ink-soft);margin-bottom:18px}
+.hero-badge b{color:var(--roe);font-weight:700}
+.hero h1{font-size:clamp(30px,5vw,44px);line-height:1.08;margin-bottom:14px}
+.hero p.lede{color:var(--ink-soft);font-size:16.5px;max-width:56ch;line-height:1.55;margin-bottom:30px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fact{background:var(--card);padding:16px 18px}
+.fact .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.fact .v{font-size:14.5px;font-weight:600;line-height:1.4}
+.services-list{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
+.services-list span{font-size:12.5px;font-family:"IBM Plex Mono",monospace;background:var(--mono-bg);border:1px solid var(--line);padding:5px 10px;border-radius:7px;color:var(--ink-soft)}
+
+/* brandbook */
+.swatch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.swatch .chip{height:88px}
+.swatch .info{padding:12px 14px}
+.swatch .role{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px}
+.swatch .hex{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:700}
+.swatch .note{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.4}
+.brandbook-note{margin-top:22px;font-size:14.5px;color:var(--ink-soft);line-height:1.6;max-width:64ch}
+
+/* логика цикла */
+.cycle{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:6px;padding-left:26px}
+.cycle-step{position:relative;padding-block:18px}
+.cycle-step::before{content:"";position:absolute;left:-31px;top:22px;width:9px;height:9px;border-radius:50%;background:var(--teal);border:2px solid var(--bg)}
+.cycle-step .stage-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.cycle-step h3{font-size:17px;margin-bottom:6px}
+.cycle-step p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;max-width:60ch}
+
+/* новости */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 26px 24px;margin-bottom:20px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.card-head h3{font-size:19px;line-height:1.3;max-width:52ch}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;background:var(--mono-bg);border:1px solid var(--line);padding:5px 10px;border-radius:7px;color:var(--teal);white-space:nowrap}
+.theses{margin:0 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.theses li{font-size:14.5px;line-height:1.5;padding-left:18px;position:relative}
+.theses li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:1px;background:var(--roe)}
+.seo-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.seo-chips span{font-family:"IBM Plex Mono",monospace;font-size:11px;background:var(--mono-bg);border:1px solid var(--line);padding:4px 9px;border-radius:6px;color:var(--ink-soft)}
+.card-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.meta-row{font-size:12px;color:var(--ink-soft);font-family:"IBM Plex Mono",monospace}
+.cta-pill{font-size:12.5px;font-weight:600;background:var(--ocean);color:var(--bg);padding:7px 14px;border-radius:8px}
+:root[data-theme="dark"] .cta-pill, @media (prefers-color-scheme:dark){.cta-pill{color:var(--ink)}}
+.cover-block{margin-top:16px;background:var(--mono-bg);border:1px dashed var(--line);border-radius:12px;padding:16px 18px}
+.cover-block .cb-label{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.cover-block .cb-thesis{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.cover-block p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0}
+
+/* сторис */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.story-card h3{font-size:16.5px;margin-bottom:12px}
+.story-card .theses{margin-bottom:14px}
+.story-card .theses li{font-size:13.5px}
+.design-note{background:var(--mono-bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.design-note .dn-label{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.design-note .swatch-mini{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle;border:1px solid var(--line)}
+.design-note p{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0}
+.story-card .seo-chips span{font-size:10.5px}
+
+/* карта тем */
+details.stage{border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+details.stage[open]{border-color:var(--teal)}
+summary.stage-summary{cursor:pointer;list-style:none;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600;background:var(--card)}
+summary.stage-summary::-webkit-details-marker{display:none}
+summary.stage-summary::before{content:"▸";font-size:13px;color:var(--ink-soft);transition:transform .15s}
+details[open] summary.stage-summary::before{transform:rotate(90deg)}
+.stage-badge{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.stage-badge.done{background:var(--mono-bg);color:var(--ink-soft);border:1px solid var(--line)}
+.stage-badge.active{background:var(--roe);color:#fff}
+.timeline{padding:6px 20px 18px;display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line);margin-left:0}
+.tl-item{position:relative;padding:12px 0 12px 24px;border-left:2px solid var(--line);margin-left:8px}
+.tl-item::before{content:"";position:absolute;left:-6px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.tl-item:last-child{border-left-color:transparent}
+.tl-fmt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);margin-bottom:3px}
+.tl-title{font-size:14.5px;font-weight:600;margin-bottom:2px}
+.tl-thesis{font-size:13px;color:var(--ink-soft)}
+
+/* источники */
+.sources{display:flex;flex-direction:column;gap:8px}
+.sources a{font-size:14px;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;color:var(--ink-soft)}
+.sources a:hover{color:var(--teal)}
+footer.foot{padding-block:40px 60px}
+footer.foot .foot-title{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
+
+@media(max-width:640px){
+  .navlinks{display:none}
+  .card-head{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Медведь на Егорке</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section id="company">
+    <div class="hero-badge">Этап <b>02</b> · ТЗ на контент</div>
+    <h1>Медведь на Егорке</h1>
+    <p class="lede">Шиномонтаж, шины и диски, сварочные работы. Техническое задание на два новостных поста с обложками и две истории для карточки компании на Яндекс Картах и 2ГИС.</p>
+    <div class="facts">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Шиномонтаж · шины и диски · сварочные работы</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Московская обл., г.о. Люберцы, пгт Малаховка, Касимовское ш., 3Б, лит.Х</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+      <div class="fact"><div class="k">Рейтинг</div><div class="v">4.9 · 225 отзывов на Яндекс Картах</div></div>
+      <div class="fact"><div class="k">Связь</div><div class="v">Telegram, WhatsApp, +7 (965) 229-68-31</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v">bear-on-egorka.clients.site</div></div>
+    </div>
+    <div class="services-list">
+      <span>шиномонтаж</span><span>правка дисков</span><span>вулканизация</span><span>аргон-сварка трещин</span>
+      <span>покраска и проточка дисков</span><span>расточка посадочного отверстия</span><span>проставочные кольца</span>
+      <span>сход-развал</span><span>замена масла и колодок</span><span>ремонт ходовой</span><span>мотошиномонтаж</span>
+      <span>балансировка</span><span>сезонное хранение шин</span><span>выкуп шин и дисков</span><span>оплата картой</span>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">01 · Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра</h2>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background:#58AB75"></div>
+        <div class="info"><div class="role">Основной</div><div class="hex">#58AB75</div><div class="note">Зелёный кольца логотипа, основной фон акцентных карточек историй</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FAE74D"></div>
+        <div class="info"><div class="role">Акцентный</div><div class="hex">#FAE74D</div><div class="note">Жёлтый кольца логотипа, акцентные карточки, привлечение внимания к товару</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E4622A"></div>
+        <div class="info"><div class="role">Второстепенный</div><div class="hex">#E4622A</div><div class="note">Тёплый оранжевый — тон сварочных работ, дополняет зелёно-жёлтую пару логотипа</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#0A0A0A"></div>
+        <div class="info"><div class="role">Фоновый</div><div class="hex">#0A0A0A</div><div class="note">Глубокий чёрный/графит — фон карточек и историй, гаражная эстетика</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div>
+        <div class="info"><div class="role">Текстовый</div><div class="hex">#FFFFFF</div><div class="note">Белый — заголовки и текст на тёмном фоне</div></div>
+      </div>
+    </div>
+    <p class="brandbook-note">После анализа логотипа и опубликованных историй компании определена фирменная палитра: зелёный и жёлтый как основа (кольца логотипа), тёмный графитовый фон и белый текст — как в уже реализованных историях, оранжевый добавлен как дополняющий тон для тематики сварочных работ.</p>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">02 · Логика цикла</div>
+    <h2 class="section-title">Как развивается контент</h2>
+    <div class="cycle">
+      <div class="cycle-step">
+        <div class="stage-tag">Этап 01 · пройдено</div>
+        <h3>Знакомство с услугами</h3>
+        <p>Первый период раскрыл базовые сценарии обращения: диагностика колеса после удара, подбор шин под автомобиль, ремонт дисков как альтернатива замене, весь комплекс услуг в одном месте.</p>
+      </div>
+      <div class="cycle-step">
+        <div class="stage-tag">Этап 02 · актуальный</div>
+        <h3>Своевременность и надёжность</h3>
+        <p>Второй период переводит фокус с «что делает компания» на «когда обращаться и почему именно сюда»: сезонная подготовка автомобиля к зиме и круглосуточная работа сервиса с гарантией и высоким рейтингом.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">03 · Новости</div>
+    <h2 class="section-title">Новостные посты · Этап 02</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Сезонная замена шин: когда готовить автомобиль к зиме</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <ul class="theses">
+        <li>Снижение среднесуточной температуры воздуха ниже +7°C — сигнал для перехода на зимние шины</li>
+        <li>В сервисе доступны сезонный шиномонтаж, балансировка колёс, дошиповка и ошиповка шин</li>
+        <li>Отдельная услуга — сезонное хранение снятого комплекта шин и дисков до следующего сезона</li>
+        <li>Своевременная подготовка снижает риск повреждения резины и дисков в холодный период</li>
+        <li>Запись на сезонный шиномонтаж — заранее, без очередей в пиковые даты смены сезона</li>
+      </ul>
+      <div class="seo-chips">
+        <span>сезонная замена шин</span><span>шиномонтаж перед зимой</span><span>зимние шины</span>
+        <span>замена летней резины на зимнюю</span><span>хранение шин</span><span>сезонное хранение колёс</span>
+        <span>шиномонтаж Малаховка</span><span>шиномонтаж Люберцы</span><span>балансировка колёс</span>
+        <span>ошиповка шин</span><span>дошиповка шин</span>
+      </div>
+      <div class="card-foot">
+        <span class="meta-row">~1800–2200 знаков · Яндекс Карты, 2ГИС</span>
+        <span class="cta-pill">Записывайтесь на сезонный шиномонтаж</span>
+      </div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку новости</div>
+        <div class="cb-thesis">Сезон меняется — шины тоже</div>
+        <p>Тёмный фон (#0A0A0A), крупным планом шина или стеллаж сезонного хранения. Акцентный блок справа — жёлтый #FAE74D с фото шины. Заголовок белым #FFFFFF, крупный, короткий, без подзаголовков.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Круглосуточный шиномонтаж с гарантией: почему выбирают «Медведь на Егорке»</h3>
+        <span class="tag">Доверие</span>
+      </div>
+      <ul class="theses">
+        <li>Сервис работает круглосуточно, без выходных — актуально при внезапном проколе или повреждении колеса</li>
+        <li>Рейтинг 4.9 на основании 225 отзывов на Яндекс Картах</li>
+        <li>На выполненные работы предоставляется гарантия</li>
+        <li>Дополнительно — выкуп шин и дисков, оплата картой</li>
+        <li>Обращение возможно в любое время суток, включая ночные и экстренные ситуации на дороге</li>
+      </ul>
+      <div class="seo-chips">
+        <span>шиномонтаж круглосуточно</span><span>шиномонтаж 24 часа</span><span>шиномонтаж Малаховка</span>
+        <span>шиномонтаж Люберцы</span><span>гарантия на шиномонтаж</span><span>выкуп шин и дисков</span>
+        <span>отзывы о шиномонтаже</span><span>надёжный шиномонтаж</span><span>аварийный шиномонтаж</span>
+        <span>ремонт колёс ночью</span><span>шиномонтаж без выходных</span>
+      </div>
+      <div class="card-foot">
+        <span class="meta-row">~1800–2200 знаков · Яндекс Карты, 2ГИС</span>
+        <span class="cta-pill">Приезжайте в любое время суток</span>
+      </div>
+      <div class="cover-block">
+        <div class="cb-label">ТЗ на обложку новости</div>
+        <div class="cb-thesis">Сервис без выходных</div>
+        <p>Тёмный фон (#0A0A0A). Акцентный блок справа — зелёный #58AB75, в нём крупно цифра «4.9» или иконка часов. Заголовок белым #FFFFFF, крупный, короткий.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">04 · Сторис</div>
+    <h2 class="section-title">Истории · Этап 02</h2>
+    <div class="story-grid">
+      <div class="story-card">
+        <h3>Готовим авто к сезону</h3>
+        <ul class="theses">
+          <li>Смена шин по сезону</li>
+          <li>Хранение снятого комплекта</li>
+          <li>Дошиповка и ошиповка</li>
+          <li>Запись заранее</li>
+        </ul>
+        <div class="design-note">
+          <div class="dn-label">Дизайн слайда</div>
+          <p><span class="swatch-mini" style="background:#0A0A0A"></span>Фон #0A0A0A · <span class="swatch-mini" style="background:#FAE74D"></span>акцентный блок #FAE74D справа с фото шины/стеллажа хранения · <span class="swatch-mini" style="background:#FFFFFF"></span>текст #FFFFFF, крупный заголовок сверху</p>
+        </div>
+        <div class="seo-chips"><span>сезонная замена шин</span><span>хранение шин</span><span>шиномонтаж</span></div>
+      </div>
+      <div class="story-card">
+        <h3>Работаем круглосуточно</h3>
+        <ul class="theses">
+          <li>Режим работы 24/7</li>
+          <li>Рейтинг 4.9 по 225 отзывам</li>
+          <li>Гарантия на выполненные работы</li>
+        </ul>
+        <div class="design-note">
+          <div class="dn-label">Дизайн слайда</div>
+          <p><span class="swatch-mini" style="background:#0A0A0A"></span>Фон #0A0A0A · <span class="swatch-mini" style="background:#58AB75"></span>акцентный блок #58AB75 справа с цифрой «4.9» или иконкой часов · <span class="swatch-mini" style="background:#FFFFFF"></span>текст #FFFFFF, крупный заголовок сверху</p>
+        </div>
+        <div class="seo-chips"><span>шиномонтаж круглосуточно</span><span>гарантия</span><span>отзывы</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">05 · Карта тем</div>
+    <h2 class="section-title">Хронология этапов</h2>
+
+    <details class="stage">
+      <summary class="stage-summary">
+        Этап 01 — знакомство с услугами
+        <span class="stage-badge done">Пройден</span>
+      </summary>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Ударили колесо? Проверьте состояние шин и дисков</div><div class="tl-thesis">Диагностика после удара — деформация, вибрация, ремонт вместо замены</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Почему после удара нужно проверить колесо</div><div class="tl-thesis">Скрытые повреждения диска и шины после удара</div></div>
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Как правильно выбрать шины</div><div class="tl-thesis">Подбор по размеру, сезону и условиям эксплуатации</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Балансировка колёс: зачем она нужна</div><div class="tl-thesis">Устранение вибраций, равномерный износ шин</div></div>
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Ремонт дисков и сварочные работы</div><div class="tl-thesis">Когда восстановление выгоднее замены</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Подбор шин под ваш автомобиль</div><div class="tl-thesis">Размер, сезон, особенности эксплуатации</div></div>
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Все услуги для колёс в одном месте</div><div class="tl-thesis">Шины, диски, шиномонтаж, сварка — полный цикл</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Полный сервис колёс автомобиля</div><div class="tl-thesis">Коллаж: шины, диски, оборудование, сварка</div></div>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary class="stage-summary">
+        Этап 02 — своевременность и надёжность
+        <span class="stage-badge active">Актуальный</span>
+      </summary>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Сезонная замена шин</div><div class="tl-thesis">Когда готовить автомобиль к зиме</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Готовим авто к сезону</div><div class="tl-thesis">Смена шин, хранение, дошиповка</div></div>
+        <div class="tl-item"><div class="tl-fmt">Новость</div><div class="tl-title">Круглосуточный шиномонтаж с гарантией</div><div class="tl-thesis">Почему выбирают «Медведь на Егорке»</div></div>
+        <div class="tl-item"><div class="tl-fmt">История</div><div class="tl-title">Работаем круглосуточно</div><div class="tl-thesis">24/7, рейтинг 4.9, гарантия</div></div>
+      </div>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-title">Источники</div>
+    <div class="sources">
+      <a href="https://bear-on-egorka.clients.site/" target="_blank" rel="noopener">bear-on-egorka.clients.site — сайт компании</a>
+      <a href="https://yandex.ru/profile/-/CXE4JVOB" target="_blank" rel="noopener">Карточка компании на Яндекс Картах</a>
+      <a href="https://docs.google.com/document/d/1qug4gwjw2OQ-PXmPNK1CKvQnr4fXW79f1G88JiDaUxk/edit" target="_blank" rel="noopener">Архив тем предыдущего периода (Google Docs)</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
