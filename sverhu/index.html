@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Сверху ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ocean:#0E3B47;--teal:#1B6B78;--ice:#F5F8F8;--roe:#C4572B;--roe-soft:#F6E4DB;
+  --bg:#F5F8F8;--card:#FFFFFF;--card-2:#EAF1F2;--ink:#10262D;--ink-soft:#4E646B;--line:#D5E1E3;
+  --bar-bg:#0E3B47;--bar-ink:#D8E7EA;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Public Sans','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A171B;--card:#10232A;--card-2:#15303A;--ink:#E6F0F2;--ink-soft:#9BB2B8;
+    --line:#22404A;--teal:#5FB3C0;--roe:#E27A50;--roe-soft:#3A2218;--bar-bg:#071E25;--bar-ink:#C9DDE1;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A171B;--card:#10232A;--card-2:#15303A;--ink:#E6F0F2;--ink-soft:#9BB2B8;
+  --line:#22404A;--teal:#5FB3C0;--roe:#E27A50;--roe-soft:#3A2218;--bar-bg:#071E25;--bar-ink:#C9DDE1;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+a{color:var(--teal)}
+a:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:40;background:var(--bar-bg);color:var(--bar-ink);display:flex;align-items:center;gap:22px;padding:12px 20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid #00000033}
+.topbar .brand{font-family:var(--display);font-weight:800;font-size:16px;color:#fff}
+.topbar nav{display:flex;gap:2px}
+.topbar nav a{color:var(--bar-ink);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:6px}
+.topbar nav a:hover{background:#ffffff17;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px}
+section{padding-block:48px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section:last-of-type{border-bottom:none}
+.eyebrow{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px}
+.h2{font-size:clamp(24px,3.6vw,30px);font-weight:700}
+.lead{color:var(--ink-soft);margin-top:10px;max-width:64ch}
+.hero h1{font-size:clamp(30px,6vw,50px);font-weight:800;line-height:1.05}
+.hero h1 span{color:var(--teal)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-family:var(--mono);font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-weight:600;margin-top:4px}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:22px}
+.sw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.sw .chip{height:88px;border-bottom:1px solid var(--line)}
+.sw .meta{padding:10px 12px}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--roe);font-weight:600}
+.sw .name{font-weight:700;font-size:14px;margin-top:2px}
+.sw .hex{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.logic{display:grid;margin-top:22px}
+.logic li{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.logic li:first-child{border-top:none}
+.logic .n{font-family:var(--mono);font-weight:600;color:var(--teal);font-size:13px;padding-top:2px}
+.logic b{display:block;font-family:var(--display);font-size:17px}
+.logic span{color:var(--ink-soft);font-size:14px}
+.rules{margin-top:18px;background:var(--card-2);border-radius:10px;padding:16px 18px;display:grid;gap:6px;font-size:14px}
+.rules li{padding-left:16px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:2px;background:var(--roe)}
+.news{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:22px;scroll-margin-top:64px}
+.nhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal)}
+.tag{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--roe-soft);color:var(--roe);font-weight:600}
+.news h3{font-size:21px;font-weight:700;margin-top:8px;line-height:1.25}
+.blk{margin-top:18px}
+.blk .lbl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.theses li{position:relative;padding-left:18px;margin-top:6px}
+.theses li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:2px;background:var(--teal)}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-family:var(--mono);font-size:12px;padding:4px 9px;border-radius:6px;background:var(--card-2);border:1px solid var(--line)}
+.metarow{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:var(--ink-soft)}
+.metarow b{color:var(--ink);font-weight:600}
+.cta{margin-top:18px;padding:12px 16px;border-left:3px solid var(--roe);background:var(--card-2);border-radius:0 8px 8px 0;font-weight:600}
+.cta small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.cover{margin-top:20px;border:1px dashed var(--teal);border-radius:10px;padding:16px 18px}
+.cover .ttl{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.cover .thesis{font-family:var(--display);font-weight:800;font-size:22px;margin-top:6px}
+.cover p{font-size:14px;color:var(--ink-soft);margin-top:6px}
+.hex-inline{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.hex-inline::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:var(--c);border:1px solid #0003}
+.stories{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:22px}
+.story{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:64px}
+.story h3{font-size:18px;font-weight:700;line-height:1.25}
+.story .theses li{font-size:14px}
+.story .design{margin-top:auto;font-size:13px;color:var(--ink-soft);padding-top:12px;border-top:1px solid var(--line)}
+.story .design b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:4px}
+.stage{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:22px 22px 8px}
+.stage-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage-h h3{font-size:19px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--teal);color:#fff;font-weight:600}
+.road{position:relative;margin-top:18px;padding-left:28px}
+.road::before{content:"";position:absolute;left:7px;top:8px;bottom:22px;width:2px;background:var(--line)}
+.road li{position:relative;padding-bottom:18px}
+.road li::before{content:"";position:absolute;left:-28px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.s::before{background:var(--roe);border-color:var(--roe)}
+.road .t{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+.road a{display:block;font-weight:700;color:var(--ink);text-decoration:none;margin-top:1px}
+.road a:hover{color:var(--teal)}
+.road p{font-size:13.5px;color:var(--ink-soft)}
+@media (max-width:520px){.news{padding:20px}.logic li{grid-template-columns:34px 1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand">«Сверху»</span>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<section class="hero" id="company">
+  <span class="eyebrow">ТЗ · новости и сторис · Яндекс Карты и 2ГИС</span>
+  <h1>«Сверху» — центр <span>пилонного спорта и воздушной гимнастики</span> в Перми</h1>
+  <div class="pills">
+    <span class="pill">Пермь, ш. Космонавтов, 61Б</span>
+    <span class="pill">Пилонный спорт</span>
+    <span class="pill">Воздушная гимнастика</span>
+    <span class="pill">Этап 1</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Направление 1</span><div class="v">Пилонный спорт<small>Спортивный пилон и танцевальный пилон — для детей и взрослых</small></div></div>
+    <div class="fact"><span class="k">Направление 2</span><div class="v">Воздушная гимнастика<small>Воздушное кольцо и воздушные полотна — для детей и взрослых</small></div></div>
+    <div class="fact"><span class="k">Формат тренировок</span><div class="v">Групповые и персональные<small>Группы разных уровней сложности; акробатика, растяжка, ОФП для детей 3–5 лет</small></div></div>
+    <div class="fact"><span class="k">Ключевые преимущества</span><div class="v">7 лет работы<small>Аккредитованная федерация Минспорта; тренеры с квалификацией и судейскими категориями</small></div></div>
+    <div class="fact"><span class="k">Адрес</span><div class="v">Пермь, ш. Космонавтов, 61Б<small>5 этаж, офис 500 · удобная дорожная развязка, доехать можно из любого района города</small></div></div>
+    <div class="fact"><span class="k">Режим работы</span><div class="v">Пн–Пт 9:15–21:00<small>Сб–Вс 9:15–19:00</small></div></div>
+    <div class="fact"><span class="k">Сфера деятельности</span><div class="v">Спорт и здоровый образ жизни<small>Спортивное развитие населения при поддержке аккредитованной федерации</small></div></div>
+    <div class="fact"><span class="k">Площадка публикации</span><div class="v">Карточка компании на Яндекс Картах и 2ГИС<small>Новости — раздел «Публикации», сторис — раздел «Истории» карточки</small></div></div>
+  </div>
+</section>
+
+<section id="brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Фирменная цветовая гамма компании</h2>
+  <p class="lead">После анализа ресурсов компании определена фирменная цветовая гамма из шести цветов. Все обложки новостей и слайды сторис оформляются строго в этих цветах.</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#5498EE"></div><div class="meta"><div class="role">Основной</div><div class="name">Васильковый синий</div><div class="hex">#5498EE</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C44D51"></div><div class="meta"><div class="role">Акцентный</div><div class="name">Красный</div><div class="hex">#C44D51</div></div></div>
+    <div class="sw"><div class="chip" style="background:#B8A5E1"></div><div class="meta"><div class="role">Второстепенный</div><div class="name">Лавандовый</div><div class="hex">#B8A5E1</div></div></div>
+    <div class="sw"><div class="chip" style="background:#78B9F2"></div><div class="meta"><div class="role">Второстепенный</div><div class="name">Небесно-голубой</div><div class="hex">#78B9F2</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1D347A"></div><div class="meta"><div class="role">Текстовый</div><div class="name">Тёмно-синий</div><div class="hex">#1D347A</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F7F8FD"></div><div class="meta"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#F7F8FD</div></div></div>
+  </div>
+</section>
+
+<section id="logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">От знакомства с центром — к каждому направлению</h2>
+  <p class="lead">Этап вводный: сначала центр целиком, затем по одной теме на каждое из двух направлений и отдельная тема про детские тренировки.</p>
+  <ol class="logic">
+    <li><span class="n">1</span><div><b>Знакомство с центром «Сверху»</b><span>7 лет работы, два направления, федерация, тренеры, расположение.</span></div></li>
+    <li><span class="n">2</span><div><b>Пилонный спорт</b><span>Первое направление: спортивный и танцевальный пилон, уровни сложности.</span></div></li>
+    <li><span class="n">3</span><div><b>Воздушная гимнастика</b><span>Второе направление: воздушное кольцо и воздушные полотна.</span></div></li>
+    <li><span class="n">4</span><div><b>Тренировки для детей</b><span>ОФП для детей 3–5 лет, акробатика и растяжка, путь в оба направления.</span></div></li>
+  </ol>
+</section>
+
+<section id="news">
+  <span class="eyebrow">Новости · 4 темы + обложка</span>
+  <h2 class="h2">Тексты для публикаций на карточке</h2>
+  <p class="lead">Новости публикуются в разделе «Публикации» карточки компании на Яндекс Картах и 2ГИС.</p>
+  <ul class="rules">
+    <li>SEO: ключевые запросы из блока темы — почти в каждом предложении, с обязательной гео-привязкой «Пермь»; один и тот же ключ не повторять подряд, чередовать формулировки.</li>
+    <li>Объём: 1800–2500 знаков с пробелами (лимит площадки — 3000).</li>
+    <li>Без номера телефона и e-mail в тексте, без ссылок, капса, превосходных степеней («лучший», «№1») и лишних эмодзи.</li>
+    <li>Только факты компании — без выдуманных цен, сроков абонементов, имён и регалий тренеров.</li>
+    <li>Обложка: текст и логотип не более 20% площади, без контактов на изображении.</li>
+  </ul>
+
+  <article class="news" id="news-1">
+    <div class="nhead"><span class="num">Новость 1</span><span class="tag">Имиджевая</span></div>
+    <h3>Центр пилонного спорта и воздушной гимнастики «Сверху» в Перми</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>«Сверху» — центр пилонного спорта и воздушной гимнастики в Перми, работает 7 лет</li>
+        <li>Два направления: пилонный спорт и воздушная гимнастика; дополнительно — акробатика, растяжка и ОФП для детей 3–5 лет</li>
+        <li>Все тренировки проходят как для детей, так и для взрослых</li>
+        <li>Групповые тренировки разных уровней сложности и персональные занятия</li>
+        <li>Центр работает при поддержке аккредитованной федерации Минспорта</li>
+        <li>Тренеры — с квалификацией и судейскими категориями</li>
+        <li>Адрес: ш. Космонавтов, 61Б, 5 этаж, офис 500; удобная дорожная развязка — доехать можно из любого района Перми</li>
+        <li>Режим: пн–пт 9:15–21:00, сб–вс 9:15–19:00</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">пилонный спорт Пермь</span><span class="kw">воздушная гимнастика Пермь</span><span class="kw">студия пилона Пермь</span><span class="kw">спортивная секция Пермь</span><span class="kw">спортивный клуб Пермь</span><span class="kw">фитнес-клуб Пермь</span><span class="kw">тренировки для детей и взрослых Пермь</span><span class="kw">шоссе Космонавтов</span><span class="kw">центр «Сверху»</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>знакомство с центром</b></span><span>Объём: <b>1800–2200 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Записывайтесь на тренировку в центр «Сверху» — подберём направление и уровень группы.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Пилон и воздух</div>
+      <p>Фото спортсменки на пилоне в момент элемента. Вертикальный градиент-вуаль в фирменной логике: сверху <span class="hex-inline" style="--c:#78B9F2">#78B9F2</span> → <span class="hex-inline" style="--c:#5498EE">#5498EE</span>, снизу уходит в <span class="hex-inline" style="--c:#C44D51">#C44D51</span>. Тезис белым, тонкая дуга-лента <span class="hex-inline" style="--c:#B8A5E1">#B8A5E1</span> за силуэтом.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-2">
+    <div class="nhead"><span class="num">Новость 2</span><span class="tag">Экспертная</span></div>
+    <h3>Пилонный спорт в Перми: спортивный и танцевальный пилон для детей и взрослых</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>Пилонный спорт — первое направление центра «Сверху»</li>
+        <li>Два вида: спортивный пилон — сила и техника элементов; танцевальный пилон — пластика и хореография</li>
+        <li>Тренировки для детей и для взрослых</li>
+        <li>Группы разных уровней сложности — можно начать без подготовки и расти постепенно</li>
+        <li>Персональные тренировки — для индивидуальной программы и отработки элементов</li>
+        <li>Тренировка развивает силу, гибкость, координацию</li>
+        <li>Занятия ведут тренеры с квалификацией и судейскими категориями</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">пилонный спорт Пермь</span><span class="kw">спортивный пилон Пермь</span><span class="kw">танцевальный пилон Пермь</span><span class="kw">pole sport Пермь</span><span class="kw">танцы на пилоне Пермь</span><span class="kw">пилон для начинающих</span><span class="kw">пилон для детей Пермь</span><span class="kw">персональные тренировки на пилоне</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>раскрыть направление «Пилонный спорт»</b></span><span>Объём: <b>2000–2500 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Приходите на тренировку по пилонному спорту в «Сверху» — подберём группу по уровню.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Пилонный спорт</div>
+      <p>Фото силового элемента на спортивном пилоне, светлый зал. Затемнение снизу <span class="hex-inline" style="--c:#1D347A">#1D347A</span>. Тезис белым на плашке <span class="hex-inline" style="--c:#5498EE">#5498EE</span>, вертикальная линия-пилон акцентом <span class="hex-inline" style="--c:#C44D51">#C44D51</span>.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-3">
+    <div class="nhead"><span class="num">Новость 3</span><span class="tag">Экспертная</span></div>
+    <h3>Воздушная гимнастика в Перми: воздушное кольцо и полотна</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>Воздушная гимнастика — второе направление центра «Сверху»</li>
+        <li>Снаряды: воздушное кольцо и воздушные полотна</li>
+        <li>Занятия для детей и взрослых, профессиональная спортивная подготовка не требуется</li>
+        <li>Основа тренировок — акробатика и растяжка: гибкость, сила хвата, контроль тела</li>
+        <li>Групповые тренировки разных уровней сложности и персональные занятия</li>
+        <li>Тренеры с квалификацией и судейскими категориями ведут от первых элементов к сложным</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">воздушная гимнастика Пермь</span><span class="kw">воздушное кольцо Пермь</span><span class="kw">воздушные полотна Пермь</span><span class="kw">воздушная акробатика Пермь</span><span class="kw">воздушная гимнастика для взрослых</span><span class="kw">воздушная гимнастика для детей Пермь</span><span class="kw">акробатика и растяжка Пермь</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>раскрыть направление «Воздушная гимнастика»</b></span><span>Объём: <b>2000–2500 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Записывайтесь на воздушную гимнастику в центр «Сверху» — начнём с базовых элементов.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Воздушная гимнастика</div>
+      <p>Фото гимнастки на воздушном кольце или полотнах, съёмка снизу вверх. Фон-вуаль <span class="hex-inline" style="--c:#78B9F2">#78B9F2</span> → <span class="hex-inline" style="--c:#B8A5E1">#B8A5E1</span>. Тезис белым с тенью <span class="hex-inline" style="--c:#1D347A">#1D347A</span>, подчёркивание <span class="hex-inline" style="--c:#C44D51">#C44D51</span>.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-4">
+    <div class="nhead"><span class="num">Новость 4</span><span class="tag">Продающая</span></div>
+    <h3>Спортивная секция для детей в Перми: ОФП с 3 лет, акробатика и растяжка</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>В центре «Сверху» есть ОФП для детей от 3 до 5 лет — общая физическая подготовка</li>
+        <li>ОФП развивает силу, выносливость, координацию и гибкость ребёнка</li>
+        <li>Для детей постарше — акробатика и растяжка</li>
+        <li>Пилонный спорт и воздушная гимнастика доступны детям так же, как взрослым</li>
+        <li>Групповые тренировки разных уровней и персональные занятия</li>
+        <li>Тренеры с квалификацией и судейскими категориями, центр работает при поддержке аккредитованной федерации Минспорта</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">спортивная секция для детей Пермь</span><span class="kw">ОФП для детей Пермь</span><span class="kw">детская спортивная школа Пермь</span><span class="kw">детский фитнес Пермь</span><span class="kw">акробатика для детей Пермь</span><span class="kw">растяжка для детей Пермь</span><span class="kw">секция для ребёнка 3 лет</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>привлечь родителей детей 3+</b></span><span>Объём: <b>1800–2200 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Записывайте ребёнка на тренировку в центр «Сверху» — подберём группу по возрасту.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Спорт с 3 лет</div>
+      <p>Фото ребёнка на тренировке (растяжка или акробатика на мате). Светлый фон <span class="hex-inline" style="--c:#F7F8FD">#F7F8FD</span>, тезис <span class="hex-inline" style="--c:#1D347A">#1D347A</span>, цифра «3» акцентом <span class="hex-inline" style="--c:#C44D51">#C44D51</span>, мягкая лента-волна <span class="hex-inline" style="--c:#B8A5E1">#B8A5E1</span> по краю.</p>
+    </div>
+  </article>
+</section>
+
+<section id="stories">
+  <span class="eyebrow">Сторис · 4 темы · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="lead">Сторис публикуются в разделе «Истории» карточки компании на Яндекс Картах и 2ГИС. Каждая история — один слайд: заголовок и 3–4 коротких тезиса.</p>
+  <div class="stories">
+    <article class="story" id="story-1">
+      <span class="num">История 1</span>
+      <h3>«Сверху» — это</h3>
+      <ul class="theses"><li>7 лет в Перми</li><li>Пилонный спорт и воздушная гимнастика</li><li>Для детей и взрослых</li><li>Аккредитованная федерация Минспорта</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Вертикальный градиент <span class="hex-inline" style="--c:#78B9F2">#78B9F2</span> → <span class="hex-inline" style="--c:#5498EE">#5498EE</span> → <span class="hex-inline" style="--c:#C44D51">#C44D51</span>, как в логотипе. Тезисы белым, маркеры — белые точки, цифра «7» крупно.</div>
+    </article>
+    <article class="story" id="story-2">
+      <span class="num">История 2</span>
+      <h3>Пилонный спорт</h3>
+      <ul class="theses"><li>Спортивный пилон</li><li>Танцевальный пилон</li><li>Группы разных уровней</li><li>Персональные тренировки</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фон <span class="hex-inline" style="--c:#F7F8FD">#F7F8FD</span>, по центру вертикальная линия-пилон <span class="hex-inline" style="--c:#5498EE">#5498EE</span>, тезисы <span class="hex-inline" style="--c:#1D347A">#1D347A</span> по обе стороны, маркеры <span class="hex-inline" style="--c:#C44D51">#C44D51</span>.</div>
+    </article>
+    <article class="story" id="story-3">
+      <span class="num">История 3</span>
+      <h3>Воздушная гимнастика</h3>
+      <ul class="theses"><li>Воздушное кольцо</li><li>Воздушные полотна</li><li>Акробатика и растяжка</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фон-градиент <span class="hex-inline" style="--c:#78B9F2">#78B9F2</span> → <span class="hex-inline" style="--c:#B8A5E1">#B8A5E1</span>, линейные иконки кольца и полотен белым, тезисы <span class="hex-inline" style="--c:#1D347A">#1D347A</span>.</div>
+    </article>
+    <article class="story" id="story-4">
+      <span class="num">История 4</span>
+      <h3>Детям от 3 лет</h3>
+      <ul class="theses"><li>ОФП для детей 3–5 лет</li><li>Акробатика</li><li>Растяжка</li><li>Пилон и воздушные снаряды</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фон <span class="hex-inline" style="--c:#F7F8FD">#F7F8FD</span>, заголовок <span class="hex-inline" style="--c:#1D347A">#1D347A</span>, «3» акцентом <span class="hex-inline" style="--c:#C44D51">#C44D51</span>, плашки тезисов <span class="hex-inline" style="--c:#5498EE">#5498EE</span> с белым текстом.</div>
+    </article>
+  </div>
+</section>
+
+<section id="map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента</h2>
+  <div class="stage">
+    <div class="stage-h"><h3>Этап 1</h3><span class="badge">актуальный</span></div>
+    <ol class="road">
+      <li><span class="t">Новость 1</span><a href="#news-1">Центр пилонного спорта и воздушной гимнастики «Сверху» в Перми</a><p>7 лет, два направления, федерация, тренеры, адрес</p></li>
+      <li class="s"><span class="t">История 1</span><a href="#story-1">«Сверху» — это</a><p>Четыре ключевых факта о центре</p></li>
+      <li><span class="t">Новость 2</span><a href="#news-2">Пилонный спорт: спортивный и танцевальный пилон</a><p>Два вида пилона, уровни, персональные занятия</p></li>
+      <li class="s"><span class="t">История 2</span><a href="#story-2">Пилонный спорт</a><p>Виды пилона и форматы тренировок</p></li>
+      <li><span class="t">Новость 3</span><a href="#news-3">Воздушная гимнастика: кольцо и полотна</a><p>Снаряды, акробатика и растяжка как основа</p></li>
+      <li class="s"><span class="t">История 3</span><a href="#story-3">Воздушная гимнастика</a><p>Кольцо, полотна, акробатика и растяжка</p></li>
+      <li><span class="t">Новость 4</span><a href="#news-4">Спортивная секция для детей: ОФП с 3 лет</a><p>ОФП 3–5 лет, акробатика, растяжка, оба направления</p></li>
+      <li class="s"><span class="t">История 4</span><a href="#story-4">Детям от 3 лет</a><p>Детские форматы тренировок</p></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
