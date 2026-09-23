@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Матур окна ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ocean:#0E3B47;
+  --teal:#1B6B78;
+  --ice:#F5F8F8;
+  --roe:#C4572B;
+  --roe-soft:#F6E4DB;
+  --bg:#F5F8F8;
+  --card:#FFFFFF;
+  --card-2:#EAF1F2;
+  --ink:#10262D;
+  --ink-soft:#4E646B;
+  --line:#D5E1E3;
+  --bar-bg:#0E3B47;
+  --bar-ink:#D8E7EA;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Public Sans','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A171B;--card:#10232A;--card-2:#15303A;--ink:#E6F0F2;--ink-soft:#9BB2B8;
+    --line:#22404A;--teal:#5FB3C0;--roe:#E27A50;--roe-soft:#3A2218;--bar-bg:#071E25;--bar-ink:#C9DDE1;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A171B;--card:#10232A;--card-2:#15303A;--ink:#E6F0F2;--ink-soft:#9BB2B8;
+  --line:#22404A;--teal:#5FB3C0;--roe:#E27A50;--roe-soft:#3A2218;--bar-bg:#071E25;--bar-ink:#C9DDE1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+a{color:var(--teal)}
+a:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bar-bg);color:var(--bar-ink);
+  display:flex;align-items:center;gap:22px;padding:12px 20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid #00000033}
+.topbar .brand{font-family:var(--display);font-weight:800;font-size:16px;color:#fff}
+.topbar nav{display:flex;gap:2px}
+.topbar nav a{color:var(--bar-ink);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:6px}
+.topbar nav a:hover{background:#ffffff17;color:#fff}
+
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+section{padding-block:48px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section:last-of-type{border-bottom:none}
+.eyebrow{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px}
+.h2{font-size:clamp(24px,3.6vw,30px);font-weight:700}
+.lead{color:var(--ink-soft);margin-top:10px;max-width:64ch}
+
+/* hero */
+.hero h1{font-size:clamp(32px,6vw,52px);font-weight:800;line-height:1.04}
+.hero h1 span{color:var(--teal)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-family:var(--mono);font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-weight:600;margin-top:4px}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px}
+
+/* brandbook */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:22px}
+.sw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.sw .chip{height:88px;border-bottom:1px solid var(--line)}
+.sw .meta{padding:10px 12px}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--roe);font-weight:600}
+.sw .name{font-weight:700;font-size:14px;margin-top:2px}
+.sw .hex{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+
+/* logic */
+.logic{display:grid;gap:0;margin-top:22px;counter-reset:step}
+.logic li{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.logic li:first-child{border-top:none}
+.logic .n{font-family:var(--mono);font-weight:600;color:var(--teal);font-size:13px;padding-top:2px}
+.logic b{display:block;font-family:var(--display);font-size:17px}
+.logic span{color:var(--ink-soft);font-size:14px}
+
+/* seo rules */
+.rules{margin-top:18px;background:var(--card-2);border-radius:10px;padding:16px 18px;display:grid;gap:6px;font-size:14px}
+.rules li{padding-left:16px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:2px;background:var(--roe)}
+
+/* news card */
+.news{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:22px;scroll-margin-top:64px}
+.nhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal)}
+.tag{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--roe-soft);color:var(--roe);font-weight:600}
+.news h3{font-size:21px;font-weight:700;margin-top:8px;line-height:1.25}
+.blk{margin-top:18px}
+.blk .lbl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.theses li{position:relative;padding-left:18px;margin-top:6px}
+.theses li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:2px;background:var(--teal)}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-family:var(--mono);font-size:12px;padding:4px 9px;border-radius:6px;background:var(--card-2);border:1px solid var(--line)}
+.metarow{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:var(--ink-soft)}
+.metarow b{color:var(--ink);font-weight:600}
+.cta{margin-top:18px;padding:12px 16px;border-left:3px solid var(--roe);background:var(--card-2);border-radius:0 8px 8px 0;font-weight:600}
+.cta small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.cover{margin-top:20px;border:1px dashed var(--teal);border-radius:10px;padding:16px 18px}
+.cover .ttl{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.cover .thesis{font-family:var(--display);font-weight:800;font-size:22px;margin-top:6px}
+.cover p{font-size:14px;color:var(--ink-soft);margin-top:6px}
+.hex-inline{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.hex-inline::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:var(--c);border:1px solid #0003}
+
+/* stories */
+.stories{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:22px}
+.story{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:64px}
+.story h3{font-size:18px;font-weight:700;line-height:1.25}
+.story .theses li{font-size:14px}
+.story .design{margin-top:auto;font-size:13px;color:var(--ink-soft);padding-top:12px;border-top:1px solid var(--line)}
+.story .design b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:4px}
+
+/* roadmap */
+.stage{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:22px 22px 8px}
+.stage-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage-h h3{font-size:19px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--teal);color:#fff;font-weight:600}
+.road{position:relative;margin-top:18px;padding-left:28px}
+.road::before{content:"";position:absolute;left:7px;top:8px;bottom:22px;width:2px;background:var(--line)}
+.road li{position:relative;padding-bottom:18px}
+.road li::before{content:"";position:absolute;left:-28px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.s::before{background:var(--roe);border-color:var(--roe)}
+.road .t{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+.road a{display:block;font-weight:700;color:var(--ink);text-decoration:none;margin-top:1px}
+.road a:hover{color:var(--teal)}
+.road p{font-size:13.5px;color:var(--ink-soft)}
+
+@media (max-width:520px){
+  .news{padding:20px}
+  .logic li{grid-template-columns:34px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <span class="brand">Матур окна</span>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<section class="hero" id="company">
+  <span class="eyebrow">ТЗ · новости и сторис · Яндекс Карты и 2ГИС</span>
+  <h1>Матур окна — <span>окна, автотенты и пологи</span> в Уфе</h1>
+  <div class="pills">
+    <span class="pill">Уфа, ул. Айская, 46</span>
+    <span class="pill">Окна</span>
+    <span class="pill">Автотенты и пологи</span>
+    <span class="pill">Этап 1</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Направление 1</span><div class="v">Окна<small>Основная категория деятельности на карточке</small></div></div>
+    <div class="fact"><span class="k">Направление 2</span><div class="v">Автотенты и пологи<small>Вторая категория деятельности на карточке</small></div></div>
+    <div class="fact"><span class="k">Адрес и режим</span><div class="v">Уфа, ул. Айская, 46<small>Работает до 18:00 · остановка «Улица Чернышевского» в 460 м</small></div></div>
+    <div class="fact"><span class="k">Карточка компании</span><div class="v">13 фотографий, панорама<small>Отзывов пока нет — контент формирует первое знакомство с компанией</small></div></div>
+    <div class="fact"><span class="k">Площадка публикации</span><div class="v">Карточка компании на Яндекс Картах и 2ГИС<small>Новости — раздел «Публикации», сторис — раздел «Истории» карточки</small></div></div>
+    <div class="fact"><span class="k">Источник</span><div class="v"><a href="https://yandex.ru/maps/org/matur_okna/131967821845/" target="_blank" rel="noopener">Карточка «Матур окна» на Яндекс Картах</a></div></div>
+  </div>
+</section>
+
+<section id="brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Предлагаемая цветовая гамма компании</h2>
+  <p class="lead">Для оформления контента компании предлагается цветовая гамма из пяти цветов. Все обложки новостей и слайды сторис оформляются строго в этих цветах.</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#080B15"></div><div class="meta"><div class="role">Фоновый</div><div class="name">Тёмный графит</div><div class="hex">#080B15</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1C3442"></div><div class="meta"><div class="role">Основной</div><div class="name">Тёмная бирюза</div><div class="hex">#1C3442</div></div></div>
+    <div class="sw"><div class="chip" style="background:#86E8FC"></div><div class="meta"><div class="role">Акцентный</div><div class="name">Бирюзовый</div><div class="hex">#86E8FC</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFFFF"></div><div class="meta"><div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div></div>
+    <div class="sw"><div class="chip" style="background:#B98A5D"></div><div class="meta"><div class="role">Второстепенный</div><div class="name">Тёплое дерево</div><div class="hex">#B98A5D</div></div></div>
+  </div>
+</section>
+
+<section id="logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">Знакомство с компанией и её направлениями</h2>
+  <p class="lead">Этап вводный: сначала компания целиком, затем по одной теме на каждую сферу деятельности — окна, автотенты, пологи.</p>
+  <ol class="logic">
+    <li><span class="n">1</span><div><b>Знакомство с компанией</b><span>Кто такие «Матур окна», где находятся, какие два направления ведут.</span></div></li>
+    <li><span class="n">2</span><div><b>Окна</b><span>Первое направление: зачем нужны новые окна и для каких объектов.</span></div></li>
+    <li><span class="n">3</span><div><b>Автотенты</b><span>Второе направление: тенты для грузового транспорта и прицепов.</span></div></li>
+    <li><span class="n">4</span><div><b>Пологи</b><span>Отдельное изделие внутри второго направления: укрытие груза, техники, материалов.</span></div></li>
+  </ol>
+</section>
+
+<section id="news">
+  <span class="eyebrow">Новости · 4 темы + обложка</span>
+  <h2 class="h2">Тексты для публикаций на карточке</h2>
+  <p class="lead">Новости публикуются в разделе «Публикации» карточки компании на Яндекс Картах и 2ГИС.</p>
+  <ul class="rules">
+    <li>SEO: ключевые запросы из блока темы — почти в каждом предложении, с обязательной гео-привязкой «Уфа»; один и тот же ключ не повторять подряд, чередовать формулировки.</li>
+    <li>Объём: 1800–2500 знаков с пробелами (лимит площадки — 3000).</li>
+    <li>Без номера телефона и e-mail в тексте, без ссылок, капса, превосходных степеней («лучший», «№1») и лишних эмодзи.</li>
+    <li>Только факты компании — без выдуманных сроков, гарантий, цен, профилей и материалов.</li>
+    <li>Обложка: текст и логотип не более 20% площади, без контактов на изображении.</li>
+  </ul>
+
+  <article class="news" id="news-1">
+    <div class="nhead"><span class="num">Новость 1</span><span class="tag">Имиджевая</span></div>
+    <h3>«Матур окна» в Уфе: окна, автотенты и пологи</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>«Матур окна» — компания в Уфе с двумя направлениями работы: окна и автотенты с пологами</li>
+        <li>Окна — для жилых и загородных объектов: тепло, тишина и свет в помещении</li>
+        <li>Автотенты и пологи — для владельцев грузового транспорта, прицепов и тех, кому нужно укрыть груз или технику</li>
+        <li>Оба направления объединяет одна задача — защита: помещения от холода и шума, груза — от погоды</li>
+        <li>Адрес: Уфа, ул. Айская, 46; рядом остановка «Улица Чернышевского»</li>
+        <li>Режим работы и контакты — в карточке компании</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">окна Уфа</span><span class="kw">автотенты Уфа</span><span class="kw">пологи Уфа</span><span class="kw">окна на заказ Уфа</span><span class="kw">тенты для грузовиков Уфа</span><span class="kw">тенты и пологи</span><span class="kw">установка окон Уфа</span><span class="kw">Матур окна</span><span class="kw">Айская 46</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>знакомство с компанией</b></span><span>Объём: <b>1800–2200 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Приходите в «Матур окна» на Айскую, 46 — расскажем о каждом направлении подробно.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Окна и тенты</div>
+      <p>Фон <span class="hex-inline" style="--c:#080B15">#080B15</span> с градиентом в <span class="hex-inline" style="--c:#1C3442">#1C3442</span>. Кадр делится на две части: фасад с окнами и грузовой автомобиль с тентом. Тезис белым <span class="hex-inline" style="--c:#FFFFFF">#FFFFFF</span>, слово «тенты» — акцентом <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>. Тонкий разделитель между частями — <span class="hex-inline" style="--c:#B98A5D">#B98A5D</span>.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-2">
+    <div class="nhead"><span class="num">Новость 2</span><span class="tag">Экспертная</span></div>
+    <h3>Окна в Уфе: что дают новые окна дому и квартире</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>Окна — первое направление «Матур окна» в Уфе</li>
+        <li>Новые окна сохраняют тепло в помещении и снижают теплопотери зимой</li>
+        <li>Защищают от уличного шума и пыли</li>
+        <li>Пропускают больше дневного света и обновляют внешний вид фасада</li>
+        <li>Подходят для квартир, частных домов и дач</li>
+        <li>Окно подбирается под размер конкретного проёма — начинается всё с замера</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">окна Уфа</span><span class="kw">окна на заказ Уфа</span><span class="kw">замена окон Уфа</span><span class="kw">установка окон</span><span class="kw">окна в квартиру</span><span class="kw">окна для частного дома</span><span class="kw">окна на дачу</span><span class="kw">замер окон Уфа</span><span class="kw">тёплые окна</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>раскрыть направление «Окна»</b></span><span>Объём: <b>2000–2500 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Записывайтесь на замер окон в «Матур окна» — подберём решение под ваш проём.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Окна в Уфе</div>
+      <p>Фото светлого интерьера с большим окном, за стеклом — городской вид. Затемнение снизу градиентом <span class="hex-inline" style="--c:#080B15">#080B15</span>. Тезис белым <span class="hex-inline" style="--c:#FFFFFF">#FFFFFF</span> на плашке <span class="hex-inline" style="--c:#1C3442">#1C3442</span>, линия-акцент <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-3">
+    <div class="nhead"><span class="num">Новость 3</span><span class="tag">Экспертная</span></div>
+    <h3>Автотенты в Уфе: тент для грузового автомобиля и прицепа</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>Автотенты — второе направление «Матур окна»</li>
+        <li>Тент закрывает кузов и защищает груз от дождя, снега, ветра, пыли и солнца</li>
+        <li>Подходит для бортовых грузовиков, малотоннажных автомобилей, легковых и грузовых прицепов</li>
+        <li>Изношенный или порванный тент — повод заменить его до того, как пострадает груз</li>
+        <li>Тент рассчитывается под размеры конкретного кузова или прицепа</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">автотенты Уфа</span><span class="kw">тент на грузовик Уфа</span><span class="kw">тент на прицеп Уфа</span><span class="kw">тент на газель</span><span class="kw">тент для кузова</span><span class="kw">замена тента Уфа</span><span class="kw">тент на заказ</span><span class="kw">автотент для прицепа</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>раскрыть направление «Автотенты»</b></span><span>Объём: <b>2000–2500 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Обращайтесь в «Матур окна» за автотентом — подберём решение под ваш транспорт.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Автотенты</div>
+      <p>Грузовой автомобиль или прицеп с натянутым тентом, ракурс три четверти. Фон и затемнение <span class="hex-inline" style="--c:#080B15">#080B15</span> → <span class="hex-inline" style="--c:#1C3442">#1C3442</span>. Тезис белым <span class="hex-inline" style="--c:#FFFFFF">#FFFFFF</span>, подчёркивание <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>.</p>
+    </div>
+  </article>
+
+  <article class="news" id="news-4">
+    <div class="nhead"><span class="num">Новость 4</span><span class="tag">Экспертная</span></div>
+    <h3>Пологи в Уфе: для чего нужны и где применяются</h3>
+    <div class="blk"><span class="lbl">Тезисы</span>
+      <ul class="theses">
+        <li>Полог — отдельное тентовое полотно для укрытия от погоды</li>
+        <li>Укрывают груз при перевозке и хранении, технику, стройматериалы, дрова</li>
+        <li>Применяются на стройплощадках, складах, в частном хозяйстве и на даче</li>
+        <li>Защищают от дождя, снега, ветра и пыли</li>
+        <li>Размер полога подбирается под задачу</li>
+      </ul>
+    </div>
+    <div class="blk"><span class="lbl">SEO-ключи</span>
+      <div class="kws"><span class="kw">пологи Уфа</span><span class="kw">полог на заказ Уфа</span><span class="kw">тентовый полог</span><span class="kw">полог для груза</span><span class="kw">полог для укрытия техники</span><span class="kw">полог для стройматериалов</span><span class="kw">укрывной полог</span><span class="kw">тенты и пологи Уфа</span></div>
+    </div>
+    <div class="blk"><div class="metarow"><span>Цель: <b>раскрыть направление «Пологи»</b></span><span>Объём: <b>1800–2200 знаков</b></span></div></div>
+    <div class="cta"><small>CTA · финальная строка</small>Заказывайте полог в «Матур окна» — подберём размер под вашу задачу.</div>
+    <div class="cover">
+      <div class="ttl">ТЗ на обложку</div>
+      <div class="thesis">Пологи</div>
+      <p>Фото укрытого пологом груза или стройматериалов на площадке. Фон <span class="hex-inline" style="--c:#080B15">#080B15</span>, плашка под тезис <span class="hex-inline" style="--c:#1C3442">#1C3442</span>, тезис белым <span class="hex-inline" style="--c:#FFFFFF">#FFFFFF</span>, тонкая рамка <span class="hex-inline" style="--c:#B98A5D">#B98A5D</span>.</p>
+    </div>
+  </article>
+</section>
+
+<section id="stories">
+  <span class="eyebrow">Сторис · 4 темы · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="lead">Сторис публикуются в разделе «Истории» карточки компании на Яндекс Картах. Каждая история — один слайд: заголовок и 3–4 коротких тезиса.</p>
+  <div class="stories">
+    <article class="story" id="story-1">
+      <span class="num">История 1</span>
+      <h3>«Матур окна» — это</h3>
+      <ul class="theses"><li>Окна</li><li>Автотенты</li><li>Пологи</li><li>Уфа, ул. Айская, 46</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фон <span class="hex-inline" style="--c:#080B15">#080B15</span>, три плашки <span class="hex-inline" style="--c:#1C3442">#1C3442</span> с иконками окна, грузовика и сложенного полотна в <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>, текст белый.</div>
+    </article>
+    <article class="story" id="story-2">
+      <span class="num">История 2</span>
+      <h3>Что дают новые окна</h3>
+      <ul class="theses"><li>Тепло зимой</li><li>Тишина в помещении</li><li>Больше дневного света</li><li>Обновлённый фасад</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фото окна в интерьере на фоне, затемнение <span class="hex-inline" style="--c:#080B15">#080B15</span>. Список чек-маркерами <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>, текст белый.</div>
+    </article>
+    <article class="story" id="story-3">
+      <span class="num">История 3</span>
+      <h3>Автотенты для транспорта</h3>
+      <ul class="theses"><li>Бортовые грузовики</li><li>Малотоннажные автомобили</li><li>Легковые и грузовые прицепы</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Фон <span class="hex-inline" style="--c:#1C3442">#1C3442</span>, силуэты трёх видов транспорта линиями <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>, подписи белым, разделители <span class="hex-inline" style="--c:#B98A5D">#B98A5D</span>.</div>
+    </article>
+    <article class="story" id="story-4">
+      <span class="num">История 4</span>
+      <h3>Где пригодится полог</h3>
+      <ul class="theses"><li>Перевозка груза</li><li>Стройплощадка</li><li>Склад и хранение</li><li>Дача и хозяйство</li></ul>
+      <div class="design"><b>Дизайн слайда</b>Сетка 2×2 из плашек <span class="hex-inline" style="--c:#1C3442">#1C3442</span> на фоне <span class="hex-inline" style="--c:#080B15">#080B15</span>, иконки <span class="hex-inline" style="--c:#86E8FC">#86E8FC</span>, текст белый.</div>
+    </article>
+  </div>
+</section>
+
+<section id="map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента</h2>
+  <div class="stage">
+    <div class="stage-h"><h3>Этап 1</h3><span class="badge">актуальный</span></div>
+    <ol class="road">
+      <li><span class="t">Новость 1</span><a href="#news-1">«Матур окна» в Уфе: окна, автотенты и пологи</a><p>Знакомство с компанией и направлениями</p></li>
+      <li class="s"><span class="t">История 1</span><a href="#story-1">«Матур окна» — это</a><p>Три вида продукции и адрес</p></li>
+      <li><span class="t">Новость 2</span><a href="#news-2">Окна в Уфе: что дают новые окна</a><p>Тепло, тишина, свет, объекты</p></li>
+      <li class="s"><span class="t">История 2</span><a href="#story-2">Что дают новые окна</a><p>Четыре выгоды</p></li>
+      <li><span class="t">Новость 3</span><a href="#news-3">Автотенты для грузовика и прицепа</a><p>Защита груза, виды транспорта</p></li>
+      <li class="s"><span class="t">История 3</span><a href="#story-3">Автотенты для транспорта</a><p>Грузовики, малотоннажные, прицепы</p></li>
+      <li><span class="t">Новость 4</span><a href="#news-4">Пологи: для чего нужны и где применяются</a><p>Груз, техника, стройматериалы</p></li>
+      <li class="s"><span class="t">История 4</span><a href="#story-4">Где пригодится полог</a><p>Перевозка, стройка, склад, дача</p></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+</body>
+</html>
