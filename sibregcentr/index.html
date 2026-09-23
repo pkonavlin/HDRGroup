@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>СибРегЦентр ТЗ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ocean:#0E3B47;--teal:#1B6B78;--ice:#F5F8F8;--roe:#C4572B;
+  --bg:#F5F8F8;--card:#FFFFFF;--card-2:#EAF1F2;--ink:#12272D;--ink-soft:#56686D;--line:#D5E1E3;
+  --accent:#C4572B;--accent-soft:#F7E6DE;--link:#1B6B78;
+  --story-bg:#0E3B47;--story-ink:#F5F8F8;--story-soft:#A9C3C8;--story-chip:#ffffff14;--story-line:#ffffff26;
+  --display:'Bricolage Grotesque','Segoe UI',sans-serif;
+  --body:'Public Sans','Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;
+    --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+    --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;
+    --story-bg:#12323B;--story-soft:#9DB9BE;}
+}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+  --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;
+  --story-bg:#12323B;--story-soft:#9DB9BE;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.58}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}ul{margin:0;padding:0;list-style:none}
+a{color:var(--link)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--ocean);color:#F5F8F8;display:flex;align-items:center;gap:18px;padding:12px 20px;overflow-x:auto;border-bottom:1px solid #00000033}
+.topbar .brand{font-family:var(--display);font-weight:800;font-size:16px;white-space:nowrap;display:flex;align-items:center;gap:9px}
+.topbar .brand i{width:9px;height:9px;border-radius:2px;background:var(--roe);display:block}
+.topbar nav{display:flex;gap:2px;white-space:nowrap}
+.topbar nav a{color:#B9D2D6;text-decoration:none;font-size:13px;font-weight:600;padding:7px 11px;border-radius:7px}
+.topbar nav a:hover,.topbar nav a:focus-visible{background:#ffffff18;color:#fff;outline:none}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+section{padding-block:46px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section:last-of-type{border-bottom:0}
+.eyebrow{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.h2{font-size:clamp(24px,4vw,30px);font-weight:700}
+.sub{color:var(--ink-soft);max-width:64ch;margin-top:8px}
+.hero h1{font-size:clamp(30px,5.4vw,46px);font-weight:800;line-height:1.06}
+.hero h1 span{color:var(--teal)}
+:root[data-theme="dark"] .hero h1 span{color:var(--link)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero h1 span{color:var(--link)}}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-family:var(--mono);font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:22px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:8px}
+.fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-weight:600;font-size:14.5px;line-height:1.4}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px;margin-top:2px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:22px}
+.sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.sw .chip{height:88px}
+.sw .lb{padding:10px 12px 12px}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
+.sw .nm{font-weight:700;font-size:13.5px;margin-top:3px}
+.sw .hx{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.grad{margin-top:14px;border-radius:12px;height:58px;background:linear-gradient(225deg,#63599C 0%,#955C9C 50%,#B75E9A 100%);display:flex;align-items:center;padding-inline:18px;color:#fff;font-family:var(--mono);font-size:12px}
+.pal-h{font-family:var(--display);font-size:17px;font-weight:700;margin-top:26px}
+.note{margin-top:14px;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:22px;counter-reset:c}
+.chain li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;counter-increment:c}
+.chain li::before{content:"Шаг " counter(c);display:block;font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:4px}
+.chain b{display:block;font-size:14.5px}
+.chain span{font-size:13.5px;color:var(--ink-soft)}
+.theme{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:20px;scroll-margin-top:64px;display:flex;flex-direction:column;gap:18px}
+.th-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start}
+.num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:500}
+.th-title{font-size:20px;font-weight:700;margin-top:4px;max-width:46ch}
+.tag{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:6px;background:var(--card-2);color:var(--ink);white-space:nowrap}
+.blk .h{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:8px}
+.list li{position:relative;padding-left:18px;margin-top:6px;font-size:14.5px}
+.list li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;background:var(--teal);border-radius:1px}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-family:var(--mono);font-size:12px;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg)}
+.cta{font-weight:600;font-size:14.5px;border-left:3px solid var(--accent);padding-left:12px}
+.cover{background:var(--accent-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.cover .h{color:var(--accent);margin:0}
+.cover .ct{font-family:var(--display);font-weight:800;font-size:19px}
+.cover p{font-size:14px}
+.story{background:var(--story-bg);color:var(--story-ink);border-radius:16px;padding:22px 24px;margin-top:18px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:64px}
+.story .num{color:#F0A27F}
+.story .sh{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.15}
+.story .topic{font-size:13px;color:var(--story-soft)}
+.facts-s{display:flex;flex-wrap:wrap;gap:7px}
+.facts-s li{font-size:13px;padding:6px 11px;border-radius:999px;background:var(--story-chip);border:1px solid var(--story-line)}
+.story .dz{font-size:13.5px;color:var(--story-soft);border-top:1px solid var(--story-line);padding-top:12px}
+.story .dz b{color:var(--story-ink);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:4px;border:1px solid #ffffff40}
+.pub{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:18px}
+.pub li{display:flex;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:14px}
+.pub li:last-child{border-bottom:0}
+.pub .t{flex:none;width:84px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding-top:2px}
+.stage{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.stage-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage-h b{font-family:var(--display);font-size:18px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--accent);color:#fff}
+.rm{position:relative;margin-top:18px;padding-left:26px}
+.rm::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.rm li{position:relative;padding-bottom:18px}
+.rm li:last-child{padding-bottom:0}
+.rm li::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.rm li.s::before{background:var(--accent);border-color:var(--accent)}
+.rm .f{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+.rm .n{font-weight:700;font-size:15px}
+.rm .x{font-size:13.5px;color:var(--ink-soft)}
+.rm a{color:inherit;text-decoration:none}
+.br-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.br{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.br-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.br-h b{font-family:var(--display);font-size:17px}
+.pill.new{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mock{position:relative;width:100%;max-width:220px;aspect-ratio:9/16;margin-inline:auto;border-radius:14px;overflow:hidden;background:linear-gradient(170deg,var(--m-bg1) 0%,var(--m-bg2) 100%);box-shadow:0 6px 20px #0000002a}
+.m-logo{position:absolute;top:5%;left:0;right:0;text-align:center;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:.04em;color:#3B3B3B}
+.m-logo::before{content:"";display:inline-block;width:22px;height:9px;margin-right:6px;vertical-align:-1px;background:linear-gradient(90deg,#B75E9A,#63599C);border-radius:2px}
+.m-plate{position:absolute;top:19%;left:14%;right:14%;padding:11% 8%;background:var(--m-plate);border:1px solid #ffffffcc;border-radius:8px;font-family:var(--display);font-weight:800;font-size:20px;text-transform:uppercase;color:var(--m-head);box-shadow:0 4px 14px #0000001f}
+.m-strip{position:absolute;transform:rotate(28deg);border-radius:2px}
+.m-strip.s1{width:34%;height:70%;right:-22%;bottom:-10%;background:linear-gradient(180deg,var(--m-deep),var(--m-glow));opacity:.9}
+.m-strip.s2{width:9%;height:60%;right:18%;bottom:-18%;background:var(--m-glow);opacity:.75;box-shadow:0 0 18px var(--m-glow)}
+.m-strip.s3{width:4%;height:55%;right:30%;bottom:-22%;background:#ffffffb0}
+.swatches.sm{grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;margin-top:0}
+.swatches.sm .chip{height:46px}
+.swatches.sm .lb{padding:7px 8px 9px}
+.swatches.sm .nm{font-size:12px}
+.swatches.sm .hx{font-size:11px}
+.roles{margin-top:18px}
+@media (max-width:560px){.theme,.story{padding:18px}.pub .t{width:64px}}
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="brand"><i></i>СибРегЦентр</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#branches">Филиалы</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#published">На карточке</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<section class="hero" id="company">
+  <span class="eyebrow">ТЗ · Этап 1 · карточка компании на Яндекс Картах и 2ГИС</span>
+  <h1>СибРегЦентр — <span>регистрация бизнеса, бухгалтерия и электронная подпись</span> в Новосибирске</h1>
+  <p class="sub">Новости и сторис этого этапа публикуются в карточках обоих филиалов СибРегЦентр на Яндекс Картах и в 2ГИС.</p>
+  <div class="pills">
+    <span class="pill">Регистрация и ликвидация предприятий</span>
+    <span class="pill">Бухгалтерские услуги</span>
+    <span class="pill">Удостоверяющий центр</span>
+    <span class="pill">Печати и штампы</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Филиалы</span>
+      <div class="v">Правый берег — пр-кт Димитрова, 7, офис 101<small>Яндекс Карты: 4,4 · 10 оценок</small></div>
+      <div class="v">Левый берег — пл. Труда, 1, офис 730<small>Яндекс Карты: 4,4 · 34 оценки</small></div>
+    </div>
+    <div class="fact"><span class="k">Опыт и цифры</span>
+      <div class="v">Работает с 2010 года</div>
+      <div class="v">Более 20 000 зарегистрированных ООО и ИП</div>
+      <div class="v">Каждый второй обратившийся возвращается повторно</div>
+    </div>
+    <div class="fact"><span class="k">Формат работы</span>
+      <div class="v">Онлайн по всей России или в офисе<small>Регистрация без визита в налоговую, подача документов онлайн</small></div>
+      <div class="v">ПН–ЧТ 09:00–17:00 · ПТ 09:00–16:00</div>
+    </div>
+    <div class="fact"><span class="k">Ключевые цены</span>
+      <div class="v">Регистрация ИП — 2 500 ₽ онлайн / 4 500 ₽ под ключ</div>
+      <div class="v">Регистрация ООО (1 участник) — 5 000 ₽</div>
+      <div class="v">ЭЦП на физлицо — от 3 500 ₽ · печати — от 800 ₽</div>
+      <div class="v">Ликвидация ООО под ключ — 27 000 ₽</div>
+    </div>
+    <div class="fact"><span class="k">Банки-партнёры</span>
+      <div class="v">Сбербанк, Альфа-Банк, Открытие<small>Расчётный счёт открывается вместе с регистрацией. Июль 2025 — статус «Топ партнёр» от Сбербанка</small></div>
+    </div>
+    <div class="fact"><span class="k">Что отмечают в отзывах</span>
+      <div class="v">Оперативность, регистрация без походов в налоговую и банк, ЭЦП в том же офисе, подробные консультации по системе налогообложения</div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Фирменная палитра</h2>
+  <p class="sub">После анализа ресурсов компании определены фирменные цвета СибРегЦентр: логотип, кнопки, промо-плашки и акцентные ссылки сайта построены на диагональном градиенте от индиго к розовой орхидее, текст — графитовый на белом фоне.</p>
+  <h3 class="pal-h">пр-кт Димитрова, 7</h3>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#63599C"></div><div class="lb"><div class="role">Основной</div><div class="nm">Индиго</div><div class="hx">#63599C</div></div></div>
+    <div class="sw"><div class="chip" style="background:#B75E9A"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Розовая орхидея</div><div class="hx">#B75E9A</div></div></div>
+    <div class="sw"><div class="chip" style="background:#955C9C"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Сливовый</div><div class="hx">#955C9C</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3B3B3B"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Графит</div><div class="hx">#3B3B3B</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Белый</div><div class="hx">#FFFFFF</div></div></div>
+  </div>
+  <div class="grad">Фирменный градиент · #63599C → #955C9C → #B75E9A · от правого верхнего угла к левому нижнему</div>
+
+  <h3 class="pal-h">пл. Труда, 1 — сапфир + лазурь</h3>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#08233A"></div><div class="lb"><div class="role">Основной</div><div class="nm">Глубокий петроль</div><div class="hx">#08233A</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1597B8"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Неоновая лазурь</div><div class="hx">#1597B8</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F5F8F9;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Плашка</div><div class="hx">#F5F8F9</div></div></div>
+    <div class="sw"><div class="chip" style="background:#16324A"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Тёмный сапфир</div><div class="hx">#16324A</div></div></div>
+    <div class="sw"><div class="chip" style="background:#E2E7EA"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Холодная сталь</div><div class="hx">#E2E7EA</div></div></div>
+  </div>
+  <div class="grad" style="background:linear-gradient(225deg,#08233A 0%,#16324A 50%,#1597B8 100%)">Градиент филиала · #08233A → #16324A → #1597B8 · от правого верхнего угла к левому нижнему</div>
+</section>
+
+<section id="branches">
+  <span class="eyebrow">Стилистика филиалов</span>
+  <h2 class="h2">Два филиала — одна стилистика, две гаммы</h2>
+  <p class="sub">Сторис и обложки новостей делаются в двух версиях. Композиция общая: логотип сверху, белая стеклянная плашка с заголовком, стальной фон с фото и стеклянные диагональные полосы с неоновым свечением в правом нижнем углу. Меняется только цветовая гамма. Логотип в обеих версиях остаётся в фирменных цветах.</p>
+
+  <div class="br-grid">
+    <div class="br">
+      <div class="br-h"><b>пр-кт Димитрова, 7</b><span class="pill">действующий стиль</span></div>
+      <div class="mock" style="--m-bg1:#E3E3E7;--m-bg2:#C9C9D0;--m-head:#353052;--m-glow:#7E2A9C;--m-deep:#1E0C3C;--m-plate:#F6F6F6">
+        <div class="m-logo">СИБРЕГЦЕНТР</div><div class="m-plate">Услуги</div><div class="m-strip s1"></div><div class="m-strip s2"></div><div class="m-strip s3"></div>
+      </div>
+      <div class="swatches sm">
+        <div class="sw"><div class="chip" style="background:#353052"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Тёмный индиго</div><div class="hx">#353052</div></div></div>
+        <div class="sw"><div class="chip" style="background:#7E2A9C"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Неоновый фиолет</div><div class="hx">#7E2A9C</div></div></div>
+        <div class="sw"><div class="chip" style="background:#1E0C3C"></div><div class="lb"><div class="role">Основной</div><div class="nm">Глубокий баклажан</div><div class="hx">#1E0C3C</div></div></div>
+        <div class="sw"><div class="chip" style="background:#E3E3E7"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Светлая сталь</div><div class="hx">#E3E3E7</div></div></div>
+        <div class="sw"><div class="chip" style="background:#F6F6F6"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Плашка</div><div class="hx">#F6F6F6</div></div></div>
+      </div>
+    </div>
+
+    <div class="br">
+      <div class="br-h"><b>пл. Труда, 1</b><span class="pill new">новая гамма</span></div>
+      <div class="mock" style="--m-bg1:#E2E7EA;--m-bg2:#C6D0D5;--m-head:#16324A;--m-glow:#1597B8;--m-deep:#08233A;--m-plate:#F5F8F9">
+        <div class="m-logo">СИБРЕГЦЕНТР</div><div class="m-plate">Услуги</div><div class="m-strip s1"></div><div class="m-strip s2"></div><div class="m-strip s3"></div>
+      </div>
+      <div class="swatches sm">
+        <div class="sw"><div class="chip" style="background:#16324A"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Тёмный сапфир</div><div class="hx">#16324A</div></div></div>
+        <div class="sw"><div class="chip" style="background:#1597B8"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Неоновая лазурь</div><div class="hx">#1597B8</div></div></div>
+        <div class="sw"><div class="chip" style="background:#08233A"></div><div class="lb"><div class="role">Основной</div><div class="nm">Глубокий петроль</div><div class="hx">#08233A</div></div></div>
+        <div class="sw"><div class="chip" style="background:#E2E7EA"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Холодная сталь</div><div class="hx">#E2E7EA</div></div></div>
+        <div class="sw"><div class="chip" style="background:#F5F8F9"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Плашка</div><div class="hx">#F5F8F9</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="list roles">
+    <li><b>Текстовый</b> — заголовок в белой плашке</li>
+    <li><b>Акцентный</b> — неоновое свечение полос, подсветка на фото, метки и выделенные цифры</li>
+    <li><b>Основной</b> — тёмные грани стеклянных полос, крупные графические элементы</li>
+    <li><b>Фоновый / Второстепенный</b> — стальной фон слайда и заливка плашки</li>
+  </ul>
+</section>
+
+<section id="logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">От открытия бизнеса к сопровождению</h2>
+  <p class="sub">Темы идут по пути предпринимателя: открыть бизнес, получить инструменты для работы, вносить изменения или закрыть компанию, решить налоговые вопросы частного лица. Бухгалтерское обслуживание уже раскрыто на карточке, поэтому этот этап закрывает остальные рубрики.</p>
+  <ul class="chain">
+    <li><b>Регистрация</b><span>ИП и ООО онлайн + два офиса</span></li>
+    <li><b>Удостоверяющий центр</b><span>ЭЦП + печати и штампы</span></li>
+    <li><b>Изменения и ликвидация</b><span>Закрытие ООО + смена данных ООО</span></li>
+    <li><b>Налоги физлиц</b><span>Вычет и 3-НДФЛ + 16 лет опыта</span></li>
+  </ul>
+</section>
+
+<section id="news">
+  <span class="eyebrow">Новости · текст до 3 000 знаков</span>
+  <h2 class="h2">4 темы с обложкой</h2>
+  <p class="sub">Высокая SEO-плотность без повтора одного ключа подряд, без телефонов и e-mail в тексте, без превосходных степеней — по правилам модерации Яндекс Карт. Обложка каждой новости делается в двух версиях — по гамме филиала.</p>
+
+  <article class="theme" id="news-1">
+    <div class="th-head">
+      <div><div class="num">Новость 1</div><h3 class="th-title">Регистрация ИП и ООО в Новосибирске без визита в налоговую: три шага и два документа</h3></div>
+      <span class="tag">Продающий</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Для регистрации ИП или ООО достаточно двух документов — полный пакет оформляют специалисты</li>
+      <li>Шаг 1: специалисты подбирают коды ОКВЭД, готовят документы и выпускают ЭЦП</li>
+      <li>Шаг 2: пакет документов уходит в налоговую онлайн за 1 день</li>
+      <li>Шаг 3: 3–4 дня на обработку — бизнес готов к работе</li>
+      <li>В комплекте: бесплатная консультация, готовый устав для ООО, ЭЦП, расчётный счёт в банке-партнёре</li>
+      <li>Регистрация ИП онлайн — 2 500 ₽, ИП под ключ — 4 500 ₽, ООО с одним участником — 5 000 ₽</li>
+      <li>Подача заявления на УСН или патент — 1 000 ₽, помощь с выбором системы налогообложения</li>
+      <li>Более 20 000 ООО и ИП зарегистрировано с 2010 года</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">регистрация ИП Новосибирск</span><span class="kw">регистрация ООО Новосибирск</span><span class="kw">открыть ИП без визита в налоговую</span><span class="kw">регистрация ООО под ключ</span><span class="kw">регистрация бизнеса онлайн</span><span class="kw">подбор кодов ОКВЭД</span><span class="kw">открыть расчётный счёт ИП</span><span class="kw">стоимость регистрации ИП</span><span class="kw">заявление на УСН</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на бесплатную консультацию по регистрации бизнеса</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Бизнес за 3 дня</div>
+      <p>Шаблон филиала: стальной фон, тезис в белой плашке цветом «Текстовый». Фото — рабочий стол с документами и ноутбуком, схема из трёх шагов (данные → отправка → готово) линиями цвета «Акцентный». Текст на изображении — не более 20% площади.</p>
+    </div>
+  </article>
+
+  <article class="theme" id="news-2">
+    <div class="th-head">
+      <div><div class="num">Новость 2</div><h3 class="th-title">Электронная подпись в удостоверяющем центре СибРегЦентр: для директора, физического лица и торгов</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Компания работает как удостоверяющий центр — выпуск ЭЦП в офисе компании в Новосибирске</li>
+      <li>Какие виды подписи оформляются: ЭЦП для директора ООО, ЭЦП для физического лица, ЭЦП для участия в торгах</li>
+      <li>Для чего нужна ЭЦП: сдача отчётности, работа с госуслугами и налоговой, электронный документооборот, торги</li>
+      <li>Выпуск ЭЦП на торги для физлица — от 3 500 ₽</li>
+      <li>Защищённые USB-носители (токены) для хранения подписи — 2 500 ₽, доставка токена по адресу</li>
+      <li>При регистрации ИП или ООО ЭЦП выпускается в комплекте</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">электронная подпись Новосибирск</span><span class="kw">получить ЭЦП</span><span class="kw">ЭЦП для директора</span><span class="kw">ЭЦП для физического лица</span><span class="kw">ЭЦП для торгов</span><span class="kw">удостоверяющий центр Новосибирск</span><span class="kw">токен для электронной подписи</span><span class="kw">выпуск ЭЦП цена</span>
+    </div></div>
+    <p class="cta">CTA: Оформляйте электронную подпись по онлайн-записи в удобном филиале</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Электронная подпись</div>
+      <p>Шаблон филиала: тезис в белой плашке. Фото — USB-токен крупным планом на рабочем столе, подсветка токена цветом «Акцентный».</p>
+    </div>
+  </article>
+
+  <article class="theme" id="news-3">
+    <div class="th-head">
+      <div><div class="num">Новость 3</div><h3 class="th-title">Ликвидация ООО под ключ в Новосибирске: закрытие компании без посещения налоговой и нотариуса</h3></div>
+      <span class="tag">Продающий</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Официальная ликвидация ООО под ключ — около 3 месяцев</li>
+      <li>Посещать налоговую и нотариуса не требуется — документы готовят и подают специалисты</li>
+      <li>Стоимость 27 000 ₽ — уже со всеми расходами процедуры</li>
+      <li>Этапы: решение о ликвидации → уведомление налоговой → промежуточный баланс → ликвидационный баланс → исключение из ЕГРЮЛ</li>
+      <li>Отдельно — ликвидация ИП</li>
+      <li>Выписка из ЕГРЮЛ/ЕГРИП для подтверждения закрытия — 2 500 ₽</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">ликвидация ООО Новосибирск</span><span class="kw">закрыть ООО под ключ</span><span class="kw">ликвидация ООО стоимость</span><span class="kw">закрытие ООО без нотариуса</span><span class="kw">ликвидация ИП</span><span class="kw">этапы ликвидации ООО</span><span class="kw">выписка из ЕГРЮЛ</span>
+    </div></div>
+    <p class="cta">CTA: Получите консультацию по ликвидации ООО в удобном офисе или онлайн</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Закрытие ООО</div>
+      <p>Шаблон филиала: тезис в белой плашке. Фото — папка документов со штампом, приглушённая по тону, стеклянные полосы со свечением «Акцентный». Без слов «акция» и «купить».</p>
+    </div>
+  </article>
+
+  <article class="theme" id="news-4">
+    <div class="th-head">
+      <div><div class="num">Новость 4</div><h3 class="th-title">Налоговый вычет и декларация 3-НДФЛ в Новосибирске: вернуть часть расходов на лечение, обучение и жильё</h3></div>
+      <span class="tag">Информационный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Услуга для физических лиц, не только для предпринимателей</li>
+      <li>Основания для вычета: лечение, обучение, покупка жилья</li>
+      <li>Специалисты заполняют декларацию 3-НДФЛ и подают её в налоговую</li>
+      <li>Помогают получить доступ к личному кабинету налогоплательщика и собрать справки, если документы утеряны</li>
+      <li>Налоговый вычет и декларация 3-НДФЛ — от 2 000 ₽</li>
+      <li>Приём в двух филиалах или онлайн</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">налоговый вычет Новосибирск</span><span class="kw">декларация 3-НДФЛ</span><span class="kw">заполнить 3-НДФЛ</span><span class="kw">вычет за лечение</span><span class="kw">вычет за обучение</span><span class="kw">имущественный вычет</span><span class="kw">личный кабинет налогоплательщика</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на оформление налогового вычета онлайн</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Налоговый вычет</div>
+      <p>Шаблон филиала: тезис в белой плашке. Фото — бланк декларации и калькулятор на светлом столе.</p>
+    </div>
+  </article>
+</section>
+
+<section id="stories">
+  <span class="eyebrow">Сторис · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="sub">Каждая история — один слайд в шаблоне филиала: заголовок в белой плашке, 3–4 факта, две версии по гамме Димитрова, 7 и пл. Труда, 1. Обязательное название истории — по заголовку слайда.</p>
+
+  <article class="story" id="story-1">
+    <div class="num">История 1 · к новости 1</div>
+    <div class="sh">Два офиса на двух берегах</div>
+    <div class="topic">Где оформить документы в Новосибирске</div>
+    <ul class="facts-s"><li>Правый берег — пр-кт Димитрова, 7</li><li>Левый берег — пл. Труда, 1</li><li>Онлайн-запись в нужный филиал</li><li>ПН–ЧТ 9:00–17:00 · ПТ 9:00–16:00</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Фото — карта города с двумя метками цвета «Акцентный», соединёнными пунктирным маршрутом. Под плашкой — две белые карточки-адреса.</div>
+  </article>
+
+  <article class="story" id="story-2">
+    <div class="num">История 2 · к новости 2</div>
+    <div class="sh">Печать за 30 минут</div>
+    <div class="topic">Изготовление печатей и штампов</div>
+    <ul class="facts-s"><li>Для ИП, ООО и врачей</li><li>Срочное изготовление — 30 минут</li><li>Восстановление утраченных печатей</li><li>От 800 ₽</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Фото — оснастка с оттиском на документе. «30 минут» в плашке выделено цветом «Акцентный».</div>
+  </article>
+
+  <article class="story" id="story-3">
+    <div class="num">История 3 · к новости 3</div>
+    <div class="sh">Изменения в ООО</div>
+    <div class="topic">Какие данные компании можно поменять</div>
+    <ul class="facts-s"><li>Смена директора — 5 000 ₽</li><li>Смена юрадреса — от 5 000 ₽</li><li>Вход участника — 11 000 ₽</li><li>Перераспределение доли — 6 000 ₽</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Под плашкой — стеклянная панель со списком из четырёх строк цветом «Текстовый», цены справа цветом «Акцентный», фон — размытый офис.</div>
+  </article>
+
+  <article class="story" id="story-4">
+    <div class="num">История 4 · к новости 4</div>
+    <div class="sh">С 2010 года</div>
+    <div class="topic">СибРегЦентр в цифрах</div>
+    <ul class="facts-s"><li>Более 20 000 ООО и ИП</li><li>Каждый второй возвращается повторно</li><li>Работа онлайн по всей России</li><li>«Топ партнёр» Сбербанка, 2025</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Фото — панорама деловых высоток. «20 000+» крупно цветом «Основной» по центру, остальные факты — строками ниже.</div>
+  </article>
+</section>
+
+<section id="published">
+  <span class="eyebrow">Уже на карточке</span>
+  <h2 class="h2">Опубликованные темы — не повторяются</h2>
+  <ul class="pub">
+    <li><span class="t">Новость</span>Бухгалтерское сопровождение или штатный бухгалтер: что выгоднее бизнесу</li>
+    <li><span class="t">Новость</span>5 причин передать бухгалтерию на аутсорсинг</li>
+    <li><span class="t">Новость</span>7 ошибок при регистрации ООО, которые могут привести к отказу</li>
+    <li><span class="t">Акция</span>Скидка 50% на бухгалтерское обслуживание</li>
+  </ul>
+</section>
+
+<section id="map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента</h2>
+  <div class="stage">
+    <div class="stage-h"><b>Этап 1</b><span class="badge">актуальный</span></div>
+    <ul class="rm">
+      <li><a href="#news-1"><div class="f">Новость 1</div><div class="n">Регистрация ИП и ООО без визита в налоговую</div><div class="x">Три шага, два документа, ЭЦП и счёт в комплекте</div></a></li>
+      <li class="s"><a href="#story-1"><div class="f">История 1</div><div class="n">Два офиса на двух берегах</div><div class="x">Адреса филиалов и онлайн-запись</div></a></li>
+      <li><a href="#news-2"><div class="f">Новость 2</div><div class="n">Электронная подпись в удостоверяющем центре</div><div class="x">ЭЦП для директора, физлица и торгов, токены</div></a></li>
+      <li class="s"><a href="#story-2"><div class="f">История 2</div><div class="n">Печать за 30 минут</div><div class="x">Печати и штампы от 800 ₽</div></a></li>
+      <li><a href="#news-3"><div class="f">Новость 3</div><div class="n">Ликвидация ООО под ключ</div><div class="x">Около 3 месяцев, без налоговой и нотариуса, 27 000 ₽</div></a></li>
+      <li class="s"><a href="#story-3"><div class="f">История 3</div><div class="n">Изменения в ООО</div><div class="x">Директор, юрадрес, участники, доли</div></a></li>
+      <li><a href="#news-4"><div class="f">Новость 4</div><div class="n">Налоговый вычет и 3-НДФЛ</div><div class="x">Лечение, обучение, жильё — от 2 000 ₽</div></a></li>
+      <li class="s"><a href="#story-4"><div class="f">История 4</div><div class="n">С 2010 года</div><div class="x">20 000+ ООО и ИП, работа по всей России</div></a></li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+</body>
+</html>
