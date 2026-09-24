@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>СК 32 и 32 Норма ТЗ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ocean:#0E3B47;--teal:#1B6B78;--ice:#F5F8F8;--roe:#C4572B;
+  --bg:#F5F8F8;--card:#FFFFFF;--card-2:#EAF1F2;--ink:#12272D;--ink-soft:#56686D;--line:#D5E1E3;
+  --accent:#C4572B;--accent-soft:#F7E6DE;--link:#1B6B78;
+  --story-bg:#0E3B47;--story-ink:#F5F8F8;--story-soft:#A9C3C8;--story-chip:#ffffff14;--story-line:#ffffff26;
+  --display:'Bricolage Grotesque','Segoe UI',sans-serif;
+  --body:'Public Sans','Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;
+    --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+    --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;--story-bg:#12323B;--story-soft:#9DB9BE;}
+}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+  --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;--story-bg:#12323B;--story-soft:#9DB9BE;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.58}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}ul{margin:0;padding:0;list-style:none}
+a{color:var(--link)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--ocean);color:#F5F8F8;display:flex;align-items:center;gap:16px;padding:10px 20px;overflow-x:auto;border-bottom:1px solid #00000033}
+.switch{display:flex;gap:4px;flex:none;background:#ffffff12;padding:3px;border-radius:9px}
+.switch button{font:inherit;font-family:var(--display);font-weight:800;font-size:14px;color:#B9D2D6;background:none;border:0;padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.switch button i{width:9px;height:9px;border-radius:2px;background:#ffffff40;display:block}
+.switch button[aria-pressed="true"]{background:#ffffff1f;color:#fff}
+.switch button[aria-pressed="true"] i{background:var(--roe)}
+.switch button:focus-visible,.topbar nav a:focus-visible{outline:2px solid #F0A27F;outline-offset:1px}
+.topbar nav{display:flex;gap:2px;white-space:nowrap}
+.topbar nav a{color:#B9D2D6;text-decoration:none;font-size:13px;font-weight:600;padding:7px 11px;border-radius:7px}
+.topbar nav a:hover{background:#ffffff18;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+section{padding-block:46px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+section:last-of-type{border-bottom:0}
+.eyebrow{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.h2{font-size:clamp(24px,4vw,30px);font-weight:700}
+.sub{color:var(--ink-soft);max-width:64ch;margin-top:8px}
+.hero h1{font-size:clamp(30px,5.4vw,46px);font-weight:800;line-height:1.06}
+.hero h1 span{color:var(--teal)}
+:root[data-theme="dark"] .hero h1 span{color:var(--link)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero h1 span{color:var(--link)}}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-family:var(--mono);font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:22px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:8px}
+.fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-weight:600;font-size:14.5px;line-height:1.4}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px;margin-top:2px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:22px}
+.sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.sw .chip{height:88px}
+.sw .lb{padding:10px 12px 12px}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
+.sw .nm{font-weight:700;font-size:13.5px;margin-top:3px}
+.sw .hx{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:22px;counter-reset:c}
+.chain li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;counter-increment:c}
+.chain li::before{content:"Шаг " counter(c);display:block;font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:4px}
+.chain b{display:block;font-size:14.5px}
+.chain span{font-size:13.5px;color:var(--ink-soft)}
+.theme{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:20px;scroll-margin-top:64px;display:flex;flex-direction:column;gap:18px}
+.th-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start}
+.num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:500}
+.th-title{font-size:20px;font-weight:700;margin-top:4px;max-width:46ch}
+.tag{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:6px;background:var(--card-2);color:var(--ink);white-space:nowrap}
+.blk .h{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:8px}
+.list li{position:relative;padding-left:18px;margin-top:6px;font-size:14.5px}
+.list li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;background:var(--teal);border-radius:1px}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-family:var(--mono);font-size:12px;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg)}
+.cta{font-weight:600;font-size:14.5px;border-left:3px solid var(--accent);padding-left:12px}
+.cover{background:var(--accent-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.cover .h{color:var(--accent);margin:0}
+.cover .ct{font-family:var(--display);font-weight:800;font-size:19px}
+.cover p{font-size:14px}
+.story{background:var(--story-bg);color:var(--story-ink);border-radius:16px;padding:22px 24px;margin-top:18px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:64px}
+.story .num{color:#F0A27F}
+.story .sh{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.15}
+.story .topic{font-size:13px;color:var(--story-soft)}
+.facts-s{display:flex;flex-wrap:wrap;gap:7px}
+.facts-s li{font-size:13px;padding:6px 11px;border-radius:999px;background:var(--story-chip);border:1px solid var(--story-line)}
+.story .dz{font-size:13.5px;color:var(--story-soft);border-top:1px solid var(--story-line);padding-top:12px}
+.story .dz b{color:var(--story-ink);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:3px;border:1px solid #ffffff40}
+.stage{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.stage-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage-h b{font-family:var(--display);font-size:18px}
+.stage-h small{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+details.stage summary{cursor:pointer;list-style:none}
+details.stage summary::-webkit-details-marker{display:none}
+details.stage summary .stage-h::after{content:"Развернуть";margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--link)}
+details.stage[open] summary .stage-h::after{content:"Свернуть"}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--accent);color:#fff}
+.badge.done{background:var(--card-2);color:var(--ink-soft)}
+.rm{position:relative;margin-top:18px;padding-left:26px}
+.rm::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.rm li{position:relative;padding-bottom:18px}
+.rm li:last-child{padding-bottom:0}
+.rm li::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.rm li.s::before{background:var(--accent);border-color:var(--accent)}
+.rm .f{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+.rm .n{font-weight:700;font-size:15px}
+.rm .x{font-size:13.5px;color:var(--ink-soft)}
+.rm a{color:inherit;text-decoration:none}
+@media (max-width:560px){.theme,.story{padding:18px}.topbar{padding-inline:16px}.wrap{padding-inline:16px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="switch" role="group" aria-label="Компания">
+    <button type="button" id="btn-sk" data-co="sk" aria-pressed="true"><i></i>СК 32</button>
+    <button type="button" id="btn-nm" data-co="nm" aria-pressed="false"><i></i>32 Норма</button>
+  </div>
+  <nav data-nav="sk">
+    <a href="#sk-company">Компания</a><a href="#sk-brand">Брендбук</a><a href="#sk-logic">Логика цикла</a><a href="#sk-news">Новости</a><a href="#sk-stories">Сторис</a><a href="#sk-map">Карта тем</a>
+  </nav>
+  <nav data-nav="nm" hidden>
+    <a href="#nm-company">Компания</a><a href="#nm-brand">Брендбук</a><a href="#nm-logic">Логика цикла</a><a href="#nm-news">Новости</a><a href="#nm-stories">Сторис</a><a href="#nm-map">Карта тем</a>
+  </nav>
+</div>
+
+<!-- ===================== СК 32 ===================== -->
+<div class="wrap" data-shell="sk">
+
+<section class="hero" id="sk-company">
+  <span class="eyebrow">ТЗ · Этап 3 · карточка компании на Яндекс Картах и 2ГИС</span>
+  <h1>СК 32 — <span>стоматологическая клиника</span> на ул. Потёмкина в Челябинске</h1>
+  <p class="sub">ООО «Стоматологическая клиника «32» — стоматологическая поликлиника полного цикла в Калининском районе: терапия, эндодонтия, хирургия и имплантация, протезирование, эстетическая стоматология, профессиональная гигиена. Новости и сторис этапа публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="pills">
+    <span class="pill">Терапия и эндодонтия</span><span class="pill">Хирургия</span><span class="pill">Имплантация</span><span class="pill">Протезирование</span><span class="pill">Виниры и люминиры</span><span class="pill">Профгигиена</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Адрес и режим</span>
+      <div class="v">Челябинск, ул. Потёмкина, 14, 1 этаж<small>Калининский район · остановка «Улица Потёмкина»</small></div>
+      <div class="v">Ежедневно 9:00–20:00<small>Приём по предварительной записи</small></div>
+    </div>
+    <div class="fact"><span class="k">Лицензия</span>
+      <div class="v">№ ЛО-74-01-005674 от 29.10.2020<small>Министерство здравоохранения Челябинской области, бессрочная</small></div>
+      <div class="v">Стоматология общей практики, терапевтическая, хирургическая, ортопедическая<small>Также рентгенология и сестринское дело</small></div>
+    </div>
+    <div class="fact"><span class="k">Принципы работы</span>
+      <div class="v">Конечная стоимость озвучивается до начала лечения<small>Закрепляется в медицинской карте и изменению не подлежит</small></div>
+      <div class="v">Бесплатная консультация и гарантия на работы</div>
+      <div class="v">Импортные пломбировочные материалы, современная карпульная анестезия</div>
+    </div>
+    <div class="fact"><span class="k">Технологии</span>
+      <div class="v">RECIPROC<small>Машинная обработка корневых каналов</small></div>
+      <div class="v">Цифровой визиограф<small>Снимок зуба с кратно меньшей лучевой нагрузкой</small></div>
+      <div class="v">Ведущий стоматолог-терапевт — стаж более 37 лет</div>
+    </div>
+    <div class="fact"><span class="k">Направления</span>
+      <div class="v">Эстетическая стоматология<small>Виниры и люминиры, реставрация зубов</small></div>
+      <div class="v">Хирургия<small>Удаление зубов, лечение кист зуба, пластика уздечки, челюстно-лицевая хирургия</small></div>
+      <div class="v">Эндодонтия<small>Лечение пульпита, периодонтита, корневых каналов</small></div>
+    </div>
+    <div class="fact"><span class="k">Сервис</span>
+      <div class="v">Оплата наличными, картой, электронными деньгами, по безналичному расчёту</div>
+      <div class="v">Справки для работы и учёбы</div>
+      <div class="v">Парковка, Wi-Fi</div>
+    </div>
+  </div>
+</section>
+
+<section id="sk-brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Фирменная палитра СК 32</h2>
+  <p class="sub">После анализа ресурсов компании определены фирменные цвета СК 32: крупные небесно-голубые цветовые блоки и волнообразные разделители, индиго на кнопках записи, ночной синий фон под светящейся цифровой графикой зуба и графитовый текст на светло-сером фоне.</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#56BDF9"></div><div class="lb"><div class="role">Основной</div><div class="nm">Небесно-голубой</div><div class="hx">#56BDF9</div></div></div>
+    <div class="sw"><div class="chip" style="background:#74CEF9"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Голубая волна</div><div class="hx">#74CEF9</div></div></div>
+    <div class="sw"><div class="chip" style="background:#4A5F9C"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Индиго</div><div class="hx">#4A5F9C</div></div></div>
+    <div class="sw"><div class="chip" style="background:#051639"></div><div class="lb"><div class="role">Фоновый тёмный</div><div class="nm">Ночной синий</div><div class="hx">#051639</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F4F5F6;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый светлый</div><div class="nm">Светло-серый</div><div class="hx">#F4F5F6</div></div></div>
+    <div class="sw"><div class="chip" style="background:#444444"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Графит</div><div class="hx">#444444</div></div></div>
+  </div>
+</section>
+
+<section id="sk-logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">От протезирования и пульпита — к эстетике и сохранению зуба</h2>
+  <p class="sub">Этап 1 познакомил с подходом клиники, этап 2 — с протезированием и лечением пульпита. Этап 3 продолжает обе линии: после восстановления формы зуба — эстетическая реставрация, после пульпита — следующая стадия воспаления у корня и то, как клиника сохраняет зуб.</p>
+  <ul class="chain">
+    <li><b>Виниры и люминиры</b><span>Эстетика: цвет и форма зубов</span></li>
+    <li><b>Виниры или люминиры</b><span>В чём разница</span></li>
+    <li><b>Периодонтит и киста</b><span>Как сохраняют зуб</span></li>
+    <li><b>Признаки периодонтита</b><span>Когда пора к врачу</span></li>
+  </ul>
+</section>
+
+<section id="sk-news">
+  <span class="eyebrow">Новости · текст до 3 000 знаков</span>
+  <h2 class="h2">2 темы с обложкой</h2>
+  <p class="sub">Экспертная подача от третьего лица, высокая SEO-плотность без повтора одного ключа подряд. По правилам модерации Яндекс Карт — без цен, телефонов и e-mail в тексте, без превосходных степеней, без слов «безопасно», «безболезненно», «эффективно». Каждый текст заканчивается строкой «Имеются противопоказания. Необходима консультация специалиста».</p>
+
+  <article class="theme" id="sk-news-1">
+    <div class="th-head">
+      <div><div class="num">Новость 1</div><h3 class="th-title">Виниры и люминиры в «СК 32»: как эстетическая реставрация меняет цвет и форму зубов</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Виниры и люминиры — тонкие керамические накладки на переднюю поверхность зуба; эстетическое направление, которое продолжает тему протезирования</li>
+      <li>Какие задачи решают: стойкое изменение цвета эмали, сколы, щели между зубами, неровная форма и длина зубов</li>
+      <li>Разница: виниры требуют минимальной обработки эмали, люминиры — ультратонкие и часто устанавливаются без обточки; выбор зависит от клинической ситуации</li>
+      <li>Этапы: консультация и осмотр → подготовка полости рта (лечение кариеса, профгигиена) → подбор оттенка и формы → изготовление → фиксация</li>
+      <li>Кому не подходят: бруксизм, выраженные нарушения прикуса — решение принимает врач на консультации</li>
+      <li>Уход после установки: ежедневная гигиена и регулярные контрольные осмотры</li>
+      <li>Конечная стоимость озвучивается до начала работы и закрепляется в медицинской карте</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">виниры Челябинск</span><span class="kw">люминиры Челябинск</span><span class="kw">установка виниров</span><span class="kw">керамические виниры</span><span class="kw">виниры или люминиры</span><span class="kw">эстетическая реставрация зубов</span><span class="kw">эстетическая стоматология Челябинск</span><span class="kw">изменить цвет зубов</span><span class="kw">стоматология на Потёмкина</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на консультацию по эстетической реставрации зубов</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Виниры и люминиры</div>
+      <p>Композиция как на сайте: левая половина — плашка <span class="dot" style="background:#56BDF9"></span>#56BDF9 с тезисом белым и короткой белой линией под ним; правая половина — фон <span class="dot" style="background:#051639"></span>#051639 со светящейся полигональной моделью переднего зуба и тонкой накладкой. Акцентные элементы — <span class="dot" style="background:#4A5F9C"></span>#4A5F9C. Текст — не более 20% площади.</p>
+    </div>
+  </article>
+
+  <article class="theme" id="sk-news-2">
+    <div class="th-head">
+      <div><div class="num">Новость 2</div><h3 class="th-title">Лечение периодонтита и кисты зуба: как в «СК 32» сохраняют зуб при воспалении у корня</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Периодонтит — воспаление тканей у верхушки корня; часто развивается, если пульпит не был вылечен вовремя — продолжение темы о пульпите</li>
+      <li>Киста или гранулёма — следствие хронического воспаления: может долго не беспокоить и обнаруживается на снимке</li>
+      <li>Диагностика: осмотр и снимок на цифровом визиографе — с кратно меньшей лучевой нагрузкой</li>
+      <li>Терапевтический путь: обработка и пломбирование корневых каналов, в том числе машинным методом RECIPROC</li>
+      <li>Хирургический путь, если он нужен: в клинике работает хирургия, включая лечение кист зуба</li>
+      <li>Контрольный снимок после лечения — проверка результата</li>
+      <li>Задача лечения — сохранить собственный зуб и избежать удаления</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">лечение периодонтита Челябинск</span><span class="kw">лечение кисты зуба</span><span class="kw">киста зуба Челябинск</span><span class="kw">гранулёма зуба</span><span class="kw">сохранить зуб</span><span class="kw">лечение корневых каналов</span><span class="kw">эндодонтия Челябинск</span><span class="kw">стоматолог-хирург Челябинск</span><span class="kw">стоматология Калининский район</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на консультацию и диагностику зуба</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Сохраняем зуб</div>
+      <p>Фон <span class="dot" style="background:#051639"></span>#051639, по центру светящийся полигональный зуб с подсвеченными корнями в тон <span class="dot" style="background:#56BDF9"></span>#56BDF9. Тезис белым на плашке <span class="dot" style="background:#4A5F9C"></span>#4A5F9C, внизу — волнообразный разделитель <span class="dot" style="background:#74CEF9"></span>#74CEF9.</p>
+    </div>
+  </article>
+</section>
+
+<section id="sk-stories">
+  <span class="eyebrow">Сторис · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="sub">Каждая история — один слайд: заголовок и 3–4 сухих факта. Заголовок слайда — обязательное название истории. Внизу слайда мелкой строкой: «Имеются противопоказания. Необходима консультация специалиста».</p>
+
+  <article class="story" id="sk-story-1">
+    <div class="num">История 1</div>
+    <div class="sh">Виниры или люминиры</div>
+    <div class="topic">В чём разница между накладками</div>
+    <ul class="facts-s"><li>Виниры — минимальная обработка эмали</li><li>Люминиры — ультратонкие, часто без обточки</li><li>Меняют цвет и форму зуба</li><li>Вариант подбирает врач на консультации</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Слайд разделён на две колонки-сравнения на фоне <span class="dot" style="background:#F4F5F6"></span>#F4F5F6: «Виниры» и «Люминиры», у каждой — линейная иконка зуба с накладкой разной толщины. Заголовок на плашке <span class="dot" style="background:#56BDF9"></span>#56BDF9 белым, факты — <span class="dot" style="background:#444444"></span>#444444, разделитель колонок — <span class="dot" style="background:#4A5F9C"></span>#4A5F9C.</div>
+  </article>
+
+  <article class="story" id="sk-story-2">
+    <div class="num">История 2</div>
+    <div class="sh">Признаки периодонтита</div>
+    <div class="topic">Когда пора к стоматологу</div>
+    <ul class="facts-s"><li>Боль при накусывании</li><li>Отёк десны возле зуба</li><li>Потемнение зуба</li><li>Свищ на десне</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#051639"></span>#051639, светящийся полигональный зуб в стиле сайта. Заголовок на плашке <span class="dot" style="background:#56BDF9"></span>#56BDF9, четыре признака — списком с маркерами <span class="dot" style="background:#74CEF9"></span>#74CEF9, текст белым.</div>
+  </article>
+</section>
+
+<section id="sk-map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента СК 32</h2>
+
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 1</b><span class="badge done">опубликован</span><small>4 новости · 4 истории</small></div></summary>
+    <ul class="rm">
+      <li><div class="f">Новость 1</div><div class="n">Качественное лечение начинается с профессионального подхода</div><div class="x">Опыт врача, диагностика, план лечения</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Опыт врача имеет значение</div><div class="x">Профессионализм стоматолога и качество лечения</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Почему важно выбирать стоматологию с полным спектром услуг</div><div class="x">Консультация, лечение, восстановление и профилактика в одном месте</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Комплексная стоматологическая помощь</div><div class="x">Полный цикл лечения в одной клинике</div></li>
+      <li><div class="f">Новость 3</div><div class="n">Комфорт пациента — стандарт современной стоматологии</div><div class="x">Атмосфера, анестезия, сопровождение на всех этапах</div></li>
+      <li class="s"><div class="f">История 3</div><div class="n">Современное лечение — это комфорт</div><div class="x">Современные методы, анестезия, внимание</div></li>
+      <li><div class="f">Новость 4</div><div class="n">Здоровая улыбка — результат регулярной заботы о зубах</div><div class="x">Диагностика, профилактика, регулярные визиты</div></li>
+      <li class="s"><div class="f">История 4</div><div class="n">Профилактика — основа здоровья зубов</div><div class="x">Регулярные осмотры и профгигиена</div></li>
+    </ul>
+  </details>
+
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 2</b><span class="badge done">опубликован</span><small>2 новости · 2 истории</small></div></summary>
+    <ul class="rm">
+      <li><div class="f">Новость 1</div><div class="n">Протезирование и коронки: как выбрать вид протезирования</div><div class="x">Виды коронок, съёмное и несъёмное протезирование</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Бесплатная консультация + гарантия на все работы</div><div class="x">Осмотр и план лечения без оплаты</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Лечение пульпита: как проходит и почему важно долечивать до конца</div><div class="x">Этапы лечения каналов, чувствительность после лечения</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Профессиональная гигиена: как часто и что входит</div><div class="x">Регулярность и состав процедуры</div></li>
+    </ul>
+  </details>
+
+  <div class="stage">
+    <div class="stage-h"><b>Этап 3</b><span class="badge">актуальный</span><small>2 новости · 2 истории</small></div>
+    <ul class="rm">
+      <li><a href="#sk-news-1"><div class="f">Новость 1</div><div class="n">Виниры и люминиры</div><div class="x">Эстетическая реставрация: цвет и форма зубов</div></a></li>
+      <li class="s"><a href="#sk-story-1"><div class="f">История 1</div><div class="n">Виниры или люминиры</div><div class="x">Разница между накладками</div></a></li>
+      <li><a href="#sk-news-2"><div class="f">Новость 2</div><div class="n">Лечение периодонтита и кисты зуба</div><div class="x">Как сохраняют зуб при воспалении у корня</div></a></li>
+      <li class="s"><a href="#sk-story-2"><div class="f">История 2</div><div class="n">Признаки периодонтита</div><div class="x">Когда пора к стоматологу</div></a></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<!-- ===================== 32 НОРМА ===================== -->
+<div class="wrap" data-shell="nm" hidden>
+
+<section class="hero" id="nm-company">
+  <span class="eyebrow">ТЗ · Этап 3 · карточка компании на Яндекс Картах и 2ГИС</span>
+  <h1>32 Норма — <span>стоматологическая клиника</span> на ул. Молодогвардейцев с 2006 года</h1>
+  <p class="sub">ООО «МСЦ «32 Норма» — медицинский стоматологический центр в Курчатовском районе Челябинска: терапия, эндодонтия, хирургия и имплантация, костная пластика, ортопедия, лечение дёсен и профессиональная гигиена. Новости и сторис этапа публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="pills">
+    <span class="pill">Терапия</span><span class="pill">Эндодонтия</span><span class="pill">Хирургия и имплантация</span><span class="pill">Костная пластика</span><span class="pill">Ортопедия</span><span class="pill">Лечение дёсен</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Адрес и режим</span>
+      <div class="v">Челябинск, ул. Молодогвардейцев, 24<small>Курчатовский район · остановка «Улица Куйбышева»</small></div>
+      <div class="v">Ежедневно 9:00–20:00<small>Без выходных и праздников, по предварительной записи</small></div>
+    </div>
+    <div class="fact"><span class="k">О клинике</span>
+      <div class="v">Основана в 2006 году</div>
+      <div class="v">Высокоточное диагностическое оборудование ведущих производителей</div>
+      <div class="v">Стерилизация инструментов на оборудовании мировых производителей<small>Дезинфекция кресла после каждого пациента, индивидуальный набор для каждого пациента</small></div>
+    </div>
+    <div class="fact"><span class="k">Консультации</span>
+      <div class="v">Осмотр и консультация терапевта, ортопеда, хирурга-имплантолога — бесплатно</div>
+    </div>
+    <div class="fact"><span class="k">Направления</span>
+      <div class="v">Хирургия и имплантология<small>Удаление зубов, костная пластика, имплантация</small></div>
+      <div class="v">Терапия и эндодонтия<small>Кариес, пульпит, периодонтит, лечение каналов</small></div>
+      <div class="v">Пародонтология и гигиена<small>Лечение заболеваний дёсен, профгигиена с AirFlow</small></div>
+      <div class="v">Ортопедия<small>Коронки, съёмные протезы, восстановление зубов</small></div>
+    </div>
+    <div class="fact"><span class="k">Удобства</span>
+      <div class="v">Парковка, в том числе для людей с инвалидностью</div>
+      <div class="v">Кнопка вызова персонала, анонимное обследование, Wi-Fi</div>
+      <div class="v">Оплата наличными, картой, электронными деньгами</div>
+    </div>
+    <div class="fact"><span class="k">Что отмечают в отзывах</span>
+      <div class="v">Приём точно по записи, без очередей, чистота и порядок, внимательные врачи, подробные объяснения, сохранение зуба вместо удаления</div>
+    </div>
+  </div>
+</section>
+
+<section id="nm-brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Фирменная палитра 32 Норма</h2>
+  <p class="sub">После анализа ресурсов компании определены фирменные цвета 32 Норма: травяной зелёный в меню и на кнопке «Запись», сочный зелёный в телефоне и ссылках, лазурный в кольце логотипа, графитовый подвал и тёмно-серый текст на молочном фоне.</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#85D45B"></div><div class="lb"><div class="role">Основной</div><div class="nm">Травяной зелёный</div><div class="hx">#85D45B</div></div></div>
+    <div class="sw"><div class="chip" style="background:#69D33F"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Сочный зелёный</div><div class="hx">#69D33F</div></div></div>
+    <div class="sw"><div class="chip" style="background:#4191D5"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Лазурный</div><div class="hx">#4191D5</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F9F8F5;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый светлый</div><div class="nm">Молочный</div><div class="hx">#F9F8F5</div></div></div>
+    <div class="sw"><div class="chip" style="background:#4F4D4B"></div><div class="lb"><div class="role">Фоновый тёмный</div><div class="nm">Графит</div><div class="hx">#4F4D4B</div></div></div>
+    <div class="sw"><div class="chip" style="background:#333333"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Тёмно-серый</div><div class="hx">#333333</div></div></div>
+  </div>
+</section>
+
+<section id="nm-logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">От имплантации и кариеса — к кости и дёснам</h2>
+  <p class="sub">Этап 1 познакомил с подходом клиники, этап 2 — с имплантацией и лечением кариеса. Этап 3 углубляет обе линии: что делать, если для импланта не хватает кости, и как здоровье дёсен влияет на сохранность зубов.</p>
+  <ul class="chain">
+    <li><b>Костная пластика</b><span>Подготовка к имплантации</span></li>
+    <li><b>Зачем восстанавливать кость</b><span>Что происходит после удаления зуба</span></li>
+    <li><b>Лечение дёсен</b><span>Кровоточивость, гингивит, пародонтит</span></li>
+    <li><b>Признаки воспаления дёсен</b><span>Когда пора к врачу</span></li>
+  </ul>
+</section>
+
+<section id="nm-news">
+  <span class="eyebrow">Новости · текст до 3 000 знаков</span>
+  <h2 class="h2">2 темы с обложкой</h2>
+  <p class="sub">Экспертная подача от третьего лица, высокая SEO-плотность без повтора одного ключа подряд. По правилам модерации Яндекс Карт — без цен, телефонов и e-mail в тексте, без превосходных степеней, без слов «безопасно», «безболезненно», «эффективно». Каждый текст заканчивается строкой «Имеются противопоказания. Необходима консультация специалиста».</p>
+
+  <article class="theme" id="nm-news-1">
+    <div class="th-head">
+      <div><div class="num">Новость 1</div><h3 class="th-title">Костная пластика перед имплантацией: когда она нужна и как проходит в стоматологии «32 Норма»</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Продолжение темы имплантации: для установки импланта нужен достаточный объём костной ткани</li>
+      <li>Почему кость убывает: после удаления зуба без восстановления кость со временем теряет объём (атрофия), также после длительных воспалений</li>
+      <li>Как определяют необходимость: осмотр хирурга-имплантолога и рентгенодиагностика на высокоточном оборудовании</li>
+      <li>Что такое костная пластика: восстановление объёма кости с помощью костнопластических материалов</li>
+      <li>Пластика выполняется одновременно с имплантацией или отдельным этапом — решение принимает врач</li>
+      <li>Хирургия, имплантация и ортопедия в одной клинике — от удаления зуба до коронки на имплант</li>
+      <li>Вывод: восстановление зуба после удаления лучше не откладывать</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">костная пластика Челябинск</span><span class="kw">наращивание костной ткани</span><span class="kw">костная пластика перед имплантацией</span><span class="kw">атрофия костной ткани челюсти</span><span class="kw">остеопластика</span><span class="kw">имплантация зубов Челябинск</span><span class="kw">хирург-имплантолог Челябинск</span><span class="kw">стоматология Молодогвардейцев 24</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на бесплатную консультацию хирурга-имплантолога</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Костная пластика</div>
+      <p>Фон <span class="dot" style="background:#F9F8F5;border-color:#ccc"></span>#F9F8F5, линейная схема челюсти с имплантом и восстановленным объёмом кости цветом <span class="dot" style="background:#4191D5"></span>#4191D5. Тезис на плашке <span class="dot" style="background:#85D45B"></span>#85D45B, текст <span class="dot" style="background:#333333"></span>#333333, тонкое подчёркивание <span class="dot" style="background:#69D33F"></span>#69D33F.</p>
+    </div>
+  </article>
+
+  <article class="theme" id="nm-news-2">
+    <div class="th-head">
+      <div><div class="num">Новость 2</div><h3 class="th-title">Лечение дёсен в «32 Норма»: почему кровоточат дёсны и как стоматолог восстанавливает их здоровье</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Кровоточивость, отёк и неприятный запах — признаки воспаления дёсен (гингивита), который без лечения переходит в пародонтит</li>
+      <li>Главная причина — зубной налёт и камень, которые не удаляются домашней чисткой</li>
+      <li>Диагностика: осмотр и оценка состояния дёсен, план лечения</li>
+      <li>Лечение: профессиональная гигиена (снятие камня, очистка AirFlow), лечение воспаления, подбор домашнего ухода, контрольные визиты</li>
+      <li>Здоровые дёсны — условие для надёжного протезирования и имплантации</li>
+      <li>Профилактика: регулярная профессиональная гигиена и осмотры</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">лечение дёсен Челябинск</span><span class="kw">кровоточат дёсны</span><span class="kw">лечение пародонтита Челябинск</span><span class="kw">лечение гингивита</span><span class="kw">воспаление дёсен</span><span class="kw">снятие зубного камня</span><span class="kw">профессиональная гигиена Челябинск</span><span class="kw">стоматология Курчатовский район</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на бесплатный осмотр стоматолога</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Здоровые дёсны</div>
+      <p>Фон <span class="dot" style="background:#F9F8F5;border-color:#ccc"></span>#F9F8F5, спокойная улыбка крупным планом без медицинских деталей. Тезис на плашке <span class="dot" style="background:#85D45B"></span>#85D45B, кольцо-акцент <span class="dot" style="background:#4191D5"></span>#4191D5 как в логотипе, нижняя полоса <span class="dot" style="background:#4F4D4B"></span>#4F4D4B.</p>
+    </div>
+  </article>
+</section>
+
+<section id="nm-stories">
+  <span class="eyebrow">Сторис · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="sub">Каждая история — один слайд: заголовок и 3–4 сухих факта. Заголовок слайда — обязательное название истории. Внизу слайда мелкой строкой: «Имеются противопоказания. Необходима консультация специалиста».</p>
+
+  <article class="story" id="nm-story-1">
+    <div class="num">История 1</div>
+    <div class="sh">Зачем восстанавливать кость</div>
+    <div class="topic">Костная ткань и имплантация</div>
+    <ul class="facts-s"><li>После удаления зуба кость убывает</li><li>Для импланта нужен объём кости</li><li>Пластика — до или вместе с имплантацией</li><li>План — на консультации хирурга</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#F9F8F5"></span>#F9F8F5, линейная схема «до / после» объёма кости цветом <span class="dot" style="background:#4191D5"></span>#4191D5. Заголовок на плашке <span class="dot" style="background:#85D45B"></span>#85D45B, факты <span class="dot" style="background:#333333"></span>#333333 с маркерами <span class="dot" style="background:#69D33F"></span>#69D33F.</div>
+  </article>
+
+  <article class="story" id="nm-story-2">
+    <div class="num">История 2</div>
+    <div class="sh">Признаки воспаления дёсен</div>
+    <div class="topic">Когда пора к стоматологу</div>
+    <ul class="facts-s"><li>Кровоточивость при чистке</li><li>Отёк и покраснение</li><li>Неприятный запах</li><li>Подвижность зубов</li></ul>
+    <div class="dz"><b>Дизайн слайда</b>Верх — плашка <span class="dot" style="background:#85D45B"></span>#85D45B с заголовком <span class="dot" style="background:#333333"></span>#333333, ниже четыре признака списком на фоне <span class="dot" style="background:#F9F8F5"></span>#F9F8F5 с линейными иконками <span class="dot" style="background:#4191D5"></span>#4191D5, нижняя полоса <span class="dot" style="background:#4F4D4B"></span>#4F4D4B.</div>
+  </article>
+</section>
+
+<section id="nm-map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента 32 Норма</h2>
+
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 1</b><span class="badge done">опубликован</span><small>4 новости · 4 истории</small></div></summary>
+    <ul class="rm">
+      <li><div class="f">Новость 1</div><div class="n">Чем современная клиника отличается от стоматологического кабинета</div><div class="x">Диагностика, специалисты, оборудование, полный спектр услуг</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Современная стоматология — это уверенность в результате</div><div class="x">Технологии, опыт, комплексное лечение</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Почему комплексный подход к лечению зубов даёт результат</div><div class="x">План лечения и взаимодействие врачей</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Комплексная забота о здоровье улыбки</div><div class="x">Полный цикл от консультации до завершения лечения</div></li>
+      <li><div class="f">Новость 3</div><div class="n">Качественное лечение начинается с диагностики</div><div class="x">Обследование как основа любого лечения</div></li>
+      <li class="s"><div class="f">История 3</div><div class="n">Современные стандарты стоматологической помощи</div><div class="x">Оборудование, материалы, медицинские стандарты</div></li>
+      <li><div class="f">Новость 4</div><div class="n">Почему пациенты выбирают нас</div><div class="x">Опыт, комплексное лечение, комфорт, сервис</div></li>
+      <li class="s"><div class="f">История 4</div><div class="n">Профессиональный подход к каждому пациенту</div><div class="x">Индивидуальный план и сопровождение</div></li>
+    </ul>
+  </details>
+
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 2</b><span class="badge done">опубликован</span><small>2 новости · 2 истории</small></div></summary>
+    <ul class="rm">
+      <li><div class="f">Новость 1</div><div class="n">Имплантация зубов: этапы, сроки и что важно знать</div><div class="x">От консультации до коронки, остеоинтеграция</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Профессиональная чистка AirFlow</div><div class="x">Налёт и пигментация</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Лечение кариеса без боли: современная анестезия</div><div class="x">Страх стоматолога и методы анестезии</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Бесплатная консультация — первый шаг</div><div class="x">Осмотр и предварительный план</div></li>
+    </ul>
+  </details>
+
+  <div class="stage">
+    <div class="stage-h"><b>Этап 3</b><span class="badge">актуальный</span><small>2 новости · 2 истории</small></div>
+    <ul class="rm">
+      <li><a href="#nm-news-1"><div class="f">Новость 1</div><div class="n">Костная пластика перед имплантацией</div><div class="x">Когда нужна и как проходит</div></a></li>
+      <li class="s"><a href="#nm-story-1"><div class="f">История 1</div><div class="n">Зачем восстанавливать кость</div><div class="x">Что происходит после удаления зуба</div></a></li>
+      <li><a href="#nm-news-2"><div class="f">Новость 2</div><div class="n">Лечение дёсен</div><div class="x">Кровоточивость, гингивит и пародонтит</div></a></li>
+      <li class="s"><a href="#nm-story-2"><div class="f">История 2</div><div class="n">Признаки воспаления дёсен</div><div class="x">Когда пора к стоматологу</div></a></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.switch button');
+  function show(co){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.co===co));});
+    document.querySelectorAll('[data-shell]').forEach(function(s){s.hidden=s.dataset.shell!==co;});
+    document.querySelectorAll('[data-nav]').forEach(function(n){n.hidden=n.dataset.nav!==co;});
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.co);window.scrollTo(0,0);});});
+  var h=(location.hash||'').slice(1);
+  if(h.indexOf('nm-')===0) show('nm');
+})();
+</script>
+</body>
+</html>
