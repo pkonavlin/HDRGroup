@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ТЗ — WARPOINT — Этап 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    color-scheme:light;
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39B7B;
+    --ink:#10262B; --ink-soft:#4C6067; --line:#D7E2E1; --card:#FFFFFF; --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+      --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+    --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',sans-serif;margin:0;color:var(--ink);text-wrap:balance;}
+  a{color:var(--teal);}
+  a:focus-visible{outline:2px solid var(--roe);outline-offset:2px;}
+
+  header.topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:14px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:var(--ocean);white-space:nowrap;margin-right:auto;}
+  header.topbar nav{display:flex;gap:4px;flex-wrap:wrap;}
+  header.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;padding:8px 12px;border-radius:8px;}
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px;}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin:0 0 28px;max-width:660px;}
+
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:640px;margin:0 0 32px;}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+  .legal{margin-top:20px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:16px 18px;}
+  .legal .block-label{margin-top:0;}
+  .legal ul{margin:0;padding-left:18px;font-size:14.5px;}
+
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px;margin-bottom:20px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;flex:1 1 360px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;}
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:5px 10px;border-radius:8px;}
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);margin-top:14px;}
+  .voice{font-style:italic;font-size:14.5px;color:var(--ink);background:var(--ice);border-left:3px solid var(--roe-soft);padding:10px 14px;border-radius:8px;margin:0;}
+  .tone-banner{border:1px dashed var(--roe-soft);border-radius:12px;padding:14px 18px;margin-bottom:24px;background:color-mix(in srgb, var(--roe) 6%, transparent);font-size:14px;color:var(--ink-soft);}
+  .tone-banner b{color:var(--ink);}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:color-mix(in srgb, var(--roe) 8%, transparent);border:1px dashed var(--roe-soft);font-size:14.5px;}
+  .cover-block .block-label{margin-top:0;}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;display:flex;flex-direction:column;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .chips{margin-top:12px;}
+  .story-card .design-note{margin-top:auto;padding:12px 14px;border-radius:10px;background:var(--ice);font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);}
+  .story-card .design-note b{color:var(--ink);}
+  .story-card .spacer{height:14px;}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--card);}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;}
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--roe);}
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;}
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:660px;}
+
+  @media(max-width:560px){
+    header.topbar{padding:12px 16px;}
+    section{padding:40px 0;}
+    .card{padding:20px 18px;}
+  }
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">WARPOINT</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">Этап 01 · ТЗ на контент · Яндекс Карты и 2ГИС</div>
+    <h1>WARPOINT — парк виртуальной реальности в Нижнем Новгороде</h1>
+    <p class="lead">Парк виртуальной реальности площадью 800 м² в ТРК «Индиго Life»: командные и одиночные ВР-игры, ВР-аттракционы и две лаунж-зоны для праздников. Площадка подходит для отдыха на каждый день и для мероприятий — дней рождения, корпоративов и выпускных. Для детей от 7 лет и взрослых.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Нижний Новгород</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Казанское шоссе, 11, ТРК «Индиго Life», 3 этаж</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">10:00–21:00</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (905) 666-41-41</div></div>
+      <div class="fact"><div class="k">Площадь парка</div><div class="v">800 м², из них арена — 400 м²</div></div>
+      <div class="fact"><div class="k">Зоны</div><div class="v">Арена, ВР-станции, зона экстрим, 2 лаунж-зоны</div></div>
+      <div class="fact"><div class="k">Возраст</div><div class="v">Арена — 8+, остальные развлечения — 7+</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">5,0 · 229 оценок · 190 отзывов</div></div>
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Клуб виртуальной реальности, парк аттракционов, организация мероприятий</div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v">На «вы», юмор допустим</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра WARPOINT</h2>
+    <p class="section-sub">После анализа фирменных материалов компании (сайт, кнопки, плашки заголовков, карточки зон) определена рабочая палитра бренда: чёрный, синий и красный.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#1B1B1B;"></div><div class="info"><div class="role">Фоновый</div><div class="hex">#1B1B1B</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#262626;"></div><div class="info"><div class="role">Фоновый (карточки)</div><div class="hex">#262626</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#CE4546;"></div><div class="info"><div class="role">Акцентный красный</div><div class="hex">#CE4546</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#476FEE;"></div><div class="info"><div class="role">Акцентный синий</div><div class="hex">#476FEE</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#7193F8;"></div><div class="info"><div class="role">Второстепенный</div><div class="hex">#7193F8</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#EBEBEB;"></div><div class="info"><div class="role">Текстовый</div><div class="hex">#EBEBEB</div></div></div>
+    </div>
+    <div class="legal">
+      <div class="block-label">Обязательные надписи компании</div>
+      <ul>
+        <li>«Не является публичной офертой»</li>
+        <li>Возрастная маркировка: 8+ — игра на арене, 7+ — все остальные развлечения</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="logic">
+    <div class="eyebrow">Логика цикла</div>
+    <h2 class="section-title">Праздник → команда → свободный визит</h2>
+    <p class="section-sub">Первый этап раскрывает три главных направления мероприятий — детский день рождения, выпускной и корпоратив — и отдельно показывает формат для гостей, которые приходят поиграть сами. Сторис дополняют новости фактами о каждой зоне парка: арена, ВР-станции, экстрим, лаунж-зоны. Все материалы публикуются в карточке WARPOINT на Яндекс Картах и 2ГИС.</p>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · карточка на Яндекс Картах и 2ГИС</div>
+    <h2 class="section-title">4 темы для новостей</h2>
+    <p class="section-sub">Темы построены на приоритетах компании: дни рождения детей, выпускные, корпоративы для взрослых и ВР-станции с аттракционами для тех, кто приходит без повода. Новости публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+
+    <div class="tone-banner"><b>Тон текстов:</b> все факты — только из анкеты компании и официальных источников (сайт, карточка), без домыслов и приукрашиваний. Пишем от лица команды WARPOINT, на «вы», живо и с лёгким юмором, как будто рассказываем о своём парке друзьям. У каждого текста своя эмоция и своя история (детский восторг, общий школьный праздник, командный азарт, спонтанный вечер), а не повтор одного и того же списка зон из поста в пост. SEO-ключи вплетаются в живые фразы естественно. Без телефона и ссылок в тексте, без превосходных степеней, без упоминания конкурентов, минимум восклицательных знаков и эмодзи.</div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>День рождения ребёнка в парке виртуальной реальности WARPOINT в Нижнем Новгороде</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Мы в WARPOINT проводим детские дни рождения в парке виртуальной реальности площадью 800 м²: арена, ВР-станции, ВР-аттракционы и лаунж-зона для праздника — в одном месте.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Праздник проходит в парке площадью 800 м² на 3 этаже ТРК «Индиго Life»</li>
+        <li>Гости от 8 лет играют на ВР-арене 400 м² командами до 10 человек, младшие от 7 лет выбирают ВР-станции и зону экстрим</li>
+        <li>После игры — отдельная лаунж-зона: большой стол, удобные стулья, посуда, настольные игры, приставка и большой телевизор</li>
+        <li>Сражения проходят без проводов и ограничений — участники свободно перемещаются по большой игровой площадке</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">день рождения ребёнка Нижний Новгород</span>
+        <span class="chip-seo">где отметить день рождения ребёнка в Нижнем Новгороде</span>
+        <span class="chip-seo">детский праздник Нижний Новгород</span>
+        <span class="chip-seo">парк виртуальной реальности Нижний Новгород</span>
+        <span class="chip-seo">ВР клуб Нижний Новгород</span>
+        <span class="chip-seo">день рождения в VR</span>
+        <span class="chip-seo">ТРК Индиго Life</span>
+      </div>
+      <div class="cta">CTA: бронируйте день рождения в WARPOINT через карточку на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «День рождения в ВР». Фото детей в ВР-шлемах на арене в момент радости (руки вверх, синяя подсветка зала). Фон — #1B1B1B, тезис белым #EBEBEB на наклонной красной плашке #CE4546 в фирменной манере сайта. Текст не больше 20% площади, без контактов на изображении.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Выпускной в формате виртуальной реальности — праздник для всего класса в WARPOINT</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Мы в WARPOINT проводим выпускные в формате виртуальной реальности: командные и одиночные ВР-игры, ВР-аттракционы и лаунж-зона для праздника.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Выпускной в WARPOINT — праздник, где весь класс играет вместе в командные и одиночные ВР-игры</li>
+        <li>На ВР-арене площадью 400 м² участники сражаются команда на команду — до 10 игроков одновременно, без проводов и ограничений</li>
+        <li>Помимо арены в парке есть ВР-станции с более чем 50 популярными играми и ВР-аттракционы зоны экстрим</li>
+        <li>Две лаунж-зоны парка — место для общего праздничного стола после игры</li>
+        <li>Парк находится на 3 этаже ТРК «Индиго Life», Казанское шоссе, 11</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">выпускной Нижний Новгород</span>
+        <span class="chip-seo">где провести выпускной в Нижнем Новгороде</span>
+        <span class="chip-seo">выпускной для класса</span>
+        <span class="chip-seo">выпускной в виртуальной реальности</span>
+        <span class="chip-seo">ВР арена Нижний Новгород</span>
+        <span class="chip-seo">развлечения для школьников Нижний Новгород</span>
+      </div>
+      <div class="cta">CTA: оставляйте заявку на выпускной в WARPOINT через карточку на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Выпускной в ВР». Групповое фото подростков в ВР-шлемах на арене, общий радостный момент. Фон — #1B1B1B, тезис #EBEBEB на наклонной синей плашке #476FEE, тонкий красный акцент #CE4546 по краю кадра. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Корпоратив и тимбилдинг на ВР-арене WARPOINT — команда на команду</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Мы в WARPOINT проводим корпоративы на ВР-арене площадью 400 м²: сражения команда на команду без проводов и ограничений.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Корпоратив в WARPOINT начинается с командного сражения на ВР-арене площадью 400 м² — современной альтернативы лазертагу и пейнтболу, только в виртуальной реальности</li>
+        <li>До 10 игроков на арене одновременно: коллеги делятся на две команды и свободно перемещаются без проводов и ограничений</li>
+                <li>После игры — лаунж-зона для застолья и неформального общения: стол, приставка, большой телевизор</li>
+        <li>Лаунж-зона подходит и для корпоратива, и для дня рождения коллеги</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">корпоратив Нижний Новгород</span>
+        <span class="chip-seo">тимбилдинг Нижний Новгород</span>
+        <span class="chip-seo">где провести корпоратив в Нижнем Новгороде</span>
+        <span class="chip-seo">VR арена Нижний Новгород</span>
+        <span class="chip-seo">лазертаг Нижний Новгород</span>
+        <span class="chip-seo">командные игры для взрослых</span>
+      </div>
+      <div class="cta">CTA: бронируйте корпоратив в WARPOINT через карточку на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Корпоратив на арене». Кадр взрослых игроков в ВР-шлемах с оружием в динамике, красно-синий свет арены. Фон — #1B1B1B, тезис #EBEBEB на наклонной красной плашке #CE4546. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>ВР-станции и зона экстрим в WARPOINT — развлечения в виртуальной реальности без повода и записи на праздник</h3>
+        <span class="tag">Вовлекающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Прийти в WARPOINT можно и без повода: тем, кто приходит поодиночке, мы предлагаем ВР-станции и аттракционы. Кричать разрешено.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Гостям, которые приходят поодиночке, WARPOINT предлагает ВР-станции и аттракционы</li>
+        <li>ВР-станции: разные ВР-шлемы и более 50 популярных игр — спортивные, фэнтези, шутеры, квесты; играют одному или компанией</li>
+        <li>Зона экстрим: динамические ВР-аттракционы со спецэффектами нового поколения — виражи, резкие манёвры, американские горки и гигантские качели</li>
+        <li>ВР-станции и зона экстрим доступны с 7 лет</li>
+        <li>Парк работает с 10:00 до 21:00 на 3 этаже ТРК «Индиго Life»</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">виртуальная реальность Нижний Новгород</span>
+        <span class="chip-seo">VR игры Нижний Новгород</span>
+        <span class="chip-seo">ВР аттракционы</span>
+        <span class="chip-seo">куда сходить в Нижнем Новгороде</span>
+        <span class="chip-seo">развлечения Индиго Life</span>
+        <span class="chip-seo">парк аттракционов Нижний Новгород</span>
+      </div>
+      <div class="cta">CTA: приходите в WARPOINT на 3 этаж ТРК «Индиго Life» — маршрут в карточке на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Кричать разрешено». Фото гостя на ВР-аттракционе зоны экстрим (кресло-капсула, синяя неоновая подсветка). Фон — #1B1B1B, тезис #EBEBEB на наклонной синей плашке #476FEE. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · формат презентации</div>
+    <h2 class="section-title">4 темы для сторис</h2>
+    <p class="section-sub">Один слайд — один факт. Каждая история знакомит с одной зоной парка и публикуется в карточке WARPOINT на Яндекс Картах и 2ГИС.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <h3>ВР-арена 400 м²</h3>
+        <ul class="tezis">
+          <li>Команда на команду, от 2 до 10 игроков</li>
+          <li>Без проводов и ограничений в движении</li>
+          <li>Возраст 8+</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">ВР арена Нижний Новгород</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #1B1B1B, фото игроков на арене. Заголовок «Арена 400 м²» — узкий курсивный гротеск капсом на наклонной красной плашке #CE4546, тезисы #EBEBEB, маркировка «8+» в круге #CE4546.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>ВР-станции: 50+ игр</h3>
+        <ul class="tezis">
+          <li>Спортивные, фэнтези, шутеры, квесты</li>
+          <li>Играть одному или компанией</li>
+          <li>Возраст 7+</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">VR игры Нижний Новгород</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #1B1B1B, крупная цифра «50+» синим #476FEE, фото гостя в ВР-шлеме в синей подсветке. Тезисы #EBEBEB на подложке #262626.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Зона экстрим</h3>
+        <ul class="tezis">
+          <li>Американские горки и гигантские качели в ВР</li>
+          <li>Виражи и резкие манёвры</li>
+          <li>Кричать разрешено · 7+</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">ВР аттракционы Нижний Новгород</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото ВР-аттракциона с неоновой подсветкой, затемнение к низу до #1B1B1B. Фраза «Кричать разрешено» на наклонной красной плашке #CE4546, второстепенные детали #7193F8.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Две лаунж-зоны для праздника</h3>
+        <ul class="tezis">
+          <li>Большой стол, удобные стулья, посуда</li>
+          <li>Приставка, большой телевизор, настольные игры</li>
+          <li>Для дня рождения и корпоратива</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">день рождения Нижний Новгород</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото праздничного стола в лаунж-зоне. Фон #1B1B1B, заголовок #EBEBEB на наклонной синей плашке #476FEE, тезисы на подложке #262626, тонкая красная линия-акцент #CE4546.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+    <details class="stage" open>
+      <summary>Этап 1 · 28.09.2026 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1</div><div class="road-text">День рождения ребёнка в WARPOINT — арена для 8+, ВР-станции и экстрим для 7+, отдельная лаунж-зона для застолья</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">ВР-арена 400 м² — команда на команду, от 2 до 10 игроков, без проводов, 8+</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2</div><div class="road-text">Выпускной в формате виртуальной реальности — класс делится на команды, арена, ВР-станции и лаунж-зоны для общего праздника</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">ВР-станции — более 50 игр разных жанров, одному или компанией, 7+</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 3</div><div class="road-text">Корпоратив и тимбилдинг на ВР-арене — команда на команду, застолье в лаунж-зоне</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 3</div><div class="road-text">Зона экстрим — американские горки и гигантские качели в ВР, кричать разрешено, 7+</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 4</div><div class="road-text">ВР-станции и зона экстрим для свободного визита — одному, вдвоём или небольшой компанией, 10:00–21:00</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 4</div><div class="road-text">Две лаунж-зоны для праздника — стол, приставка, телевизор, настольные игры</div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+</body>
+</html>
