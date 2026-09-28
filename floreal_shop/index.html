@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Флореаль-шоп — ТЗ на контент</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ocean:#0E3B47;
+    --teal:#1B6B78;
+    --ice:#F5F8F8;
+    --roe:#C4572B;
+    --ink:#14262B;
+    --ink-soft:#4B6169;
+    --line:#D8E3E2;
+    --card:#FFFFFF;
+    --bg:var(--ice);
+    --shadow: 0 1px 2px rgba(14,59,71,.06), 0 8px 24px rgba(14,59,71,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ocean:#8FDCE3; --teal:#5DC2CD; --ice:#0E1F24; --roe:#E08A5D;
+      --ink:#EAF3F2; --ink-soft:#9FB8BC; --line:#234049; --card:#16323A; --bg:var(--ice);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ocean:#8FDCE3; --teal:#5DC2CD; --ice:#0E1F24; --roe:#E08A5D;
+    --ink:#EAF3F2; --ink-soft:#9FB8BC; --line:#234049; --card:#16323A; --bg:var(--ice);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', system-ui, sans-serif; line-height:1.55; }
+  h1,h2,h3{ font-family:'Bricolage Grotesque', sans-serif; text-wrap:balance; margin:0 0 .35em; color:var(--ocean); }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
+  a{ color:var(--teal); }
+
+  /* Sticky top bar */
+  header.topbar{
+    position:sticky; top:0; z-index:20;
+    display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+    padding:14px 28px; background:var(--card); border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  header.topbar .brand{
+    font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size:1.02rem; color:var(--ocean);
+    white-space:nowrap;
+  }
+  header.topbar nav{ display:flex; gap:4px; flex-wrap:wrap; overflow-x:auto; }
+  header.topbar nav a{
+    font-size:.86rem; font-weight:500; color:var(--ink-soft); text-decoration:none;
+    padding:7px 11px; border-radius:8px; white-space:nowrap; transition:background .15s, color .15s;
+  }
+  header.topbar nav a:hover{ background:var(--ice); color:var(--ocean); }
+
+  main{ max-width:920px; margin:0 auto; padding:36px 28px 90px; }
+
+  .hero{
+    padding:26px 28px; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); margin-bottom:36px;
+  }
+  .hero .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roe); margin-bottom:10px;
+  }
+  .hero h1{ font-size:1.6rem; }
+  .hero p{ color:var(--ink-soft); max-width:64ch; margin:.4em 0; }
+
+  section{ margin-bottom:48px; scroll-margin-top:76px; }
+  section > h2{
+    font-size:1.25rem; display:flex; align-items:baseline; gap:10px; margin-bottom:16px;
+    padding-bottom:10px; border-bottom:1px solid var(--line);
+  }
+  section > h2 .num{ font-family:'IBM Plex Mono', monospace; font-size:.74rem; color:var(--roe); }
+  section > p.lead{ color:var(--ink-soft); max-width:68ch; margin-top:-6px; margin-bottom:18px; }
+
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); }
+
+  /* Компания facts */
+  .facts{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  }
+  .facts .fact{ background:var(--card); padding:15px 17px; }
+  .facts dt{ font-family:'IBM Plex Mono', monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:4px; }
+  .facts dd{ margin:0; font-weight:600; font-size:.92rem; }
+  .facts dd.muted{ font-weight:400; color:var(--ink-soft); }
+
+  /* Мини-брендбук — только labeled swatches */
+  .swatches{ display:flex; gap:14px; flex-wrap:wrap; }
+  .swatch{ width:120px; text-align:center; }
+  .swatch .chip{ height:64px; border-radius:10px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .swatch .role{ font-family:'IBM Plex Mono', monospace; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--roe); margin-top:7px; }
+  .swatch .name{ font-size:.78rem; font-weight:600; margin-top:1px; }
+  .swatch .hex{ font-family:'IBM Plex Mono', monospace; font-size:.7rem; color:var(--ink-soft); }
+
+  /* Логика цикла */
+  .cycle{ display:flex; align-items:stretch; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow-x:auto; box-shadow:var(--shadow); }
+  .cycle .step{ flex:1 0 160px; padding:16px 18px; border-right:1px solid var(--line); font-size:.82rem; }
+  .cycle .step:last-child{ border-right:none; }
+  .cycle .step .tag{ font-family:'IBM Plex Mono', monospace; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:4px; }
+  .cycle .step.done{ color:var(--ink-soft); }
+  .cycle .step.done .tag{ color:var(--ink-soft); }
+  .cycle .step.new{ background:var(--ice); }
+  .cycle .step.new .tag{ color:var(--roe); }
+  .cycle .step strong{ display:block; font-size:.86rem; color:var(--ink); }
+
+  /* Новости */
+  .tone-banner{
+    font-size:.85rem; color:var(--ink-soft); background:var(--ice); border:1px solid var(--line);
+    border-radius:10px; padding:11px 15px; margin-bottom:20px;
+  }
+  .theme-card{ margin-bottom:22px; }
+  .theme-card .head{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:14px; flex-wrap:wrap; }
+  .theme-card h3{ font-size:1.1rem; margin:0; }
+  .tag-goal{
+    font-family:'IBM Plex Mono', monospace; font-size:.7rem; text-transform:uppercase; letter-spacing:.04em;
+    background:var(--ice); border:1px solid var(--line); color:var(--ocean); padding:5px 10px; border-radius:20px; white-space:nowrap;
+  }
+  .intro-voice{
+    font-size:.94rem; font-style:italic; color:var(--ink); padding:10px 14px; margin-bottom:14px;
+    border-left:3px solid var(--roe); background:var(--ice); border-radius:0 8px 8px 0;
+  }
+  .theme-card h4{
+    font-family:'IBM Plex Mono', monospace; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin:14px 0 8px;
+  }
+  .theme-card ul.thesis{ margin:0; padding-left:20px; font-size:.92rem; }
+  .theme-card ul.thesis li{ margin-bottom:6px; }
+  .kw-chips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .kw-chips span{
+    font-family:'IBM Plex Mono', monospace; font-size:.74rem; background:var(--ice); border:1px solid var(--line);
+    color:var(--ocean); padding:4px 9px; border-radius:6px;
+  }
+  .cta-box{ margin-top:14px; padding:11px 15px; border-left:3px solid var(--roe); background:var(--ice); font-size:.9rem; }
+  .cta-box b{ color:var(--roe); font-family:'IBM Plex Mono', monospace; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:4px; }
+  .cover-box{ margin-top:16px; padding:14px 16px; border-radius:10px; background:var(--bg); border:1px dashed var(--line); }
+  .cover-box h4{ margin-top:0; color:var(--ocean); }
+
+  /* Сторис — без обложки, один слайд */
+  .story-card{ margin-bottom:20px; }
+  .story-card h3{ font-size:1.05rem; }
+  .design-note{ margin-top:12px; padding:13px 15px; border-radius:10px; background:var(--bg); border:1px solid var(--line); font-size:.88rem; }
+  .design-note h4{ margin:0 0 7px; color:var(--ocean); font-family:'IBM Plex Mono', monospace; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; }
+  .design-colors{ display:flex; gap:6px; margin-top:8px; }
+  .design-colors i{ width:18px; height:18px; border-radius:5px; display:inline-block; border:1px solid var(--line); }
+
+  /* Карта тем */
+  .roadmap-stage{ margin-bottom:14px; }
+  .roadmap-stage summary{
+    cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px;
+    padding:13px 16px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+    font-weight:600; font-size:.92rem;
+  }
+  .roadmap-stage summary::-webkit-details-marker{ display:none; }
+  .roadmap-stage summary::before{ content:"▸"; color:var(--roe); font-size:.8em; transition:transform .15s; }
+  .roadmap-stage[open] summary::before{ transform:rotate(90deg); }
+  .roadmap-stage summary .stage-count{ font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:.78rem; color:var(--ink-soft); margin-left:auto; }
+  .roadmap-list{ list-style:none; margin:10px 0 0; padding:14px 18px; background:var(--card); border:1px solid var(--line); border-radius:12px; }
+  .roadmap-list li{ display:flex; gap:12px; padding:9px 0; border-top:1px solid var(--line); font-size:.88rem; align-items:baseline; }
+  .roadmap-list li:first-child{ border-top:none; }
+  .roadmap-list .fmt{
+    font-family:'IBM Plex Mono', monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--teal); flex:0 0 62px;
+  }
+  .roadmap-list .r-title{ font-weight:600; }
+  .roadmap-list .r-brief{ display:block; color:var(--ink-soft); font-size:.82rem; margin-top:1px; }
+  .stage-current{ border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); }
+  .stage-current .stage-head{
+    display:flex; align-items:center; gap:10px; padding:13px 16px; background:var(--ice);
+    font-weight:600; font-size:.92rem; border-bottom:1px solid var(--line);
+  }
+  .stage-current .stage-head .badge{
+    font-family:'IBM Plex Mono', monospace; font-size:.62rem; text-transform:uppercase; letter-spacing:.05em;
+    background:var(--roe); color:#fff; padding:2px 8px; border-radius:20px; margin-left:auto;
+  }
+  .stage-current .roadmap-list{ border:none; border-radius:0; }
+
+  footer.sources{ padding-top:22px; border-top:1px solid var(--line); font-size:.85rem; color:var(--ink-soft); }
+  footer.sources a{ color:var(--teal); }
+
+  @media (max-width: 720px){
+    header.topbar{ padding:12px 16px; }
+    main{ padding:24px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <span class="brand">Флореаль-шоп</span>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">Продолжение контент-цикла · этап 3</div>
+    <h1>Флореаль-шоп — ТЗ на контент: 2 новости + 2 сторис</h1>
+    <p>Магазин цветов и флористическая студия в Тюмени. Материал продолжает уже реализованный цикл публикаций и раскрывает команду магазина и праздничный ассортимент — направления, которые ещё не были представлены отдельно.</p>
+    <p>Публикация — карточка компании на Яндекс Картах.</p>
+  </section>
+
+  <section id="company">
+    <h2><span class="num">01</span> Компания</h2>
+    <dl class="facts">
+      <div class="fact"><dt>Название</dt><dd>Флореаль-шоп</dd></div>
+      <div class="fact"><dt>Категория</dt><dd class="muted">Магазин цветов, флористическая студия, товары для праздника</dd></div>
+      <div class="fact"><dt>Адрес</dt><dd class="muted">г. Тюмень, ул. Герцена, 64, 1 этаж</dd></div>
+      <div class="fact"><dt>Телефон</dt><dd class="muted">+7 (922) 003-02-32</dd></div>
+      <div class="fact"><dt>WhatsApp / Telegram</dt><dd class="muted">+7 (929) 269-16-81</dd></div>
+      <div class="fact"><dt>Часы работы</dt><dd class="muted">до 20:00</dd></div>
+      <div class="fact"><dt>Рейтинг</dt><dd class="muted">4,6 из 5 (34 оценки)</dd></div>
+      <div class="fact"><dt>Цены на розы</dt><dd class="muted">от 2 090 до 3 900 ₽ за букет (премиальный сегмент)</dd></div>
+      <div class="fact"><dt>Ассортимент</dt><dd class="muted">срезанные цветы, авторские букеты, комнатные растения, подарочная упаковка, воздушные шары, мягкие игрушки</dd></div>
+      <div class="fact"><dt>Сервис</dt><dd class="muted">оплата картой, доставка, самовывоз, парковка, доступно для маломобильных, можно с питомцами</dd></div>
+      <div class="fact"><dt>Из отзывов</dt><dd class="muted">качество цветов, быстрая сборка и доставка, отдельно отмечают флориста Лидию</dd></div>
+    </dl>
+  </section>
+
+  <section id="brandbook">
+    <h2><span class="num">02</span> Мини-брендбук</h2>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#F8F3ED"></div><div class="role">Фоновый</div><div class="name">Айвори</div><div class="hex mono">#F8F3ED</div></div>
+      <div class="swatch"><div class="chip" style="background:#C98B93"></div><div class="role">Второстепенный</div><div class="name">Пыльная роза</div><div class="hex mono">#C98B93</div></div>
+      <div class="swatch"><div class="chip" style="background:#7C8B6F"></div><div class="role">Второстепенный</div><div class="name">Ботанический зелёный</div><div class="hex mono">#7C8B6F</div></div>
+      <div class="swatch"><div class="chip" style="background:#C99248"></div><div class="role">Акцентный</div><div class="name">Янтарный</div><div class="hex mono">#C99248</div></div>
+      <div class="swatch"><div class="chip" style="background:#2E2A27"></div><div class="role">Текстовый</div><div class="name">Тёплый графит</div><div class="hex mono">#2E2A27</div></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <h2><span class="num">03</span> Логика цикла</h2>
+    <p class="lead">Новый этап продолжает уже пройденный путь: от ассортимента и сервиса — к команде магазина и праздничным товарам, которые ещё не были представлены в контенте.</p>
+    <div class="cycle">
+      <div class="step done"><span class="tag">Пройдено</span><strong>Ассортимент, поводы, уход, интерьер</strong></div>
+      <div class="step done"><span class="tag">Пройдено</span><strong>Подарки в одном месте, доверие, эмоции</strong></div>
+      <div class="step done"><span class="tag">Пройдено</span><strong>Комнатные растения, доставка и самовывоз</strong></div>
+      <div class="step new"><span class="tag">Новый этап</span><strong>Команда и флорист, праздничные товары</strong></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <h2><span class="num">04</span> Новости</h2>
+    <p class="lead">2 темы, каждая — с вступлением, тезисами для копирайтера, SEO-ключами и отдельным ТЗ на обложку.</p>
+    <div class="tone-banner">Тексты этапа — от первого лица компании, с тёплой интонацией: не перечисление услуг, а история о том, как мы работаем.</div>
+
+    <div class="theme-card card">
+      <div class="head">
+        <h3>1. Индивидуальный подбор букета</h3>
+        <span class="tag-goal">Сервисный · вовлекающий</span>
+      </div>
+      <div class="intro-voice">Каждый заказ во «Флореаль-шоп» собираем индивидуально — учитываем повод, бюджет и пожелания клиента.</div>
+      <h4>Тезисы для копирайтера</h4>
+      <ul class="thesis">
+        <li>Букет подбираем индивидуально под повод, бюджет и пожелания</li>
+        <li>Помогаем определиться, если сложно выбрать самостоятельно</li>
+        <li>Подходит для любого случая — от повседневного повода до торжества</li>
+        <li>Учитываем пожелания по цвету и составу букета</li>
+      </ul>
+      <h4>SEO-ключи</h4>
+      <div class="kw-chips">
+        <span>индивидуальный подбор букета</span><span>букет на заказ Тюмень</span><span>подбор цветов по бюджету</span>
+        <span>флористика Тюмень</span><span>магазин цветов Тюмень</span><span>купить букет по индивидуальному заказу</span>
+      </div>
+      <div class="cta-box"><b>CTA</b>Расскажите, какой букет нужен, — подберём вместе то, что подойдёт.</div>
+      <div class="cover-box">
+        <h4>ТЗ на обложку</h4>
+        <p>Процесс подбора букета крупным планом — руки перебирают цветы на фоне ассортимента магазина, светлый фон, естественный свет.</p>
+      </div>
+    </div>
+
+    <div class="theme-card card">
+      <div class="head">
+        <h3>2. Воздушные шары и праздничные товары</h3>
+        <span class="tag-goal">Ассортиментный · продающий</span>
+      </div>
+      <div class="intro-voice">В «Флореаль-шоп» кроме цветов есть и другие способы дополнить праздник — воздушные шары для любого повода.</div>
+      <h4>Тезисы для копирайтера</h4>
+      <ul class="thesis">
+        <li>Воздушные шары в наличии</li>
+        <li>Дополняют букет к празднику</li>
+        <li>Можно оформить вместе с цветами в одном заказе</li>
+        <li>Подходят для дня рождения, юбилея, любого торжества</li>
+      </ul>
+      <h4>SEO-ключи</h4>
+      <div class="kw-chips">
+        <span>воздушные шары Тюмень</span><span>шары на день рождения</span><span>шары и цветы</span>
+        <span>праздничные товары</span><span>магазин шаров Тюмень</span><span>цветы и шары в подарок</span>
+      </div>
+      <div class="cta-box"><b>CTA</b>Дополните букет шарами — соберём праздничный набор вместе.</div>
+      <div class="cover-box">
+        <h4>ТЗ на обложку</h4>
+        <p>Букет с воздушными шарами в одном кадре, светлый фон, естественный свет.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <h2><span class="num">05</span> Сторис</h2>
+    <p class="lead">Один слайд — один факт.</p>
+
+    <div class="story-card card">
+      <h3>1. Индивидуальный подбор букета</h3>
+      <ul class="thesis">
+        <li>Букет подбираем под повод, бюджет и пожелания</li>
+        <li>Помогаем определиться, если сложно выбрать</li>
+        <li>Подходит для любого случая — от повседневного до торжества</li>
+      </ul>
+      <div class="design-note">
+        <h4>Дизайн слайда</h4>
+        <p>Процесс подбора букета крупным планом, светлый фон, тезисы компактным списком в нижней трети кадра.</p>
+        <div class="design-colors"><i style="background:#F8F3ED"></i><i style="background:#C98B93"></i><i style="background:#2E2A27"></i></div>
+      </div>
+    </div>
+
+    <div class="story-card card">
+      <h3>2. Воздушные шары и праздничные товары</h3>
+      <ul class="thesis">
+        <li>Воздушные шары в наличии</li>
+        <li>Дополняют букет к празднику</li>
+        <li>Оформляем вместе с цветами в одном заказе</li>
+      </ul>
+      <div class="design-note">
+        <h4>Дизайн слайда</h4>
+        <p>Букет с шарами крупным планом, тезисы снизу на светлой плашке.</p>
+        <div class="design-colors"><i style="background:#F8F3ED"></i><i style="background:#C99248"></i><i style="background:#2E2A27"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <h2><span class="num">06</span> Карта тем</h2>
+    <p class="lead">Все темы по этапам работы с компанией. При каждом новом периоде сюда дописывается пройденный этап, а разделы «Новости» и «Сторис» выше обновляются под новый.</p>
+
+    <details class="roadmap-stage">
+      <summary>Этап 1 — Знакомство с ассортиментом<span class="stage-count">12 тем</span></summary>
+      <ul class="roadmap-list">
+        <li><span class="fmt">Новость</span><span><span class="r-title">Ассортимент магазина</span><span class="r-brief">Срезанные цветы, авторские букеты, композиции, упаковка</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Красивый букет для вашего праздника</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Авторские букеты для разных поводов</span><span class="r-brief">День рождения, юбилей, свадьба, корпоратив</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Свежие цветы каждый день</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Как сохранить свежесть букета</span><span class="r-brief">Уход: ваза, вода, стебли, хранение</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Авторские букеты на любой повод</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Цветочные композиции для интерьера</span><span class="r-brief">Дом, офис, праздничное оформление</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Цветы, которые дарят эмоции</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Всё для подарка в одном месте</span><span class="r-brief">Цветы + подарки + сувениры + оформление</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Что можно подарить вместе с букетом</span><span class="r-brief">Игрушки, открытки, сувениры, наборы</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Свежие цветы и авторские букеты для любого повода</span><span class="r-brief">Ассортимент, индивидуальный подбор, флорист</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Почему выбирают свежие цветы во «Флореаль»</span></span></li>
+      </ul>
+    </details>
+
+    <details class="roadmap-stage">
+      <summary>Этап 2 — Товарные категории и сервис<span class="stage-count">4 темы</span></summary>
+      <ul class="roadmap-list">
+        <li><span class="fmt">Новость</span><span><span class="r-title">Комнатные растения во «Флореаль-шоп»</span><span class="r-brief">Отдельная холодильная зона, дом/офис</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Комнатные растения в «Флореаль-шоп»</span><span class="r-brief">Ассортимент, холодильная зона</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Доставка и самовывоз во «Флореаль-шоп»</span><span class="r-brief">Оформление заказа, оплата, адрес</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Доставка и самовывоз</span><span class="r-brief">Оформление заказа через мессенджер</span></span></li>
+      </ul>
+    </details>
+
+    <div class="stage-current">
+      <div class="stage-head">Этап 3 — Персональный подбор и праздничные товары<span class="badge">актуальный</span></div>
+      <ul class="roadmap-list">
+        <li><span class="fmt">Новость</span><span><span class="r-title">Индивидуальный подбор букета</span><span class="r-brief">Подбор под повод, бюджет и пожелания клиента</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Индивидуальный подбор букета</span><span class="r-brief">Подбор под повод, бюджет и пожелания</span></span></li>
+        <li><span class="fmt">Новость</span><span><span class="r-title">Воздушные шары и праздничные товары</span><span class="r-brief">Шары в наличии, дополняют букет, для любого праздника</span></span></li>
+        <li><span class="fmt">Сторис</span><span><span class="r-title">Воздушные шары и праздничные товары</span><span class="r-brief">Шары в наличии, дополняют букет к празднику</span></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sources" id="sources">
+    <p><strong>Источники:</strong> <a href="https://yandex.com/maps/-/CTHOuGzK" target="_blank" rel="noopener">карточка компании «Флореаль-шоп» на Яндекс Картах</a></p>
+  </footer>
+</main>
+
+</body>
+</html>
