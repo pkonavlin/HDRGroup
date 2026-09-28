@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ТЗ — Аква Дизайн — Этап 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    color-scheme:light;
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39B7B;
+    --ink:#10262B; --ink-soft:#4C6067; --line:#D7E2E1; --card:#FFFFFF; --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+      --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+    --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',sans-serif;margin:0;color:var(--ink);text-wrap:balance;}
+  a{color:var(--teal);}
+  a:focus-visible{outline:2px solid var(--roe);outline-offset:2px;}
+
+  header.topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:14px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:var(--ocean);white-space:nowrap;margin-right:auto;}
+  header.topbar nav{display:flex;gap:4px;flex-wrap:wrap;}
+  header.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;padding:8px 12px;border-radius:8px;}
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px;}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin:0 0 28px;max-width:660px;}
+
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:640px;margin:0 0 32px;}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;border-bottom:1px solid var(--line);}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px;margin-bottom:20px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;flex:1 1 360px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;}
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:5px 10px;border-radius:8px;}
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);margin-top:14px;}
+  .voice{font-style:italic;font-size:14.5px;color:var(--ink);background:var(--ice);border-left:3px solid var(--roe-soft);padding:10px 14px;border-radius:8px;margin:0;}
+  .tone-banner{border:1px dashed var(--roe-soft);border-radius:12px;padding:14px 18px;margin-bottom:24px;background:color-mix(in srgb, var(--roe) 6%, transparent);font-size:14px;color:var(--ink-soft);}
+  .tone-banner b{color:var(--ink);}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:color-mix(in srgb, var(--roe) 8%, transparent);border:1px dashed var(--roe-soft);font-size:14.5px;}
+  .cover-block .block-label{margin-top:0;}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;display:flex;flex-direction:column;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .chips{margin-top:12px;}
+  .story-card .design-note{margin-top:auto;padding:12px 14px;border-radius:10px;background:var(--ice);font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);}
+  .story-card .design-note b{color:var(--ink);}
+  .story-card .spacer{height:14px;}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--card);}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;}
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--roe);}
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;}
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:660px;}
+
+  @media(max-width:560px){
+    header.topbar{padding:12px 16px;}
+    section{padding:40px 0;}
+    .card{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Аква Дизайн</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">Этап 03 · ТЗ на контент · Яндекс Карты и 2ГИС</div>
+    <h1>«Аква Дизайн» — бассейны и оборудование в Новосибирске</h1>
+    <p class="lead">Около 20 лет компания «Аква Дизайн» возводит бассейны, оснащает их оборудованием, материалами, химией. Строит общественные и частные бассейны в помещениях и на улице. Материалы этапа публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Новосибирск</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Ватутина, 42а, корп. 2</div></div>
+      <div class="fact"><div class="k">Виды деятельности</div><div class="v">Строительство и монтаж бассейнов, аквапарков · Продажа бассейнов и оборудования · Водоочистка, водоочистное оборудование</div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">Более 20 лет на рынке</div></div>
+      <div class="fact"><div class="k">Объекты</div><div class="v">Более 1000 бассейнов за 20 лет</div></div>
+      <div class="fact"><div class="k">Каталог</div><div class="v">10 000 позиций, собственный склад</div></div>
+      <div class="fact"><div class="k">Гарантия</div><div class="v">Работа по договору с гарантией · 100% гарантия качества</div></div>
+      <div class="fact"><div class="k">Рекомендации</div><div class="v">97% клиентов приходят по рекомендации</div></div>
+      <div class="fact"><div class="k">Доставка</div><div class="v">По Новосибирску, области и в другие регионы России · самовывоз со склада по согласованию</div></div>
+      <div class="fact"><div class="k">Оплата</div><div class="v">Наличный и безналичный расчёт для физических и юридических лиц</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">4,4 · 16 оценок · 12 отзывов</div></div>
+    </div>
+    <div class="card" style="margin-top:20px;margin-bottom:0;">
+      <div class="block-label" style="margin-top:0;">Направления и преимущества компании</div>
+      <ul class="tezis">
+        <li>Строительство бассейнов всех типов: бетонные, металлические сборные, панельные, стеклопластиковые, полипропиленовые</li>
+        <li>Готовые морозоустойчивые бассейны с разнообразием форм и размеров и возможностью заглубления — от официального российского производителя</li>
+        <li>Бесплатная доставка до транспортной компании</li>
+        <li>Профессиональный подбор и установка оборудования: фильтрация, подогрев, подсветка, обеззараживание</li>
+        <li>Аттракционы: гидро- и аэромассаж, водопады, искусственное течение</li>
+        <li>Гидроизоляция, отделка, реконструкция бассейнов</li>
+        <li>Бесплатный выезд специалиста: консультация и выезд на объект без дополнительной оплаты</li>
+        <li>Практически все марки оборудования, представленные в России: Aquaviva, Bestway, Kalekim, Water Tech, Bailey, Elecro, Kokido</li>
+        <li>Опытные консультанты; особые условия для дизайнеров и архитекторов</li>
+        <li>Среди реализованных объектов — акватермальный бассейн круглогодичного использования в Новосибирске</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра «Аква Дизайн»</h2>
+    <p class="section-sub">После анализа ресурсов компании (логотип, дизайны публикаций в карточке, сайт) определена фирменная палитра. Логотип — капля из тёмно-синей и оранжевой частей. Дизайны карточки построены на мягком градиенте от бежевого к серо-голубому с тёмно-синим текстом. Сайт использует тёмно-синюю навигацию, красно-оранжевые кнопки и светло-голубые плашки.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#223B5F;"></div><div class="info"><div class="role">Основной · текст дизайнов, логотип</div><div class="hex">#223B5F</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#EB8843;"></div><div class="info"><div class="role">Акцентный · оранжевый капли</div><div class="hex">#EB8843</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#F2B857;"></div><div class="info"><div class="role">Акцентный светлый · блик капли</div><div class="hex">#F2B857</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#E7D1AE;"></div><div class="info"><div class="role">Фоновый · бежевый градиента</div><div class="hex">#E7D1AE</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#9CB0C4;"></div><div class="info"><div class="role">Фоновый · серо-голубой градиента</div><div class="hex">#9CB0C4</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#BBBEBC;"></div><div class="info"><div class="role">Фоновый · светло-серый градиента</div><div class="hex">#BBBEBC</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#CD4F29;"></div><div class="info"><div class="role">Второстепенный · кнопки сайта</div><div class="hex">#CD4F29</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#313B7D;"></div><div class="info"><div class="role">Второстепенный · навигация сайта</div><div class="hex">#313B7D</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#B4D0E8;"></div><div class="info"><div class="role">Фоновый · плашки сайта</div><div class="hex">#B4D0E8</div></div></div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <div class="eyebrow">Логика цикла</div>
+    <h2 class="section-title">Готовые морозоустойчивые бассейны → водные аттракционы → договор и гарантия → доверие клиентов</h2>
+    <p class="section-sub">Этап 1 раскрыл компанию, строительство под ключ, типы бассейнов, ассортимент и обслуживание, а также доставку, оплату и бесплатный выезд специалиста. Этап 2 раскрыл инженерную сторону: водоподготовку и оборудование. Этап 3 открывает то, что ещё не было отдельной темой: готовые морозоустойчивые бассейны, водные аттракционы и работу компании по договору с гарантией, подкреплённую результатом — более 1000 бассейнов и 97% клиентов по рекомендации. Все материалы публикуются в карточке «Аква Дизайн» на Яндекс Картах и 2ГИС.</p>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · карточка на Яндекс Картах и 2ГИС</div>
+    <h2 class="section-title">2 темы для новостей</h2>
+    <p class="section-sub">Каждая новость сопровождается обложкой. Публикация — в карточке «Аква Дизайн» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="tone-banner"><b>Тон текстов:</b> спокойный, экспертный, от лица компании («мы»). Факты — только с официальных ресурсов компании, без домыслов. У каждого текста свой предмет разговора, без повтора полного перечня услуг и типов бассейнов из поста в пост. SEO-ключи вплетаются в предложения естественно, без повторов одного ключа подряд. Без телефона, e-mail и ссылок в тексте, без превосходных степеней, без капса, минимум восклицательных знаков. Не повторяем уже опубликованные темы: строительство под ключ и этапы, типы бассейнов и комплекс услуг, ассортимент оборудования, обслуживание и модернизация, водоподготовка, оборудование и срок службы.</div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Морозоустойчивые бассейны в Новосибирске: готовые чаши разных форм и размеров с возможностью заглубления</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Мы предлагаем готовые морозоустойчивые бассейны от официального российского производителя — с разнообразием форм и размеров и возможностью заглубления.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Большой выбор готовых морозоустойчивых бассейнов от официального российского производителя</li>
+        <li>Разнообразие форм и размеров чаши</li>
+        <li>Возможность заглубления бассейна</li>
+        <li>Бесплатная доставка до транспортной компании</li>
+        <li>Стоимость бассейна можно узнать, оставив заявку</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">морозоустойчивый бассейн</span>
+        <span class="chip-seo">морозоустойчивые бассейны Новосибирск</span>
+        <span class="chip-seo">купить бассейн Новосибирск</span>
+        <span class="chip-seo">готовый бассейн для дачи</span>
+        <span class="chip-seo">бассейн для частного дома</span>
+        <span class="chip-seo">бассейн с заглублением</span>
+        <span class="chip-seo">заглубляемый бассейн</span>
+        <span class="chip-seo">уличный бассейн на участок</span>
+        <span class="chip-seo">бассейн российского производства</span>
+        <span class="chip-seo">продажа бассейнов и оборудования</span>
+        <span class="chip-seo">бассейн с доставкой</span>
+        <span class="chip-seo">овальный бассейн</span>
+        <span class="chip-seo">бассейны и оборудование Новосибирск</span>
+        <span class="chip-seo">стоимость бассейна</span>
+        <span class="chip-seo">бассейн для загородного участка</span>
+      </div>
+      <p class="cta">CTA: Оставляйте заявку — подберём морозоустойчивый бассейн под ваш участок.</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <b>Тезис:</b> «Морозоустойчивые бассейны»<br>
+        Композиция по стилю визитки компании: слева фото готового овального бассейна на участке с газоном, справа — фон с волнистой границей, градиент сверху серо-голубой #9CB0C4 → снизу бежевый #E7D1AE. Тезис тёмно-синим #223B5F, логотип-капля (#223B5F + #EB8843 / #F2B857) над тезисом. Текст и логотип — не более 20% площади.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Бассейн по договору с гарантией: 1000+ реализованных объектов и 97% клиентов по рекомендации</h3>
+        <span class="tag">Имиджевая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Мы работаем по договору с гарантией. За 20 лет мы построили более 1000 бассейнов, и 97% клиентов приходят к нам по рекомендации.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Работаем по договору с гарантией; 100% гарантия качества</li>
+        <li>Более 1000 бассейнов за 20 лет — общественные и частные, в помещениях и на улице</li>
+        <li>Среди реализованных объектов — акватермальный бассейн круглогодичного использования в Новосибирске</li>
+        <li>97% клиентов приходят к компании по рекомендации</li>
+        <li>Опытные консультанты, особые условия для дизайнеров и архитекторов</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">бассейн по договору</span>
+        <span class="chip-seo">строительство бассейна с гарантией</span>
+        <span class="chip-seo">гарантия на бассейн</span>
+        <span class="chip-seo">строительство бассейнов Новосибирск</span>
+        <span class="chip-seo">строительство бассейнов и аквапарков</span>
+        <span class="chip-seo">монтаж бассейнов Новосибирск</span>
+        <span class="chip-seo">компания по строительству бассейнов</span>
+        <span class="chip-seo">общественный бассейн</span>
+        <span class="chip-seo">частный бассейн</span>
+        <span class="chip-seo">бассейн в помещении</span>
+        <span class="chip-seo">уличный бассейн</span>
+        <span class="chip-seo">акватермальный бассейн</span>
+        <span class="chip-seo">круглогодичный бассейн</span>
+        <span class="chip-seo">бассейн для дизайнеров и архитекторов</span>
+        <span class="chip-seo">отзывы о строительстве бассейна</span>
+      </div>
+      <p class="cta">CTA: Оставляйте заявку — рассчитаем стоимость вашего бассейна.</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <b>Тезис:</b> «Работаем по договору»<br>
+        Композиция по стилю сторис компании: сверху фото реализованного бассейна, диагональный срез к нижней части. Низ — горизонтальный градиент бежевый #E7D1AE → светло-серый #BBBEBC. Тезис тёмно-синим #223B5F, выравнивание по правому краю, тонкий акцент оранжевым #EB8843. Текст и логотип — не более 20% площади.
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · формат презентации</div>
+    <h2 class="section-title">2 темы для сторис</h2>
+    <p class="section-sub">Один слайд — один факт. Истории публикуются в карточке «Аква Дизайн» на Яндекс Картах и 2ГИС.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <h3>Водные аттракционы для бассейна</h3>
+        <ul class="tezis">
+          <li>Гидромассаж</li>
+          <li>Аэромассаж</li>
+          <li>Водопады</li>
+          <li>Искусственное течение</li>
+          <li>Профессиональный подбор и установка</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">аттракционы для бассейна Новосибирск</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> в стиле сторис компании — сверху фото бассейна с водопадом-каскадом, диагональный срез. Низ — горизонтальный градиент бежевый #E7D1AE → светло-серый #BBBEBC. Заголовок заглавными тёмно-синим #223B5F, четыре аттракциона списком с маркерами оранжевым #EB8843, текст по правому краю.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>97% клиентов приходят по рекомендации</h3>
+        <ul class="tezis">
+          <li>Более 1000 бассейнов за 20 лет</li>
+          <li>Работаем по договору с гарантией</li>
+          <li>100% гарантия качества</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">строительство бассейнов с гарантией Новосибирск</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> в стиле сторис компании — сверху фото реализованного частного бассейна, диагональный срез. Низ — горизонтальный градиент бежевый #E7D1AE → светло-серый #BBBEBC. Цифры «97%», «1000+», «100%» крупно тёмно-синим #223B5F, подписи под ними, тонкий разделитель оранжевым #EB8843.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+    <details class="stage">
+      <summary>Этап 1 · реализован</summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость · 29.07</div><div class="road-text">Обширный ассортимент для строительства и оснащения бассейнов — большая модельная и размерная линейка, всё для бассейна в одном месте</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость · 29.07</div><div class="road-text">Строительство бассейнов под ключ — проектирование, ошибки самостоятельного строительства, этапы комплексного строительства</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость · 31.07</div><div class="road-text">Более 24 лет создаём бассейны любой сложности — типы бассейнов (бетонные, сборные, полипропиленовые, панельные, композитные, купели, СПА) и комплекс услуг</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость · 03.08</div><div class="road-text">Что необходимо для надёжной работы бассейна — всё для обслуживания, химия, реконструкция отделки, модернизация оборудования</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История</div><div class="road-text">Создание — более 24 лет создаём бассейны: любой формат, оборудование и отделка, комплексный сервис</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История</div><div class="road-text">Доставка — доставка и оплата, самовывоз со склада</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История</div><div class="road-text">Всё для вас — бесплатный выезд специалиста, подбор оборудования и материалов</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История</div><div class="road-text">Строительство — строительство бассейнов под ключ</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История</div><div class="road-text">Как пройти</div></div>
+      </div>
+    </details>
+    <div style="height:14px"></div>
+    <details class="stage">
+      <summary>Этап 2 · реализован</summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1 · 09.09</div><div class="road-text">Качество воды = комфорт и безопасность бассейна — фильтрация, обеззараживание, циркуляция</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">Комфорт работы — что обеспечивает комфортную эксплуатацию бассейна</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2 · 09.09</div><div class="road-text">Надёжное оборудование для долговечной работы бассейна — фильтрация, нагрев, автоматика, монтаж и обслуживание</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">Надёжность — оборудование как основа надёжной работы бассейна</div></div>
+      </div>
+    </details>
+    <div style="height:14px"></div>
+    <details class="stage" open>
+      <summary>Этап 3 · 28.09.2026 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1</div><div class="road-text">Морозоустойчивые бассейны — готовые чаши разных форм и размеров с возможностью заглубления, бесплатная доставка до транспортной компании</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">Водные аттракционы для бассейна — гидро- и аэромассаж, водопады, искусственное течение</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2</div><div class="road-text">Бассейн по договору с гарантией — 1000+ объектов, акватермальный круглогодичный бассейн, 97% клиентов по рекомендации</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">97% клиентов приходят по рекомендации — 1000+ бассейнов, договор с гарантией, 100% гарантия качества</div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+</body>
+</html>
