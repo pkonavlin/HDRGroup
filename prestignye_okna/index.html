@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ТЗ — Престижные окна — Этап 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    color-scheme:light;
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39B7B;
+    --ink:#10262B; --ink-soft:#4C6067; --line:#D7E2E1; --card:#FFFFFF; --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+      --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+    --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',sans-serif;margin:0;color:var(--ink);text-wrap:balance;}
+  a{color:var(--teal);}
+  a:focus-visible{outline:2px solid var(--roe);outline-offset:2px;}
+
+  header.topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:14px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:var(--ocean);white-space:nowrap;margin-right:auto;}
+  header.topbar nav{display:flex;gap:4px;flex-wrap:wrap;}
+  header.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;padding:8px 12px;border-radius:8px;}
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px;}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin:0 0 28px;max-width:660px;}
+
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:640px;margin:0 0 32px;}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px;margin-bottom:20px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;flex:1 1 360px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;}
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:5px 10px;border-radius:8px;}
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);margin-top:14px;}
+  .voice{font-style:italic;font-size:14.5px;color:var(--ink);background:var(--ice);border-left:3px solid var(--roe-soft);padding:10px 14px;border-radius:8px;margin:0;}
+  .tone-banner{border:1px dashed var(--roe-soft);border-radius:12px;padding:14px 18px;margin-bottom:24px;background:color-mix(in srgb, var(--roe) 6%, transparent);font-size:14px;color:var(--ink-soft);}
+  .tone-banner b{color:var(--ink);}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:color-mix(in srgb, var(--roe) 8%, transparent);border:1px dashed var(--roe-soft);font-size:14.5px;}
+  .cover-block .block-label{margin-top:0;}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;display:flex;flex-direction:column;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .chips{margin-top:12px;}
+  .story-card .design-note{margin-top:auto;padding:12px 14px;border-radius:10px;background:var(--ice);font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);}
+  .story-card .design-note b{color:var(--ink);}
+  .story-card .spacer{height:14px;}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--card);}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;}
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--roe);}
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;}
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:660px;}
+
+  @media(max-width:560px){
+    header.topbar{padding:12px 16px;}
+    section{padding:40px 0;}
+    .card{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Престижные окна</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">Этап 01 · ТЗ на контент · Яндекс Карты и 2ГИС</div>
+    <h1>«Престижные окна» — окна, двери, остекление балконов и лоджий в Пскове</h1>
+    <p class="lead">Компания изготавливает и монтирует металлопластиковые окна, балконные блоки, лоджии и балконы, стеклопакеты, алюминиевые конструкции, офисные перегородки, цветные изделия, москитные сетки и жалюзи, выполняет наружную и внутреннюю обшивку балконов и лоджий. Производство — на заводе в Пскове, изделия изготавливаются индивидуально под размеры заказчика.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Псков</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Леона Поземского, 108, офис 26</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–Пт 9:00–17:00; Сб, Вс — выходной, заявки по телефону принимаются</div></div>
+      <div class="fact"><div class="k">Телефоны</div><div class="v">+7 (911) 399-86-36<br>+7 (911) 366-22-28</div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">Более 10 лет работы</div></div>
+      <div class="fact"><div class="k">Гарантия</div><div class="v">5 лет</div></div>
+      <div class="fact"><div class="k">Замер</div><div class="v">Бесплатный при заказе изделия</div></div>
+      <div class="fact"><div class="k">Фурнитура</div><div class="v">UPT и MACO (Германия)</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">5,0 · 60 оценок · 50 отзывов</div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v">На «Вы», строго деловой стиль, без указания цен</div></div>
+    </div>
+    <div class="card" style="margin-top:20px;margin-bottom:0;">
+      <div class="block-label" style="margin-top:0;">Ключевые преимущества компании</div>
+      <ul class="tezis">
+        <li>Разнообразный выбор профилей и отделочных материалов</li>
+        <li>Широкий список услуг и индивидуальный подход</li>
+        <li>Гарантированное качество</li>
+        <li>Невысокие цены</li>
+        <li>Высокая скорость установки, квалифицированные монтажники</li>
+      </ul>
+      <div class="block-label">Порядок работ по металлопластиковым окнам</div>
+      <ul class="tezis">
+        <li>Изготовление: проектирование и расчёт параметров окон; подбор оптимального профиля и стеклопакетов; изготовление с учётом всех технических требований и пожеланий заказчика</li>
+        <li>Монтаж: профессиональная установка с соблюдением всех технологических норм; выравнивание и фиксация конструкций; герметизация и утепление монтажных швов; проверка работоспособности всех элементов оконной системы</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра «Престижных окон»</h2>
+    <p class="section-sub">После анализа ресурсов компании (логотип-кристалл, шапка и подвал сайта, кнопки, сообщество ВКонтакте) определена фирменная палитра: голубой кристалла логотипа, серо-синий фирменной подложки и белый.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#4F9ED7;"></div><div class="info"><div class="role">Акцентный (голубой логотипа)</div><div class="hex">#4F9ED7</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#A7D3EF;"></div><div class="info"><div class="role">Второстепенный (светло-голубой)</div><div class="hex">#A7D3EF</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#748094;"></div><div class="info"><div class="role">Основной (серо-синий)</div><div class="hex">#748094</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#7889C9;"></div><div class="info"><div class="role">Акцентный (кнопки)</div><div class="hex">#7889C9</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#1B202B;"></div><div class="info"><div class="role">Текстовый</div><div class="hex">#1B202B</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;"></div><div class="info"><div class="role">Фоновый</div><div class="hex">#FFFFFF</div></div></div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <div class="eyebrow">Логика цикла</div>
+    <h2 class="section-title">Остекление → выбор системы → отделка внутри → отделка снаружи</h2>
+    <p class="section-sub">Первый этап целиком посвящён сезонному приоритету компании — изготовлению и монтажу балконов и лоджий, их наружной и внутренней отделке. Новости идут в порядке работ: остекление, выбор между тёплым и холодным вариантом, внутренняя отделка, наружная обшивка и крыша. Сторис дополняют их фактами о компании, балконном блоке и изделиях под размеры заказчика. Все материалы публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · карточка на Яндекс Картах и 2ГИС</div>
+    <h2 class="section-title">4 темы для новостей</h2>
+    <p class="section-sub">Все четыре темы построены на приоритетном направлении сезона, которое компания назвала сама: изготовление и монтаж балконов и лоджий, наружная и внутренняя отделка. Новости публикуются в карточке «Престижных окон» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="tone-banner"><b>Тон текстов:</b> строго деловой стиль, обращение на «Вы». Факты — только из анкеты компании и официальных источников (сайт, карточка, сообщество ВКонтакте), без домыслов. Пишем от лица компании «Престижные окна». У каждого текста свой предмет разговора, без повтора одного и того же полного перечня услуг из поста в пост. SEO-ключи вплетаются в предложения естественно, без повторов одного ключа подряд. Без цен, без телефона и ссылок в тексте, без превосходных степеней, без уменьшительно-ласкательных слов, без упоминания конкурентов, общественно-политической повестки и внутренних процессов компании, без эмодзи и лишних восклицательных знаков.</div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Остекление балконов и лоджий в Пскове: изготовление и монтаж от компании «Престижные окна»</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Компания «Престижные окна» изготавливает и монтирует балконы и лоджии в Пскове: остекление, наружную и внутреннюю отделку.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Конструкции изготавливаются на заводе в Пскове индивидуально под размеры заказчика</li>
+        <li>Остекление балкона, лоджии от перил и лоджии от пола</li>
+        <li>Тёплое остекление в ПВХ-профилях и холодное — в раздвижных алюминиевых конструкциях</li>
+        <li>Разнообразный выбор профилей и отделочных материалов, индивидуальный подход</li>
+        <li>Высокая скорость установки, квалифицированные монтажники, гарантированное качество, невысокие цены</li>
+        <li>Фурнитура UPT и MACO (Германия)</li>
+        <li>Бесплатный замер при заказе изделия, гарантия 5 лет, уборка после работ</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">остекление балконов Псков</span>
+        <span class="chip-seo">остекление лоджий Псков</span>
+        <span class="chip-seo">застеклить балкон в Пскове</span>
+        <span class="chip-seo">изготовление и монтаж балконов</span>
+        <span class="chip-seo">балконы и лоджии Псков</span>
+        <span class="chip-seo">пластиковые окна Псков</span>
+        <span class="chip-seo">замер балкона бесплатно</span>
+      </div>
+      <div class="cta">CTA: оставляйте заявку на бесплатный замер в карточке компании на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Остекление балконов». Фото застеклённого балкона из альбома «Наши работы». Нижняя плашка серо-синего цвета #748094 с тезисом белым #FFFFFF, тонкая линия-акцент голубым #4F9ED7. Текст не больше 20% площади, без контактов на изображении.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Тёплое или холодное остекление балкона: какой вариант выбрать</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Компания «Престижные окна» выполняет холодное и тёплое остекление балконов и лоджий, предлагая разнообразный выбор профилей.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Холодное остекление — раздвижные алюминиевые конструкции Provedal: раздвижной механизм экономит место, защищает от ветра, осадков и пыли, но не от мороза</li>
+        <li>Тёплое остекление — ПВХ-профили: позволяет объединить балкон с комнатой, при этом рекомендуется отделка с утеплением</li>
+        <li>Трёхкамерные профили 58–62 мм: KBE Knipping 58, Reachmont 60, Ivaper 62, Rehau Ewro Blitz 60</li>
+        <li>Профили 70 мм на 4–5 камер: Reachmont 70, Ivaper 70, Montblanc Nord 70, KBE Expert 70, Rehau Delight 70</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">тёплое остекление балкона Псков</span>
+        <span class="chip-seo">холодное остекление балкона</span>
+        <span class="chip-seo">раздвижное алюминиевое остекление</span>
+        <span class="chip-seo">остекление лоджии ПВХ</span>
+        <span class="chip-seo">профиль Rehau</span>
+        <span class="chip-seo">профиль KBE</span>
+        <span class="chip-seo">какое остекление балкона выбрать</span>
+      </div>
+      <div class="cta">CTA: оставляйте заявку на бесплатный замер в карточке компании на Яндекс Картах</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Тёплое или холодное». Кадр разделён вертикально на две половины: слева балкон с ПВХ-остеклением, справа с раздвижным алюминиевым. Разделительная полоса голубым #4F9ED7, подписи белым #FFFFFF на плашках #748094. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Внутренняя отделка балконов и лоджий в Пскове: утепление, обшивка, пол и электрика</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">После остекления компания «Престижные окна» выполняет внутреннюю отделку балкона или лоджии: от утепления парапета до установки мебели.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Утепление парапета теплоизоляционными плитами</li>
+        <li>Обшивка ПВХ-сэндвич-панелями: два листа ПВХ толщиной 2 мм с теплоизоляционной пеной внутри, панели влагонепроницаемы</li>
+        <li>Обшивка деревянной вагонкой: натуральная древесина, звуковая и тепловая изоляция</li>
+        <li>Влагостойкие гипсоволокнистые листы ГВЛВ и ГВЛ под декоративную плёнку, плитку или краску</li>
+        <li>Стяжка и укладка пола, в том числе тёплого; электромонтажные работы; установка мебели</li>
+        <li>Разнообразный выбор отделочных материалов</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">внутренняя отделка балкона Псков</span>
+        <span class="chip-seo">отделка лоджии Псков</span>
+        <span class="chip-seo">утепление балкона</span>
+        <span class="chip-seo">обшивка балкона вагонкой</span>
+        <span class="chip-seo">обшивка балкона панелями ПВХ</span>
+        <span class="chip-seo">тёплый пол на лоджии</span>
+      </div>
+      <div class="cta">CTA: оставляйте заявку на внутреннюю отделку балкона в карточке компании</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Отделка внутри». Фото готовой отделанной лоджии из альбома «Внутренняя отделка балконов» (светлая обшивка, пол, остекление). Плашка #748094 с тезисом белым #FFFFFF, акцентная деталь светло-голубым #A7D3EF. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Наружная отделка балкона и крыша: профнастил, сайдинг, ондулин</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Компания «Престижные окна» выполняет наружную обшивку балконов и лоджий, облицовку парапета и монтаж крыши над балконом.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Профнастил: стальной лист с антикоррозионным слоем горячего цинка и цветным полимером, срок службы более 40 лет, устойчив к ультрафиолету, пожаробезопасен, не требует усиления конструкции, доступен во многих расцветках</li>
+        <li>Профлист монтируется по сплошной обрешётке и подходит для лоджий с кирпичным ограждением</li>
+        <li>Сайдинг не выгорает, устойчив к механическим воздействиям, невосприимчив к плесени и грибку</li>
+        <li>Крыша над балконом — из ондулина (влагостойкий, бесшумный при осадках) или металлопрофиля</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">наружная отделка балкона Псков</span>
+        <span class="chip-seo">обшивка балкона снаружи</span>
+        <span class="chip-seo">крыша на балкон Псков</span>
+        <span class="chip-seo">обшивка балкона профнастилом</span>
+        <span class="chip-seo">обшивка балкона сайдингом</span>
+        <span class="chip-seo">крыша из ондулина</span>
+      </div>
+      <div class="cta">CTA: запишитесь на замер для наружной отделки и монтажа крыши над балконом</div>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <div>Тезис: «Обшивка и крыша». Фото балкона с наружной обшивкой на фасаде дома из альбома «Наши работы». Плашка #748094 с тезисом белым #FFFFFF, линия-акцент голубым #4F9ED7. Текст не больше 20% площади.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · формат презентации</div>
+    <h2 class="section-title">4 темы для сторис</h2>
+    <p class="section-sub">Один слайд — один факт. Истории публикуются в карточке «Престижных окон» на Яндекс Картах и 2ГИС.</p>
+    <div class="story-grid">
+
+      <div class="story-card">
+        <h3>«Престижные окна» в Пскове</h3>
+        <ul class="tezis">
+          <li>Более 10 лет работы</li>
+          <li>Производство на заводе в Пскове</li>
+          <li>Гарантия 5 лет</li>
+          <li>Бесплатный замер при заказе изделия</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">окна Псков</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #748094, логотип-кристалл сверху. Крупная цифра «10+» голубым #4F9ED7, тезисы белым #FFFFFF, разделители светло-голубым #A7D3EF.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Балконы и лоджии: изготовление, монтаж и отделка</h3>
+        <ul class="tezis">
+          <li>Изготовление и монтаж остекления</li>
+          <li>Внутренняя отделка и утепление</li>
+          <li>Наружная обшивка и крыша</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">остекление балконов Псков</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото балкона из альбома «Наши работы», затемнение к низу до #748094. Три этапа — нумерованные строки белым #FFFFFF, номера в кругах голубым #4F9ED7.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Балконный блок</h3>
+        <ul class="tezis">
+          <li>Балконная дверь и окно из ПВХ</li>
+          <li>Стеклопакет 32–42 мм</li>
+          <li>Фурнитура UPT и MACO</li>
+          <li>Поворотное, поворотно-откидное, с микропроветриванием</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">балконный блок Псков</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> белый фон #FFFFFF, фото балконного блока. Заголовок текстовым #1B202B, тезисы на плашках #748094 белым шрифтом, иконки открывания голубым #4F9ED7.</div>
+      </div>
+
+      <div class="story-card">
+        <h3>Изделия под размеры заказчика</h3>
+        <ul class="tezis">
+          <li>Изготовление по индивидуальным размерам</li>
+          <li>Конструкции нестандартных размеров и форм</li>
+          <li>Цветные изделия и варианты ламинации</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">окна на заказ Псков</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото образцов ламинации профиля из альбома «Варианты ламинации». Нижняя плашка #748094, заголовок белым #FFFFFF, акцентная линия кнопочным #7889C9.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+    <details class="stage" open>
+      <summary>Этап 1 · 28.09.2026 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1</div><div class="road-text">Остекление балконов и лоджий в Пскове — изготовление на заводе в Пскове, монтаж, бесплатный замер, гарантия 5 лет</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">«Престижные окна» в Пскове — более 10 лет, завод в Пскове, гарантия 5 лет, бесплатный замер</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2</div><div class="road-text">Тёплое или холодное остекление — раздвижные алюминиевые конструкции и ПВХ-профили 58–70 мм</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">Балконы и лоджии: изготовление, монтаж и отделка — остекление, внутренняя отделка, наружная обшивка и крыша</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 3</div><div class="road-text">Внутренняя отделка — утепление парапета, ПВХ-панели, вагонка, ГВЛВ, пол, электрика, мебель</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 3</div><div class="road-text">Балконный блок — дверь и окно из ПВХ, стеклопакет 32–42 мм, фурнитура UPT и MACO</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 4</div><div class="road-text">Наружная отделка и крыша — профнастил, профлист, сайдинг, ондулин, металлопрофиль</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 4</div><div class="road-text">Изделия под размеры заказчика — нестандартные формы, цветные изделия и ламинация</div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+</body>
+</html>
