@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ТЗ — Бьюти Мед Сити — Этап 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    color-scheme:light;
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39B7B;
+    --ink:#10262B; --ink-soft:#4C6067; --line:#D7E2E1; --card:#FFFFFF; --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+      --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+    --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',sans-serif;margin:0;color:var(--ink);text-wrap:balance;}
+  a{color:var(--teal);}
+  a:focus-visible{outline:2px solid var(--roe);outline-offset:2px;}
+
+  header.topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:14px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:var(--ocean);white-space:nowrap;margin-right:auto;}
+  header.topbar nav{display:flex;gap:4px;flex-wrap:wrap;}
+  header.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;padding:8px 12px;border-radius:8px;}
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px;}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin:0 0 28px;max-width:660px;}
+
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:660px;margin:0 0 32px;}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;border-bottom:1px solid var(--line);}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px;margin-bottom:20px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;flex:1 1 360px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;}
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:5px 10px;border-radius:8px;}
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);margin-top:14px;}
+  .voice{font-style:italic;font-size:14.5px;color:var(--ink);background:var(--ice);border-left:3px solid var(--roe-soft);padding:10px 14px;border-radius:8px;margin:0;}
+  .tone-banner{border:1px dashed var(--roe-soft);border-radius:12px;padding:14px 18px;margin-bottom:24px;background:color-mix(in srgb, var(--roe) 6%, transparent);font-size:14px;color:var(--ink-soft);}
+  .tone-banner b{color:var(--ink);}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:color-mix(in srgb, var(--roe) 8%, transparent);border:1px dashed var(--roe-soft);font-size:14.5px;}
+  .cover-block .block-label{margin-top:0;}
+  .cover-block ul.tezis li{font-size:14px;}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;display:flex;flex-direction:column;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .chips{margin-top:12px;}
+  .story-card .design-note{margin-top:auto;padding:12px 14px;border-radius:10px;background:var(--ice);font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);}
+  .story-card .design-note b{color:var(--ink);}
+  .story-card .spacer{height:14px;}
+  .story-rules{margin-bottom:24px;}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--card);}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  .badge-current{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;}
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--roe);}
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;}
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:660px;}
+
+  @media(max-width:560px){
+    header.topbar{padding:12px 16px;}
+    section{padding:40px 0;}
+    .card{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Бьюти Мед Сити</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">Этап 01 · ТЗ на контент · Яндекс Карты и 2ГИС</div>
+    <h1>«Бьюти Мед Сити» — клиника эпиляции, косметологии и массажа у м.&nbsp;Сухаревская</h1>
+    <p class="lead">Многофункциональный медицинский косметологический центр в центре Москвы. 25 лет в косметологии, коррекции фигуры и профессиональной эпиляции. Направления: лазерная эпиляция и электроэпиляция, аппаратная, инъекционная и эстетическая косметология лица, коррекция фигуры, ручной и аппаратный массаж тела и лица.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Москва</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Проспект Мира, д. 3, корп. 1, этаж 2</div></div>
+      <div class="fact"><div class="k">Метро</div><div class="v">1 минута от м. Сухаревская</div></div>
+      <div class="fact"><div class="k">Парковка</div><div class="v">Бесплатная</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–Вс, 8:00–23:00</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (495) 150-25-66</div></div>
+      <div class="fact"><div class="k">Рубрики карточки</div><div class="v">Эпиляция, депиляция · Косметология · Массажный салон</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">5,0</div></div>
+      <div class="fact"><div class="k">Награда</div><div class="v">«Хорошее место 2026»</div></div>
+      <div class="fact"><div class="k">Статус</div><div class="v">Медицинская лицензия</div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">25 лет · электроэпиляция с 1999 года</div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v">На «вы», от лица клиники</div></div>
+    </div>
+    <div class="card" style="margin-top:20px;margin-bottom:0;">
+      <div class="block-label" style="margin-top:0;">Ключевые преимущества компании</div>
+      <ul class="tezis">
+        <li>Удобное расположение: 1 минута от м. Сухаревская, бесплатная парковка</li>
+        <li>Работает ежедневно с 8:00 до 23:00</li>
+        <li>Медицинская лицензия</li>
+        <li>Все виды эпиляции: лазерная на Candela GentleMax Pro и электроэпиляция на Depilplus 13 MHz</li>
+        <li>Электроэпиляция в клинике выполняется с 1999 года, за это время — порядка 30 тысяч обратившихся</li>
+        <li>Специалисты по эпиляции со стажем более 15 лет, мастера электроэпиляции с медицинским образованием</li>
+        <li>Врачи-косметологи высшей категории, врачи-физиотерапевты</li>
+        <li>Парк оборудования: Candela GentleMax Pro, Depilplus 13 MHz, Endospheres Therapy, LPG Cellu M6 Alliance, VelaShape, HIFU, фракционный микроигольчатый RF, ICOONE LASER</li>
+        <li>Сертифицированные, зарегистрированные препараты и оборудование</li>
+        <li>Карта привилегий для постоянных пациентов, подарочный сертификат на любую сумму</li>
+      </ul>
+      <div class="block-label">Система лояльности (Карта привилегий)</div>
+      <ul class="tezis">
+        <li>+500 бонусов в день рождения</li>
+        <li>+500 бонусов за рекомендацию услуг клиники</li>
+        <li>+300 бонусов за отзыв о визите</li>
+        <li>Кешбэк 1% при оплате наличными</li>
+        <li>Скидка 10% на услуги при записи и визите в день звонка</li>
+        <li>Экономия по косметологическим программам — до 20%, по абонементам — до 15%, в счастливые часы — 10%</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра «Бьюти Мед Сити»</h2>
+    <p class="section-sub">После анализа ресурсов компании (сайт, оформление сообщества ВКонтакте) определена фирменная палитра из четырёх цветов: зелёный кнопок и призывов к действию, тёмно-зелёный заголовков, бежевый фон и графитовый текст.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#5C9B81;"></div><div class="info"><div class="role">Акцентный (кнопки, плашки, CTA)</div><div class="hex">#5C9B81</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#3E5E4E;"></div><div class="info"><div class="role">Основной (заголовки, тёмный фон)</div><div class="hex">#3E5E4E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#EBDDD2;"></div><div class="info"><div class="role">Фоновый (бежевый)</div><div class="hex">#EBDDD2</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#333333;"></div><div class="info"><div class="role">Текстовый</div><div class="hex">#333333</div></div></div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <div class="eyebrow">Логика цикла</div>
+    <h2 class="section-title">Эпиляция осенью → лазер Candela → косметология лица → массаж</h2>
+    <p class="section-sub">Новости первого этапа проходят по трём рубрикам карточки компании: эпиляция, косметология, массажный салон. Открывает цикл электроэпиляция — курс клиника рекомендует начинать в холодное время года, поэтому тема совпадает с сезоном. Дальше — лазерная эпиляция Candela GentleMax Pro, аппаратная косметология лица и массаж тела и лица. Сторис дополняют новости фактами о самой клинике: расположение, специалисты, оборудование, Карта привилегий. Все материалы публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">Новости · карточка на Яндекс Картах и 2ГИС</div>
+    <h2 class="section-title">4 темы для новостей</h2>
+    <p class="section-sub">Каждая новость раскрывает одно направление клиники и публикуется в карточке «Бьюти Мед Сити» на Яндекс Картах и 2ГИС вместе с обложкой.</p>
+
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», текст от лица клиники («мы»). Факты — только с официального сайта и из карточки компании, без домыслов. У каждого текста свой предмет разговора, без повтора полного перечня услуг из поста в пост. SEO-ключи вплетаются в предложения естественно, без повторов одного ключа подряд. Медицинская тематика: без слов «безопасно», «безвредно», «безболезненно», «эффективно», без слова «лечение» применительно к услугам. Без превосходных степеней («лучший», «один из крупнейших»), без телефона и ссылок в тексте, без эмодзи и лишних восклицательных знаков.</div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Электроэпиляция в Москве у м. Сухаревская: почему курс удобно начинать осенью</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Электроэпиляцией мы занимаемся с 1999 года и рекомендуем начинать курс в холодное время года — осенью или зимой.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Почему осенью: после процедуры в режиме бленд коже нужен этап восстановления, в этот период желательно избегать солнца</li>
+        <li>Подготовка к первому сеансу: волоски на зоне отращиваются до длины не менее 10 мм — примерно 2–2,5 месяца после бритья</li>
+        <li>Аппарат Depilplus 13 MHz: 650 программ, 5 техник — электролиз, термолиз, мягкий термолиз, флеш, бленд; клиника работает в режиме бленд</li>
+        <li>Одноразовые иглы Ballet (Франция): мастер достаёт новый электрод из индивидуальной упаковки в присутствии пациента</li>
+        <li>Все мастера электроэпиляции имеют медицинское образование, по желанию проводится обезболивание</li>
+        <li>Бесплатная консультация для тех, кто обращается впервые: как проходит процедура, противопоказания, сколько займёт курс</li>
+        <li>Минимальная процедура — 10 минут, шаг записи — 5 минут; предоплата даёт дополнительную скидку 10–15%; стоимость — от 46 ₽ за минуту</li>
+        <li>Электроэпиляция лица и тела, в том числе зоны бикини, для женщин и мужчин</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">электроэпиляция Москва</span>
+        <span class="chip-seo">электроэпиляция м. Сухаревская</span>
+        <span class="chip-seo">электроэпиляция проспект Мира</span>
+        <span class="chip-seo">электроэпиляция осенью</span>
+        <span class="chip-seo">электроэпиляция лица Москва</span>
+        <span class="chip-seo">электроэпиляция бикини Москва</span>
+        <span class="chip-seo">электроэпиляция бленд</span>
+        <span class="chip-seo">электролог Москва</span>
+        <span class="chip-seo">клиника электроэпиляции</span>
+        <span class="chip-seo">удаление волос Москва</span>
+      </div>
+      <p class="cta">CTA: Записывайтесь на бесплатную консультацию к электрологу клиники «Бьюти Мед Сити».</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <ul class="tezis">
+          <li>Тезис на обложке: «Электроэпиляция осенью»</li>
+          <li>Визуал: руки мастера в перчатках, аппарат Depilplus 13 MHz, игла в индивидуальной упаковке</li>
+          <li>Без фото «до/после», без тела в белье и откровенных поз</li>
+          <li>Тезис — #3E5E4E на фоне #EBDDD2, плашка #5C9B81 с белым текстом; текст не более 20% площади</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Лазерная эпиляция Candela GentleMax Pro у м. Сухаревская: как проходит курс</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">В отделении эпиляции нашей клиники работает александритово-неодимовый лазер Candela GentleMax Pro — рассказываем, как проходит курс лазерной эпиляции.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Candela GentleMax Pro — александритово-неодимовый лазер: две длины волны, две системы охлаждения, рабочее пятно 24 мм</li>
+        <li>Курс — 6–10 сеансов с интервалом 1,5–2 месяца; количество процедур специалист подбирает персонально</li>
+        <li>Ход сеанса: на кожу наносится гель, участок обрабатывается манипулой; при низком болевом пороге применяется анестезирующий гель</li>
+        <li>Зоны лица и тела для женщин и мужчин: бикини, подмышечные впадины, голени, ноги, руки, живот, спина, коррекция формы бороды</li>
+        <li>После сеанса — 5 дней без солнца, сауны, бани, солярия и массажа</li>
+        <li>Процедуры проводят Кравцова Светлана — специалист эстетической медицины и лазерной эпиляции, и Мутагирова Эсмира — врач-косметолог, специалист по лазерной эпиляции</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">лазерная эпиляция Москва</span>
+        <span class="chip-seo">лазерная эпиляция Candela</span>
+        <span class="chip-seo">Candela GentleMax Pro Москва</span>
+        <span class="chip-seo">александритовый лазер Москва</span>
+        <span class="chip-seo">лазерная эпиляция м. Сухаревская</span>
+        <span class="chip-seo">лазерная эпиляция бикини Москва</span>
+        <span class="chip-seo">лазерная эпиляция ног</span>
+        <span class="chip-seo">лазерная эпиляция для мужчин</span>
+        <span class="chip-seo">лазерная эпиляция лица</span>
+        <span class="chip-seo">курс лазерной эпиляции</span>
+      </div>
+      <p class="cta">CTA: Записывайтесь на лазерную эпиляцию в клинику «Бьюти Мед Сити».</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <ul class="tezis">
+          <li>Тезис на обложке: «Лазер Candela»</li>
+          <li>Визуал: манипула лазера в работе на голени или руке, специалист в перчатках</li>
+          <li>Без фото «до/после», без зоны бикини в кадре, без белья и откровенных поз</li>
+          <li>Тезис — #333333 на фоне #EBDDD2, акцентная линия #5C9B81; текст не более 20% площади</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Аппаратная косметология лица в Москве: SMAS-лифтинг HIFU и микроигольчатый RF-лифтинг</h3>
+        <span class="tag">Экспертная</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Каждый аппарат клиники мы выбираем сами — так сформирован парк оборудования, которым мы гордимся.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>SMAS-лифтинг HIFU: фокусированный ультразвук работает на глубине до 4,5 мм, в мышечно-апоневротическом слое лица (SMAS)</li>
+        <li>Зоны HIFU: линия бровей, нависшее веко, овал лица, зона под подбородком, декольте; однократная процедура без периода восстановления</li>
+        <li>Фракционный микроигольчатый RF: 64 иглы с полимерным покрытием, разная глубина проникновения у одной насадки</li>
+        <li>Задачи RF-лифтинга: плотность и упругость кожи, морщины лица, шеи и декольте, рельеф и тон кожи</li>
+        <li>Процедуры проводит Мутагирова Эсмира — врач-косметолог, специалист по аппаратной косметологии лица и тела</li>
+        <li>Процедуры подбираются на консультации врача-косметолога</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">косметология Москва</span>
+        <span class="chip-seo">аппаратная косметология лица Москва</span>
+        <span class="chip-seo">SMAS-лифтинг Москва</span>
+        <span class="chip-seo">HIFU лифтинг лица</span>
+        <span class="chip-seo">микроигольчатый RF-лифтинг Москва</span>
+        <span class="chip-seo">anti-age косметология Москва</span>
+        <span class="chip-seo">омоложение лица Москва</span>
+        <span class="chip-seo">косметолог м. Сухаревская</span>
+        <span class="chip-seo">клиника косметологии проспект Мира</span>
+      </div>
+      <p class="cta">CTA: Записывайтесь на консультацию врача-косметолога клиники «Бьюти Мед Сити».</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <ul class="tezis">
+          <li>Тезис на обложке: «Аппаратный лифтинг лица»</li>
+          <li>Визуал: врач в перчатках работает манипулой RF или HIFU у лица пациентки, экран аппарата в кадре</li>
+          <li>Без фото «до/после», без следов процедуры на коже</li>
+          <li>Подпись-плашка #5C9B81 со скруглением и белым текстом (как карточки процедур на сайте); текст не более 20% площади</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Массаж в Москве у м. Сухаревская: ручной массаж тела и лица и аппаратные методики</h3>
+        <span class="tag">Продающая</span>
+      </div>
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Массаж в нашей клинике — это руки специалиста и аппараты: ручной массаж тела и лица мы проводим наряду с Эндосферой, LPG и ICOONE.</p>
+      <div class="block-label">Тезисы</div>
+      <ul class="tezis">
+        <li>Общий ручной массаж: 30 мин — 1 500 ₽, 45 мин — 2 200 ₽, 1 час — 2 800 ₽, 1,5 часа — 3 500 ₽</li>
+        <li>Виды массажа тела: лимфодренажный, медовый, антицеллюлитный, спортивный</li>
+        <li>Массаж лица: ручной, лифтинг, скульптурный, буккальный, миофасциальный, вакуумный, аппаратный, массаж лица от отёков</li>
+        <li>Endospheres Therapy: компрессионная микровибрация, манипула с 50 вращающимися силиконовыми сферами</li>
+        <li>Аппаратный массаж: LPG Cellu M6 Alliance, ICOONE LASER по телу, прессотерапия</li>
+        <li>Специалисты по массажу: Рачинская Ирина — врач-физиотерапевт, ведущий специалист аппаратной косметологии по коррекции фигуры; Калугина Юлия — врач-косметолог высшей категории; Кравцова Светлана — специалист эстетической медицины</li>
+      </ul>
+      <div class="block-label">SEO-ключи</div>
+      <div class="chips">
+        <span class="chip-seo">массаж Москва</span>
+        <span class="chip-seo">массажный салон Москва</span>
+        <span class="chip-seo">массаж м. Сухаревская</span>
+        <span class="chip-seo">массаж проспект Мира</span>
+        <span class="chip-seo">ручной массаж тела Москва</span>
+        <span class="chip-seo">массаж лица Москва</span>
+        <span class="chip-seo">лимфодренажный массаж Москва</span>
+        <span class="chip-seo">антицеллюлитный массаж Москва</span>
+        <span class="chip-seo">эндосфера Москва</span>
+        <span class="chip-seo">LPG массаж Москва</span>
+      </div>
+      <p class="cta">CTA: Записывайтесь на массаж в клинику «Бьюти Мед Сити» онлайн или через администратора.</p>
+      <div class="cover-block">
+        <div class="block-label">ТЗ на обложку</div>
+        <ul class="tezis">
+          <li>Тезис на обложке: «Массаж тела и лица»</li>
+          <li>Визуал: руки специалиста, спина пациентки под простынёй, или манипула Эндосферы крупным планом</li>
+          <li>Без белья и откровенных поз в кадре</li>
+          <li>Тезис — белый на плашке #3E5E4E, фон #EBDDD2; текст не более 20% площади</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">Сторис · карточка на Яндекс Картах и 2ГИС</div>
+    <h2 class="section-title">4 темы для сторис</h2>
+    <p class="section-sub">Один слайд — один факт о клинике, в формате презентации. Сторис публикуются в карточке «Бьюти Мед Сити» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="card story-rules">
+      <div class="block-label" style="margin-top:0;">Оформление сторис (по фирменной палитре)</div>
+      <ul class="tezis">
+        <li>Фон — #EBDDD2; тёмный вариант — #3E5E4E с белым текстом</li>
+        <li>Заголовки — #3E5E4E, основной текст — #333333</li>
+        <li>Плашки и подписи — #5C9B81 с белым текстом, скругление как у кнопок сайта</li>
+        <li>Без фото «до/после», без белья и откровенных поз, без телефона на изображении</li>
+      </ul>
+    </div>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <h3>Клиника у м. Сухаревская</h3>
+        <ul class="tezis">
+          <li>1 минута от м. Сухаревская</li>
+          <li>Бесплатная парковка</li>
+          <li>Проспект Мира, 3, корп. 1, 2 этаж</li>
+          <li>Ежедневно 8:00–23:00</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">клиника у м. Сухаревская</span><span class="chip-seo">косметология проспект Мира</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото вывески «Бьюти Мед Сити» в холле клиники; четыре факта столбиком на плашках #5C9B81 с белым текстом; заголовок #3E5E4E на фоне #EBDDD2.</div>
+      </div>
+      <div class="story-card">
+        <h3>Специалисты клиники</h3>
+        <ul class="tezis">
+          <li>Врачи-косметологи высшей категории: Пайкова Елена, Калугина Юлия</li>
+          <li>Врачи-физиотерапевты: Рачинская Ирина, Гречина Альфира</li>
+          <li>Ведущие электрологи: Быкова Маргарита, Бегченкова Татьяна</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">врач-косметолог Москва</span><span class="chip-seo">электролог Москва</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото специалиста в белом халате в кабинете; должности — плашки #5C9B81 с белым текстом, имена #333333 на фоне #EBDDD2.</div>
+      </div>
+      <div class="story-card">
+        <h3>Оборудование клиники</h3>
+        <ul class="tezis">
+          <li>Лазер Candela GentleMax Pro</li>
+          <li>Электроэпилятор Depilplus 13 MHz</li>
+          <li>Endospheres Therapy, LPG Cellu M6 Alliance, VelaShape</li>
+          <li>HIFU, фракционный микроигольчатый RF</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">аппаратная косметология Москва</span><span class="chip-seo">лазер Candela Москва</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> аппарат крупным планом в кабинете; названия #333333 на фоне #EBDDD2, тонкие разделители #5C9B81, заголовок #3E5E4E.</div>
+      </div>
+      <div class="story-card">
+        <h3>Карта привилегий</h3>
+        <ul class="tezis">
+          <li>+500 бонусов в день рождения</li>
+          <li>+500 бонусов за рекомендацию</li>
+          <li>+300 бонусов за отзыв о визите</li>
+          <li>Скидка 10% при записи и визите в день звонка</li>
+          <li>Подарочный сертификат на любую сумму</li>
+        </ul>
+        <div class="chips"><span class="chip-seo">бонусы косметология Москва</span><span class="chip-seo">подарочный сертификат косметология</span></div>
+        <div class="spacer"></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #3E5E4E, текст белый; цифры бонусов крупно #EBDDD2, скидка 10% — белым на плашке #5C9B81.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">Дорожная карта публикаций</h2>
+    <p class="section-sub">Порядок выхода материалов в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <details class="stage" open>
+      <summary>Этап 1 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item"><span class="road-dot"></span><div class="road-label">Новость 1</div><div class="road-text">Электроэпиляция у м. Сухаревская: почему курс удобно начинать осенью — Depilplus 13 MHz, режим бленд, иглы Ballet, бесплатная консультация.</div></div>
+        <div class="road-item is-story"><span class="road-dot"></span><div class="road-label">История 1</div><div class="road-text">Клиника у м. Сухаревская: 1 минута от метро, бесплатная парковка, ежедневно 8:00–23:00.</div></div>
+        <div class="road-item"><span class="road-dot"></span><div class="road-label">Новость 2</div><div class="road-text">Лазерная эпиляция Candela GentleMax Pro: курс 6–10 сеансов, зоны для женщин и мужчин, рекомендации после сеанса.</div></div>
+        <div class="road-item is-story"><span class="road-dot"></span><div class="road-label">История 2</div><div class="road-text">Специалисты клиники: врачи-косметологи высшей категории, врачи-физиотерапевты, ведущие электрологи.</div></div>
+        <div class="road-item"><span class="road-dot"></span><div class="road-label">Новость 3</div><div class="road-text">Аппаратная косметология лица: SMAS-лифтинг HIFU и фракционный микроигольчатый RF-лифтинг.</div></div>
+        <div class="road-item is-story"><span class="road-dot"></span><div class="road-label">История 3</div><div class="road-text">Оборудование клиники: Candela, Depilplus, Endospheres, LPG, VelaShape, HIFU, микроигольчатый RF.</div></div>
+        <div class="road-item"><span class="road-dot"></span><div class="road-label">Новость 4</div><div class="road-text">Массаж у м. Сухаревская: ручной массаж тела и лица, Эндосфера, LPG, ICOONE.</div></div>
+        <div class="road-item is-story"><span class="road-dot"></span><div class="road-label">История 4</div><div class="road-text">Карта привилегий: бонусы за день рождения, рекомендацию и отзыв, подарочный сертификат.</div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+</body>
+</html>
