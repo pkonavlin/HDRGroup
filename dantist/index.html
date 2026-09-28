@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дантист ТЗ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ocean:#0E3B47;--teal:#1B6B78;--ice:#F5F8F8;--roe:#C4572B;
+  --bg:#F5F8F8;--card:#FFFFFF;--card-2:#EAF1F2;--ink:#12272D;--ink-soft:#56686D;--line:#D5E1E3;
+  --accent:#C4572B;--accent-soft:#F7E6DE;--link:#1B6B78;
+  --story-bg:#0E3B47;--story-ink:#F5F8F8;--story-soft:#A9C3C8;--story-chip:#ffffff14;--story-line:#ffffff26;
+  --display:'Bricolage Grotesque','Segoe UI',sans-serif;
+  --body:'Public Sans','Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;
+    --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+    --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;--story-bg:#12323B;--story-soft:#9DB9BE;}
+}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#081A1F;--card:#0F252B;--card-2:#143139;--ink:#E6EFF0;--ink-soft:#93AAAF;--line:#1F3D45;
+  --accent:#E27A4E;--accent-soft:#3A2218;--link:#6FC3CF;--story-bg:#12323B;--story-soft:#9DB9BE;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.58}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}ul{margin:0;padding:0;list-style:none}
+a{color:var(--link)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--ocean);color:#F5F8F8;display:flex;align-items:center;gap:16px;padding:10px 20px;overflow-x:auto;border-bottom:1px solid #00000033}
+.brand{font-family:var(--display);font-weight:800;font-size:15px;white-space:nowrap;display:flex;align-items:center;gap:8px;flex:none}
+.brand i{width:9px;height:9px;border-radius:2px;background:var(--roe);display:block}
+.topbar nav{display:flex;gap:2px;white-space:nowrap}
+.topbar nav a{color:#B9D2D6;text-decoration:none;font-size:13px;font-weight:600;padding:7px 11px;border-radius:7px}
+.topbar nav a:hover{background:#ffffff18;color:#fff}
+.topbar nav a:focus-visible{outline:2px solid #F0A27F;outline-offset:1px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px}
+section{padding-block:46px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+section:last-of-type{border-bottom:0}
+.eyebrow{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.h2{font-size:clamp(24px,4vw,30px);font-weight:700}
+.sub{color:var(--ink-soft);max-width:64ch;margin-top:8px}
+.hero h1{font-size:clamp(30px,5.4vw,46px);font-weight:800;line-height:1.06}
+.hero h1 span{color:var(--teal)}
+:root[data-theme="dark"] .hero h1 span{color:var(--link)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero h1 span{color:var(--link)}}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-family:var(--mono);font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:22px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:8px}
+.fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-weight:600;font-size:14.5px;line-height:1.4}
+.fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px;margin-top:2px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:22px}
+.sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.sw .chip{height:88px}
+.sw .lb{padding:10px 12px 12px}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
+.sw .nm{font-weight:700;font-size:13.5px;margin-top:3px}
+.sw .hx{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:22px;counter-reset:c}
+.chain li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;counter-increment:c}
+.chain li::before{content:"Шаг " counter(c);display:block;font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:4px}
+.chain b{display:block;font-size:14.5px}
+.chain span{font-size:13.5px;color:var(--ink-soft)}
+.tone-banner{margin-top:18px;background:var(--card-2);border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:4px}
+.theme{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:20px;scroll-margin-top:64px;display:flex;flex-direction:column;gap:18px}
+.th-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start}
+.num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:500}
+.th-title{font-size:20px;font-weight:700;margin-top:4px;max-width:46ch}
+.tag{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:6px;background:var(--card-2);color:var(--ink);white-space:nowrap}
+.blk .h{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:8px}
+.intro{font-size:15px;font-style:italic;border-left:3px solid var(--teal);padding-left:12px}
+.list li{position:relative;padding-left:18px;margin-top:6px;font-size:14.5px}
+.list li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;background:var(--teal);border-radius:1px}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{font-family:var(--mono);font-size:12px;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg)}
+.cta{font-weight:600;font-size:14.5px;border-left:3px solid var(--accent);padding-left:12px}
+.cover{background:var(--accent-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.cover .h{color:var(--accent);margin:0}
+.cover .ct{font-family:var(--display);font-weight:800;font-size:19px}
+.cover p{font-size:14px}
+.story{background:var(--story-bg);color:var(--story-ink);border-radius:16px;padding:22px 24px;margin-top:18px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:64px}
+.story .num{color:#F0A27F}
+.story .sh{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.15}
+.story .topic{font-size:13px;color:var(--story-soft)}
+.facts-s{display:flex;flex-wrap:wrap;gap:7px}
+.facts-s li{font-size:13px;padding:6px 11px;border-radius:999px;background:var(--story-chip);border:1px solid var(--story-line)}
+.story .kws .kw{background:transparent;border-color:var(--story-line);color:var(--story-soft)}
+.story .dz{font-size:13.5px;color:var(--story-soft);border-top:1px solid var(--story-line);padding-top:12px}
+.story .dz b{color:var(--story-ink);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:3px;border:1px solid #00000030}
+.stage{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.stage-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage-h b{font-family:var(--display);font-size:18px}
+.stage-h small{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+details.stage summary{cursor:pointer;list-style:none}
+details.stage summary::-webkit-details-marker{display:none}
+details.stage summary .stage-h::after{content:"Развернуть";margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--link)}
+details.stage[open] summary .stage-h::after{content:"Свернуть"}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--accent);color:#fff}
+.badge.done{background:var(--card-2);color:var(--ink-soft)}
+.rm{position:relative;margin-top:18px;padding-left:26px}
+.rm::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.rm li{position:relative;padding-bottom:18px}
+.rm li:last-child{padding-bottom:0}
+.rm li::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.rm li.s::before{background:var(--accent);border-color:var(--accent)}
+.rm .f{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+.rm .n{font-weight:700;font-size:15px}
+.rm .x{font-size:13.5px;color:var(--ink-soft)}
+.rm a{color:inherit;text-decoration:none}
+@media (max-width:560px){.theme,.story{padding:18px}.topbar{padding-inline:16px}.wrap{padding-inline:16px}}
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="brand"><i></i>Дантист</div>
+  <nav>
+    <a href="#company">Компания</a><a href="#brand">Брендбук</a><a href="#logic">Логика цикла</a><a href="#news">Новости</a><a href="#stories">Сторис</a><a href="#map">Карта тем</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<section class="hero" id="company">
+  <span class="eyebrow">ТЗ · Этап 2 · карточка компании на Яндекс Картах и 2ГИС</span>
+  <h1>Дантист — <span>стоматологическая клиника</span> на ул. Кочетова в Великом Новгороде</h1>
+  <p class="sub">ООО «Стоматологическая клиника «Дантист» — стоматологическая поликлиника и зуботехническая лаборатория в Западном районе с 2006 года: терапевтическая, хирургическая и ортопедическая стоматология для взрослых пациентов. Новости и сторис этапа публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="pills">
+    <span class="pill">Гигиена и профилактика</span><span class="pill">Терапия</span><span class="pill">Хирургия</span><span class="pill">Ортопедия</span><span class="pill">Имплантация</span><span class="pill">Зуботехническая лаборатория</span>
+  </div>
+  <div class="facts">
+    <div class="fact"><span class="k">Адрес и режим</span>
+      <div class="v">Великий Новгород, ул. Кочетова, 15к1, 1 этаж<small>Западный район · вход с улицы Кочетова</small></div>
+      <div class="v">Каждый день: пн–пт 8:00–20:00 · сб 9:00–15:00 · вс 10:00–15:00<small>В воскресенье — только по предварительной записи</small></div>
+    </div>
+    <div class="fact"><span class="k">О клинике</span>
+      <div class="v">Основана в 2006 году, работает более 19 лет<small>Более 250 000 приёмов, более 5 000 постоянных пациентов</small></div>
+      <div class="v">Лицензия № ЛО-53-01-000628 от 10.10.2013<small>Департамент здравоохранения Новгородской области</small></div>
+      <div class="v">Слоган «Мы сохраним вашу улыбку»</div>
+    </div>
+    <div class="fact"><span class="k">Подход к лечению</span>
+      <div class="v">Несколько вариантов плана лечения на выбор пациента</div>
+      <div class="v">Без скрытых платежей<small>В цену лечения входят анестезия, бахилы, рентген, необходимые материалы и медикаменты</small></div>
+      <div class="v">Лечение по клиническим протоколам диагностики и лечения</div>
+    </div>
+    <div class="fact"><span class="k">Направления</span>
+      <div class="v">Чтобы зубы не болели<small>Профилактический осмотр, комплексная чистка, реставрация</small></div>
+      <div class="v">Если зуб болит<small>Диагностика (приём и рентген), лечение кариеса, пульпита, периодонтита, удаление</small></div>
+      <div class="v">Если зуб разрушен<small>Имплантация, коронки, мостовидный, частичный и полный съёмный протез</small></div>
+    </div>
+    <div class="fact"><span class="k">Протезирование</span>
+      <div class="v">Коронки: штампованные, цельнометаллические, металлокерамические, из циркония</div>
+      <div class="v">Опыт изготовления виниров, безметалловой керамики и компьютерного протезирования с оксидом циркония</div>
+    </div>
+    <div class="fact"><span class="k">Команда</span>
+      <div class="v">Стоматологи-терапевты, ортопеды, хирурги, зубные врачи и ассистенты<small>Директор — Виктория Николаевна Кобликова, стоматолог-терапевт и ортопед, опыт 34 года</small></div>
+      <div class="v">Регулярное повышение квалификации, конференции и семинары</div>
+    </div>
+    <div class="fact"><span class="k">Оплата и гарантия</span>
+      <div class="v">Рассрочка, скидки для льготных категорий, услуги по некоторым программам ДМС</div>
+      <div class="v">Гарантия до 3 лет<small>Пломба — 1 год, ортопедические конструкции — 2 года</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2 class="h2">Фирменная палитра Дантист</h2>
+  <p class="sub">После анализа ресурсов компании определены фирменные цвета Дантист: бирюзовый в логотипе, кнопках записи, информационной полосе и заголовках историй, глубокий и небесно-голубой в фоне главного фото и обложки сообщества, песочный как единый дополнительный акцент, светло-серый фон блоков и почти чёрный текст.</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#68BBBD"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Бирюзовый</div><div class="hx">#68BBBD</div></div></div>
+    <div class="sw"><div class="chip" style="background:#4C95B7"></div><div class="lb"><div class="role">Основной</div><div class="nm">Глубокий голубой</div><div class="hx">#4C95B7</div></div></div>
+    <div class="sw"><div class="chip" style="background:#91D0E8"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Небесно-голубой</div><div class="hx">#91D0E8</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C7A87C"></div><div class="lb"><div class="role">Дополнительный</div><div class="nm">Песочный</div><div class="hx">#C7A87C</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F0F0F0;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Светло-серый</div><div class="hx">#F0F0F0</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Белый</div><div class="hx">#FFFFFF</div></div></div>
+    <div class="sw"><div class="chip" style="background:#121212"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Почти чёрный</div><div class="hx">#121212</div></div></div>
+  </div>
+</section>
+
+<section id="logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2 class="h2">От «что есть в клинике» — к «как клиника ведёт пациента»</h2>
+  <p class="sub">Этап 1 рассказал о клинике: полный спектр услуг, профилактика, технологии, своя зуботехническая лаборатория и команда. Этап 2 раскрывает то, чего в карточке компании ещё не было: как составляется план лечения и из чего складывается его цена, а после лаборатории — какие конструкции в ней изготавливают и из каких материалов.</p>
+  <ul class="chain">
+    <li><b>План лечения</b><span>Несколько вариантов и цена без скрытых платежей</span></li>
+    <li><b>Что входит в стоимость</b><span>Анестезия, рентген, материалы, медикаменты</span></li>
+    <li><b>Коронки и протезы</b><span>Что изготавливает лаборатория клиники</span></li>
+    <li><b>Коронки: материалы</b><span>Четыре вида коронок</span></li>
+  </ul>
+</section>
+
+<section id="news">
+  <span class="eyebrow">Новости · текст до 3 000 знаков</span>
+  <h2 class="h2">2 темы с обложкой</h2>
+  <p class="sub">Высокая SEO-плотность без повтора одного ключа подряд. По правилам модерации Яндекс Карт — без цен, телефонов и e-mail в тексте, без превосходных степеней, без слов «безопасно», «безболезненно», «эффективно». Каждый текст заканчивается строкой «Имеются противопоказания. Необходима консультация специалиста».</p>
+  <div class="tone-banner"><b>Тон текстов</b>Текст открывается тёплым вступлением от лица клиники («мы») и дальше раскрывает одну историю темы, а не перечень всех услуг. Факты — только из материалов компании, без додуманных деталей. SEO-ключи вплетаются в предложения, не списком.</div>
+
+  <article class="theme" id="news-1">
+    <div class="th-head">
+      <div><div class="num">Новость 1</div><h3 class="th-title">План лечения зубов в клинике «Дантист»: несколько вариантов на выбор и цена без скрытых платежей</h3></div>
+      <span class="tag">Доверительный</span>
+    </div>
+    <div class="blk"><span class="h">Вступление (тон и голос)</span>
+      <p class="intro">Мы составляем для пациента несколько вариантов плана лечения, чтобы он выбрал самый оптимальный и удобный для себя. Так пациент заранее знает, что будет делать врач, что делать ему самому и сколько будет стоить всё лечение.</p>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Лечение в «Дантист» начинается с диагностики — приёма и рентгена; по её итогам врач составляет план</li>
+      <li>Что даёт план: пациент полностью осведомлён о проблемах, о том, что будет делать доктор, что делать ему самому и сколько будет стоить всё лечение</li>
+      <li>Стоматологи предлагают несколько вариантов плана лечения — пациент выбирает оптимальный и удобный для себя</li>
+      <li>Лечение проводится в соответствии с клиническими протоколами диагностики и лечения</li>
+      <li>Без скрытых платежей: цена сразу включает анестезию, бахилы, рентген, необходимые материалы и медикаменты</li>
+      <li>Итог: пациент понимает весь путь лечения до его начала</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">план лечения зубов</span><span class="kw">стоматология Великий Новгород</span><span class="kw">стоматологическая клиника Великий Новгород</span><span class="kw">стоимость лечения зубов</span><span class="kw">диагностика зубов</span><span class="kw">рентген зуба</span><span class="kw">консультация стоматолога</span><span class="kw">стоматология на Кочетова</span><span class="kw">стоматология Западный район</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на приём — составим план лечения</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Понятный план</div>
+      <p>Фон <span class="dot" style="background:#4C95B7"></span>#4C95B7 с плавным переходом в <span class="dot" style="background:#91D0E8"></span>#91D0E8, как на главном фото сайта. Слева — фото врача клиники с пациентом у снимка. Тезис белым, крупно, справа; под ним плашка <span class="dot" style="background:#68BBBD"></span>#68BBBD со скруглёнными краями, как кнопки сайта. Текст — не более 20% площади.</p>
+    </div>
+  </article>
+
+  <article class="theme" id="news-2">
+    <div class="th-head">
+      <div><div class="num">Новость 2</div><h3 class="th-title">Коронки и протезы в «Дантист»: какие конструкции изготавливает зуботехническая лаборатория клиники</h3></div>
+      <span class="tag">Экспертный</span>
+    </div>
+    <div class="blk"><span class="h">Вступление (тон и голос)</span>
+      <p class="intro">Если зуб разрушен, мы помогаем его восстановить. За годы работы у нас накоплен опыт изготовления виниров, безметалловой керамики и компьютерного протезирования с оксидом циркония.</p>
+    </div>
+    <div class="blk"><span class="h">Тезисы</span><ul class="list">
+      <li>Продолжение темы собственной зуботехнической лаборатории из этапа 1 — теперь о том, какие конструкции в ней изготавливают</li>
+      <li>Коронки: штампованные, цельнометаллические, металлокерамические, из циркония — чем различаются по материалу</li>
+      <li>Цирконий и безметалловая керамика — компьютерное протезирование с оксидом циркония</li>
+      <li>Мостовидный протез — когда нужно восстановить несколько зубов подряд</li>
+      <li>Частичный и полный съёмный протез</li>
+      <li>Протезированием занимаются стоматологи-ортопеды клиники; вид конструкции врач подбирает после осмотра и включает в план лечения</li>
+    </ul></div>
+    <div class="blk"><span class="h">SEO</span><div class="kws">
+      <span class="kw">протезирование зубов Великий Новгород</span><span class="kw">коронки на зубы</span><span class="kw">металлокерамическая коронка</span><span class="kw">циркониевая коронка</span><span class="kw">безметалловая керамика</span><span class="kw">мостовидный протез</span><span class="kw">съёмный протез</span><span class="kw">стоматолог-ортопед Великий Новгород</span><span class="kw">зуботехническая лаборатория Великий Новгород</span>
+    </div></div>
+    <p class="cta">CTA: Записывайтесь на консультацию стоматолога-ортопеда</p>
+    <div class="cover"><span class="h">ТЗ на обложку</span>
+      <div class="ct">Коронки и протезы</div>
+      <p>Фон <span class="dot" style="background:#F0F0F0"></span>#F0F0F0. По центру — фото коронок в руках зубного техника. Тезис <span class="dot" style="background:#121212"></span>#121212 на белой плашке, под ним тонкая линия <span class="dot" style="background:#68BBBD"></span>#68BBBD. Небольшой акцент — круглая иконка зуба цветом <span class="dot" style="background:#C7A87C"></span>#C7A87C. Текст — не более 20% площади.</p>
+    </div>
+  </article>
+</section>
+
+<section id="stories">
+  <span class="eyebrow">Сторис · формат презентации</span>
+  <h2 class="h2">Один слайд — один факт</h2>
+  <p class="sub">Каждая история — один слайд: заголовок и 3–4 сухих факта. Заголовок слайда — обязательное название истории. Внизу слайда мелкой строкой: «Имеются противопоказания. Необходима консультация специалиста». Стиль — как у историй, уже опубликованных в карточке: светлый фон, крупный заголовок заглавными буквами цветом #68BBBD, пункты в светло-сером блоке со скруглёнными углами, итоговая строка внизу тёмным.</p>
+
+  <article class="story" id="story-1">
+    <div class="num">История 1</div>
+    <div class="sh">Что уже входит в стоимость</div>
+    <div class="topic">Цена без скрытых платежей</div>
+    <ul class="facts-s"><li>Анестезия</li><li>Рентген</li><li>Необходимые материалы и медикаменты</li><li>Бахилы</li></ul>
+    <div class="kws"><span class="kw">стоимость лечения зубов</span><span class="kw">стоматология Великий Новгород</span><span class="kw">лечение зубов</span></div>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF. Заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD, подзаголовок «Без скрытых платежей» — <span class="dot" style="background:#121212"></span>#121212. Четыре пункта — в блоке <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 со скруглёнными углами и обводкой <span class="dot" style="background:#68BBBD"></span>#68BBBD, текст пунктов #68BBBD. Справа у блока — объёмная модель зуба, маркеры пунктов <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными #121212: «Цена лечения — без доплат».</div>
+  </article>
+
+  <article class="story" id="story-2">
+    <div class="num">История 2</div>
+    <div class="sh">Коронки: четыре материала</div>
+    <div class="topic">Из чего делают коронки в «Дантист»</div>
+    <ul class="facts-s"><li>Штампованная</li><li>Цельнометаллическая</li><li>Металлокерамика</li><li>Цирконий</li></ul>
+    <div class="kws"><span class="kw">коронки на зубы Великий Новгород</span><span class="kw">протезирование зубов</span><span class="kw">циркониевая коронка</span></div>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF, заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD. Четыре материала — сеткой 2×2 в плашках <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 с обводкой #68BBBD, у каждой объёмная модель коронки; плашка «Цирконий» с акцентной обводкой <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными <span class="dot" style="background:#121212"></span>#121212: «Материал подбирает стоматолог-ортопед».</div>
+  </article>
+</section>
+
+<section id="map">
+  <span class="eyebrow">Карта тем</span>
+  <h2 class="h2">Дорожная карта контента Дантист</h2>
+
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 1</b><span class="badge done">опубликован</span><small>4 новости · 4 истории</small></div></summary>
+    <ul class="rm">
+      <li><div class="f">Новость 1</div><div class="n">Современная стоматология для всей семьи</div><div class="x">Полный спектр услуг для взрослых и детей, все этапы в одном месте</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Когда пора записаться к стоматологу</div><div class="x">Признаки, при которых не стоит откладывать визит</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Почему важно регулярно посещать стоматолога</div><div class="x">Профилактика, осмотры, профессиональная гигиена</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Полный спектр стоматологических услуг в одном месте</div><div class="x">Диагностика, лечение, удаление, протезирование</div></li>
+      <li><div class="f">Новость 3</div><div class="n">Технологии, которые делают лечение комфортнее</div><div class="x">Оборудование, цифровая диагностика, материалы</div></li>
+      <li class="s"><div class="f">История 3</div><div class="n">Здоровая улыбка начинается с профилактики</div><div class="x">Регулярные осмотры и гигиена</div></li>
+      <li><div class="f">Новость 4</div><div class="n">Собственная зуботехническая лаборатория — преимущество для пациентов</div><div class="x">Точность, сроки, работа врача и техника</div></li>
+      <li class="s"><div class="f">История 4</div><div class="n">Команда специалистов для комплексного лечения</div><div class="x">Стоматологи разных направлений и зубные техники</div></li>
+    </ul>
+  </details>
+
+  <div class="stage">
+    <div class="stage-h"><b>Этап 2</b><span class="badge">актуальный</span><small>2 новости · 2 истории</small></div>
+    <ul class="rm">
+      <li><a href="#news-1"><div class="f">Новость 1</div><div class="n">План лечения зубов: несколько вариантов и цена без скрытых платежей</div><div class="x">Выбор плана, что входит в цену</div></a></li>
+      <li class="s"><a href="#story-1"><div class="f">История 1</div><div class="n">Что уже входит в стоимость</div><div class="x">Анестезия, рентген, материалы, медикаменты, бахилы</div></a></li>
+      <li><a href="#news-2"><div class="f">Новость 2</div><div class="n">Коронки и протезы из лаборатории клиники</div><div class="x">Виды коронок, цирконий, мостовидные и съёмные протезы</div></a></li>
+      <li class="s"><a href="#story-2"><div class="f">История 2</div><div class="n">Коронки: четыре материала</div><div class="x">Штампованная, цельнометаллическая, металлокерамика, цирконий</div></a></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+</body>
+</html>
