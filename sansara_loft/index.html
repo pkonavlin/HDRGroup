@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ТЗ — Sansara Loft</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    color-scheme:light;
+    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#E39B7B;
+    --ink:#10262B; --ink-soft:#4C6067; --line:#D7E2E1; --card:#FFFFFF; --bg:var(--ice);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+      --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ocean:#BFE3EC; --teal:#7FD1DD; --ice:#0B1A1E; --ink:#EAF3F2; --ink-soft:#9FB6BA;
+    --line:#233A3F; --card:#0F2226; --bg:#0B1A1E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',sans-serif;margin:0;color:var(--ink);text-wrap:balance;}
+  a{color:var(--teal);}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--roe);outline-offset:2px;}
+
+  header.topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+    display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap;
+    padding:12px 28px;
+    background:color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:var(--ocean);white-space:nowrap;margin-right:auto;}
+  header.topbar nav{display:flex;gap:2px;flex-wrap:wrap;}
+  header.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;padding:8px 11px;border-radius:8px;}
+  header.topbar nav a:hover{background:var(--line);color:var(--ocean);}
+
+  main{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);scroll-margin-top:120px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:700;margin-bottom:8px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin:0 0 28px;max-width:660px;}
+
+  .hero{padding-top:44px;}
+  .hero h1{font-size:clamp(30px,5.5vw,44px);font-weight:800;line-height:1.1;margin-bottom:14px;}
+  .hero p.lead{color:var(--ink-soft);font-size:16px;max-width:640px;margin:0 0 32px;}
+  .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .fact{background:var(--card);padding:18px 20px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .fact .v{font-size:15px;font-weight:600;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+  .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);}
+  .swatch .chip{height:88px;border-bottom:1px solid var(--line);}
+  .swatch .info{padding:12px 14px;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:26px 28px;margin-bottom:20px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .card-head h3{font-size:20px;font-weight:700;flex:1 1 360px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ocean);font-weight:600;white-space:nowrap;}
+  .block-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--roe);margin:16px 0 6px;font-weight:600;}
+  ul.tezis{margin:0;padding-left:18px;}
+  ul.tezis li{margin-bottom:6px;font-size:14.5px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip-seo{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--ice);border:1px solid var(--line);color:var(--teal);padding:5px 10px;border-radius:8px;}
+  .cta{font-size:14.5px;font-style:italic;color:var(--ink-soft);margin-top:14px;}
+  .voice{font-style:italic;font-size:14.5px;color:var(--ink);background:var(--ice);border-left:3px solid var(--roe-soft);padding:10px 14px;border-radius:8px;margin:0;}
+  .tone-banner{border:1px dashed var(--roe-soft);border-radius:12px;padding:14px 18px;margin-bottom:24px;background:color-mix(in srgb, var(--roe) 6%, transparent);font-size:14px;color:var(--ink-soft);}
+  .tone-banner b{color:var(--ink);}
+  .cover-block{margin-top:16px;padding:14px 16px;border-radius:10px;background:color-mix(in srgb, var(--roe) 8%, transparent);border:1px dashed var(--roe-soft);font-size:14.5px;}
+  .cover-block .block-label{margin-top:0;}
+  .done-note{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--card);margin-bottom:22px;}
+
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .story-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:22px;display:flex;flex-direction:column;}
+  .story-card h3{font-size:17px;margin-bottom:10px;}
+  .story-card .chips{margin-top:12px;}
+  .story-card .design-note{margin-top:auto;padding:12px 14px;border-radius:10px;background:var(--ice);font-size:13.5px;color:var(--ink-soft);border:1px solid var(--line);}
+  .story-card .design-note b{color:var(--ink);}
+  .story-card .spacer{height:14px;}
+
+  details.stage{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--card);margin-bottom:14px;}
+  details.stage summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.stage summary::-webkit-details-marker{display:none;}
+  details.stage summary::before{content:'▸';color:var(--roe);transition:transform .15s;}
+  details.stage[open] summary::before{transform:rotate(90deg);}
+  .badge-current{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;}
+  .roadmap{position:relative;margin-top:16px;padding-left:26px;}
+  .roadmap::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .road-item{position:relative;padding-bottom:18px;}
+  .road-item:last-child{padding-bottom:0;}
+  .road-dot{position:absolute;left:-26px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--roe);}
+  .road-item.is-story .road-dot{border-color:var(--teal);}
+  .road-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--roe);margin-bottom:4px;}
+  .road-item.is-story .road-label{color:var(--teal);}
+  .road-text{font-size:14.5px;color:var(--ink-soft);max-width:660px;}
+
+  @media (prefers-reduced-motion: reduce){details.stage summary::before{transition:none;}}
+  @media(max-width:560px){
+    header.topbar{padding:10px 16px;}
+    section{padding:40px 0;scroll-margin-top:170px;}
+    .card{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Sansara Loft</div>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="company">
+    <div class="eyebrow">ТЗ на контент · Яндекс Карты и 2ГИС</div>
+    <h1>Sansara Loft — лофты для праздников и встреч у метро Преображенская площадь</h1>
+    <p class="lead">Антикафе, караоке-клуб и кальян-бар в Москве: 7 отдельных лофтов площадью от 30 до 70 м² для дней рождения, корпоративов, вечеринок и встреч с друзьями. Караоке, проекторы, PlayStation 5 и настольные игры включены в аренду, пробкового сбора нет, лофты работают 24/7. Все материалы публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Город</div><div class="v">Москва</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Стромынка, 25 стр. 1</div></div>
+      <div class="fact"><div class="k">Метро</div><div class="v">Преображенская площадь, 5 минут пешком</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно, 24/7</div></div>
+      <div class="fact"><div class="k">Лофты</div><div class="v">7 залов, 30–70 м²: BREEZE, GRAND, HAPPY, GRAY, LOFT, GLAM, MIRAGE</div></div>
+      <div class="fact"><div class="k">Стоимость</div><div class="v">От 3 000 ₽ в час</div></div>
+      <div class="fact"><div class="k">Включено в аренду</div><div class="v">Караоке, проекторы, PlayStation 5, настольные игры</div></div>
+      <div class="fact"><div class="k">Условия</div><div class="v">Без пробкового сбора, свои угощения и напитки</div></div>
+      <div class="fact"><div class="k">Рейтинг Я.Карт</div><div class="v">5,0 · 181 оценка · 169 отзывов</div></div>
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Антикафе, караоке-клуб, кальян-бар</div></div>
+      <div class="fact"><div class="k">Форматы</div><div class="v">День рождения, корпоратив, вечеринка, девичник, мальчишник, выпускной, тимбилдинг</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2 class="section-title">Фирменная палитра Sansara Loft</h2>
+    <p class="section-sub">После анализа фирменных материалов компании (сайт, опубликованные истории) определена рабочая палитра бренда: глубокий ночной синий сайта и светлые истории с лавандовыми и медно-персиковыми плашками.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#060826;"></div><div class="info"><div class="role">Основной</div><div class="hex">#060826</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#171A43;"></div><div class="info"><div class="role">Второстепенный</div><div class="hex">#171A43</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#C8A6E0;"></div><div class="info"><div class="role">Акцентный лавандовый</div><div class="hex">#C8A6E0</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#D49464;"></div><div class="info"><div class="role">Акцентный медный</div><div class="hex">#D49464</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#E6BFA4;"></div><div class="info"><div class="role">Второстепенный персиковый</div><div class="hex">#E6BFA4</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FCF7FF;"></div><div class="info"><div class="role">Фоновый</div><div class="hex">#FCF7FF</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;"></div><div class="info"><div class="role">Текстовый на тёмном</div><div class="hex">#FFFFFF</div></div></div>
+    </div>
+  </section>
+
+
+    <section id="logic">
+      <div class="eyebrow">Логика цикла</div>
+      <h2 class="section-title">Что внутри → на каких условиях</h2>
+      <p class="section-sub">Первый этап рассказал, какие события можно провести в Sansara Loft. Второй этап показывает, где и на каких условиях: сначала сами 7 лофтов и то, что уже входит в аренду, затем правила, которые отличают площадку, — без пробкового сбора, со своими угощениями, круглосуточно. Материалы публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+    </section>
+
+    <section id="news">
+      <div class="eyebrow">Новости · карточка на Яндекс Картах и 2ГИС</div>
+      <h2 class="section-title">2 темы для новостей</h2>
+      <p class="section-sub">Каждая новость раскрывает одно преимущество площадки и сопровождается обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+
+      <div class="tone-banner"><b>Тон текстов:</b> факты только с официальных источников компании (сайт, карточка), без домыслов и приукрашиваний. Пишем от лица команды Sansara Loft, на «вы», тепло и легко. SEO-ключи вплетаются в живые фразы, без повторов одного ключа подряд. В тексте нет телефона и ссылок, превосходных степеней, капса, упоминания конкурентов; минимум восклицательных знаков и эмодзи. Кальян и алкоголь в текстах не упоминаются — эти тематики запрещены к продвижению на Яндекс Картах.</div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>7 лофтов от 30 до 70 м² у метро Преображенская площадь: караоке, проектор и PlayStation 5 уже входят в аренду</h3>
+          <span class="tag">Информационная</span>
+        </div>
+        <div class="block-label">Вступление (тон и голос)</div>
+        <p class="voice">В Sansara Loft семь лофтов от 30 до 70 м², и в аренду каждого уже входят караоке, проекторы, PlayStation 5 и настольные игры.</p>
+        <div class="block-label">Тезисы</div>
+        <ul class="tezis">
+          <li>7 отдельных лофтов площадью от 30 до 70 м²: BREEZE, GRAND, HAPPY, GRAY, LOFT, GLAM и MIRAGE</li>
+          <li>Караоке, проекторы, PlayStation 5 и настольные игры — всё включено в аренду</li>
+          <li>Аренда лофта — от 3 000 ₽ в час</li>
+          <li>Лофты на ул. Стромынка, 25 стр. 1, 5 минут пешком от метро Преображенская площадь</li>
+          <li>Работаем круглосуточно, 24/7</li>
+        </ul>
+        <div class="block-label">SEO-ключи</div>
+        <div class="chips">
+          <span class="chip-seo">аренда лофта Москва</span>
+          <span class="chip-seo">лофт для мероприятий Москва</span>
+          <span class="chip-seo">караоке-клуб Москва</span>
+          <span class="chip-seo">антикафе Преображенская площадь</span>
+          <span class="chip-seo">лофт с караоке</span>
+          <span class="chip-seo">лофт с PlayStation 5</span>
+          <span class="chip-seo">аренда зала на Стромынке</span>
+          <span class="chip-seo">снять лофт на день рождения Москва</span>
+        </div>
+        <div class="cta">CTA: выбирайте лофт и бронируйте через карточку Sansara Loft на Яндекс Картах</div>
+        <div class="cover-block">
+          <div class="block-label">ТЗ на обложку</div>
+          <div>Тезис: «7 лофтов». Фото одного из залов (сервированный стол, мягкие кресла, фирменная роспись стены). Затемнение фото к низу в основной синий #060826, тезис белым #FFFFFF, под ним тонкая линия-подчёркивание лавандовым #C8A6E0. Текст не больше 20% площади, без контактов на изображении.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Лофт в Москве без пробкового сбора: приносите свои угощения и празднуйте 24/7</h3>
+          <span class="tag">Продающая</span>
+        </div>
+        <div class="block-label">Вступление (тон и голос)</div>
+        <p class="voice">В Sansara Loft нет пробкового сбора: вы приносите свои угощения и напитки, а шуметь у нас можно 24/7.</p>
+        <div class="block-label">Тезисы</div>
+        <ul class="tezis">
+          <li>Пробкового сбора нет — гости приносят свои любимые угощения и напитки</li>
+          <li>Лофты работают круглосуточно: шуметь можно 24/7</li>
+          <li>Караоке, проекторы, PlayStation 5 и настольные игры уже включены в аренду</li>
+          <li>Подходит для дня рождения, корпоратива, девичника, мальчишника, выпускного и вечеринки</li>
+          <li>5 минут пешком от метро Преображенская площадь</li>
+        </ul>
+        <div class="block-label">SEO-ключи</div>
+        <div class="chips">
+          <span class="chip-seo">лофт без пробкового сбора Москва</span>
+          <span class="chip-seo">аренда лофта со своей едой</span>
+          <span class="chip-seo">лофт 24/7 Москва</span>
+          <span class="chip-seo">круглосуточный лофт</span>
+          <span class="chip-seo">где отметить день рождения в Москве</span>
+          <span class="chip-seo">лофт для вечеринки Москва</span>
+          <span class="chip-seo">антикафе Москва круглосуточно</span>
+        </div>
+        <div class="cta">CTA: бронируйте лофт для праздника через карточку Sansara Loft на Яндекс Картах</div>
+        <div class="cover-block">
+          <div class="block-label">ТЗ на обложку</div>
+          <div>Тезис: «Можно с собой». Фото праздничного стола в лофте с угощениями, без бутылок с алкоголем в кадре. Слева медно-персиковая плашка #D49464 со смещённой лавандовой подложкой #C8A6E0, на ней тезис основным синим #060826. Текст не больше 20% площади, без контактов на изображении.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stories">
+      <div class="eyebrow">Сторис · формат презентации</div>
+      <h2 class="section-title">2 темы для сторис</h2>
+      <p class="section-sub">Один слайд — одна тема. Истории публикуются в карточке Sansara Loft на Яндекс Картах и 2ГИС.</p>
+      <div class="story-grid">
+
+        <div class="story-card">
+          <h3>7 лофтов — выберите свой</h3>
+          <ul class="tezis">
+            <li>7 лофтов от 30 до 70 м²</li>
+            <li>BREEZE · GRAND · HAPPY · GRAY · LOFT · GLAM · MIRAGE</li>
+            <li>Караоке, проектор, PS5, настолки — в аренде</li>
+            <li>От 3 000 ₽ в час</li>
+          </ul>
+          <div class="chips"><span class="chip-seo">аренда лофта Москва</span><span class="chip-seo">караоке-клуб Москва</span></div>
+          <div class="spacer"></div>
+          <div class="design-note"><b>Дизайн слайда:</b> фон #FCF7FF, крупная полупрозрачная цифра «7» в верхнем левом углу, как «5» в историях компании. Два фото разных залов в скруглённых рамках со смещёнными плашками: лавандовой #C8A6E0 и медно-персиковой #D49464. Названия залов — капсом основным синим #060826, подписи тонким начертанием, короткое подчёркивание медным #D49464.</div>
+        </div>
+
+        <div class="story-card">
+          <h3>Можно с собой</h3>
+          <ul class="tezis">
+            <li>Без пробкового сбора</li>
+            <li>Свои угощения и напитки</li>
+            <li>Шуметь можно 24/7</li>
+          </ul>
+          <div class="chips"><span class="chip-seo">лофт без пробкового сбора Москва</span></div>
+          <div class="spacer"></div>
+          <div class="design-note"><b>Дизайн слайда:</b> фон #FCF7FF, горизонтальная лавандовая полоса #C8A6E0 с фото накрытого стола, внизу справа персиковая полоса #E6BFA4. Тезисы — капсом основным синим #060826, разделены тонкими линиями. Фото в скруглённых рамках со смещёнными плашками #D49464 и #C8A6E0.</div>
+        </div>
+
+      </div>
+    </section>
+
+  <section id="map" style="border-bottom:none;">
+    <div class="eyebrow">Карта тем</div>
+    <h2 class="section-title">История этапов</h2>
+
+    <details class="stage">
+      <summary>Этап 1 · реализован</summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1</div><div class="road-text">Sansara Loft для разных форматов мероприятий — дни рождения, корпоративы, вечеринки, встречи, частные праздники</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">5 форматов мероприятий в Sansara Loft</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2</div><div class="road-text">Настольные игры и отдых — камерный досуг с друзьями</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">Настольные игры в лофте</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 3</div><div class="road-text">День рождения в Sansara Loft — праздник в своём формате</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 3</div><div class="road-text">День рождения в лофте — зал, концепция, оформление, программа</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 4</div><div class="road-text">Как выбрать лофт для мероприятия в Москве — вместимость, пространство, расположение, оформление</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 4</div><div class="road-text">Sansara Loft для вашего мероприятия</div></div>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary>Этап 2 <span class="badge-current">актуальный</span></summary>
+      <div class="roadmap">
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 1</div><div class="road-text">7 лофтов от 30 до 70 м² у метро Преображенская площадь — караоке, проекторы, PS5 и настолки в аренде, от 3 000 ₽ в час</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 1</div><div class="road-text">7 лофтов — выберите свой</div></div>
+        <div class="road-item"><div class="road-dot"></div><div class="road-label">Новость 2</div><div class="road-text">Без пробкового сбора — свои угощения и напитки, шуметь можно 24/7</div></div>
+        <div class="road-item is-story"><div class="road-dot"></div><div class="road-label">История 2</div><div class="road-text">Можно с собой</div></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+</body>
+</html>
