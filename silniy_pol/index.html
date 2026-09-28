@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сильный Пол — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ocean:#0E3B47;--teal:#1B6B78;--ice:#F5F8F8;--roe:#C4572B;--roe-soft:#F6E4DB;
+  --ink:#10262C;--ink-soft:#4A6168;--line:#D6E1E3;--card:#FFFFFF;--bg:#F5F8F8;--chip:#E8F0F1;
+  --bar:#0E3B47;--bar-ink:#F5F8F8;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Public Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--ocean:#9FD3DC;--teal:#6FB7C3;--roe:#E88A5F;--roe-soft:#3A2419;
+  --ink:#E6EFF0;--ink-soft:#A3B8BD;--line:#274048;--card:#122A31;--bg:#0B1E23;--chip:#1A363E;
+  --bar:#07161A;--bar-ink:#E6EFF0;}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--ocean:#9FD3DC;--teal:#6FB7C3;--roe:#E88A5F;--roe-soft:#3A2419;
+  --ink:#E6EFF0;--ink-soft:#A3B8BD;--line:#274048;--card:#122A31;--bg:#0B1E23;--chip:#1A363E;
+  --bar:#07161A;--bar-ink:#E6EFF0;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 15.5px/1.6 var(--body);}
+a{color:inherit}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);color:var(--bar-ink);}
+.topbar .in{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:24px;min-height:56px;overflow-x:auto;scrollbar-width:none}
+.topbar .in::-webkit-scrollbar{display:none}
+.brand{font:800 18px/1 var(--display);white-space:nowrap;letter-spacing:-.01em}
+.brand small{display:block;font:500 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-top:3px}
+.topbar nav{display:flex;gap:4px;margin-left:auto}
+.topbar nav a{font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:9px 10px;border-radius:4px;white-space:nowrap;opacity:.85}
+.topbar nav a:hover,.topbar nav a:focus-visible{background:rgba(255,255,255,.1);opacity:1;outline:none}
+main{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:56px}
+section{scroll-margin-top:72px}
+.eyebrow{font:500 11.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--roe);display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";height:1px;width:48px;background:var(--roe);opacity:.5}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;color:var(--ocean)}
+h1{font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:-.02em}
+h2{font-weight:700;font-size:clamp(24px,3.6vw,34px);line-height:1.1;letter-spacing:-.01em}
+h3{font-weight:700;font-size:20px;line-height:1.2}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.sec-head p{margin:0;color:var(--ink-soft);max-width:68ch}
+.hero{display:flex;flex-direction:column;gap:14px}
+.hero .lead{font-size:17px;color:var(--ink-soft);max-width:66ch;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font:500 11.5px/1 var(--mono);letter-spacing:.05em;padding:7px 10px;border-radius:3px;background:var(--chip);color:var(--teal)}
+.tag.roe{background:var(--roe-soft);color:var(--roe)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.fact{background:var(--card);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.fact.wide{grid-column:1/-1}
+.fact dt{font:500 11px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.fact dd{margin:0}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.sw{background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.sw .chipc{height:96px;border-bottom:1px solid var(--line)}
+.sw .i{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.sw .role{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--roe)}
+.sw .hex{font:600 15px/1.2 var(--mono);color:var(--ink)}
+.sw .use{font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+.note{font-size:14.5px;color:var(--ink-soft);margin:14px 0 0;max-width:72ch}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;counter-reset:st}
+.step{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.step .n{font:600 12px/1 var(--mono);color:var(--roe);letter-spacing:.08em}
+.step b{font-family:var(--display);font-size:17px;color:var(--ocean)}
+.step span{font-size:14px;color:var(--ink-soft)}
+.tone-banner{border:1px solid var(--line);border-left:4px solid var(--roe);background:var(--card);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.tone-banner b{font-family:var(--display);color:var(--ocean);font-size:16px}
+.tone-banner ul{margin:0;padding-left:18px;color:var(--ink-soft);font-size:14.5px}
+.cards{display:flex;flex-direction:column;gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.card-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.idx{font:600 12px/1 var(--mono);color:var(--bar-ink);background:var(--ocean);padding:7px 9px;border-radius:3px;letter-spacing:.06em}
+.blk{display:flex;flex-direction:column;gap:6px}
+.blk>.lbl{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.blk p{margin:0}
+.voice{font-size:16px;font-style:italic;color:var(--ink);border-left:2px solid var(--teal);padding-left:14px;margin:0}
+.blk ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font:500 12px/1.2 var(--mono);background:var(--chip);color:var(--ink);padding:6px 8px;border-radius:3px}
+.cta{font-weight:600;color:var(--ocean)}
+.cover{background:var(--roe-soft);border-radius:6px;padding:16px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cover .blk>.lbl{color:var(--roe)}
+.thesis{font:800 22px/1.15 var(--display);color:var(--ocean)}
+.hexs{font-family:var(--mono);font-size:13px}
+.stories{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.story{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.story h3{font-size:19px}
+.slide-note{background:var(--chip);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.slide-note .lbl{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.road{position:relative;display:flex;flex-direction:column;gap:0;margin-top:6px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px 22px}
+.stage-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.badge{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--roe);color:#fff;padding:6px 9px;border-radius:3px}
+.rm{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.rm li{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--line);position:relative}
+.rm li:first-child{border-top:0}
+.rm .k{font:600 12px/1.4 var(--mono);letter-spacing:.05em;color:var(--teal)}
+.rm li.st .k{color:var(--roe)}
+.rm .t b{display:block;font-family:var(--display);color:var(--ocean);font-size:16px;line-height:1.3}
+.rm .t span{font-size:14px;color:var(--ink-soft)}
+@media (max-width:560px){.rm li{grid-template-columns:1fr;gap:4px}.card{padding:18px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="in">
+    <div class="brand">Сильный Пол<small>ТЗ · Этап 1</small></div>
+    <nav aria-label="Разделы">
+      <a href="#company">Компания</a>
+      <a href="#brand">Брендбук</a>
+      <a href="#logic">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section id="company" class="hero">
+  <div class="eyebrow">Техническое задание · контент для карточки компании</div>
+  <h1>Сильный Пол: новости и сторис для Яндекс Карт и 2ГИС</h1>
+  <p class="lead">Материалы этапа публикуются в карточке компании «Сильный Пол» на Яндекс Картах и в 2ГИС: 4 новостных поста с обложкой и 4 сторис в формате одного слайда-презентации.</p>
+  <div class="meta-row">
+    <span class="tag">4 новости + обложка</span>
+    <span class="tag">4 сторис · 1 слайд</span>
+    <span class="tag roe">Яндекс Карты · 2ГИС</span>
+  </div>
+
+  <dl class="facts" style="margin-top:14px">
+    <div class="fact"><dt>Наименование компании</dt><dd>Сильный Пол</dd></div>
+    <div class="fact"><dt>Площадка публикации</dt><dd>Карточка компании «Сильный Пол» на Яндекс Картах и в 2ГИС</dd></div>
+    <div class="fact wide"><dt>Сфера деятельности и краткое описание работы компании</dt><dd>Продажа напольных покрытий и сопутствующих товаров, таких как подложный материал, плинтуса, моющие средства, герметики, клей, грунт. Доставка в квартиру, Укладка, Гарантия, Услуги хранения.</dd></div>
+    <div class="fact wide"><dt>Основные услуги или товары</dt><dd>Ламинат Underwood и Joss Beaumont - Товар в наличии! Самый износостойкий – 33 и 34 класс в разных толщинах, от 8 до 12мм. Максимально приближенные к натуральной доске декоры и текстуры ламината. Совместимость с тёплым полом. Влагостойкий. Класс пожарной безопасности км2. Класс эмиссии и формальдегида E0 и E0,5.</dd></div>
+    <div class="fact"><dt>Ключевые преимущества</dt><dd>Наличие товара на складах, что обеспечивает быструю доставку.</dd></div>
+    <div class="fact"><dt>Актуальные темы и поводы</dt><dd>Новые декоры ламината, акции.</dd></div>
+    <div class="fact"><dt>Адрес точки обслуживания</dt><dd>ТД "Миллион Мелочей". ул.Пришвина 26. Павильон А11/1. Магазин "Сильный Пол".</dd></div>
+    <div class="fact"><dt>Режим работы</dt><dd>каждый день с 9:00 до 21:00.</dd></div>
+    <div class="fact"><dt>Контактный телефон для карточки и публикаций</dt><dd>+7 966 050 81 00</dd></div>
+    <div class="fact"><dt>Официальный сайт компании</dt><dd>https://www.silniypol.ru/</dd></div>
+    <div class="fact"><dt>Форма обращения к аудитории</dt><dd>На «вы»</dd></div>
+    <div class="fact"><dt>Тон публикаций</dt><dd>Чаще на Вы, но более неформальное общение и живое.</dd></div>
+    <div class="fact"><dt>Стиль ответов на отзывы</dt><dd>Официальное, на Вы.</dd></div>
+    <div class="fact"><dt>Подпись ответа на отзыв</dt><dd>От имени компании.</dd></div>
+    <div class="fact"><dt>Действующий прайс-лист</dt><dd>Прайс лист ламината Underwood и Joss Beaumont актуальный на оф.сайте Сильный Пол.</dd></div>
+    <div class="fact"><dt>Формат указания стоимости</dt><dd>Без указания цен</dd></div>
+    <div class="fact"><dt>Действующие акции и специальные предложения</dt><dd>нет.</dd></div>
+    <div class="fact"><dt>Фотографии компании</dt><dd>нет, но по запросу можем сделать фото магазина и образцов.</dd></div>
+    <div class="fact"><dt>Общая стилистика оформления</dt><dd>На усмотрение исполнителя</dd></div>
+    <div class="fact"><dt>Фирменные шрифты</dt><dd>взять с оф.сайта</dd></div>
+    <div class="fact"><dt>Обязательные юридические сведения</dt><dd>нет</dd></div>
+    <div class="fact"><dt>Согласование материалов</dt><dd>Максим и Алексей. Менеджеры. Telegram. Согласование первых публикаций, далее еженедельный отчёт</dd></div>
+  </dl>
+</section>
+
+<section id="brand">
+  <div class="sec-head">
+    <div class="eyebrow">Мини-брендбук</div>
+    <h2>Фирменная палитра</h2>
+    <p>После анализа оформления публикаций компании в карточке на Яндекс Картах определена фирменная палитра «Сильного Пола»: бордовый логотипа, тёмно-бордовый градиент заголовков и рамок, приглушённый бордовый узор из треугольников, графитовая плашка под текст и светлый тёплый фон.</p>
+  </div>
+  <div class="swatches">
+    <div class="sw"><div class="chipc" style="background:#4C0905"></div><div class="i"><span class="role">Основной</span><span class="hex">#4C0905</span><span class="use">Бордовый: логотип «Сильный Пол»</span></div></div>
+    <div class="sw"><div class="chipc" style="background:linear-gradient(180deg,#55201F 0%,#240909 55%,#401513 100%)"></div><div class="i"><span class="role">Акцентный</span><span class="hex">#55201F → #240909</span><span class="use">Градиент тёмно-бордового: крупные заголовки заглавными буквами</span></div></div>
+    <div class="sw"><div class="chipc" style="background:#321311"></div><div class="i"><span class="role">Второстепенный</span><span class="hex">#321311</span><span class="use">Тёмно-бордовый: прямоугольная рамка вокруг заголовка, контур надзаголовка</span></div></div>
+    <div class="sw"><div class="chipc" style="background:#764341"></div><div class="i"><span class="role">Второстепенный</span><span class="hex">#764341</span><span class="use">Приглушённый бордовый: узор из треугольников по краям макета</span></div></div>
+    <div class="sw"><div class="chipc" style="background:#4A4140"></div><div class="i"><span class="role">Текстовый</span><span class="hex">#4A4140</span><span class="use">Графит с тёплым оттенком: скруглённая плашка под поясняющий текст, текст на плашке белый</span></div></div>
+    <div class="sw"><div class="chipc" style="background:linear-gradient(135deg,#FFFFFF 0%,#ECE6E7 60%,#E0D5D5 100%)"></div><div class="i"><span class="role">Фоновый</span><span class="hex">#FFFFFF → #ECE6E7</span><span class="use">Светлый тёплый фон с мягким переходом в розовато-серый</span></div></div>
+  </div>
+</section>
+
+<section id="logic">
+  <div class="sec-head">
+    <div class="eyebrow">Логика цикла</div>
+    <h2>Новые декоры ламината: от наличия к услугам</h2>
+    <p>Все темы этапа строятся вокруг актуальной темы компании — новых декоров ламината — и товаров, которые компания указала основными: ламинат Underwood и Joss Beaumont.</p>
+  </div>
+  <div class="flow">
+    <div class="step"><span class="n">Новость 1</span><b>Товар в наличии</b><span>Новые декоры ламината Underwood и Joss Beaumont, адрес и режим работы</span></div>
+    <div class="step"><span class="n">Новость 2</span><b>Декоры и текстуры</b><span>Максимально приближенные к натуральной доске, толщины от 8 до 12мм</span></div>
+    <div class="step"><span class="n">Новость 3</span><b>Характеристики</b><span>33 и 34 класс, тёплый пол, влагостойкий, км2, E0 и E0,5</span></div>
+    <div class="step"><span class="n">Новость 4</span><b>Товары и услуги</b><span>Сопутствующие товары, доставка в квартиру, укладка, гарантия, услуги хранения</span></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <div class="eyebrow">Новости</div>
+    <h2>4 новостных поста с обложкой</h2>
+    <p>Публикация — в разделе новостей карточки «Сильный Пол» на Яндекс Картах и в 2ГИС.</p>
+  </div>
+
+  <div class="tone-banner">
+    <b>Тон и требования к тексту</b>
+    <ul>
+      <li>На «вы». Чаще на Вы, но более неформальное общение и живое: текст начинается с короткого вступления от лица компании («мы»), а не с перечня товаров.</li>
+      <li>Факты — только из тезисов ниже, без добавленных деталей. Без указания цен.</li>
+      <li>SEO-ключи вплетаются в каждое предложение органично, без повторов одного ключа подряд.</li>
+      <li>Объём до 3000 знаков с пробелами. CTA в конце — только словами, без телефона и e-mail в тексте. Без капса, минимум эмодзи и восклицательных знаков; слово «самый» в тексте поста не используется — требование модерации Яндекс Карт.</li>
+    </ul>
+  </div>
+
+  <div class="cards">
+
+    <article class="card">
+      <div class="card-top"><span class="idx">Новость 1</span><span class="tag">Продающая · новые декоры в наличии</span></div>
+      <h3>Новые декоры ламината Underwood и Joss Beaumont — в наличии в магазине «Сильный Пол»</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">У нас в наличии новые декоры ламината Underwood и Joss Beaumont.</p></div>
+      <div class="blk"><span class="lbl">Тезисы</span><ul>
+        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии!</li>
+        <li>Наличие товара на складах, что обеспечивает быструю доставку.</li>
+        <li>ТД "Миллион Мелочей". ул.Пришвина 26. Павильон А11/1. Магазин "Сильный Пол".</li>
+        <li>Режим работы: каждый день с 9:00 до 21:00.</li>
+      </ul></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>новые декоры ламината</span><span>ламинат Underwood</span><span>ламинат Joss Beaumont</span><span>ламинат в наличии</span><span>купить ламинат</span><span>магазин ламината</span><span>ламинат ул. Пришвина</span><span>ламинат Миллион Мелочей</span><span>магазин напольных покрытий</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
+      <div class="cover">
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Новые декоры ламината</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината (фото магазина и образцов компания делает по запросу). Сверху логотип, заголовок заглавными в градиенте <span class="hexs">#55201F → #240909</span> в прямоугольной рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор из треугольников <span class="hexs">#764341</span> по краям. Текст не более 20% площади, без контактов и слов «акция», «купить».</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><span class="idx">Новость 2</span><span class="tag">Имиджевая · декор и текстура</span></div>
+      <h3>Декоры и текстуры ламината Underwood и Joss Beaumont, максимально приближенные к натуральной доске</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Мы предлагаем ламинат Underwood и Joss Beaumont с декорами и текстурами, максимально приближенными к натуральной доске.</p></div>
+      <div class="blk"><span class="lbl">Тезисы</span><ul>
+        <li>Максимально приближенные к натуральной доске декоры и текстуры ламината.</li>
+        <li>В разных толщинах, от 8 до 12мм.</li>
+        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии!</li>
+      </ul></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат под дерево</span><span>ламинат с текстурой дерева</span><span>ламинат под натуральную доску</span><span>декоры ламината</span><span>ламинат 12 мм</span><span>ламинат 8 мм</span><span>ламинат Underwood</span><span>ламинат Joss Beaumont</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите выбрать декор ламината в магазин «Сильный Пол».</p></div>
+      <div class="cover">
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Как натуральная доска</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Крупный план текстуры ламината. Заголовок в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><span class="idx">Новость 3</span><span class="tag">Экспертная · характеристики</span></div>
+      <h3>Ламинат Underwood и Joss Beaumont: 33 и 34 класс, совместимость с тёплым полом, влагостойкий</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Мы рассказываем о характеристиках ламината Underwood и Joss Beaumont, который есть у нас в наличии.</p></div>
+      <div class="blk"><span class="lbl">Тезисы</span><ul>
+        <li>Самый износостойкий – 33 и 34 класс в разных толщинах, от 8 до 12мм.</li>
+        <li>Совместимость с тёплым полом.</li>
+        <li>Влагостойкий.</li>
+        <li>Класс пожарной безопасности км2.</li>
+        <li>Класс эмиссии и формальдегида E0 и E0,5.</li>
+      </ul></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат 33 класса</span><span>ламинат 34 класса</span><span>износостойкий ламинат</span><span>влагостойкий ламинат</span><span>ламинат для тёплого пола</span><span>ламинат E0</span><span>ламинат км2</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
+      <div class="cover">
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">33 и 34 класс</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината. Цифры «33 · 34» крупно в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><span class="idx">Новость 4</span><span class="tag">Продающая · товары и услуги</span></div>
+      <h3>Ламинат Underwood и Joss Beaumont, сопутствующие товары, доставка в квартиру, укладка, гарантия и услуги хранения</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Кроме ламината, у нас есть сопутствующие товары, а ещё мы делаем доставку в квартиру, укладку, даём гарантию и оказываем услуги хранения.</p></div>
+      <div class="blk"><span class="lbl">Тезисы</span><ul>
+        <li>Продажа напольных покрытий и сопутствующих товаров, таких как подложный материал, плинтуса, моющие средства, герметики, клей, грунт.</li>
+        <li>Доставка в квартиру, Укладка, Гарантия, Услуги хранения.</li>
+        <li>Наличие товара на складах, что обеспечивает быструю доставку.</li>
+      </ul></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>укладка ламината</span><span>доставка ламината в квартиру</span><span>подложка под ламинат</span><span>плинтус для ламината</span><span>клей для напольных покрытий</span><span>грунт для пола</span><span>хранение напольных покрытий</span><span>магазин напольных покрытий</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
+      <div class="cover">
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Доставка и укладка</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината с плинтусом. Заголовок в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <div class="eyebrow">Сторис</div>
+    <h2>Один слайд — один факт</h2>
+    <p>Формат 1080×1920, слайд-презентация в фирменной стилистике компании: логотип сверху, надзаголовок контуром, заголовок заглавными в рамке, фото по центру, скруглённая плашка <span class="hexs">#4A4140</span> с белым текстом внизу, узор из треугольников <span class="hexs">#764341</span> по краям на фоне <span class="hexs">#FFFFFF → #ECE6E7</span>. Название сторис обязательно для публикации в карточке на Яндекс Картах.</p>
+  </div>
+  <div class="stories">
+
+    <article class="story">
+      <div class="card-top"><span class="idx">Сторис 1</span></div>
+      <h3>Товар в наличии</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Ламинат Underwood и Joss Beaumont - Товар в наличии!</p></div>
+      <div class="chips"><span>ламинат в наличии</span><span>новые декоры ламината</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Ламинат» контуром <span class="hexs">#321311</span>, заголовок «Underwood и Joss Beaumont» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. Фото ламината по центру, на плашке <span class="hexs">#4A4140</span> белым: «Товар в наличии».</div>
+    </article>
+
+    <article class="story">
+      <div class="card-top"><span class="idx">Сторис 2</span></div>
+      <h3>33 и 34 класс</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>33 и 34 класс в разных толщинах, от 8 до 12мм.</p></div>
+      <div class="chips"><span>ламинат 33 класса</span><span>ламинат 34 класса</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «33 и 34 класс» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото торца ламината, на плашке <span class="hexs">#4A4140</span> белым: «В разных толщинах, от 8 до 12мм».</div>
+    </article>
+
+    <article class="story">
+      <div class="card-top"><span class="idx">Сторис 3</span></div>
+      <h3>Совместимость с тёплым полом</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Совместимость с тёплым полом. Влагостойкий. Класс пожарной безопасности км2. Класс эмиссии и формальдегида E0 и E0,5.</p></div>
+      <div class="chips"><span>ламинат для тёплого пола</span><span>влагостойкий ламинат</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «Совместимость с тёплым полом» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото ламината, на плашке <span class="hexs">#4A4140</span> белым три строки: влагостойкий, км2, E0 и E0,5.</div>
+    </article>
+
+    <article class="story">
+      <div class="card-top"><span class="idx">Сторис 4</span></div>
+      <h3>Доставка в квартиру и укладка</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Доставка в квартиру, Укладка, Гарантия, Услуги хранения.</p></div>
+      <div class="chips"><span>укладка ламината</span><span>доставка ламината</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «Доставка в квартиру и укладка» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото ламината, на плашке <span class="hexs">#4A4140</span> белым: «Гарантия. Услуги хранения».</div>
+    </article>
+
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head">
+    <div class="eyebrow">Карта тем</div>
+    <h2>Дорожная карта контента</h2>
+  </div>
+  <div class="stage">
+    <div class="stage-head"><h3>Этап 1</h3><span class="badge">актуальный</span></div>
+    <ol class="rm">
+      <li><span class="k">Новость 1</span><span class="t"><b>Новые декоры ламината Underwood и Joss Beaumont — в наличии</b><span>Товар в наличии, адрес, режим работы</span></span></li>
+      <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Товар в наличии</b><span>Ламинат Underwood и Joss Beaumont</span></span></li>
+      <li><span class="k">Новость 2</span><span class="t"><b>Декоры и текстуры, максимально приближенные к натуральной доске</b><span>Декор и толщины от 8 до 12мм</span></span></li>
+      <li class="st"><span class="k">Сторис 2</span><span class="t"><b>33 и 34 класс</b><span>Толщины от 8 до 12мм</span></span></li>
+      <li><span class="k">Новость 3</span><span class="t"><b>33 и 34 класс, совместимость с тёплым полом, влагостойкий</b><span>Характеристики, км2, E0 и E0,5</span></span></li>
+      <li class="st"><span class="k">Сторис 3</span><span class="t"><b>Совместимость с тёплым полом</b><span>Влагостойкий, км2, E0 и E0,5</span></span></li>
+      <li><span class="k">Новость 4</span><span class="t"><b>Сопутствующие товары и услуги</b><span>Доставка в квартиру, укладка, гарантия, услуги хранения</span></span></li>
+      <li class="st"><span class="k">Сторис 4</span><span class="t"><b>Доставка в квартиру и укладка</b><span>Гарантия, услуги хранения</span></span></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+</body>
+</html>
