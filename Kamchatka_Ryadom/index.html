@@ -108,9 +108,10 @@
 
   /* brand board — swatches only */
   .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .swatch { border-radius: 10px; height: 88px; display: flex; flex-direction: column; justify-content: space-between; padding: 9px; border: 1px solid rgba(0,0,0,0.06); }
-  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(255,255,255,0.88); color: #241f1c; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
-  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; background: rgba(255,255,255,0.88); color: #241f1c; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
+  .swatch { border-radius: 10px; height: 88px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.06); color: #fff; }
+  .swatch.light { color: #241f1c; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.82; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 500; }
   @media (max-width: 700px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
 
   .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
@@ -156,18 +157,17 @@
   .slide-block li { margin-bottom: 3px; }
   .slide-block.design .label { color: var(--roe); }
 
-  /* Карта тем — tabs */
-  .map-tabs { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
-  .map-tabs input { display: none; }
-  .tabnav { display: flex; border-bottom: 1px solid var(--line-soft); }
-  .tabnav label { flex: 1 1 auto; text-align: center; padding: 14px 16px; font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; color: var(--ink-faint); cursor: pointer; border-right: 1px solid var(--line-soft); transition: background 0.15s ease, color 0.15s ease; }
-  .tabnav label:last-child { border-right: none; }
-  .tabnav label .cur { color: var(--roe); }
-  .tabpanel { display: none; padding: 26px 28px; }
-  #tab-stage1:checked ~ .tabnav label[for="tab-stage1"],
-  #tab-stage2:checked ~ .tabnav label[for="tab-stage2"] { background: var(--ice); color: var(--ink); }
-  #tab-stage1:checked ~ .panel-stage1 { display: block; }
-  #tab-stage2:checked ~ .panel-stage2 { display: block; }
+  /* Карта тем — вертикальный аккордеон по этапам, снизу — актуальный этап открыт */
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc { border-bottom: 1px solid var(--line-soft); }
+  .stage-acc:last-child { border-bottom: none; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); transition: background 0.15s ease, color 0.15s ease; }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .stage-acc .roadmap { padding: 24px 28px 26px; }
 
   .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin-left: 8px; padding-left: 24px; }
   .roadmap-item { position: relative; padding-bottom: 20px; }
@@ -252,7 +252,7 @@
       <div class="swatch" style="background:#2a2622"><span class="role">Основной</span><span class="name">Графит · #2A2622</span></div>
       <div class="swatch" style="background:#5c534b"><span class="role">Второстепенный</span><span class="name">Камень · #5C534B</span></div>
       <div class="swatch" style="background:#b23a2e"><span class="role">Акцентный</span><span class="name">Краб · #B23A2E</span></div>
-      <div class="swatch" style="background:#f2eeea"><span class="role">Фоновый</span><span class="name">Иней · #F2EEEA</span></div>
+      <div class="swatch light" style="background:#f2eeea"><span class="role">Фоновый</span><span class="name">Иней · #F2EEEA</span></div>
       <div class="swatch" style="background:#241f1c"><span class="role">Текстовый</span><span class="name">Уголь · #241F1C</span></div>
     </div>
   </section>
@@ -384,14 +384,9 @@
 
   <section id="map">
     <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
-    <div class="map-tabs">
-      <input type="radio" name="mapstage" id="tab-stage1" checked>
-      <input type="radio" name="mapstage" id="tab-stage2">
-      <div class="tabnav">
-        <label for="tab-stage1">Этап 1</label>
-        <label for="tab-stage2">Этап 2 <span class="cur">· актуальный</span></label>
-      </div>
-      <div class="tabpanel panel-stage1">
+    <div class="map-accordion">
+      <details class="stage-acc">
+        <summary><span class="stage-name">Этап 1</span></summary>
         <div class="roadmap">
           <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Кто такие «Камчатка Рядом»</h4><p>Сеть магазинов рыбы и морепродуктов в Смоленске, формат работы, как связаться</p></div>
           <div class="roadmap-item"><div class="kind">История 1</div><h4>Кто мы</h4><p>Сеть, ежедневная работа, розница + доставка</p></div>
@@ -402,15 +397,16 @@
           <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Как сделать заказ и получить доставку</h4><p>Способы связи, доставка, самовывоз</p></div>
           <div class="roadmap-item"><div class="kind">История 4</div><h4>Как заказать</h4><p>Способы связи, доставка/самовывоз</p></div>
         </div>
-      </div>
-      <div class="tabpanel panel-stage2">
+      </details>
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 2</span> <span class="cur">· актуальный</span></summary>
         <div class="roadmap">
           <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Преимущества сети «Камчатка Рядом»</h4><p>Несколько точек в городе, всегда свежий ассортимент, розница/доставка/самовывоз</p></div>
           <div class="roadmap-item"><div class="kind">История 1</div><h4>Почему выбирают «Камчатка Рядом»</h4><p>Сеть точек, свежий ассортимент, удобные способы получить заказ</p></div>
           <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Мобильное приложение «Камчатка Рядом»</h4><p>Дополнительный канал связи с сетью</p></div>
           <div class="roadmap-item"><div class="kind">История 2</div><h4>Приложение «Камчатка Рядом»</h4><p>Ещё один способ оставаться на связи</p></div>
         </div>
-      </div>
+      </details>
     </div>
   </section>
 </main>
