@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ТЗ АКПП Сервис</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky top bar + single reading column, sections flow top-down, roadmap last */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#F6E4DB;
+  --bg:#F5F8F8; --card:#FFFFFF; --ink:#12242A; --ink-soft:#4A5E64; --line:#D6E1E3; --chip:#E8F0F1;
+  --bar:#0E3B47; --bar-ink:#F5F8F8; --bar-soft:#9FC3C9;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1B20; --card:#12272D; --ink:#E6EEF0; --ink-soft:#A3B6BB; --line:#24414A; --chip:#18343B;
+  --teal:#5FB3BF; --roe:#E27A4F; --roe-soft:#3A2419; --bar:#081418; --bar-ink:#E6EEF0; --bar-soft:#7FA9B0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1B20; --card:#12272D; --ink:#E6EEF0; --ink-soft:#A3B6BB; --line:#24414A; --chip:#18343B;
+  --teal:#5FB3BF; --roe:#E27A4F; --roe-soft:#3A2419; --bar:#081418; --bar-ink:#E6EEF0; --bar-soft:#7FA9B0; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;margin:0}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bar);color:var(--bar-ink);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-in{max-width:1080px;margin:0 auto;padding-inline:16px;display:flex;align-items:center;gap:24px;min-height:56px}
+.brand{font-family:var(--display);font-weight:800;font-size:18px;white-space:nowrap;letter-spacing:-.01em}
+.brand span{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--bar-soft);margin-left:8px;letter-spacing:.06em;text-transform:uppercase}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--bar-soft);text-decoration:none;font-size:14px;font-weight:500;padding:6px 10px;border-radius:6px;white-space:nowrap}
+.nav a:hover,.nav a:focus-visible{color:var(--bar-ink);background:rgba(255,255,255,.08);outline:none}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:40px 64px;display:flex;flex-direction:column;gap:64px}
+section{scroll-margin-top:80px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--roe)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.015em}
+h1{font-size:clamp(32px,6vw,52px);line-height:1.05;font-weight:800;color:var(--ink)}
+h2{font-size:clamp(24px,4vw,34px);line-height:1.15;font-weight:700}
+h3{font-size:21px;line-height:1.25;font-weight:700}
+p{margin:0}
+.lead{font-size:18px;color:var(--ink-soft);max-width:68ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fact{background:var(--card);padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.fact dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.fact dd{margin:0;font-weight:600}
+.note{font-size:15px;color:var(--ink-soft);max-width:72ch}
+/* brandbook */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.sw{border-radius:10px;min-height:150px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:1px solid var(--line)}
+.sw b{font-family:var(--display);font-size:17px}
+.sw small{font-family:var(--mono);font-size:12px;opacity:.92}
+.sw i{font-style:normal;font-size:13px;line-height:1.4;opacity:.9;margin-top:6px}
+.sw.lt{color:#FFFFFF}.sw.dk{color:#1E3346}
+/* logic */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:s}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.steps li .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.steps li b{font-family:var(--display);font-size:17px}
+.steps li span{font-size:14.5px;color:var(--ink-soft)}
+details.past{border:1px solid var(--line);border-radius:10px;background:var(--card)}
+details.past>summary{cursor:pointer;padding:14px 18px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.past>summary::-webkit-details-marker{display:none}
+details.past>summary::after{content:"+";font-family:var(--mono);color:var(--teal)}
+details.past[open]>summary::after{content:"−"}
+details.past>div{padding:0 18px 18px}
+summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:8px}
+/* theme cards */
+.tone-banner{border:1px solid var(--line);border-left:4px solid var(--roe);background:var(--card);border-radius:10px;padding:16px 18px;font-size:15px;color:var(--ink-soft)}
+.tone-banner b{color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.card-head{display:flex;flex-direction:column;gap:8px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;padding:4px 9px;border-radius:5px;background:var(--chip);color:var(--teal)}
+.tag.roe{background:var(--roe-soft);color:var(--roe)}
+.blk{display:flex;flex-direction:column;gap:8px}
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.voice{font-size:16px;font-style:italic;color:var(--ink);border-left:2px solid var(--line);padding-left:14px;max-width:70ch}
+ul.th{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;max-width:72ch}
+ul.th li::marker{color:var(--roe)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-family:var(--mono);font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink-soft)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.meta div{display:flex;flex-direction:column;gap:3px}
+.meta b{font-weight:600;font-size:15px}
+.cover{border:1px dashed var(--teal);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.cover .thesis{font-family:var(--display);font-size:22px;font-weight:700}
+.cover p{font-size:14.5px;color:var(--ink-soft)}
+.hex{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.hex::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:5px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
+.stories{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.slide{background:var(--chip);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.slide .st{font-family:var(--display);font-weight:700;font-size:18px}
+.slide ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:4px}
+.design{font-size:14.5px;color:var(--ink-soft)}
+/* roadmap */
+.road{list-style:none;margin:0;padding:0 0 0 22px;position:relative;display:flex;flex-direction:column;gap:14px}
+.road::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;display:flex;flex-direction:column;gap:3px}
+.road li::before{content:"";position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.n::before{background:var(--teal)}
+.road .f{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.road b{font-weight:600}
+.road span{font-size:14.5px;color:var(--ink-soft)}
+.stage{border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.stage>summary{cursor:pointer;list-style:none;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stage>summary::-webkit-details-marker{display:none}
+.stage>summary h3{font-size:19px}
+.stage>summary .cur{font-family:var(--mono);font-size:12px;color:var(--roe);font-weight:500}
+.stage>summary::after{content:"+";font-family:var(--mono);font-size:18px;color:var(--teal)}
+.stage[open]>summary::after{content:"−"}
+.stage>div{padding:4px 20px 22px}
+.stages{display:flex;flex-direction:column;gap:12px}
+@media (max-width:520px){.card{padding:18px}.brand span{display:none}.topbar-in{gap:12px}}
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">АКПП Сервис<span>Этап 2</span></div>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#company">Компания</a>
+      <a href="#brand">Брендбук</a>
+      <a href="#logic">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="company">
+  <div class="eyebrow">01 · Компания</div>
+  <h1>АКПП Сервис: ТЗ на новости и сторис, этап 2</h1>
+  <p class="lead">Две новости с обложкой и две сторис в формате одного слайда для карточек компании на Яндекс Картах и в 2ГИС — Ижевск и Пермь.</p>
+  <dl class="facts">
+    <div class="fact"><dt>Компания</dt><dd>«АКПП Сервис»</dd></div>
+    <div class="fact"><dt>Виды деятельности</dt><dd>Ремонт АКПП · Экспресс-пункт замены масла · Автосервис, автотехцентр</dd></div>
+    <div class="fact"><dt>Ижевск</dt><dd>ул. Телегина, 30/853</dd></div>
+    <div class="fact"><dt>Пермь</dt><dd>ул. Промышленная, 84А/2</dd></div>
+    <div class="fact"><dt>На рынке</dt><dd>С 2003 года</dd></div>
+    <div class="fact"><dt>Типы коробок</dt><dd>АКПП, вариатор, DSG</dd></div>
+    <div class="fact"><dt>Сайты</dt><dd>akpp18.ru · akpp59.ru</dd></div>
+    <div class="fact"><dt>Слоган</dt><dd>«Наша миссия — трансмиссия»</dd></div>
+    <div class="fact"><dt>Площадка публикации</dt><dd>Карточки компании на Яндекс Картах и в 2ГИС</dd></div>
+  </dl>
+</section>
+
+<section id="brand">
+  <div class="eyebrow">02 · Мини-брендбук</div>
+  <h2>Фирменные цвета</h2>
+  <p class="note">После анализа ресурсов компании определены фирменные цвета: они сняты с логотипа, обложки сообщества и сайта. Сочетание красного и синего на светлом фоне — основа всех материалов.</p>
+  <div class="swatches">
+    <div class="sw lt" style="background:#EB493B"><small>Акцентный</small><b>Красный</b><small>#EB493B</small><i>«АКПП» в логотипе, плашки преимуществ, галочки</i></div>
+    <div class="sw lt" style="background:#3478B9"><small>Основной</small><b>Синий</b><small>#3478B9</small><i>«СЕРВИС», шестерня логотипа, заголовки</i></div>
+    <div class="sw lt" style="background:#C53329"><small>Второстепенный</small><b>Тёмно-красный</b><small>#C53329</small><i>Информационная полоса, выделение цифр</i></div>
+    <div class="sw dk" style="background:#E7F1F8"><small>Фоновый</small><b>Светло-голубой</b><small>#E7F1F8</small><i>Фон обложки и светлых плашек</i></div>
+    <div class="sw lt" style="background:#777777"><small>Текстовый</small><b>Серый</b><small>#777777</small><i>Подписи и второстепенный текст</i></div>
+  </div>
+</section>
+
+<section id="logic">
+  <div class="eyebrow">03 · Логика цикла</div>
+  <h2>От коробки — к автомобилю, от ремонта — к профилактике</h2>
+  <p class="note">Этап 1 раскрыл ядро компании: специализацию на трансмиссиях, диагностику, капитальный ремонт и замену масла. Этап 2 расширяет картину: показывает, что компания работает со всем, что влияет на коробку, и что АКПП можно не только ремонтировать, но и дооснащать.</p>
+  <ol class="steps">
+    <li><span class="k">Новость 1</span><b>Смежные системы</b><span>Двигатель, зажигание, электроника и ходовая как часть работы с АКПП</span></li>
+    <li><span class="k">Сторис 1</span><b>Трансмиссия целиком</b><span>Раздатки, редукторы, дифференциалы, валы, ступицы</span></li>
+    <li><span class="k">Новость 2</span><b>Доработки АКПП</b><span>Доп. радиатор, магистральный фильтр, замена робота на автомат</span></li>
+    <li><span class="k">Сторис 2</span><b>Уровень масла</b><span>Три способа проверки и доливка</span></li>
+  </ol>
+  <details class="past">
+    <summary>Логика этапа 1</summary>
+    <div><p class="note">Специализация и команда → диагностика: три метода → капитальный ремонт: четыре этапа → замена масла в АКПП, вариаторе и DSG.</p></div>
+  </details>
+</section>
+
+<section id="news">
+  <div class="eyebrow">04 · Новости</div>
+  <h2>Новости этапа</h2>
+  <div class="tone-banner"><b>Тон и голос.</b> Текст начинается с короткого вступления от лица компании («мы») и держит деловой экспертный тон: точные термины с простым пояснением, факты и цифры. Каждая новость раскрывает свою мысль, без перечня всех услуг подряд. SEO-ключи вплетаются в предложения естественно. Без превосходных степеней, телефонов и адресов в тексте — контакты остаются в полях карточки.</div>
+
+  <article class="card">
+    <div class="card-head">
+      <div class="tags"><span class="tag roe">Новость 1</span><span class="tag">Экспертная</span><span class="tag">Автосервис, автотехцентр</span></div>
+      <h3>Симптом в коробке, причина в другой системе: как «АКПП Сервис» работает со смежными неисправностями</h3>
+    </div>
+    <div class="blk"><div class="lbl">Вступление (тон и голос)</div>
+      <p class="voice">Мы занимаемся автоматическими коробками передач с 2003 года. За это время трансмиссии стали сложнее, а системы автомобиля теснее связаны друг с другом. Поэтому мы разбираемся не только в коробке, но и во всём, что на неё влияет.</p></div>
+    <div class="blk"><div class="lbl">Тезисы</div>
+      <ul class="th">
+        <li>В автомобилях последних 10–12 лет двигатель, АКПП, АБС, контроль тяги, антипробуксовочная система и система управления полным приводом работают во взаимодействии. Сбой в одной системе приводит к некорректной работе остальных.</li>
+        <li>Отсюда принцип компании: при обращении с предполагаемой неисправностью АКПП в ремонте не откажут в 99% случаев, даже если причина в системе впрыска топлива или в блоке АБС.</li>
+        <li>Двигатель: диагностика и ремонт бензиновых ДВС. Мотортестер без разборки двигателя выявляет проблемы ГРМ: неверно выставленные фазы впуска и выпуска, неплотное закрытие клапанов, недостаточное разрежение во впускном тракте.</li>
+        <li>Зажигание: угол опережения и его изменение по нагрузке и оборотам коленвала, состояние свечей без снятия на работающем двигателе (актуально для V-образных моторов), высоковольтные провода и катушки, время горения искры и напряжение пробоя.</li>
+        <li>Электроника: ремонт электронных систем автомобиля со сканером и информационными базами; диагност компании имеет радиоэлектронный опыт. Когда нужно дилерское оборудование, возможна совместная работа с дилерами.</li>
+        <li>Также в работе: ходовая часть, тормозная и рулевая системы, текущее ТО — замена жидкостей, фильтров и расходных материалов.</li>
+      </ul></div>
+    <div class="blk"><div class="lbl">SEO-ключи</div>
+      <div class="chips"><span>автосервис Ижевск</span><span>автотехцентр Пермь</span><span>ремонт АКПП Ижевск</span><span>ремонт АКПП Пермь</span><span>диагностика двигателя мотортестером</span><span>диагностика ДВС Ижевск</span><span>ремонт системы зажигания</span><span>ремонт автоэлектрики Ижевск</span><span>ремонт электронных систем автомобиля</span><span>компьютерная диагностика автомобиля Пермь</span><span>ремонт ходовой части</span><span>ремонт тормозной системы</span><span>техническое обслуживание автомобиля</span></div></div>
+    <div class="meta">
+      <div><span class="lbl">Цель</span><b>Показать компетенцию шире коробки передач</b></div>
+      <div><span class="lbl">Объём</span><b>До 3000 знаков с пробелами</b></div>
+      <div><span class="lbl">CTA</span><b>Записывайтесь на диагностику: укажите марку, год, тип двигателя и коробки</b></div>
+    </div>
+    <div class="cover"><div class="lbl">ТЗ на обложку</div>
+      <div class="thesis">«Автомобиль как система»</div>
+      <p>Фото: мотортестер или сканер, подключённый к автомобилю, подкапотное пространство. Заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span> на светлой плашке <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, акцентная линия или галочка красным <span class="hex" style="--c:#EB493B">#EB493B</span>. Текст не более 20% площади, без телефонов и адресов.</p></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <div class="tags"><span class="tag roe">Новость 2</span><span class="tag">Экспертно-продающая</span><span class="tag">Ремонт АКПП</span></div>
+      <h3>Доработки АКПП: дополнительный радиатор, магистральный фильтр и замена робота на автомат</h3>
+    </div>
+    <div class="blk"><div class="lbl">Вступление (тон и голос)</div>
+      <p class="voice">Мы не только ремонтируем и обслуживаем автоматические коробки передач, но и дооснащаем их. У каждой доработки понятная комплектация и стоимость — рассказываем, что входит в работу.</p></div>
+    <div class="blk"><div class="lbl">Тезисы</div>
+      <ul class="th">
+        <li>Установка дополнительного радиатора АКПП — от 20 000 ₽. В стоимость входят радиатор, шланги, хомуты, монтажные элементы и работа по монтажу.</li>
+        <li>Установка дополнительного магистрального фильтра АКПП — от 2 500 ₽.</li>
+        <li>Замена масла с адаптером для АКПП с теплообменником — от 3 000 ₽: теплообменник снимается и заменяется специальным адаптером, затем прокачка системы, заливка масла и установка уровня. Подходит для АКПП, вариатора и DSG.</li>
+        <li>Замена роботизированной коробки передач на АКПП — от 130 000 ₽, для Toyota Corolla и Auris.</li>
+        <li>Все работы выполняет сервис, специализирующийся на трансмиссиях с 2003 года, в Ижевске и Перми.</li>
+      </ul></div>
+    <div class="blk"><div class="lbl">SEO-ключи</div>
+      <div class="chips"><span>доработка АКПП Ижевск</span><span>установка радиатора АКПП</span><span>дополнительный радиатор АКПП цена</span><span>магистральный фильтр АКПП</span><span>адаптер теплообменника АКПП</span><span>замена робота на АКПП</span><span>замена роботизированной коробки на автомат Toyota Corolla</span><span>замена робота Toyota Auris</span><span>обслуживание АКПП Пермь</span><span>ремонт АКПП Ижевск</span></div></div>
+    <div class="meta">
+      <div><span class="lbl">Цель</span><b>Показать направление доработок и дооснащения АКПП</b></div>
+      <div><span class="lbl">Объём</span><b>До 3000 знаков с пробелами</b></div>
+      <div><span class="lbl">CTA</span><b>Уточняйте доработку для вашего автомобиля на консультации мастера</b></div>
+    </div>
+    <div class="cover"><div class="lbl">ТЗ на обложку</div>
+      <div class="thesis">«Доработки АКПП»</div>
+      <p>Фото: дополнительный радиатор или магистральный фильтр на агрегате, крупный план узла. Заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span>, акцентная плашка красным <span class="hex" style="--c:#EB493B">#EB493B</span> с белым текстом. Текст не более 20% площади, без цен и контактов на изображении.</p></div>
+  </article>
+</section>
+
+<section id="stories">
+  <div class="eyebrow">05 · Сторис</div>
+  <h2>Сторис этапа</h2>
+  <p class="note">Один слайд — один факт. Название истории обязательно для публикации на Яндекс Картах.</p>
+  <div class="stories">
+    <article class="card">
+      <div class="card-head">
+        <div class="tags"><span class="tag roe">Сторис 1</span><span class="tag">Автосервис, автотехцентр</span></div>
+        <h3>Трансмиссия целиком</h3>
+      </div>
+      <div class="slide"><div class="st">Не только коробка — вся трансмиссия</div>
+        <ul><li>Раздаточные коробки</li><li>Редукторы и дифференциалы</li><li>Карданные и приводные валы</li><li>Ступицы</li><li>Обслуживание и ремонт — Ижевск и Пермь</li></ul></div>
+      <div class="chips"><span>ремонт раздаточной коробки</span><span>ремонт редуктора</span><span>ремонт дифференциала</span><span>ремонт карданного вала</span></div>
+      <div class="blk"><div class="lbl">Дизайн слайда</div>
+        <p class="design">Фото узла трансмиссии на подъёмнике. Нижняя плашка синим <span class="hex" style="--c:#3478B9">#3478B9</span> с белым текстом, маркеры-галочки красным <span class="hex" style="--c:#EB493B">#EB493B</span>, как на обложке сообщества.</p></div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="tags"><span class="tag roe">Сторис 2</span><span class="tag">Экспресс-пункт замены масла</span></div>
+        <h3>Уровень масла в АКПП</h3>
+      </div>
+      <div class="slide"><div class="st">Проверка уровня масла в АКПП</div>
+        <ul><li>По заводскому щупу — от 250 ₽</li><li>Спецщупом (например, Mercedes после 1996 г. в.) — от 400 ₽</li><li>На подъёмнике (большинство Audi, VW, часть Toyota после 2003 г. в.) — от 500 ₽</li><li>Доливка до нормы — от 500 ₽</li></ul></div>
+      <div class="chips"><span>проверка уровня масла в АКПП</span><span>доливка масла в АКПП</span><span>масло в коробке автомат Ижевск</span></div>
+      <div class="blk"><div class="lbl">Дизайн слайда</div>
+        <p class="design">Фото щупа АКПП крупным планом. Светлый фон <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span>, цены тёмно-красным <span class="hex" style="--c:#C53329">#C53329</span>.</p></div>
+    </article>
+  </div>
+</section>
+
+<section id="map">
+  <div class="eyebrow">06 · Карта тем</div>
+  <h2>Карта тем</h2>
+  <div class="stages">
+    <details class="stage">
+      <summary><h3>Этап 1</h3></summary>
+      <div><ol class="road">
+        <li class="n"><span class="f">Новость 1</span><b>Команда профессионалов</b><span>Узкая специализация мастеров: гидравлик, агрегатчик, диагност-автоэлектрик, инженер-конструктор</span></li>
+        <li><span class="f">Сторис 1</span><b>Специализация</b><span>Автомат, вариатор, DSG в одном месте; узкий профиль; с 2003 года, Ижевск и Пермь</span></li>
+        <li class="n"><span class="f">Новость 2</span><b>Диагностика АКПП: три метода определения неисправности</b><span>Компьютерная, в движении, разборочная; цены по видам диагностики</span></li>
+        <li><span class="f">Сторис 2</span><b>Диагностика</b><span>Три метода, от 500 ₽</span></li>
+        <li class="n"><span class="f">Новость 3</span><b>Капитальный ремонт АКПП: 4 этапа и гарантия</b><span>Диагностика → дефектовка → согласование → сборка; ремонт гидроблока, мехатроника, гидротрансформатора</span></li>
+        <li><span class="f">Сторис 3</span><b>Капремонт</b><span>Четыре этапа, дефектовочная ведомость, сроки сборки и установки</span></li>
+        <li class="n"><span class="f">Новость 4</span><b>Замена масла в АКПП, вариаторе и DSG: почему важна технология</b><span>Метод вытеснения, интервалы замены, замена фильтров</span></li>
+        <li><span class="f">Сторис 4</span><b>Замена масла</b><span>Все типы коробок, интервал 30–40 тыс. км, метод вытеснения</span></li>
+      </ol></div>
+    </details>
+    <details class="stage" open>
+      <summary><h3>Этап 2 <span class="cur">· актуальный</span></h3></summary>
+      <div><ol class="road">
+        <li class="n"><span class="f">Новость 1</span><b>Симптом в коробке, причина в другой системе</b><span>Смежные системы: двигатель, зажигание, электроника, ходовая; принцип «не откажем в 99% случаев»</span></li>
+        <li><span class="f">Сторис 1</span><b>Трансмиссия целиком</b><span>Раздатки, редукторы, дифференциалы, валы, ступицы</span></li>
+        <li class="n"><span class="f">Новость 2</span><b>Доработки АКПП</b><span>Доп. радиатор, магистральный фильтр, адаптер теплообменника, замена робота на АКПП</span></li>
+        <li><span class="f">Сторис 2</span><b>Уровень масла в АКПП</b><span>Три способа проверки и доливка, цены от 250 ₽</span></li>
+      </ol></div>
+    </details>
+  </div>
+</section>
+
+</main>
+
+</body>
+</html>
