@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crystal Dent — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #d96a3b;
+    --roe-soft: #f0a47a;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6;
+      --ocean: #7fc4c9;
+      --ocean-soft: #5aa5ab;
+      --ice: #12292d;
+      --paper: #0b1d22;
+      --surface: #102529;
+      --roe: #f0895a;
+      --roe-soft: #c96636;
+      --ink: #e9f3f1;
+      --ink-soft: #b6cbc8;
+      --ink-faint: #7f9a97;
+      --line: #24444b;
+      --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6;
+    --ocean: #7fc4c9;
+    --ocean-soft: #5aa5ab;
+    --ice: #12292d;
+    --paper: #0b1d22;
+    --surface: #102529;
+    --roe: #f0895a;
+    --roe-soft: #c96636;
+    --ink: #e9f3f1;
+    --ink-soft: #b6cbc8;
+    --ink-faint: #7f9a97;
+    --line: #24444b;
+    --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--ocean); }
+
+  header.topbar { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 20px; } main { padding: 32px 20px 80px; } }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  /* brand board — swatches only */
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 88px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.06); color: #fff; }
+  .swatch.light { color: #241f1c; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.82; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 500; }
+  @media (max-width: 700px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 150px; padding: 16px 16px; border-right: 1px solid var(--line-soft); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step.new { background: var(--ice); }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { color: var(--roe); }
+
+  .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  /* Карта тем — вертикальный аккордеон по этапам, снизу — актуальный этап открыт */
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc { border-bottom: 1px solid var(--line-soft); }
+  .stage-acc:last-child { border-bottom: none; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); transition: background 0.15s ease, color 0.15s ease; }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .stage-acc .roadmap { padding: 24px 28px 26px; }
+
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin-left: 8px; padding-left: 24px; }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Crystal Dent</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 3 · Стоматологическая клиника</div>
+    <h1 class="title">«Crystal Dent»</h1>
+    <p class="lede">Семейная стоматологическая клиника в Краснодаре. Этапы 1–2 раскрыли имплантацию и комплексное восстановление зубного ряда. Этап 3 продолжает линию в сторону сохранения собственных зубов и ортопедического результата — 2 темы новостей с обложками и 2 темы сторис для карточки компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Краснодар</span>
+      <span><b>Категория:</b> стоматологическая клиника</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 3 (сохранение зуба и ортопедия)</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card">
+        <div class="k">Адрес и график</div>
+        <div class="v">Краснодар, ул. Агрономическая, 2/5, корп. 1 (мкр. Горхутор)<small>Пн–Сб 09:00–21:00 · Вс 09:00–18:00</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Формат</div>
+        <div class="v">Семейная клиника: терапия, хирургия, имплантология, ортопедия, ортодонтия, гигиена<small>ООО «Кристал Дент», работает с 2021 года</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Ключевые преимущества</div>
+        <div class="v">Гарантия на все виды работ, пожизненная гарантия на имплантат OSSTEM<small>Специалисты со стажем от 5 лет</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Доступность</div>
+        <div class="v">Бесплатная консультация (терапевт, ортопед, хирург) с планом лечения<small>Бесплатный трансфер для иногородних · беспроцентная рассрочка до 10 мес. · карта «Халва»</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Терапия</div>
+        <div class="v">Лечение корневых каналов любой сложности под микроскопом, художественная реставрация<small>Профгигиена, отбеливание Zoom 4, лечение заболеваний дёсен</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Ортопедия</div>
+        <div class="v">Коронки: металлокерамика, цирконий, E-max; виниры E-max; временные коронки CAD/CAM<small>Съёмные и бюгельные протезы, протезирование на имплантатах</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Команда</div>
+        <div class="v">Главный врач-терапевт, терапевты-эндодонтисты-реставраторы, ортопед, хирург-имплантолог, ортодонт<small>Стаж врачей — от 5 до 17 лет</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Оснащение</div>
+        <div class="v">Импортное оборудование, дентальный микроскоп, визиограф<small>Хирургический 3D-шаблон для имплантации</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа сайта, оформления сообщества ВКонтакте и логотипа определены фирменные цвета «Crystal Dent».</p>
+    <div class="swatch-row">
+      <div class="swatch light" style="background:#60b2d2"><span class="role">Акцентный</span><span class="name">Кристалл · #60B2D2</span></div>
+      <div class="swatch" style="background:#1c1c1c"><span class="role">Основной</span><span class="name">Графит · #1C1C1C</span></div>
+      <div class="swatch light" style="background:#63bdee"><span class="role">Второстепенный</span><span class="name">Лазурь · #63BDEE</span></div>
+      <div class="swatch light" style="background:#f4f4f4"><span class="role">Фоновый</span><span class="name">Светло-серый · #F4F4F4</span></div>
+      <div class="swatch light" style="background:#ffffff"><span class="role">Текстовый на цвете</span><span class="name">Белый · #FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этапы 1–2 провели от имплантации к комплексному восстановлению зубного ряда. Этап 3 показывает другую сторону клиники: сначала — сохранить собственный зуб, если это возможно, затем — из чего складывается итоговый ортопедический результат.</p>
+    <details class="stage-acc" style="border:1px solid var(--line-soft);border-radius:var(--radius);background:var(--surface);margin-bottom:12px;">
+      <summary><span class="stage-name">Этапы 1–2 · пройдены</span></summary>
+      <div class="sequence" style="box-shadow:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;">
+        <div class="step"><div class="n">01</div><div class="t">Имплантация</div><div class="d">форматы, костная ткань, стоимость</div></div>
+        <div class="step"><div class="n">02</div><div class="t">Потеря зубов</div><div class="d">почему не откладывать</div></div>
+        <div class="step"><div class="n">03</div><div class="t">Комплексный подход</div><div class="d">команда врачей, технологии</div></div>
+        <div class="step"><div class="n">04</div><div class="t">Путь пациента</div><div class="d">этапы восстановления</div></div>
+      </div>
+    </details>
+    <div class="sequence">
+      <div class="step new"><div class="n">05</div><div class="t">Сохранение зуба</div><div class="d">лечение каналов под микроскопом</div></div>
+      <div class="step new"><div class="n">06</div><div class="t">Ортопедический результат</div><div class="d">коронки и виниры: материалы</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 3, 2 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица команды «Crystal Dent» — спокойно и по-человечески, без перечисления полного списка услуг в каждой карточке. Медицинская тематика: без обещаний «безопасно / безболезненно / эффективно», без превосходных степеней, в конце — строка «Имеются противопоказания. Необходима консультация специалиста». CTA — только словами, без телефона в тексте.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 2</div>
+      <div class="theme-head"><h3>Лечение корневых каналов под микроскопом: как сохранить собственный зуб</h3><span class="theme-tag">экспертный · терапия</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Все прошлые темы были о восстановлении утраченных зубов. Логичный следующий шаг — показать, что клиника начинает с попытки сохранить собственный зуб: направление терапии и эндодонтии ещё не раскрывалось в карточке.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«Главное для наших врачей — сохранить вашу улыбку. Поэтому, прежде чем говорить о восстановлении, мы оцениваем, можно ли вылечить собственный зуб».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Что такое лечение корневых каналов (эндодонтия) и при каких ситуациях к нему обращаются: пульпит, периодонтит, разрушенный зуб, боль при накусывании</li>
+            <li>В «Crystal Dent» каналы любой сложности лечат под дентальным микроскопом — врач видит строение канала при увеличении</li>
+            <li>Перед лечением — осмотр и рентген-диагностика (визиографический снимок), затем план и стоимость</li>
+            <li>Анестезия подбирается индивидуально</li>
+            <li>После лечения каналов зуб восстанавливают: художественная реставрация, штифт из стекловолокна или коронка — по показаниям</li>
+            <li>Направление ведут терапевты-эндодонтисты-реставраторы клиники, стаж одного из врачей — 17 лет</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">лечение каналов под микроскопом краснодар</span>
+            <span class="chip">лечение корневых каналов</span>
+            <span class="chip">эндодонтия</span>
+            <span class="chip">лечение пульпита</span>
+            <span class="chip">лечение периодонтита</span>
+            <span class="chip">сохранить зуб</span>
+            <span class="chip">стоматолог-терапевт краснодар</span>
+            <span class="chip">стоматологическая клиника краснодар</span>
+            <span class="chip">лечение зубов</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Приходите на бесплатную консультацию — врач оценит, можно ли сохранить ваш зуб</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Сохранить свой зуб<br>
+          <b>Подзаголовок:</b> Лечение каналов под микроскопом<br><br>
+          Светло-серый фон #F4F4F4, заголовок графитом #1C1C1C, ключевое слово «свой зуб» — голубым #60B2D2 (как в заголовках сайта). Фото: врач за дентальным микроскопом или крупный план микроскопа. Логотип в углу, текст — не более 20% площади.
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 2</div>
+      <div class="theme-head"><h3>Коронки и виниры: из каких материалов «Crystal Dent» восстанавливает зубы</h3><span class="theme-tag">информационный · ортопедия</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">На этапе 2 рассказали о роли ортопеда и этапах восстановления. Теперь — про сам результат: какие конструкции и материалы есть в клинике и как их выбирают. Это новый угол, без повторов про имплантацию.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«В ортопедии от точности зависит результат. Материал коронки мы подбираем индивидуально — по медицинским показаниям и вашим пожеланиям».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Коронки на свой зуб и на имплантат: металлокерамика, цирконий, E-max</li>
+            <li>Виниры E-max — корректируют оттенок и форму собственных зубов</li>
+            <li>На время изготовления постоянной конструкции — временные коронки, в том числе CAD/CAM</li>
+            <li>Выбор материала зависит от расположения зуба, прикуса и эстетических задач — решает стоматолог-ортопед после осмотра</li>
+            <li>Ортопед клиники работает с цирконием и E-max, винирами, протезированием при полном отсутствии зубов</li>
+            <li>Гарантия на все виды работ</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">коронки на зубы краснодар</span>
+            <span class="chip">циркониевая коронка</span>
+            <span class="chip">коронка e-max</span>
+            <span class="chip">металлокерамическая коронка</span>
+            <span class="chip">виниры краснодар</span>
+            <span class="chip">протезирование зубов</span>
+            <span class="chip">стоматолог-ортопед</span>
+            <span class="chip">коронка на имплант</span>
+            <span class="chip">стоматологическая клиника</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Записывайтесь на консультацию ортопеда — подберём конструкцию под вашу ситуацию</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Коронки и виниры<br>
+          <b>Подзаголовок:</b> Металлокерамика, цирконий, E-max<br><br>
+          Графитовый фон #1C1C1C, заголовок белым #FFFFFF, подзаголовок голубым #60B2D2. Фото: крупный план коронок/виниров или модели зубного ряда, без изображений «до/после». Логотип в углу, текст — не более 20% площади.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 3, 2 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Терапия</div>
+        <h3>Лечим каналы под микроскопом</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Корневые каналы любой сложности</li>
+          <li>Работа под дентальным микроскопом</li>
+          <li>Рентген-диагностика перед лечением</li>
+          <li>Восстановление зуба после лечения</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">лечение каналов под микроскопом</span>
+          <span class="chip">эндодонтия краснодар</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Светло-серый фон #F4F4F4, заголовок графитом #1C1C1C, тезисы в белых карточках с иконками-зубами голубого цвета #60B2D2 (стиль иконок как в блоке «Поможем вам» на сайте).</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Записаться на консультацию»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">02 · Ортопедия</div>
+        <h3>Коронки: какие бывают</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Металлокерамика</li>
+          <li>Цирконий</li>
+          <li>E-max</li>
+          <li>Временные коронки CAD/CAM</li>
+          <li>Материал подбирает стоматолог-ортопед</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">коронки на зубы</span>
+          <span class="chip">циркониевые коронки краснодар</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Голубой фон #60B2D2, заголовок белым #FFFFFF, список материалов в плашках графит #1C1C1C с белым текстом. Плашки квадратные, как блоки услуг на сайте.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Консультация ортопеда»</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc">
+        <summary><span class="stage-name">Этап 1</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Имплантация за 1 день: когда формат действительно применим</h4><p>Показания, этапы и ограничения немедленной нагрузки</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Имплантация за 1 день</h4><p>Показания, этапы, результат</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Недостаток костной ткани: какие решения применяются в имплантации</h4><p>Костная регенерация, синус-лифтинг, десневая пластика</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Синус-лифтинг и костная регенерация</h4><p>Когда применяются при недостатке костной ткани</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Из чего складывается стоимость имплантации и как работает рассрочка</h4><p>Ценообразование, акционная стоимость, рассрочка до 10 месяцев</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>All-on-4 / All-on-6</h4><p>Отличия, клинические случаи, результат</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Почему отсутствие даже одного зуба нельзя откладывать «на потом»</h4><p>Смещение зубов, атрофия кости, усложнение лечения со временем</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>5 признаков, что пора к стоматологу, даже если ничего не болит</h4><p>Кровоточивость дёсен, запах, чувствительность, потемнение, застревание пищи</p></div>
+        </div>
+      </details>
+      <details class="stage-acc">
+        <summary><span class="stage-name">Этап 2</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Имплантация при полном отсутствии зубов: современные возможности восстановления улыбки</h4><p>Комплексная диагностика и индивидуальный план без привязки к системам</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Команда специалистов — один план лечения</h4><p>Хирург, ортопед, терапевт работают по единому плану</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Роль стоматолога-ортопеда в успешной имплантации</h4><p>Совместное планирование хирурга и ортопеда</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Современные технологии в стоматологии: точность и комфорт лечения</h4><p>Цифровая диагностика и планирование</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Что происходит с зубами и прикусом после потери нескольких зубов</h4><p>Нагрузка, смещение, прикус — понимание проблемы</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Какие случаи можно решить с помощью имплантации</h4><p>Один, несколько, все зубы — тактика после диагностики</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Полное восстановление зубного ряда: из каких этапов состоит лечение</h4><p>От обращения до контроля результата</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Что важно учитывать перед восстановлением зубов</h4><p>Соседние зубы, дёсны, кость, прикус, нагрузка, эстетика</p></div>
+        </div>
+      </details>
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 3</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Лечение корневых каналов под микроскопом: как сохранить собственный зуб</h4><p>Эндодонтия под микроскопом, диагностика, восстановление после лечения</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Лечим каналы под микроскопом</h4><p>Каналы любой сложности, микроскоп, рентген, восстановление</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Коронки и виниры: из каких материалов «Crystal Dent» восстанавливает зубы</h4><p>Металлокерамика, цирконий, E-max, CAD/CAM, подбор ортопедом</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Коронки: какие бывают</h4><p>Материалы коронок и индивидуальный подбор</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
