@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Строй-Инструмент — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: sticky topbar + single column; house ТЗ system (ocean / teal / ice / roe), client colors only in brandbook swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #c4572b;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #6f878b;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+    --f-display: "Bricolage Grotesque", "Public Sans", sans-serif;
+    --f-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d;
+      --paper: #0b1d22; --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8;
+      --ink-faint: #8aa4a1; --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d;
+    --paper: #0b1d22; --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8;
+    --ink-faint: #8aa4a1; --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: var(--f-display); font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 80px; } }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 64ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: var(--f-mono); color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+  .fact-card.wide { grid-column: 1 / -1; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(128,128,128,0.25); color: #ffffff; }
+  .swatch.light { color: #111111; }
+  .swatch .role { font-family: var(--f-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: var(--f-mono); font-size: 0.7rem; font-weight: 500; }
+  @media (max-width: 700px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px; border-right: 1px solid var(--line-soft); background: var(--ice); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: var(--f-mono); color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .theme-card { padding: 22px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); flex: 1 1 320px; min-width: 0; }
+  .theme-tag { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: var(--f-mono); color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field .label { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul, .slide-block ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: var(--f-mono); font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roe); margin-bottom: 6px; }
+  .cover-brief .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .cover-brief .body b { color: var(--ink); }
+
+  .story-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: var(--f-mono); font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block:last-child { margin-bottom: 0; }
+  .slide-block .label { font-family: var(--f-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  @media (max-width: 720px) { .roadmap { margin: 20px 16px 22px 24px; } .stage-acc summary { padding: 14px 18px; } }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: var(--f-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Строй-Инструмент</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Строительный инструмент, крепёжные изделия, садовая техника</div>
+    <h1 class="title">«Строй-Инструмент»</h1>
+    <p class="lede">Торговля строительным инструментом, садовой техникой, метизами и расходными материалами в Ижевске. Этап 1 — 4 темы новостей с обложками и 4 темы сторис в формате презентации для карточки компании на Яндекс Картах и 2ГИС. В приоритете — новинки и акции.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Ижевск</span>
+      <span><b>Адрес:</b> ул. Телегина, 30</span>
+      <span><b>Публикация:</b> карточка компании на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card">
+        <div class="k">Сфера деятельности</div>
+        <div class="v">Торговля строительным инструментом, садовой техникой, метизами и расходными материалами.</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Адрес и режим работы</div>
+        <div class="v">Телегина 30<small>Ижевск · Пн, вт, ср, чт, пт с 9:00 до 19:00 · Сб с 9:00 до 15:00 · Вс выходной</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Ключевые преимущества</div>
+        <div class="v">Скидки · Весь товар в наличии · Бесплатная доставка крупногабаритной техники по региону · Беспроцентная рассрочка · Широкий ассортимент по категориям и брендам</div>
+      </div>
+      <div class="fact-card wide">
+        <div class="k">Садовая техника</div>
+        <div class="v">Культиваторы, мотоблоки, измельчители веток, газонокосилки, бензиновые, аккумуляторные и электрические цепные пилы, воздуходувки, автомобильные мойки, телеги для мотоблоков, мотобуксировщики, триммеры, аэраторы, Райдеры.</div>
+      </div>
+      <div class="fact-card wide">
+        <div class="k">Строительный инструмент</div>
+        <div class="v">Шуруповерты, дрели, перфораторы, болгарки (ушм), лобзики, различные шлифмашины, отбойные молотки, сварочные аппараты, тепловые пушки, лестницы, генераторы бензиновые и дизельные.</div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Приоритетные темы</div>
+        <div class="v">Новинки, акции<small>Сезонные поводы: День строителя, Посевная, 23 февраля, Новый год, Подготовка к временам года (зима, весна, лето, осень)</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Бренды в каталоге сайта</div>
+        <div class="v">MAKITA, DEWALT, BOSCH, AEG, CHAMPION, DAEWOO, ELITECH, PATRIOT, TEH, STIHL, HUSQVARNA, AL-KO, GEOS, GREENWORKS<small>Перечень из раздела «О магазине» instrument18.ru</small></div>
+      </div>
+      <div class="fact-card">
+        <div class="k">Услуга при покупке техники</div>
+        <div class="v">Сборка, установка и настройка техники (предпродажная подготовка)<small>От 800 ₽ · стоимость согласуется до выполнения услуги</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа логотипа, сайта и опубликованных историй компании определены фирменные цвета «Строй-Инструмента» — чёрно-жёлтый стиль.</p>
+    <div class="swatch-row">
+      <div class="swatch light" style="background:#FAE24C"><span class="role">Акцентный</span><span class="name">Жёлтый · #FAE24C</span></div>
+      <div class="swatch" style="background:#000000"><span class="role">Основной</span><span class="name">Чёрный · #000000</span></div>
+      <div class="swatch" style="background:#0C1013"><span class="role">Фоновый</span><span class="name">Графит · #0C1013</span></div>
+      <div class="swatch light" style="background:#A6A7A9"><span class="role">Второстепенный</span><span class="name">Серебро · #A6A7A9</span></div>
+      <div class="swatch light" style="background:#FFFFFF"><span class="role">Текстовый на тёмном</span><span class="name">Белый · #FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Новости чередуют два приоритета компании — новинки и акции. Цикл открывается сезонной темой к зиме, затем раскрывает скидки, новинки инструмента и условия покупки крупной техники.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01 · новинки</div><div class="t">Техника к зиме</div><div class="d">снегоуборщики, тепловые пушки, генераторы</div></div>
+      <div class="step"><div class="n">02 · акции</div><div class="t">Скидки</div><div class="d">скидки, раздел «Акции», уценённые товары</div></div>
+      <div class="step"><div class="n">03 · новинки</div><div class="t">Новый инструмент</div><div class="d">шуруповёрты, перфораторы, УШМ, сварка</div></div>
+      <div class="step"><div class="n">04 · акции</div><div class="t">Условия покупки</div><div class="d">беспроцентная рассрочка и доставка по региону</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — 4 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> обращение на «вы», живой неформальный тон, лёгкий юмор допустим. Каждая новость начинается с короткой фразы от лица компании, дальше — факты темы без повторения всего каталога. Без упоминания конкурентов, общественно-политической повестки и внутренних процессов компании, без превосходных степеней. Цены — точные, сверяются по прайсу на сайте раз в месяц. CTA — только словами, без телефона и e-mail в тексте. Тексты публикуются в карточке компании на Яндекс Картах и 2ГИС.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Новинки к зиме в «Строй-Инструменте»: снегоуборщики, тепловые пушки и генераторы в Ижевске</h3><span class="theme-tag">новинки · сезон</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Октябрь — время подготовки к зиме, это сезонный повод из анкеты компании («подготовка к временам года»). Тема закрывает приоритет «новинки» и сразу показывает технику, которую ищут осенью.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«Подготовка к зиме — время выбрать технику к сезону. У нас весь товар в наличии».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Снегоуборщики для участка и прилегающей территории, в том числе аккумуляторные</li>
+            <li>Тепловые пушки; обогреватели и конвекторы</li>
+            <li>Генераторы бензиновые и дизельные, стабилизаторы напряжения</li>
+            <li>Модели-новинки и точные цены берутся из каталога instrument18.ru на дату публикации</li>
+            <li>Весь товар в наличии</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">снегоуборщик купить ижевск</span>
+            <span class="chip">тепловая пушка ижевск</span>
+            <span class="chip">генератор бензиновый ижевск</span>
+            <span class="chip">дизельный генератор</span>
+            <span class="chip">стабилизатор напряжения</span>
+            <span class="chip">техника к зиме</span>
+            <span class="chip">магазин инструмента ижевск</span>
+            <span class="chip">строй-инструмент</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Приходите в «Строй-Инструмент» на Телегина, 30 — подберём технику к зиме</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Готовы к зиме<br>
+          <b>Подзаголовок:</b> Новинки техники к сезону<br><br>
+          Графитовый фон #0C1013 с мягким жёлтым свечением #FAE24C за объектом. Заголовок — узкий жирный гротеск в верхнем регистре с серебряным градиентом #FFFFFF → #A6A7A9, как в историях компании. Подзаголовок — в жёлтой плашке-пилюле #FAE24C с чёрным текстом #000000. Объект: снегоуборщик или тепловая пушка крупным планом. Логотип в чёрно-жёлтой плашке в верхнем углу. Текст — не более 20% площади.
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Скидки в «Строй-Инструменте»: строительный инструмент и садовая техника</h3><span class="theme-tag">акции</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">«Акции» — второй приоритет из анкеты, «скидки» — первое преимущество компании. Тема ведёт в раздел «Акции» на сайте.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«В «Строй-Инструменте» действуют скидки, а весь товар — в наличии».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Скидки</li>
+            <li>Действующие акции берутся из раздела «Акции» на сайте на дату публикации</li>
+            <li>Отдельный раздел каталога — «Уценённые товары»</li>
+            <li>Весь товар в наличии</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">скидки на инструмент ижевск</span>
+            <span class="chip">акции строительный инструмент</span>
+            <span class="chip">электроинструмент ижевск</span>
+            <span class="chip">садовая техника ижевск</span>
+            <span class="chip">уценённые товары</span>
+            <span class="chip">скидки ижевск</span>
+            <span class="chip">магазин инструмента</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Загляните в раздел «Акции» на сайте или приходите в магазин на Телегина, 30</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Скидки<br>
+          <b>Подзаголовок:</b> Инструмент и садовая техника<br><br>
+          Графитовый фон #0C1013 с фактурой потёртостей и жёлтыми бликами в углах (как в заставке «Акции и скидки» компании). Заголовок по центру серебряным градиентом #FFFFFF → #A6A7A9. В углах — шуруповёрт и объёмный жёлтый знак процента #FAE24C. Логотип сверху по центру. Слово «акция» на обложке не используется (правила модерации Яндекса).
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Новинки строительного инструмента: шуруповёрты, перфораторы, болгарки и сварочные аппараты в наличии</h3><span class="theme-tag">новинки · инструмент</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Второй блок приоритета «новинки» — по строительному инструменту из анкеты компании.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«Весь строительный инструмент в «Строй-Инструменте» — в наличии, включая новинки».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Шуруповерты, дрели, перфораторы, болгарки (ушм), лобзики, различные шлифмашины, отбойные молотки, сварочные аппараты</li>
+            <li>Новинки по этим категориям берутся из каталога instrument18.ru на дату публикации</li>
+            <li>Бренды из каталога: MAKITA, DEWALT, BOSCH, AEG, ELITECH, PATRIOT, TEH, GREENWORKS</li>
+            <li>Метизы и расходные материалы</li>
+            <li>Широкий ассортимент по категориям и брендам</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">купить шуруповёрт ижевск</span>
+            <span class="chip">перфоратор ижевск</span>
+            <span class="chip">болгарка ушм</span>
+            <span class="chip">сварочный аппарат ижевск</span>
+            <span class="chip">строительный инструмент ижевск</span>
+            <span class="chip">электроинструмент</span>
+            <span class="chip">метизы ижевск</span>
+            <span class="chip">расходные материалы</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Приходите посмотреть новинки в магазин на Телегина, 30</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Новый инструмент<br>
+          <b>Подзаголовок:</b> Уже в наличии<br><br>
+          Графитовый фон #0C1013. Композиция из 3–4 единиц инструмента (шуруповёрт, перфоратор, УШМ) с жёлтой контровой подсветкой #FAE24C. Заголовок серебряным градиентом #FFFFFF → #A6A7A9, подзаголовок в жёлтой плашке #FAE24C чёрным текстом #000000. Логотип в верхнем углу. Текст — не более 20% площади.
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Беспроцентная рассрочка и бесплатная доставка крупногабаритной техники по региону</h3><span class="theme-tag">акции · условия покупки</span></div>
+      <div class="field-grid">
+        <div class="field full">
+          <div class="label">Почему актуально</div>
+          <div class="body">Два преимущества из анкеты компании об условиях покупки. Закрывает цикл переходом от выбора к покупке.</div>
+        </div>
+        <div class="field full voice">
+          <div class="label">Вступление (тон и голос)</div>
+          <div class="body">«В «Строй-Инструменте» действуют беспроцентная рассрочка и бесплатная доставка крупногабаритной техники по региону».</div>
+        </div>
+        <div class="field full">
+          <div class="label">Тезисы</div>
+          <div class="body"><ul>
+            <li>Беспроцентная рассрочка</li>
+            <li>Бесплатная доставка крупногабаритной техники по региону</li>
+            <li>Услуга при покупке техники на сайте — сборка, установка и настройка: заправка маслом и топливом, пробный запуск на холостом ходу</li>
+            <li>Весь товар в наличии</li>
+          </ul></div>
+        </div>
+        <div class="field">
+          <div class="label">SEO-ключи</div>
+          <div class="chip-row">
+            <span class="chip">беспроцентная рассрочка ижевск</span>
+            <span class="chip">техника в рассрочку ижевск</span>
+            <span class="chip">доставка крупногабаритной техники</span>
+            <span class="chip">купить мотоблок ижевск</span>
+            <span class="chip">культиватор ижевск</span>
+            <span class="chip">садовая техника удмуртия</span>
+            <span class="chip">строй-инструмент ижевск</span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">CTA</div>
+          <div class="body">Выбирайте технику в магазине на Телегина 30 или на сайте</div>
+        </div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <div class="body">
+          <b>Заголовок:</b> Беспроцентная рассрочка<br>
+          <b>Подзаголовок:</b> Бесплатная доставка крупногабаритной техники по региону<br><br>
+          Графитовый фон #0C1013. Мотоблок или снегоуборщик на переднем плане, за ним — жёлтый грузовик/кузов #FAE24C (визуальная связка с историей компании о доставке). Заголовок серебряным градиентом #FFFFFF → #A6A7A9, подзаголовок в жёлтой плашке #FAE24C чёрным текстом. Логотип в верхнем углу. Текст — не более 20% площади.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — 4 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты. Общая подача — как в опубликованных историях компании: графитовый фон #0C1013, заголовок серебряным градиентом #FFFFFF → #A6A7A9, ключевые слова и плашки жёлтым #FAE24C, логотип в чёрно-жёлтой плашке сверху справа, внизу жёлтая кнопка с чёрным текстом.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Услуга к технике</div>
+        <h3>Соберём и запустим вашу технику</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Сборка и проверка всех комплектующих</li>
+          <li>Заправка маслом и топливом</li>
+          <li>Пробный запуск на холостом ходу</li>
+          <li>Бензопилы, бензотриммеры, бензогенераторы 2Т — 800 ₽</li>
+          <li>Мотоблоки — 3200 ₽</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">предпродажная подготовка техники</span>
+          <span class="chip">сборка мотоблока ижевск</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Мотоблок крупным планом с жёлтым свечением #FAE24C. Тезисы — строками в полупрозрачных тёмных плашках, цены выделены жёлтым #FAE24C. Цены сверяются с разделом «Услуги» на сайте на дату публикации.</div></div>
+        <div class="slide-block"><div class="label">Кнопка</div><div class="body">«Узнать подробнее»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">02 · Наличие</div>
+        <h3>Весь товар — в наличии</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Строительный инструмент, садовая техника, метизы и расходные материалы</li>
+          <li>Ижевск, Телегина 30</li>
+          <li>Пн–Пт с 9:00 до 19:00, Сб с 9:00 до 15:00, Вс выходной</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">инструмент в наличии ижевск</span>
+          <span class="chip">магазин инструмента телегина</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Стеллажи с инструментом и коробками в перспективе, жёлтые акценты #FAE24C. Адрес и график — в стеклянной плашке с иконкой часов, ключевые слова жёлтым (как блок с датой в истории о розыгрыше).</div></div>
+        <div class="slide-block"><div class="label">Кнопка</div><div class="body">«Построить маршрут»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">03 · Ассортимент</div>
+        <h3>Бренды «Строй-Инструмента»</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>MAKITA · DEWALT · BOSCH</li>
+          <li>STIHL · HUSQVARNA · AL-KO</li>
+          <li>ELITECH · PATRIOT · GREENWORKS</li>
+          <li>Широкий ассортимент по категориям и брендам</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">makita ижевск</span>
+          <span class="chip">stihl ижевск</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Сетка 3×3 из тёмных карточек с названиями брендов белым #FFFFFF, тонкая жёлтая обводка #FAE24C. Над сеткой — заголовок серебряным градиентом.</div></div>
+        <div class="slide-block"><div class="label">Кнопка</div><div class="body">«Смотреть каталог»</div></div>
+      </div>
+
+      <div class="story-card">
+        <div class="idx">04 · Условия покупки</div>
+        <h3>Беспроцентная рассрочка</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Оплата частями без процентов</li>
+          <li>Весь товар в наличии</li>
+          <li>Широкий ассортимент по категориям и брендам</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">рассрочка на инструмент</span>
+          <span class="chip">садовая техника в рассрочку</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Крупная надпись «0%» жёлтым #FAE24C рядом с газонокосилкой или мотоблоком. Тезисы — в жёлтой плашке-пилюле и стеклянных плашках с белым текстом.</div></div>
+        <div class="slide-block"><div class="label">Кнопка</div><div class="body">«Узнать подробнее»</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 1</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Новинки к зиме: снегоуборщики, тепловые пушки и генераторы</h4><p>Техника к сезону, весь товар в наличии</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Соберём и запустим вашу технику</h4><p>Предпродажная подготовка: сборка, заправка, пробный запуск, от 800 ₽</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Скидки в «Строй-Инструменте»</h4><p>Скидки, раздел «Акции», уценённые товары</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Весь товар — в наличии</h4><p>Ассортимент, адрес и режим работы</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Новинки строительного инструмента в наличии</h4><p>Шуруповерты, перфораторы, ушм, сварочные аппараты, метизы и расходные материалы</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Бренды «Строй-Инструмента»</h4><p>Широкий ассортимент по категориям и брендам</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Беспроцентная рассрочка и бесплатная доставка крупногабаритной техники по региону</h4><p>Условия покупки из анкеты компании</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Беспроцентная рассрочка</h4><p>Оплата частями без процентов</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
