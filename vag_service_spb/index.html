@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VAG-SERVICE.SPB — ТЗ</title>
+<style>
+  /* Layout: single sticky top bar + one reading column; agency chrome (ocean/teal/ice/roe), client colors only in swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #c4572b;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+      --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+    --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 80px; } }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(128,128,128,0.25); color: #ffffff; }
+  .swatch.light { color: #171717; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 500; }
+  @media (max-width: 860px) { .swatch-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px; border-right: 1px solid var(--line-soft); background: var(--ice); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .theme-card { padding: 20px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); min-width: 0; flex: 1 1 320px; }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roe); margin-bottom: 6px; }
+  .cover-brief .body { font-size: 0.92rem; color: var(--ink-soft); }
+
+  .story-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block:last-child { margin-bottom: 0; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  @media (max-width: 720px) { .roadmap { margin: 20px 16px 22px 24px; } .stage-acc summary { padding: 14px 16px; } }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">VAG-SERVICE.SPB</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Автосервис</div>
+    <h1 class="title">VAG-SERVICE.SPB</h1>
+    <p class="lede">Техническое обслуживание и ремонт автомобилей Audi, Volkswagen, Škoda и SEAT в Санкт-Петербурге. Этап 1 посвящён двум приоритетным направлениям компании: своевременному прохождению ТО и своевременному ремонту ходовой части. 4 темы новостей с обложками и 4 темы сторис в формате презентации. Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Санкт-Петербург</span>
+      <span><b>Категория:</b> автосервис Audi, Volkswagen, Škoda, SEAT</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="k">Название</div><div class="v">VAG-SERVICE.SPB</div></div>
+      <div class="fact-card"><div class="k">Сфера деятельности</div><div class="v">Техническое обслуживание и ремонт двигателей, ходовой части, тормозных систем автомобилей марок Audi, Volkswagen, Škoda, SEAT</div></div>
+      <div class="fact-card"><div class="k">Услуги</div><div class="v">Техническое обслуживание, замена масел и технических жидкостей. Ремонт бензиновых и дизельных двигателей, замена поршневой, капитальный ремонт, замена ремней и цепей ГРМ</div></div>
+      <div class="fact-card"><div class="k">Ключевые преимущества</div><div class="v">Опыт работы в данной сфере 30 лет. Только проверенные запчасти. Работа по нормативам дилерских центров. Дилерское оборудование. Опытные механики и мастера</div></div>
+      <div class="fact-card"><div class="k">Адрес и режим работы</div><div class="v">Санкт-Петербург, набережная Обводного канала, 150Р<small>Пн–Сб 10:00–20:00, Вс 10:00–18:00</small></div></div>
+      <div class="fact-card"><div class="k">Приоритетные темы</div><div class="v">Своевременное прохождение ТО<small>Своевременный ремонт ходовой части автомобиля</small></div></div>
+      <div class="fact-card"><div class="k">Стиль общения</div><div class="v">Обращение на «Вы»<small>Деловой стиль</small></div></div>
+      <div class="fact-card"><div class="k">Формат стоимости и согласование</div><div class="v">Формат «от N ₽»; все работы и цены индивидуальны<small>Согласование каждой публикации и еженедельный отчёт</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа сайта компании и фирменных цветов, названных компанией, определена палитра VAG-SERVICE.SPB: тёмно-серая основа и красный акцент, оранжевый — второй акцент для заголовков и иконок, белый — для текста на тёмном фоне.</p>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#171717"><span class="role">Основной</span><span class="name">Тёмно-серый · #171717</span></div>
+      <div class="swatch" style="background:#EB3D2F"><span class="role">Акцентный</span><span class="name">Красный · #EB3D2F</span></div>
+      <div class="swatch light" style="background:#E18537"><span class="role">Второстепенный</span><span class="name">Оранжевый · #E18537</span></div>
+      <div class="swatch" style="background:#000000"><span class="role">Фоновый</span><span class="name">Чёрный · #000000</span></div>
+      <div class="swatch light" style="background:#FFFFFF"><span class="role">Текстовый</span><span class="name">Белый · #FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 целиком отдан двум приоритетам компании: сначала своевременное ТО (регламент и плановые работы), затем своевременный ремонт ходовой части (диагностика и ремонт ходовой вместе с тормозными системами). Сторис поддерживают новости фактами о компании.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">ТО по нормативам</div><div class="d">регламент дилерских центров</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Плановые работы</div><div class="d">масла, жидкости, ремни и цепи ГРМ</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Ходовая часть</div><div class="d">ремонт на дилерском оборудовании</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Ходовая и тормоза</div><div class="d">ремонт вовремя, запись в сервис</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 1, 4 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица компании, обращение на «Вы», деловой стиль. Каждая тема раскрывает своё направление, без повтора полного списка услуг из текста в текст. Марки пишутся как товарные знаки: Audi, Volkswagen, Škoda, SEAT. Без превосходных степеней, без конкурентов, без цен в тексте (работы и цены индивидуальны). CTA — только словами, без телефона и e-mail в тексте. Объём — до 3000 знаков с пробелами. SEO-ключи вплетаются органично, без повторов подряд.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Техническое обслуживание Audi, Volkswagen, Škoda и SEAT по нормативам дилерских центров в Санкт-Петербурге</h3><span class="theme-tag">экспертный · ТО</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Своевременное прохождение ТО — первая приоритетная тема компании. Первая публикация знакомит с сервисом через то, как он проводит ТО: по нормативам дилерских центров, на дилерском оборудовании, с проверенными запчастями.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Мы проводим техническое обслуживание Audi, Volkswagen, Škoda и SEAT по нормативам дилерских центров. Опыт работы в этой сфере — 30 лет».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>VAG-SERVICE.SPB — техническое обслуживание и ремонт автомобилей Audi, Volkswagen, Škoda, SEAT</li>
+          <li>ТО проводится по нормативам дилерских центров</li>
+          <li>Работа на дилерском оборудовании</li>
+          <li>Устанавливаются только проверенные запчасти</li>
+          <li>Своевременное прохождение ТО — повод записаться в сервис заранее</li>
+          <li>Адрес: набережная Обводного канала, 150Р; Пн–Сб 10:00–20:00, Вс 10:00–18:00</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">техническое обслуживание audi спб</span><span class="chip">то volkswagen спб</span><span class="chip">то skoda спб</span><span class="chip">обслуживание seat спб</span><span class="chip">автосервис vag спб</span><span class="chip">то по регламенту дилера</span><span class="chip">автосервис обводный канал</span><span class="chip">дилерское оборудование</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на техническое обслуживание в VAG-SERVICE.SPB</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> ТО по нормативам дилера<br><b>Подзаголовок:</b> Audi · Volkswagen · Škoda · SEAT<br><br>
+        Тёмно-серый фон #171717 с диагональной чёрной полосой #000000, как на сайте компании. Заголовок белым #FFFFFF, подзаголовок оранжевым #E18537, короткая линия-акцент красным #EB3D2F. Фото автомобиля одной из марок на обслуживании. Логотип в углу. Текст и логотип — не более 20% площади, без контактов на изображении.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Замена масла, технических жидкостей, ремней и цепей ГРМ: плановые работы на Audi, Volkswagen, Škoda, SEAT вовремя</h3><span class="theme-tag">полезный · плановые работы</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Продолжение темы своевременного ТО: из чего складываются плановые работы в сервисе. Тема связывает ТО с направлением ремонта двигателей и показывает, что оба делаются в одном месте.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Своевременное ТО складывается из конкретных плановых работ. Рассказываем, какие из них мы выполняем для Audi, Volkswagen, Škoda и SEAT».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Замена масел и технических жидкостей в рамках технического обслуживания</li>
+          <li>Замена ремней и цепей ГРМ</li>
+          <li>Если двигателю нужен ремонт — ремонт бензиновых и дизельных двигателей, замена поршневой, капитальный ремонт выполняются в том же сервисе</li>
+          <li>Только проверенные запчасти, работа по нормативам дилерских центров</li>
+          <li>Все работы и цены индивидуальны — стоимость стандартных работ указана в карточке компании</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">замена масла audi спб</span><span class="chip">замена масла volkswagen</span><span class="chip">замена технических жидкостей</span><span class="chip">замена ремня грм спб</span><span class="chip">замена цепи грм volkswagen</span><span class="chip">ремонт двигателя skoda спб</span><span class="chip">капитальный ремонт двигателя</span><span class="chip">ремонт дизельного двигателя спб</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на плановые работы в VAG-SERVICE.SPB</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Плановые работы вовремя<br><b>Подзаголовок:</b> Масла, жидкости, ремни и цепи ГРМ<br><br>
+        Чёрный фон #000000, заголовок белым #FFFFFF, подзаголовок оранжевым #E18537. Три линейные иконки оранжевым #E18537 в стиле иконок сайта (канистра, капля, шестерня ГРМ). Фото моторного отсека автомобиля VAG. Логотип в углу, текст — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Ремонт ходовой части Audi, Volkswagen, Škoda, SEAT в Санкт-Петербурге: опыт 30 лет и дилерское оборудование</h3><span class="theme-tag">экспертный · ходовая</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Своевременный ремонт ходовой части — вторая приоритетная тема компании. Тема раскрывает направление через преимущества, которые компания называет сама: опыт, оборудование, мастера.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Ремонт ходовой части — одно из основных направлений нашей работы. За 30 лет в этой сфере мы знаем автомобили Audi, Volkswagen, Škoda и SEAT».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Ремонт ходовой части автомобилей Audi, Volkswagen, Škoda, SEAT</li>
+          <li>Опыт работы в данной сфере — 30 лет</li>
+          <li>Дилерское оборудование и работа по нормативам дилерских центров</li>
+          <li>Ремонт выполняют опытные механики и мастера</li>
+          <li>Только проверенные запчасти</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">ремонт ходовой части спб</span><span class="chip">ремонт ходовой audi</span><span class="chip">ремонт подвески volkswagen спб</span><span class="chip">ремонт ходовой skoda</span><span class="chip">ремонт ходовой seat</span><span class="chip">диагностика ходовой спб</span><span class="chip">автосервис vag санкт-петербург</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на ремонт ходовой части в VAG-SERVICE.SPB</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Ремонт ходовой части<br><b>Подзаголовок:</b> 30 лет опыта · дилерское оборудование<br><br>
+        Тёмно-серый фон #171717, заголовок белым #FFFFFF, «30 лет» крупно красным #EB3D2F, подзаголовок оранжевым #E18537. Фото автомобиля на подъёмнике с видом на подвеску. Диагональная чёрная полоса #000000 по краю. Логотип в углу, текст — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Ходовая часть и тормозные системы: своевременный ремонт Audi, Volkswagen, Škoda и SEAT на Обводном канале</h3><span class="theme-tag">продающий · запись</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Финал этапа: вторая тема по ходовой части объединяет её с тормозными системами, которые компания обслуживает в той же сфере деятельности, и даёт понятный путь к записи.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Ходовую часть автомобиля важно ремонтировать своевременно. Мы ремонтируем ходовую часть и тормозные системы Audi, Volkswagen, Škoda и SEAT».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Своевременный ремонт ходовой части — приоритетное направление сервиса</li>
+          <li>В том же сервисе — ремонт тормозных систем</li>
+          <li>Работа по нормативам дилерских центров, только проверенные запчасти</li>
+          <li>Все работы и цены индивидуальны; стоимость стандартных работ — в карточке компании</li>
+          <li>Набережная Обводного канала, 150Р; Пн–Сб 10:00–20:00, Вс 10:00–18:00</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">ремонт тормозной системы спб</span><span class="chip">ремонт тормозов audi</span><span class="chip">ремонт ходовой volkswagen спб</span><span class="chip">ремонт ходовой части обводный канал</span><span class="chip">автосервис skoda спб</span><span class="chip">автосервис seat спб</span><span class="chip">записаться в автосервис спб</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на ремонт ходовой части и тормозных систем — контакты в карточке</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Ходовая и тормоза<br><b>Подзаголовок:</b> Ремонт вовремя на Обводном канале<br><br>
+        Красный фон #EB3D2F с диагональной тёмно-серой полосой #171717, заголовок белым #FFFFFF, подзаголовок белым на тёмной полосе. Фото тормозного диска и суппорта автомобиля VAG. Логотип в углу, текст — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 1, 4 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Стандарт работы</div>
+        <h3>Работаем по нормативам дилерских центров</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Нормативы дилерских центров</li>
+          <li>Дилерское оборудование</li>
+          <li>Только проверенные запчасти</li>
+          <li>Опытные механики и мастера</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">автосервис vag спб</span><span class="chip">то по регламенту дилера</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмно-серый фон #171717, заголовок белым #FFFFFF, четыре пункта с линейными иконками оранжевым #E18537 в стиле блока «Почему мы?» на сайте. Тонкая красная линия #EB3D2F под заголовком.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">02 · ТО</div>
+        <h3>Техническое обслуживание Audi, Volkswagen, Škoda, SEAT</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Техническое обслуживание</li>
+          <li>Замена масел и технических жидкостей</li>
+          <li>Замена ремней и цепей ГРМ</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">то audi спб</span><span class="chip">замена масла volkswagen</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Чёрный фон #000000, заголовок белым #FFFFFF, названия марок строкой оранжевым #E18537, три пункта белым с красными маркерами #EB3D2F. Фото автомобиля VAG в верхней части слайда.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">03 · Двигатели</div>
+        <h3>Ремонт двигателей</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Бензиновые и дизельные двигатели</li>
+          <li>Замена поршневой</li>
+          <li>Капитальный ремонт</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">ремонт двигателя спб</span><span class="chip">капитальный ремонт двигателя</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмно-серый фон #171717 с диагональной чёрной полосой #000000, заголовок белым #FFFFFF, «бензин / дизель» двумя плашками красным #EB3D2F с белым текстом, остальные пункты белым. Фото двигателя.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">04 · Ходовая и тормоза</div>
+        <h3>Ходовая часть и тормозные системы</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Ремонт ходовой части</li>
+          <li>Ремонт тормозных систем</li>
+          <li>Опыт работы 30 лет</li>
+          <li>Наб. Обводного канала, 150Р</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">ремонт ходовой части спб</span><span class="chip">ремонт тормозов спб</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Красный фон #EB3D2F, заголовок белым #FFFFFF, «30 лет» крупно в тёмно-серой плашке #171717 оранжевым #E18537, адрес внизу белым. Фото колеса и тормозного суппорта.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 1</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Техническое обслуживание Audi, Volkswagen, Škoda и SEAT по нормативам дилерских центров в Санкт-Петербурге</h4><p>ТО по нормативам дилера, дилерское оборудование, проверенные запчасти</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Работаем по нормативам дилерских центров</h4><p>Нормативы, оборудование, запчасти, механики и мастера</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Замена масла, технических жидкостей, ремней и цепей ГРМ: плановые работы вовремя</h4><p>Из чего складывается своевременное ТО, связь с ремонтом двигателей</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Техническое обслуживание Audi, Volkswagen, Škoda, SEAT</h4><p>ТО, масла и технические жидкости, ремни и цепи ГРМ</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Ремонт ходовой части Audi, Volkswagen, Škoda, SEAT: опыт 30 лет и дилерское оборудование</h4><p>Направление ходовой через преимущества компании</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Ремонт двигателей</h4><p>Бензиновые и дизельные, замена поршневой, капитальный ремонт</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Ходовая часть и тормозные системы: своевременный ремонт на Обводном канале</h4><p>Ходовая вместе с тормозами, путь к записи</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Ходовая часть и тормозные системы</h4><p>Ремонт ходовой и тормозов, 30 лет, адрес</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
