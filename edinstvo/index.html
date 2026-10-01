@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Гостиница «Единство» — ТЗ</title>
+<style>
+  /* Layout: single sticky top bar + one reading column; agency chrome (ocean/teal/ice/roe), client colors only in swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47; --ocean: #1b6b78; --ocean-soft: #4c97a0; --ice: #eef6f5; --paper: #f7faf9; --surface: #ffffff;
+    --roe: #c4572b; --ink: #0f2429; --ink-soft: #4a6167; --ink-faint: #7c9296; --line: #cfe1de; --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+      --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+    --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 80px; } }
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+  .swatch-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(128,128,128,0.25); color: #ffffff; min-width: 0; }
+  .swatch.light { color: #171717; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 500; }
+  @media (max-width: 960px) { .swatch-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px; border-right: 1px solid var(--line-soft); background: var(--ice); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .theme-card { padding: 20px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); min-width: 0; flex: 1 1 320px; }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roe); margin-bottom: 6px; }
+  .cover-brief .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .story-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block:last-child { margin-bottom: 0; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  @media (max-width: 720px) { .roadmap { margin: 20px 16px 22px 24px; } .stage-acc summary { padding: 14px 16px; } }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Гостиница «Единство»</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Гостиница</div>
+    <h1 class="title">Гостиница «Единство»</h1>
+    <p class="lede">Гостиница в Череповце, расположенная в административной и культурной части города, на ул. Ломоносова, 19. Работает круглосуточно. Этап 1 знакомит с гостиницей через расположение, специальный тариф «Одним днем», размещение коллективных групп и спортивных команд, сервис и гибкую систему скидок. 4 темы новостей с обложками и 4 темы сторис в формате презентации. Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Череповец</span>
+      <span><b>Категория:</b> гостиница</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="k">Название</div><div class="v">Гостиница «Единство»</div></div>
+      <div class="fact-card"><div class="k">Расположение</div><div class="v">Гостиница «Единство» расположена в административной и культурной части города<small>Вологодская область, г. Череповец, ул. Ломоносова, дом 19</small></div></div>
+      <div class="fact-card"><div class="k">В шаговой доступности</div><div class="v">Парковая зона, храм, речка, мэрия, Заводоуправление «Северсталь», спортивные комплексы, стадионы, развлекательные центры, магазины, аптеки, спа центр</div></div>
+      <div class="fact-card"><div class="k">К услугам гостей</div><div class="v">Кафе, конференцзал, бесплатная автопарковка, вызов такси, сейф на Reception</div></div>
+      <div class="fact-card"><div class="k">Форма оплаты</div><div class="v">Наличный, безналичный расчёт, карты</div></div>
+      <div class="fact-card"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+      <div class="fact-card"><div class="k">Гибкая система скидок</div><div class="v">Бронирование с сайта — скидка 5%<small>Коллективным группам и спортивным командам — скидка до 10%. Участникам СВО — скидка 10%</small></div></div>
+      <div class="fact-card"><div class="k">Действующее предложение</div><div class="v">Специальный тариф «Одним днем» — скидка 50% на все категории номеров<small>При условии заселения с 14.00 до 22.00</small></div></div>
+      <div class="fact-card"><div class="k">Дополнительные услуги</div><div class="v">Конференц-зал на 25–30 человек — для проживающих и прочих клиентов<small>Ксерокс, дополнительный комплект постельного белья, дополнительное полотенце, одноразовые тапочки, услуги прачечной (по договоренности с горничной)</small></div></div>
+      <div class="fact-card"><div class="k">Как добраться</div><div class="v">Вокзал — автобус № 6 до остановки «Проспект Строителей» или такси<small>Аэропорт — такси. GPS-координаты: 59.1233, 37.88967</small></div></div>
+      <div class="fact-card"><div class="k">Подача в текстах</div><div class="v">Обращение на «вы», допустим неформальный тон<small>Стоимость — без указания цен</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа ресурсов компании определена бежево-коричневая палитра гостиницы «Единство»: бордово-коричневый для навигации и заголовков, терракотовый цвет рукописного логотипа, глубокий бордовый для плотных плашек, красный для акцентов, бежевая фактура декоративной штукатурки интерьера и графитовый для текста.</p>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#71130B"><span class="role">Основной</span><span class="name">Бордо-коричневый · #71130B</span></div>
+      <div class="swatch" style="background:#9F2F17"><span class="role">Акцентный</span><span class="name">Терракота логотипа · #9F2F17</span></div>
+      <div class="swatch" style="background:#540B06"><span class="role">Второстепенный</span><span class="name">Глубокий бордовый · #540B06</span></div>
+      <div class="swatch" style="background:#BA271A"><span class="role">Дополнительный</span><span class="name">Красный · #BA271A</span></div>
+      <div class="swatch light" style="background:#D9CFBF"><span class="role">Фоновый</span><span class="name">Бежевый · #D9CFBF</span></div>
+      <div class="swatch" style="background:#222529"><span class="role">Текстовый</span><span class="name">Графит · #222529</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 начинается с главного преимущества гостиницы — расположения в административной и культурной части Череповца. Затем — действующий специальный тариф «Одним днем», размещение коллективных групп и спортивных команд, и в завершение — сервис гостиницы и гибкая система скидок. Каждая сторис дополняет свою новость одним практичным фактом.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">Расположение</div><div class="d">административная и культурная часть города</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Тариф «Одним днем»</div><div class="d">скидка 50% при заселении с 14.00 до 22.00</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Группы и команды</div><div class="d">конференцзал, скидка до 10%</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Сервис и скидки</div><div class="d">кафе, парковка, сейф, 5% с сайта</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 1, 4 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица гостиницы («мы»), обращение к читателю на «вы», допустим неформальный тон. Каждая тема раскрывает свою сторону гостиницы, без повторения полного списка услуг в каждом тексте. Только факты из анкеты и с сайта гостиницы, без приукрашивания и превосходных степеней. Цены в текстах не указываются; скидки — в процентах, как их сформулировала компания. CTA — только словами, без телефона и e-mail в тексте. Объём — до 3000 знаков с пробелами. SEO-ключи вплетаются органично, без повторов подряд.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Гостиница «Единство» в административной и культурной части Череповца: парк, храм, речка и Заводоуправление «Северсталь» в шаговой доступности</h3><span class="theme-tag">имиджевый · расположение</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Открывающая тема этапа знакомит с гостиницей через то, что компания назвала первым в описании своей работы, — расположение и всё, что находится в шаговой доступности. Тема отвечает на главный вопрос при выборе гостиницы в незнакомом городе: где она находится и что рядом.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Наша гостиница расположена в административной и культурной части Череповца — на улице Ломоносова, 19. В шаговой доступности — парковая зона, храм, речка, мэрия и Заводоуправление «Северсталь»».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Гостиница «Единство» — Вологодская область, г. Череповец, ул. Ломоносова, дом 19, административная и культурная часть города</li>
+          <li>В шаговой доступности — парковая зона, храм, речка, мэрия, Заводоуправление «Северсталь»</li>
+          <li>Также в шаговой доступности — спортивные комплексы, стадионы, развлекательные центры, магазины, аптеки, спа центр</li>
+          <li>Как добраться: с вокзала — автобус № 6 до остановки «Проспект Строителей» или такси, из аэропорта — такси</li>
+          <li>Гостиница работает круглосуточно, для гостей на автомобиле — бесплатная автопарковка</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">гостиница череповец</span><span class="chip">гостиница на ломоносова череповец</span><span class="chip">где остановиться в череповце</span><span class="chip">гостиница рядом с северсталь</span><span class="chip">гостиница рядом с мэрией череповец</span><span class="chip">гостиница с парковкой череповец</span><span class="chip">гостиница единство череповец</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Бронируйте номер в гостинице «Единство» на сайте</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> В шаговой доступности<br><b>Подзаголовок:</b> Административная и культурная часть Череповца<br><br>
+        Фон — бежевая фактура декоративной штукатурки #D9CFBF, как на фото интерьера гостиницы на сайте. Рукописный логотип «гостиница Единство» терракотой #9F2F17 сверху слева. Заголовок крупно бордо-коричневым #71130B, подзаголовок графитом #222529. Справа — фото фасада гостиницы или вида улицы из материалов компании. По нижнему краю — тонкая полоса глубокого бордового #540B06. Текст и логотип — не более 20% площади, без контактов и адреса на изображении.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Специальный тариф «Одним днем» в гостинице «Единство»: скидка 50% на все категории номеров в Череповце</h3><span class="theme-tag">продающий · спецпредложение</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Это действующее специальное предложение, которое компания указала в анкете. Тема рассказывает об условиях тарифа: скидка 50% на все категории номеров при заселении с 14.00 до 22.00.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Если номер нужен вам на день, у нас действует специальный тариф «Одним днем» — скидка 50% на все категории номеров при заселении с 14.00 до 22.00».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Специальный тариф «Одним днем» — скидка 50% на все категории номеров</li>
+          <li>Условие тарифа — заселение с 14.00 до 22.00</li>
+          <li>Гостиница работает круглосуточно</li>
+          <li>Гостиница расположена в административной и культурной части Череповца, на ул. Ломоносова, 19</li>
+          <li>К услугам гостей — кафе, бесплатная автопарковка, вызов такси, сейф на Reception</li>
+          <li>Оплата — наличный, безналичный расчёт, карты</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">номер на день череповец</span><span class="chip">дневное размещение череповец</span><span class="chip">гостиница со скидкой череповец</span><span class="chip">забронировать номер череповец</span><span class="chip">тариф одним днем</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Бронируйте номер по тарифу «Одним днем»</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Тариф «Одним днем»<br><b>Подзаголовок:</b> −50% на все категории номеров<br><br>
+        Фон — бежевая фактура штукатурки #D9CFBF. Рукописный логотип терракотой #9F2F17 сверху. «−50%» крупной цифрой терракотой #9F2F17, название тарифа бордо-коричневым #71130B, подзаголовок графитом #222529. Справа — фото номера гостиницы из материалов компании. Плашка «с 14.00 до 22.00» — глубокий бордовый #540B06 с бежевым текстом #D9CFBF. Без слов «акция», «купить», «продать», без контактов. Текст и логотип — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Гостиница для коллективных групп и спортивных команд в Череповце: конференцзал и скидка до 10%</h3><span class="theme-tag">продающий · группы и команды</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Компания отдельно выделила скидку коллективным группам и спортивным командам. В шаговой доступности от гостиницы — спортивные комплексы и стадионы, в гостинице есть конференцзал.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Коллективным группам и спортивным командам мы предоставляем скидку до 10%. В шаговой доступности от гостиницы — спортивные комплексы и стадионы».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Коллективным группам и спортивным командам — скидка до 10%</li>
+          <li>Спортивные комплексы и стадионы — в шаговой доступности от гостиницы</li>
+          <li>Мэрия и Заводоуправление «Северсталь» — в шаговой доступности</li>
+          <li>Конференц-зал на 25–30 человек — для проживающих в гостинице и прочих клиентов</li>
+          <li>Ксерокс — в списке услуг гостиницы</li>
+          <li>Оплата — наличный, безналичный расчёт, карты</li>
+          <li>Кафе и бесплатная автопарковка — к услугам гостей</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">гостиница для спортивных команд череповец</span><span class="chip">размещение групп череповец</span><span class="chip">гостиница для групп череповец</span><span class="chip">конференц-зал череповец</span><span class="chip">аренда конференц-зала череповец</span><span class="chip">гостиница безналичный расчет череповец</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Оставляйте заявку на размещение группы или команды</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Группам и командам<br><b>Подзаголовок:</b> Скидка до 10% и конференцзал<br><br>
+        Верхние две трети — фото конференц-зала гостиницы из материалов компании. Нижняя треть — плашка глубокого бордового #540B06, заголовок на ней бежевым #D9CFBF, подзаголовок светлым бежевым, «до 10%» терракотой на бежевом кружке #D9CFBF. Рукописный логотип терракотой #9F2F17 на светлой подложке сверху слева. Без контактов. Текст и логотип — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Сервис гостиницы «Единство» в Череповце: кафе, бесплатная автопарковка, сейф на Reception и гибкая система скидок</h3><span class="theme-tag">вовлекающий · сервис</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Завершающая тема этапа собирает в одном материале услуги для гостей из анкеты и с сайта гостиницы и рассказывает о гибкой системе скидок — в том числе о скидке 5% при бронировании с сайта.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Наша гостиница работает круглосуточно, а к вашим услугам — кафе, конференцзал, бесплатная автопарковка, вызов такси и сейф на Reception».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>К услугам гостей — кафе, конференцзал, бесплатная автопарковка, вызов такси, сейф на Reception</li>
+          <li>Дополнительные услуги — дополнительный комплект постельного белья, дополнительное полотенце, одноразовые тапочки</li>
+          <li>Услуги прачечной — по договоренности с горничной</li>
+          <li>Оплата — наличный, безналичный расчёт, карты</li>
+          <li>Гибкая система скидок: бронирование с сайта — скидка 5%, участникам СВО — скидка 10%</li>
+          <li>Гостиница работает круглосуточно</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">гостиница с кафе череповец</span><span class="chip">гостиница с бесплатной парковкой череповец</span><span class="chip">бронирование гостиницы череповец</span><span class="chip">скидка при бронировании с сайта</span><span class="chip">гостиница круглосуточно череповец</span><span class="chip">гостиница скидка участникам сво</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Бронируйте номер на сайте гостиницы со скидкой 5%</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Сервис для гостей<br><b>Подзаголовок:</b> Работаем круглосуточно<br><br>
+        Фон — бежевая фактура штукатурки #D9CFBF. Рукописный логотип терракотой #9F2F17 сверху. Заголовок бордо-коричневым #71130B, подзаголовок красным #BA271A. Коллаж из трёх фото из материалов компании: кафе, стойка Reception, парковка у гостиницы — в тонких рамках бордо-коричневого #71130B. Без контактов. Текст и логотип — не более 20% площади.
+      </div></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 1, 4 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Дорога</div>
+        <h3>Как добраться до гостиницы</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>С вокзала — автобус № 6 до остановки «Проспект Строителей» или такси</li>
+          <li>Из аэропорта — такси</li>
+          <li>На автомобиле — бесплатная автопарковка</li>
+          <li>GPS: 59.1233, 37.88967</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">как добраться гостиница череповец</span><span class="chip">гостиница с парковкой череповец</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — бежевая фактура штукатурки #D9CFBF. Рукописный логотип терракотой #9F2F17 сверху. Заголовок бордо-коричневым #71130B. Три пункта столбиком с простыми линейными иконками (автобус, такси, автомобиль) терракотой #9F2F17, текст графитом #222529. Внизу — полоса глубокого бордового #540B06 с GPS-координатами бежевым.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">02 · Тариф</div>
+        <h3>Тариф «Одним днем»</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>−50%</li>
+          <li>На все категории номеров</li>
+          <li>При заселении с 14.00 до 22.00</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">номер на день череповец</span><span class="chip">гостиница со скидкой череповец</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Верх — фото номера гостиницы из материалов компании. Низ — плашка глубокого бордового #540B06: название тарифа бежевым #D9CFBF, «−50%» крупно бежевым, время заселения в рамке терракоты #9F2F17. Рукописный логотип терракотой на светлой подложке сверху.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">03 · Конференц-зал</div>
+        <h3>Конференц-зал гостиницы</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>25–30 человек</li>
+          <li>Для проживающих и прочих клиентов</li>
+          <li>Ксерокс</li>
+          <li>Оплата наличными, безналичным расчётом, картой</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">конференц-зал череповец</span><span class="chip">конференц-зал в гостинице</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — фото конференц-зала из материалов компании, затемнённое снизу к бордо-коричневому #71130B. Заголовок бежевым #D9CFBF, «25–30» крупно бежевым. Тезисы — в плашках бежевого #D9CFBF с текстом графитом #222529. Рукописный логотип терракотой на светлой подложке сверху.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">04 · Скидки</div>
+        <h3>Гибкая система скидок</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>5% — бронирование с сайта</li>
+          <li>До 10% — коллективным группам и спортивным командам</li>
+          <li>10% — участникам СВО</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">гостиница со скидкой череповец</span><span class="chip">бронирование гостиницы череповец</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — бежевая фактура штукатурки #D9CFBF. Заголовок бордо-коричневым #71130B. Три строки-карточки: процент крупно терракотой #9F2F17 слева, условие графитом #222529 справа, разделители тонкими линиями #71130B. Рукописный логотип терракотой сверху, внизу — тонкая полоса глубокого бордового #540B06.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 1</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Гостиница «Единство» в административной и культурной части Череповца</h4><p>Парк, храм, речка, мэрия, «Северсталь», стадионы, магазины в шаговой доступности</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Как добраться до гостиницы</h4><p>Автобус № 6 с вокзала, такси, бесплатная автопарковка, GPS</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Специальный тариф «Одним днем»</h4><p>Скидка 50% на все категории номеров при заселении с 14.00 до 22.00</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Тариф «Одним днем»</h4><p>−50%, все категории номеров, заселение с 14.00 до 22.00</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Гостиница для коллективных групп и спортивных команд</h4><p>Скидка до 10%, конференцзал, стадионы и «Северсталь» рядом</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Конференц-зал гостиницы</h4><p>25–30 человек, для проживающих и прочих клиентов, ксерокс</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Сервис гостиницы «Единство»</h4><p>Кафе, парковка, сейф на Reception, прачечная, скидки 5% и 10%</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Гибкая система скидок</h4><p>5% с сайта, до 10% группам и командам, 10% участникам СВО</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+</body>
+</html>
