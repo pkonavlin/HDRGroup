@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Баня-клуб Здрава — ТЗ</title>
+<style>
+  /* Layout: single sticky top bar + one reading column; agency chrome (ocean/teal/ice/roe), client colors only in swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #c4572b;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+      --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+    --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 80px; } }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(128,128,128,0.25); color: #ffffff; }
+  .swatch.light { color: #171717; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 500; }
+  @media (max-width: 860px) { .swatch-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px; border-right: 1px solid var(--line-soft); background: var(--ice); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .theme-card { padding: 20px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); min-width: 0; flex: 1 1 320px; }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roe); margin-bottom: 6px; }
+  .cover-brief .body { font-size: 0.92rem; color: var(--ink-soft); }
+
+  .story-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block:last-child { margin-bottom: 0; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  @media (max-width: 720px) { .roadmap { margin: 20px 16px 22px 24px; } .stage-acc summary { padding: 14px 16px; } }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Баня-клуб «Здрава»</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Баня</div>
+    <h1 class="title">Баня-клуб «Здрава»</h1>
+    <p class="lede">Клуб любителей русской бани в Сыктывкаре — авторский проект оздоровительного клубного банного отдыха с пар-мастерами. Этап 1 посвящён обрядовым банным программам, банному пониманию и традициям русской бани, которые компания возрождает и бережёт. 4 темы новостей с обложками и 4 темы сторис в формате презентации. Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Сыктывкар</span>
+      <span><b>Категория:</b> баня, банный клуб</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="k">Название</div><div class="v">Баня-клуб «Здрава»<small>Клуб любителей русской бани «Здрава»</small></div></div>
+      <div class="fact-card"><div class="k">Сфера деятельности</div><div class="v">Русская баня: авторские программы парения с пар-мастером, обрядовые бани<small>Более 15 программ: для двоих, индивидуальные, коллективные</small></div></div>
+      <div class="fact-card"><div class="k">Опыт</div><div class="v">Проводники в мир русской бани с 2019 года<small>Пар-мастера постоянно учатся у банных учителей, посещают мастер-классы и обучения</small></div></div>
+      <div class="fact-card"><div class="k">Формат работы</div><div class="v">Баня не сдаётся в аренду и не работает на потоке — топится только под заказ, под каждого гостя<small>Не более 2 компаний в день: первая баня к 11:00, вторая к 17:00 или 18:00. Вместимость — до 6 человек</small></div></div>
+      <div class="fact-card"><div class="k">Пар и парная</div><div class="v">В печи — только камень нефрит: лёгкий, обволакивающий, не обжигающий пар<small>Холодная купель, банный чан под открытым небом</small></div></div>
+      <div class="fact-card"><div class="k">Что входит в программу</div><div class="v">Банные шапки, простыни, полотенца, веники, травы, холодная купель, работа пар-мастера, стол с лёгким перекусом<small>Фирменный травяной чай в самоваре, мёд, домашнее варенье, сушки</small></div></div>
+      <div class="fact-card"><div class="k">Пар-мастера</div><div class="v">Программы проводит Евгений Кадира<small>Директор клуба — Светлана Кадира</small></div></div>
+      <div class="fact-card"><div class="k">Правила</div><div class="v">Алкоголь в бане запрещён<small>Бронь — предоплата 1000 ₽; с собой — тапочки и полотенце; программа в среднем 3 часа</small></div></div>
+      <div class="fact-card"><div class="k">Адрес</div><div class="v">Сыктывкар, м. Дырнос, СНТ Лесное-2<small>Работа по предварительной записи</small></div></div>
+      <div class="fact-card"><div class="k">Приоритетная тема</div><div class="v">Обрядовые банные услуги: банное понимание и традиции<small>Обряд «Возрождение» — подробно</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа ресурсов компании определена палитра баня-клуба «Здрава»: глубокий тёмно-лесной фон с зелёным свечением, яркая зелень листа для плашек и кнопок, тёплая фактура дерева и белый для текста и логотипа.</p>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#12170C"><span class="role">Фоновый</span><span class="name">Тёмный лес · #12170C</span></div>
+      <div class="swatch" style="background:#48642D"><span class="role">Основной</span><span class="name">Лесная зелень · #48642D</span></div>
+      <div class="swatch light" style="background:#8CBD5C"><span class="role">Акцентный</span><span class="name">Зелень листа · #8CBD5C</span></div>
+      <div class="swatch light" style="background:#D2A76C"><span class="role">Второстепенный</span><span class="name">Дерево · #D2A76C</span></div>
+      <div class="swatch light" style="background:#F8F8F7"><span class="role">Текстовый</span><span class="name">Белый · #F8F8F7</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 целиком отдан обрядовым баням и традициям. Сначала — банное понимание клуба и то, как здесь готовят баню. Затем три обрядовые программы по порядку: пихтовый обряд «Возрождение», баня в день рождения, мужская и женская обрядовые бани. Сторис закрепляют факты о клубе.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">Банное понимание</div><div class="d">традиции клуба с 2019 года</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Обряд «Возрождение»</div><div class="d">пихтовый зимний обряд</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Баня в день рождения</div><div class="d">обрядовая баня «Самый лучший день»</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Мужская и женская баня</div><div class="d">казачья «5 стихий» и обережная</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 1, 4 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица клуба («мы»), тепло, подробно и образно — каждая тема раскрывает свою банную традицию через её этапы, материалы (пихта, травы, снег, сено, соль, веники) и смысл обряда. Без перечисления всех программ клуба в каждом тексте. Без обещаний лечения и медицинских формулировок, без превосходных степеней. CTA — только словами, без телефона и e-mail в тексте. Объём — до 3000 знаков с пробелами. SEO-ключи вплетаются органично, без повторов подряд.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Банное понимание и традиции русской бани в Сыктывкаре: как баня-клуб «Здрава» бережёт вековые обычаи парения</h3><span class="theme-tag">имиджевый · традиции</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Открывающая тема этапа знакомит с банным пониманием клуба — основой, на которой строятся все обрядовые программы. Показывает, чем клуб отличается от бани в аренду: баня готовится под одного гостя, пар-мастер ведёт весь процесс.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«С 2019 года мы выступаем проводниками в мир русской бани. Для нас баня — место заботливого и доброго отношения к человеку, а банные традиции мы храним с любовью и почтением, в современном прочтении».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Баня-клуб «Здрава» — авторский проект клубного банного отдыха: атмосферу создают с почтением к вековым банным традициям</li>
+          <li>Баню не сдают в аренду и не работают на потоке: каждая баня топится только под заказ, не более 2 компаний в день</li>
+          <li>В печи — камень нефрит: лёгкий, обволакивающий, не обжигающий пар</li>
+          <li>Пар-мастера постоянно совершенствуют знания у банных учителей, на мастер-классах и обучениях</li>
+          <li>Традиция застолья после пара: травяной чай в самоваре, мёд, домашнее варенье, сушки</li>
+          <li>Алкоголь в бане под запретом — баня и алкоголь несовместимы</li>
+          <li>Сыктывкар, м. Дырнос, СНТ Лесное-2 — отдых вдали от городской суеты</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">русская баня сыктывкар</span><span class="chip">банный клуб сыктывкар</span><span class="chip">баня с пар-мастером</span><span class="chip">традиции русской бани</span><span class="chip">банные программы сыктывкар</span><span class="chip">баня на дровах сыктывкар</span><span class="chip">баня дырнос</span><span class="chip">баня лесное-2</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на банную программу в баня-клуб «Здрава»</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Традиции русской бани<br><b>Подзаголовок:</b> Банное понимание с 2019 года<br><br>
+        Тёмно-лесной фон #12170C с мягким зелёным свечением #48642D из верхнего угла, как на баннерах компании. Логотип «баня-клуб ЗДРАВА» белым #F8F8F7 по центру сверху. Заголовок белым #F8F8F7 на деревянной плашке с фактурой #D2A76C, подзаголовок — в зелёной плашке-пилюле #8CBD5C с белым текстом. Фото пар-мастера в льняной рубахе с дубовым веником на фоне парной и пара. По краям — размытые дубовые листья. Текст и логотип — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Пихтовый обряд «Возрождение» в Сыктывкаре: зимняя обрядовая баня с пихтовым коконом, снегом и тишиной</h3><span class="theme-tag">экспертный · обряд</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Обряд «Возрождение» компания выделила отдельно и попросила раскрыть подробно. Обряд проводится только зимой — для него нужно много снега, поэтому тема выходит к началу сезона.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Есть обряд, который мы проводим только зимой — когда выпадает много снега. Это пихтовый обряд «Возрождение»: тишина, тепло пихты и пробуждение».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Индивидуальная программа, проводится только в зимнее время: для обряда нужно много снега</li>
+          <li>Гостя погружают в обряд только после индивидуальной консультации — его действие сильное и подходит не каждому</li>
+          <li>Первый пар — прогревание и расслабление</li>
+          <li>Второй пар с пихтой — гостя укладывают на подстилку из пихты, с головой накрывают большими пихтовыми лапами, как коконом, и поддают пар; гость лежит в полной тишине, желательно без света</li>
+          <li>Третий пар — пробуждение и возвращение: на разогретого под пихтой гостя накладывают снег</li>
+          <li>Завершение — отдых на мягком душистом сене</li>
+          <li>В программе не предусмотрено парение вениками; длительность 2–3 часа, проводит Евгений Кадира</li>
+          <li>Программа помогает разгрузить нервную систему, когда невысказанные эмоции застряли внутри</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">обряд возрождение баня</span><span class="chip">пихтовая баня сыктывкар</span><span class="chip">обрядовая баня сыктывкар</span><span class="chip">банный обряд с пихтой</span><span class="chip">зимняя баня со снегом</span><span class="chip">индивидуальная баня сыктывкар</span><span class="chip">баня перезагрузка</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на консультацию перед обрядом «Возрождение»</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Обряд «Возрождение»<br><b>Подзаголовок:</b> Пихта · пар · снег<br><br>
+        Тёмно-лесной фон #12170C, зелёное свечение #48642D из-за пихтовых лап по краям. Заголовок крупно белым #F8F8F7, подзаголовок — в зелёной плашке-пилюле #8CBD5C. Фото пихтовых лап в клубах пара в полумраке парной, по нижнему краю — снег. Логотип «баня-клуб ЗДРАВА» белым сверху. Текст и логотип — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Обрядовая баня в день рождения «Самый лучший день»: старинная традиция омовения на новый круг Солнца</h3><span class="theme-tag">вовлекающий · обряд</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Вторая обрядовая программа этапа раскрывает традицию, связанную с личной датой гостя. Тема даёт понятный повод к записи в любой месяц года и подходит как подарок.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«В древних традициях день рождения считался точкой перерождения. Именно в этот период мы проводим для именинника обрядовую баню «Самый лучший день»».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Обрядовая баня для именинника: по поверьям, такая баня смывает с человека накопившуюся «скверну»</li>
+          <li>Время проведения — за 7 дней до дня рождения, в сам день рождения или в течение 7 дней после</li>
+          <li>Индивидуальная церемония, созданная под одного гостя: нет двух одинаковых бань</li>
+          <li>Очищение травами, паром и силой природных элементов; вода смывает прожитое, пар снимает внутреннюю тяжесть, веник — проводник обновления</li>
+          <li>Тёплый отдых между парениями с травяным чаем, домашние угощения по семейным рецептам</li>
+          <li>Перед обрядом — личный спокойный разговор с мастером</li>
+          <li>Длительность 3 часа; баня, работа мастера, травы и угощения включены</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">баня в день рождения сыктывкар</span><span class="chip">обрядовая баня день рождения</span><span class="chip">подарок на день рождения баня</span><span class="chip">индивидуальное парение сыктывкар</span><span class="chip">баня с травами</span><span class="chip">банный клуб здрава</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на обрядовую баню «Самый лучший день» к своему дню рождения</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Баня в день рождения<br><b>Подзаголовок:</b> Обряд «Самый лучший день»<br><br>
+        Тёмно-лесной фон #12170C с тёплым свечением. Заголовок белым #F8F8F7 на деревянной плашке #D2A76C, подзаголовок — в зелёной плашке-пилюле #8CBD5C. Фото самовара, пучков трав и угощений на столе в комнате отдыха клуба, на втором плане — пар из парной. Дубовые листья по углам. Логотип белым сверху. Текст и логотип — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Казачья баня «5 стихий» и женская обережная баня: мужские и женские банные традиции в Сыктывкаре</h3><span class="theme-tag">продающий · традиции</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Завершение этапа показывает, что банные традиции в клубе живут и в компании: мужская казачья баня и женская обережная баня — два обрядовых формата на 4–6 человек с разной манерой парения.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«В русской бане издавна парились по-разному: мужчины — ярко, с контрастом и силой, женщины — бережно и мягко. Обе традиции мы сохраняем в своих программах».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Казачья баня «5 стихий» переплетает мудрость казачьих традиций разных станиц России</li>
+          <li>Пар-мастер проводит гостей через 5 стихий: землю, огонь, воду, воздух, эфир</li>
+          <li>Этапы: первый пар с травами и прогрев ног дубовыми вениками, солевой пилинг, парение дубовыми или берёзовыми вениками с контрастом в ледяной купели, финал — ладка и правка тела нагайкой</li>
+          <li>Женская обережная баня — камерная церемония: мягкое женское парение в три захода под расслабляющую музыку</li>
+          <li>Ритуалы очищения и отпускания, выкатывание солью, настоянной на травах, ладование — гармонизация тела и состояния</li>
+          <li>Обе программы — 3 часа, для компании 4–6 человек</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">казачья баня сыктывкар</span><span class="chip">мужская баня сыктывкар</span><span class="chip">женская баня сыктывкар</span><span class="chip">обережная баня</span><span class="chip">парение дубовым веником</span><span class="chip">баня с купелью сыктывкар</span><span class="chip">баня для компании сыктывкар</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Собирайте компанию и записывайтесь на казачью или обережную баню</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Мужская и женская баня<br><b>Подзаголовок:</b> Казачья «5 стихий» · обережная<br><br>
+        Тёмно-лесной фон #12170C, зелёное свечение #48642D. Заголовок белым #F8F8F7 на деревянной плашке #D2A76C, как в сторис компании «Баня для мужчин», подзаголовок — в зелёной плашке-пилюле #8CBD5C. Два фото рядом: пар-мастер в льняной рубахе с дубовым веником и женская парная с травами. Дубовые листья по краям с размытием. Логотип белым сверху. Текст и логотип — не более 20% площади, без контактов.
+      </div></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 1, 4 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Формат клуба</div>
+        <h3>Баня топится только для вас</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Не сдаём в аренду, не работаем на потоке</li>
+          <li>До 2 компаний в день: к 11:00 и к 17:00/18:00</li>
+          <li>До 6 гостей</li>
+          <li>Без алкоголя</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">банный клуб сыктывкар</span><span class="chip">баня под заказ</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмно-лесной фон #12170C с зелёным свечением #48642D сверху, логотип «баня-клуб ЗДРАВА» белым #F8F8F7. Заголовок белым на деревянной плашке #D2A76C. Четыре тезиса — в полупрозрачных тёмных плашках-пилюлях с белым текстом, как в сторис компании. Фото печи и парной, дубовые листья по углам.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">02 · Обрядовые бани</div>
+        <h3>Обрядовые бани клуба</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Обряд «Возрождение» — пихта и снег, зимой</li>
+          <li>«Самый лучший день» — в день рождения</li>
+          <li>«Баня Бабы Яги» — женская</li>
+          <li>Казачья «5 стихий»</li>
+          <li>Женская обережная</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">обрядовая баня сыктывкар</span><span class="chip">банные программы</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмно-лесной фон #12170C, заголовок белым #F8F8F7. Пять названий — столбиком в зелёных плашках-пилюлях #8CBD5C с белым текстом, пояснения мелко белым под каждой. Фото пихтовых лап и веников в пару по нижнему краю, логотип белым сверху.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">03 · Пар и стол</div>
+        <h3>Что ждёт в бане</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Пар на нефрите — мягкий, не обжигающий</li>
+          <li>Веники, травы, холодная купель</li>
+          <li>Шапки, простыни, полотенца</li>
+          <li>Самовар, травяной чай, мёд, варенье</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">баня с купелью сыктывкар</span><span class="chip">русская баня сыктывкар</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — фото стола с самоваром и травами, затемнённое к #12170C снизу. Заголовок белым #F8F8F7 на деревянной плашке #D2A76C. Тезисы — в полупрозрачных тёмных плашках-пилюлях с белым текстом, ключевое слово «нефрит» — в зелёной плашке #8CBD5C. Логотип белым сверху.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">04 · Передача традиций</div>
+        <h3>«Домашний банщик» — обучение парению</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Обучающая программа</li>
+          <li>2 дня</li>
+          <li>Группа 2–4 человека</li>
+          <li>Банные традиции — в вашу баню</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">обучение парению сыктывкар</span><span class="chip">домашний банщик</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Тёмно-лесной фон #12170C с зелёным свечением #48642D. Заголовок белым #F8F8F7 на деревянной плашке #D2A76C, «2 дня» крупно в зелёной плашке-пилюле #8CBD5C. Фото пар-мастера в льняной рубахе с веником, показывающего парение. Дубовые листья по краям, логотип белым сверху.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 1</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Банное понимание и традиции русской бани в Сыктывкаре</h4><p>Баня под заказ, нефрит, пар-мастера, банное застолье, без алкоголя</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Баня топится только для вас</h4><p>Не аренда, до 2 компаний в день, до 6 гостей, без алкоголя</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Пихтовый обряд «Возрождение»</h4><p>Зимний обряд: пихтовый кокон, тишина, снег, отдых на сене</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Обрядовые бани клуба</h4><p>Пять обрядовых программ одним списком</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Обрядовая баня в день рождения «Самый лучший день»</h4><p>Традиция омовения на новый круг Солнца, ±7 дней от даты</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Что ждёт в бане</h4><p>Пар на нефрите, веники и купель, самовар с травяным чаем</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Казачья баня «5 стихий» и женская обережная баня</h4><p>Мужская и женская банные традиции для компании 4–6 человек</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>«Домашний банщик» — обучение парению</h4><p>2 дня, 2–4 человека, банные традиции в свою баню</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
