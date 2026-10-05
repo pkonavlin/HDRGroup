@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Альянс-окно · ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky top bar + single reading column; agency chrome only, brand colors live in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B; --roe-soft:#F6E4DB;
+  --bg:#F5F8F8; --card:#FFFFFF; --ink:#13262C; --ink-soft:#4D6268; --line:#D9E3E4; --chip:#E8F0F1;
+  --bar:#0E3B47; --bar-ink:#F5F8F8;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Public Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1A1E; --card:#112429; --ink:#E6EEEF; --ink-soft:#9DB2B6; --line:#21393F; --chip:#17313A;
+  --teal:#5FB3BF; --roe:#E58A63; --roe-soft:#3A2219; --bar:#08161A; --bar-ink:#E6EEEF; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1A1E; --card:#112429; --ink:#E6EEEF; --ink-soft:#9DB2B6; --line:#21393F; --chip:#17313A;
+  --teal:#5FB3BF; --roe:#E58A63; --roe-soft:#3A2219; --bar:#08161A; --bar-ink:#E6EEEF; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bar);color:var(--bar-ink)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:24px;overflow-x:auto;white-space:nowrap}
+.brand{font-family:var(--f-display);font-weight:700;font-size:18px;flex:none}
+.topbar nav{display:flex;gap:18px}
+.topbar a{color:var(--bar-ink);opacity:.78;text-decoration:none;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.topbar a:hover,.topbar a:focus-visible{opacity:1;outline:none;text-decoration:underline;text-underline-offset:4px}
+main{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:40px 64px;display:flex;flex-direction:column;gap:64px}
+section{scroll-margin-top:64px;display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--roe)}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.04;letter-spacing:-.01em}
+h2{font-size:clamp(26px,4vw,34px);line-height:1.12}
+h3{font-size:21px;line-height:1.25}
+p{margin:0;max-width:68ch}
+.lead{color:var(--ink-soft);font-size:17.5px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));border-top:1px solid var(--line)}
+.fact{padding:14px 16px 14px 0;border-bottom:1px solid var(--line);min-width:0}
+.fact dt{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.fact dd{margin:4px 0 0;font-weight:600}
+.facts dl{display:contents}
+/* swatches */
+.note{font-size:15px;color:var(--ink-soft)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.sw{border-radius:10px;min-height:132px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:1px solid rgba(0,0,0,.06)}
+.sw .r{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.sw .n{font-weight:700;font-size:15px}
+.sw .h{font-family:var(--f-mono);font-size:13px}
+.sw.lt{color:#FFFFFF}.sw.dk{color:#1E2733}
+/* logic */
+.chain{display:flex;flex-wrap:wrap;gap:10px;align-items:center;list-style:none;padding:0;margin:0}
+.chain li{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14.5px}
+.chain li.now{border-color:var(--teal);color:var(--teal);font-weight:600}
+.chain .ar{border:0;background:none;padding:0;color:var(--ink-soft)}
+.stagecap{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+/* theme cards */
+.tone-banner{background:var(--roe-soft);border-left:3px solid var(--roe);padding:14px 18px;border-radius:0 8px 8px 0;font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.card-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline}
+.num{font-family:var(--f-mono);font-size:12.5px;color:var(--roe);letter-spacing:.06em}
+.tag{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);color:var(--teal);padding:3px 9px;border-radius:999px}
+.block{display:flex;flex-direction:column;gap:6px}
+.lbl{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.intro-voice{font-size:17px;font-style:italic;border-left:2px solid var(--teal);padding-left:14px;max-width:68ch}
+ul.th{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-family:var(--f-mono);font-size:12.5px;background:var(--chip);padding:4px 10px;border-radius:6px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.meta div{border-top:1px solid var(--line);padding-top:8px;min-width:0}
+.cover{border:1px dashed var(--teal);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.cover .thesis{font-family:var(--f-display);font-size:24px;font-weight:700}
+.hex{font-family:var(--f-mono);font-size:13px;white-space:nowrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:baseline;margin-right:4px;border:1px solid rgba(0,0,0,.15)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+/* roadmap */
+details.stage{background:var(--card);border:1px solid var(--line);border-radius:12px}
+details.stage summary{cursor:pointer;padding:16px 20px;font-family:var(--f-display);font-weight:700;font-size:19px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.stage summary::-webkit-details-marker{display:none}
+details.stage summary::after{content:"+";font-family:var(--f-mono);color:var(--ink-soft)}
+details.stage[open] summary::after{content:"−"}
+details.stage summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:12px}
+.cur{color:var(--teal);font-weight:500}
+.road{list-style:none;margin:0;padding:4px 20px 20px 20px;position:relative}
+.road li{position:relative;padding:0 0 16px 28px;border-left:2px solid var(--line);margin-left:6px}
+.road li:last-child{border-left-color:transparent;padding-bottom:0}
+.road li::before{content:"";position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .k{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.road .t{font-weight:600;display:block}
+.road .d{font-size:14.5px;color:var(--ink-soft)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+
+<header class="topbar"><div class="topbar-in">
+  <span class="brand">Альянс-окно</span>
+  <nav>
+    <a href="#company">Компания</a>
+    <a href="#brand">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</div></header>
+
+<main>
+
+<section id="company">
+  <span class="eyebrow">ТЗ · Этап 2 · 2 новости + 2 сторис</span>
+  <h1>«Альянс-окно» — Курганский завод окон ПВХ</h1>
+  <p class="lead">Темы для новостей и сторис в карточке компании на Яндекс Картах и 2ГИС. Все тексты и макеты публикуются в карточке компании на Яндекс Картах и 2ГИС.</p>
+  <div class="facts"><dl>
+    <div class="fact"><dt>Сфера</dt><dd>Производство и монтаж окон ПВХ, остекление и отделка балконов и лоджий, входные группы, перегородки ПВХ</dd></div>
+    <div class="fact"><dt>Производство</dt><dd>Собственное, полного цикла · г. Курган, ул. Ястржембского, 42</dd></div>
+    <div class="fact"><dt>Офис в карточке</dt><dd>г. Курган, ул. Гоголя, 133, оф. 213</dd></div>
+    <div class="fact"><dt>Срок изготовления</dt><dd>1,5–2 недели · зимой от 5 дней</dd></div>
+    <div class="fact"><dt>Гарантия</dt><dd>3 года на конструкции при монтаже компании · 5 лет на стеклопакеты</dd></div>
+    <div class="fact"><dt>Замер</dt><dd>Бесплатно в черте города и неудалённых районах</dd></div>
+    <div class="fact"><dt>Материалы</dt><dd>Профили Exprof Profecta Plus и ProWIN · фурнитура INTERNIKA и ROTO NT</dd></div>
+    <div class="fact"><dt>Цифры компании</dt><dd>182 450 изготовленных конструкций · 34 292 заказчика</dd></div>
+    <div class="fact"><dt>Слоган</dt><dd>«Сохраняя ваш комфорт»</dd></div>
+  </dl></div>
+</section>
+
+<section id="brand">
+  <span class="eyebrow">Мини-брендбук</span>
+  <h2>Фирменные цвета</h2>
+  <p class="note">После анализа ресурсов компании определены фирменные цвета: основа — синий цвет логотипа на графитовой шапке сайта, светлый холодный фон сториз и оранжевый цвет кнопки «Закажите замер». Значения сняты по пикселям с логотипа, сайта и опубликованных сториз.</p>
+  <div class="swatches">
+    <div class="sw lt" style="background:#3C88D3"><span class="r">Акцентный</span><span class="n">Синий логотипа</span><span class="h">#3C88D3</span></div>
+    <div class="sw lt" style="background:#386DAC"><span class="r">Текстовый · заголовки</span><span class="n">Глубокий синий</span><span class="h">#386DAC</span></div>
+    <div class="sw lt" style="background:#353B47"><span class="r">Основной</span><span class="n">Графит</span><span class="h">#353B47</span></div>
+    <div class="sw dk" style="background:#77BBE7"><span class="r">Второстепенный</span><span class="n">Голубой</span><span class="h">#77BBE7</span></div>
+    <div class="sw dk" style="background:#F3AE4D"><span class="r">Акцентный · кнопка</span><span class="n">Оранжевый</span><span class="h">#F3AE4D</span></div>
+    <div class="sw dk" style="background:#F1F5FC"><span class="r">Фоновый</span><span class="n">Светлый холодный</span><span class="h">#F1F5FC</span></div>
+  </div>
+</section>
+
+<section id="logic">
+  <span class="eyebrow">Логика цикла</span>
+  <h2>От окна — к балкону, объектам и дверям</h2>
+  <p class="note">Первый этап познакомил с компанией и её окнами: производство, профиль, стеклопакет, готовые окна в наличии. Второй этап расширяет картину на остальные направления собственного производства.</p>
+  <div class="block">
+    <span class="stagecap">Этап 1</span>
+    <ul class="chain"><li>Компания и производство</li><li class="ar">→</li><li>Профиль</li><li class="ar">→</li><li>Стеклопакет к зиме</li><li class="ar">→</li><li>Окна в наличии</li></ul>
+  </div>
+  <div class="block">
+    <span class="stagecap">Этап 2 · текущий</span>
+    <ul class="chain"><li class="now">Балконы и лоджии</li><li class="ar">→</li><li class="now">Цветные окна</li><li class="ar">→</li><li class="now">Объекты и перегородки</li><li class="ar">→</li><li class="now">Двери ПВХ</li></ul>
+  </div>
+</section>
+
+<section id="news">
+  <span class="eyebrow">Новости · 2 темы</span>
+  <h2>Новости этапа</h2>
+  <div class="tone-banner"><b>Тон текстов.</b> Каждая новость открывается тёплой фразой от лица компании («мы»). Факты подаются как часть рассказа о работе, без перечисления всего каталога услуг. В каждом тексте — собственное производство полного цикла и сроки: 1,5–2 недели, зимой от 5 дней. SEO-ключи вплетаются в текст органично, без повторов подряд. Телефон и e-mail в тексте не указываются — они есть в карточке компании. До 3000 знаков.</div>
+
+  <article class="card">
+    <div class="card-head"><span class="num">Новость 1</span><span class="tag">Продающая · сезонная</span></div>
+    <h3>Остекление, утепление и отделка балконов и лоджий в Кургане</h3>
+    <div class="block"><span class="lbl">Вступление (тон и голос)</span>
+      <p class="intro-voice">Мы сами производим окна на Ястржембского, 42 и сами доводим балкон до готового вида: замер, изготовление, монтаж и отделку выполняет одна команда.</p></div>
+    <div class="block"><span class="lbl">Тезисы</span>
+      <ul class="th">
+        <li>«Альянс-окно» выполняет установку, отделку и утепление балконов и лоджий любой сложности в Кургане и Курганской области.</li>
+        <li>Собственное производство полного цикла: окна для балкона изготавливаются на заводе компании, без посредников, все вопросы решает один исполнитель.</li>
+        <li>Холодное остекление: однокамерный стеклопакет — лёгкое и доступное решение для неотапливаемых балконов и лоджий.</li>
+        <li>Балконный блок: дверь ПВХ полностью остеклённая или наполовину с сэндвич-панелью, створки распашные или поворотно-откидные с микропроветриванием.</li>
+        <li>Профили Exprof (Profecta Plus 70 мм, ProWIN 58 мм) — выбор под задачу балкона.</li>
+        <li>Срок изготовления 1,5–2 недели, зимой от 5 дней. Замер в черте города бесплатно.</li>
+        <li>Гарантия 3 года на конструкции при монтаже компании, 5 лет на стеклопакеты.</li>
+      </ul></div>
+    <div class="block"><span class="lbl">SEO-ключи</span>
+      <div class="chips"><span>остекление балконов Курган</span><span>остекление лоджий Курган</span><span>утепление балкона Курган</span><span>отделка балконов и лоджий Курган</span><span>холодное остекление балкона</span><span>балконный блок ПВХ Курган</span><span>балконные двери ПВХ</span><span>остекление балкона под ключ Курган</span><span>окна ПВХ Курган</span><span>Альянс-окно Курган</span></div></div>
+    <div class="meta">
+      <div><span class="lbl">Цель</span><p>Вывести направление «балконы и лоджии» в поиск карточки перед зимой</p></div>
+      <div><span class="lbl">CTA</span><p>Оставьте заявку на бесплатный замер балкона</p></div>
+    </div>
+    <div class="cover"><span class="lbl">ТЗ на обложку</span>
+      <span class="thesis">Балкон — одной командой</span>
+      <p>Реальное фото остеклённой лоджии из портфолио компании. Фон <span class="hex"><span class="dot" style="background:#F1F5FC"></span>#F1F5FC</span>, заголовок <span class="hex"><span class="dot" style="background:#386DAC"></span>#386DAC</span>, логотип в левом верхнем углу. Плашка «от замера до отделки» в <span class="hex"><span class="dot" style="background:#3C88D3"></span>#3C88D3</span> с белым текстом.</p></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="num">Новость 2</span><span class="tag">Экспертная · для организаций</span></div>
+    <h3>Остекление зданий и перегородки ПВХ в Кургане: школы, поликлиники, торговые и производственные помещения</h3>
+    <div class="block"><span class="lbl">Вступление (тон и голос)</span>
+      <p class="intro-voice">Мы делаем окна не только для квартир и домов: в списке наших объектов школа, поликлиника, торговое здание и производственные цеха.</p></div>
+    <div class="block"><span class="lbl">Тезисы</span>
+      <ul class="th">
+        <li>«Альянс-окно» остекляет общественные и коммерческие здания: школа в с. Кетово, поликлиника, торговое здание, входные группы.</li>
+        <li>Перегородки ПВХ для производственных помещений, душевых и санузлов.</li>
+        <li>Компания разрабатывает техническое решение под объект и подбирает комплектацию.</li>
+        <li>Ударостойкие стеклопакеты для нижних этажей, магазинов, офисов и образовательных учреждений: триплекс и закалённое стекло.</li>
+        <li>На продукцию есть сертификаты соответствия: профили «ЭксПроф», пожарная безопасность, стеклопакеты, фурнитура Roto, а также санитарно-эпидемиологическое заключение.</li>
+        <li>Собственное производство полного цикла: 182 450 изготовленных конструкций, срок 1,5–2 недели, зимой от 5 дней.</li>
+        <li>Договор оформляется на объекте или в офисе компании.</li>
+      </ul></div>
+    <div class="block"><span class="lbl">SEO-ключи</span>
+      <div class="chips"><span>остекление зданий Курган</span><span>остекление входных групп Курган</span><span>перегородки ПВХ Курган</span><span>перегородки для производственных помещений</span><span>перегородки в санузлах ПВХ</span><span>ударопрочные стеклопакеты Курган</span><span>окна ПВХ для организаций Курган</span><span>остекление коммерческих объектов</span><span>завод окон ПВХ Курган</span></div></div>
+    <div class="meta">
+      <div><span class="lbl">Цель</span><p>Показать направление для организаций и подтвердить надёжность документами</p></div>
+      <div><span class="lbl">CTA</span><p>Оставьте заявку на расчёт остекления объекта</p></div>
+    </div>
+    <div class="cover"><span class="lbl">ТЗ на обложку</span>
+      <span class="thesis">Окна для объектов</span>
+      <p>Реальное фото остеклённого здания из портфолио (школа или поликлиника). Графитовая плашка <span class="hex"><span class="dot" style="background:#353B47"></span>#353B47</span> внизу кадра с заголовком белым, акцентная линия <span class="hex"><span class="dot" style="background:#3C88D3"></span>#3C88D3</span>, логотип в левом верхнем углу.</p></div>
+  </article>
+</section>
+
+<section id="stories">
+  <span class="eyebrow">Сторис · 2 темы</span>
+  <h2>Сторис этапа</h2>
+  <p class="note">Один слайд — один факт. Формат презентации, 1080×1920, логотип вверху слева, фон <span class="hex"><span class="dot" style="background:#F1F5FC"></span>#F1F5FC</span>, заголовки <span class="hex"><span class="dot" style="background:#386DAC"></span>#386DAC</span>, нижняя CTA-плашка <span class="hex"><span class="dot" style="background:#386DAC"></span>#386DAC</span> с белым текстом — как в уже опубликованных сториз компании.</p>
+  <div class="grid2">
+    <article class="card">
+      <div class="card-head"><span class="num">Сторис 1</span><span class="tag">Продуктовая</span></div>
+      <h3>Цветные окна ПВХ</h3>
+      <div class="block"><span class="lbl">Тезисы</span>
+        <ul class="th">
+          <li>Ламинация профиля под дерево и в другие цвета</li>
+          <li>Цвет снаружи и внутри может отличаться</li>
+          <li>Плёнка наносится при изготовлении — не выгорает и не отслаивается</li>
+          <li>Цена незначительно отличается от белых окон</li>
+        </ul></div>
+      <div class="block"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинированные окна Курган</span><span>цветные окна ПВХ</span><span>окна под дерево</span></div></div>
+      <div class="block"><span class="lbl">Дизайн слайда</span><p>Справа крупный фрагмент окна с ламинацией под дерево, слева заголовок <span class="hex">#386DAC</span> и 4 тезиса в белых карточках с иконками <span class="hex">#3C88D3</span>. CTA-плашка: «Подобрать цвет профиля».</p></div>
+    </article>
+    <article class="card">
+      <div class="card-head"><span class="num">Сторис 2</span><span class="tag">Продуктовая</span></div>
+      <h3>Двери ПВХ: балконные и входные</h3>
+      <div class="block"><span class="lbl">Тезисы</span>
+        <ul class="th">
+          <li>Балконные: глухие, наполовину остеклённые с сэндвич-панелью или с полным остеклением</li>
+          <li>Двухстворчатые двери со штульпом</li>
+          <li>Входные: любые замки, включая многозапорные и противовзломные</li>
+          <li>Двойной контур уплотнения и тёплый порог</li>
+        </ul></div>
+      <div class="block"><span class="lbl">SEO-ключи</span><div class="chips"><span>двери ПВХ Курган</span><span>балконная дверь ПВХ</span><span>входные пластиковые двери</span></div></div>
+      <div class="block"><span class="lbl">Дизайн слайда</span><p>Две колонки-карточки «Балконные» и «Входные» с шапками <span class="hex">#3C88D3</span>, схемы дверей тонкой линией <span class="hex">#3C88D3</span> в стиле иконок окон из сториз «В наличии». CTA-плашка: «Подобрать дверь».</p></div>
+    </article>
+  </div>
+</section>
+
+<section id="map">
+  <span class="eyebrow">Карта тем</span>
+  <h2>Все этапы</h2>
+  <details class="stage">
+    <summary>Этап 1</summary>
+    <ol class="road">
+      <li><span class="k">Новость 1</span><span class="t">Как в «Альянс-окно» делают окна без посредников</span><span class="d">Полный цикл одной командой, 182 450 конструкций, гарантии 3 / 5 лет</span></li>
+      <li class="st"><span class="k">Сторис 1</span><span class="t">Кто мы</span><span class="d">Цифры компании и гарантии</span></li>
+      <li><span class="k">Новость 2</span><span class="t">Profecta Plus или ProWIN: как выбрать профиль окна ПВХ</span><span class="d">5 камер 70 мм против 3 камер 58 мм</span></li>
+      <li class="st"><span class="k">Сторис 2</span><span class="t">Как проходит заказ</span><span class="d">Замер → расчёт → договор → монтаж → гарантия</span></li>
+      <li><span class="k">Новость 3</span><span class="t">Тёплые окна к зиме: энергосберегающие стеклопакеты</span><span class="d">Экономия на отоплении, шумоизоляция 32–34 дБ</span></li>
+      <li class="st"><span class="k">Сторис 3</span><span class="t">Фурнитура, которой доверяют</span><span class="d">INTERNIKA и ROTO NT</span></li>
+      <li><span class="k">Новость 4</span><span class="t">Готовые окна со склада</span><span class="d">500×500, 1300×1400, 2050×1400 мм в наличии</span></li>
+      <li class="st"><span class="k">Сторис 4</span><span class="t">Не ждать — забрать сегодня</span><span class="d">3 размера на складе, изготовление на заказ</span></li>
+    </ol>
+  </details>
+  <details class="stage" open>
+    <summary><span>Этап 2 <span class="cur">· актуальный</span></span></summary>
+    <ol class="road">
+      <li><span class="k">Новость 1</span><span class="t">Остекление, утепление и отделка балконов и лоджий в Кургане</span><span class="d">Одна команда от замера до отделки, холодное остекление, балконный блок</span></li>
+      <li class="st"><span class="k">Сторис 1</span><span class="t">Цветные окна ПВХ</span><span class="d">Ламинация под дерево, разный цвет снаружи и внутри</span></li>
+      <li><span class="k">Новость 2</span><span class="t">Остекление зданий и перегородки ПВХ</span><span class="d">Школы, поликлиники, торговые и производственные помещения, сертификаты</span></li>
+      <li class="st"><span class="k">Сторис 2</span><span class="t">Двери ПВХ: балконные и входные</span><span class="d">Виды заполнения, штульп, замки, тёплый порог</span></li>
+    </ol>
+  </details>
+</section>
+
+</main>
+
+</body>
+</html>
