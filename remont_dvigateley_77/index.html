@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ремонт двигателей 77 — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«Ремонт двигателей 77»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«Ремонт двигателей 77», Москва</h1>
+    <p class="lede">Автосервис занимается профессиональным ремонтом двигателей и не только, так же большой склад с наличием новых и бу двигателей. Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Ремонт двигателей 77</div></div>
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Автосервис, автотехцентр · ремонт двигателей · кузовной ремонт</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Москва, Волгоградский проспект 21 стр 23</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно с 9-21</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+79260303977</div></div>
+      <div class="fact"><div class="k">Основные услуги</div><div class="v">Ремонт двигателя · Техобслуживание авто · Продажа двигателей новых и бу · Ремонт ходовой части · Ремонт тормозной системы · Автоэлектрик · Кузовной ремонт</div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Быстрый, качественный и недорогой ремонт двигателей · Продажа новых и бу двигателей из наличия с собственного склада · При установке двигателя в нашем автосервисе действует расширенная гарантия</div></div>
+      <div class="fact"><div class="k">Приоритет продвижения</div><div class="v">Ремонт и продажа двигателей новых и бу</div></div>
+      <div class="fact"><div class="k">Обращение и стиль</div><div class="v">На «вы» · деловой стиль</div></div>
+      <div class="fact"><div class="k">Стоимость в публикациях</div><div class="v">Без указания цен</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: синий и серый. Тёмно-синий — кольцо и надписи логотипа, синий — поршни и верхняя шестерня, графитовый серый — нижняя шестерня и ключи, светлая сталь — цифры «77», светло-серый — фон логотипа.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#15273B"><span class="role">Основной</span><span class="name">Тёмно-синий</span><span class="hex">#15273B</span></div>
+      <div class="sw light" style="background:#24425C"><span class="role">Акцентный</span><span class="name">Синий</span><span class="hex">#24425C</span></div>
+      <div class="sw light" style="background:#6B6F73"><span class="role">Второстепенный</span><span class="name">Графитовый серый</span><span class="hex">#6B6F73</span></div>
+      <div class="sw dark" style="background:#B5B9BA"><span class="role">Дополнительный</span><span class="name">Светлая сталь</span><span class="hex">#B5B9BA</span></div>
+      <div class="sw dark" style="background:#ECEFF2"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#ECEFF2</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От ремонта двигателя к складу и установке</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — двигатели: ремонт и продажа <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Первый этап целиком посвящён приоритетному направлению компании — ремонту и продаже двигателей новых и бу. Сначала ремонт двигателя и собственный склад, затем остальные услуги автосервиса и расширенная гарантия при установке двигателя. Сторис дополняют цикл кузовным ремонтом.</p>
+          <div class="flow"><span>Ремонт двигателей</span><i>→</i><span>Склад новых и б/у двигателей</span><i>→</i><span>Услуги автосервиса</span><i>→</i><span>Установка с расширенной гарантией</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «Ремонт двигателей 77» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Москва», «Волгоградский проспект» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки. Цены в текстах не указываются.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Деловой стиль, обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг автосервиса подряд. Факты берутся только из анкеты компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Ремонт двигателей в Москве на Волгоградском проспекте</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Знакомство с главной специализацией автосервиса. Ремонт двигателя — первое направление, которое компания продвигает в приоритете.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Наш автосервис занимается профессиональным ремонтом двигателей. Ремонт делаем быстро, качественно и недорого».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>«Ремонт двигателей 77» — автосервис в Москве, Волгоградский проспект 21 стр 23</li>
+          <li>Автосервис занимается профессиональным ремонтом двигателей</li>
+          <li>Быстрый, качественный и недорогой ремонт двигателей</li>
+          <li>Ежедневно с 9-21</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">ремонт двигателей Москва</span><span class="chip">ремонт двигателя Москва</span><span class="chip">ремонт двигателя Волгоградский проспект</span><span class="chip">автосервис ремонт двигателей</span><span class="chip">автосервис Волгоградский проспект</span><span class="chip">быстрый ремонт двигателя</span><span class="chip">недорогой ремонт двигателя Москва</span><span class="chip">автотехцентр Москва</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">«Ремонт двигателей 77» — профессиональный ремонт двигателей в Москве на Волгоградском проспекте. Быстро, качественно и недорого, ежедневно с 9-21.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на ремонт двигателя в удобное время.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Ремонт двигателей»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании, по теме ремонта двигателя</dd>
+          <dt>Цвета</dt><dd>Плашка под заголовок #15273B, заголовок белым, тонкая линия-акцент #24425C; логотип в углу на светлой подложке #ECEFF2</dd>
+          <dt>Подпись</dt><dd>«Быстро · качественно · недорого»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Новые и б/у двигатели в наличии на собственном складе в Москве</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Второе приоритетное направление — продажа двигателей. Склад компании отличает её от автосервиса, который только ремонтирует.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«У нас большой склад с наличием новых и бу двигателей. Продаём двигатели из наличия с собственного склада».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Большой склад с наличием новых и бу двигателей</li>
+          <li>Продажа новых и бу двигателей из наличия с собственного склада</li>
+                    <li>Ежедневно с 9-21, Волгоградский проспект 21 стр 23</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">купить двигатель Москва</span><span class="chip">двигатель б/у Москва</span><span class="chip">двигатель бу купить</span><span class="chip">новый двигатель купить Москва</span><span class="chip">двигатели в наличии Москва</span><span class="chip">продажа двигателей Москва</span><span class="chip">склад двигателей Москва</span><span class="chip">двигатель Волгоградский проспект</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Новые и б/у двигатели в наличии с собственного склада «Ремонт двигателей 77» в Москве на Волгоградском проспекте.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Уточняйте наличие нужного двигателя.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Двигатели в наличии»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании, по теме склада двигателей</dd>
+          <dt>Цвета</dt><dd>Заголовок белым на плашке #24425C, второй строкой «новые и б/у» цветом #B5B9BA; логотип в углу</dd>
+          <dt>Подпись</dt><dd>«Новые и б/у · собственный склад»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Техобслуживание, ремонт ходовой и тормозной системы, автоэлектрик в Москве</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Автосервис занимается ремонтом двигателей «и не только». Тема раскрывает остальные услуги компании из анкеты, чтобы карточка показывала автосервис целиком.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Наш автосервис занимается профессиональным ремонтом двигателей и не только. Мы проводим техобслуживание авто, ремонт ходовой части и тормозной системы, работает автоэлектрик».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Автосервис занимается профессиональным ремонтом двигателей и не только</li>
+          <li>Техобслуживание авто</li>
+          <li>Ремонт ходовой части</li>
+          <li>Ремонт тормозной системы</li>
+          <li>Автоэлектрик</li>
+          <li>Ежедневно с 9-21, Волгоградский проспект 21 стр 23</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автосервис Москва</span><span class="chip">техобслуживание авто Москва</span><span class="chip">ТО автомобиля Москва</span><span class="chip">ремонт ходовой части Москва</span><span class="chip">ремонт тормозной системы Москва</span><span class="chip">автоэлектрик Москва</span><span class="chip">автосервис Волгоградский проспект</span><span class="chip">автотехцентр Москва</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Автосервис «Ремонт двигателей 77» в Москве на Волгоградском проспекте: техобслуживание авто, ремонт ходовой части и тормозной системы, автоэлектрик.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на обслуживание автомобиля в удобное время.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Автосервис»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании, по теме обслуживания автомобиля</dd>
+          <dt>Цвета</dt><dd>Плашка под заголовок #15273B, заголовок белым, линия-акцент #24425C; логотип в углу на подложке #ECEFF2</dd>
+          <dt>Подпись</dt><dd>«ТО · ходовая · тормоза · автоэлектрик»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Установка двигателя в автосервисе с расширенной гарантией</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Третье преимущество из анкеты компании. Завершает этап: двигатель со склада устанавливается в автосервисе компании с расширенной гарантией.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«При установке двигателя в нашем автосервисе действует расширенная гарантия».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>При установке двигателя в нашем автосервисе действует расширенная гарантия</li>
+          <li>Продажа новых и бу двигателей из наличия с собственного склада</li>
+          <li>Ежедневно с 9-21, Волгоградский проспект 21 стр 23</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">установка двигателя Москва</span><span class="chip">замена двигателя с гарантией</span><span class="chip">двигатель с установкой Москва</span><span class="chip">гарантия на установку двигателя</span><span class="chip">замена двигателя Волгоградский проспект</span><span class="chip">автосервис с гарантией Москва</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Установка двигателя в автосервисе «Ремонт двигателей 77» в Москве — с расширенной гарантией. Новые и б/у двигатели из наличия.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на установку двигателя.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Расширенная гарантия»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании, по теме установки двигателя</dd>
+          <dt>Цвета</dt><dd>Заголовок белым на плашке #15273B, слово «гарантия» выделить #B5B9BA; логотип в углу</dd>
+          <dt>Подпись</dt><dd>«При установке у нас»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Ремонт двигателей на Волгоградском проспекте</h4>
+        <ul>
+          <li>Профессиональный ремонт двигателей</li>
+          <li>Быстро, качественно, недорого</li>
+          <li>Ежедневно с 9-21</li>
+          <li>Волгоградский проспект 21 стр 23</li>
+        </ul>
+        <div class="chips"><span class="chip">ремонт двигателей Москва</span><span class="chip">автосервис Волгоградский проспект</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #15273B, логотип сверху по центру на круглой подложке #ECEFF2, заголовок белым, тезисы в плашках #24425C с тонкой обводкой #B5B9BA, фото из архива компании в нижней трети слайда.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Двигатели в наличии</h4>
+        <ul>
+          <li>Новые и бу двигатели</li>
+          <li>Большой склад</li>
+          <li>Из наличия с собственного склада</li>
+        </ul>
+        <div class="chips"><span class="chip">двигатель б/у Москва</span><span class="chip">купить двигатель Москва</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #ECEFF2, заголовок #15273B, два крупных блока «Новые» #24425C и «Б/у» #6B6F73 с белым текстом, фото из архива компании сверху слайда.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Расширенная гарантия при установке</h4>
+        <ul>
+          <li>Двигатели из наличия с собственного склада</li>
+          <li>Установка в нашем автосервисе</li>
+          <li>Расширенная гарантия</li>
+        </ul>
+        <div class="chips"><span class="chip">установка двигателя Москва</span><span class="chip">замена двигателя с гарантией</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #15273B, три шага сверху вниз в плашках #24425C, соединённые линией #B5B9BA; последний шаг «Расширенная гарантия» крупно на плашке #ECEFF2 с текстом #15273B.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Кузовной ремонт</h4>
+        <ul>
+          <li>Кузовной ремонт</li>
+          <li>Ремонт двигателя</li>
+          <li>Ежедневно с 9-21</li>
+          <li>Волгоградский проспект 21 стр 23</li>
+        </ul>
+        <div class="chips"><span class="chip">кузовной ремонт Москва</span><span class="chip">кузовной ремонт Волгоградский проспект</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #ECEFF2, заголовок «Кузовной ремонт» крупно #15273B, тезисы в плашках #24425C с белым текстом, фото из архива компании в верхней половине слайда, логотип внизу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Ремонт двигателей в Москве на Волгоградском проспекте</span><span class="d">Профессиональный ремонт двигателей: быстро, качественно, недорого</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Ремонт двигателей на Волгоградском проспекте</span><span class="d">Специализация, преимущества, режим работы, адрес</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Новые и б/у двигатели в наличии на собственном складе</span><span class="d">Большой склад, продажа из наличия</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Двигатели в наличии</span><span class="d">Новые и бу, собственный склад</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Техобслуживание, ремонт ходовой и тормозной системы, автоэлектрик</span><span class="d">Автосервис занимается ремонтом двигателей и не только</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Расширенная гарантия при установке</span><span class="d">Склад → установка → расширенная гарантия</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Установка двигателя с расширенной гарантией</span><span class="d">Гарантия при установке двигателя в автосервисе компании</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Кузовной ремонт</span><span class="d">Кузовной ремонт и ремонт двигателя, режим работы, адрес</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
