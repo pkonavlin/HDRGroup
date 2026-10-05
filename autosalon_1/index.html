@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Автосалон №1 · Первый Коммерческий</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar with company switcher + one reading column per company; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:12px max(16px,calc((100% - 980px)/2 + 28px))}
+.switch{display:flex;gap:6px;margin-right:auto;flex-wrap:wrap}
+.switch button{font-family:var(--disp);font-weight:700;font-size:15px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:6px 14px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:var(--bg)}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:110px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#111111}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch;margin:0}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch;margin:0}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe);margin:0}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="switch" role="group" aria-label="Компания">
+    <button type="button" id="btn-a1" data-co="a1" aria-pressed="true">Автосалон №1</button>
+    <button type="button" id="btn-pk" data-co="pk" aria-pressed="false">Первый Коммерческий</button>
+  </div>
+  <nav aria-label="Разделы" id="nav-a1">
+    <a href="#a1-company">Компания</a><a href="#a1-brandbook">Брендбук</a><a href="#a1-cycle">Логика цикла</a><a href="#a1-news">Новости</a><a href="#a1-stories">Сторис</a><a href="#a1-map">Карта тем</a>
+  </nav>
+  <nav aria-label="Разделы" id="nav-pk" hidden>
+    <a href="#pk-company">Компания</a><a href="#pk-brandbook">Брендбук</a><a href="#pk-cycle">Логика цикла</a><a href="#pk-news">Новости</a><a href="#pk-stories">Сторис</a><a href="#pk-map">Карта тем</a>
+  </nav>
+</header>
+
+<!-- ═══════════════ АВТОСАЛОН №1 ═══════════════ -->
+<main class="wrap" id="co-a1">
+
+  <section id="a1-company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«Автосалон №1», Нижний Новгород</h1>
+    <p class="lede">«Автосалон №1» специализируется на продаже автомобилей с пробегом на территории Нижегородской области и предоставляет комплекс услуг по приему б/у автомобилей на комиссию, оформлению срочного выкупа автомобиля в день обращения, а также обмен подержанных автомобилей (trade-in). Публикация новостей и сторис — карточки компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Автосалон №1 · Автомобили с пробегом</div></div>
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Автосалон · продажа автомобилей с пробегом · салон по продаже б/у автомобилей</div></div>
+      <div class="fact"><div class="k">Карточка 1</div><div class="v">Нижний Новгород, СНТ Балтика, 51</div></div>
+      <div class="fact"><div class="k">Карточка 2</div><div class="v">Нижегородская обл., д. Афонино, Магистральная ул., с107</div></div>
+      <div class="fact"><div class="k">Услуги</div><div class="v">Продажа авто с пробегом · Комиссионная продажа · Срочный выкуп · Trade-in · Автокредитование</div></div>
+      <div class="fact"><div class="k">Комиссия</div><div class="v">Для владельца бесплатно, комиссия поверх цены владельца · средний срок продажи 3–7 дней</div></div>
+      <div class="fact"><div class="k">Выкуп</div><div class="v">В течение 1 часа · платим сразу и наличкой · адекватная оценка</div></div>
+      <div class="fact"><div class="k">Trade-in</div><div class="v">Обмен с доплатой в обе стороны на любой из автомобилей салона</div></div>
+      <div class="fact"><div class="k">Автокредит</div><div class="v">Только на авто с пробегом салона · по 2-м документам · решение банков в течение 30 минут</div></div>
+      <div class="fact"><div class="k">Площадка</div><div class="v">Камеры видеонаблюдения, охрана 24/7 · парковка · Wi-Fi · тест-драйв</div></div>
+    </div>
+  </section>
+
+  <section id="a1-brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: чёрный и красный на белом. Чёрный — буквы «А», надпись «Автосалон №1» и строка «Автомобили с пробегом», красный — цифра «1» в знаке и «№1» в логотипе, графитовый — полоса услуг на обложке сообщества, белый — фон шапки и логотипа.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#000000"><span class="role">Основной</span><span class="name">Чёрный</span><span class="hex">#000000</span></div>
+      <div class="sw light" style="background:#E43B2F"><span class="role">Акцентный</span><span class="name">Красный «№1»</span><span class="hex">#E43B2F</span></div>
+      <div class="sw light" style="background:#1F1F1F"><span class="role">Второстепенный</span><span class="name">Графитовый</span><span class="hex">#1F1F1F</span></div>
+      <div class="sw dark" style="background:#FFFFFF"><span class="role">Фоновый</span><span class="name">Белый</span><span class="hex">#FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="a1-cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От выбора автомобиля к продаже своего</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — знакомство с автосалоном <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Первый этап знакомит с автосалоном и его услугами по порядку. Сначала автомобили с пробегом в наличии, затем три способа продать свой автомобиль: комиссия, срочный выкуп, trade-in. Завершает этап автокредит на автомобиль с пробегом из салона.</p>
+          <div class="flow"><span>Авто с пробегом в наличии</span><i>→</i><span>Комиссионная продажа</span><i>→</i><span>Выкуп и trade-in</span><i>→</i><span>Автокредит</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="a1-news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточки компании «Автосалон №1» на Яндекс Картах и в 2ГИС, один текст подходит для обеих карточек. Тексты до 3000 знаков с пробелами, гео-ключи «Нижний Новгород» и «Нижегородская область» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки. Цены, скидки и процентные ставки в текстах не указываются.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Спокойный, уверенный тон, обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты берутся только с сайтов и карточек компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Автомобили с пробегом в Нижнем Новгороде: продажа, комиссия, выкуп и trade-in</h3>
+        <span class="tag">Имиджевый</span>
+      </div>
+      <p class="why">Знакомство с автосалоном. Показывает специализацию и полный круг услуг в одном месте, задаёт основу для следующих тем.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы специализируемся на продаже недорогих автомобилей с проверенным пробегом в Нижнем Новгороде и Нижегородской области. Подбираем вариант под ваши требования и бюджет».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>«Автосалон №1» специализируется на продаже автомобилей с пробегом на территории Нижегородской области</li>
+          <li>Продажа недорогих автомобилей с проверенным пробегом</li>
+          <li>Купить автомобиль с пробегом можно за наличный расчёт, в кредит или по trade-in</li>
+          <li>В автосалоне также принимают б/у автомобили на комиссию и оформляют срочный выкуп в день обращения</li>
+          <li>Иномарки и отечественные автомобили: LADA, Hyundai, Kia, Volkswagen, Nissan, Ford, Chevrolet, Toyota, Renault и другие марки</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автомобили с пробегом Нижний Новгород</span><span class="chip">автосалон с пробегом Нижний Новгород</span><span class="chip">купить авто с пробегом Нижний Новгород</span><span class="chip">б/у автомобили Нижегородская область</span><span class="chip">автосалон б/у авто</span><span class="chip">продажа подержанных автомобилей</span><span class="chip">авто с пробегом в наличии</span><span class="chip">Автосалон №1 Нижний Новгород</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">«Автосалон №1» — продажа автомобилей с пробегом в Нижнем Новгороде и Нижегородской области. Наличные, кредит, trade-in, комиссия и выкуп.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте выбрать автомобиль с пробегом.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Авто с пробегом»</dd>
+          <dt>Фото</dt><dd>Автомобили на площадке автосалона, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Белая плашка #FFFFFF с заголовком #000000, акцент-полоса #E43B2F под заголовком; логотип в верхнем углу</dd>
+          <dt>Подпись</dt><dd>«Продажа · комиссия · выкуп · trade-in»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Комиссионная продажа автомобиля в Нижнем Новгороде: бесплатно для владельца</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Главная услуга для тех, кто продаёт автомобиль. Раскрывает условия комиссии: для владельца бесплатно, сроки, сохранность автомобиля.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Продадим ваш автомобиль в самые короткие сроки. Для владельца услуга бесплатная: наша комиссия поверх вашей цены».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Комиссионная продажа: для владельца автомобиля услуга бесплатная, комиссия автосалона поверх цены владельца</li>
+          <li>Средний срок продажи 3–7 дней</li>
+          <li>Оформляется договор комиссии</li>
+          <li>Забрать свой автомобиль можно в любой момент, без штрафов и санкций</li>
+          <li>Автосалон несёт ответственность за автомобиль, пока он находится на площадке: камеры видеонаблюдения, охрана 24/7</li>
+          <li>Расчёт сразу после продажи автомобиля, наличными в автосалоне</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">комиссионная продажа авто Нижний Новгород</span><span class="chip">продать авто на комиссию</span><span class="chip">продать машину Нижний Новгород</span><span class="chip">комиссия автомобиля Нижегородская область</span><span class="chip">быстро продать автомобиль</span><span class="chip">автосалон комиссия б/у авто</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Комиссионная продажа автомобиля в «Автосалоне №1», Нижний Новгород: для владельца бесплатно, средний срок продажи 3–7 дней, охраняемая площадка.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на комиссионную продажу автомобиля.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Продадим ваш авто»</dd>
+          <dt>Фото</dt><dd>Автомобиль на площадке автосалона, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Графитовая плашка #1F1F1F, заголовок белым, слово «бесплатно» в подписи #E43B2F; логотип на белой подложке #FFFFFF</dd>
+          <dt>Подпись</dt><dd>«Для владельца бесплатно · 3–7 дней»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Срочный выкуп автомобиля и trade-in в Нижнем Новгороде</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Два других способа продать автомобиль: когда деньги нужны сразу, и когда нужно сразу пересесть на другой автомобиль.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Срочно выкупим ваш автомобиль: платим сразу и наличкой. А если хотите поменять машину, обменяем её по системе trade-in».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Срочный выкуп автомобиля в течение 1 часа</li>
+          <li>Платим сразу и наличкой, адекватная оценка автомобиля</li>
+          <li>При выкупе оформляется договор купли-продажи</li>
+          <li>Trade-in: обмен автомобиля с доплатой в обе стороны</li>
+          <li>Обмен на любой из автомобилей «Автосалона №1»</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">срочный выкуп авто Нижний Новгород</span><span class="chip">выкуп автомобилей Нижний Новгород</span><span class="chip">продать авто за час</span><span class="chip">выкуп авто наличными</span><span class="chip">trade-in Нижний Новгород</span><span class="chip">обмен автомобиля с доплатой</span><span class="chip">трейд-ин авто с пробегом</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Срочный выкуп автомобиля в Нижнем Новгороде в течение 1 часа, расчёт сразу наличными. Trade-in с доплатой в обе стороны в «Автосалоне №1».</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на выкуп или обмен автомобиля.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Выкуп за 1 час»</dd>
+          <dt>Фото</dt><dd>Автомобиль на площадке автосалона, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Плашка #E43B2F, заголовок белым; вторая строка «и trade-in» на чёрной плашке #000000; логотип в углу на белой подложке</dd>
+          <dt>Подпись</dt><dd>«Наличными сразу · обмен с доплатой»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Автокредит на автомобиль с пробегом в Нижнем Новгороде по двум документам</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Завершает этап: способ купить автомобиль из наличия, если не хватает собственных средств. Раскрывает работу отдела кредитования.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В автосалоне работает отдел кредитования. Помогаем оформить автокредит на автомобиль с пробегом из нашего автосалона».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Отдел кредитования в автосалоне</li>
+          <li>Кредит предоставляется исключительно на покупку автомобиля с пробегом в автосалоне</li>
+          <li>Банки-партнёры, высокий процент одобряемости</li>
+          <li>Всего по 2-м документам</li>
+          <li>Решение банков в течение 30 минут</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автокредит Нижний Новгород</span><span class="chip">авто с пробегом в кредит</span><span class="chip">купить б/у авто в кредит Нижний Новгород</span><span class="chip">автокредит по двум документам</span><span class="chip">кредит на автомобиль с пробегом</span><span class="chip">автосалон с кредитом Нижегородская область</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Автокредит на автомобиль с пробегом в «Автосалоне №1», Нижний Новгород: по 2-м документам, решение банков в течение 30 минут.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на автокредит.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Автокредит»</dd>
+          <dt>Фото</dt><dd>Автомобиль из наличия автосалона, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Чёрная плашка #000000, заголовок белым, цифры «2» и «30» в подписи #E43B2F; логотип на белой подложке #FFFFFF</dd>
+          <dt>Подпись</dt><dd>«2 документа · решение за 30 минут»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="a1-stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточки компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Марки в наличии</h4>
+        <ul>
+          <li>Автомобили с проверенным пробегом</li>
+          <li>LADA · Hyundai · Kia · Volkswagen · Nissan · Ford · Toyota</li>
+          <li>Наличные · кредит · trade-in</li>
+        </ul>
+        <div class="chips"><span class="chip">авто с пробегом Нижний Новгород</span><span class="chip">автосалон б/у авто</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> белый фон #FFFFFF, логотип сверху, заголовок #000000, сетка логотипов марок в одну тонкую чёрную линию, строка «Наличные · кредит · trade-in» на плашке #E43B2F с белым текстом внизу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Комиссия в 4 шага</h4>
+        <ul>
+          <li>01 Оставляете заявку или звоните</li>
+          <li>02 Привозите автомобиль</li>
+          <li>03 Оформляем договор комиссии</li>
+          <li>04 Получаете деньги после продажи</li>
+        </ul>
+        <div class="chips"><span class="chip">комиссионная продажа авто</span><span class="chip">продать авто Нижний Новгород</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #1F1F1F, четыре шага сверху вниз, номера 01–04 крупно цветом #E43B2F, текст белым, внизу строка «В среднем 3–7 дней» на белой плашке с текстом #000000.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Выкуп за 1 час</h4>
+        <ul>
+          <li>Срочный выкуп в течение 1 часа</li>
+          <li>Платим сразу и наличкой</li>
+          <li>Trade-in с доплатой в обе стороны</li>
+        </ul>
+        <div class="chips"><span class="chip">срочный выкуп авто</span><span class="chip">trade-in Нижний Новгород</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #E43B2F, «1 час» огромными белыми цифрами в центре, тезисы в чёрных плашках #000000 с белым текстом, фото автомобиля из архива компании в нижней трети.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Автокредит</h4>
+        <ul>
+          <li>На авто с пробегом из автосалона</li>
+          <li>По 2-м документам</li>
+          <li>Решение банков за 30 минут</li>
+        </ul>
+        <div class="chips"><span class="chip">автокредит Нижний Новгород</span><span class="chip">авто с пробегом в кредит</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> белый фон #FFFFFF, заголовок #000000, два крупных блока «2 документа» и «30 минут» на плашках #1F1F1F с цифрами #E43B2F, логотип внизу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="a1-map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Автомобили с пробегом в Нижнем Новгороде</span><span class="d">Специализация, способы покупки, услуги в одном месте</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Марки в наличии</span><span class="d">Иномарки и отечественные авто, наличные, кредит, trade-in</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Комиссионная продажа: бесплатно для владельца</span><span class="d">Комиссия поверх цены, 3–7 дней, охраняемая площадка</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Комиссия в 4 шага</span><span class="d">Заявка → автомобиль → договор → деньги</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Срочный выкуп и trade-in</span><span class="d">Выкуп за 1 час наличными, обмен с доплатой</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Выкуп за 1 час</span><span class="d">Сразу наличкой, trade-in</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Автокредит по двум документам</span><span class="d">Отдел кредитования, решение за 30 минут</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Автокредит</span><span class="d">2 документа, 30 минут</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+</main>
+
+<!-- ═══════════════ ПЕРВЫЙ КОММЕРЧЕСКИЙ ═══════════════ -->
+<main class="wrap" id="co-pk" hidden>
+
+  <section id="pk-company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«Первый Коммерческий», Нижний Новгород</h1>
+    <p class="lede">«Первый Коммерческий» — автосалон коммерческого транспорта с пробегом: «Большой опыт работы и накопившихся знаний в сфере продаж коммерческого транспорта с пробегом». Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">ООО «Первый коммерческий»</div></div>
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Автосалон · продажа автомобилей с пробегом · салон по продаже б/у автомобилей</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Нижний Новгород, Московское шоссе, 302, корп. 5, стр. 2</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (920) 009-00-75</div></div>
+      <div class="fact"><div class="k">Специализация</div><div class="v">Коммерческий транспорт с пробегом: ГАЗ, ГАЗель, ГАЗон NEXT, JAC, грузовики</div></div>
+      <div class="fact"><div class="k">Разделы сайта</div><div class="v">Авто в наличии · Выкуп и комиссия · Кредитование</div></div>
+      <div class="fact"><div class="k">Покупка</div><div class="v">Наличные · банковский перевод · безналичная оплата · кредит · лизинг · trade-in</div></div>
+      <div class="fact"><div class="k">На площадке</div><div class="v">Тест-драйв · парковка · Wi-Fi · доступно для маломобильных посетителей</div></div>
+    </div>
+  </section>
+
+  <section id="pk-brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: чёрный, белый и красный. Красный — цифра «1» в логотипе, чёрный — шапка и подвал сайта, второй красный — кнопки и иконки соцсетей, светло-серый — фон каталога.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#000000"><span class="role">Основной</span><span class="name">Чёрный</span><span class="hex">#000000</span></div>
+      <div class="sw light" style="background:#CB2B1D"><span class="role">Акцентный</span><span class="name">Красный логотипа</span><span class="hex">#CB2B1D</span></div>
+      <div class="sw light" style="background:#D13731"><span class="role">Второстепенный</span><span class="name">Красный кнопок</span><span class="hex">#D13731</span></div>
+      <div class="sw dark" style="background:#F2F2F2"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#F2F2F2</span></div>
+      <div class="sw dark" style="background:#FFFFFF"><span class="role">Текстовый</span><span class="name">Белый</span><span class="hex">#FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="pk-cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">Коммерческий транспорт: от выбора к покупке</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — знакомство с автосалоном <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Первый этап знакомит со специализацией компании — коммерческим транспортом с пробегом. Сначала автосалон и транспорт в наличии, затем подбор и тест-драйв, выкуп и комиссия, и в конце способы покупки: кредит, лизинг, trade-in.</p>
+          <div class="flow"><span>Коммерческий транспорт в наличии</span><i>→</i><span>Подбор и тест-драйв</span><i>→</i><span>Выкуп и комиссия</span><i>→</i><span>Кредит и лизинг</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="pk-news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «Первый Коммерческий» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Нижний Новгород» и «Московское шоссе» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки. Цены, скидки и процентные ставки в текстах не указываются.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Деловой, уверенный тон, обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты берутся только с сайта и карточек компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Коммерческий транспорт с пробегом в Нижнем Новгороде на Московском шоссе</h3>
+        <span class="tag">Имиджевый</span>
+      </div>
+      <p class="why">Знакомство с автосалоном и его специализацией. Отделяет «Первый Коммерческий» от обычных автосалонов легковых авто.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«У нас большой опыт работы и накопившихся знаний в сфере продаж коммерческого транспорта с пробегом».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>«Первый Коммерческий» — автосалон в Нижнем Новгороде, Московское шоссе</li>
+          <li>Специализация — продажа коммерческого транспорта с пробегом</li>
+          <li>В наличии ГАЗ: ГАЗель, ГАЗон NEXT, а также JAC, грузовики, отечественные автомобили и иномарки</li>
+          <li>Направления компании: авто в наличии, выкуп и комиссия, кредитование</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">коммерческий транспорт с пробегом Нижний Новгород</span><span class="chip">купить ГАЗель б/у Нижний Новгород</span><span class="chip">ГАЗон NEXT с пробегом</span><span class="chip">грузовики с пробегом Нижний Новгород</span><span class="chip">автосалон коммерческого транспорта</span><span class="chip">автосалон Московское шоссе</span><span class="chip">коммерческие авто б/у</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">«Первый Коммерческий» — коммерческий транспорт с пробегом в Нижнем Новгороде на Московском шоссе: ГАЗель, ГАЗон NEXT, JAC, грузовики.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте выбрать коммерческий автомобиль.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Коммерческий транспорт»</dd>
+          <dt>Фото</dt><dd>ГАЗель на площадке автосалона, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Чёрная плашка #000000, заголовок белым #FFFFFF, акцент-полоса #CB2B1D; логотип в верхнем углу</dd>
+          <dt>Подпись</dt><dd>«С пробегом · в наличии»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Как подобрать коммерческий автомобиль с пробегом: каталог и тест-драйв</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Показывает, как устроен выбор: каталог с фильтрами по техническим параметрам и тест-драйв на площадке.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Коммерческий автомобиль выбирают под задачу. В каталоге наличия можно отобрать автомобили по нужным параметрам, а на площадке — проехать на тест-драйве».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Каталог автомобилей в наличии на сайте компании</li>
+          <li>Фильтры: цена, пробег, год, бренд, цвет, коробка, привод, тип двигателя, мощность, объём двигателя</li>
+          <li>В карточке автомобиля: год, пробег, объём и мощность двигателя, КПП, топливо, привод</li>
+          <li>Тест-драйв на площадке автосалона</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">подобрать коммерческий автомобиль</span><span class="chip">ГАЗель с пробегом в наличии</span><span class="chip">тест-драйв коммерческого авто Нижний Новгород</span><span class="chip">каталог коммерческого транспорта</span><span class="chip">грузовой автомобиль б/у Нижний Новгород</span><span class="chip">автосалон с тест-драйвом</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Подбор коммерческого автомобиля с пробегом в «Первом Коммерческом», Нижний Новгород: каталог с фильтрами и тест-драйв на площадке.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на тест-драйв.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Подбор и тест-драйв»</dd>
+          <dt>Фото</dt><dd>Коммерческий автомобиль на площадке, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Светлая плашка #F2F2F2, заголовок #000000, слово «тест-драйв» на плашке #D13731 белым; логотип в углу</dd>
+          <dt>Подпись</dt><dd>«Пробег · год · привод · двигатель»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Выкуп и комиссионная продажа коммерческого транспорта в Нижнем Новгороде</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Направление для владельцев коммерческих автомобилей, которые хотят продать или обменять свой транспорт.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы не только продаём коммерческий транспорт с пробегом, но и выкупаем его, принимаем на комиссию и меняем по trade-in».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Выкуп коммерческого транспорта</li>
+          <li>Комиссионная продажа коммерческого транспорта</li>
+          <li>Trade-in: обмен своего автомобиля в автосалоне</li>
+          <li>Автосалон на Московском шоссе, Нижний Новгород</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">выкуп коммерческого транспорта Нижний Новгород</span><span class="chip">продать ГАЗель</span><span class="chip">выкуп грузовиков</span><span class="chip">комиссионная продажа коммерческого авто</span><span class="chip">trade-in коммерческий транспорт</span><span class="chip">продать грузовой автомобиль Нижний Новгород</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Выкуп, комиссионная продажа и trade-in коммерческого транспорта в «Первом Коммерческом», Нижний Новгород, Московское шоссе.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на выкуп или комиссию.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Выкуп и комиссия»</dd>
+          <dt>Фото</dt><dd>Грузовой или коммерческий автомобиль на площадке, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Плашка #CB2B1D, заголовок белым #FFFFFF, вторая строка на чёрной плашке #000000; логотип в углу</dd>
+          <dt>Подпись</dt><dd>«Выкуп · комиссия · trade-in»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Коммерческий автомобиль в кредит или лизинг в Нижнем Новгороде</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Завершает этап: способы оплаты, важные для бизнеса и частных покупателей коммерческого транспорта.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Купить коммерческий автомобиль у нас можно удобным способом: за наличные, по безналичному расчёту, в кредит или в лизинг».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Оформление кредита в автосалоне</li>
+          <li>Оформление лизинга</li>
+          <li>Оплата: наличные, банковский перевод, безналичная оплата</li>
+          <li>Trade-in при покупке</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">коммерческий транспорт в лизинг Нижний Новгород</span><span class="chip">ГАЗель в кредит</span><span class="chip">грузовик в кредит с пробегом</span><span class="chip">лизинг коммерческого автомобиля</span><span class="chip">автокредит на коммерческий транспорт</span><span class="chip">купить ГАЗель по безналу</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Коммерческий транспорт с пробегом в кредит, лизинг, за наличные или по безналичному расчёту — «Первый Коммерческий», Нижний Новгород.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на кредит или лизинг.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Кредит и лизинг»</dd>
+          <dt>Фото</dt><dd>ГАЗель из наличия, из фотоархива компании</dd>
+          <dt>Цвета</dt><dd>Чёрная плашка #000000, заголовок белым, разделитель «·» и слово «лизинг» цветом #D13731; логотип в углу</dd>
+          <dt>Подпись</dt><dd>«Наличные · безнал · кредит · лизинг»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="pk-stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Что в наличии</h4>
+        <ul>
+          <li>ГАЗель</li>
+          <li>ГАЗон NEXT</li>
+          <li>JAC</li>
+          <li>Грузовики</li>
+        </ul>
+        <div class="chips"><span class="chip">ГАЗель б/у Нижний Новгород</span><span class="chip">коммерческий транспорт с пробегом</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> чёрный фон #000000, логотип сверху, четыре строки-плашки #CB2B1D с белым текстом, фото ГАЗели из архива компании в нижней половине слайда.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Подбор по параметрам</h4>
+        <ul>
+          <li>Пробег · год · привод</li>
+          <li>Коробка · двигатель · мощность</li>
+          <li>Тест-драйв на площадке</li>
+        </ul>
+        <div class="chips"><span class="chip">подобрать коммерческий автомобиль</span><span class="chip">тест-драйв Нижний Новгород</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #F2F2F2, заголовок #000000, параметры в белых карточках #FFFFFF с тонкой чёрной обводкой, «Тест-драйв» внизу на плашке #D13731 белым.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Продайте свой коммерческий авто</h4>
+        <ul>
+          <li>Выкуп</li>
+          <li>Комиссия</li>
+          <li>Trade-in</li>
+        </ul>
+        <div class="chips"><span class="chip">выкуп коммерческого транспорта</span><span class="chip">продать ГАЗель</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #CB2B1D, заголовок белым, три слова крупно в столбик на чёрных плашках #000000, фото коммерческого автомобиля из архива компании сверху.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Способы покупки</h4>
+        <ul>
+          <li>Наличные · безнал</li>
+          <li>Кредит</li>
+          <li>Лизинг</li>
+        </ul>
+        <div class="chips"><span class="chip">коммерческий транспорт в лизинг</span><span class="chip">ГАЗель в кредит</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> чёрный фон #000000, три блока сверху вниз с белым текстом, разделённые тонкими линиями #D13731, логотип внизу на светлой подложке #F2F2F2.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pk-map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Коммерческий транспорт с пробегом на Московском шоссе</span><span class="d">Специализация, транспорт в наличии, направления компании</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Что в наличии</span><span class="d">ГАЗель, ГАЗон NEXT, JAC, грузовики</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Подбор коммерческого авто: каталог и тест-драйв</span><span class="d">Фильтры по параметрам, тест-драйв на площадке</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Подбор по параметрам</span><span class="d">Пробег, год, привод, двигатель, тест-драйв</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Выкуп и комиссия коммерческого транспорта</span><span class="d">Выкуп, комиссия, trade-in</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Продайте свой коммерческий авто</span><span class="d">Выкуп · комиссия · trade-in</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Коммерческий автомобиль в кредит или лизинг</span><span class="d">Способы оплаты для бизнеса и частных покупателей</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Способы покупки</span><span class="d">Наличные, безнал, кредит, лизинг</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var cos=['a1','pk'];
+  function show(co){
+    cos.forEach(function(c){
+      document.getElementById('co-'+c).hidden=(c!==co);
+      document.getElementById('nav-'+c).hidden=(c!==co);
+      document.getElementById('btn-'+c).setAttribute('aria-pressed',c===co?'true':'false');
+    });
+  }
+  document.querySelectorAll('.switch button').forEach(function(b){
+    b.addEventListener('click',function(){show(b.dataset.co);window.scrollTo({top:0});});
+  });
+  var h=(location.hash||'').replace('#','');
+  if(h.indexOf('pk')===0) show('pk');
+})();
+</script>
+
+</body>
+</html>
