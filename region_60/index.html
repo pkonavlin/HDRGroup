@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>рЕГИон 60 — ТЗ</title>
+<style>
+  /* Layout: single sticky top bar + one reading column; agency chrome (ocean/teal/ice/roe), client colors only in swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47; --ocean: #1b6b78; --ocean-soft: #4c97a0; --ice: #eef6f5; --paper: #f7faf9; --surface: #ffffff;
+    --roe: #c4572b; --ink: #0f2429; --ink-soft: #4a6167; --ink-faint: #7c9296; --line: #cfe1de; --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+      --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22; --surface: #102529;
+    --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97; --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: "Bricolage Grotesque", "Public Sans", sans-serif; text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 100px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 80px; } }
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row span b { color: var(--ink-soft); font-weight: 600; }
+  section { margin-bottom: 64px; scroll-margin-top: 88px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: "IBM Plex Mono", monospace; color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin-top: -12px; margin-bottom: 22px; max-width: 68ch; }
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; color: var(--ink); line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+  .swatch-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .swatch { border-radius: 10px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(128,128,128,0.25); color: #ffffff; min-width: 0; }
+  .swatch.light { color: #171717; }
+  .swatch .role { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 500; }
+  @media (max-width: 960px) { .swatch-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .swatch-row { grid-template-columns: repeat(2, 1fr); } }
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .sequence .step { flex: 1 1 200px; padding: 16px; border-right: 1px solid var(--line-soft); background: var(--ice); }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step .n { font-family: "IBM Plex Mono", monospace; color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .theme-card { padding: 20px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; color: var(--ink); min-width: 0; flex: 1 1 320px; }
+  .theme-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: "IBM Plex Mono", monospace; color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.full { grid-column: 1 / -1; }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .cover-brief .label { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roe); margin-bottom: 6px; }
+  .cover-brief .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .story-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; color: var(--ink); margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block:last-child { margin-bottom: 0; }
+  .slide-block .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 5px; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block ul { margin: 4px 0 0; padding-left: 16px; }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 16px 28px; display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform 0.15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  @media (max-width: 720px) { .roadmap { margin: 20px 16px 22px 24px; } .stage-acc summary { padding: 14px 16px; } }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; color: var(--ink); }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">рЕГИон 60</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 1 · Магазин автозапчастей</div>
+    <h1 class="title">рЕГИон 60</h1>
+    <p class="lede">Продажа автозапчастей для ВАЗ и иномарок в Пскове. Огромный ассортимент автозапчастей в наличии. Этап 1 знакомит с компанией через историю с 1999 года, четыре магазина в Пскове, помощь в подборе запчастей и ассортимент автохимии, автокосметики и автоаксессуаров. 4 темы новостей с обложками и 4 темы сторис в формате презентации. Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Псков</span>
+      <span><b>Категория:</b> магазин автозапчастей и автотоваров</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 1</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="k">Наименование</div><div class="v">рЕГИон60</div></div>
+      <div class="fact-card"><div class="k">Сфера деятельности</div><div class="v">Продажа автозапчастей для ВАЗ и иномарок<small>Автоаксессуары, автокосметика, автохимия</small></div></div>
+      <div class="fact-card"><div class="k">Ключевое преимущество</div><div class="v">Огромный ассортимент автозапчастей в наличии.</div></div>
+      <div class="fact-card"><div class="k">История</div><div class="v">Компания «РЕГИОН 60» начала свою деятельность в марте 1999 года<small>Изначально компания открыла магазин на ул. Вокзальной, 36 и занималась продажей запчастей для автомобилей марки «Жигули». В дальнейшем ассортимент увеличился, и компания занялась продажей запчастей для всех отечественных автомобилей.</small></div></div>
+      <div class="fact-card"><div class="k">Псков, ул. Вокзальная, д. 36</div><div class="v">Отдел ВАЗ · Отдел Иномарки<small>С понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00.</small></div></div>
+      <div class="fact-card"><div class="k">ул. Алмазная, д. 9А</div><div class="v">Магазин автозапчастей<small>С понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00.</small></div></div>
+      <div class="fact-card"><div class="k">Гаражный проезд, д. 8</div><div class="v">Магазин автозапчастей<small>С понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00</small></div></div>
+      <div class="fact-card"><div class="k">ул. Льва Толстого, д. 3</div><div class="v">Магазин автозапчастей<small>С понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00</small></div></div>
+      <div class="fact-card"><div class="k">Сервисы на сайте</div><div class="v">Помощь в подборе запчастей, VIN запрос, поиск по артикулу детали, каталоги<small>Доставка и оплата, договор поставки, как сделать заказ — region60rus.ru</small></div></div>
+      <div class="fact-card"><div class="k">Подача в текстах</div><div class="v">Обращение к аудитории на «вы»<small>Без указания цен. Темы, которых компания не касается: упоминание конкурентов, общественно-политическая повестка, внутренние процессы компании.</small></div></div>
+      <div class="fact-card"><div class="k">Стилистика</div><div class="v">Сдержанный минимализм<small>Избегать: пестрые картинки</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа ресурсов компании определена графитово-красная палитра «рЕГИон 60»: графит как фирменный цвет компании, малиново-красный для акцентов и ключевых слов, почти чёрный фон публикаций, тёмные плашки для текстовых блоков, белый для текста и бронзовые искры как декоративный элемент фона.</p>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#27292D"><span class="role">Основной</span><span class="name">Графит · #27292D</span></div>
+      <div class="swatch" style="background:#E4364F"><span class="role">Акцентный</span><span class="name">Малиново-красный · #E4364F</span></div>
+      <div class="swatch" style="background:#141517"><span class="role">Второстепенный</span><span class="name">Тёмная плашка · #141517</span></div>
+      <div class="swatch" style="background:#020202"><span class="role">Фоновый</span><span class="name">Почти чёрный · #020202</span></div>
+      <div class="swatch light" style="background:#FFFFFF"><span class="role">Текстовый</span><span class="name">Белый · #FFFFFF</span></div>
+      <div class="swatch" style="background:#A56C38"><span class="role">Декоративный</span><span class="name">Бронзовые искры · #A56C38</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этап 1 начинается со знакомства с компанией — с магазина на ул. Вокзальной, 36, открытого в марте 1999 года. Затем — четыре магазина в Пскове и огромный ассортимент автозапчастей в наличии, помощь в подборе запчастей по VIN и артикулу, и в завершение — автохимия, автокосметика и автоаксессуары. Каждая сторис дополняет свою новость одним практичным фактом.</p>
+    <div class="sequence">
+      <div class="step"><div class="n">01</div><div class="t">С 1999 года</div><div class="d">от запчастей для «Жигулей» к ВАЗ и иномаркам</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Четыре магазина</div><div class="d">огромный ассортимент в наличии</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Подбор запчастей</div><div class="d">VIN запрос, поиск по артикулу</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Автотовары</div><div class="d">автохимия, автокосметика, автоаксессуары</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 1, 4 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица компании («мы»), обращение к читателю на «вы», сдержанно и по делу. Каждая тема раскрывает свою сторону компании, без повторения полного списка адресов и товаров в каждом тексте. Только факты из анкеты и с сайта компании, без приукрашивания и превосходных степеней. Цены не указываются. CTA — только словами, без телефона и e-mail в тексте. Объём — до 3000 знаков с пробелами. SEO-ключи вплетаются органично, без повторов подряд.</div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 1 / 4</div>
+      <div class="theme-head"><h3>Магазин автозапчастей «Регион 60» в Пскове: с 1999 года — от запчастей для «Жигулей» к запчастям для ВАЗ и иномарок</h3><span class="theme-tag">имиджевый · знакомство</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Открывающая тема этапа знакомит с компанией через её историю: магазин на ул. Вокзальной, 36, открытый в марте 1999 года, начинался с запчастей для автомобилей марки «Жигули», а сегодня компания продаёт автозапчасти для ВАЗ и иномарок. Тема даёт читателю карточки главное — кто такой «Регион 60» и чем занимается.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Мы начали свою деятельность в марте 1999 года — с магазина на улице Вокзальной, 36 и запчастей для автомобилей марки «Жигули». Сегодня мы продаём автозапчасти для ВАЗ и иномарок».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Компания «Регион 60» начала свою деятельность в марте 1999 года</li>
+          <li>Изначально компания открыла магазин на ул. Вокзальной, 36 и занималась продажей запчастей для автомобилей марки «Жигули»</li>
+          <li>В дальнейшем ассортимент увеличился, и компания занялась продажей запчастей для всех отечественных автомобилей</li>
+          <li>Сегодня — продажа автозапчастей для ВАЗ и иномарок; на ул. Вокзальной, 36 работают отдел ВАЗ и отдел Иномарки</li>
+          <li>Ключевое преимущество компании — огромный ассортимент автозапчастей в наличии</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">автозапчасти псков</span><span class="chip">магазин автозапчастей псков</span><span class="chip">запчасти для ваз псков</span><span class="chip">запчасти для иномарок псков</span><span class="chip">автозапчасти на вокзальной псков</span><span class="chip">регион 60 псков</span><span class="chip">запчасти для отечественных автомобилей</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Приходите в магазин «Регион 60» на ул. Вокзальной, 36</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> С 1999 года<br><b>Подзаголовок:</b> Автозапчасти для ВАЗ и иномарок<br><br>
+        Фон — почти чёрный #020202 с мелкой точечной сеткой и бронзовыми искрами #A56C38 по левому краю, как в действующем оформлении компании. Сверху по центру — «РЕГИОН 60» контурным белым #FFFFFF шрифтом. По центру — скруглённая плашка #141517 с тонкой обводкой малиново-красным #E4364F: «С 1999 года» белым #FFFFFF, «ВАЗ и иномарки» малиново-красным #E4364F — широкий жирный гротеск в верхнем регистре. Без контактов и адреса на изображении, текст — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 2 / 4</div>
+      <div class="theme-head"><h3>Огромный ассортимент автозапчастей в наличии: четыре магазина «Регион 60» в Пскове</h3><span class="theme-tag">продающий · магазины и ассортимент</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Компания назвала главным преимуществом огромный ассортимент автозапчастей в наличии и указала четыре адреса в Пскове. Тема отвечает на практический вопрос автовладельца: где купить нужную деталь и когда магазин открыт.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«У нас огромный ассортимент автозапчастей в наличии — в четырёх магазинах в Пскове: на улице Вокзальной, 36, улице Алмазной, 9А, в Гаражном проезде, 8 и на улице Льва Толстого, 3».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Огромный ассортимент автозапчастей в наличии</li>
+          <li>Псков, ул. Вокзальная, д. 36 — отдел ВАЗ и отдел Иномарки</li>
+          <li>ул. Алмазная, д. 9А; Гаражный проезд, д. 8; ул. Льва Толстого, д. 3</li>
+          <li>Режим работы: с понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">автозапчасти в наличии псков</span><span class="chip">купить автозапчасти псков</span><span class="chip">магазин запчастей рядом псков</span><span class="chip">автозапчасти алмазная псков</span><span class="chip">автозапчасти льва толстого псков</span><span class="chip">автозапчасти гаражный проезд псков</span><span class="chip">запчасти ваз в наличии</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Приходите в ближайший к вам магазин «Регион 60»</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Запчасти в наличии<br><b>Подзаголовок:</b> Четыре магазина в Пскове<br><br>
+        Фон — почти чёрный #020202 с точечной сеткой и бронзовыми искрами #A56C38. «РЕГИОН 60» контурным белым #FFFFFF сверху. Плашка #141517 с обводкой #E4364F: «Запчасти» белым, «в наличии» малиново-красным #E4364F. Под плашкой — фото стеллажей магазина из материалов компании, затемнённое к графиту #27292D. Без адресов и телефонов на изображении, текст — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 3 / 4</div>
+      <div class="theme-head"><h3>Помощь в подборе запчастей в Пскове: VIN запрос и поиск по артикулу детали на сайте «Регион 60»</h3><span class="theme-tag">экспертный · подбор запчастей</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">На сайте компании есть помощь в подборе запчастей, VIN запрос, поиск по артикулу детали и каталоги. Тема снимает главную сложность покупки — как точно найти нужную деталь для своего автомобиля.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Есть сложности в подборе запчастей? Мы поможем. Оставьте заявку на сайте или позвоните».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Помощь в подборе запчастей: заявка на сайте region60rus.ru или звонок в магазин</li>
+          <li>VIN запрос на сайте</li>
+          <li>Поиск по артикулу детали и каталоги на сайте</li>
+          <li>На сайте — разделы «Как сделать заказ» и «Доставка и оплата»</li>
+          <li>Отдел ВАЗ и отдел Иномарки на ул. Вокзальной, 36</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">подбор запчастей по vin псков</span><span class="chip">подбор автозапчастей псков</span><span class="chip">поиск запчастей по артикулу</span><span class="chip">заказать автозапчасти псков</span><span class="chip">запчасти для иномарок под заказ псков</span><span class="chip">vin запрос</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Оставьте VIN запрос на сайте region60rus.ru</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Подбор по VIN<br><b>Подзаголовок:</b> Помощь в подборе запчастей<br><br>
+        Фон — почти чёрный #020202 с точечной сеткой и бронзовыми искрами #A56C38. «РЕГИОН 60» контурным белым #FFFFFF сверху. Плашка #141517 с обводкой #E4364F: «Подбор» белым, «по VIN» малиново-красным #E4364F. Ниже — стилизованная строка из 17 символов-ячеек VIN тонкой белой обводкой, без реального номера. Без контактов на изображении, текст — не более 20% площади.
+      </div></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="theme-idx">Тема 4 / 4</div>
+      <div class="theme-head"><h3>Автохимия, автокосметика и автоаксессуары в Пскове: что ещё есть в магазинах «Регион 60» кроме запчастей</h3><span class="theme-tag">продающий · автотовары</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Помимо автозапчастей компания продаёт автоаксессуары, автокосметику и автохимию. Тема расширяет представление о магазине: сюда приходят не только за деталью для ремонта.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Кроме автозапчастей для ВАЗ и иномарок, у нас есть автохимия, автокосметика и автоаксессуары».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Автохимия</li>
+          <li>Автокосметика</li>
+          <li>Автоаксессуары</li>
+          <li>Огромный ассортимент автозапчастей в наличии для ВАЗ и иномарок</li>
+          <li>Режим работы: с понедельника по пятницу с 09.00 до 19.00, суббота, воскресенье — с 10.00 до 16.00</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">автохимия псков</span><span class="chip">автокосметика псков</span><span class="chip">автоаксессуары псков</span><span class="chip">автотовары псков</span><span class="chip">магазин автотоваров псков</span><span class="chip">купить автохимию псков</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Заходите в магазины «Регион 60» за автохимией, автокосметикой и автоаксессуарами</div></div>
+      </div>
+      <div class="cover-brief"><div class="label">ТЗ на обложку</div><div class="body">
+        <b>Заголовок:</b> Не только запчасти<br><b>Подзаголовок:</b> Автохимия, автокосметика, автоаксессуары<br><br>
+        Фон — почти чёрный #020202 с точечной сеткой и бронзовыми искрами #A56C38. «РЕГИОН 60» контурным белым #FFFFFF сверху. Плашка #141517 с обводкой #E4364F: «Не только» белым, «запчасти» малиново-красным #E4364F. Ниже — три предметных фото без фона (флакон автохимии, средство автокосметики, автоаксессуар) в ряд, без пестроты. Без контактов, текст — не более 20% площади.
+      </div></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 1, 4 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · История</div>
+        <h3>С марта 1999 года</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Март 1999 — магазин на ул. Вокзальной, 36</li>
+          <li>Запчасти для «Жигулей» → для всех отечественных автомобилей</li>
+          <li>Сегодня — автозапчасти для ВАЗ и иномарок</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">магазин автозапчастей псков</span><span class="chip">запчасти ваз псков</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — почти чёрный #020202 с точечной сеткой и бронзовыми искрами #A56C38. Сверху — «РЕГИОН 60» белым #FFFFFF. «1999» крупно малиново-красным #E4364F, ниже — подпись белым. Три тезиса — в скруглённой плашке #141517 с тонкой светлой обводкой, разделены стрелкой ↓, как в действующем оформлении сторис компании.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">02 · Вокзальная, 36</div>
+        <h3>Два отдела на Вокзальной</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Отдел ВАЗ</li>
+          <li>Отдел Иномарки</li>
+          <li>Ул. Вокзальная, 36, Псков</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">запчасти для иномарок псков</span><span class="chip">автозапчасти вокзальная псков</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — почти чёрный #020202 с бронзовыми искрами #A56C38. «РЕГИОН 60» белым сверху. Две плашки #141517 одна над другой: «ВАЗ» и «Иномарки» малиново-красным #E4364F крупно, подпись «отдел» белым. Внизу — фото входа в магазин из материалов компании, затемнённое к графиту #27292D. Без телефонов на слайде.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">03 · Подбор</div>
+        <h3>VIN запрос</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Помощь в подборе запчастей</li>
+          <li>VIN запрос и поиск по артикулу на сайте</li>
+          <li>region60rus.ru</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">подбор запчастей по vin псков</span><span class="chip">поиск запчастей по артикулу</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — почти чёрный #020202 с точечной сеткой и бронзовыми искрами #A56C38. «РЕГИОН 60» белым сверху, «VIN запрос» крупно малиново-красным #E4364F. По центру — строка из 17 пустых ячеек VIN тонкой белой обводкой. Тезисы — в плашке #141517 со стрелкой ↓. Внизу — плашка #141517 с адресом сайта белым.</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">04 · Автотовары</div>
+        <h3>Автохимия и автокосметика</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Автохимия</li>
+          <li>Автокосметика</li>
+          <li>Автоаксессуары</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row"><span class="chip">автохимия псков</span><span class="chip">автоаксессуары псков</span></div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Фон — почти чёрный #020202 с бронзовыми искрами #A56C38. «РЕГИОН 60» белым сверху, заголовок малиново-красным #E4364F. Три категории — в скруглённых плашках #141517 белым текстом. В центре — предметное фото товара без фона, как деталь в действующей сторис компании. Минимализм, без пестроты.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc" open>
+        <summary><span class="stage-name">Этап 1</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Магазин автозапчастей «Регион 60» в Пскове с 1999 года</h4><p>От запчастей для «Жигулей» к запчастям для ВАЗ и иномарок</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>С марта 1999 года</h4><p>Вокзальная, 36 — «Жигули» — ВАЗ и иномарки</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Огромный ассортимент автозапчастей в наличии</h4><p>Четыре магазина в Пскове, режим работы</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Два отдела на Вокзальной</h4><p>Отдел ВАЗ и отдел Иномарки</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Помощь в подборе запчастей</h4><p>VIN запрос, поиск по артикулу, каталоги на сайте</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>VIN запрос</h4><p>Подбор запчастей и поиск по артикулу на region60rus.ru</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Автохимия, автокосметика и автоаксессуары</h4><p>Что ещё есть в магазинах кроме запчастей</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Автохимия и автокосметика</h4><p>Три категории автотоваров</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+</body>
+</html>
