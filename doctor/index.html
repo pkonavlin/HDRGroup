@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>«Доктор» — ТЗ</title>
+
+<style>
+  /* Layout: sticky single top bar, one content column; agency chrome (ocean/roe), client colors only in swatches and design notes */
+  :root {
+    --ocean-deep: #0e3b47;
+    --ocean: #1b6b78;
+    --ocean-soft: #4c97a0;
+    --ice: #eef6f5;
+    --paper: #f7faf9;
+    --surface: #ffffff;
+    --roe: #c4572b;
+    --ink: #0f2429;
+    --ink-soft: #4a6167;
+    --ink-faint: #7c9296;
+    --line: #cfe1de;
+    --line-soft: #e2eeec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
+    --f-display: "Bricolage Grotesque", "Public Sans", -apple-system, sans-serif;
+    --f-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22;
+      --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97;
+      --line: #24444b; --line-soft: #1b3338;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22;
+    --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97;
+    --line: #24444b; --line-soft: #1b3338;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+  a { color: var(--ocean); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
+
+  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
+  .topbar .brand { font-family: var(--f-display); font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
+  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; white-space: nowrap; }
+  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 80px; }
+  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 64px; } }
+
+  header.hero { margin-bottom: 40px; }
+  .eyebrow { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
+  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
+  .lede { max-width: 64ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
+  .meta-row b { color: var(--ink-soft); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 96px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .section-head .num { font-family: var(--f-mono); color: var(--ocean-soft); font-size: 0.9rem; }
+  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
+  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin: -12px 0 22px; max-width: 68ch; }
+
+  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
+  .fact-card .k { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
+  .fact-card .v { font-size: 0.92rem; line-height: 1.5; }
+  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .swatch { border-radius: 10px; height: 96px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.06); color: #ffffff; }
+  .swatch.on-light { color: #1d2a28; }
+  .swatch .role { font-family: var(--f-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+  .swatch .name { font-family: var(--f-mono); font-size: 0.7rem; font-weight: 500; }
+
+  .stage-acc { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); margin-bottom: 12px; overflow: hidden; }
+  .stage-acc summary { list-style: none; cursor: pointer; padding: 14px 22px; display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--ink-faint); }
+  .stage-acc summary::-webkit-details-marker { display: none; }
+  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform .15s ease; }
+  .stage-acc[open] summary::before { transform: rotate(90deg); }
+  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
+  .stage-acc summary .cur { color: var(--roe); }
+
+  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .stage-acc .sequence { border: none; border-top: 1px solid var(--line-soft); border-radius: 0; box-shadow: none; }
+  .sequence .step { flex: 1 1 150px; padding: 16px; border-right: 1px solid var(--line-soft); min-width: 0; }
+  .sequence .step:last-child { border-right: none; }
+  .sequence .step.new { background: var(--ice); }
+  .sequence .step .n { font-family: var(--f-mono); color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
+  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
+
+  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
+  .tone-banner b { color: var(--ocean-deep); }
+
+  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 520px) { .theme-card { padding: 20px 18px; } }
+  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .theme-head h3 { font-size: 1.2rem; min-width: 0; flex: 1 1 320px; }
+  .theme-tag { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+  .theme-idx { font-family: var(--f-mono); color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
+  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
+  .field { min-width: 0; }
+  .field.full { grid-column: 1 / -1; }
+  .label { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
+  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
+  .field.voice .body { font-style: italic; color: var(--ink); }
+  .field ul, .slide-block ul { margin: 4px 0 0; padding-left: 18px; }
+  .field li { margin-bottom: 5px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip { font-family: var(--f-mono); font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; font-size: 0.92rem; color: var(--ink-soft); }
+  .cover-brief .label { color: var(--roe); }
+  .cover-brief b { color: var(--ink); }
+
+  .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
+  .story-card .idx { font-family: var(--f-mono); font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
+  .story-card h3 { font-size: 1.08rem; margin-bottom: 14px; }
+  .slide-block { margin-bottom: 14px; }
+  .slide-block .label { font-size: 0.68rem; }
+  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
+  .slide-block li { margin-bottom: 3px; }
+  .slide-block.design .label { color: var(--roe); }
+
+  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .map-accordion .stage-acc { border: none; border-bottom: 1px solid var(--line-soft); border-radius: 0; margin: 0; }
+  .map-accordion .stage-acc:last-child { border-bottom: none; }
+  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
+  .roadmap-item { position: relative; padding-bottom: 20px; }
+  .roadmap-item:last-child { padding-bottom: 0; }
+  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
+  .roadmap-item .kind { font-family: var(--f-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
+  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; }
+  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 520px) { .roadmap { margin: 20px 16px 20px 22px; padding-left: 20px; } .roadmap-item::before { left: -26px; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">«Доктор»</span>
+    <nav>
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#sequence">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Контент-ТЗ · Этап 4 · Стоматологическая клиника</div>
+    <h1 class="title">Стоматологическая клиника «Доктор»</h1>
+    <p class="lede">Клиника в Калининграде на улице Генерала Челнокова, 56. Этапы 1–3 раскрыли имплантацию, протезирование, ортодонтию, диагностику, гигиену и хирургию. Этап 4 рассказывает, как в клинике проходит лечение с обезболиванием и с какими имплантационными системами она работает: 2 темы новостей с обложками и 2 темы сторис для карточки компании на Яндекс Картах и 2ГИС.</p>
+    <div class="meta-row">
+      <span><b>Город:</b> Калининград</span>
+      <span><b>Категория:</b> стоматологическая клиника</span>
+      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
+      <span><b>Этап:</b> 4</span>
+    </div>
+  </header>
+
+  <section id="company">
+    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="k">Адрес и график</div><div class="v">Калининград, Генерала Челнокова, 56<small>Пн–Сб 09:00–20:00 · Вс — выходной</small></div></div>
+      <div class="fact-card"><div class="k">Главный врач и основатель</div><div class="v">Шабалин Анатолий Викторович<small>Ортопед, терапевт, хирург-имплантолог высшей категории</small></div></div>
+      <div class="fact-card"><div class="k">Направления</div><div class="v">Лечение зубов, ортодонтия, профессиональная гигиена, протезирование, хирургическая стоматология, имплантация<small>Кариес и пульпит · брекет-системы и аппараты · виниры и коронки · удаление кисты и зуба мудрости · All-on-4/6 · синус-лифтинг</small></div></div>
+      <div class="fact-card"><div class="k">Имплантация</div><div class="v">Официальные представители Osstem и Straumann<small>Системы на сайте: Straumann, Neodent, Osstem · одни из первых привезли метод All-on-4 в Калининград</small></div></div>
+      <div class="fact-card"><div class="k">Комфорт лечения</div><div class="v">Анестетики последнего поколения, обезболивающий гель на десну перед анестезией<small>97% пациентов не испытывают болевых ощущений, у остальных — небольшой дискомфорт</small></div></div>
+      <div class="fact-card"><div class="k">Условия</div><div class="v">Стоимость фиксируется в договоре и не меняется после начала лечения<small>Каждая операция застрахована · беспроцентная рассрочка · гарантия на импланты от производителя</small></div></div>
+      <div class="fact-card"><div class="k">Опыт</div><div class="v">1 600+ установленных имплантов<small>Специалисты с опытом более 12 лет</small></div></div>
+      <div class="fact-card"><div class="k">Оснащение</div><div class="v">Оборудование из Израиля, Германии, Венгрии, Южной Кореи, США<small>Лицензия № Л041-01157-39/00631040, ООО «Ортис»</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
+    <p class="section-sub">После анализа логотипа, сайта и опубликованных материалов клиники определены фирменные цвета «Доктора».</p>
+    <div class="swatch-row">
+      <div class="swatch on-light" style="background:#54B8B0"><span class="role">Акцентный</span><span class="name">Бирюзовый · #54B8B0</span></div>
+      <div class="swatch on-light" style="background:#78C8D4"><span class="role">Основной</span><span class="name">Голубой логотипа · #78C8D4</span></div>
+      <div class="swatch on-light" style="background:#6CBC94"><span class="role">Второстепенный</span><span class="name">Зелёный логотипа · #6CBC94</span></div>
+      <div class="swatch" style="background:#386050"><span class="role">Заголовки</span><span class="name">Тёмно-зелёный · #386050</span></div>
+      <div class="swatch on-light" style="background:#E4F8F4"><span class="role">Фоновый</span><span class="name">Мятный · #E4F8F4</span></div>
+      <div class="swatch on-light" style="background:#D8D8D8"><span class="role">Плашки</span><span class="name">Светло-серый · #D8D8D8</span></div>
+      <div class="swatch" style="background:#303C3C"><span class="role">Текстовый</span><span class="name">Графит · #303C3C</span></div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
+    <p class="section-sub">Этапы 1–3 показали, какие задачи решает клиника: от диагностики и гигиены до имплантации и протезирования. Этап 4 рассказывает, как проходит само лечение и на чём строится имплантация в «Докторе».</p>
+    <details class="stage-acc">
+      <summary><span>Этапы 1–3 · пройдены</span></summary>
+      <div class="sequence">
+        <div class="step"><div class="n">01</div><div class="t">Возможности клиники</div><div class="d">протезирование на имплантах, ортодонтия, диагностика, реставрация</div></div>
+        <div class="step"><div class="n">02</div><div class="t">Ключевые услуги</div><div class="d">имплантация за 1 день, профгигиена</div></div>
+        <div class="step"><div class="n">03</div><div class="t">Хирургия</div><div class="d">зуб мудрости, одномоментная имплантация</div></div>
+      </div>
+    </details>
+    <div class="sequence">
+      <div class="step new"><div class="n">04</div><div class="t">Комфорт лечения</div><div class="d">лечение кариеса и пульпита с обезболиванием</div></div>
+      <div class="step new"><div class="n">04</div><div class="t">Имплантационные системы</div><div class="d">Straumann, Neodent, Osstem</div></div>
+      <div class="step new"><div class="n">04</div><div class="t">Условия лечения</div><div class="d">договор, страхование, рассрочка</div></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="section-head"><span class="num">04</span><h2>Новости — этап 4, 2 темы + обложка</h2></div>
+    <div class="tone-banner"><b>Тон:</b> от первого лица команды клиники «Доктор» — спокойно и по-человечески, без перечисления всех услуг клиники в каждом тексте. Медицинская тематика: без обещаний «безопасно / безболезненно / эффективно», без превосходных степеней, в конце текста — строка «Имеются противопоказания. Необходима консультация специалиста». CTA — только словами, без телефона и e-mail в тексте. Публикация — в карточке клиники на Яндекс Картах и 2ГИС.</div>
+
+    <article class="theme-card">
+      <div class="theme-idx">Тема 1 / 2</div>
+      <div class="theme-head"><h3>Лечение зубов с комфортом: как в клинике «Доктор» проходит обезболивание</h3><span class="theme-tag">информационный · терапия</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Прошлые этапы были о хирургии, имплантации, ортодонтии и диагностике. Терапевтическое лечение (кариес, пульпит) и то, как в клинике устроено обезболивание, в карточке ещё не раскрывались.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Мы в клинике «Доктор» лечим зубы с надёжными анестетиками последнего поколения, а перед анестезией наносим на десну обезболивающий гель».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Лечение зубов в клинике «Доктор» в Калининграде — направление, в которое входят лечение кариеса и лечение пульпита</li>
+          <li>Для обезболивания используются анестетики последнего поколения</li>
+          <li>Перед введением анестезии на десну наносится обезболивающий гель</li>
+          <li>По данным клиники, 97% пациентов не испытывают болевых ощущений, у остальных — небольшой дискомфорт</li>
+          <li>Кабинеты клиники оснащены оборудованием из Израиля, Германии, Венгрии, Южной Кореи и США</li>
+          <li>На консультации стоматолог проводит детальный осмотр и ориентирует по стоимости и срокам лечения</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">лечение зубов калининград</span>
+          <span class="chip">лечение кариеса калининград</span>
+          <span class="chip">лечение пульпита</span>
+          <span class="chip">лечение зубов под анестезией</span>
+          <span class="chip">стоматолог-терапевт калининград</span>
+          <span class="chip">стоматология калининград</span>
+          <span class="chip">обезболивание в стоматологии</span>
+          <span class="chip">стоматологическая клиника доктор</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на консультацию — стоматолог проведёт осмотр и расскажет о плане лечения</div></div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <b>Заголовок:</b> Лечение зубов с комфортом<br>
+        <b>Подзаголовок:</b> Обезболивающий гель и современные анестетики<br><br>
+        Мятный фон #E4F8F4 с мягкими полупрозрачными сферами, как на опубликованных обложках клиники. Логотип по центру сверху, заголовок графитом #303C3C разреженными прописными, подзаголовок бирюзовым #54B8B0. Фото: стоматологический кабинет или врач за работой. Текст и логотип — не более 20% площади.
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-idx">Тема 2 / 2</div>
+      <div class="theme-head"><h3>Импланты Straumann, Neodent и Osstem: с какими системами работает клиника «Доктор»</h3><span class="theme-tag">экспертный · имплантация</span></div>
+      <div class="field-grid">
+        <div class="field full"><div class="label">Почему актуально</div><div class="body">Имплантация — ключевое направление клиники; прошлые этапы раскрыли методики (за 1 день, одномоментная, протезирование на имплантах). Сами имплантационные системы и статус официального представителя отдельной темой ещё не подавались.</div></div>
+        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Мы — официальные представители Osstem и Straumann в Калининграде и подбираем импланты и протез под ваш случай».</div></div>
+        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Клиника «Доктор» — официальный представитель Osstem и Straumann</li>
+          <li>В клинике работают с тремя имплантационными системами: Straumann (Швейцария), Osstem (Южная Корея) и Neodent</li>
+          <li>Систему подбирают после осмотра и диагностики — клиника советует импланты и протез под конкретный случай</li>
+          <li>На модели пациент видит, какими будут новые зубы</li>
+          <li>Гарантия на импланты от производителя</li>
+          <li>Клиника одной из первых привезла метод All-on-4 в Калининград; специалисты установили более 1 600 имплантов</li>
+        </ul></div></div>
+        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">имплантация зубов калининград</span>
+          <span class="chip">импланты straumann калининград</span>
+          <span class="chip">импланты osstem</span>
+          <span class="chip">импланты neodent</span>
+          <span class="chip">установка импланта калининград</span>
+          <span class="chip">какой имплант выбрать</span>
+          <span class="chip">стоматолог-имплантолог калининград</span>
+          <span class="chip">all-on-4 калининград</span>
+        </div></div>
+        <div class="field"><div class="label">CTA</div><div class="body">Приходите на консультацию — подберём имплантационную систему под вашу ситуацию</div></div>
+      </div>
+      <div class="cover-brief">
+        <div class="label">ТЗ на обложку</div>
+        <b>Заголовок:</b> Три системы имплантов<br>
+        <b>Подзаголовок:</b> Straumann · Neodent · Osstem<br><br>
+        Мятный фон #E4F8F4 со сферами, заголовок графитом #303C3C разреженными прописными, подзаголовок голубым #78C8D4. Визуал: 3D-модель зуба на импланте, как на опубликованных сторис клиники. Логотип сверху, без цен на изображении. Текст и логотип — не более 20% площади.
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 4, 2 темы</h2></div>
+    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты. Публикация — в карточке клиники на Яндекс Картах и 2ГИС.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="idx">01 · Терапия</div>
+        <h3>Лечение с комфортом</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Обезболивающий гель на десну перед анестезией</li>
+          <li>Анестетики последнего поколения</li>
+          <li>97% пациентов не испытывают болевых ощущений</li>
+          <li>Лечение кариеса и пульпита</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">лечение зубов калининград</span>
+          <span class="chip">лечение кариеса</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Как опубликованные сторис клиники: мятный градиентный фон #E4F8F4 со сферами, логотип слева сверху, заголовок тёмно-зелёным #386050 разреженными прописными, тезисы в светло-серых плашках #D8D8D8 с текстом графитом #303C3C. Внизу справа — 3D-модель зуба.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Записаться на консультацию»</div></div>
+      </div>
+      <div class="story-card">
+        <div class="idx">02 · Условия</div>
+        <h3>Условия лечения в клинике «Доктор»</h3>
+        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
+          <li>Стоимость фиксируется в договоре и не меняется после начала лечения</li>
+          <li>Каждая операция застрахована</li>
+          <li>Беспроцентная рассрочка</li>
+          <li>Гарантия на импланты от производителя</li>
+        </ul></div></div>
+        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
+          <span class="chip">стоматология калининград</span>
+          <span class="chip">лечение зубов в рассрочку</span>
+        </div></div>
+        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Мятный фон #E4F8F4, логотип сверху, заголовок тёмно-зелёным #386050. Четыре тезиса в плашках #D8D8D8, слева от каждого — маркер-круг бирюзовым #54B8B0. Без цифр стоимости.</div></div>
+        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Получить консультацию»</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
+    <div class="map-accordion">
+      <details class="stage-acc">
+        <summary><span>Этап 1</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Протезирование на имплантах: современное решение для восстановления зубного ряда</h4><p>Один, несколько или все зубы; фиксация, жевательная функция, эстетика</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Как работает протезирование на имплантах</h4><p>Диагностика, установка, приживление, изготовление и фиксация протеза</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Одномоментная имплантация после удаления зуба: сокращение сроков лечения</h4><p>Удаление и установка импланта за одно посещение, временное протезирование</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Одномоментная имплантация по этапам</h4><p>Удаление, установка импланта, временное протезирование</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Аппаратная ортодонтия: возможности коррекции прикуса без хирургического вмешательства</h4><p>Показания, лечение детей и подростков, профилактика осложнений</p></div>
+          <div class="roadmap-item"><div class="kind">История 3</div><h4>Виды аппаратов для коррекции прикуса</h4><p>Функциональные, расширяющие, ортодонтические системы</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Современная диагностика в стоматологии: что позволяет выявить снимок</h4><p>Скрытый кариес, воспаление корней, дёсны, прикус, костная ткань</p></div>
+          <div class="roadmap-item"><div class="kind">История 4</div><h4>Когда требуется аппаратная ортодонтия</h4><p>Скученность, нарушение прикуса, сужение челюсти</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 5</div><h4>Восстановление зубов: чем отличаются вкладки, коронки и пломбы</h4><p>Сравнение методов реставрации по долговечности и функциональности</p></div>
+          <div class="roadmap-item"><div class="kind">История 5</div><h4>Признаки, которые указывают на необходимость диагностики зубов</h4><p>Чувствительность, запах, кровоточивость, цвет эмали, дискомфорт</p></div>
+        </div>
+      </details>
+      <details class="stage-acc">
+        <summary><span>Этап 2</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Имплантация зубов за 1 день — как проходит лечение</h4><p>Кому подходит методика, этапы, технологии, консультация</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>5 признаков, что пора записаться к стоматологу</h4><p>Чувствительность, дёсны, запах, боль при жевании, давно не было осмотра</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Почему профессиональная гигиена — обязательная процедура даже при здоровых зубах</h4><p>Зубной камень, профилактика кариеса и болезней дёсен, периодичность</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Что происходит на первой консультации</h4><p>Осмотр, диагностика, план, расчёт стоимости, ответы на вопросы</p></div>
+        </div>
+      </details>
+      <details class="stage-acc">
+        <summary><span>Этап 3</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Зуб мудрости: когда его действительно необходимо удалять?</h4><p>Показания к удалению, роль диагностики, хирургическая стоматология</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Зуб мудрости: удалять или оставить?</h4><p>Когда требуется удаление; решение после осмотра</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Имплантация сразу после удаления зуба: когда можно установить имплант одномоментно?</h4><p>Принцип процедуры, условия, преимущества методики</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Имплант сразу после удаления зуба — возможно?</h4><p>Условия, при которых методика возможна</p></div>
+        </div>
+      </details>
+      <details class="stage-acc" open>
+        <summary><span>Этап 4</span> <span class="cur">· актуальный</span></summary>
+        <div class="roadmap">
+          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Лечение зубов с комфортом: как в клинике «Доктор» проходит обезболивание</h4><p>Кариес и пульпит, анестетики последнего поколения, гель перед анестезией</p></div>
+          <div class="roadmap-item"><div class="kind">История 1</div><h4>Лечение с комфортом</h4><p>Гель, анестетики, 97% без болевых ощущений</p></div>
+          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Импланты Straumann, Neodent и Osstem: с какими системами работает клиника «Доктор»</h4><p>Официальный представитель Osstem и Straumann, подбор системы под случай</p></div>
+          <div class="roadmap-item"><div class="kind">История 2</div><h4>Условия лечения в клинике «Доктор»</h4><p>Договор с фиксированной стоимостью, страхование операций, рассрочка, гарантия</p></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
