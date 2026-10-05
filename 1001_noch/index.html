@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>1000 и 1 Ночь — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#1B1E0B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">«1000 и 1 Ночь»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«1000 и 1 Ночь», Екатеринбург</h1>
+    <p class="lede">Оздоровительный центр в Екатеринбурге. Отдых для души и тела в атмосфере восточной сказки. Пять залов, финская, турецкая и русская парные, бассейны, бильярд и караоке. Работает круглосуточно. Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Рубрики</div><div class="v">Сауна · баня · бассейн</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Екатеринбург, ул. Готвальда, 12А, этаж 1 · Заречный, Верх-Исетский район</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+      <div class="fact"><div class="k">Телефоны</div><div class="v">+7 (343) 268-65-55 · +7 908 908 67 55</div></div>
+      <div class="fact"><div class="k">Залы</div><div class="v">Финский зал, зал «Оазис», Турецкий зал, Аппартаменты, Грация</div></div>
+      <div class="fact"><div class="k">Стоимость по сайту</div><div class="v">Турецкий зал — от 2000 ₽/час · Аппартаменты — 800–1000 ₽/час · Грация — 3000 ₽/час</div></div>
+      <div class="fact"><div class="k">Парные</div><div class="v">Финская, турецкая (хамам), русская</div></div>
+      <div class="fact"><div class="k">Бассейны</div><div class="v">Бассейн с подогревом, подсветкой и водопадом, джакузи, гидро- и аэромассаж, купель</div></div>
+      <div class="fact"><div class="k">В залах</div><div class="v">Бильярд, караоке, комнаты отдыха, массажное кресло</div></div>
+      <div class="fact"><div class="k">Удобства</div><div class="v">Парковка, в том числе для людей с инвалидностью, Wi‑Fi, оплата картой, подарочные сертификаты</div></div>
+      <div class="fact"><div class="k">Включено в отдых</div><div class="v">Веники, простыни, тапочки, посуда, обливное ведро, заказ еды в зал</div></div>
+      <div class="fact"><div class="k">Предложение</div><div class="v">−10% в день рождения</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: тёмно-оливковый логотипа и заголовков, золото месяца и звезды, кремовый фон сайта и сторис. Тёмные кадры интерьера используются под золотой логотип и золотые надписи.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#343B18"><span class="role">Основной</span><span class="name">Тёмно-оливковый</span><span class="hex">#343B18</span></div>
+      <div class="sw dark" style="background:#DAB66B"><span class="role">Акцентный</span><span class="name">Золото</span><span class="hex">#DAB66B</span></div>
+      <div class="sw light" style="background:#A9824B"><span class="role">Второстепенный</span><span class="name">Тёмное золото</span><span class="hex">#A9824B</span></div>
+      <div class="sw dark" style="background:#F8F3D7"><span class="role">Фоновый</span><span class="name">Кремовый</span><span class="hex">#F8F3D7</span></div>
+      <div class="sw light" style="background:#1B1E0B"><span class="role">Текстовый</span><span class="name">Оливково-чёрный</span><span class="hex">#1B1E0B</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От знакомства с комплексом к каждому залу</h2>
+    <div class="timeline">
+      <details class="stage">
+        <summary>Этап 1 — знакомство с форматами отдыха</summary>
+        <div class="stage-body">
+          <p>Финская сауна и хамам, польза отдыха после рабочей недели, праздники и встречи, полный перечень услуг комплекса.</p>
+          <div class="flow"><span>Сауна или хамам</span><i>→</i><span>Восстановление</span><i>→</i><span>Праздники</span><i>→</i><span>Что входит в отдых</span></div>
+        </div>
+      </details>
+      <details class="stage">
+        <summary>Этап 2 — два больших зала и дополнения к отдыху</summary>
+        <div class="stage-body">
+          <p>Турецкий и Финский залы как самостоятельные пространства, банные процедуры, круглосуточная работа и всё необходимое на месте.</p>
+          <div class="flow"><span>Турецкий и Финский залы</span><i>→</i><span>Веники, масла, процедуры</span><i>→</i><span>Круглосуточно</span><i>→</i><span>Всё для отдыха</span></div>
+        </div>
+      </details>
+      <details class="stage" open>
+        <summary>Этап 3 — камерные форматы <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>После двух больших залов цикл переходит к форматам для небольшого числа гостей: Аппартаменты с финской парной на двоих и зал «Оазис» с финской парной для небольшой компании.</p>
+          <div class="flow"><span>Аппартаменты на двоих</span><i>→</i><span>Зал «Оазис» для небольшой компании</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 3</h2>
+    <p class="lede">Публикация — карточка компании «1000 и 1 Ночь» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Екатеринбург», «Заречный», «ул. Готвальда» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Каждый текст начинается от лица компании («мы») и раскрывает один зал как отдельное пространство. Факты подаются как часть рассказа о зале, без перечисления всех услуг комплекса подряд. SEO-ключи вплетаются в предложения, без списков и повторов подряд.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Аппартаменты в «1000 и 1 Ночь»: финская сауна на двоих в Екатеринбурге</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Прошлые этапы рассказали о больших залах для компании. Аппартаменты — отдельный формат на двух человек, о котором в карточке ещё не было публикаций.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В «1000 и 1 Ночь» есть зал для двоих — Аппартаменты. Своя финская парная, Смарт TV и музыка через bluetooth, и мы открыты круглосуточно».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Аппартаменты — один из пяти залов комплекса, рассчитан на 2 человека</li>
+          <li>Финская парная с сухим жарким паром</li>
+          <li>Смарт TV и bluetooth-аудиосистема в зале</li>
+          <li>Стоимость — 800–1000 ₽/час</li>
+          <li>Работает круглосуточно: визит можно запланировать днём, вечером или ночью</li>
+          <li>Адрес: ул. Готвальда, 12А, Заречный</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">сауна на двоих Екатеринбург</span><span class="chip">финская сауна на двоих</span><span class="chip">сауна для двоих Екатеринбург</span><span class="chip">сауна Екатеринбург</span><span class="chip">финская сауна Екатеринбург</span><span class="chip">сауна круглосуточно Екатеринбург</span><span class="chip">сауна Заречный</span><span class="chip">сауна Готвальда</span><span class="chip">снять сауну Екатеринбург</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Аппартаменты в «1000 и 1 Ночь» — финская сауна на двоих в Екатеринбурге: своя парная, Смарт TV, bluetooth-аудиосистема. 800–1000 ₽/час, круглосуточно, ул. Готвальда, 12А.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Бронируйте Аппартаменты на удобное время.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Сауна на двоих»</dd>
+          <dt>Фото</dt><dd>Аппартаменты: финская парная или зона отдыха зала, тёплый свет</dd>
+          <dt>Цвета</dt><dd>Заголовок золотом #DAB66B, логотип в золоте; если фото светлое — плашка #343B18 под текстом</dd>
+          <dt>Подпись</dt><dd>«800–1000 ₽/час · круглосуточно»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Зал «Оазис»: финская сауна для небольшой компании в Заречном</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Между залом на двоих и большими залами на 20 человек стоит «Оазис» — формат для небольшой компании. Тема продолжает рассказ о залах комплекса по вместимости.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Для небольшой компании у нас есть зал «Оазис»: финская парная с сухим жарким паром, рассчитанная на 6 гостей, а если вас больше — до 10».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Зал «Оазис» — финская парная с сухим жарким паром</li>
+          <li>Вместимость — 6 человек, максимум 10</li>
+          <li>Каждый гость сверх 6 — доплата 300 ₽/час</li>
+          <li>Работает круглосуточно</li>
+          <li>Адрес: ул. Готвальда, 12А, Заречный, Верх-Исетский район</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">сауна для компании Екатеринбург</span><span class="chip">сауна на 6 человек Екатеринбург</span><span class="chip">сауна до 10 человек</span><span class="chip">финская сауна Екатеринбург</span><span class="chip">сауна Заречный</span><span class="chip">сауна Верх-Исетский район</span><span class="chip">баня Екатеринбург</span><span class="chip">сауна круглосуточно</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Зал «Оазис» в «1000 и 1 Ночь» — финская сауна для компании до 10 человек в Екатеринбурге, Заречный. Работает круглосуточно, ул. Готвальда, 12А.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Бронируйте зал «Оазис» для своей компании.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Зал «Оазис»»</dd>
+          <dt>Фото</dt><dd>Интерьер зала «Оазис»: финская парная или зона отдыха</dd>
+          <dt>Цвета</dt><dd>Заголовок золотом #DAB66B, логотип в золоте, затемнение фото к низу кадра под текст</dd>
+          <dt>Подпись</dt><dd>«6 гостей · максимум 10»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 3</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Один слайд — один зал, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Аппартаменты — сауна на двоих</h4>
+        <ul>
+          <li>Финская парная</li>
+          <li>Вместимость — 2 человека</li>
+          <li>Смарт TV и bluetooth-аудиосистема</li>
+          <li>800–1000 ₽/час</li>
+          <li>Круглосуточно</li>
+        </ul>
+        <div class="chips"><span class="chip">сауна на двоих Екатеринбург</span><span class="chip">финская сауна</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> кремовый фон #F8F3D7, золотой месяц со звёздами #A9824B–#DAB66B в верхнем углу, заголовок капсом #343B18, тезисы в светлых плашках, фото Аппартаментов в арке внизу слайда.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Зал «Оазис» — для небольшой компании</h4>
+        <ul>
+          <li>Финская парная, сухой жаркий пар</li>
+          <li>6 гостей, максимум 10</li>
+          <li>Сверх 6 гостей — 300 ₽/час за человека</li>
+          <li>Круглосуточно</li>
+        </ul>
+        <div class="chips"><span class="chip">сауна для компании</span><span class="chip">сауна Заречный</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> кремовый фон #F8F3D7, золотой месяц со звёздами в верхнем углу, заголовок капсом #343B18, цифры вместимости крупно золотом #A9824B, фото зала «Оазис» в арке внизу слайда.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage">
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Финская сауна или хамам — что выбрать?</span><span class="d">Преимущества финской сауны, кому подходит хамам, парение и бассейн</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Три вида отдыха в одном месте</span><span class="d">Финская сауна и турецкий хамам</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Отдых в сауне для восстановления после рабочей недели</span><span class="d">Расслабление, отдых без гаджетов, пар и прохладный бассейн</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Что входит в стоимость отдыха</span><span class="d">Бассейн, джакузи, караоке, бильярд, комнаты отдыха, парная</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Место для праздника, встречи друзей и семейного отдыха</span><span class="d">Дни рождения, корпоративы, большие компании, приватность</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Почему выбирают комплекс</span><span class="d">Круглосуточная работа, большие залы, чистая вода, оборудование</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Что входит в отдых в комплексе «1000 и 1 Ночь»</span><span class="d">Бассейн, хамам, финская сауна, джакузи, комнаты отдыха, караоке, бильярд</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Идея для выходных</span><span class="d">Парная → бассейн → чай → караоке → бильярд → отдых</span></li>
+        </ol>
+      </details>
+      <details class="stage">
+        <summary>Этап 2 <span class="when">2 новости · 2 сторис</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Турецкий зал и Финский зал: два формата отдыха</span><span class="d">Интерьер, парные, бассейны и зоны отдыха каждого зала</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">«1000 и 1 Ночь» работает круглосуточно</span><span class="d">Дневной, вечерний и ночной отдых, 24/7</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Отдых можно дополнить: веники, аромамасла и банные процедуры</span><span class="d">Веники, масла, скрабы, массаж, обливное ведро</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Всё необходимое для банного отдыха</span><span class="d">Веники, простыни, тапочки, посуда, заказ еды, парковка</span></li>
+        </ol>
+      </details>
+      <details class="stage" open>
+        <summary>Этап 3 <span class="when">2 новости · 2 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Аппартаменты: финская сауна на двоих в Екатеринбурге</span><span class="d">Финская парная, 2 человека, Смарт TV, bluetooth, 800–1000 ₽/час</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Аппартаменты — сауна на двоих</span><span class="d">Парная, вместимость, оснащение, стоимость</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Зал «Оазис»: финская сауна для небольшой компании</span><span class="d">Финская парная, 6 гостей, максимум 10, доплата 300 ₽/час</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Зал «Оазис» — для небольшой компании</span><span class="d">Парная, вместимость, доплата, круглосуточно</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
