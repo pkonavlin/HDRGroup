@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Центр замены масел — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«Центр замены масел»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«Центр замены масел», Оренбург</h1>
+    <p class="lede">Экспресс-пункт замены масла, магазин автозапчастей и автотоваров, смазочные материалы. Публикация новостей и сторис — карточка компании «Центр замены масел» на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Центр замены масел</div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Экспресс-пункт замены масла · Магазин автозапчастей и автотоваров · Смазочные материалы</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Оренбург</div></div>
+      <div class="fact"><div class="k">Адрес карточки</div><div class="v">Оренбург, ул. Фронтовиков, 27</div></div>
+      <div class="fact"><div class="k">Сеть</div><div class="v">Сеть ОЙЛ-МАРКЕТ основана в 2008 году</div></div>
+      <div class="fact"><div class="k">Услуги</div><div class="v">Раскоксовка двигателя · Очистка впускного коллектора · Замена масла: двигатель, МКПП, АКПП, вариатор, редуктор, мост · Замена фильтров: масляный, воздушный, салонный, топливный · Замена тормозных колодок: передние / задние · Замена технических жидкостей: антифриз, тосол, тормозная жидкость, ГУР · Замена свечей зажигания</div></div>
+      <div class="fact"><div class="k">Ассортимент</div><div class="v">Оригинальные масла и масла для двигателя и трансмиссии более 50 производителей смазочных материалов, все расходные материалы · Масла · Свечи зажигания · Аккумуляторы · Автохимия · Охлаждающая жидкость · Фильтры · Дворники · Стеклоомывающая жидкость · Щетки для снега</div></div>
+      <div class="fact"><div class="k">Автомобили</div><div class="v">Импортные, легковые, отечественные, китайские, европейские, японские, корейские</div></div>
+      <div class="fact"><div class="k">Оплата и получение</div><div class="v">Оплата картой, СБП, QR-код, наличными · Самовывоз</div></div>
+      <div class="fact"><div class="k">Миссия сети</div><div class="v">Качественная и быстрая замена масла</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: малиновый и графитовый. Малиновый — канистра логотипа, верхняя полоса сайта, кнопки, плашки акций и цифр. Графитовый — основное меню сайта и тёмные баннеры. Тёмно-сливовый — начало фирменного градиента баннеров, переходящего в малиновый.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#D22F7E"><span class="role">Акцентный</span><span class="name">Малиновый</span><span class="hex">#D22F7E</span></div>
+      <div class="sw light" style="background:#222222"><span class="role">Основной</span><span class="name">Графитовый</span><span class="hex">#222222</span></div>
+      <div class="sw light" style="background:#591A39"><span class="role">Второстепенный</span><span class="name">Тёмно-сливовый</span><span class="hex">#591A39</span></div>
+      <div class="sw dark" style="background:#F7F7F9"><span class="role">Дополнительный</span><span class="name">Светло-серый</span><span class="hex">#F7F7F9</span></div>
+      <div class="sw dark" style="background:#FFFFFF"><span class="role">Фоновый</span><span class="name">Белый</span><span class="hex">#FFFFFF</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От обслуживания двигателя к ассортименту магазина</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — услуги и ассортимент за пределами замены масла <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Этап раскрывает направления компании, которые идут дальше замены масла: очистку двигателя, замену расходных материалов, выбор смазочных материалов и автотовары магазина. Четвёртая тема привязана к сезону — подготовке автомобиля к зиме.</p>
+          <div class="flow"><span>Раскоксовка и очистка коллектора</span><i>→</i><span>Замена расходных материалов</span><i>→</i><span>Масла более 50 производителей</span><i>→</i><span>Автотовары к зиме</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «Центр замены масел» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Оренбург», «ул. Фронтовиков» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки. Цены в текстах не указываются.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты берутся только из материалов компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Без превосходных степеней и капса.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Раскоксовка двигателя и очистка впускного коллектора в Оренбурге</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Компанию знают по замене масла, а работы по очистке двигателя остаются в тени. Тема показывает услуги, с которыми можно приехать в экспресс-пункт помимо замены масла.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы занимаемся не только заменой масла: в нашем экспресс-пункте в Оренбурге выполняем раскоксовку двигателя и очистку впускного коллектора».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>«Центр замены масел» — экспресс-пункт замены масла в Оренбурге, ул. Фронтовиков, 27</li>
+          <li>Раскоксовка двигателя — отдельная услуга экспресс-пункта</li>
+          <li>Очистка впускного коллектора — отдельная услуга экспресс-пункта</li>
+          <li>Миссия сети — качественная и быстрая замена масла, которая экономит время владельца автомобиля</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">раскоксовка двигателя Оренбург</span><span class="chip">очистка впускного коллектора Оренбург</span><span class="chip">чистка впускного коллектора</span><span class="chip">экспресс замена масла Оренбург</span><span class="chip">автосервис ул. Фронтовиков</span><span class="chip">обслуживание двигателя Оренбург</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление от лица компании → что такое раскоксовка двигателя → очистка впускного коллектора → миссия сети → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте на раскоксовку двигателя и очистку впускного коллектора.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Чистый двигатель</dd>
+          <dt>Визуал</dt><dd>Фото двигателя под открытым капотом крупным планом, мастер в перчатках за работой.</dd>
+          <dt>Цвета</dt><dd>Фирменный градиент #591A39 → #D22F7E по левой части обложки, тезис белым, тонкая малиновая плашка #D22F7E под заголовком.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в правом верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Замена фильтров, технических жидкостей и тормозных колодок в экспресс-пункте на Фронтовиков</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Техническое обслуживание по сути состоит из замены расходных материалов. Тема показывает, что весь этот перечень работ доступен в одном экспресс-пункте.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Техническое обслуживание кажется сложной процедурой, но по сути это замена расходников. Мы создали пункты замены масла, чтобы упростить её».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Замена фильтров: масляный, воздушный, салонный, топливный</li>
+          <li>Замена технических жидкостей: антифриз, тосол, тормозная жидкость, ГУР</li>
+          <li>Замена тормозных колодок: передние / задние</li>
+          <li>Замена свечей зажигания</li>
+          <li>Все расходные материалы в наличии в магазине компании</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">замена фильтров Оренбург</span><span class="chip">замена салонного фильтра Оренбург</span><span class="chip">замена воздушного фильтра</span><span class="chip">замена антифриза Оренбург</span><span class="chip">замена тормозной жидкости Оренбург</span><span class="chip">замена тормозных колодок Оренбург</span><span class="chip">замена свечей зажигания Оренбург</span><span class="chip">ТО автомобиля Оренбург</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о ТО как замене расходников → фильтры → технические жидкости → тормозные колодки и свечи → наличие расходных материалов в магазине → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте на замену расходных материалов в экспресс-пункт.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Замена расходников</dd>
+          <dt>Визуал</dt><dd>Предметная раскладка расходников на светлом фоне: масляный, воздушный и салонный фильтры, тормозные колодки, свечи зажигания.</dd>
+          <dt>Цвета</dt><dd>Фон #F7F7F9, тезис графитовым #222222, акцентная плашка #D22F7E с белым текстом «фильтры · жидкости · колодки».</dd>
+          <dt>Логотип</dt><dd>Логотип компании в правом верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Моторные и трансмиссионные масла более 50 производителей в Оренбурге</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Выбор смазочных материалов — сильная сторона магазина. Тема показывает ширину ассортимента масел, включая оригинальные и разливные, и автомобили, для которых они предназначены.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Если вы предпочитаете использовать только оригинальные масла, мы предоставим вам такую возможность».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Оригинальные масла и масла для двигателя и трансмиссии более 50 производителей смазочных материалов</li>
+          <li>Разливные моторные масла: Zic, Shell Helix, G-Energy, GM Dexos2, Total Quartz, Motul</li>
+          <li>Масла для автомобилей: отечественных, европейских, японских, корейских, китайских</li>
+          <li>Замена масла: двигатель, МКПП, АКПП, вариатор, редуктор, мост</li>
+          <li>Сеть ОЙЛ-МАРКЕТ основана в 2008 году</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">моторное масло Оренбург</span><span class="chip">купить моторное масло Оренбург</span><span class="chip">разливное масло Оренбург</span><span class="chip">трансмиссионное масло Оренбург</span><span class="chip">оригинальное масло</span><span class="chip">масло Shell Helix Оренбург</span><span class="chip">масло Motul Оренбург</span><span class="chip">магазин масел ул. Фронтовиков</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление об оригинальных маслах → более 50 производителей → разливные масла и бренды → автомобили, для которых предназначены масла → замена масла в экспресс-пункте → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приходите за маслом для своего автомобиля в наш магазин.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>50+ производителей</dd>
+          <dt>Визуал</dt><dd>Бочки и канистры моторных масел на стеллаже магазина, фронтальный ракурс.</dd>
+          <dt>Цвета</dt><dd>Фирменный градиент #591A39 → #D22F7E на фоне, цифра «50+» крупно белым, подпись «производителей» в плашке #222222.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в правом верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Автотовары для подготовки автомобиля к зиме в Оренбурге</h3>
+        <span class="tag">Сезонный</span>
+      </div>
+      <p class="why">Октябрь — время готовить автомобиль к холодам. Тема показывает магазин автотоваров: аккумуляторы, жидкости и зимние аксессуары в одном месте.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Приближается зима, и в нашем магазине есть автотовары для подготовки автомобиля к холодному сезону».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Аккумуляторы — все типы батарей</li>
+          <li>Охлаждающая жидкость и стеклоомывающая жидкость</li>
+          <li>Дворники и щетки для снега</li>
+          <li>Автохимия для ухода за автомобилем</li>
+          <li>Замена антифриза в экспресс-пункте</li>
+          <li>Самовывоз, оплата картой, СБП, QR-код, наличными</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">аккумулятор купить Оренбург</span><span class="chip">автотовары Оренбург</span><span class="chip">стеклоомывающая жидкость Оренбург</span><span class="chip">незамерзайка Оренбург</span><span class="chip">антифриз купить Оренбург</span><span class="chip">щетка для снега авто</span><span class="chip">дворники для автомобиля Оренбург</span><span class="chip">подготовка авто к зиме Оренбург</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о приближении зимы → аккумуляторы → жидкости → дворники и щетки → автохимия → замена антифриза в экспресс-пункте → способы оплаты и самовывоз → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Подготовьте автомобиль к зиме вместе с нами.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Готовим авто к зиме</dd>
+          <dt>Визуал</dt><dd>Автомобиль в снегу или зимний капот, на переднем плане аккумулятор, канистра стеклоомывающей жидкости и щетка для снега.</dd>
+          <dt>Цвета</dt><dd>Тёмный фон #222222, тезис белым, акцентная плашка #D22F7E, тонкие белые разделители.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в правом верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Не только замена масла</h4>
+        <ul>
+          <li>Раскоксовка двигателя</li>
+          <li>Очистка впускного коллектора</li>
+          <li>Ул. Фронтовиков, 27</li>
+        </ul>
+        <div class="chips"><span class="chip">раскоксовка двигателя Оренбург</span><span class="chip">очистка впускного коллектора</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фирменный градиент #591A39 → #D22F7E сверху вниз, логотип сверху по центру, заголовок белым, две услуги в плашках #222222 с белым текстом, фото двигателя в нижней трети.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Какие фильтры меняем</h4>
+        <ul>
+          <li>Масляный</li>
+          <li>Воздушный</li>
+          <li>Салонный</li>
+          <li>Топливный</li>
+        </ul>
+        <div class="chips"><span class="chip">замена фильтров Оренбург</span><span class="chip">замена салонного фильтра</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #F7F7F9, заголовок #222222, сетка 2×2 из четырёх фото фильтров с подписями в плашках #D22F7E с белым текстом.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Разливные масла</h4>
+        <ul>
+          <li>Zic · Shell Helix · G-Energy</li>
+          <li>GM Dexos2 · Total Quartz · Motul</li>
+          <li>Более 50 производителей смазочных материалов</li>
+        </ul>
+        <div class="chips"><span class="chip">разливное масло Оренбург</span><span class="chip">моторное масло Оренбург</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #222222, фото бочек с маслом в верхней половине, названия брендов белым столбиком, строка «более 50 производителей» в плашке #D22F7E.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Чек-лист к зиме</h4>
+        <ul>
+          <li>Аккумулятор</li>
+          <li>Антифриз</li>
+          <li>Стеклоомывающая жидкость</li>
+          <li>Дворники и щетка для снега</li>
+        </ul>
+        <div class="chips"><span class="chip">подготовка авто к зиме Оренбург</span><span class="chip">аккумулятор Оренбург</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #591A39, заголовок белым, четыре пункта чек-листа с малиновыми галочками #D22F7E, внизу фото зимнего автомобиля, логотип в нижнем углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Раскоксовка двигателя и очистка впускного коллектора в Оренбурге</span><span class="d">Услуги экспресс-пункта помимо замены масла</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Не только замена масла</span><span class="d">Раскоксовка, очистка коллектора, адрес</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Замена фильтров, технических жидкостей и тормозных колодок</span><span class="d">ТО как замена расходных материалов в одном пункте</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Какие фильтры меняем</span><span class="d">Масляный, воздушный, салонный, топливный</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Моторные и трансмиссионные масла более 50 производителей</span><span class="d">Оригинальные и разливные масла, подбор под марку авто</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Разливные масла</span><span class="d">Бренды разливных масел, 50+ производителей</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Автотовары для подготовки автомобиля к зиме</span><span class="d">Аккумуляторы, жидкости, дворники, щетки, автохимия</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Чек-лист к зиме</span><span class="d">Аккумулятор, антифриз, омывайка, дворники и щетка</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
