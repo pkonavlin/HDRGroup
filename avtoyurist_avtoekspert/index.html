@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Автоюрист и автоэксперт — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«Автоюрист и автоэксперт»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">«Автоюрист и автоэксперт», Липецк</h1>
+    <p class="lede">Автоэкспертиза, оценка автомобилей и юридическая помощь в спорах со страховой компанией. Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Автоюрист и автоэксперт</div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Автоэкспертиза, оценка автомобилей</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Липецк, улица Льва Толстого, 1, 3 этаж</div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v">+7 (905) 688-34-50</div></div>
+      <div class="fact"><div class="k">Консультации</div><div class="v">Консультация юриста по телефону бесплатно · Консультация юриста в офисе бесплатно</div></div>
+      <div class="fact"><div class="k">Экспертиза после ДТП</div><div class="v">Легкового автомобиля (с выездом эксперта и составление акта осмотра) — от 15 000 руб. · Грузового автомобиля — от 30 000 руб.</div></div>
+      <div class="fact"><div class="k">Кузовной ремонт</div><div class="v">Экспертиза качества кузовного ремонта (с составлением экспертного заключения) — от 30 000 руб. · Приемка автомобиля после кузовного ремонта, без составления экспертного заключения — 5 000 руб.</div></div>
+      <div class="fact"><div class="k">Страховое возмещение</div><div class="v">Проверка расчета страховой компании — 3 000 руб. · Досудебная работа юриста — от 15 000 руб. за всю работу · Представительство в суде — от 8 000 руб. за судебное заседание</div></div>
+      <div class="fact"><div class="k">Выезд эксперта</div><div class="v">К месту осмотра ТС для оказания помощи (в черте г. Липецка) — от 3 000 руб.</div></div>
+      <div class="fact"><div class="k">Возмещение расходов</div><div class="v">Стоимость независимой экспертизы, услуги юриста будут возмещены страховой компанией</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: песочный и тёмно-синий в паре, синий как дополнительный оттенок, серые для текста и фона. Знак компании — контурные иконки тёмно-синего цвета на песочном поле в тёмно-синей рамке. Красный и белый встречаются только внутри знака (дорожный треугольник) и в макетах как фирменные цвета не используются.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#172F47"><span class="role">Основной</span><span class="name">Тёмно-синий</span><span class="hex">#172F47</span></div>
+      <div class="sw dark" style="background:#D4B785"><span class="role">Акцентный</span><span class="name">Песочный</span><span class="hex">#D4B785</span></div>
+      <div class="sw light" style="background:#274569"><span class="role">Второстепенный</span><span class="name">Синий</span><span class="hex">#274569</span></div>
+      <div class="sw light" style="background:#585858"><span class="role">Текстовый</span><span class="name">Графитовый</span><span class="hex">#585858</span></div>
+      <div class="sw dark" style="background:#D4D4D4"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#D4D4D4</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От первой консультации до суда со страховой</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — знакомство с компанией и услугами <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Первый этап последовательно знакомит с компанией по прайс-листу: кто она и с чего начинается обращение, затем независимая экспертиза после ДТП, затем контроль кузовного ремонта, и в конце — работа юриста со страховой компанией до суда.</p>
+          <div class="flow"><span>Знакомство и бесплатная консультация</span><i>→</i><span>Независимая экспертиза после ДТП</span><i>→</i><span>Экспертиза и приемка кузовного ремонта</span><i>→</i><span>Споры со страховой компанией</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «Автоюрист и автоэксперт» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключ «Липецк» в первом абзаце и далее по тексту. Телефон и адрес в тексте не указываются: они находятся в полях карточки. Цены — только из прайс-листа компании, без округлений.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Обращение на «вы», спокойный экспертный тон. Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всего прайс-листа подряд. Факты и формулировки услуг берутся только из прайс-листа компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Автоюрист и автоэксперт в Липецке: экспертиза автомобиля и юридическая помощь в одной компании</h3>
+        <span class="tag">Имиджевый</span>
+      </div>
+      <p class="why">Знакомство с компанией. В одном месте работают два направления: автоэкспертиза и юрист по спорам со страховой компанией. Первый шаг — бесплатная консультация юриста.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы занимаемся автоэкспертизой, оценкой автомобилей и юридической работой по спорам со страховой компанией. Консультация юриста у нас бесплатна — по телефону и в офисе».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>«Автоюрист и автоэксперт» — автоэкспертиза и оценка автомобилей в Липецке</li>
+          <li>Два направления: независимая экспертиза автомобиля и работа юриста по спорам со страховой компанией</li>
+          <li>Консультация юриста по телефону бесплатно, консультация юриста в офисе бесплатно</li>
+          <li>Стоимость независимой экспертизы, услуги юриста будут возмещены страховой компанией</li>
+          <li>Коротко о том, с чем можно обратиться: экспертиза после ДТП, проверка расчета страховой компании, экспертиза и приемка после кузовного ремонта, досудебная работа и суд</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автоюрист Липецк</span><span class="chip">автоэксперт Липецк</span><span class="chip">автоэкспертиза Липецк</span><span class="chip">оценка автомобиля Липецк</span><span class="chip">юрист по ДТП Липецк</span><span class="chip">бесплатная консультация автоюриста</span><span class="chip">консультация юриста по ДТП</span><span class="chip">независимая экспертиза автомобиля</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">«Автоюрист и автоэксперт» в Липецке — автоэкспертиза, оценка автомобилей и помощь юриста в спорах со страховой компанией. Консультация юриста бесплатно.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Позвоните или приходите в офис на бесплатную консультацию юриста.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Автоюрист и автоэксперт»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании: офис или эксперт за работой с документами</dd>
+          <dt>Цвета</dt><dd>Плашка под заголовок #172F47, заголовок белым, тонкая линия-акцент #D4B785; знак компании в углу</dd>
+          <dt>Подпись</dt><dd>«Экспертиза · юрист · бесплатная консультация»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Независимая экспертиза после ДТП в Липецке: выезд эксперта и акт осмотра</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Главная экспертная услуга компании. Объясняет, что входит в экспертизу после ДТП, чем отличаются легковые и грузовые автомобили и зачем проверять расчет страховой компании.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«После ДТП мы проводим независимую экспертизу автомобиля: эксперт выезжает на осмотр и составляет акт осмотра».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Производство независимой экспертизы после ДТП легкового автомобиля (с выездом эксперта и составление акта осмотра) — от 15 000 руб.</li>
+          <li>Производство независимой экспертизы после ДТП грузового автомобиля (с выездом эксперта и составление акта осмотра) — от 30 000 руб.</li>
+          <li>Проверка расчета страховой компании при определении стоимости страхового возмещения — 3 000 руб.</li>
+          <li>Стоимость независимой экспертизы будет возмещена страховой компанией</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">независимая экспертиза после ДТП Липецк</span><span class="chip">экспертиза автомобиля после ДТП</span><span class="chip">автоэкспертиза после ДТП Липецк</span><span class="chip">экспертиза грузового автомобиля</span><span class="chip">акт осмотра автомобиля</span><span class="chip">выезд эксперта Липецк</span><span class="chip">проверка расчета страховой</span><span class="chip">оценка ущерба после ДТП Липецк</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Независимая экспертиза после ДТП в Липецке: выезд эксперта, акт осмотра, легковые и грузовые автомобили. Проверка расчета страховой компании.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на независимую экспертизу после ДТП.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Экспертиза после ДТП»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании: эксперт осматривает автомобиль с внешними повреждениями кузова, без тяжёлых аварийных сцен</dd>
+          <dt>Цвета</dt><dd>Нижняя плашка #172F47, заголовок белым, подзаголовок #D4B785</dd>
+          <dt>Подпись</dt><dd>«Выезд эксперта · акт осмотра»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Экспертиза качества кузовного ремонта и приемка автомобиля после ремонта в Липецке</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Вторая экспертная услуга. Показывает, что эксперт нужен не только после ДТП, но и после кузовного ремонта: с заключением или на приемке автомобиля.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы проверяем качество кузовного ремонта автомобиля. Можем составить экспертное заключение или принять автомобиль после ремонта без заключения».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Экспертиза качества кузовного ремонта автомобиля (с составлением экспертного заключения) — от 30 000 руб.</li>
+          <li>Приемка автомобиля после кузовного ремонта, без составления экспертного заключения — 5 000 руб.</li>
+          <li>Выезд эксперта к месту осмотра ТС для оказания помощи (в черте г. Липецка) — от 3 000 руб.</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">экспертиза кузовного ремонта Липецк</span><span class="chip">экспертиза качества ремонта автомобиля</span><span class="chip">приемка автомобиля после ремонта</span><span class="chip">проверка кузовного ремонта</span><span class="chip">экспертное заключение по ремонту</span><span class="chip">выезд автоэксперта Липецк</span><span class="chip">автоэксперт Липецк</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Экспертиза качества кузовного ремонта и приемка автомобиля после ремонта в Липецке. Экспертное заключение, выезд эксперта к месту осмотра.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Пригласите эксперта на приемку автомобиля после кузовного ремонта.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Проверка кузовного ремонта»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании: эксперт осматривает отремонтированный кузов автомобиля</dd>
+          <dt>Цвета</dt><dd>Плашка #274569, заголовок белым, тонкая рамка #D4B785</dd>
+          <dt>Подпись</dt><dd>«Экспертиза · приемка после ремонта»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Автоюрист в Липецке: споры со страховой компанией до суда и в суде</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Юридическое направление компании. Раскрывает весь путь спора со страховой компанией: досудебная работа, представительство в суде и что можно взыскать.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Наш юрист ведёт споры со страховой компанией — сначала досудебная работа, затем представительство в суде».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Досудебная работа юриста по спорам со страховой компанией — от 15 000 руб. за всю работу</li>
+          <li>Представительство юриста в суде по спорам о взыскании страхового возмещения, убытков, неустойки, штрафа, морального вреда — от 8 000 руб. за судебное заседание</li>
+          <li>Стоимость независимой экспертизы, услуги юриста будут возмещены страховой компанией</li>
+          <li>Консультация юриста по телефону бесплатно, консультация юриста в офисе бесплатно</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автоюрист Липецк</span><span class="chip">юрист по спорам со страховой</span><span class="chip">взыскание страхового возмещения</span><span class="chip">неустойка со страховой компании</span><span class="chip">досудебная претензия страховой</span><span class="chip">юрист в суде по ОСАГО Липецк</span><span class="chip">страховое возмещение после ДТП</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Автоюрист в Липецке: досудебная работа и представительство в суде по спорам со страховой компанией о взыскании страхового возмещения, неустойки, штрафа.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Обсудите спор со страховой компанией на бесплатной консультации юриста.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Споры со страховой»</dd>
+          <dt>Фото</dt><dd>Из архива фотографий компании: юрист с документами в офисе</dd>
+          <dt>Цвета</dt><dd>Фон #172F47, заголовок белым, иконка весов из знака компании #D4B785</dd>
+          <dt>Подпись</dt><dd>«До суда и в суде»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты из прайс-листа.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Консультация юриста бесплатно</h4>
+        <ul>
+          <li>По телефону — бесплатно</li>
+          <li>В офисе — бесплатно</li>
+          <li>Автоэкспертиза и юрист в одной компании</li>
+        </ul>
+        <div class="chips"><span class="chip">бесплатная консультация автоюриста</span><span class="chip">автоюрист Липецк</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #172F47, знак компании сверху по центру, заголовок белым, слово «бесплатно» крупно цветом #D4B785, два тезиса «по телефону» и «в офисе» в плашках #274569.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Экспертиза после ДТП</h4>
+        <ul>
+          <li>Выезд эксперта и акт осмотра</li>
+          <li>Легковой автомобиль — от 15 000 руб.</li>
+          <li>Грузовой автомобиль — от 30 000 руб.</li>
+        </ul>
+        <div class="chips"><span class="chip">независимая экспертиза после ДТП Липецк</span><span class="chip">автоэксперт Липецк</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #D4D4D4, заголовок #172F47, два блока «Легковой» и «Грузовой» в плашках #172F47 с ценой цветом #D4B785, фото из архива компании сверху слайда.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>После кузовного ремонта</h4>
+        <ul>
+          <li>Экспертиза качества с заключением — от 30 000 руб.</li>
+          <li>Приемка без заключения — 5 000 руб.</li>
+          <li>Выезд эксперта по Липецку — от 3 000 руб.</li>
+        </ul>
+        <div class="chips"><span class="chip">экспертиза кузовного ремонта Липецк</span><span class="chip">приемка автомобиля после ремонта</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> песочный фон #D4B785, заголовок #172F47, три строки-тезиса в плашках #172F47 с белым текстом, второстепенный текст #585858.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Спор со страховой: три шага</h4>
+        <ul>
+          <li>Проверка расчета страховой — 3 000 руб.</li>
+          <li>Досудебная работа — от 15 000 руб. за всю работу</li>
+          <li>Суд — от 8 000 руб. за заседание</li>
+        </ul>
+        <div class="chips"><span class="chip">юрист по спорам со страховой</span><span class="chip">взыскание страхового возмещения</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #172F47, три шага сверху вниз в плашках #274569, соединённые линией #D4B785; в последнем шаге иконка весов из знака компании.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Автоюрист и автоэксперт в Липецке: экспертиза автомобиля и юридическая помощь в одной компании</span><span class="d">Два направления компании, бесплатная консультация юриста</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Консультация юриста бесплатно</span><span class="d">По телефону и в офисе</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Независимая экспертиза после ДТП в Липецке: выезд эксперта и акт осмотра</span><span class="d">Легковые и грузовые автомобили, проверка расчета страховой компании</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Экспертиза после ДТП</span><span class="d">Выезд эксперта, акт осмотра, цены из прайс-листа</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Экспертиза качества кузовного ремонта и приемка автомобиля после ремонта в Липецке</span><span class="d">Экспертное заключение или приемка, выезд эксперта</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">После кузовного ремонта</span><span class="d">Экспертиза качества, приемка, выезд по Липецку</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Автоюрист в Липецке: споры со страховой компанией до суда и в суде</span><span class="d">Досудебная работа, представительство в суде, возмещение расходов</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Спор со страховой: три шага</span><span class="d">Проверка расчета → досудебная работа → суд</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
