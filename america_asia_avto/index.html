@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>АмерикаАзияАвто — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«АмерикаАзияАвто»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">Автосервис «Америка Азия Авто», Люберцы</h1>
+    <p class="lede">Ремонт трансмиссий, слесарный и агрегатный ремонт, ремонт электрики, тюнинг оптики. Публикация новостей и сторис — карточка компании «АмерикаАзияАвто» на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Название</div><div class="v">Автосервис «Америка Азия Авто» · логотип «ААА»</div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Автосервис, автотехцентр · Ремонт автоэлектрики · Детейлинг</div></div>
+      <div class="fact"><div class="k">Основные сферы деятельности</div><div class="v">Слесарный ремонт · Ремонт АКПП · Агрегатный ремонт · Ремонт электрики</div></div>
+      <div class="fact"><div class="k">Ключевые преимущества</div><div class="v">Бесплатная диагностика · Гарантия 3 года</div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Весь спектр работ · Гарантия на все работы · Система лояльности · Полный пакет документов · Соблюдаем сроки</div></div>
+      <div class="fact"><div class="k">Работаем с</div><div class="v">Юридическими и физическими лицами</div></div>
+      <div class="fact"><div class="k">Марки</div><div class="v">Hummer, Infiniti, Ford, Chevrolet, Jeep, GMC, Hyundai, Land Rover, Volvo, Saab и другие популярные марки</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">140000, г. Люберцы, Октябрьский проспект, д. 259, стр. 6</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета. Красный — буквы логотипа «ААА», активные пункты меню и кнопки сайта. Серый — объёмная тень под буквами логотипа. Тёмно-серый — панель навигации и тонировка фотографий на первом экране сайта. Светлый тёплый — фон разделов сайта. Графитовый — заголовки и текст.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#BC3126"><span class="role">Акцентный</span><span class="name">Красный логотипа</span><span class="hex">#BC3126</span></div>
+      <div class="sw light" style="background:#444444"><span class="role">Основной</span><span class="name">Тёмно-серый навигации</span><span class="hex">#444444</span></div>
+      <div class="sw light" style="background:#616464"><span class="role">Второстепенный</span><span class="name">Серый тени логотипа</span><span class="hex">#616464</span></div>
+      <div class="sw dark" style="background:#F5F3F1"><span class="role">Фоновый</span><span class="name">Светлый тёплый</span><span class="hex">#F5F3F1</span></div>
+      <div class="sw light" style="background:#333333"><span class="role">Текстовый</span><span class="name">Графитовый</span><span class="hex">#333333</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От преимуществ к направлениям</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — автосервис и его основные направления <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Первая тема представляет автосервис через его преимущества: бесплатную диагностику и гарантию 3 года. Три следующие раскрывают направления с сайта компании: ремонт трансмиссий, ремонт электрики, оптику и уход за автомобилем.</p>
+          <div class="flow"><span>Преимущества автосервиса</span><i>→</i><span>Ремонт АКПП, вариаторов и роботов</span><i>→</i><span>Ремонт электрики</span><i>→</i><span>Оптика и уход за автомобилем</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «АмерикаАзияАвто» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Люберцы», «Октябрьский проспект» в первом абзаце и далее по тексту. Телефон в тексте не указывается: он находится в полях карточки.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты берутся только с сайта компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Без превосходных степеней и капса.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Автосервис «Америка Азия Авто» в Люберцах: бесплатная диагностика и гарантия 3 года</h3>
+        <span class="tag">Имиджевый</span>
+      </div>
+      <p class="why">Вводная тема этапа. Знакомит с автосервисом на Октябрьском проспекте через преимущества, которые компания выносит на первый экран и в блок «Почему с нами выгодно работать?» на сайте.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы — автосервис «Америка Азия Авто» в Люберцах. Диагностика у нас бесплатная, гарантия — 3 года».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Автосервис «Америка Азия Авто» — г. Люберцы, Октябрьский проспект, д. 259, стр. 6</li>
+          <li>Бесплатная диагностика · Гарантия 3 года · Гарантия на все работы</li>
+          <li>Весь спектр работ · Соблюдаем сроки</li>
+          <li>Система лояльности · Полный пакет документов</li>
+          <li>Работаем с юридическими и физическими лицами</li>
+          <li>Марки: Hummer, Infiniti, Ford, Chevrolet, Jeep, GMC, Hyundai, Land Rover, Volvo, Saab и другие популярные марки</li>
+          <li>Позвоните и получите скидку на все услуги</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автосервис Люберцы</span><span class="chip">автосервис Америка Азия Авто</span><span class="chip">автотехцентр Люберцы</span><span class="chip">бесплатная диагностика авто Люберцы</span><span class="chip">ремонт иномарок Люберцы</span><span class="chip">ремонт Infiniti Люберцы</span><span class="chip">ремонт Land Rover Люберцы</span><span class="chip">автосервис для юридических лиц</span><span class="chip">автосервис Октябрьский проспект</span><span class="chip">СТО Люберцы</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление от лица компании → бесплатная диагностика и гарантия 3 года на все работы → весь спектр работ и соблюдение сроков → система лояльности, полный пакет документов, работа с юр. и физ. лицами → марки → адрес → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Позвоните и получите скидку на все услуги автосервиса.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Бесплатная диагностика</dd>
+          <dt>Визуал</dt><dd>Мастер у открытого капота автомобиля в боксе автосервиса, моторный отсек крупным планом.</dd>
+          <dt>Цвета</dt><dd>Фото тонировано тёмно-серым #444444 с полупрозрачным затемнением, тезис белым жирным гротеском, под тезисом скруглённая плашка #BC3126 с надписью «Гарантия 3 года» белым, тонкая линия #616464 под плашкой.</dd>
+          <dt>Логотип</dt><dd>Логотип «ААА» в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Ремонт АКПП, вариаторов и роботов в Люберцах: диагностика бесплатно</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Ремонт трансмиссий стоит первым в названии сайта компании, ремонт АКПП и агрегатный ремонт — в основных сферах деятельности. Тема собирает трансмиссию и двигатель: бесплатные диагностики и платный ремонт.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В нашем автосервисе в Люберцах диагностику АКПП, вариатора и работы ДВС проводим бесплатно».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Бесплатно: диагностика АКПП, диагностика вариатора, диагностика работы ДВС, консультации</li>
+          <li>Ремонт АКПП · Ремонт CVT (вариаторов) · Ремонт роботов</li>
+          <li>Ремонт ДВС · Ремонт двигателей</li>
+          <li>Ремонт шлангов ГУР и АКПП</li>
+          <li>Агрегатный и слесарный ремонт — основные сферы деятельности автосервиса</li>
+          <li>Гарантия 3 года</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">ремонт АКПП Люберцы</span><span class="chip">диагностика АКПП бесплатно</span><span class="chip">ремонт вариатора Люберцы</span><span class="chip">ремонт CVT</span><span class="chip">ремонт роботизированной коробки</span><span class="chip">ремонт трансмиссий Люберцы</span><span class="chip">ремонт двигателя Люберцы</span><span class="chip">агрегатный ремонт Люберцы</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о бесплатной диагностике → бесплатные услуги: диагностика АКПП, вариатора, работы ДВС, консультации → ремонт АКПП, вариаторов, роботов → ремонт ДВС → ремонт шлангов ГУР и АКПП → гарантия 3 года → адрес → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на бесплатную диагностику АКПП или вариатора на Октябрьском проспекте.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Ремонт АКПП и вариаторов</dd>
+          <dt>Визуал</dt><dd>Шестерни и валы разобранной коробки передач крупным планом, как на первом экране сайта.</dd>
+          <dt>Цвета</dt><dd>Монохромное фото шестерён, тонированное тёмно-серым #444444, тезис белым жирным гротеском по центру, под тезисом скруглённая плашка #BC3126 с надписью «Диагностика бесплатно» белым.</dd>
+          <dt>Логотип</dt><dd>Логотип «ААА» в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Ремонт электрики автомобиля в Люберцах: от лампочек до электромеханических узлов</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Ремонт электрики — одна из основных сфер деятельности автосервиса. Тема раскрывает её по описанию с сайта: диапазон работ от простых до сложных, плюс отдельные платные услуги по электрооборудованию.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы ремонтируем электрику автомобиля — от замены лампочек в датчиках или фарах до замены и наладки любого электромеханического узла».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Ремонт электрической системы требует терпения, внимания и высокой квалификации техника-электрика</li>
+          <li>Важно правильно диагностировать неполадку и устранить её; элементы электросети часто находятся в труднодоступных местах</li>
+          <li>Ремонт электросистемы любой сложности</li>
+          <li>От замены лампочек в датчиках или фарах до замены и наладки любого электромеханического узла</li>
+          <li>Ремонт генераторов и стартеров</li>
+          <li>Диагностика, заправка и ремонт автокондиционеров</li>
+          <li>Ремонт электрооборудования автомобиля в Люберцах</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">ремонт автоэлектрики Люберцы</span><span class="chip">автоэлектрик Люберцы</span><span class="chip">ремонт электрооборудования автомобиля</span><span class="chip">ремонт генератора Люберцы</span><span class="chip">ремонт стартера Люберцы</span><span class="chip">заправка автокондиционера Люберцы</span><span class="chip">ремонт автокондиционера</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о диапазоне работ → почему ремонт электрики трудоёмкий: диагностика и труднодоступные элементы → ремонт любой сложности → генераторы и стартеры → автокондиционеры → адрес → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на ремонт электрики в автосервис на Октябрьском проспекте.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Ремонт электрики</dd>
+          <dt>Визуал</dt><dd>Руки мастера у моторного отсека, жгуты проводов и разъёмы крупным планом.</dd>
+          <dt>Цвета</dt><dd>Светлый фон #F5F3F1, фото справа вырезом, тезис #333333 жирным гротеском слева, под тезисом красный элемент #BC3126 со смещённой серой тенью #616464 в манере логотипа.</dd>
+          <dt>Логотип</dt><dd>Логотип «ААА» в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Тюнинг и ремонт оптики, полировка фар и химчистка салона в Люберцах</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Направление детейлинга на сайте компании представлено оптикой, полировкой фар, химчисткой салона и обработкой кузова. Тюнинг оптики вынесен в название сайта.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Мы занимаемся тюнингом и ремонтом оптики, а при полировке фар бесплатно полируем задние фонари».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Тюнинг и ремонт оптики</li>
+          <li>Полировка задних фонарей — бесплатно при полировке фар</li>
+          <li>Оклейка плёнкой</li>
+          <li>Химчистка салона</li>
+          <li>Обработка кузовов и рам автомобилей специальными составами</li>
+          <li>Ремонт сколов и трещин на стёклах</li>
+          <li>Предпродажная подготовка</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">тюнинг оптики Люберцы</span><span class="chip">ремонт фар Люберцы</span><span class="chip">полировка фар Люберцы</span><span class="chip">химчистка салона Люберцы</span><span class="chip">оклейка плёнкой Люберцы</span><span class="chip">антикоррозийная обработка кузова</span><span class="chip">ремонт сколов на стекле</span><span class="chip">детейлинг Люберцы</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление об оптике → тюнинг и ремонт оптики → полировка фар и бесплатная полировка задних фонарей → оклейка плёнкой → химчистка салона → обработка кузова и рам составами → ремонт сколов и трещин на стёклах → предпродажная подготовка → адрес → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на полировку фар в автосервис «Америка Азия Авто».</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Тюнинг и ремонт оптики</dd>
+          <dt>Визуал</dt><dd>Фара автомобиля крупным планом с чистым прозрачным стеклом, блики света.</dd>
+          <dt>Цвета</dt><dd>Фото на всю площадь с затемнением #444444 снизу, тезис белым жирным гротеском в нижней трети, тонкая горизонтальная линия #BC3126 над тезисом.</dd>
+          <dt>Логотип</dt><dd>Логотип «ААА» в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Бесплатные услуги</h4>
+        <ul>
+          <li>Диагностика АКПП</li>
+          <li>Диагностика вариатора</li>
+          <li>Диагностика работы ДВС</li>
+          <li>Консультации</li>
+          <li>Полировка задних фонарей при полировке фар</li>
+        </ul>
+        <div class="chips"><span class="chip">бесплатная диагностика Люберцы</span><span class="chip">автосервис Люберцы</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото мотора, тонированное тёмно-серым #444444, заголовок белым жирным гротеском в верхней трети, слово «Бесплатные» в скруглённой плашке #BC3126, пять строк белым столбиком с тонкими разделителями #616464, логотип «ААА» в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Ремонт трансмиссий</h4>
+        <ul>
+          <li>Ремонт АКПП</li>
+          <li>Ремонт CVT (вариаторов)</li>
+          <li>Ремонт роботов</li>
+          <li>Ремонт шлангов ГУР и АКПП</li>
+        </ul>
+        <div class="chips"><span class="chip">ремонт АКПП Люберцы</span><span class="chip">ремонт вариатора</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> монохромное фото шестерён коробки, тонированное #444444, заголовок белым, четыре строки в плашках #F5F3F1 с текстом #333333, слева от каждой красный квадрат #BC3126 со смещённой тенью #616464, логотип «ААА» в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Ремонт электрики</h4>
+        <ul>
+          <li>Ремонт электросистемы любой сложности</li>
+          <li>Ремонт генераторов и стартеров</li>
+          <li>Диагностика, заправка автокондиционеров</li>
+          <li>Ремонт автокондиционеров</li>
+        </ul>
+        <div class="chips"><span class="chip">ремонт автоэлектрики Люберцы</span><span class="chip">ремонт генератора</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #F5F3F1, заголовок #333333 жирным гротеском, четыре строки столбиком, слева от каждой маленький квадрат #BC3126, фото проводки и разъёмов вырезом в нижней трети, логотип «ААА» в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Оптика и салон</h4>
+        <ul>
+          <li>Тюнинг и ремонт оптики</li>
+          <li>Полировка фар</li>
+          <li>Химчистка салона</li>
+          <li>Ремонт сколов и трещин на стёклах</li>
+        </ul>
+        <div class="chips"><span class="chip">тюнинг оптики Люберцы</span><span class="chip">химчистка салона Люберцы</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото фары крупным планом на всю площадь с затемнением #444444, заголовок белым жирным гротеском, четыре строки белым столбиком, тонкая горизонтальная линия #BC3126 под заголовком, логотип «ААА» в верхнем углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Автосервис «Америка Азия Авто» в Люберцах: бесплатная диагностика и гарантия 3 года</span><span class="d">Преимущества автосервиса, марки, работа с юр. и физ. лицами</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Бесплатные услуги</span><span class="d">Диагностики АКПП, вариатора, ДВС, консультации, полировка фонарей</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Ремонт АКПП, вариаторов и роботов в Люберцах: диагностика бесплатно</span><span class="d">Бесплатные диагностики, ремонт трансмиссий и ДВС</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Ремонт трансмиссий</span><span class="d">АКПП, CVT, роботы, шланги ГУР и АКПП</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Ремонт электрики автомобиля в Люберцах: от лампочек до электромеханических узлов</span><span class="d">Электросистема, генераторы и стартеры, автокондиционеры</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Ремонт электрики</span><span class="d">Четыре услуги по электрооборудованию</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Тюнинг и ремонт оптики, полировка фар и химчистка салона в Люберцах</span><span class="d">Оптика, оклейка плёнкой, химчистка, обработка кузова</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Оптика и салон</span><span class="d">Оптика, полировка фар, химчистка, стёкла</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
