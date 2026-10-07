@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ЮТА — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
+
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«ЮТА»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">Автотехцентр «ЮТА», Балашиха</h1>
+    <p class="lede">Автотехцентр в микрорайоне Железнодорожный: сервис, автомойка, шиномонтаж, электрик. Публикация новостей и сторис — карточка компании «ЮТА» на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">ООО ЮТА</div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Многопрофильная компания (техцентр; сдача в аренду объектов недвижимости: объекты, земля, рекламные щиты; банный комплекс)</div></div>
+      <div class="fact"><div class="k">Основные услуги</div><div class="v">Сервис · Автомойка · Шиномонтаж · Электрик</div></div>
+      <div class="fact"><div class="k">Ключевое преимущество</div><div class="v">Цены</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">г. Балашиха мкр. Железнодорожный ул. Советская д.54</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">09:00-21:00</div></div>
+      <div class="fact"><div class="k">Обращение и стиль</div><div class="v">На «вы» · деловой стиль</div></div>
+      <div class="fact"><div class="k">Формат цен</div><div class="v">Формат «от N ₽»</div></div>
+      <div class="fact"><div class="k">Приоритетная тема</div><div class="v">Шиномонтаж</div></div>
+      <div class="fact"><div class="k">Сезонный спрос</div><div class="v">Шиномонтаж · Мойка</div></div>
+      <div class="fact"><div class="k">Темы, которых не касаемся</div><div class="v">Политика</div></div>
+      <div class="fact"><div class="k">Прайс-лист</div><div class="v">uta50.ru/avtoservis-balashiha/prajs/</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: тёмно-синий и красный логотипа «ЮТА». Тёмно-синий — буквы логотипа и надпись «Железнодорожный», красный — лента логотипа. Синий — кнопки, заголовки и телефон на сайте компании. Ярко-синий — фигурные плашки со скошенными углами в опубликованных материалах компании. Светло-серый — фон этих материалов.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#382E84"><span class="role">Основной</span><span class="name">Тёмно-синий логотипа</span><span class="hex">#382E84</span></div>
+      <div class="sw light" style="background:#EA3A31"><span class="role">Акцентный</span><span class="name">Красный ленты</span><span class="hex">#EA3A31</span></div>
+      <div class="sw light" style="background:#2E6BAC"><span class="role">Второстепенный</span><span class="name">Синий сайта</span><span class="hex">#2E6BAC</span></div>
+      <div class="sw light" style="background:#244ACD"><span class="role">Дополнительный</span><span class="name">Ярко-синий публикаций</span><span class="hex">#244ACD</span></div>
+      <div class="sw dark" style="background:#EAE9EF"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#EAE9EF</span></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От колеса к салону</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — шиномонтаж и автомойка <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Этап посвящён двум направлениям сезонного спроса. Первые две темы раскрывают шиномонтаж через отдельные работы с колесом: ремонт шин и камер, балансировку и прокатку дисков. Вторые две — автомойку: покрытия кузова и химчистку салона.</p>
+          <div class="flow"><span>Ремонт шин и проколов</span><i>→</i><span>Балансировка и прокатка дисков</span><i>→</i><span>Мойка и покрытия кузова</span><i>→</i><span>Химчистка салона</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «ЮТА» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Балашиха», «Железнодорожный», «ул. Советская» в первом абзаце и далее по тексту. Телефон в тексте не указывается: он находится в полях карточки. Цены — в формате «от N ₽».</p>
+    <div class="tone-banner"><b>Тон текстов</b>Деловой стиль, обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты и цены берутся только из материалов компании. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Без превосходных степеней и капса.</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Ремонт шин и проколов в шиномонтаже автотехцентра ЮТА в Балашихе</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Шиномонтаж — приоритетное направление компании. Тема показывает его со стороны ремонта: какими способами в автотехцентре восстанавливают бескамерные шины и камеры.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В шиномонтаже автотехцентра ЮТА в Железнодорожном мы ремонтируем бескамерные шины жгутом, грибком и кордовой заплаткой, а камеры — заплаткой».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Автотехцентр ЮТА — г. Балашиха, мкр. Железнодорожный, ул. Советская, д. 54, режим работы 09:00-21:00</li>
+          <li>Ремонт б/к шины жгутом — от 250 ₽</li>
+          <li>Ремонт б/к шины грибком — от 400 ₽</li>
+          <li>Ремонт шины кордовая заплатка — от 600 ₽</li>
+          <li>Ремонт камеры «заплаткой» — от 300 ₽</li>
+          <li>Герметизация борта — от 200 ₽, вентиль — от 50 ₽, проверка камеры — от 50 ₽</li>
+          <li>Окончательная стоимость работ зависит от марки/модели автомобиля, согласовывается с мастером-приемщиком</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">ремонт шин Балашиха</span><span class="chip">ремонт проколов Балашиха</span><span class="chip">шиномонтаж Железнодорожный</span><span class="chip">ремонт бескамерной шины</span><span class="chip">ремонт шины жгутом</span><span class="chip">ремонт шины грибком</span><span class="chip">кордовая заплатка</span><span class="chip">шиномонтаж ул. Советская 54</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о ремонте шин → ремонт жгутом → ремонт грибком → кордовая заплатка → ремонт камеры → дополнительные работы: герметизация борта, вентиль, проверка камеры → стоимость согласовывается с мастером-приемщиком → адрес и режим работы → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте в шиномонтаж автотехцентра ЮТА на ул. Советской.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Ремонт шин</dd>
+          <dt>Визуал</dt><dd>Мастер в рабочих перчатках ремонтирует шину на шиномонтажном станке, крупный план колеса.</dd>
+          <dt>Цвета</dt><dd>Светлый фон #EAE9EF с тонкими линиями сетки, фигурная плашка со скошенными углами #244ACD с внутренней белой линией-контуром, тезис белым, крупная надпись «ЮТА» в плашке оттенком светлее #244ACD, тонкая акцентная линия #EA3A31, фото вырезом справа.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Балансировка колёс и прокатка дисков в Железнодорожном: радиусы 13–22 и Газель</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Вторая тема шиномонтажа — работа с колесом и диском: балансировка на балансировочном станке и прокатка дисков на прокаточном станке. В прайс-листе — радиусы колёс от 13 до 22, кроссоверы/джипы и Газель.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В шиномонтаже автотехцентра ЮТА в Балашихе мы выполняем балансировку колёс на балансировочном станке и прокатку дисков на прокаточном станке».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Колёса устанавливают на балансировочный станок, закрепляют и центрируют; данные о типоразмере диска вводят в компьютер, устройство автоматически рассчитывает</li>
+          <li>Мастера применяют металлические грузики разного веса</li>
+          <li>Балансировка (груз набивной) — от 100 ₽, балансировка (груз клеящийся) — от 150 ₽, проверка балансировки колёс — от 50 ₽</li>
+          <li>Радиусы колёс: 13-14, 15-16, 17-18, 19-20, 21-22, Газель</li>
+          <li>Снятие/установка колёс кроссоверы/джипы — от 300 ₽</li>
+          <li>Прокатка дисков: восстанавливаемый диск помещается на прокаточный станок, специальный ролик проходит по всей поверхности диска, либо направленно воздействует на проблемные участки</li>
+          <li>Чаще всего прокатка применяется при ремонте штампованных стальных дисков, в ряде случаев — литых; при наличии трещин прокатка не производится</li>
+          <li>Прокатка дисков с гарантией качественного результата</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">балансировка колёс Балашиха</span><span class="chip">прокатка дисков Железнодорожный</span><span class="chip">прокатка дисков Балашиха</span><span class="chip">правка дисков Балашиха</span><span class="chip">балансировка колёс кроссовер</span><span class="chip">шиномонтаж ГАЗель Балашиха</span><span class="chip">балансировка колёс R17</span><span class="chip">шиномонтаж Железнодорожный</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о балансировке и прокатке → как проходит балансировка на станке → набивной и клеящийся груз → радиусы 13–22 и Газель, кроссоверы и джипы → прокатка дисков: станок, стальные и литые диски, ограничение при трещинах → гарантия → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на балансировку и прокатку дисков в автотехцентр ЮТА.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Балансировка и прокатка</dd>
+          <dt>Визуал</dt><dd>Колесо на балансировочном станке, диск в фокусе, мастер выставляет груз.</dd>
+          <dt>Цвета</dt><dd>Фигурная плашка #382E84 со скошенными углами и внутренней белой линией-контуром на светлом фоне #EAE9EF, тезис белым, подпись «Радиусы 13–22» в плашке #EA3A31 белым текстом, фото колеса вырезом справа.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Бесконтактная мойка и покрытия кузова в Балашихе: воск и жидкий полимер</h3>
+        <span class="tag">Сезонный</span>
+      </div>
+      <p class="why">Мойка — второе направление сезонного спроса. Тема показывает автомойку со стороны кузова: виды мойки и покрытия кузова из прайс-листа.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«На автомойке ЮТА в Железнодорожном мы выполняем бесконтактную и комплексную мойку, покрытие воском, горячим воском и жидким полимером».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Бесконтактная мойка кузова (без протирки) — от 450 ₽</li>
+          <li>Комплексная мойка СТАНДАРТ — от 1200 ₽</li>
+          <li>Покрытие воск / гор.воск — от 400 ₽</li>
+          <li>Покрытие жидким полимером — от 400 ₽</li>
+          <li>Чернение резины — от 200 ₽, обработка силиконом — от 150 ₽, очистка кузова средством от насекомых — от 300 ₽</li>
+          <li>Окончательная стоимость работ зависит от марки/модели автомобиля, согласовывается с мастером-приемщиком</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">автомойка Балашиха</span><span class="chip">бесконтактная мойка Балашиха</span><span class="chip">автомойка Железнодорожный</span><span class="chip">покрытие воском Балашиха</span><span class="chip">горячий воск автомойка</span><span class="chip">покрытие жидким полимером</span><span class="chip">комплексная мойка Балашиха</span><span class="chip">автомойка ул. Советская 54</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о мойке и покрытиях → бесконтактная и комплексная мойка → воск и горячий воск → жидкий полимер → чернение резины и обработка силиконом → стоимость согласовывается с мастером-приемщиком → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Приезжайте на автомойку ЮТА на ул. Советской.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Воск и полимер</dd>
+          <dt>Визуал</dt><dd>Кузов автомобиля на автомойке во время нанесения покрытия, ракурс сбоку.</dd>
+          <dt>Цвета</dt><dd>Фигурная плашка #244ACD со скошенными углами на светлом фоне #EAE9EF, тезис белым, крупная надпись «ЮТА» оттенком светлее #244ACD, тонкая акцентная линия #EA3A31, фото вырезом справа.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Химчистка салона автомобиля в Балашихе: этапы и услуги для салона</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Продолжение темы автомойки — уход за салоном. Тема раскрывает химчистку по этапам и отдельные услуги для салона из прайс-листа.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Химчистка салона в автотехцентре ЮТА включает глубокую очистку передних и задних сидений, чистку пола и потолка, обработку дверей и пластика».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Этап 1 — сухая уборка: с помощью пылесоса убираются пыль и мелкий мусор</li>
+          <li>Этап 2 — обработка распылителем: специальным аппаратом с чистящим средством обрабатываются швы сидений</li>
+          <li>Этап 3 — очистка пеной: наносится, а затем удаляется специальная пена, которая захватывает всю оставшуюся грязь</li>
+          <li>Этап 4 — сушка и кондиционирование: салон тщательно высушивается, кожаные поверхности обрабатываются увлажняющим кондиционером</li>
+          <li>Уборка салона пылесосом — от 250 ₽, протирка пластика салона — от 200 ₽, протирка стёкол — от 200 ₽</li>
+          <li>Очистка кожи от загрязнений (влажная/спец.средства) — от 400 ₽, мойка ковриков — от 80 ₽</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">химчистка салона Балашиха</span><span class="chip">химчистка салона Железнодорожный</span><span class="chip">химчистка салона автомобиля</span><span class="chip">чистка кожаного салона</span><span class="chip">уборка салона авто Балашиха</span><span class="chip">химчистка сидений</span><span class="chip">автомойка Балашиха</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о составе химчистки → четыре этапа по порядку → отдельные услуги для салона: пылесос, пластик, стёкла, кожа, коврики → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на химчистку салона в автотехцентр ЮТА.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Химчистка салона</dd>
+          <dt>Визуал</dt><dd>Мастер очищает пеной сиденье автомобиля, салон через открытую дверь.</dd>
+          <dt>Цвета</dt><dd>Фигурная плашка #382E84 со скошенными углами и внутренней белой линией-контуром на светлом фоне #EAE9EF, тезис белым, тонкая акцентная линия #EA3A31, фото салона вырезом справа.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Ремонт проколов</h4>
+        <ul>
+          <li>Жгутом — от 250 ₽</li>
+          <li>Грибком — от 400 ₽</li>
+          <li>Кордовая заплатка — от 600 ₽</li>
+          <li>Камера «заплаткой» — от 300 ₽</li>
+        </ul>
+        <div class="chips"><span class="chip">ремонт шин Балашиха</span><span class="chip">ремонт проколов</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #EAE9EF с тонкими линиями сетки, фигурная плашка #244ACD со скошенными углами и внутренней белой линией-контуром в верхней половине, заголовок белым, четыре строки с ценами белым, цены выделены #EA3A31-плашками, фото шины вырезом в нижней трети, логотип в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Балансировка: радиусы 13–22</h4>
+        <ul>
+          <li>13-14 · 15-16 · 17-18</li>
+          <li>19-20 · 21-22 · Газель</li>
+          <li>Груз набивной и клеящийся</li>
+          <li>Прокатка дисков с гарантией качественного результата</li>
+        </ul>
+        <div class="chips"><span class="chip">балансировка колёс Балашиха</span><span class="chip">прокатка дисков</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #382E84, заголовок белым, радиусы в сетке 3×2 из светлых плашек #EAE9EF с текстом #382E84, строка про прокатку в плашке #EA3A31 белым, фото колеса на станке внизу, логотип в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Покрытия для кузова</h4>
+        <ul>
+          <li>Воск / горячий воск — от 400 ₽</li>
+          <li>Жидкий полимер — от 400 ₽</li>
+          <li>Чернение резины — от 200 ₽</li>
+          <li>Обработка силиконом — от 150 ₽</li>
+        </ul>
+        <div class="chips"><span class="chip">автомойка Балашиха</span><span class="chip">покрытие воском</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #EAE9EF, фигурная плашка #244ACD со скошенными углами, заголовок белым, крупная надпись «ЮТА» оттенком светлее #244ACD, четыре покрытия списком белым, фото блестящего кузова вырезом снизу, логотип в верхнем углу.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Химчистка салона: 4 этапа</h4>
+        <ul>
+          <li>Сухая уборка пылесосом</li>
+          <li>Обработка распылителем</li>
+          <li>Очистка пеной</li>
+          <li>Сушка и кондиционирование</li>
+        </ul>
+        <div class="chips"><span class="chip">химчистка салона Балашиха</span><span class="chip">химчистка салона авто</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #382E84, заголовок белым, четыре этапа с номерами 1–4 в кружках #EA3A31, фото сиденья в пене в нижней трети, тонкая белая линия-контур по краю слайда, логотип в верхнем углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Ремонт шин и проколов в шиномонтаже автотехцентра ЮТА в Балашихе</span><span class="d">Жгут, грибок, кордовая заплатка, ремонт камеры</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Ремонт проколов</span><span class="d">Четыре способа ремонта с ценами «от»</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Балансировка колёс и прокатка дисков в Железнодорожном</span><span class="d">Балансировочный и прокаточный станки, радиусы 13–22 и Газель</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Балансировка: радиусы 13–22</span><span class="d">Радиусы, виды груза, прокатка с гарантией</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Бесконтактная мойка и покрытия кузова</span><span class="d">Воск, горячий воск, жидкий полимер</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Покрытия для кузова</span><span class="d">Четыре покрытия с ценами «от»</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Химчистка салона автомобиля в Балашихе</span><span class="d">Четыре этапа и услуги для салона</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Химчистка салона: 4 этапа</span><span class="d">Пылесос, распылитель, пена, сушка</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
