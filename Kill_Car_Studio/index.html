@@ -31,13 +31,13 @@ h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 a{color:inherit}
 
-.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ocean);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:#F5F8F8;border-bottom:1px solid #D8E2E2}
 .topbar .wrap{display:flex;align-items:center;gap:28px;height:64px;overflow-x:auto;scrollbar-width:none}
 .topbar .wrap::-webkit-scrollbar{display:none}
-.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:#fff;font-size:18px;white-space:nowrap;flex:none}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:#12181A;font-size:18px;white-space:nowrap;flex:none}
 .topnav{display:flex;gap:4px;flex-wrap:nowrap}
-.topnav a{white-space:nowrap;color:rgba(255,255,255,.78);text-decoration:none;font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:8px;transition:background .15s,color .15s}
-.topnav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.topnav a{white-space:nowrap;color:#4A5A5D;text-decoration:none;font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:8px;transition:background .15s,color .15s}
+.topnav a:hover{background:rgba(18,24,26,.08);color:#12181A}
 
 section{padding:64px 0}
 section + section{border-top:1px solid var(--line)}
@@ -106,17 +106,19 @@ h2.htitle{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px}
 .scard .design-note b{color:var(--ink)}
 
 /* MAP */
-.timeline{border-left:2px solid var(--line);margin-left:6px}
-.stage{position:relative;padding:4px 0 28px 26px}
-.stage::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ocean);border:2px solid var(--bg)}
-.stage .head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-.stage .head h3{font-size:16px}
+.stage-acc{border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;background:var(--card)}
+.stage-acc summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:16px 20px;flex-wrap:wrap}
+.stage-acc summary::-webkit-details-marker{display:none}
+.stage-acc summary::before{content:"▸";color:var(--teal);font-size:13px;flex:none;transition:transform .15s}
+.stage-acc[open] summary::before{transform:rotate(90deg)}
+.stage-acc summary h3{font-size:16px;display:inline}
 .badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;background:var(--roe);color:#fff;padding:3px 9px;border-radius:999px}
-.stage .date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
-.stage-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 20px;list-style:none;margin:0;padding:0}
-.stage-items li{font-size:13.5px;color:var(--ink-soft);padding-left:14px;position:relative}
-.stage-items li::before{content:"—";position:absolute;left:0;color:var(--line)}
-.stage-items li b{color:var(--ink);font-weight:600}
+.stage-acc .date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+.stage-acc .items{padding:4px 20px 20px 44px;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line)}
+.stage-row{display:flex;gap:12px;align-items:flex-start;padding-top:12px}
+.stage-row .fmt{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;background:var(--ice);border:1px solid var(--line);color:var(--ink-soft);padding:3px 8px;border-radius:6px;flex:none;margin-top:2px}
+.stage-row .body b{font-size:14px;color:var(--ink)}
+.stage-row .body .th{font-size:13px;color:var(--ink-soft);margin-top:2px}
 
 footer.sources{padding:40px 0 64px}
 footer.sources .wrap{display:flex;flex-direction:column;gap:8px}
@@ -129,7 +131,6 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
   .ncard{padding:20px}
 }
 </style>
-
 
 </head>
 <body>
@@ -150,7 +151,7 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
 
 <section id="company" class="hero">
   <div class="wrap">
-    <span class="eyebrow">ТЗ на контент · Этап 01</span>
+    <span class="eyebrow">ТЗ на контент · Этап 02 · актуальный</span>
     <h1>Kill Car Studio</h1>
     <p class="sub">Детейлинг-студия полного цикла в Москве: комплексный детейлинг, оклейка автомобилей плёнкой, кузовной ремонт без покраски.</p>
     <p class="alias">На сайте и в сообществе ВК компания представлена как <b>Kill Car Detailing</b>; на Яндекс Картах и в 2ГИС карточка зарегистрирована как <b>Kill Car Studio</b> — платформа Яндекса не пропускает слово «detailing» в названии. Во всех текстах для Яндекс Карт и 2ГИС используется название <b>Kill Car Studio</b>.</p>
@@ -199,13 +200,15 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
   <div class="wrap">
     <span class="eyebrow">03 · Последовательность</span>
     <h2 class="htitle">Логика цикла</h2>
-    <p class="lede">Первый этап открывает три направления, обозначенные компанией (детейлинг, оклейка, кузовной ремонт), и сразу выводит вперёд два приоритетных: оклейку автомобилей и полировку с защитой кузова.</p>
+    <p class="lede">Первый этап открыл три направления, обозначенные компанией (детейлинг, оклейка, кузовной ремонт), и сразу вывел вперёд два приоритетных: оклейку автомобилей и полировку с защитой кузова. Второй этап продолжает оба приоритета новыми фактами с официального сайта — защитой стекла и условиями работы по оклейке.</p>
     <div class="logic-list">
       <div class="logic-item"><span class="n">01</span><div><div class="t">Знакомство со студией</div><div class="d">Формат работы, опыт с 2016 года, локация и принцип честного сервиса — новость-интро.</div></div></div>
       <div class="logic-item"><span class="n">02</span><div><div class="t">Оклейка автомобилей плёнкой</div><div class="d">Приоритетное направление — защитная, матовая и цветная плёнка.</div></div></div>
       <div class="logic-item"><span class="n">03</span><div><div class="t">Полировка и защита кузова</div><div class="d">Второе приоритетное направление — полировка, керамика, жидкое стекло.</div></div></div>
       <div class="logic-item"><span class="n">04</span><div><div class="t">Кузовной ремонт</div><div class="d">Удаление вмятин без покраски — третье заявленное направление компании.</div></div></div>
-      <div class="logic-item"><span class="n">05</span><div><div class="t">Сторис — акции и сервис</div><div class="d">Конкретные, снимаемые факты: действующие акции студии и шумоизоляция как отдельная услуга.</div></div></div>
+      <div class="logic-item"><span class="n">05</span><div><div class="t">Сторис первого этапа</div><div class="d">Конкретные, снимаемые факты: действующие акции студии и шумоизоляция как отдельная услуга.</div></div></div>
+      <div class="logic-item"><span class="n">06</span><div><div class="t">Защита лобового стекла</div><div class="d">Продолжение приоритета «полировка и защита кузова» на стекло — ремонт сколов и трещин, защита бронеплёнкой.</div></div></div>
+      <div class="logic-item"><span class="n">07</span><div><div class="t">Оклейка — условия работы</div><div class="d">Развитие приоритета «оклейка автомобилей» — бесплатный расчёт стоимости и гарантия на работы.</div></div></div>
     </div>
   </div>
 </section>
@@ -213,83 +216,43 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
 <section id="news">
   <div class="wrap">
     <span class="eyebrow">04 · Новостные публикации</span>
-    <h2 class="htitle">Новости — 4 темы + обложка</h2>
-    <p class="lede">Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
+    <h2 class="htitle">Новости — 2 темы + обложка</h2>
+    <p class="lede">Этап 02. Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
     <div class="card-grid">
 
       <div class="ncard">
-        <div class="top"><h3>Kill Car Studio — детейлинг-центр комплексного ухода за автомобилем в Москве</h3><span class="tag">Имиджевый</span></div>
+        <div class="top"><h3>Ремонт сколов и трещин на лобовом стекле и защита бронеплёнкой в Kill Car Studio</h3><span class="tag acc">Продающий</span></div>
         <ul class="thesis">
-          <li>Kill Car Studio — детейлинг-студия в Москве: комплексный детейлинг, оклейка автомобилей плёнкой, кузовной ремонт без покраски.</li>
-          <li>Компания работает с 2016 года — 10 лет практического опыта в уходе за автомобилями всех марок.</li>
-          <li>Студия расположена рядом с МКАД — удобный подъезд для клиентов со всей Москвы и области.</li>
-          <li>Рейтинг 5.0 на Яндекс Картах и 260 отзывов подтверждают стабильное качество детейлинга.</li>
-          <li>Принцип работы — честность без навязывания лишних услуг: специалисты предлагают только то, что действительно нужно автомобилю.</li>
-          <li>В работе используются современные материалы для полировки, керамической защиты, оклейки плёнкой и химчистки салона.</li>
-          <li>Оплата любым удобным способом — наличные, карта, безналичный расчёт.</li>
+          <li>В Kill Car Studio доступен ремонт сколов и трещин на лобовом стекле — отдельная услуга, которая восстанавливает повреждённый участок стекла без полной замены.</li>
+          <li>Ремонт сколов и трещин — самостоятельное направление: в отличие от полировки стекла, которая устраняет только потёртости и матовость, именно ремонт возвращает стеклу целостность после механического повреждения.</li>
+          <li>Для лобового стекла в Kill Car Studio также доступна защита бронеплёнкой — прозрачным защитным покрытием, которое принимает на себя сколы и мелкие повреждения при движении.</li>
+          <li>Услугу выполняют мастера с опытом работы с 2016 года, с использованием профессионального оборудования.</li>
+          <li>Направление продолжает приоритет компании — полировку и защиту кузова, расширяя её на лобовое стекло автомобиля.</li>
         </ul>
-        <div class="chips"><span>детейлинг Москва</span><span>детейлинг-студия</span><span>комплексный уход за автомобилем</span><span>детейлинг Саянская</span><span>автодетейлинг МКАД</span><span>полировка и оклейка авто Москва</span></div>
-        <div class="meta-row"><b>Meta:</b> Детейлинг-студия Kill Car Studio в Москве — комплексный уход за автомобилем: полировка, оклейка плёнкой, кузовной ремонт. Опыт с 2016 года, рейтинг 5.0.</div>
-        <div class="cta-row">CTA: Записаться на диагностику автомобиля в Kill Car Studio.</div>
+        <div class="chips"><span>ремонт сколов на лобовом стекле Москва</span><span>ремонт трещин на стекле автомобиля</span><span>защита лобового стекла бронеплёнкой</span><span>бронеплёнка на стекло</span><span>ремонт стекла без замены</span><span>детейлинг стёкол Москва</span></div>
+        <div class="meta-row"><b>Meta:</b> Ремонт сколов и трещин на лобовом стекле и защита бронеплёнкой в Kill Car Studio (Москва) — восстановление стекла без замены и защита от новых повреждений.</div>
+        <div class="cta-row">CTA: Записаться на ремонт скола или защиту лобового стекла бронеплёнкой.</div>
         <div class="cover-block">
           <span class="lbl">ТЗ на обложку</span>
-          <p>Фон <span class="swpair"><span class="swdot" style="background:#101423"></span></span>#101423, акцент <span class="swpair"><span class="swdot" style="background:#3465BC"></span></span>#3465BC. Крупный тезис «10 лет ухода за автомобилями», логотип студии, мелкая строка «Kill Car Studio · Москва».</p>
+          <p>Фон <span class="swpair"><span class="swdot" style="background:#101423"></span></span>#101423, акцент <span class="swpair"><span class="swdot" style="background:#3465BC"></span></span>#3465BC. Тезис «Скол на стекле? Не замена, а ремонт», графичный акцент — трещина на стекле со значком щита.</p>
         </div>
       </div>
 
       <div class="ncard">
-        <div class="top"><h3>Оклейка автомобиля плёнкой в Kill Car Studio: защита кузова и смена образа</h3><span class="tag acc">Продающий</span></div>
+        <div class="top"><h3>Оклейка автомобиля плёнкой в Kill Car Studio: бесплатный расчёт стоимости и гарантия на работы</h3><span class="tag acc">Продающий</span></div>
         <ul class="thesis">
-          <li>Оклейка автомобиля плёнкой в Kill Car Studio решает две задачи сразу — защищает лакокрасочное покрытие и меняет визуальный образ автомобиля.</li>
-          <li>Защитная прозрачная плёнка (антигравийная оклейка кузова) принимает на себя сколы, царапины и мелкие механические повреждения вместо ЛКП.</li>
-          <li>Матовая оклейка автомобиля меняет фактуру кузова, делая образ строгим и статусным без перекраски.</li>
-          <li>Цветная оклейка плёнкой — способ сменить цвет автомобиля без покраски и без повреждения заводского лакокрасочного покрытия.</li>
-          <li>Оклейку выполняют мастера с опытом работы с 2016 года, с проверенными плёночными материалами.</li>
-          <li>Услуга доступна для автомобилей любых марок — студия расположена в Москве рядом с МКАД.</li>
+          <li>В Kill Car Studio можно бесплатно рассчитать стоимость оклейки автомобиля плёнкой по заявке.</li>
+          <li>Оклейка выполняется с гарантией на выполненные работы.</li>
+          <li>В работе используются плёнки проверенных производителей — защитные прозрачные, матовые и цветные варианты для кузова автомобиля.</li>
+          <li>Сроки выполнения оклейки в Kill Car Studio — оперативные.</li>
+          <li>Услуга доступна для автомобилей любых марок — студия расположена в Москве рядом с МКАД, работает ежедневно с 10:00 до 20:00.</li>
         </ul>
-        <div class="chips"><span>оклейка авто плёнкой Москва</span><span>защитная плёнка на кузов</span><span>антигравийная плёнка авто</span><span>матовая оклейка автомобиля</span><span>цветная оклейка плёнкой</span><span>оклейка кузова без покраски</span></div>
-        <div class="meta-row"><b>Meta:</b> Оклейка автомобиля плёнкой в Москве — защитная, матовая и цветная плёнка на кузов в Kill Car Studio. Защита ЛКП и смена образа без покраски.</div>
-        <div class="cta-row">CTA: Уточнить стоимость оклейки автомобиля плёнкой в Kill Car Studio.</div>
+        <div class="chips"><span>бесплатный расчёт оклейки авто</span><span>оклейка автомобиля плёнкой с гарантией</span><span>стоимость оклейки плёнкой Москва</span><span>оклейка авто сроки Москва</span><span>плёнка на кузов автомобиля</span></div>
+        <div class="meta-row"><b>Meta:</b> Оклейка автомобиля плёнкой в Kill Car Studio — бесплатный расчёт стоимости по заявке, гарантия на работы и оперативные сроки. Москва, рядом с МКАД.</div>
+        <div class="cta-row">CTA: Оставить заявку на бесплатный расчёт стоимости оклейки.</div>
         <div class="cover-block">
           <span class="lbl">ТЗ на обложку</span>
-          <p>Фон #101423, акцент #3465BC. Тезис «Оклейка кузова плёнкой», графичный акцент — силуэт кузова с линией плёнки.</p>
-        </div>
-      </div>
-
-      <div class="ncard">
-        <div class="top"><h3>Полировка и керамическая защита кузова от Kill Car Studio</h3><span class="tag acc">Продающий</span></div>
-        <ul class="thesis">
-          <li>Полировка кузова в Kill Car Studio убирает паутинку и мелкие царапины, возвращая лакокрасочному покрытию глубину цвета и блеск.</li>
-          <li>После полировки кузова наносится защитный состав — керамика или жидкое стекло, создающие гидрофобный слой на кузове.</li>
-          <li>Керамическая защита и жидкое стекло усиливают блеск ЛКП и защищают кузов от солнца, дождя и грязи.</li>
-          <li>Полировка автостёкол возвращает прозрачность, устраняет мелкие потёртости и матовость — повышает безопасность и комфорт в движении.</li>
-          <li>Комплекс «химчистка + полировка + керамика» в Kill Car Studio предоставляется со скидкой 10% — решение для полного обновления автомобиля.</li>
-          <li>Работы выполняются с использованием профессионального оборудования и сертифицированных защитных составов.</li>
-        </ul>
-        <div class="chips"><span>полировка кузова Москва</span><span>керамическая защита автомобиля</span><span>жидкое стекло на кузов</span><span>полировка стёкол автомобиля</span><span>защита ЛКП от царапин</span><span>детейлинг полировка Москва</span></div>
-        <div class="meta-row"><b>Meta:</b> Полировка кузова и керамическая защита автомобиля в Kill Car Studio (Москва) — устранение паутинки, глубина цвета, гидрофобный слой на кузове.</div>
-        <div class="cta-row">CTA: Записаться на полировку и керамическую защиту кузова.</div>
-        <div class="cover-block">
-          <span class="lbl">ТЗ на обложку</span>
-          <p>Фон #101423, акцент #3465BC. Тезис «Полировка и защита кузова», графичный акцент — капли гидрофобного эффекта на кузове.</p>
-        </div>
-      </div>
-
-      <div class="ncard">
-        <div class="top"><h3>Удаление вмятин без покраски в Kill Car Studio — кузовной ремонт с сохранением заводского ЛКП</h3><span class="tag">Экспертный</span></div>
-        <ul class="thesis">
-          <li>Удаление вмятин без покраски (PDR) в Kill Car Studio — кузовной ремонт, при котором форма детали восстанавливается без нарушения заводского лакокрасочного покрытия.</li>
-          <li>Метод подходит для мелких и средних вмятин на капоте, дверях, крыльях и крыше — без покраски и без потери заводского ЛКП.</li>
-          <li>Кузовной ремонт без покраски сохраняет заводскую толщину лакокрасочного слоя — это важно при последующей продаже автомобиля.</li>
-          <li>Ремонт вмятин выполняют мастера с опытом работы с 2016 года, с использованием профессионального инструмента для беспокрасочной рихтовки.</li>
-          <li>Услуга сочетается с полировкой кузова и керамической защитой для полного восстановления внешнего вида автомобиля.</li>
-        </ul>
-        <div class="chips"><span>удаление вмятин без покраски Москва</span><span>кузовной ремонт без покраски</span><span>беспокрасочная рихтовка авто</span><span>PDR ремонт вмятин</span><span>ремонт кузова без покраски Москва</span></div>
-        <div class="meta-row"><b>Meta:</b> Удаление вмятин без покраски в Kill Car Studio — кузовной ремонт в Москве с сохранением заводского ЛКП автомобиля.</div>
-        <div class="cta-row">CTA: Оценить стоимость удаления вмятины без покраски.</div>
-        <div class="cover-block">
-          <span class="lbl">ТЗ на обложку</span>
-          <p>Фон #101423, акцент #3465BC. Тезис «Вмятина? Без покраски», графичный акцент — контур двери или капота.</p>
+          <p>Фон #101423, акцент #3465BC. Тезис «Бесплатный расчёт оклейки», графичный акцент — чек-лист/расчёт поверх силуэта кузова.</p>
         </div>
       </div>
 
@@ -300,56 +263,32 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
 <section id="stories">
   <div class="wrap">
     <span class="eyebrow">05 · Сторис</span>
-    <h2 class="htitle">Сторис — 4 темы, формат «1 слайд»</h2>
-    <p class="lede">Каждая сторис — один слайд: тезис и сухие факты, без обложки. Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
+    <h2 class="htitle">Сторис — 2 темы, формат «1 слайд»</h2>
+    <p class="lede">Этап 02. Каждая сторис — один слайд: тезис и сухие факты. Публикация — карточка Kill Car Studio на Яндекс Картах и в 2ГИС.</p>
     <div class="story-grid">
 
       <div class="scard">
-        <h3>Полировка лобового стекла — антидождь в подарок</h3>
-        <div class="thesis-main">При полировке лобового стекла в Kill Car Studio нанесение антидождя — в подарок.</div>
+        <h3>Защита лобового стекла бронеплёнкой</h3>
+        <div class="thesis-main">В Kill Car Studio доступна защита лобового стекла бронеплёнкой.</div>
         <ul>
-          <li>Устраняет мелкие потёртости и матовость на стекле</li>
-          <li>Улучшает видимость во время дождя</li>
-          <li>Повышает безопасность движения</li>
+          <li>Прозрачное защитное покрытие на лобовом стекле</li>
+          <li>Принимает на себя мелкие сколы и повреждения при движении</li>
+          <li>Дополняет ремонт сколов и трещин на стекле</li>
         </ul>
-        <div class="chips"><span>полировка лобового стекла</span><span>антидождь на стекло</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок капли, факты — мелким текстом внизу.</div>
+        <div class="chips"><span>бронеплёнка на стекло</span><span>защита лобового стекла</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок щита на стекле, факты — мелким текстом внизу.</div>
       </div>
 
       <div class="scard">
-        <h3>Химчистка салона — озонация в подарок</h3>
-        <div class="thesis-main">При заказе химчистки салона в Kill Car Studio озонация салона — в подарок.</div>
+        <h3>Бесплатный расчёт стоимости по заявке</h3>
+        <div class="thesis-main">В Kill Car Studio можно бесплатно рассчитать стоимость работ по заявке.</div>
         <ul>
-          <li>Устраняет посторонние запахи в салоне</li>
-          <li>Обеззараживает поверхности салона</li>
-          <li>Дополняет полную химчистку автомобиля</li>
+          <li>Расчёт стоимости — бесплатный</li>
+          <li>Оформляется по заявке</li>
+          <li>Сроки выполнения работ — оперативные</li>
         </ul>
-        <div class="chips"><span>химчистка салона Москва</span><span>озонация автомобиля</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок распыления, факты — мелким текстом внизу.</div>
-      </div>
-
-      <div class="scard">
-        <h3>Химчистка + полировка + керамика — скидка 10%</h3>
-        <div class="thesis-main">Комплекс «химчистка + полировка + керамика» в Kill Car Studio — скидка 10% на полное обновление автомобиля.</div>
-        <ul>
-          <li>Салон и кузов приводятся в порядок за один визит</li>
-          <li>Керамическая защита ЛКП входит в комплекс</li>
-          <li>У каждой услуги комплекса — отдельная стоимость; скидка 10% рассчитывается от их суммы</li>
-        </ul>
-        <div class="chips"><span>комплекс детейлинга Москва</span><span>скидка на детейлинг</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок процента, факты — мелким текстом внизу.</div>
-      </div>
-
-      <div class="scard">
-        <h3>Шумоизоляция — тишина и комфорт в салоне</h3>
-        <div class="thesis-main">Шумоизоляция в Kill Car Studio снижает уровень шума и вибраций в салоне автомобиля.</div>
-        <ul>
-          <li>Многослойная обработка ключевых зон кузова</li>
-          <li>Комфорт на трассе и в городском потоке</li>
-          <li>Актуально перед зимним сезоном эксплуатации</li>
-        </ul>
-        <div class="chips"><span>шумоизоляция автомобиля Москва</span><span>шумоизоляция салона</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок звуковой волны, факты — мелким текстом внизу.</div>
+        <div class="chips"><span>бесплатный расчёт детейлинга</span><span>заявка на расчёт стоимости</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #101423, акцент #3465BC, крупный тезис + значок калькулятора, факты — мелким текстом внизу.</div>
       </div>
 
     </div>
@@ -360,25 +299,31 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
   <div class="wrap">
     <span class="eyebrow">06 · Карта тем</span>
     <h2 class="htitle">Карта тем</h2>
-    <div class="timeline">
-      <div class="stage">
-        <div class="head">
-          <h3>Этап 01</h3>
-          <span class="badge">Актуальный</span>
-          <span class="date">15.09.2026</span>
-        </div>
-        <ul class="stage-items">
-          <li><b>Новость:</b> Kill Car Studio — комплексный детейлинг-центр</li>
-          <li><b>Новость:</b> Оклейка автомобиля плёнкой</li>
-          <li><b>Новость:</b> Полировка и керамическая защита кузова</li>
-          <li><b>Новость:</b> Удаление вмятин без покраски</li>
-          <li><b>Сторис:</b> Антидождь в подарок при полировке стекла</li>
-          <li><b>Сторис:</b> Озонация в подарок при химчистке</li>
-          <li><b>Сторис:</b> Скидка 10% на комплекс услуг</li>
-          <li><b>Сторис:</b> Шумоизоляция салона</li>
-        </ul>
+
+    <details class="stage-acc">
+      <summary><h3>Этап 01</h3><span class="date">15.09.2026</span></summary>
+      <div class="items">
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Kill Car Studio — детейлинг-центр комплексного ухода за автомобилем</b><div class="th">Комплексный детейлинг, оклейка, кузовной ремонт; опыт с 2016 года, рейтинг 5.0</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Антидождь в подарок при полировке лобового стекла</b><div class="th">Акция компании</div></div></div>
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Оклейка автомобиля плёнкой</b><div class="th">Защитная, матовая, цветная плёнка — защита ЛКП и смена образа</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Озонация в подарок при химчистке салона</b><div class="th">Акция компании</div></div></div>
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Полировка и керамическая защита кузова</b><div class="th">Устранение паутинки, керамика/жидкое стекло, гидрофобный слой</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Скидка 10% на комплекс химчистка+полировка+керамика</b><div class="th">Акция компании, скидка считается от суммы отдельных цен услуг</div></div></div>
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Удаление вмятин без покраски</b><div class="th">Кузовной ремонт без покраски, сохранение заводского ЛКП</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Шумоизоляция — тишина и комфорт в салоне</b><div class="th">Многослойная обработка ключевых зон, комфорт в салоне</div></div></div>
       </div>
-    </div>
+    </details>
+
+    <details class="stage-acc" open>
+      <summary><h3>Этап 02</h3><span class="badge">Актуальный</span><span class="date">09.10.2026</span></summary>
+      <div class="items">
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Ремонт сколов и трещин на лобовом стекле и защита бронеплёнкой</b><div class="th">Отдельная услуга — восстановление стекла без замены, защита от новых повреждений</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Защита лобового стекла бронеплёнкой</b><div class="th">Прозрачное защитное покрытие на стекле</div></div></div>
+        <div class="stage-row"><span class="fmt">Новость</span><div class="body"><b>Оклейка автомобиля плёнкой: бесплатный расчёт и гарантия</b><div class="th">Бесплатный расчёт по заявке, гарантия на работы, оперативные сроки</div></div></div>
+        <div class="stage-row"><span class="fmt">Сторис</span><div class="body"><b>Бесплатный расчёт стоимости по заявке</b><div class="th">Бесплатно, по заявке, оперативные сроки</div></div></div>
+      </div>
+    </details>
+
   </div>
 </section>
 
@@ -391,6 +336,5 @@ footer.sources .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-tr
     <span class="lbl" style="margin-top:10px">Анкета «Старт проекта» — заполнена 15.09.2026</span>
   </div>
 </footer>
-
 </body>
 </html>
