@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Персона — ТЗ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#111111}
+.legal{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:14px}
+.legal b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--roe);display:block;margin-bottom:4px}
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch;margin:0}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch;margin:0}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe);margin:0}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">«Персона»</div>
+  <nav aria-label="Разделы">
+    <a href="#p-company">Компания</a>
+    <a href="#p-brandbook">Брендбук</a>
+    <a href="#p-cycle">Логика цикла</a>
+    <a href="#p-news">Новости</a>
+    <a href="#p-stories">Сторис</a>
+    <a href="#p-map">Карта тем</a>
+  </nav>
+</header>
+<main class="wrap">
+
+  <section id="p-company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">Стоматологический центр «Персона», Екатеринбург</h1>
+    <p class="lede">Стоматологическая клиника. Детская стоматология. Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Стоматологический центр "Персона"</div></div>
+      <div class="fact"><div class="k">Сфера деятельности</div><div class="v">В стоматологическом центре "Персона" оказывают помощь по всем направлениям: лечение, удаление, восстановление и отбеливание зубов, имплантация, протезирование, профилактика, исправление прикуса.</div></div>
+      <div class="fact"><div class="k">Основные услуги</div><div class="v">Имплантация, виниры, коронки из диоксида циркония, элайнеры, брекет-системы, отбеливание, профессиональная гигиена зубов, лечение кариеса/пульпита, ортодонтические пластины</div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Высокий уровень обслуживания, первоклассный сервис, соблюдение строгих стандартов безопасности, уникальный персонал</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Понедельник–Пятница 09:00–21:00 · Суббота 09:00–17:00 · Воскресенье Выходной</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Екатеринбург, Свердловская область, улица Мехренцева д.3</div></div>
+    </div>
+  </section>
+
+  <section id="p-brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">После анализа ресурсов компании определены фирменные цвета: сине-серый, оранжево-красный и белый. Сине-серый — фон шапки сайта под белым логотипом «Персона», глубокий сине-серый — тёмные панели сайта, оранжево-красный — кнопка «Запись на приём», светло-серый — фон блоков сайта, графит — основной текст.</p>
+    <div class="swatches">
+      <div class="sw light" style="background:#3A5564"><span class="role">Основной</span><span class="name">Сине-серый</span><span class="hex">#3A5564</span></div>
+      <div class="sw light" style="background:#2B4250"><span class="role">Второстепенный</span><span class="name">Глубокий сине-серый</span><span class="hex">#2B4250</span></div>
+      <div class="sw light" style="background:#FF3F1E"><span class="role">Акцентный</span><span class="name">Оранжево-красный</span><span class="hex">#FF3F1E</span></div>
+      <div class="sw dark" style="background:#F4F4F4"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#F4F4F4</span></div>
+      <div class="sw light" style="background:#201C1C"><span class="role">Текстовый</span><span class="name">Графит</span><span class="hex">#201C1C</span></div>
+    </div>
+    <div class="legal"><b>Обязательная надпись</b>«Имеются противопоказания. Необходима консультация специалиста» — на каждой обложке новости и на каждом слайде сторис, мелким кеглем внизу.</div>
+  </section>
+
+  <section id="p-cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">От клиники полного цикла к детской стоматологии</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 — клиника, коронки, виниры, детская стоматология <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Этап начинается со знакомства с «Персоной» как с центром, где помогают по всем направлениям и принимают по вечерам и в субботу. Затем раскрываются две услуги восстановления и эстетики — коронки из диоксида циркония и виниры с отбеливанием. Завершает цикл детская стоматология и исправление прикуса ортодонтическими пластинами. Сторис дополняют цикл графиком, направлениями, исправлением прикуса и лечением.</p>
+          <div class="flow"><span>Все направления, удобный график</span><i>→</i><span>Коронки из диоксида циркония</span><i>→</i><span>Виниры и отбеливание</span><i>→</i><span>Детская стоматология и пластины</span></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="p-news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 1</h2>
+    <p class="lede">Публикация — карточка компании «Персона» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Екатеринбург», «Мехренцева, 3» в первом абзаце и далее по тексту. Телефон и адрес электронной почты в тексте не указываются: они находятся в полях карточки. Стоимость в тексте не указывается.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Обращение на «Вы». Каждый текст начинается от лица клиники («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Без слов «безопасно», «безвредно», «безболезненно», «эффективно», без превосходных степеней. В тексте — только факты из блока «Компания», без названий материалов, брендов, сроков и цен. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Минимум эмодзи. В конце каждого текста — «Имеются противопоказания. Необходима консультация специалиста».</div>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Стоматология на Мехренцева, 3 в Екатеринбурге: помощь по всем направлениям, приём до 21:00 и по субботам</h3>
+        <span class="tag">Имиджевый</span>
+      </div>
+      <p class="why">Знакомство с «Персоной» через то, что важно для записи: все направления в одном центре и график с вечерним приёмом и субботой.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В стоматологическом центре „Персона“ мы оказываем помощь по всем направлениям — и принимаем по будням до 21:00».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Стоматологический центр «Персона» — Екатеринбург, улица Мехренцева д.3</li>
+          <li>Помощь по всем направлениям: лечение, удаление, восстановление и отбеливание зубов, имплантация, протезирование, профилактика, исправление прикуса</li>
+          <li>Понедельник–Пятница 09:00–21:00, Суббота 09:00–17:00</li>
+          <li>Высокий уровень обслуживания, уникальный персонал</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">стоматология Екатеринбург</span><span class="chip">стоматологическая клиника Екатеринбург</span><span class="chip">стоматология Мехренцева 3</span><span class="chip">стоматолог вечером Екатеринбург</span><span class="chip">стоматология в субботу Екатеринбург</span><span class="chip">стоматологический центр Персона</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Стоматологический центр «Персона» в Екатеринбурге на Мехренцева, 3: помощь по всем направлениям, приём по будням до 21:00 и в субботу с 09:00 до 17:00.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь в «Персону» в удобное время — по будням до 21:00.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Приём до 21:00»</dd>
+          <dt>Фото</dt><dd>Кабинет клиники из фотографий карточки компании на Яндекс Картах</dd>
+          <dt>Цвета</dt><dd>Заголовок #FFFFFF на плашке #3A5564, акцент-линия #FF3F1E, логотип белым в нижнем углу; обязательная надпись внизу на #2B4250</dd>
+          <dt>Подпись</dt><dd>«Мехренцева, 3 · Пн–Пт до 21:00 · Сб»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Коронки из диоксида циркония в Екатеринбурге — протезирование в стоматологии «Персона»</h3>
+        <span class="tag">Экспертный</span>
+      </div>
+      <p class="why">Протезирование — направление клиники, коронки из диоксида циркония — отдельная позиция основных услуг.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Восстанавливаем зубы коронками из диоксида циркония».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Коронки из диоксида циркония</li>
+          <li>Протезирование и восстановление зубов</li>
+          <li>Имплантация — в том же центре</li>
+          <li>«Персона», улица Мехренцева д.3</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">коронки из диоксида циркония Екатеринбург</span><span class="chip">циркониевые коронки Екатеринбург</span><span class="chip">коронка на зуб Екатеринбург</span><span class="chip">протезирование зубов Екатеринбург</span><span class="chip">протезирование Мехренцева</span><span class="chip">восстановление зубов коронками</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Коронки из диоксида циркония в стоматологии «Персона», Екатеринбург, Мехренцева, 3: протезирование и восстановление зубов.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по протезированию.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Коронки из циркония»</dd>
+          <dt>Фото</dt><dd>Улыбка крупным планом из фотографий карточки компании на Яндекс Картах</dd>
+          <dt>Цвета</dt><dd>Светлый фон #F4F4F4, заголовок #201C1C, акцент-линия #FF3F1E, логотип на плашке #3A5564 в нижнем углу; обязательная надпись внизу</dd>
+          <dt>Подпись</dt><dd>«Протезирование»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 3</span>
+        <h3>Виниры и отбеливание зубов в Екатеринбурге: эстетика улыбки в стоматологии «Персона»</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Виниры и отбеливание — основные услуги клиники; продолжают тему восстановления, но с акцентом на эстетику.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Помогаем улыбке выглядеть так, как Вам хочется, — с помощью виниров и отбеливания».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Виниры</li>
+          <li>Отбеливание</li>
+          <li>Восстановление и отбеливание зубов — направления клиники</li>
+          <li>«Персона», улица Мехренцева д.3</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">виниры Екатеринбург</span><span class="chip">поставить виниры Екатеринбург</span><span class="chip">отбеливание зубов Екатеринбург</span><span class="chip">эстетическая стоматология Екатеринбург</span><span class="chip">виниры Мехренцева</span><span class="chip">отбеливание зубов Мехренцева 3</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Виниры и отбеливание зубов в стоматологии «Персона» в Екатеринбурге на Мехренцева, 3: восстановление и эстетика улыбки.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по винирам и отбеливанию.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Виниры и отбеливание»</dd>
+          <dt>Фото</dt><dd>Портрет с открытой улыбкой из фотографий карточки компании на Яндекс Картах</dd>
+          <dt>Цвета</dt><dd>Заголовок #FFFFFF поверх фото, затемнение нижней трети #2B4250, акцент-линия #FF3F1E, логотип белым в углу; обязательная надпись внизу</dd>
+          <dt>Подпись</dt><dd>«Эстетика улыбки»</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 4</span>
+        <h3>Детская стоматология и ортодонтические пластины в Екатеринбурге — стоматология «Персона»</h3>
+        <span class="tag">Продающий</span>
+      </div>
+      <p class="why">Детская стоматология — направление компании; ортодонтические пластины и исправление прикуса — из основных услуг.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В „Персоне“ есть детская стоматология — и мы исправляем прикус ортодонтическими пластинами».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Детская стоматология</li>
+          <li>Ортодонтические пластины</li>
+          <li>Исправление прикуса — одно из направлений клиники; также элайнеры и брекет-системы</li>
+          <li>«Персона», улица Мехренцева д.3</li>
+        </ul>
+      </div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">детская стоматология Екатеринбург</span><span class="chip">детский стоматолог Екатеринбург</span><span class="chip">ортодонтические пластины Екатеринбург</span><span class="chip">пластинки для выравнивания зубов</span><span class="chip">исправление прикуса Екатеринбург</span><span class="chip">детская стоматология Мехренцева</span></div>
+      </div>
+      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Стоматология «Персона» в Екатеринбурге на Мехренцева, 3: детская стоматология и исправление прикуса ортодонтическими пластинами.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по исправлению прикуса.</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>«Детская стоматология»</dd>
+          <dt>Фото</dt><dd>Ребёнок на приёме из фотографий карточки компании на Яндекс Картах</dd>
+          <dt>Цвета</dt><dd>Заголовок #FFFFFF на плашке #3A5564, акцент-линия #FF3F1E, подпись на светлом #F4F4F4 текстом #201C1C, логотип в углу; обязательная надпись внизу</dd>
+          <dt>Подпись</dt><dd>«Ортодонтические пластины»</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="p-stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 1</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты. На каждом слайде — обязательная надпись «Имеются противопоказания. Необходима консультация специалиста».</p>
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>График работы</h4>
+        <ul>
+          <li>Пн–Пт 09:00–21:00</li>
+          <li>Сб 09:00–17:00</li>
+          <li>Вс выходной</li>
+        </ul>
+        <div class="chips"><span class="chip">стоматология Мехренцева 3</span><span class="chip">стоматолог вечером Екатеринбург</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #3A5564, заголовок #FFFFFF, акцент-линия #FF3F1E под заголовком, три строки графика белым, логотип «Персона» белым внизу по центру.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Помощь по всем направлениям</h4>
+        <ul>
+          <li>Лечение · удаление</li>
+          <li>Восстановление · отбеливание</li>
+          <li>Имплантация · протезирование</li>
+          <li>Профилактика · исправление прикуса</li>
+        </ul>
+        <div class="chips"><span class="chip">стоматологическая клиника Екатеринбург</span><span class="chip">стоматология Мехренцева</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #F4F4F4, заголовок #201C1C, направления списком в плашках #3A5564 с белым текстом, акцент-линия #FF3F1E.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 3 · 1 слайд</span>
+        <h4>Исправление прикуса</h4>
+        <ul>
+          <li>Элайнеры</li>
+          <li>Брекет-системы</li>
+          <li>Ортодонтические пластины</li>
+        </ul>
+        <div class="chips"><span class="chip">исправление прикуса Екатеринбург</span><span class="chip">элайнеры Екатеринбург</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото из фотографий карточки в верхней половине, ниже фон #2B4250, заголовок #FFFFFF, три способа в строку через тонкие разделители #FF3F1E.</div>
+      </div>
+      <div class="story-card">
+        <span class="slide-tag">Сторис 4 · 1 слайд</span>
+        <h4>Лечение и профилактика</h4>
+        <ul>
+          <li>Лечение кариеса/пульпита</li>
+          <li>Профессиональная гигиена зубов</li>
+        </ul>
+        <div class="chips"><span class="chip">лечение кариеса Екатеринбург</span><span class="chip">профессиональная гигиена зубов Екатеринбург</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон #3A5564, заголовок #FFFFFF, два пункта в плашках #F4F4F4 с текстом #201C1C, акцент-линия #FF3F1E, логотип белым внизу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="p-map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
+    <div class="timeline">
+      <details class="stage" open>
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Помощь по всем направлениям, приём до 21:00 и по субботам</span><span class="d">Все направления клиники, график работы, адрес</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">График работы</span><span class="d">Пн–Пт 09:00–21:00, Сб 09:00–17:00, Вс выходной</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Коронки из диоксида циркония</span><span class="d">Протезирование и восстановление зубов</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Помощь по всем направлениям</span><span class="d">Лечение, удаление, восстановление, отбеливание, имплантация, протезирование, профилактика, прикус</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Виниры и отбеливание зубов</span><span class="d">Эстетика улыбки</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Исправление прикуса</span><span class="d">Элайнеры, брекет-системы, ортодонтические пластины</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Детская стоматология и ортодонтические пластины</span><span class="d">Детская стоматология, ортодонтические пластины, исправление прикуса</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Лечение и профилактика</span><span class="d">Лечение кариеса/пульпита, профессиональная гигиена зубов</span></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
