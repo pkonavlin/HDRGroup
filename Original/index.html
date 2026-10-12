@@ -1,371 +1,332 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Автокомплекс «Оригинал» — бриф на контент</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Автокомплекс «Оригинал» — ТЗ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
-    --bg:var(--ice); --card:#FFFFFF; --ink:#12232A; --ink-soft:#4B6169; --line:#D8E2E2;
-    --brand-red:#E2231A; --brand-black:#101010; --brand-white:#FFFFFF;
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#0B1416; --card:#132226; --ink:#EAF3F3; --ink-soft:#9FB4B8; --line:#24393E;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,sans-serif;line-height:1.55;}
-  h1,h2,h3,h4{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--ink);margin:0;}
-  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
-  a{color:inherit;}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+}
+:root[data-theme="dark"]{
+  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
+  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+a{color:var(--teal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
 
-  header.topbar{position:sticky;top:0;z-index:50;background:var(--ocean);color:#fff;border-bottom:3px solid var(--roe);}
-  .topbar-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;}
-  .topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:.2px;white-space:nowrap;}
-  .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
-  .topbar nav::-webkit-scrollbar{display:none;}
-  .topbar nav a{font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,.85);white-space:nowrap;transition:background .15s;}
-  .topbar nav a:hover{background:rgba(255,255,255,.12);color:#fff;}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
+.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
+.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+.topbar nav a:hover{color:var(--roe)}
 
-  section{padding:56px 0;border-bottom:1px solid var(--line);}
-  section:last-of-type{border-bottom:none;}
-  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);font-weight:600;margin-bottom:10px;display:block;}
-  h2.section-title{font-size:28px;font-weight:700;margin-bottom:28px;}
-  .lead-note{max-width:680px;color:var(--ink-soft);margin-bottom:24px;font-size:15px;}
+.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
+h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
+h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
+.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
 
-  /* HERO */
-  .hero{background:linear-gradient(180deg,var(--ocean),var(--teal));color:#fff;}
-  .hero .eyebrow{color:#ffd7c4;}
-  .hero h1{font-size:34px;font-weight:800;max-width:720px;}
-  .hero p.lead{max-width:660px;font-size:16px;color:rgba(255,255,255,.88);margin-top:14px;}
-  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px;}
-  .fact{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:16px;}
-  .fact .num{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;}
-  .fact .label{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;}
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
 
-  /* BRANDBOOK */
-  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
-  .swatch{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);}
-  .swatch .chip{height:64px;}
-  .swatch .meta{padding:10px 12px;}
-  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
-  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;margin-top:2px;}
-  .bb-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-  @media (max-width:720px){.bb-grid{grid-template-columns:1fr;}}
-  .bb-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
-  .bb-card h4{font-size:14px;margin-bottom:8px;color:var(--roe);}
-  .bb-card p{font-size:14px;color:var(--ink-soft);margin:0;}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
+.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
+.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
+.sw.light{color:#FFFFFF}
+.sw.dark{color:#15273B}
 
-  /* CYCLE */
-  .cycle{display:flex;flex-wrap:wrap;gap:10px;}
-  .cycle-step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
-  .cycle-step .n{font-family:'IBM Plex Mono',monospace;color:var(--roe);}
-  .cycle-arrow{align-self:center;color:var(--ink-soft);}
-  .scope-note{margin-top:20px;font-size:13px;color:var(--ink-soft);background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:12px 16px;max-width:680px;}
+.timeline{display:grid;gap:12px;margin-top:24px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
+.stage summary::-webkit-details-marker{display:none}
+.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
+.stage[open] summary::before{transform:rotate(90deg)}
+.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
+.stage-body{margin-top:14px}
+.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow i{font-style:normal;color:var(--ink-soft)}
 
-  /* POSTS (Новости) */
-  .post-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
-  .post-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
-  .post-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
-  .post-title{font-size:17px;font-weight:700;margin-top:4px;}
-  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:var(--ocean);color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap;}
-  .post-body ul{margin:0;padding-left:18px;}
-  .post-body li{font-size:14.5px;color:var(--ink);margin-bottom:6px;}
-  .seo-block{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px;}
-  .seo-block .seo-row{margin-bottom:10px;}
-  .seo-block .seo-row:last-child{margin-bottom:0;}
-  .seo-block .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:3px;}
-  .seo-block .v{font-size:13.5px;}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-  .chip-tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--card);border:1px solid var(--line);color:var(--teal);padding:3px 8px;border-radius:6px;}
-  .meta-block{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;}
-  .meta-block .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
-  .meta-block .v{font-size:13.5px;}
-  .cta-line{margin-top:12px;font-size:13.5px;font-weight:600;color:var(--roe);}
+.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
+.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
 
-  /* STORIES (Сторис) */
-  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
-  .story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;}
-  .story-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);}
-  .story-title{font-size:15.5px;font-weight:700;}
-  .story-thesis{font-size:13.5px;color:var(--ink);margin:0;}
-  .story-design{font-size:12.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto;}
-  .story-design .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--roe);display:block;margin-bottom:3px;}
+.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
+@media (max-width:560px){.theme-card{padding:20px 18px}}
+.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
+.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
+.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
+.blk{margin-top:18px}
+.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
+.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch}
+ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
+ul.thesis li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch}
+.cta{font-size:14.5px;font-weight:600;color:var(--roe)}
+.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
+.cover-box .blk-h{color:var(--roe)}
+.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
+.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cover-box dd{margin:0;min-width:0}
+@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
 
-  /* TIMELINE */
-  .timeline{display:grid;gap:14px;}
-  .tl-item{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
-  .tl-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--roe);color:#fff;padding:4px 10px;border-radius:999px;height:fit-content;white-space:nowrap;}
-  .tl-content h4{font-size:15px;margin-bottom:4px;}
-  .tl-content p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
+.story-card h4{font-size:16.5px}
+.story-card .lead{font-size:13.5px;color:var(--ink-soft);margin:6px 0 0}
+.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
+.story-card ul li{margin-bottom:4px}
+.story-card .chips{margin-top:12px}
+.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
+.design-note b{color:var(--ink)}
 
-  footer.src{padding:32px 0 60px;}
-  footer.src .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;}
-  footer.src a{font-size:13px;color:var(--teal);text-decoration:none;font-family:'IBM Plex Mono',monospace;}
-  footer.src .copy{font-size:12px;color:var(--ink-soft);}
+.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.road li{position:relative;padding:0 0 14px 28px}
+.road li:last-child{padding-bottom:0}
+.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
+.road li.st::before{border-color:var(--roe)}
+.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
+.road li.st .fmt{color:var(--roe)}
+.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
+.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+
 </head>
 <body>
 <header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">Автокомплекс «Оригинал»</div>
-    <nav>
-      <a href="#company">Компания</a>
-      <a href="#brandbook">Брендбук</a>
-      <a href="#cycle">Логика цикла</a>
-      <a href="#news">Новости</a>
-      <a href="#stories">Сторис</a>
-      <a href="#map">Карта тем</a>
-    </nav>
-  </div>
+  <div class="brand">Автокомплекс «Оригинал»</div>
+  <nav aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#cycle">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
 </header>
 
-<section class="hero" id="company">
-  <div class="wrap">
-    <span class="eyebrow">Бриф на контент · Новости + Сторис · Этап 1</span>
-    <h1>Автокомплекс «Оригинал», Тюмень</h1>
-    <p class="lead">Ремонт и обслуживание легкового и коммерческого транспорта иностранного производства — все виды работ, кроме кузовных. Продажа запасных частей и специальных жидкостей на собственном складе. Публикация материалов — карточка компании на Яндекс Картах и 2ГИС.</p>
-    <div class="fact-grid">
-      <div class="fact"><div class="num">20+ лет</div><div class="label">опыта комплексного ремонта иномарок</div></div>
-      <div class="fact"><div class="num">6</div><div class="label">направлений обслуживания под одной крышей</div></div>
-      <div class="fact"><div class="num">7 дней</div><div class="label">в неделю принимают автомобили</div></div>
-      <div class="fact"><div class="num">Физ. и юр. лица</div><div class="label">частный и корпоративный автопарк</div></div>
-    </div>
-  </div>
-</section>
+<main class="wrap">
 
-<section id="brandbook">
-  <div class="wrap">
-    <span class="eyebrow">Мини-брендбук</span>
-    <h2 class="section-title">Визуальный код «Оригинала»</h2>
-    <p class="lead-note">Фирменные цвета и стилистика подтверждены компанией напрямую в анкете: красный, чёрный, белый — сдержанный минимализм, без лишних элементов. На этой основе строится оформление обложек новостей и слайдов сторис.</p>
+  <section id="company">
+    <div class="eyebrow">01 · Компания</div>
+    <h1 class="title">Автокомплекс «Оригинал», Тюмень</h1>
+    <p class="lede">Ремонт и обслуживание легкового и коммерческого транспорта иностранного производства — все виды работ, кроме кузовных. Продажа запасных частей и специальных жидкостей на собственном складе. Публикация новостей и сторис — карточка компании «Оригинал» на Яндекс Картах и в 2ГИС.</p>
+    <div class="facts-grid">
+      <div class="fact"><div class="k">Наименование</div><div class="v">Автокомплекс «Оригинал»</div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Ремонт транспорта + продажа запчастей и спец. жидкостей, иностранные легковые и коммерческие авто, кроме кузовных работ</div></div>
+      <div class="fact"><div class="k">Основные услуги</div><div class="v">Подвеска · Жидкости · Автоэлектрика и чип-тюнинг · Капремонт двигателя · Сход-развал/шиномонтаж · Кондиционеры</div></div>
+      <div class="fact"><div class="k">Ключевые преимущества</div><div class="v">Опыт 20+ лет · комплексная услуга · склад запчастей и масел · гарантия на ремонт · история обслуживания · физ. и юр. лица</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Тюмень, ул. Железнодорожная, стр. 54</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–сб 9:00–20:00, вс 9:00–18:00</div></div>
+      <div class="fact"><div class="k">Обращение и стиль</div><div class="v">На «вы» · деловой стиль</div></div>
+      <div class="fact"><div class="k">Формат цен</div><div class="v">Формат «от N ₽»</div></div>
+      <div class="fact"><div class="k">Приоритетная тема</div><div class="v">Сезонное обслуживание автомобиля</div></div>
+      <div class="fact"><div class="k">Темы, которых не касаемся</div><div class="v">Конкуренты · Политика · Сравнение цен · Внутренние процессы</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="eyebrow">02 · Мини-брендбук</div>
+    <h2 class="title">Фирменные цвета</h2>
+    <p class="lede">Фирменные цвета компании — красный, чёрный и белый, в стилистике сдержанного минимализма. Красный — акцентный, выделяет ключевые элементы обложек и слайдов. Чёрный — основной фон. Белый — текстовый и второстепенный на тёмном фоне.</p>
     <div class="swatches">
-      <div class="swatch">
-        <div class="chip" style="background:#E2231A;"></div>
-        <div class="meta"><div class="role">Акцентный</div><div class="hex">#E2231A</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#101010;"></div>
-        <div class="meta"><div class="role">Основной / фон</div><div class="hex">#101010</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
-        <div class="meta"><div class="role">Второстепенный / текстовый на тёмном</div><div class="hex">#FFFFFF</div></div>
-      </div>
+      <div class="sw light" style="background:#E2231A"><span class="role">Акцентный</span><span class="name">Красный</span><span class="hex">#E2231A</span></div>
+      <div class="sw light" style="background:#101010"><span class="role">Основной</span><span class="name">Чёрный</span><span class="hex">#101010</span></div>
+      <div class="sw dark" style="background:#FFFFFF;border:1px solid var(--line)"><span class="role">Второстепенный</span><span class="name">Белый</span><span class="hex">#FFFFFF</span></div>
     </div>
-    <div class="bb-grid">
-      <div class="bb-card">
-        <h4>Типографика</h4>
-        <p>Строгий гротеск без засечек, крупный заголовок + плотный вспомогательный текст. Декоративные элементы и рукописные шрифты не используются — стилистика заявлена как сдержанный минимализм.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Фотостиль</h4>
-        <p>Собранного фотоархива пока нет — материалы поступают от компании еженедельно. До получения кадров обложки и слайды строятся на типографике и цветовых плашках; при поступлении фото — документальный стиль без постановки: цех, подъёмники, диагностика крупным планом.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Логотип</h4>
-        <p>Векторный файл предоставляется компанией отдельно и встраивается в обложки и подписи материалов после получения.</p>
-      </div>
-      <div class="bb-card">
-        <h4>Тон коммуникации</h4>
-        <p>Деловой стиль, обращение на «вы», без юмора и неформальных оборотов. В ответах на отзывы — благодарность по имени, при негативе решение предлагается и диалог переводится в личные сообщения, без публичных споров.</p>
-      </div>
+  </section>
+
+  <section id="cycle">
+    <div class="eyebrow">03 · Логика цикла</div>
+    <h2 class="title">Сезонная подготовка: от шасси к теплу в салоне</h2>
+    <div class="timeline">
+      <details class="stage">
+        <summary>Этап 1 — знакомство и сезонная подготовка</summary>
+        <div class="stage-body">
+          <p>Первый этап вводит компанию: опыт 20+ лет и комплексность услуг, сезонная подготовка автомобиля к зиме (сход-развал, шиномонтаж, жидкости), экспертиза в автоэлектрике и чип-тюнинге, закрывающая акция с бесплатной диагностикой подвески и заменой масла.</p>
+          <div class="flow"><span>Доверие</span><i>→</i><span>Сезон</span><i>→</i><span>Экспертность</span><i>→</i><span>Акция</span></div>
+        </div>
+      </details>
+      <details class="stage" open>
+        <summary>Этап 2 — сезонная подготовка, часть 2 <span class="badge">актуальный</span></summary>
+        <div class="stage-body">
+          <p>Середина октября — сезон, когда чаще всего подводят аккумулятор и отопитель салона. Этап продолжает сезонную линию первого этапа двумя узлами из каталога услуг компании, которые именно сейчас наиболее актуальны для водителя.</p>
+          <div class="flow"><span>Аккумулятор перед зимой</span><i>→</i><span>Отопитель и обогрев салона</span></div>
+        </div>
+      </details>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="cycle">
-  <div class="wrap">
-    <span class="eyebrow">Логика цикла</span>
-    <h2 class="section-title">Как связаны 4 темы этапа 1</h2>
-    <p class="lead-note">Цикл выстроен по нарастающей: от доверия к бренду — к актуальному сезонному поводу, затем к узкой экспертизе и закрывающему предложению с бесплатными услугами.</p>
-    <div class="cycle">
-      <div class="cycle-step"><span class="n">01</span>Доверие</div><div class="cycle-arrow">→</div>
-      <div class="cycle-step"><span class="n">02</span>Сезон</div><div class="cycle-arrow">→</div>
-      <div class="cycle-step"><span class="n">03</span>Экспертность</div><div class="cycle-arrow">→</div>
-      <div class="cycle-step"><span class="n">04</span>Акция / CTA</div>
-    </div>
-    <div class="scope-note">Тематика не затрагивает сравнение цен, конкурентов и общественно-политическую повестку — по требованию компании. Сезонный акцент этапа — подготовка автомобиля к зиме.</div>
-  </div>
-</section>
+  <section id="news">
+    <div class="eyebrow">04 · Новости</div>
+    <h2 class="title">Новости этапа 2</h2>
+    <p class="lede">Публикация — карточка компании «Оригинал» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Тюмень», «Железнодорожная» — в первом абзаце и далее по тексту. Телефон в тексте не указывается: он находится в полях карточки. Цены — в формате «от N ₽».</p>
+    <div class="tone-banner"><b>Тон текстов</b>Деловой стиль, обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Факты берутся только из анкеты компании и каталога услуг на карточке Яндекс Карт. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Без превосходных степеней и капса.</div>
 
-<section id="news">
-  <div class="wrap">
-    <span class="eyebrow">Новости · 4 темы + обложка</span>
-    <h2 class="section-title">Контент-план новостей</h2>
-
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 01</div><div class="post-title">Автокомплекс «Оригинал»: 20 лет комплексного ремонта иностранных автомобилей в Тюмени</div></div>
-        <span class="tag">Доверие</span>
-      </div>
-      <div class="post-body">
-        <ul>
-          <li>Компания работает более 20 лет, специализируется на ремонте и обслуживании легкового и коммерческого транспорта иностранного производства (кроме кузовных работ).</li>
-          <li>Комплексный подход: диагностика, ремонт подвески, двигателя, автоэлектрика, сход-развал, шиномонтаж, обслуживание кондиционеров — на одной площадке.</li>
-          <li>Запасные части и масла — в наличии на собственном складе, что сокращает срок ремонта.</li>
-          <li>На каждый автомобиль ведётся история обслуживания.</li>
-          <li>Работа как с физическими, так и с юридическими лицами — обслуживание частного и корпоративного автопарка.</li>
-          <li>Адрес: Тюмень, ул. Железнодорожная, стр. 54. Режим работы: пн–сб 9:00–20:00, вс 9:00–18:00.</li>
-        </ul>
-      </div>
-      <div class="seo-block">
-        <div class="seo-row"><div class="k">H1</div><div class="v">Автокомплекс «Оригинал» — ремонт иностранных автомобилей в Тюмени</div></div>
-        <div class="seo-row"><div class="k">Title</div><div class="v">Автокомплекс «Оригинал» в Тюмени — комплексный ремонт иномарок, 20 лет опыта</div></div>
-        <div class="seo-row"><div class="k">Description</div><div class="v">Автокомплекс «Оригинал» на Железнодорожной в Тюмени — ремонт подвески, двигателя, электрики и шиномонтаж иностранных автомобилей. Более 20 лет опыта, запчасти в наличии, работа с юрлицами.</div></div>
-        <div class="seo-row"><div class="k">Ключевые слова</div><div class="chips">
-          <span class="chip-tag">автосервис тюмень</span><span class="chip-tag">ремонт иномарок тюмень</span><span class="chip-tag">автокомплекс оригинал тюмень</span><span class="chip-tag">СТО тюмень железнодорожная</span><span class="chip-tag">ремонт иностранных автомобилей</span><span class="chip-tag">автосервис для юрлиц тюмень</span>
-        </div></div>
-      </div>
-      <div class="meta-block"><div class="k">ТЗ на обложку</div><div class="v">Чёрный фон, крупная белая типографика заголовка «20 ЛЕТ РЕМОНТА ИНОМАРОК», тонкая акцентная красная линия снизу, плашка с названием компании. Без фото — сдержанный минимализм.</div></div>
-      <div class="cta-line">CTA: записаться на диагностику — телефон мастера СТО 908-908</div>
-    </div>
-
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 02</div><div class="post-title">Подготовка автомобиля к зиме: сход-развал, шиномонтаж и замена технических жидкостей в «Оригинале»</div></div>
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 1</span>
+        <h3>Замена аккумулятора перед зимой в автокомплексе «Оригинал»</h3>
         <span class="tag">Сезон</span>
       </div>
-      <div class="post-body">
-        <ul>
-          <li>Межсезонье — время подготовить автомобиль к зимней эксплуатации.</li>
-          <li>В комплекс работ входят сход-развал, шиномонтаж, замена антифриза и тормозной жидкости.</li>
-          <li>Диагностика подвески перед сменой резины выявляет износ, влияющий на управляемость на зимней дороге.</li>
-          <li>Все работы выполняются на одной площадке — без обращения в разные сервисы.</li>
-          <li>При ремонте автомобиля на СТО осмотр и диагностика подвески предоставляются бесплатно.</li>
+      <p class="why">Середина октября — время, когда севший аккумулятор становится частой причиной проблем с запуском двигателя. Услуга есть в каталоге компании на Яндекс Картах, но ещё не получала отдельной темы.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В автокомплексе «Оригинал» мы меняем аккумулятор для легковых и коммерческих автомобилей — особенно актуально перед наступлением холодов».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Замена аккумулятора — услуга категории «Ремонт/Замена» в каталоге автокомплекса, для легковых и коммерческих автомобилей</li>
+          <li>Перед похолоданием севший или изношенный аккумулятор — частая причина проблем с запуском двигателя</li>
+          <li>Работы проводятся с использованием деталей, которые есть в наличии на складе компании</li>
+          <li>На выполненную замену предоставляется гарантия</li>
+          <li>Автокомплекс работает с легковым и коммерческим транспортом иностранного производства</li>
+          <li>Тюмень, ул. Железнодорожная, стр. 54, режим работы пн–сб 9:00–20:00, вс 9:00–18:00</li>
         </ul>
       </div>
-      <div class="seo-block">
-        <div class="seo-row"><div class="k">H1</div><div class="v">Подготовка автомобиля к зиме в автокомплексе «Оригинал»</div></div>
-        <div class="seo-row"><div class="k">Title</div><div class="v">Подготовка авто к зиме в Тюмени — сход-развал, шиномонтаж, замена жидкостей</div></div>
-        <div class="seo-row"><div class="k">Description</div><div class="v">Сезонное обслуживание автомобиля перед зимой в автокомплексе «Оригинал» (Тюмень): сход-развал, шиномонтаж, замена антифриза и тормозной жидкости. Диагностика подвески — бесплатно при ремонте.</div></div>
-        <div class="seo-row"><div class="k">Ключевые слова</div><div class="chips">
-          <span class="chip-tag">подготовка авто к зиме тюмень</span><span class="chip-tag">сход развал тюмень</span><span class="chip-tag">шиномонтаж тюмень</span><span class="chip-tag">замена антифриза тюмень</span><span class="chip-tag">сезонное обслуживание автомобиля</span><span class="chip-tag">замена тормозной жидкости тюмень</span>
-        </div></div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">замена аккумулятора тюмень</span><span class="chip">аккумулятор перед зимой</span><span class="chip">замена аккумулятора авто тюмень</span><span class="chip">автокомплекс оригинал тюмень</span><span class="chip">замена аккумулятора коммерческий транспорт</span><span class="chip">автосервис Железнодорожная тюмень</span></div>
       </div>
-      <div class="meta-block"><div class="k">ТЗ на обложку</div><div class="v">Чёрно-белая гамма с красным акцентом, минималистичный графический элемент зимней шины, заголовок «ГОТОВИМ АВТО К ЗИМЕ» крупным шрифтом, нижняя плашка с названием компании.</div></div>
-      <div class="cta-line">CTA: записаться на сезонное обслуживание — телефон мастера СТО 908-908</div>
-    </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление о замене аккумулятора → сезонная причина: похолодание и проблемы с запуском → категория услуги в каталоге компании → детали со склада → гарантия → легковой и коммерческий транспорт → адрес и режим работы → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Проверяйте и меняйте аккумулятор перед зимой в автокомплексе «Оригинал».</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Аккумулятор перед зимой</dd>
+          <dt>Визуал</dt><dd>Типографическая обложка без фото — сдержанный минимализм.</dd>
+          <dt>Цвета</dt><dd>Чёрный фон #101010, крупный заголовок белым, тонкая акцентная линия #E2231A внизу.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
 
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 03</div><div class="post-title">Автоэлектрика и чип-тюнинг: диагностика и настройка электронных систем в «Оригинале»</div></div>
-        <span class="tag">Экспертность</span>
+    <article class="theme-card">
+      <div class="theme-head">
+        <span class="num">Новость 2</span>
+        <h3>Ремонт отопителя и обогрева салона в автокомплексе «Оригинал»</h3>
+        <span class="tag">Сезон</span>
       </div>
-      <div class="post-body">
-        <ul>
-          <li>Автоэлектрик занимается диагностикой и ремонтом электронных систем иностранных автомобилей.</li>
-          <li>Отдельное направление — чип-тюнинг: настройка электронных систем под задачи владельца.</li>
-          <li>В комплексе также выполняется капитальный ремонт двигателя при серьёзных неисправностях.</li>
-          <li>Работы проводятся с использованием запчастей, которые есть в наличии на складе компании.</li>
+      <p class="why">Вторая сезонная тема — узлы, от которых зависит комфорт поездки в холода: отопитель салона и котлы обогрева, обе услуги есть в каталоге компании и ещё не раскрывались отдельно.</p>
+      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В автокомплексе «Оригинал» мы занимаемся ремонтом отопителя и обогрева салона — направление особенно актуально перед холодным сезоном».</p></div>
+      <div class="blk"><div class="blk-h">Тезисы</div>
+        <ul class="thesis">
+          <li>Ремонт отопителя — диагностика и ремонт системы отопления салона, категория «Ремонт/Замена» в каталоге автокомплекса</li>
+          <li>Отдельно в каталоге — установка, ремонт и обслуживание котлов подогрева и котлов обогрева салона, категория «Услуги электрика»</li>
+          <li>Неисправный отопитель или котёл обогрева напрямую влияют на комфорт и безопасность поездки в холода</li>
+          <li>Работы проводятся с использованием деталей, которые есть в наличии на складе компании</li>
+          <li>На выполненный ремонт предоставляется гарантия</li>
+          <li>Тюмень, ул. Железнодорожная, стр. 54, режим работы пн–сб 9:00–20:00, вс 9:00–18:00</li>
         </ul>
       </div>
-      <div class="seo-block">
-        <div class="seo-row"><div class="k">H1</div><div class="v">Автоэлектрик и чип-тюнинг в Тюмени — автокомплекс «Оригинал»</div></div>
-        <div class="seo-row"><div class="k">Title</div><div class="v">Автоэлектрика и чип-тюнинг в Тюмени | Автокомплекс «Оригинал»</div></div>
-        <div class="seo-row"><div class="k">Description</div><div class="v">Диагностика и ремонт электронных систем, чип-тюнинг и капитальный ремонт двигателя иностранных автомобилей в автокомплексе «Оригинал» — Тюмень, Железнодорожная, 54.</div></div>
-        <div class="seo-row"><div class="k">Ключевые слова</div><div class="chips">
-          <span class="chip-tag">автоэлектрик тюмень</span><span class="chip-tag">чип тюнинг тюмень</span><span class="chip-tag">ремонт электроники автомобиля</span><span class="chip-tag">капитальный ремонт двигателя тюмень</span><span class="chip-tag">диагностика авто тюмень</span>
-        </div></div>
+      <div class="blk"><div class="blk-h">SEO-ключи</div>
+        <div class="chips"><span class="chip">ремонт отопителя тюмень</span><span class="chip">обогрев салона тюмень</span><span class="chip">ремонт котла подогрева тюмень</span><span class="chip">автокомплекс оригинал тюмень</span><span class="chip">обслуживание отопителя автомобиля</span><span class="chip">автосервис перед зимой тюмень</span></div>
       </div>
-      <div class="meta-block"><div class="k">ТЗ на обложку</div><div class="v">Тёмный фон, тонкая графика электрической схемы красной линией, заголовок «АВТОЭЛЕКТРИКА И ЧИП-ТЮНИНГ» белым, лаконичная композиция без фото.</div></div>
-      <div class="cta-line">CTA: записаться к автоэлектрику — телефон 8-9044-74-11-33</div>
-    </div>
+      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление об отопителе и обогреве салона → ремонт отопителя → котлы подогрева и обогрева → сезонная актуальность перед холодами → детали со склада → гарантия → адрес и режим работы → CTA.</p></div>
+      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Проверяйте отопитель и обогрев салона перед холодами в автокомплексе «Оригинал».</p></div>
+      <div class="cover-box">
+        <div class="blk-h">ТЗ на обложку</div>
+        <dl>
+          <dt>Тезис</dt><dd>Отопитель и обогрев салона</dd>
+          <dt>Визуал</dt><dd>Типографическая обложка без фото — сдержанный минимализм.</dd>
+          <dt>Цвета</dt><dd>Чёрный фон #101010, крупный заголовок белым, тонкая акцентная линия #E2231A внизу.</dd>
+          <dt>Логотип</dt><dd>Логотип компании в верхнем углу.</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
 
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 04</div><div class="post-title">Бесплатная диагностика подвески при ремонте и бесплатная замена масла в «Оригинале»</div></div>
-        <span class="tag">Акция</span>
-      </div>
-      <div class="post-body">
-        <ul>
-          <li>При ремонте автомобиля на СТО осмотр и диагностика подвески предоставляются бесплатно.</li>
-          <li>При покупке масла в автомагазине компании работа по его замене — бесплатно.</li>
-          <li>Компания предоставляет гарантию на выполненный ремонт.</li>
-          <li>На каждый автомобиль ведётся история обслуживания — при повторном обращении мастер видит все предыдущие работы.</li>
-          <li>Автомагазин и СТО работают на одной площадке: Тюмень, ул. Железнодорожная, стр. 54.</li>
-        </ul>
-      </div>
-      <div class="seo-block">
-        <div class="seo-row"><div class="k">H1</div><div class="v">Бесплатная диагностика подвески и замена масла в автокомплексе «Оригинал»</div></div>
-        <div class="seo-row"><div class="k">Title</div><div class="v">Бесплатная диагностика подвески и замена масла — автокомплекс «Оригинал», Тюмень</div></div>
-        <div class="seo-row"><div class="k">Description</div><div class="v">Бесплатный осмотр и диагностика подвески при ремонте, бесплатная замена масла при покупке в автомагазине. Автокомплекс «Оригинал» в Тюмени, гарантия на ремонт.</div></div>
-        <div class="seo-row"><div class="k">Ключевые слова</div><div class="chips">
-          <span class="chip-tag">бесплатная диагностика подвески тюмень</span><span class="chip-tag">замена масла тюмень</span><span class="chip-tag">автомагазин тюмень железнодорожная</span><span class="chip-tag">гарантия на ремонт авто тюмень</span><span class="chip-tag">автокомплекс оригинал акции</span>
-        </div></div>
-      </div>
-      <div class="meta-block"><div class="k">ТЗ на обложку</div><div class="v">Фирменная чёрно-красная гамма, крупное слово «БЕСПЛАТНО» красным на чёрном, под ним короткая строка условий, внизу — плашка с названием и адресом компании.</div></div>
-      <div class="cta-line">CTA: уточнить условия — телефон автомагазина 500-911 / 500-912</div>
-    </div>
-
-  </div>
-</section>
-
-<section id="stories">
-  <div class="wrap">
-    <span class="eyebrow">Сторис · 4 темы, один слайд, без обложки</span>
-    <h2 class="section-title">Контент-план сторис</h2>
-    <p class="lead-note">Каждая тема — один слайд, зеркалящий соответствующую новость. Только тезис и дизайн-заметка, без обложки.</p>
+  <section id="stories">
+    <div class="eyebrow">05 · Сторис</div>
+    <h2 class="title">Сторис этапа 2</h2>
+    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
     <div class="story-grid">
       <div class="story-card">
-        <div class="story-num">Сторис 01 · зеркалит новость 01</div>
-        <div class="story-title">20 лет комплексного ремонта</div>
-        <p class="story-thesis">Более 20 лет опыта. Комплексный ремонт иностранных легковых и коммерческих автомобилей — от подвески до электрики. Работа с физическими и юридическими лицами.</p>
-        <div class="story-design"><span class="k">Дизайн слайда</span>Чёрный фон, белый текст, крупная красная цифра «20+», внизу — название компании.</div>
+        <span class="slide-tag">Сторис 1 · 1 слайд</span>
+        <h4>Аккумулятор перед зимой</h4>
+        <ul>
+          <li>Категория «Ремонт/Замена» в каталоге</li>
+          <li>Частая причина проблем с запуском зимой</li>
+          <li>Детали со склада компании</li>
+          <li>Гарантия на замену</li>
+        </ul>
+        <div class="chips"><span class="chip">замена аккумулятора тюмень</span><span class="chip">аккумулятор перед зимой</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> чёрный фон #101010, заголовок белым крупно, тонкая акцентная линия #E2231A, типографика без фото, логотип в верхнем углу.</div>
       </div>
       <div class="story-card">
-        <div class="story-num">Сторис 02 · зеркалит новость 02</div>
-        <div class="story-title">Готовим авто к зиме</div>
-        <p class="story-thesis">Сход-развал, шиномонтаж, замена антифриза и тормозной жидкости. Диагностика подвески — бесплатно при ремонте.</p>
-        <div class="story-design"><span class="k">Дизайн слайда</span>Чёрно-белая гамма, минималистичная иконка шины, слово «бесплатно» — красным акцентом.</div>
-      </div>
-      <div class="story-card">
-        <div class="story-num">Сторис 03 · зеркалит новость 03</div>
-        <div class="story-title">Автоэлектрика и чип-тюнинг</div>
-        <p class="story-thesis">Диагностика и ремонт электронных систем. Чип-тюнинг — настройка под задачи владельца.</p>
-        <div class="story-design"><span class="k">Дизайн слайда</span>Тёмный фон, тонкая графика электросхемы красной линией, заголовок белым.</div>
-      </div>
-      <div class="story-card">
-        <div class="story-num">Сторис 04 · зеркалит новость 04</div>
-        <div class="story-title">Бесплатно: диагностика и замена масла</div>
-        <p class="story-thesis">Бесплатная диагностика подвески при ремонте. Бесплатная замена масла при покупке в автомагазине. Гарантия на ремонт.</p>
-        <div class="story-design"><span class="k">Дизайн слайда</span>Чёрный фон, слово «БЕСПЛАТНО» крупно красным, короткая строка условий белым.</div>
+        <span class="slide-tag">Сторис 2 · 1 слайд</span>
+        <h4>Отопитель и обогрев салона</h4>
+        <ul>
+          <li>Ремонт отопителя салона</li>
+          <li>Котлы подогрева и обогрева</li>
+          <li>Актуально перед холодами</li>
+          <li>Гарантия на ремонт</li>
+        </ul>
+        <div class="chips"><span class="chip">ремонт отопителя тюмень</span><span class="chip">обогрев салона тюмень</span></div>
+        <div class="design-note"><b>Дизайн слайда:</b> чёрный фон #101010, заголовок белым крупно, тонкая акцентная линия #E2231A, типографика без фото, логотип в верхнем углу.</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="map">
-  <div class="wrap">
-    <span class="eyebrow">Карта тем</span>
-    <h2 class="section-title">Хронология этапов</h2>
+  <section id="map">
+    <div class="eyebrow">06 · Карта тем</div>
+    <h2 class="title">Карта тем по этапам</h2>
     <div class="timeline">
-      <div class="tl-item">
-        <span class="tl-badge">Этап 1 · Актуальный</span>
-        <div class="tl-content">
-          <h4>Этап 1 — знакомство и сезонная подготовка</h4>
-          <p>4 новости + обложки (доверие → сезон → экспертность → акция) и 4 зеркальные сторис-темы, один слайд каждая, без обложки.</p>
-        </div>
-      </div>
+      <details class="stage">
+        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Автокомплекс «Оригинал»: 20 лет комплексного ремонта иностранных автомобилей</span><span class="d">Опыт 20+ лет, 6 направлений, склад, история обслуживания, физ. и юр. лица</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">20 лет комплексного ремонта</span><span class="d">Опыт, комплексность, работа с физ. и юр. лицами</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Подготовка автомобиля к зиме</span><span class="d">Сход-развал, шиномонтаж, замена антифриза и тормозной жидкости, бесплатная диагностика подвески</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Готовим авто к зиме</span><span class="d">Сход-развал, шиномонтаж, жидкости, бесплатная диагностика</span></li>
+          <li><span class="fmt">Новость 3</span><span class="t">Автоэлектрика и чип-тюнинг</span><span class="d">Диагностика и ремонт электронных систем, настройка под задачи владельца</span></li>
+          <li class="st"><span class="fmt">История 3</span><span class="t">Автоэлектрика и чип-тюнинг</span><span class="d">Диагностика, ремонт электроники, чип-тюнинг</span></li>
+          <li><span class="fmt">Новость 4</span><span class="t">Бесплатная диагностика подвески и замена масла</span><span class="d">Бесплатный осмотр подвески, бесплатная замена масла, гарантия на ремонт</span></li>
+          <li class="st"><span class="fmt">История 4</span><span class="t">Бесплатно: диагностика и замена масла</span><span class="d">Бесплатная диагностика и замена масла, гарантия</span></li>
+        </ol>
+      </details>
+      <details class="stage" open>
+        <summary>Этап 2 <span class="when">2 новости · 2 сторис</span> <span class="badge">актуальный</span></summary>
+        <ol class="road">
+          <li><span class="fmt">Новость 1</span><span class="t">Замена аккумулятора перед зимой в автокомплексе «Оригинал»</span><span class="d">Сезонная причина, категория каталога, склад, гарантия</span></li>
+          <li class="st"><span class="fmt">История 1</span><span class="t">Аккумулятор перед зимой</span><span class="d">Категория каталога, сезонная причина, склад, гарантия</span></li>
+          <li><span class="fmt">Новость 2</span><span class="t">Ремонт отопителя и обогрева салона в автокомплексе «Оригинал»</span><span class="d">Отопитель, котлы подогрева и обогрева, сезонная актуальность, гарантия</span></li>
+          <li class="st"><span class="fmt">История 2</span><span class="t">Отопитель и обогрев салона</span><span class="d">Отопитель, котлы, сезонная актуальность, гарантия</span></li>
+        </ol>
+      </details>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer class="src">
-  <div class="wrap">
-    <a href="https://yandex.ru/maps/org/original_avtokompleks/155270833702/" target="_blank" rel="noopener">Яндекс Карты</a>
-    <a href="https://2gis.ru/tyumen/search/%D0%BE%D1%80%D0%B8%D0%B3%D0%B8%D0%BD%D0%B0%D0%BB/firm/70000001m=65.512068%2C57.151283%2F16" target="_blank" rel="noopener">2ГИС</a>
-    <span class="copy">Бриф на контент · Автокомплекс «Оригинал», Тюмень · по анкете компании от 10.09.2026</span>
-  </div>
-</footer>
+</main>
 </body>
 </html>
