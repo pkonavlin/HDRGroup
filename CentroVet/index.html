@@ -79,12 +79,23 @@
   .bb-block li{font-size:14.5px;padding-left:18px;position:relative;color:var(--ink);}
   .bb-block li::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:1px;background:var(--roe);}
 
-  .cycle{display:flex;flex-wrap:wrap;gap:0;margin-top:32px;counter-reset:step;}
+  .cycle{display:flex;flex-wrap:wrap;gap:0;margin-top:20px;counter-reset:step;}
   .step{flex:1 1 200px;position:relative;padding:20px 22px 20px 0;}
   .step:not(:last-child)::after{content:'→';position:absolute;right:-2px;top:20px;color:var(--line);font-size:18px;}
   .step .num{font-family:var(--mono);font-size:11px;color:var(--roe);}
   .step h4{margin-top:8px;font-size:15px;}
   .step p{margin-top:6px;font-size:13px;color:var(--ink-soft);}
+  .step.new .num{color:var(--ok);}
+  .new-badge{display:inline-block;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:middle;}
+
+  details.history{margin-top:24px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;}
+  details.history summary{cursor:pointer;padding:14px 18px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+    letter-spacing:.03em;text-transform:uppercase;list-style:none;display:flex;align-items:center;gap:8px;}
+  details.history summary::-webkit-details-marker{display:none;}
+  details.history summary::before{content:'▸';font-size:10px;transition:transform .15s;}
+  details.history[open] summary::before{transform:rotate(90deg);}
+  details.history .history-body{padding:4px 18px 18px;border-top:1px solid var(--line-soft);}
 
   .news-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:32px;}
   .news-card{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;}
@@ -123,15 +134,18 @@
   .story-design{margin-top:14px;padding:12px 14px;background:var(--card-alt);border-radius:8px;font-size:12.5px;color:var(--ink-soft);}
   .story-design b{color:var(--ink);font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;}
 
-  table{width:100%;border-collapse:collapse;margin-top:28px;font-size:13.5px;}
+  table{width:100%;border-collapse:collapse;margin-top:0;font-size:13.5px;}
   th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
     text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);}
   td{padding:11px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
   tr:last-child td{border-bottom:none;}
   .fmt{font-family:var(--mono);font-size:11px;color:var(--teal);}
-  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin-top:28px;}
   .tbl-wrap table{margin-top:0;}
   .tbl-wrap th:first-child,.tbl-wrap td:first-child{padding-left:16px;}
+  .tbl-plain{overflow-x:auto;}
+  .current-badge{display:inline-block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:3px 10px;margin-left:10px;vertical-align:middle;}
 
   footer{padding:36px 28px 60px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
   footer .src-links a{color:var(--ink-soft);margin:0 4px;}
@@ -143,7 +157,7 @@
 </head>
 <body>
 <nav class="nav">
-  <div class="brand">ЦЕНТРОВЕТ <span>ТЗ · ЭТАП 1</span></div>
+  <div class="brand">ЦЕНТРОВЕТ <span>ТЗ · ЭТАП 2</span></div>
   <div class="nav-links">
     <a href="#overview">Компания</a>
     <a href="#brandbook">Брендбук</a>
@@ -159,23 +173,23 @@
   <section class="hero" id="overview">
     <span class="eyebrow">Ветеринарная клиника · Ветеринарная аптека</span>
     <h1>ТЗ на контент: новости и сторис для «ЦентроВет»</h1>
-    <p class="tag">Этап 1 — знакомство. Красноярск, ул. Копылова, 44</p>
-    <p class="lede">4 темы для новостей (тезисы, SEO-блок под максимальную оптимизацию, ТЗ на обложку) + 4 темы для сторис (1 слайд, без обложки — только сухие тезисы). Публикация — карточка компании «ЦентроВет» на Яндекс Картах и 2ГИС.</p>
+    <p class="tag">Этап 2 — диагностика и профилактика. Красноярск, ул. Копылова, 44</p>
+    <p class="lede">2 темы для новостей (тезисы, SEO-блок под максимальную оптимизацию, ТЗ на обложку) + 2 темы для сторис (1 слайд). Публикация — карточка компании «ЦентроВет» на Яндекс Картах и 2ГИС.</p>
 
     <div class="hero-meta">
       <span class="pill">Город: <b>Красноярск</b></span>
       <span class="pill">Режим: <b>9:00–21:00</b> · стационар <b>24/7</b></span>
-      <span class="pill">Рейтинг: <b>4,7 / 5</b> (Яндекс/2ГИС, Zoon)</span>
+      <span class="pill">Рейтинг: <b>4,7 / 5</b></span>
       <span class="pill">Формат: <b>клиника + ветаптека</b> в одном месте</span>
     </div>
 
     <div class="fact-grid">
       <div class="fact"><div class="k">Адрес</div><div class="v">ул. Копылова, 44, Красноярск</div></div>
       <div class="fact"><div class="k">Режим работы</div><div class="v small">9:00–21:00 ежедневно, стационар — круглосуточно</div></div>
-      <div class="fact"><div class="k">Рейтинг</div><div class="v small">2ГИС 4,7/5; Zoon — 575 отзывов, 780 оценок</div></div>
-      <div class="fact"><div class="k">Узкие специалисты</div><div class="v small">Хирург-ортопед-нейрохирург, дерматолог, кардиолог-пульмонолог, хирург-онколог, неврологи, стоматологи, офтальмолог, эндокринолог, репродуктолог, анестезиологи</div></div>
+      <div class="fact"><div class="k">Диагностика</div><div class="v small">Собственная лаборатория, УЗИ, рентген, экспресс-анализы</div></div>
+      <div class="fact"><div class="k">Профилактика</div><div class="v small">Вакцинация, чипирование, кастрация/стерилизация</div></div>
+      <div class="fact"><div class="k">Узкие специалисты</div><div class="v small">Хирург-ортопед-нейрохирург, дерматолог, кардиолог-пульмонолог, хирург-онколог и другие</div></div>
       <div class="fact"><div class="k">Оборудование стационара</div><div class="v small">ИВЛ, кардиомониторы, пульсоксиметры, кислородный концентратор</div></div>
-      <div class="fact"><div class="k">Ветаптека</div><div class="v small">Антибиотики, лечебные препараты, контрацептивы для животных</div></div>
       <div class="fact"><div class="k">Контакты</div><div class="v small">+7 (391) 227-85-07 · centrovet.ru@mail.ru</div></div>
       <div class="fact"><div class="k">Принцип клиники</div><div class="v small">Каждый врач развивает узкую специализацию, а не приём «по всем вопросам сразу»</div></div>
     </div>
@@ -224,158 +238,99 @@
   </section>
 
   <section id="cycle">
-    <span class="eyebrow">03 · Логика цикла (этап 1)</span>
-    <h2>Знакомство: от «кто мы» до «что можно купить рядом»</h2>
-    <p class="lede">Последовательность одинакова для новостей и сторис — от доверия к компании к конкретным направлениям и сервису.</p>
-    <div class="cycle">
-      <div class="step"><div class="num">01</div><h4>Кто мы</h4><p>Клиника + аптека, режим, рейтинг</p></div>
-      <div class="step"><div class="num">02</div><h4>Врачи и специализации</h4><p>Узкие специалисты по направлениям</p></div>
-      <div class="step"><div class="num">03</div><h4>Стационар 24/7</h4><p>Оборудование для критических состояний</p></div>
-      <div class="step"><div class="num">04</div><h4>Ветаптека при клинике</h4><p>Препараты, консультация, удобство</p></div>
+    <span class="eyebrow">03 · Логика цикла</span>
+    <h2>От знакомства — к диагностике и профилактике</h2>
+    <p class="lede">Этап 1 познакомил с клиникой, врачами, стационаром и аптекой. Этап 2 углубляется в конкретные медицинские процессы — диагностику и профилактику.</p>
+
+    <details class="history">
+      <summary>Пройдено — этап 1, знакомство (4 шага)</summary>
+      <div class="history-body">
+        <div class="cycle">
+          <div class="step"><div class="num">01</div><h4>Кто мы</h4><p>Клиника + аптека, режим, рейтинг</p></div>
+          <div class="step"><div class="num">02</div><h4>Врачи и специализации</h4><p>Узкие специалисты по направлениям</p></div>
+          <div class="step"><div class="num">03</div><h4>Стационар 24/7</h4><p>Оборудование для критических состояний</p></div>
+          <div class="step"><div class="num">04</div><h4>Ветаптека при клинике</h4><p>Препараты, консультация, удобство</p></div>
+        </div>
+      </div>
+    </details>
+
+    <div class="cycle" style="margin-top:28px;">
+      <div class="step new"><div class="num">05 <span class="new-badge">новое</span></div><h4>Диагностика</h4><p>УЗИ, рентген, экспресс-анализы, своя лаборатория</p></div>
+      <div class="step new"><div class="num">06 <span class="new-badge">новое</span></div><h4>Профилактика</h4><p>Вакцинация, чипирование, кастрация/стерилизация</p></div>
     </div>
   </section>
 
   <section id="news">
     <span class="eyebrow">04 · Новости</span>
-    <h2>4 темы для новостей + ТЗ на обложку</h2>
+    <h2>2 темы для новостей + ТЗ на обложку</h2>
     <p class="lede">Каждая тема — с тезисами, SEO-ключами, мета-описанием, CTA и отдельным ТЗ на обложку. Максимальная локальная SEO-оптимизация под Красноярск.</p>
 
     <div class="news-grid">
 
       <article class="news-card">
         <div class="news-head">
-          <div><div class="idx">Тема 01 / 04 · знакомство</div><h3>Ветеринарная клиника ЦентроВет в Красноярске: узкие специалисты, стационар 24/7 и своя ветаптека</h3></div>
-          <span class="angle-tag">Имиджевая</span>
-        </div>
-        <div class="news-body">
-          <div>
-            <h5>Тезисы</h5>
-            <ul class="thesis">
-              <li>Клиника работает в Красноярске на ул. Копылова, 44, ежедневно с 9:00 до 21:00</li>
-              <li>Стационар принимает пациентов круглосуточно</li>
-              <li>Рейтинг 4,7 из 5, сотни отзывов владельцев животных</li>
-              <li>Принимают узкие специалисты: хирурги, ортопеды, неврологи, дерматологи, стоматологи, кардиологи, онкологи, офтальмологи, эндокринологи</li>
-              <li>При клинике работает собственная ветеринарная аптека — приём и препараты в одном месте</li>
-              <li>Принцип клиники: «не стремимся объять необъятное» — каждый врач развивает свою специализацию</li>
-            </ul>
-          </div>
-          <div>
-            <div class="seo-box">
-              <h5>SEO-ключи</h5>
-              <div class="kw"><span>ветеринарная клиника красноярск</span><span>ветклиника копылова 44</span><span>круглосуточная ветклиника красноярск</span><span>ветеринарная клиника центровет отзывы</span></div>
-              <div class="meta-line">Meta: Ветеринарная клиника ЦентроВет в Красноярске — приём узких специалистов, круглосуточный стационар, собственная ветаптека. Рейтинг 4,7. Ул. Копылова, 44, ежедневно с 9:00 до 21:00.</div>
-            </div>
-            <div class="cta-line">CTA: <b>«Записаться на приём»</b> → сайт / телефон</div>
-          </div>
-        </div>
-        <div style="padding:0 24px 24px;">
-          <div class="cover-box">
-            <h5>ТЗ на обложку</h5>
-            <div class="headline">«ЦентроВет: клиника + ветаптека рядом»</div>
-            <p>Белый фон, снизу плашка фирменным синим #42599E с заголовком белым текстом. Реальное фото питомца на приёме (тёплый свет, в стиле фото сайта). Лапка-водяной знак #DAF6F7 декоративно в углу.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="news-card">
-        <div class="news-head">
-          <div><div class="idx">Тема 02 / 04 · врачи и специализации</div><h3>Хирург-ортопед, кардиолог, дерматолог и онколог: узкие ветеринарные специалисты в Красноярске</h3></div>
+          <div><div class="idx">Тема 05 / 06 · диагностика</div><h3>Диагностика в клинике ЦентроВет: УЗИ, рентген и экспресс-анализы в день обращения</h3></div>
           <span class="angle-tag">Экспертная</span>
         </div>
         <div class="news-body">
           <div>
             <h5>Тезисы</h5>
             <ul class="thesis">
-              <li>Недочуков А.Б. — хирург, ортопед, нейрохирург</li>
-              <li>Алданов С.Ю. — кардиолог, пульмонолог</li>
-              <li>Загороднова К.А. — дерматолог</li>
-              <li>Матосян О.А. — хирург-онколог, малоинвазивная хирургия и гастроскопия</li>
-              <li>Также принимают неврологи, стоматологи, офтальмолог, эндокринолог, специалист по репродуктивной патологии, анестезиологи</li>
-              <li>Каждый врач ведёт одно направление, а не приём «по всем вопросам сразу»</li>
+              <li>В клинике работает собственная лаборатория с современным оборудованием</li>
+              <li>УЗИ и рентген-диагностика проводятся на месте, без направления в сторонние центры</li>
+              <li>Экспресс-анализы — результат в день обращения</li>
+              <li>Точная диагностика нужна перед хирургическим вмешательством и для подбора лечения</li>
+              <li>Подходит как для плановых осмотров, так и для срочных случаев</li>
             </ul>
           </div>
           <div>
             <div class="seo-box">
               <h5>SEO-ключи</h5>
-              <div class="kw"><span>ветеринарный хирург красноярск</span><span>ветеринарный кардиолог красноярск</span><span>ветеринарный дерматолог красноярск</span><span>ветеринарный онколог красноярск</span></div>
-              <div class="meta-line">Meta: Узкие ветеринарные специалисты в Красноярске — хирург-ортопед-нейрохирург, кардиолог-пульмонолог, дерматолог, хирург-онколог и другие. Приём в клинике ЦентроВет, ул. Копылова, 44.</div>
+              <div class="kw"><span>узи животным красноярск</span><span>рентген для животных красноярск</span><span>анализы для животных красноярск</span><span>ветеринарная лаборатория красноярск</span></div>
+              <div class="meta-line">Meta: Диагностика для животных в Красноярске — УЗИ, рентген и экспресс-анализы в день обращения. Собственная лаборатория клиники ЦентроВет, ул. Копылова, 44.</div>
             </div>
-            <div class="cta-line">CTA: <b>«Выбрать врача и записаться»</b> → раздел «Врачи» на сайте</div>
+            <div class="cta-line">CTA: <b>«Записаться на диагностику»</b> → сайт / телефон</div>
           </div>
         </div>
         <div style="padding:0 24px 24px;">
           <div class="cover-box">
             <h5>ТЗ на обложку</h5>
-            <div class="headline">«Врач под каждую задачу»</div>
-            <p>Белый фон, сетка из круглых фото врачей (как на сайте), синяя плашка-заголовок #42599E сверху или снизу. Подписи специализаций мелким моно-шрифтом под фото.</p>
+            <div class="headline">«Диагностика день в день»</div>
+            <p>Белый фон, синяя иконка-плашка #42599E с силуэтом УЗИ-датчика или рентген-аппарата, заголовок чёрным жирным гротеском. Лапка-водяной знак #DAF6F7 декоративно в углу.</p>
           </div>
         </div>
       </article>
 
       <article class="news-card">
         <div class="news-head">
-          <div><div class="idx">Тема 03 / 04 · стационар</div><h3>Стационар для животных в Красноярске: помощь в критическом состоянии круглосуточно</h3></div>
-          <span class="angle-tag">Экспертная</span>
-        </div>
-        <div class="news-body">
-          <div>
-            <h5>Тезисы</h5>
-            <ul class="thesis">
-              <li>Стационар клиники ЦентроВет работает круглосуточно, вне зависимости от часов приёма</li>
-              <li>Оборудован аппаратами искусственной вентиляции лёгких (ИВЛ)</li>
-              <li>Есть кардиомониторы и пульсоксиметры для контроля состояния пациента</li>
-              <li>Кислородный концентратор — для животных с дыхательной недостаточностью</li>
-              <li>Такое оснащение позволяет вести пациентов в критическом состоянии на месте, без переводов</li>
-            </ul>
-          </div>
-          <div>
-            <div class="seo-box">
-              <h5>SEO-ключи</h5>
-              <div class="kw"><span>круглосуточная ветклиника красноярск</span><span>стационар для животных красноярск</span><span>реанимация для животных красноярск</span><span>ивл для животных красноярск</span></div>
-              <div class="meta-line">Meta: Круглосуточный стационар для животных в Красноярске — ИВЛ, кардиомониторы, пульсоксиметры, кислородный концентратор. Клиника ЦентроВет, ул. Копылова, 44.</div>
-            </div>
-            <div class="cta-line">CTA: <b>«Экстренная помощь»</b> → телефон клиники</div>
-          </div>
-        </div>
-        <div style="padding:0 24px 24px;">
-          <div class="cover-box">
-            <h5>ТЗ на обложку</h5>
-            <div class="headline">«Стационар 24/7»</div>
-            <p>Плашка фирменным синим #42599E на всю обложку, белый крупный заголовок, простая белая иконка пульса/кардиомонитора. Лапка-водяной знак #DAF6F7 полупрозрачно на фоне.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="news-card">
-        <div class="news-head">
-          <div><div class="idx">Тема 04 / 04 · ветаптека</div><h3>Ветеринарная аптека при клинике ЦентроВет: препараты с учётом назначений врача</h3></div>
+          <div><div class="idx">Тема 06 / 06 · профилактика</div><h3>Профилактика в ЦентроВет: вакцинация, чипирование и стерилизация</h3></div>
           <span class="angle-tag">Сервисная</span>
         </div>
         <div class="news-body">
           <div>
             <h5>Тезисы</h5>
             <ul class="thesis">
-              <li>При клинике ЦентроВет работает собственная ветеринарная аптека</li>
-              <li>В ассортименте — антибиотики и антибактериальные препараты, контрацептивы, лечебные препараты для животных</li>
-              <li>Подбор препаратов с учётом назначений врача клиники</li>
-              <li>Диагностика, приём и покупка препаратов — в одном месте, на ул. Копылова, 44</li>
-              <li>Уточнить наличие и стоимость конкретного препарата можно по телефону клиники</li>
+              <li>Вакцинация и чипирование — регулярные профилактические процедуры в клинике</li>
+              <li>Кастрация и стерилизация проводятся как плановые операции под контролем анестезиолога</li>
+              <li>Профилактика снижает риск серьёзных заболеваний и экстренных случаев</li>
+              <li>Все процедуры — в той же клинике, что диагностика и стационар, без дополнительных переездов</li>
+              <li>Перед процедурой — консультация с лечащим врачом</li>
             </ul>
           </div>
           <div>
             <div class="seo-box">
               <h5>SEO-ключи</h5>
-              <div class="kw"><span>ветаптека красноярск</span><span>ветеринарная аптека копылова</span><span>купить ветпрепараты красноярск</span><span>антибиотики для животных красноярск</span></div>
-              <div class="meta-line">Meta: Ветеринарная аптека при клинике ЦентроВет в Красноярске — антибиотики, лечебные препараты и контрацептивы для животных с учётом назначений врача. Ул. Копылова, 44.</div>
+              <div class="kw"><span>вакцинация животных красноярск</span><span>чипирование животных красноярск</span><span>стерилизация кошек красноярск</span><span>кастрация собак красноярск</span></div>
+              <div class="meta-line">Meta: Вакцинация, чипирование, кастрация и стерилизация животных в Красноярске — клиника ЦентроВет, ул. Копылова, 44. Консультация с врачом перед процедурой.</div>
             </div>
-            <div class="cta-line">CTA: <b>«Уточнить наличие препарата»</b> → телефон клиники</div>
+            <div class="cta-line">CTA: <b>«Записаться на профилактический приём»</b> → сайт / телефон</div>
           </div>
         </div>
         <div style="padding:0 24px 24px;">
           <div class="cover-box">
             <h5>ТЗ на обложку</h5>
-            <div class="headline">«Аптека при клинике»</div>
-            <p>Белый фон, синяя иконка-капсула/крест #42599E, заголовок чёрным жирным гротеском. Лапка-водяной знак декоративно, без фото людей.</p>
+            <div class="headline">«Профилактика — забота на опережение»</div>
+            <p>Белый фон, синяя плашка #42599E снизу с заголовком белым текстом, простая иконка шприца/чипа. Реальное фото питомца на приёме (тёплый свет, стиль фото сайта).</p>
           </div>
         </div>
       </article>
@@ -385,66 +340,36 @@
 
   <section id="stories">
     <span class="eyebrow">05 · Сторис</span>
-    <h2>4 темы для сторис — 1 слайд</h2>
+    <h2>2 темы для сторис — 1 слайд</h2>
     <p class="lede">Формат — один слайд на тему. Только сухие тезисы, зеркалят новости 1:1, без развёрнутых текстов.</p>
 
     <div class="story-grid">
 
       <article class="story-card">
-        <div class="story-card-title">Сторис 01 — Кто мы</div>
+        <div class="story-card-title">Сторис 05 — Диагностика</div>
         <div class="story-body">
-          <h4>ЦентроВет: клиника + ветаптека</h4>
+          <h4>УЗИ, рентген, анализы</h4>
           <ul>
-            <li>Красноярск, ул. Копылова, 44</li>
-            <li>9:00–21:00, стационар — 24/7</li>
-            <li>Рейтинг 4,7</li>
-            <li>Узкие специалисты по направлениям</li>
-            <li>Своя ветаптека при клинике</li>
+            <li>Своя лаборатория в клинике</li>
+            <li>УЗИ и рентген на месте</li>
+            <li>Экспресс-анализы — в день обращения</li>
+            <li>Для плановых осмотров и срочных случаев</li>
           </ul>
-          <div class="story-design"><b>Дизайн слайда</b><br>Белый фон, синяя плашка #42599E снизу с заголовком, лапка-водяной знак #DAF6F7 в углу, реальное фото питомца.</div>
+          <div class="story-design"><b>Дизайн слайда</b><br>Белый фон, синяя иконка-плашка #42599E (УЗИ/рентген), заголовок чёрным жирным гротеском, лапка-водяной знак #DAF6F7 декоративно.</div>
         </div>
       </article>
 
       <article class="story-card">
-        <div class="story-card-title">Сторис 02 — Врачи</div>
+        <div class="story-card-title">Сторис 06 — Профилактика</div>
         <div class="story-body">
-          <h4>Узкие специалисты</h4>
+          <h4>Вакцинация и стерилизация</h4>
           <ul>
-            <li>Хирург-ортопед-нейрохирург</li>
-            <li>Кардиолог-пульмонолог</li>
-            <li>Дерматолог</li>
-            <li>Хирург-онколог</li>
-            <li>Запись — на сайте, раздел «Врачи»</li>
+            <li>Вакцинация и чипирование</li>
+            <li>Кастрация и стерилизация — под контролем анестезиолога</li>
+            <li>Консультация с врачом перед процедурой</li>
+            <li>Всё в одной клинике — Копылова, 44</li>
           </ul>
-          <div class="story-design"><b>Дизайн слайда</b><br>Белый фон, круглые фото врачей сеткой, синяя плашка-заголовок #42599E, подписи специализаций моно-шрифтом.</div>
-        </div>
-      </article>
-
-      <article class="story-card">
-        <div class="story-card-title">Сторис 03 — Стационар</div>
-        <div class="story-body">
-          <h4>Стационар 24/7</h4>
-          <ul>
-            <li>Помощь в критическом состоянии — круглосуточно</li>
-            <li>ИВЛ</li>
-            <li>Кардиомониторы и пульсоксиметры</li>
-            <li>Кислородный концентратор</li>
-          </ul>
-          <div class="story-design"><b>Дизайн слайда</b><br>Плашка фирменным синим #42599E на весь слайд, белый заголовок, простая белая иконка пульса.</div>
-        </div>
-      </article>
-
-      <article class="story-card">
-        <div class="story-card-title">Сторис 04 — Ветаптека</div>
-        <div class="story-body">
-          <h4>Аптека при клинике</h4>
-          <ul>
-            <li>Антибиотики и антибактериальные препараты</li>
-            <li>Лечебные препараты, контрацептивы для животных</li>
-            <li>Подбор с учётом назначений врача</li>
-            <li>Ул. Копылова, 44 — приём и аптека рядом</li>
-          </ul>
-          <div class="story-design"><b>Дизайн слайда</b><br>Белый фон, синяя иконка-капсула #42599E, заголовок чёрным жирным гротеском, лапка-водяной знак декоративно.</div>
+          <div class="story-design"><b>Дизайн слайда</b><br>Белый фон, синяя плашка #42599E снизу с заголовком, простая иконка шприца, реальное фото питомца на приёме.</div>
         </div>
       </article>
 
@@ -453,23 +378,39 @@
 
   <section id="map">
     <span class="eyebrow">06 · Карта тем</span>
-    <h2>Этап 1 — полный список</h2>
-    <p class="lede">Служебная сводка. При следующем этапе сюда добавятся новые строки, этап 1 свернётся в архив.</p>
+    <h2>Этап 2 — актуальный список <span class="current-badge">актуальный</span></h2>
+    <p class="lede">Служебная сводка. При следующем этапе сюда добавятся новые строки, этап 2 свернётся в архив.</p>
+
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>№</th><th>Формат</th><th>Тема</th><th>Угол</th></tr></thead>
         <tbody>
-          <tr><td>1</td><td class="fmt">Новость</td><td>ЦентроВет: узкие специалисты, стационар 24/7 и своя ветаптека</td><td>Имиджевая</td></tr>
-          <tr><td>2</td><td class="fmt">Новость</td><td>Хирург-ортопед, кардиолог, дерматолог и онколог — узкие специалисты</td><td>Экспертная</td></tr>
-          <tr><td>3</td><td class="fmt">Новость</td><td>Стационар для животных: помощь в критическом состоянии круглосуточно</td><td>Экспертная</td></tr>
-          <tr><td>4</td><td class="fmt">Новость</td><td>Ветеринарная аптека при клинике: препараты с учётом назначений врача</td><td>Сервисная</td></tr>
-          <tr><td>5</td><td class="fmt">Сторис</td><td>Кто мы</td><td>Зеркалит №1</td></tr>
-          <tr><td>6</td><td class="fmt">Сторис</td><td>Врачи</td><td>Зеркалит №2</td></tr>
-          <tr><td>7</td><td class="fmt">Сторис</td><td>Стационар</td><td>Зеркалит №3</td></tr>
-          <tr><td>8</td><td class="fmt">Сторис</td><td>Ветаптека</td><td>Зеркалит №4</td></tr>
+          <tr><td>5</td><td class="fmt">Новость</td><td>Диагностика: УЗИ, рентген и экспресс-анализы в день обращения</td><td>Экспертная</td></tr>
+          <tr><td>6</td><td class="fmt">Новость</td><td>Профилактика: вакцинация, чипирование и стерилизация</td><td>Сервисная</td></tr>
+          <tr><td>7</td><td class="fmt">Сторис</td><td>Диагностика</td><td>Зеркалит №5</td></tr>
+          <tr><td>8</td><td class="fmt">Сторис</td><td>Профилактика</td><td>Зеркалит №6</td></tr>
         </tbody>
       </table>
     </div>
+
+    <details class="history">
+      <summary>Пройденные этапы (1)</summary>
+      <div class="history-body tbl-plain">
+        <table>
+          <thead><tr><th>№</th><th>Формат</th><th>Тема</th><th>Угол</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="fmt">Новость</td><td>ЦентроВет: узкие специалисты, стационар 24/7 и своя ветаптека</td><td>Имиджевая</td></tr>
+            <tr><td>2</td><td class="fmt">Новость</td><td>Хирург-ортопед, кардиолог, дерматолог и онколог — узкие специалисты</td><td>Экспертная</td></tr>
+            <tr><td>3</td><td class="fmt">Новость</td><td>Стационар для животных: помощь в критическом состоянии круглосуточно</td><td>Экспертная</td></tr>
+            <tr><td>4</td><td class="fmt">Новость</td><td>Ветеринарная аптека при клинике: препараты с учётом назначений врача</td><td>Сервисная</td></tr>
+            <tr><td>5</td><td class="fmt">Сторис</td><td>Кто мы</td><td>Зеркалит №1</td></tr>
+            <tr><td>6</td><td class="fmt">Сторис</td><td>Врачи</td><td>Зеркалит №2</td></tr>
+            <tr><td>7</td><td class="fmt">Сторис</td><td>Стационар</td><td>Зеркалит №3</td></tr>
+            <tr><td>8</td><td class="fmt">Сторис</td><td>Ветаптека</td><td>Зеркалит №4</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
   </section>
 
 </main>
