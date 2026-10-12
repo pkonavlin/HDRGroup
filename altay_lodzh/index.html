@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Алтай ЛОДЖ — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4B5A5E; --line:#D9E1E1; --card:#FFFFFF; --bg:#F5F8F8;
+  --ocean-rgb:14,59,71;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+    --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+  --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Public Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',system-ui,sans-serif; text-wrap:balance; margin:0}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:24px}
+
+.topbar{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background:rgba(var(--ocean-rgb),.94);
+  backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topbar-inner{
+  max-width:1040px; margin:0 auto; padding:14px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; color:#F5F8F8; letter-spacing:.2px}
+.brand span{color:var(--roe)}
+.navlinks{display:flex; gap:4px; flex-wrap:wrap}
+.navlinks a{
+  font-size:13px; font-weight:600; color:#DDEDEE; text-decoration:none;
+  padding:7px 12px; border-radius:7px; transition:background .15s;
+}
+.navlinks a:hover, .navlinks a:focus-visible{background:rgba(255,255,255,.12); outline:none}
+
+.hero{padding:56px 0 40px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--teal); font-weight:600; margin-bottom:14px; display:block;
+}
+.hero h1{font-size:clamp(28px,4.2vw,42px); font-weight:700; color:var(--ocean); line-height:1.12; max-width:18ch}
+.hero p.lead{margin-top:14px; max-width:60ch; color:var(--ink-soft); font-size:16.5px}
+
+.factgrid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:32px;
+}
+.fact{background:var(--card); padding:16px 18px}
+.fact .k{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft)}
+.fact .v{margin-top:6px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:var(--ink); font-variant-numeric:tabular-nums}
+.fact .v small{font-family:'Public Sans',sans-serif; font-weight:500; font-size:13px; color:var(--ink-soft)}
+
+section{padding:52px 0}
+section + section{border-top:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
+.sec-num{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--roe); font-weight:600}
+.sec-head h2{font-size:clamp(22px,3vw,28px); color:var(--ocean); margin-top:6px}
+.sec-head p{margin-top:8px; color:var(--ink-soft); max-width:64ch}
+
+/* brandbook — swatches only, label lives on the color itself */
+.swatches{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-top:22px}
+.swatch{
+  border-radius:12px; padding:18px 16px; min-height:104px;
+  display:flex; flex-direction:column; justify-content:flex-end; border:1px solid var(--line);
+}
+.swatch .role{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.82}
+.swatch .name{font-weight:700; font-size:14.5px; margin-top:5px}
+.swatch .hex{font-family:'IBM Plex Mono',monospace; font-size:12.5px; margin-top:3px; opacity:.82}
+
+.cycle{display:grid; gap:14px}
+.cycle-row{display:flex; gap:16px; align-items:flex-start; padding:16px 18px; background:var(--card); border:1px solid var(--line); border-radius:12px}
+.cycle-row .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--teal); white-space:nowrap; padding-top:2px}
+.cycle-row p{margin:0; font-size:14.5px; color:var(--ink)}
+
+.tone-banner{
+  background:rgba(196,87,43,.08); border:1px solid rgba(196,87,43,.25); border-radius:10px;
+  padding:13px 16px; font-size:13px; color:var(--ink-soft); margin-bottom:24px; line-height:1.55;
+}
+.tone-banner b{color:var(--ink)}
+
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px 26px 24px; margin-top:20px;
+}
+.card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap}
+.card h3{font-size:20px; color:var(--ocean); max-width:44ch}
+.purpose{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--roe); background:rgba(196,87,43,.1); border:1px solid rgba(196,87,43,.3); border-radius:20px; padding:5px 11px; white-space:nowrap;
+}
+:root[data-theme="dark"] .purpose{background:rgba(224,130,88,.12)}
+
+.intro{
+  margin-top:16px; font-size:15px; line-height:1.6; color:var(--ink);
+  padding:14px 16px; background:var(--bg); border-radius:10px; border-left:3px solid var(--teal);
+}
+.intro .lbl{display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--teal); margin-bottom:6px; font-weight:700}
+
+.thesis-lbl{display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-top:18px; margin-bottom:9px}
+.thesis{margin:0; padding-left:0; list-style:none; display:grid; gap:9px}
+.thesis li{position:relative; padding-left:18px; font-size:14.5px; color:var(--ink)}
+.thesis li::before{content:"—"; position:absolute; left:0; color:var(--teal); font-weight:600}
+
+.seo-box{margin-top:18px; padding:14px 16px; background:var(--bg); border:1px solid var(--line); border-radius:10px}
+.seo-box .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:8px; display:block}
+.meta-row{display:grid; gap:6px; margin-bottom:12px; font-size:13.5px}
+.meta-row b{color:var(--ink-soft); font-weight:600; font-size:12px}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip-kw{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--card); border:1px solid var(--line);
+  border-radius:6px; padding:4px 9px; color:var(--ink-soft);
+}
+.cta-line{margin-top:14px; font-size:13.5px; color:var(--ink-soft)}
+.cta-line b{color:var(--ink); font-weight:600}
+
+.cover-box{
+  margin-top:16px; padding:16px 18px; border-radius:10px; border:1px dashed var(--line);
+  background:linear-gradient(135deg,rgba(14,59,71,.04),rgba(196,87,43,.04));
+}
+.cover-box .lbl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--roe); margin-bottom:8px; display:block; font-weight:700}
+.cover-box .thesis-cover{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--ocean); margin-bottom:8px}
+.cover-box p{margin:0 0 6px; font-size:13.5px; color:var(--ink)}
+.cover-box p:last-child{margin-bottom:0}
+
+.story-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:16px}
+.story-top{display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:flex-start}
+.story-thesis{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:var(--ocean); max-width:40ch}
+.slide-no{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); white-space:nowrap; padding-top:3px}
+.facts-line{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px}
+.fact-pill{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--bg); border:1px solid var(--line);
+  border-radius:20px; padding:5px 12px; color:var(--ink); font-weight:500;
+}
+.design-note{margin-top:14px; padding:12px 14px; background:var(--bg); border-radius:9px; font-size:13.5px; color:var(--ink-soft)}
+.design-note b{color:var(--ink); font-weight:600}
+
+details.stage{border:1px solid var(--line); border-radius:12px; background:var(--card); margin-top:14px; overflow:hidden}
+details.stage[open]{border-color:var(--teal)}
+details.stage summary{
+  cursor:pointer; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  list-style:none; font-weight:700; font-family:'Bricolage Grotesque',sans-serif; color:var(--ocean); font-size:15.5px;
+}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+  padding:4px 10px; border-radius:20px; font-weight:700;
+}
+.badge.actual{background:rgba(27,107,120,.14); color:var(--teal); border:1px solid rgba(27,107,120,.35)}
+.badge.archive{background:var(--bg); color:var(--ink-soft); border:1px solid var(--line)}
+.stage-body{padding:0 20px 18px; display:grid; gap:8px}
+.stage-item{font-size:13.5px; color:var(--ink-soft); display:flex; gap:8px}
+.stage-item .fmt{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--roe); font-weight:700; white-space:nowrap; padding-top:1px}
+
+footer{padding:36px 0 56px}
+footer .srcs{display:flex; flex-wrap:wrap; gap:16px; font-size:13.5px}
+footer a{color:var(--teal); text-decoration:none; font-weight:600}
+footer a:hover{text-decoration:underline}
+footer .fin{margin-top:18px; font-size:12px; color:var(--ink-soft)}
+
+@media(max-width:640px){
+  .wrap{padding-inline:16px}
+  .topbar-inner{padding:12px 16px}
+  .navlinks{width:100%; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch}
+  .navlinks a{white-space:nowrap; flex:none}
+}
+</style>
+</head>
+<body>
+<style>
+.stage-item .txt{display:flex; flex-direction:column; gap:2px; min-width:0}
+.stage-item .txt b{color:var(--ink); font-weight:600}
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Алтай ЛОДЖ <span>·</span> ТЗ на контент</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero" id="company" style="padding-top:48px">
+    <span class="eyebrow">Проживание и отдых в домах на Алтае · пос. Турбаза Юность</span>
+    <h1>Алтай ЛОДЖ — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 темы для новостей с обложкой + 4 темы для сторис (один слайд на тему). Публикация — карточка компании «Алтай ЛОДЖ» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v" style="font-size:15.5px">Проживание, отдых в домах на Алтае</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v" style="font-size:15.5px">пос. Турбаза Юность, ул. Чуйская, 32</div></div>
+      <div class="fact"><div class="k">Дома</div><div class="v">4 <small>Мини · Фэмили · Комфорт · Биг</small></div></div>
+      <div class="fact"><div class="k">Для кого</div><div class="v" style="font-size:15.5px">Пары, семьи с детьми, компании друзей</div></div>
+      <div class="fact"><div class="k">До Катуни</div><div class="v">5 мин <small>пешком</small></div></div>
+      <div class="fact"><div class="k">У каждого дома</div><div class="v" style="font-size:15.5px">Своя беседка, мангал <small>уличная мебель</small></div></div>
+      <div class="fact"><div class="k">Заселение</div><div class="v" style="font-size:15.5px">Круглосуточно <small>по договорённости</small></div></div>
+      <div class="fact"><div class="k">Питомцы</div><div class="v" style="font-size:15.5px">Проживание с питомцами</div></div>
+      <div class="fact"><div class="k">Цены</div><div class="v">от 7 000 ₽ <small>Мини Лодж</small></div></div>
+      <div class="fact"><div class="k">Акции</div><div class="v" style="font-size:15.5px">Скидки в межсезонье</div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v" style="font-size:15.5px">На «вы» <small>допустим неформальный тон</small></div></div>
+      <div class="fact"><div class="k">Телефон</div><div class="v mono" style="font-size:15px">8 913 692-65-69</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Алтай ЛОДЖ»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис. Основной цвет компании — бирюзовый.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="swatch" style="background:#2A9D97; color:#F7FAF9">
+        <div class="role">Основной</div><div class="name">Бирюза Катуни</div><div class="hex">#2A9D97</div>
+      </div>
+      <div class="swatch" style="background:#17605D; color:#F2F0EC">
+        <div class="role">Второстепенный</div><div class="name">Глубокая бирюза</div><div class="hex">#17605D</div>
+      </div>
+      <div class="swatch" style="background:#EDCE73; color:#1F211D">
+        <div class="role">Акцентный</div><div class="name">Тёплое золото</div><div class="hex">#EDCE73</div>
+      </div>
+      <div class="swatch" style="background:#F2F0EC; color:#1F211D; border:1px solid #DEDBD3">
+        <div class="role">Фоновый</div><div class="name">Тёплый светлый</div><div class="hex">#F2F0EC</div>
+      </div>
+      <div class="swatch" style="background:#1F211D; color:#F2F0EC">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#1F211D</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа 1</h2>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">Шаг 1</div><p>Отдых на Алтае: отдельные тёплые дома у Катуни, своя беседка и мангал у каждого дома.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 2</div><p>Новый год на Алтае: праздники и школьные каникулы в отдельном доме, заселение круглосуточно по договорённости.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 3</div><p>Локация: близость к курорту «Манжерок», детскому парку Дримвуд и туристическим достопримечательностям.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 4</div><p>Выбор дома: четыре формата для пары, семьи с детьми и компании друзей, цены от 7 000 ₽, проживание с питомцами.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы по приоритетам компании: отдых на Алтае, Новый год, близость к Манжероку и детскому парку Дримвуд. Каждая — с вступлением, тезисами, SEO-блоком и отдельным ТЗ на обложку. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+
+    <div class="tone-banner"><b>Тон текста:</b> обращение на «вы», допустим неформальный тон, без грубости и фамильярности. Тёплое вступление от первого лица компании перед тезисами — без перечисления полного списка услуг в каждой карточке. SEO-ключи — отдельным блоком для копирайтера, в самом тексте вплетаются органично, не списком. Цены — в формате «от N ₽». CTA — только словами, без номера телефона и e-mail в теле текста (правила модерации Яндекс Карт).</div>
+
+    <!-- НОВОСТЬ 1 -->
+    <div class="card">
+      <div class="card-top">
+        <h3>Отдых на Алтае в «Алтай ЛОДЖ» — отдельные тёплые дома в 5 минутах пешком от Катуни</h3>
+        <span class="purpose">Имиджевый / отдых на Алтае</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление</span>Мы сдаём отдельные благоустроенные тёплые домики на Алтае — до реки Катунь от нас 5 минут пешком.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Алтай ЛОДЖ» — проживание и отдых в домах на Алтае, посёлок Турбаза Юность, улица Чуйская, 32</li>
+        <li>Каждый дом стоит отдельно: своя мангальная зона, беседка и уличная мебель</li>
+        <li>Дома отдельные, благоустроенные и тёплые</li>
+        <li>До реки Катунь — 5 минут пешком</li>
+        <li>Отдых для пары, семьи с детьми и компании друзей</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Отдых на Алтае в отдельных домах у Катуни — «Алтай ЛОДЖ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Отдых на Алтае в тёплых домах у Катуни | Алтай ЛОДЖ</span></div>
+        <div class="meta-row"><span><b>Description · </b>«Алтай ЛОДЖ» — отдельные благоустроенные тёплые дома на Алтае в посёлке Турбаза Юность. До Катуни 5 минут пешком, у каждого дома своя беседка и мангал.</span></div>
+        <div class="chips">
+          <span class="chip-kw">отдых на Алтае</span><span class="chip-kw">дома на Алтае посуточно</span>
+          <span class="chip-kw">отдых у Катуни</span><span class="chip-kw">домики на Алтае у реки</span>
+          <span class="chip-kw">снять дом на Алтае</span><span class="chip-kw">тёплые домики Алтай</span>
+          <span class="chip-kw">отдельный дом с беседкой Алтай</span><span class="chip-kw">дом с мангалом на Алтае</span>
+          <span class="chip-kw">турбаза Юность Алтай</span><span class="chip-kw">отдых в Майминском районе</span>
+          <span class="chip-kw">аренда дома Республика Алтай</span><span class="chip-kw">отдых на Алтае для пары</span>
+          <span class="chip-kw">где остановиться на Алтае</span><span class="chip-kw">база отдыха у Катуни</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> выбирайте даты и бронируйте дом для отдыха на Алтае.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«5 минут до Катуни»</div>
+        <p>Композиция: отдельный дом с беседкой и мангальной зоной на фоне гор, в нижней трети — плашка с тезисом. Текст не больше 20% площади изображения.</p>
+        <p>Цвета: плашка — бирюза Катуни #2A9D97, тезис — тёплый светлый #F2F0EC, тонкая линия-акцент — тёплое золото #EDCE73.</p>
+      </div>
+    </div>
+
+    <!-- НОВОСТЬ 2 -->
+    <div class="card">
+      <div class="card-top">
+        <h3>Новый год на Алтае в «Алтай ЛОДЖ» — праздники в отдельном тёплом доме</h3>
+        <span class="purpose">Продающий / Новый год</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление</span>Встретить Новый год на Алтае можно в своём отдельном доме — тёплом, с собственной беседкой и мангалом.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Новогодние праздники в отдельном благоустроенном тёплом доме</li>
+        <li>У каждого дома своя беседка, мангальная зона и уличная мебель</li>
+        <li>Праздники и школьные каникулы — повод для поездки на Алтай всей семьёй</li>
+        <li>Дома для пары, семьи с детьми и компании друзей</li>
+        <li>Заселение круглосуточно по договорённости</li>
+        <li>Рядом курорт «Манжерок» — можно совместить праздники с поездкой на курорт</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Новый год на Алтае в отдельном доме — «Алтай ЛОДЖ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Новый год на Алтае в тёплом доме с беседкой | Алтай ЛОДЖ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Новогодние праздники и школьные каникулы на Алтае в отдельном тёплом доме «Алтай ЛОДЖ»: своя беседка и мангал, рядом курорт «Манжерок», заселение круглосуточно по договорённости.</span></div>
+        <div class="chips">
+          <span class="chip-kw">Новый год на Алтае</span><span class="chip-kw">новогодние праздники на Алтае</span>
+          <span class="chip-kw">снять дом на Новый год Алтай</span><span class="chip-kw">Новый год в доме на Алтае</span>
+          <span class="chip-kw">зимний отдых на Алтае</span><span class="chip-kw">школьные каникулы на Алтае</span>
+          <span class="chip-kw">Новый год с семьёй на Алтае</span><span class="chip-kw">Новый год компанией друзей Алтай</span>
+          <span class="chip-kw">тёплый дом на Новый год</span><span class="chip-kw">Новый год рядом с Манжероком</span>
+          <span class="chip-kw">новогодний отдых Майминский район</span><span class="chip-kw">дом с мангалом на праздники</span>
+          <span class="chip-kw">куда поехать на Новый год Алтай</span><span class="chip-kw">аренда дома на новогодние каникулы</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> бронируйте дом на новогодние праздники заранее.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Новый год на Алтае»</div>
+        <p>Композиция: дом в зимний вечер со светящимися окнами, снег и горы на фоне; тезис в верхней трети.</p>
+        <p>Цвета: плашка под тезис — глубокая бирюза #17605D, текст — тёплый светлый #F2F0EC, акцент (огни, звезда) — тёплое золото #EDCE73.</p>
+      </div>
+    </div>
+
+    <!-- НОВОСТЬ 3 -->
+    <div class="card">
+      <div class="card-top">
+        <h3>«Алтай ЛОДЖ» рядом с курортом «Манжерок» и детским парком Дримвуд</h3>
+        <span class="purpose">Экспертный / локация</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление</span>Мы находимся рядом с курортом «Манжерок» и детским парком Дримвуд — отдых в доме легко совместить с поездками по Алтаю.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Рядом курорт «Манжерок» и детский парк Дримвуд</li>
+        <li>Близость к туристическим достопримечательностям Алтая</li>
+        <li>До реки Катунь — 5 минут пешком</li>
+        <li>От аэропорта Горно-Алтайска — 10 минут, до озера Ая — 10 минут, до Горно-Алтайска — 15 минут</li>
+        <li>Удобная база для семьи с детьми: после прогулок — отдых в своём доме с беседкой и мангалом</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Дома рядом с курортом «Манжерок» и парком Дримвуд — «Алтай ЛОДЖ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Жильё рядом с Манжероком и парком Дримвуд | Алтай ЛОДЖ</span></div>
+        <div class="meta-row"><span><b>Description · </b>«Алтай ЛОДЖ» — отдельные дома рядом с курортом «Манжерок» и детским парком Дримвуд, 5 минут пешком до Катуни, 10 минут до аэропорта и озера Ая.</span></div>
+        <div class="chips">
+          <span class="chip-kw">жильё рядом с Манжероком</span><span class="chip-kw">дом рядом с курортом Манжерок</span>
+          <span class="chip-kw">где жить в Манжероке</span><span class="chip-kw">детский парк Дримвуд</span>
+          <span class="chip-kw">отдых с детьми на Алтае</span><span class="chip-kw">куда сходить с детьми на Алтае</span>
+          <span class="chip-kw">гостевой дом рядом с Манжероком</span><span class="chip-kw">отдых рядом с ГЛК Манжерок</span>
+          <span class="chip-kw">жильё рядом с аэропортом Горно-Алтайск</span><span class="chip-kw">дом рядом с озером Ая</span>
+          <span class="chip-kw">достопримечательности Майминского района</span><span class="chip-kw">где остановиться у Манжерока</span>
+          <span class="chip-kw">семейный отдых на Алтае</span><span class="chip-kw">домики у Катуни рядом с курортом</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> планируйте поездку на «Манжерок» и бронируйте дом рядом.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Рядом — Манжерок»</div>
+        <p>Композиция: горный пейзаж с видом на склоны и Катунь, в углу — пиктограмма точки на карте; тезис в нижнем левом углу.</p>
+        <p>Цвета: градиент снизу — глубокая бирюза #17605D, тезис — тёплый светлый #F2F0EC, пиктограмма — тёплое золото #EDCE73.</p>
+      </div>
+    </div>
+
+    <!-- НОВОСТЬ 4 -->
+    <div class="card">
+      <div class="card-top">
+        <h3>Четыре дома «Алтай ЛОДЖ» — для пары, семьи с детьми и компании друзей</h3>
+        <span class="purpose">Продающий / выбор дома</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление</span>У нас четыре дома для отдыха на Алтае — для пары, семьи с детьми и компании друзей, и вашего питомца тоже можно взять с собой.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Мини Лодж — 1–2 гостя, 19 м², от 7 000 ₽</li>
+        <li>Фэмили Лодж — 2–4 гостя, 26 м², от 8 000 ₽</li>
+        <li>Комфорт Лодж — 2–4 гостя, 36 м², отдельная спальня, от 10 000 ₽</li>
+        <li>Биг Лодж — 6–8 гостей, 60 м², 3 спальни, от 21 500 ₽</li>
+        <li>В каждом доме — кухня с СВЧ-печью, плитой, холодильником и чайником, ванная комната с феном, TV и Wi-Fi</li>
+        <li>Проживание с питомцами</li>
+        <li>В межсезонье действуют скидки</li>
+      </ul>
+
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Дома «Алтай ЛОДЖ» — четыре формата для отдыха на Алтае</span></div>
+        <div class="meta-row"><span><b>Title · </b>Аренда домов на Алтае от 7 000 ₽, можно с питомцами | Алтай ЛОДЖ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Четыре дома «Алтай ЛОДЖ»: Мини, Фэмили, Комфорт и Биг — от 1 до 8 гостей, от 7 000 ₽. Для пары, семьи с детьми и компании друзей, проживание с питомцами.</span></div>
+        <div class="chips">
+          <span class="chip-kw">аренда дома на Алтае</span><span class="chip-kw">дом на Алтае посуточно цена</span>
+          <span class="chip-kw">домик для двоих на Алтае</span><span class="chip-kw">дом для семьи с детьми Алтай</span>
+          <span class="chip-kw">дом на 8 человек Алтай</span><span class="chip-kw">дом для компании друзей Алтай</span>
+          <span class="chip-kw">отдых на Алтае с собакой</span><span class="chip-kw">дом на Алтае с питомцем</span>
+          <span class="chip-kw">домик с кухней на Алтае</span><span class="chip-kw">дом с тремя спальнями Алтай</span>
+          <span class="chip-kw">отдых на Алтае недорого</span><span class="chip-kw">скидки в межсезонье Алтай</span>
+          <span class="chip-kw">аренда домика Майминский район</span><span class="chip-kw">коттедж посуточно Республика Алтай</span>
+        </div>
+      </div>
+
+      <p class="cta-line"><b>CTA:</b> выбирайте дом под свою компанию и оставляйте заявку на бронирование.</p>
+
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«4 дома на выбор»</div>
+        <p>Композиция: интерьер дома — кухня-гостиная с диваном и кроватью, тёплый свет дерева; тезис в верхнем левом углу, рядом крупная цифра «4».</p>
+        <p>Цвета: плашка под тезис — бирюза Катуни #2A9D97, текст — тёплый светлый #F2F0EC, цифра «4» — тёплое золото #EDCE73.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">До Катуни — 5 минут пешком</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">Отдельные тёплые дома</span>
+        <span class="fact-pill">Своя беседка и мангал</span>
+        <span class="fact-pill">Уличная мебель</span>
+        <span class="fact-pill">Катунь — 5 мин пешком</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бирюза Катуни #2A9D97, крупная цифра «5 минут» тёплым светлым #F2F0EC, пункты списком с маркерами тёплым золотом #EDCE73.</div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">Новый год на Алтае — в своём доме</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">Отдельный тёплый дом</span>
+        <span class="fact-pill">Своя беседка и мангал</span>
+        <span class="fact-pill">Школьные каникулы</span>
+        <span class="fact-pill">Заселение круглосуточно по договорённости</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон глубокая бирюза #17605D, заголовок тёплым светлым #F2F0EC, новогодние огоньки и звёзды тёплым золотом #EDCE73.</div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">Рядом — «Манжерок» и парк Дримвуд</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">Курорт «Манжерок»</span>
+        <span class="fact-pill">Детский парк Дримвуд</span>
+        <span class="fact-pill">Аэропорт — 10 мин</span>
+        <span class="fact-pill">Озеро Ая — 10 мин</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото горного пейзажа с затемнением глубокой бирюзой #17605D, список тёплым светлым #F2F0EC, маркеры-точки тёплым золотом #EDCE73.</div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-thesis">4 дома — от 7 000 ₽</div>
+        <span class="slide-no mono">1 слайд</span>
+      </div>
+      <div class="facts-line">
+        <span class="fact-pill">Мини · 1–2 гостя · от 7 000 ₽</span>
+        <span class="fact-pill">Фэмили · 2–4 гостя · от 8 000 ₽</span>
+        <span class="fact-pill">Комфорт · 2–4 гостя · от 10 000 ₽</span>
+        <span class="fact-pill">Биг · 6–8 гостей · от 21 500 ₽</span>
+        <span class="fact-pill">Можно с питомцами</span>
+      </div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёплый светлый #F2F0EC, четыре строки-таблички; названия домов бирюзой Катуни #2A9D97, цены графитом #1F211D, пункт «Можно с питомцами» — плашка тёплого золота #EDCE73.</div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — отдых на Алтае, Новый год, Манжерок, выбор дома <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Отдых на Алтае — отдельные тёплые дома в 5 минутах от Катуни</b>Отдельные дома, своя беседка и мангал, для пары, семьи и компании</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>До Катуни — 5 минут пешком</b>Отдельные тёплые дома, беседка, мангал, уличная мебель</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Новый год на Алтае — праздники в отдельном тёплом доме</b>Праздники и школьные каникулы, заселение круглосуточно по договорённости</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Новый год на Алтае — в своём доме</b>Тёплый дом, беседка и мангал, каникулы</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Рядом с курортом «Манжерок» и детским парком Дримвуд</b>Локация, достопримечательности, Катунь, аэропорт и озеро Ая</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Рядом — «Манжерок» и парк Дримвуд</b>Что рядом с домами</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Четыре дома — для пары, семьи с детьми и компании друзей</b>Мини, Фэмили, Комфорт, Биг, цены от 7 000 ₽, питомцы, скидки в межсезонье</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>4 дома — от 7 000 ₽</b>Вместимость и цена каждого дома, можно с питомцами</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num" style="margin-bottom:10px">Источники</div>
+    <div class="srcs">
+      <a href="https://sevenlodge.ru/" target="_blank" rel="noopener">sevenlodge.ru</a>
+      <a href="https://yandex.ru/maps/-/CXuW4Dji" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <span>Анкета компании «Старт проекта» от 12.10.2026</span>
+    </div>
+    <div class="fin">Публикация — карточка компании «Алтай ЛОДЖ» на Яндекс Картах и 2ГИС.</div>
+  </footer>
+
+</div>
+</body>
+</html>
