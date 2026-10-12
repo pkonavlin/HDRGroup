@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вирджиния — ТЗ на контент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* single-column ТЗ document under one sticky horizontal bar */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4B5A5E; --line:#D9E1E1; --card:#FFFFFF; --bg:#F5F8F8;
+  --bar:rgba(14,59,71,.95); --bar-ink:#DDEDEE; --bar-brand:#F5F8F8;
+  --roe-tint:rgba(196,87,43,.1); --roe-edge:rgba(196,87,43,.3); --teal-tint:rgba(27,107,120,.14); --teal-edge:rgba(27,107,120,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+    --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+    --bar:rgba(8,26,31,.95); --roe-tint:rgba(224,130,88,.12); --roe-edge:rgba(224,130,88,.35); --teal-tint:rgba(79,179,196,.14); --teal-edge:rgba(79,179,196,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+  --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+  --bar:rgba(8,26,31,.95); --roe-tint:rgba(224,130,88,.12); --roe-edge:rgba(224,130,88,.35); --teal-tint:rgba(79,179,196,.14); --teal-edge:rgba(79,179,196,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;text-wrap:balance;margin:0}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:24px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bar);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-inner{max-width:1040px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:var(--bar-brand);letter-spacing:.2px}
+.brand span{color:#E08258}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap}
+.navlinks a{font-size:13px;font-weight:600;color:var(--bar-ink);text-decoration:none;padding:7px 12px;border-radius:7px;transition:background .15s}
+.navlinks a:hover,.navlinks a:focus-visible{background:rgba(255,255,255,.12);outline:none}
+
+.hero{padding:48px 0 40px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:14px;display:block}
+.hero h1{font-size:clamp(28px,4.2vw,42px);font-weight:700;color:var(--ocean);line-height:1.12;max-width:20ch}
+.hero p.lead{margin-top:14px;max-width:62ch;color:var(--ink-soft);font-size:16.5px}
+.factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:32px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{margin-top:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.fact .v small{display:block;font-family:'Public Sans',sans-serif;font-weight:500;font-size:13px;color:var(--ink-soft);margin-top:2px}
+
+section{padding-block:52px}
+section + section{border-top:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--roe);font-weight:600}
+.sec-head h2{font-size:clamp(22px,3vw,28px);color:var(--ocean);margin-top:6px}
+.sec-head p{margin:8px 0 0;color:var(--ink-soft);max-width:64ch}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:22px}
+.swatch{border-radius:12px;padding:18px 16px;min-height:110px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.swatch .role{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.82}
+.swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:3px;opacity:.82}
+
+.cycle{display:grid;gap:14px}
+.cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.cycle-row .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--teal);white-space:nowrap;padding-top:2px;min-width:78px}
+.cycle-row p{margin:0;font-size:14.5px;color:var(--ink);min-width:0}
+
+.tone-banner{background:var(--roe-tint);border:1px solid var(--roe-edge);border-radius:10px;padding:13px 16px;font-size:13.5px;color:var(--ink-soft);margin-bottom:8px;line-height:1.55}
+.tone-banner b{color:var(--ink)}
+
+.period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:40px;padding-bottom:10px;border-bottom:2px solid var(--ocean)}
+.period:first-of-type{margin-top:24px}
+.period h3{font-size:19px;color:var(--ocean)}
+.period .pmeta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 26px 24px;margin-top:20px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.card-top > div{min-width:0}
+.num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);font-weight:600;letter-spacing:.04em}
+.card h3{font-size:20px;color:var(--ocean);max-width:46ch;margin-top:4px}
+.purpose{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);background:var(--roe-tint);border:1px solid var(--roe-edge);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.intro{margin-top:16px;font-size:15px;line-height:1.6;color:var(--ink);padding:14px 16px;background:var(--bg);border-radius:10px;border-left:3px solid var(--teal)}
+.intro .lbl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);margin-bottom:6px;font-weight:700}
+.thesis-lbl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-top:18px;margin-bottom:9px}
+.thesis{margin:0;padding-left:0;list-style:none;display:grid;gap:9px}
+.thesis li{position:relative;padding-left:18px;font-size:14.5px;color:var(--ink)}
+.thesis li::before{content:"—";position:absolute;left:0;color:var(--teal);font-weight:600}
+.seo-box{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.seo-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:8px;display:block}
+.meta-row{display:grid;gap:6px;margin-bottom:10px;font-size:13.5px}
+.meta-row b{color:var(--ink-soft);font-weight:600;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-kw{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.cta-line{margin:14px 0 0;font-size:13.5px;color:var(--ink-soft)}
+.cta-line b{color:var(--ink);font-weight:600}
+.cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--line);background:var(--bg)}
+.cover-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:8px;display:block;font-weight:700}
+.cover-box .thesis-cover{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:var(--ocean);margin-bottom:8px}
+.cover-box p{margin:0 0 6px;font-size:13.5px;color:var(--ink)}
+.cover-box p:last-child{margin-bottom:0}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column}
+.story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.story-thesis{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:var(--ocean);min-width:0}
+.slide-no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);white-space:nowrap;padding-top:3px}
+.facts-line{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.fact-pill{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:5px 12px;color:var(--ink);font-weight:500}
+.design-note{margin-top:auto;padding:12px 14px;background:var(--bg);border-radius:9px;font-size:13.5px;color:var(--ink-soft)}
+.facts-line + .design-note{margin-top:14px}
+.design-note b{color:var(--ink);font-weight:600}
+
+details.stage{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:14px;overflow:hidden}
+details.stage[open]{border-color:var(--teal)}
+details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;color:var(--ocean);font-size:15.5px}
+details.stage summary:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:20px;font-weight:700;white-space:nowrap}
+.badge.actual{background:var(--teal-tint);color:var(--teal);border:1px solid var(--teal-edge)}
+.badge.next{background:var(--bg);color:var(--ink-soft);border:1px solid var(--line)}
+.stage-body{padding:0 20px 18px;display:grid;gap:10px}
+.stage-item{font-size:13.5px;color:var(--ink-soft);display:flex;gap:10px}
+.stage-item .fmt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--roe);font-weight:700;white-space:nowrap;padding-top:1px;min-width:74px}
+.stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stage-item .txt b{color:var(--ink);font-weight:600}
+
+footer{padding-block:36px 56px;border-top:1px solid var(--line)}
+footer .srcs{display:flex;flex-wrap:wrap;gap:16px;font-size:13.5px;margin-top:10px}
+footer a{color:var(--teal);text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline}
+
+@media(max-width:640px){
+  .wrap{padding-inline:16px}
+  .topbar-inner{padding:12px 16px}
+  .navlinks{width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .navlinks a{white-space:nowrap;flex:none}
+  .card{padding:20px 18px}
+  .story-grid{grid-template-columns:1fr}
+  .cycle-row{flex-direction:column;gap:6px}
+}
+.src{display:inline-block;margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--teal);border:1px solid var(--teal-edge);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.q{font-style:normal}
+</style>
+
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Гостиница «Вирджиния» <span>·</span> ТЗ на контент</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero" id="company">
+    <span class="eyebrow">Гостиница · Йошкар-Ола, Марий Эл</span>
+    <h1>Гостиница «Вирджиния» — ТЗ на контент, 3 периода</h1>
+    <p class="lead">Новости с обложкой и сторис в один слайд на три периода работы: период 1 — 4 + 4, период 2 — 2 + 2, период 3 — 2 + 2. Публикация — карточка компании «Вирджиния» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Гостиница <small>Гостиница предоставляет услуги по временному проживанию для гостей нашего города Йошкар-Ола.</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">переулок Первомайский, д.12 <small>424031, Марий Эл, город Йошкар-Ола</small></div></div>
+      <div class="fact"><div class="k">Расположение</div><div class="v">В самом центре города <small>на пересечении двух основных улиц Йошкар-Олы — Красноармейской и Первомайской</small></div></div>
+      <div class="fact"><div class="k">Рядом</div><div class="v">Парк — 5 минут <small>Центральный парк в 5 минутах ходьбы, до Набережной минут 20 пешком</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">24 часа, 7 дней в неделю <small>Без обедов и перерывов.</small></div></div>
+      <div class="fact"><div class="k">Номера</div><div class="v">от 3150 до 5300 руб <small>от стандартов до Полулюксов и Студий; цена может быть выше, зависит от сезона и загрузки</small></div></div>
+      <div class="fact"><div class="k">Для семей</div><div class="v">Номера 3-х, 4-х местные</div></div>
+      <div class="fact"><div class="k">Завтрак</div><div class="v">Шведский стол <small>Завтрак для всех гостей в подарок от отеля.</small></div></div>
+      <div class="fact"><div class="k">Кафе</div><div class="v">Своё полноценное кафе <small>блюда европейской и национальной марийской кухни</small></div></div>
+      <div class="fact"><div class="k">Сауна</div><div class="v">Финская сауна <small>с большим бассейном и сухой парной. Без веников.</small></div></div>
+      <div class="fact"><div class="k">Парковка</div><div class="v">Бесплатная охраняемая <small>на территории отеля</small></div></div>
+      <div class="fact"><div class="k">Ещё услуги</div><div class="v">Экскурсии по городу, конференц-услуги</div></div>
+      <div class="fact"><div class="k">Акция</div><div class="v">5% по промокоду на сайте <small>бессрочно</small></div></div>
+      <div class="fact"><div class="k">Тон</div><div class="v">На «вы» <small>Легкая ирония, дружеский стиль общения.</small></div></div>
+      <div class="fact"><div class="k">Телефон для карточки</div><div class="v mono">8 937 110 20 50</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Вирджинии»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: песочное золото шапки и подвала сайта, светлый песок кнопок, золото логотипа, молочный беж фона и графит текста.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#B29A73;color:#222529;border-color:#B29A73">
+        <div class="role">Основной</div><div class="name">Песочное золото</div><div class="hex">#B29A73</div>
+      </div>
+      <div class="swatch" style="background:#D2BC98;color:#222529;border-color:#D2BC98">
+        <div class="role">Второстепенный</div><div class="name">Светлый песок</div><div class="hex">#D2BC98</div>
+      </div>
+      <div class="swatch" style="background:#D9B86A;color:#222529;border-color:#D9B86A">
+        <div class="role">Акцентный</div><div class="name">Золото логотипа</div><div class="hex">#D9B86A</div>
+      </div>
+      <div class="swatch" style="background:#F0EBE3;color:#222529;border-color:#DCD3C4">
+        <div class="role">Фоновый</div><div class="name">Молочный беж</div><div class="hex">#F0EBE3</div>
+      </div>
+      <div class="swatch" style="background:#222529;color:#F0EBE3;border-color:#222529">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#222529</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем по периодам</h2>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">Период 1</div><p>Знакомство с гостиницей: расположение в центре города, сервис для гостей, номера и цены, кафе и завтрак в подарок.</p></div>
+      <div class="cycle-row"><div class="tag">Период 2</div><p>Услуги и город: финская сауна с большим бассейном, маршрут по Йошкар-Оле на один день и экскурсии по городу.</p></div>
+      <div class="cycle-row"><div class="tag">Период 3</div><p>Деловые путешественники и семьи: конференц-услуги и Йошкар-Ола для поездки всей семьёй с размещением в номерах 3-х, 4-х местных.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>8 тем с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», лёгкая ирония, дружеский стиль общения. Каждая новость начинается с вступления от лица гостиницы, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Период 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1</span><h3>«Вирджиния» — гостиница в самом центре Йошкар-Олы</h3></div>
+        <span class="purpose">Имиджевый / локация</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Гостиница находится в центре столицы Марий Эл. При этом до всех основных достопримечательностей рукой подать.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>В самом центре города на пересечении двух основных улиц Йошкар-Олы — Красноармейской и Первомайской.<span class="src">анкета</span></li>
+        <li>Рядом с остановкой общественного транспорта, что удобно для путешественников.<span class="src">анкета</span></li>
+        <li>Центральный парк в 5 минутах ходьбы, до Набережной минут 20 пешком.<span class="src">анкета</span></li>
+        <li>Рядом магазины, кафе, торговые центры.<span class="src">анкета</span></li>
+        <li>Режим работы: 24 часа, 7 дней в неделю. Без обедов и перерывов.<span class="src">анкета</span></li>
+        <li>Бесплатная охраняемая парковка на территории отеля.<span class="src">анкета</span></li>
+        <li>Отель достаточно популярен среди гостей Йошкар-Олы, как туристов, так и деловых путешественников.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Гостиница «Вирджиния» в центре Йошкар-Олы</span></div>
+        <div class="meta-row"><span><b>Title · </b>Гостиница в центре Йошкар-Олы с бесплатной парковкой | Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Гостиница «Вирджиния» в самом центре Йошкар-Олы на пересечении Красноармейской и Первомайской: Центральный парк в 5 минутах ходьбы, рядом остановка, 24 часа, 7 дней в неделю, бесплатная охраняемая парковка.</span></div>
+        <div class="chips">
+          <span class="chip-kw">гостиница в центре Йошкар-Олы</span><span class="chip-kw">отель Йошкар-Ола центр</span>
+          <span class="chip-kw">гостиница Йошкар-Ола</span><span class="chip-kw">где остановиться в Йошкар-Оле</span>
+          <span class="chip-kw">гостиница рядом с Центральным парком Йошкар-Ола</span><span class="chip-kw">гостиница на Первомайской Йошкар-Ола</span>
+          <span class="chip-kw">отель с бесплатной парковкой Йошкар-Ола</span><span class="chip-kw">круглосуточная гостиница Йошкар-Ола</span>
+          <span class="chip-kw">гостиница Марий Эл</span><span class="chip-kw">отель для туристов Йошкар-Ола</span>
+          <span class="chip-kw">гостиница для командированных Йошкар-Ола</span><span class="chip-kw">гостиница рядом с набережной Йошкар-Ола</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте номер в центре Йошкар-Олы на сайте гостиницы.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«В центре Йошкар-Олы»</div>
+        <p>Композиция: вечерний вид центра города или фасад гостиницы из архива компании; тезис на плашке в нижней трети, в углу — пиктограмма точки на карте.</p>
+        <p>Цвета: плашка — графит #222529, тезис — молочный беж #F0EBE3, пиктограмма и тонкая линия под тезисом — золото логотипа #D9B86A.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2</span><h3>Сервис для гостей «Вирджинии»: бесплатные и платные услуги</h3></div>
+        <span class="purpose">Имиджевый / сервис</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Бесплатная бронь, бесплатная охраняемая парковка и бесплатный Wi-Fi.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Набор бесплатных и платных услуг.<span class="src">анкета</span></li>
+        <li>Бесплатно: бронь, камера хранения, вызов такси, городская телефонная связь.<span class="src">сайт</span></li>
+        <li>Бесплатный Wi-Fi в номерах и на всей территории отеля.<span class="src">сайт</span></li>
+        <li>Если вам необходимо быстро, недорого и качественно постирать вещи, вы можете обратиться в прачечную в гостинице «Вирджиния».<span class="src">сайт</span></li>
+        <li>Собственная котельная — тепло и горячая вода круглогодично в любое время.<span class="src">сайт</span></li>
+        <li>Самые популярные услуги: Финская сауна, сувенирная лавка, салон красоты.<span class="src">сайт</span></li>
+        <li>Получить визовую поддержку.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Услуги для гостей гостиницы «Вирджиния» в Йошкар-Оле</span></div>
+        <div class="meta-row"><span><b>Title · </b>Гостиница в Йошкар-Оле с бесплатным Wi-Fi и камерой хранения | Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Бесплатно в гостинице «Вирджиния»: бронь, камера хранения, вызов такси, городская телефонная связь, Wi-Fi на всей территории. Прачечная, сувенирная лавка, салон красоты, визовая поддержка.</span></div>
+        <div class="chips">
+          <span class="chip-kw">услуги гостиницы Йошкар-Ола</span><span class="chip-kw">гостиница с бесплатным Wi-Fi Йошкар-Ола</span>
+          <span class="chip-kw">камера хранения Йошкар-Ола</span><span class="chip-kw">прачечная в гостинице Йошкар-Ола</span>
+          <span class="chip-kw">бесплатное бронирование гостиница</span><span class="chip-kw">вызов такси гостиница Йошкар-Ола</span>
+          <span class="chip-kw">салон красоты в гостинице</span><span class="chip-kw">визовая поддержка Йошкар-Ола</span>
+          <span class="chip-kw">гостиница Йошкар-Ола</span><span class="chip-kw">отель в центре Йошкар-Олы</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте номер на сайте гостиницы — бронь бесплатная.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Сервис для гостей»</div>
+        <p>Композиция: стойка ресепшен или холл гостиницы из архива компании; тезис в верхней трети, под ним ряд из 3–4 тонких пиктограмм (бронь, багаж, такси, Wi-Fi).</p>
+        <p>Цвета: затемнение верхней трети — графит #222529, тезис — молочный беж #F0EBE3, пиктограммы — золото логотипа #D9B86A.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3</span><h3>Номера «Вирджинии»: от стандартов до полулюксов и студий</h3></div>
+        <span class="purpose">Продающий / номера</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Предоставляем номера различных категорий от стандартов до Полулюксов и Студий.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Цены вполне демократичные и начинаются от 3150 руб за ночь до 5300 руб. Цена может быть выше, зависит от сезона и загрузки.<span class="src">анкета</span></li>
+        <li>Хорошие номера с современным ремонтом.<span class="src">анкета</span></li>
+        <li>Широкий выбор различных категорий номеров, удобно как для одиноких путешественников, так и для семей, которые могут разместиться в номерах 3-х, 4-х местных.<span class="src">анкета</span></li>
+        <li>Категории: Полулюкс с одной большой кроватью King-size; Стандартный номер с одной или двумя кроватями; Стандартный одноместный с кондиционером (1,5-сп кровать); Двухместный номер с 2 раздельными кроватями; Стандартный двухместный с 2 раздельными кроватями; Бизнес (с 1 большой или 2 раздельными кроватями); Студия с одной большой кроватью King-size; Трехместный номер с кондиционером (3 кровати); Четырехместный номер с кондиционером (4 кровати).<span class="src">сайт</span></li>
+        <li>5% по промокоду на сайте — бессрочно.<span class="src">анкета</span></li>
+        <li>Формат цены в тексте — «от N ₽», цены динамические, актуальные — на сайте.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Номера гостиницы «Вирджиния» в Йошкар-Оле — от 3 150 ₽</span></div>
+        <div class="meta-row"><span><b>Title · </b>Номера в центре Йошкар-Олы от 3 150 ₽ за ночь | Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Номера от стандартов до полулюксов и студий в центре Йошкар-Олы от 3 150 ₽ за ночь, номера 3-х и 4-х местные для семей, современный ремонт, 5% по промокоду на сайте.</span></div>
+        <div class="chips">
+          <span class="chip-kw">номера в гостинице Йошкар-Ола</span><span class="chip-kw">снять номер Йошкар-Ола</span>
+          <span class="chip-kw">гостиница Йошкар-Ола цены</span><span class="chip-kw">номер на сутки Йошкар-Ола</span>
+          <span class="chip-kw">полулюкс Йошкар-Ола</span><span class="chip-kw">студия в гостинице Йошкар-Ола</span>
+          <span class="chip-kw">семейный номер Йошкар-Ола</span><span class="chip-kw">четырёхместный номер Йошкар-Ола</span>
+          <span class="chip-kw">недорогая гостиница Йошкар-Ола</span><span class="chip-kw">номер с кондиционером Йошкар-Ола</span>
+          <span class="chip-kw">одноместный номер Йошкар-Ола</span><span class="chip-kw">промокод гостиница Йошкар-Ола</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте номер на сайте гостиницы — скидка 5% по промокоду.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Номера от 3 150 ₽»</div>
+        <p>Композиция: номер с кроватью King-size (полулюкс или студия) из архива компании; тезис в верхнем левом углу, цена выделена крупнее.</p>
+        <p>Цвета: плашка под тезис — песочное золото #B29A73, текст — графит #222529, цена «3 150 ₽» на плашке графита #222529 цветом молочный беж #F0EBE3.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4</span><h3>Завтрак «Шведский стол» в подарок и кафе с марийской кухней</h3></div>
+        <span class="purpose">Продающий / кафе</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас своё полноценное кафе с хорошей кухней.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Предлагаются блюда европейской и национальной марийской кухни.<span class="src">анкета</span></li>
+        <li>По утрам кафе предлагает завтрак Шведский стол, который предоставляется в качестве подарка для всех гостей.<span class="src">анкета</span></li>
+        <li>При гостинице работает кафе с одноимённым названием, где гостям предлагаются услуги как питания, так и проведения разнообразных мероприятий.<span class="src">сайт</span></li>
+        <li>Свежесваренный зерновой кофе: на ваш выбор капучино, латте, американо, эспрессо и еще 7 различных напитков.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Завтрак в подарок и кафе «Вирджиния» в Йошкар-Оле</span></div>
+        <div class="meta-row"><span><b>Title · </b>Гостиница с завтраком в Йошкар-Оле, марийская кухня | Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Завтрак «Шведский стол» в подарок для всех гостей гостиницы «Вирджиния». Кафе с блюдами европейской и национальной марийской кухни в центре Йошкар-Олы.</span></div>
+        <div class="chips">
+          <span class="chip-kw">гостиница с завтраком Йошкар-Ола</span><span class="chip-kw">завтрак шведский стол Йошкар-Ола</span>
+          <span class="chip-kw">марийская кухня Йошкар-Ола</span><span class="chip-kw">где попробовать марийскую кухню</span>
+          <span class="chip-kw">кафе в центре Йошкар-Олы</span><span class="chip-kw">кафе при гостинице Йошкар-Ола</span>
+          <span class="chip-kw">европейская кухня Йошкар-Ола</span><span class="chip-kw">кофе Йошкар-Ола центр</span>
+          <span class="chip-kw">отель с бесплатным завтраком</span><span class="chip-kw">мероприятия в кафе Йошкар-Ола</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте номер — завтрак Шведский стол в подарок.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Завтрак в подарок»</div>
+        <p>Композиция: завтрак «Шведский стол» или накрытый стол в кафе из архива компании, рядом чашка кофе; тезис в нижней трети.</p>
+        <p>Цвета: плашка — молочный беж #F0EBE3, тезис — графит #222529, слова «в подарок» — песочное золото #B29A73.</p>
+      </div>
+    </div>
+
+    <div class="period"><h3>Период 2</h3><span class="pmeta">2 новости</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 5</span><h3>Финская сауна с большим бассейном при гостинице «Вирджиния»</h3></div>
+        <span class="purpose">Продающий / сауна</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Наша гостиница рада предложить услуги Финской сауны с бассейном.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Финская сауна с большим бассейном и сухой парной.<span class="src">анкета</span></li>
+        <li>Без веников.<span class="src">анкета</span></li>
+        <li>Сауна при отеле.<span class="src">анкета</span></li>
+        <li>Набор бесплатных и платных услуг.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Финская сауна с бассейном в гостинице «Вирджиния»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Сауна с бассейном в центре Йошкар-Олы | гостиница Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Финская сауна с большим бассейном и сухой парной при гостинице «Вирджиния» в центре Йошкар-Олы.</span></div>
+        <div class="chips">
+          <span class="chip-kw">сауна Йошкар-Ола</span><span class="chip-kw">сауна с бассейном Йошкар-Ола</span>
+          <span class="chip-kw">финская сауна Йошкар-Ола</span><span class="chip-kw">гостиница с сауной Йошкар-Ола</span>
+          <span class="chip-kw">отель с бассейном Йошкар-Ола</span><span class="chip-kw">сауна в центре Йошкар-Олы</span>
+          <span class="chip-kw">сухая парная Йошкар-Ола</span><span class="chip-kw">сауна при гостинице</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> узнавайте о сауне при бронировании номера на сайте гостиницы.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Сауна с бассейном»</div>
+        <p>Композиция: бассейн сауны из архива компании; тезис в верхней трети по центру.</p>
+        <p>Цвета: мягкое затемнение сверху графитом #222529, тезис — молочный беж #F0EBE3, тонкая линия-разделитель — золото логотипа #D9B86A.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 6</span><h3>Йошкар-Ола за один день: маршрут от гостиницы и экскурсии</h3></div>
+        <span class="purpose">Экспертный / туристам</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если вы оказались в Йошкар-Оле, первое впечатление о нашем городе вам поможет составить обзорная экскурсия.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Экскурсии по городу. Мы сотрудничаем с одним из лучших гидов Йошкар-Олы.<span class="src">анкета</span></li>
+        <li>При этом до всех основных достопримечательностей рукой подать.<span class="src">анкета</span></li>
+        <li>Царевококшайский кремль — единственный реконструированный кремль в Поволжье.<span class="src">статья сайта</span></li>
+        <li>Набережная Брюгге.<span class="src">статья сайта</span></li>
+        <li>Патриаршая площадь; храм на ней был восстановлен в 2010 году, сохранив своё историческое имя и поклонный крест.<span class="src">статья сайта</span></li>
+        <li>Площадь Оболенского-Ноготкова: уменьшенная копия Царь-пушки (весом около 12 тонн), на башне каждый час оживают знаменитые «часы с осликом».<span class="src">статья сайта</span></li>
+        <li>На скамейке отдыхает знаменитый Йошкин кот — обязательная точка для фото.<span class="src">статья сайта</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Что посмотреть в Йошкар-Оле за один день</span></div>
+        <div class="meta-row"><span><b>Title · </b>Йошкар-Ола за один день: маршрут из центра | гостиница Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Маршрут по Йошкар-Оле на один день: Царевококшайский кремль, набережная Брюгге, Патриаршая площадь, часы с осликом, Йошкин кот и экскурсии по городу от гостиницы «Вирджиния».</span></div>
+        <div class="chips">
+          <span class="chip-kw">что посмотреть в Йошкар-Оле</span><span class="chip-kw">Йошкар-Ола за один день</span>
+          <span class="chip-kw">достопримечательности Йошкар-Олы</span><span class="chip-kw">экскурсии по Йошкар-Оле</span>
+          <span class="chip-kw">обзорная экскурсия Йошкар-Ола</span><span class="chip-kw">набережная Брюгге</span>
+          <span class="chip-kw">Царевококшайский кремль</span><span class="chip-kw">часы с осликом Йошкар-Ола</span>
+          <span class="chip-kw">Йошкин кот</span><span class="chip-kw">маршрут по Йошкар-Оле</span>
+          <span class="chip-kw">гостиница рядом с достопримечательностями Йошкар-Ола</span><span class="chip-kw">гид Йошкар-Ола</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте номер в центре и спрашивайте об экскурсии по городу.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Йошкар-Ола за день»</div>
+        <p>Композиция: набережная Брюгге или кремль днём (фото из архива компании); тезис в нижней трети, рядом пунктир маршрута с точками.</p>
+        <p>Цвета: плашка под тезис — графит #222529, тезис — молочный беж #F0EBE3, пунктир и точки маршрута — золото логотипа #D9B86A.</p>
+      </div>
+    </div>
+
+    <div class="period"><h3>Период 3</h3><span class="pmeta">2 новости</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 7</span><h3>Деловая поездка в Йошкар-Олу: конференц-услуги «Вирджинии»</h3></div>
+        <span class="purpose">Продающий / деловым</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если надо провести семинар или тренинг, к вашим услугам современный и удобный конференц-зал.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Конференц-услуги. Предоставляется один из залов кафе.<span class="src">анкета</span></li>
+        <li>Также есть возможность организовать кофе-брейки, обеды и ужины.<span class="src">анкета</span></li>
+        <li>Режим работы: 24 часа, 7 дней в неделю. Без обедов и перерывов.<span class="src">анкета</span></li>
+        <li>Бесплатная охраняемая парковка на территории отеля.<span class="src">анкета</span></li>
+        <li>Номер в центре Йошкар-Олы с бесплатной стоянкой и скоростным Wi-Fi.<span class="src">сайт</span></li>
+        <li>Завтрак для всех гостей в подарок от отеля. Завтрак Шведский стол.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Конференц-услуги и проживание для деловых поездок в Йошкар-Олу</span></div>
+        <div class="meta-row"><span><b>Title · </b>Гостиница для командировок в Йошкар-Оле, зал для семинаров | Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Деловая поездка в Йошкар-Олу: зал для семинара или тренинга, кофе-брейки, обеды и ужины, бесплатная охраняемая парковка и скоростной Wi-Fi в гостинице «Вирджиния».</span></div>
+        <div class="chips">
+          <span class="chip-kw">конференц-зал Йошкар-Ола</span><span class="chip-kw">зал для семинара Йошкар-Ола</span>
+          <span class="chip-kw">гостиница для командированных Йошкар-Ола</span><span class="chip-kw">командировка в Йошкар-Олу</span>
+          <span class="chip-kw">кофе-брейк Йошкар-Ола</span><span class="chip-kw">зал для тренинга Йошкар-Ола</span>
+          <span class="chip-kw">деловая поездка Йошкар-Ола</span><span class="chip-kw">гостиница с Wi-Fi Йошкар-Ола</span>
+          <span class="chip-kw">бизнес-номер Йошкар-Ола</span><span class="chip-kw">гостиница с парковкой в центре</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> планируете семинар или деловую поездку — оставляйте заявку на сайте гостиницы.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Для деловых поездок»</div>
+        <p>Композиция: зал кафе, подготовленный к семинару, или номер «Бизнес» (фото из архива компании); тезис в верхнем левом углу.</p>
+        <p>Цвета: плашка под тезис — песочное золото #B29A73, текст — графит #222529, тонкая рамка кадра — светлый песок #D2BC98.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 8</span><h3>Йошкар-Ола всей семьёй: где побывать с детьми и где разместиться</h3></div>
+        <span class="purpose">Экспертный / семьям</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Широкий выбор различных категорий номеров, удобно для семей, которые могут разместиться в номерах 3-х, 4-х местных.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Номера 3-х, 4-х местные для семей.<span class="src">анкета</span></li>
+        <li>Центральный парк в 5 минутах ходьбы.<span class="src">анкета</span></li>
+        <li>В Центральном парке культуры и отдыха — более 25 аттракционов для детей всех возрастов, колесо обозрения и один из старейших планетариев Поволжья.<span class="src">статья сайта</span></li>
+        <li>Контактный зоопарк неподалёку.<span class="src">статья сайта</span></li>
+        <li>Республиканский театр кукол — его здание похоже на волшебный замок.<span class="src">статья сайта</span></li>
+        <li>Царевококшайский кремль, сердце города; Музей истории города.<span class="src">статья сайта</span></li>
+        <li>Завтрак для всех гостей в подарок от отеля. Завтрак Шведский стол.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Йошкар-Ола с детьми: куда сходить и где остановиться</span></div>
+        <div class="meta-row"><span><b>Title · </b>Йошкар-Ола с детьми: семейные номера в центре | гостиница Вирджиния</span></div>
+        <div class="meta-row"><span><b>Description · </b>Семейная поездка в Йошкар-Олу: номера 3-х и 4-х местные в центре, Центральный парк в 5 минутах ходьбы, театр кукол, контактный зоопарк и кремль.</span></div>
+        <div class="chips">
+          <span class="chip-kw">Йошкар-Ола с детьми</span><span class="chip-kw">куда сходить с детьми в Йошкар-Оле</span>
+          <span class="chip-kw">семейный номер Йошкар-Ола</span><span class="chip-kw">гостиница для семьи Йошкар-Ола</span>
+          <span class="chip-kw">Центральный парк Йошкар-Ола</span><span class="chip-kw">театр кукол Йошкар-Ола</span>
+          <span class="chip-kw">контактный зоопарк Йошкар-Ола</span><span class="chip-kw">четырёхместный номер Йошкар-Ола</span>
+          <span class="chip-kw">планетарий Йошкар-Ола</span><span class="chip-kw">гостиница рядом с парком Йошкар-Ола</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте номер для всей семьи на сайте гостиницы.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Йошкар-Ола с детьми»</div>
+        <p>Композиция: трёх- или четырёхместный номер из архива компании, рядом вставка-кружок с видом Центрального парка; тезис в верхней трети.</p>
+        <p>Цвета: плашка под тезис — молочный беж #F0EBE3, текст — графит #222529, обводка кружка-вставки — золото логотипа #D9B86A.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>8 тем, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+
+    <div class="period"><h3>Период 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">В самом центре Йошкар-Олы</div><span class="slide-no">Сторис 1 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Красноармейская × Первомайская</span>
+          <span class="fact-pill">Рядом остановка</span>
+          <span class="fact-pill">Центральный парк — 5 минут</span>
+          <span class="fact-pill">Набережная — 20 минут пешком</span>
+          <span class="fact-pill">24 часа, 7 дней в неделю</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит #222529, заголовок молочным бежем #F0EBE3, расстояния крупными цифрами золотом логотипа #D9B86A, пункты списком.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Бесплатно для гостей</div><span class="slide-no">Сторис 2 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Бронь</span>
+          <span class="fact-pill">Камера хранения</span>
+          <span class="fact-pill">Вызов такси</span>
+          <span class="fact-pill">Городская телефонная связь</span>
+          <span class="fact-pill">Wi-Fi на всей территории отеля</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон молочный беж #F0EBE3, заголовок графитом #222529, пять пунктов списком с тонкими пиктограммами песочного золота #B29A73, слово «Бесплатно» — плашка золота логотипа #D9B86A.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Номера от 3 150 ₽</div><span class="slide-no">Сторис 3 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">От стандартов до Полулюксов и Студий</span>
+          <span class="fact-pill">Номера 3-х, 4-х местные</span>
+          <span class="fact-pill">Современный ремонт</span>
+          <span class="fact-pill">5% по промокоду на сайте</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон молочный беж #F0EBE3, цена «от 3 150 ₽» крупно графитом #222529, пункты на плашках песочного золота #B29A73, скидка 5% — плашка золота логотипа #D9B86A.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Завтрак — в подарок</div><span class="slide-no">Сторис 4 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Шведский стол для всех гостей</span>
+          <span class="fact-pill">Европейская кухня</span>
+          <span class="fact-pill">Национальная марийская кухня</span>
+          <span class="fact-pill">Капучино, латте, американо, эспрессо и еще 7 напитков</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото завтрака в верхней половине, нижняя половина — фон песочное золото #B29A73, текст графитом #222529, слова «в подарок» на плашке графита #222529 молочным бежем #F0EBE3.</div>
+      </div>
+    </div>
+
+    <div class="period"><h3>Период 2</h3><span class="pmeta">2 сторис</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Финская сауна с бассейном</div><span class="slide-no">Сторис 5 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Финская сауна</span>
+          <span class="fact-pill">Большой бассейн</span>
+          <span class="fact-pill">Сухая парная</span>
+          <span class="fact-pill">Без веников</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото бассейна с затемнением графитом #222529, заголовок молочным бежем #F0EBE3, маркеры пунктов — золото логотипа #D9B86A.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Экскурсии по Йошкар-Оле</div><span class="slide-no">Сторис 6 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Обзорная экскурсия</span>
+          <span class="fact-pill">Гид Йошкар-Олы</span>
+          <span class="fact-pill">Царевококшайский кремль</span>
+          <span class="fact-pill">Набережная Брюгге</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон молочный беж #F0EBE3, схематичный пунктир маршрута песочным золотом #B29A73 с точками-остановками, подписи графитом #222529.</div>
+      </div>
+    </div>
+
+    <div class="period"><h3>Период 3</h3><span class="pmeta">2 сторис</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Для деловых поездок</div><span class="slide-no">Сторис 7 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Зал для семинара или тренинга</span>
+          <span class="fact-pill">Кофе-брейки, обеды и ужины</span>
+          <span class="fact-pill">Бесплатная охраняемая парковка</span>
+          <span class="fact-pill">Скоростной Wi-Fi</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит #222529, заголовок молочным бежем #F0EBE3, четыре пункта в сетке 2×2 с тонкими пиктограммами золотом логотипа #D9B86A.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">С детьми — в центр города</div><span class="slide-no">Сторис 8 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Номера 3-х, 4-х местные</span>
+          <span class="fact-pill">Центральный парк — 5 минут</span>
+          <span class="fact-pill">Театр кукол</span>
+          <span class="fact-pill">Контактный зоопарк</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый песок #D2BC98, заголовок графитом #222529, пункты на плашках молочного бежа #F0EBE3, «5 минут» — графит #222529 крупно.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта периодов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Период 1 — центр города, сервис, номера, кафе и завтрак <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>«Вирджиния» — гостиница в самом центре Йошкар-Олы</b>Пересечение Красноармейской и Первомайской, парк — 5 минут, 24/7, парковка</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>В самом центре Йошкар-Олы</b>Расстояния до парка и набережной, остановка рядом</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Сервис для гостей: бесплатные и платные услуги</b>Бронь, камера хранения, такси, Wi-Fi, прачечная, котельная, визовая поддержка</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Бесплатно для гостей</b>Пять бесплатных услуг</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Номера: от стандартов до полулюксов и студий</b>Категории, от 3150 до 5300 руб, номера 3-х, 4-х местные, 5% по промокоду</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Номера от 3 150 ₽</b>Категории и скидка по промокоду</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Завтрак «Шведский стол» в подарок и кафе с марийской кухней</b>Европейская и марийская кухня, кофе, мероприятия</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Завтрак — в подарок</b>Завтрак для всех гостей, кухня кафе, кофе</span></div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Период 2 — сауна с бассейном, Йошкар-Ола за один день <span class="badge next">Следующий</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 5</span><span class="txt"><b>Финская сауна с большим бассейном при гостинице</b>Большой бассейн, сухая парная, без веников</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 5</span><span class="txt"><b>Финская сауна с бассейном</b>Сауна в четырёх фактах</span></div>
+        <div class="stage-item"><span class="fmt">Новость 6</span><span class="txt"><b>Йошкар-Ола за один день: маршрут от гостиницы и экскурсии</b>Гид, кремль, набережная Брюгге, часы с осликом, Йошкин кот</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 6</span><span class="txt"><b>Экскурсии по Йошкар-Оле</b>Обзорная экскурсия с гидом</span></div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Период 3 — деловые поездки, Йошкар-Ола всей семьёй <span class="badge next">Следующий</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 7</span><span class="txt"><b>Деловая поездка в Йошкар-Олу: конференц-услуги</b>Зал кафе, кофе-брейки, обеды и ужины, парковка, Wi-Fi</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 7</span><span class="txt"><b>Для деловых поездок</b>Четыре удобства для деловой поездки</span></div>
+        <div class="stage-item"><span class="fmt">Новость 8</span><span class="txt"><b>Йошкар-Ола всей семьёй: где побывать и где разместиться</b>Номера 3-х, 4-х местные, парк, театр кукол, зоопарк, кремль</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 8</span><span class="txt"><b>С детьми — в центр города</b>Семейные номера и места рядом</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Анкета компании «Старт проекта» от 12.10.2026</span>
+      <a href="https://hotel-yoshkar-ola.ru/" target="_blank" rel="noopener">hotel-yoshkar-ola.ru</a>
+      <a href="https://hotel-yoshkar-ola.ru/news/148" target="_blank" rel="noopener">Статья сайта: Йошкар-Ола на один день</a>
+      <a href="https://hotel-yoshkar-ola.ru/news/146" target="_blank" rel="noopener">Статья сайта: Йошкар-Ола для всей семьи</a>
+      <a href="https://yandex.ru/maps/-/CXu0IQzG" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
