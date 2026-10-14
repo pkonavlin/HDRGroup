@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Улыбка Энгельс — ТЗ на контент</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* single-column ТЗ document under one sticky horizontal bar */
+:root{
+  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
+  --ink:#12181A; --ink-soft:#4B5A5E; --line:#D9E1E1; --card:#FFFFFF; --bg:#F5F8F8;
+  --bar:rgba(14,59,71,.95); --bar-ink:#DDEDEE; --bar-brand:#F5F8F8; --bar-dot:#E08258;
+  --roe-tint:rgba(196,87,43,.1); --roe-edge:rgba(196,87,43,.3); --teal-tint:rgba(27,107,120,.14); --teal-edge:rgba(27,107,120,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+    --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+    --bar:rgba(8,26,31,.95); --roe-tint:rgba(224,130,88,.12); --roe-edge:rgba(224,130,88,.35); --teal-tint:rgba(79,179,196,.14); --teal-edge:rgba(79,179,196,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FD6E6; --teal:#4FB3C4; --ice:#0B1416; --roe:#E08258;
+  --ink:#EAF2F2; --ink-soft:#9FB2B4; --line:#213035; --card:#101B1D; --bg:#0B1416;
+  --bar:rgba(8,26,31,.95); --roe-tint:rgba(224,130,88,.12); --roe-edge:rgba(224,130,88,.35); --teal-tint:rgba(79,179,196,.14); --teal-edge:rgba(79,179,196,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;text-wrap:balance;margin:0}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bar);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-inner{max-width:1040px;margin:0 auto;padding-block:14px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:var(--bar-brand);letter-spacing:.2px}
+.brand span{color:var(--bar-dot)}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap}
+.navlinks a{font-size:13px;font-weight:600;color:var(--bar-ink);text-decoration:none;padding:7px 12px;border-radius:7px;transition:background .15s}
+.navlinks a:hover,.navlinks a:focus-visible{background:rgba(255,255,255,.12);outline:none}
+
+.hero{padding-block:48px 40px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:14px;display:block}
+.hero h1{font-size:clamp(28px,4.2vw,42px);font-weight:700;color:var(--ocean);line-height:1.12;max-width:20ch}
+.hero p.lead{margin-top:14px;max-width:62ch;color:var(--ink-soft);font-size:16.5px}
+.factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:32px}
+.fact{background:var(--card);padding:16px 18px;min-width:0}
+.fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.fact .v{margin-top:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.fact .v small{display:block;font-family:'Public Sans',sans-serif;font-weight:500;font-size:13px;color:var(--ink-soft);margin-top:2px}
+
+section{padding-block:52px}
+section + section{border-top:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--roe);font-weight:600}
+.sec-head h2{font-size:clamp(22px,3vw,28px);color:var(--ocean);margin-top:6px}
+.sec-head p{margin:8px 0 0;color:var(--ink-soft);max-width:64ch}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:22px}
+.swatch{border-radius:12px;padding:18px 16px;min-height:110px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.swatch .role{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.82}
+.swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:3px;opacity:.82}
+.bb-notes{display:grid;gap:10px;margin-top:22px}
+.bb-row{display:flex;gap:16px;align-items:flex-start;padding:14px 18px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.bb-k{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;padding-top:2px;min-width:110px}
+.bb-row p{margin:0;font-size:14.5px;min-width:0}
+
+.cycle{display:grid;gap:14px}
+.cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.cycle-row .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--teal);white-space:nowrap;padding-top:2px;min-width:78px}
+.cycle-row p{margin:0;font-size:14.5px;color:var(--ink);min-width:0}
+
+.tone-banner{background:var(--roe-tint);border:1px solid var(--roe-edge);border-radius:10px;padding:13px 16px;font-size:13.5px;color:var(--ink-soft);margin-bottom:8px;line-height:1.55}
+.tone-banner b{color:var(--ink)}
+
+.period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:40px;padding-bottom:10px;border-bottom:2px solid var(--ocean)}
+.period:first-of-type{margin-top:24px}
+.period h3{font-size:19px;color:var(--ocean)}
+.period .pmeta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 26px 24px;margin-top:20px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.card-top > div{min-width:0}
+.num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);font-weight:600;letter-spacing:.04em}
+.card h3{font-size:20px;color:var(--ocean);max-width:46ch;margin-top:4px}
+.purpose{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);background:var(--roe-tint);border:1px solid var(--roe-edge);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.intro{margin-top:16px;font-size:15px;line-height:1.6;color:var(--ink);padding:14px 16px;background:var(--bg);border-radius:10px;border-left:3px solid var(--teal)}
+.intro .lbl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);margin-bottom:6px;font-weight:700}
+.thesis-lbl{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-top:18px;margin-bottom:9px}
+.thesis{margin:0;padding-left:0;list-style:none;display:grid;gap:9px}
+.thesis li{position:relative;padding-left:18px;font-size:14.5px;color:var(--ink)}
+.thesis li::before{content:"—";position:absolute;left:0;color:var(--teal);font-weight:600}
+.seo-box{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.seo-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:8px;display:block}
+.meta-row{display:grid;gap:6px;margin-bottom:10px;font-size:13.5px}
+.meta-row b{color:var(--ink-soft);font-weight:600;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-kw{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.cta-line{margin:14px 0 0;font-size:13.5px;color:var(--ink-soft)}
+.cta-line b{color:var(--ink);font-weight:600}
+.cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--line);background:var(--bg)}
+.cover-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:8px;display:block;font-weight:700}
+.cover-box .thesis-cover{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:var(--ocean);margin-bottom:8px}
+.cover-box p{margin:0 0 6px;font-size:13.5px;color:var(--ink)}
+.cover-box p:last-child{margin-bottom:0}
+
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column}
+.story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.story-thesis{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:var(--ocean);min-width:0}
+.slide-no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);white-space:nowrap;padding-top:3px}
+.facts-line{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.fact-pill{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:5px 12px;color:var(--ink);font-weight:500}
+.design-note{margin-top:auto;padding:12px 14px;background:var(--bg);border-radius:9px;font-size:13.5px;color:var(--ink-soft)}
+.facts-line + .design-note{margin-top:14px}
+.design-note b{color:var(--ink);font-weight:600}
+
+details.stage{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:14px;overflow:hidden}
+details.stage[open]{border-color:var(--teal)}
+details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;color:var(--ocean);font-size:15.5px}
+details.stage summary:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:20px;font-weight:700;white-space:nowrap}
+.badge.actual{background:var(--teal-tint);color:var(--teal);border:1px solid var(--teal-edge)}
+.stage-body{padding:0 20px 18px;display:grid;gap:10px}
+.stage-item{font-size:13.5px;color:var(--ink-soft);display:flex;gap:10px}
+.stage-item .fmt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--roe);font-weight:700;white-space:nowrap;padding-top:1px;min-width:74px}
+.stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stage-item .txt b{color:var(--ink);font-weight:600}
+
+footer{padding-block:36px 56px;border-top:1px solid var(--line)}
+footer .srcs{display:flex;flex-wrap:wrap;gap:16px;font-size:13.5px;margin-top:10px}
+footer a{color:var(--teal);text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline}
+.src{display:inline-block;margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--teal);border:1px solid var(--teal-edge);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+
+@media(max-width:640px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .topbar-inner{padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .navlinks{width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .navlinks a{white-space:nowrap;flex:none}
+  .card{padding:20px 18px}
+  .story-grid{grid-template-columns:1fr}
+  .cycle-row,.bb-row{flex-direction:column;gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">«Улыбка» <span>·</span> ТЗ на контент</div>
+    <nav class="navlinks">
+      <a href="#company">Компания</a>
+      <a href="#brandbook">Брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero" id="company">
+    <span class="eyebrow">Стоматологическая клиника · Энгельс</span>
+    <h1>«Улыбка» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Улыбка» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Взрослая стоматология</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Энгельс <small>Саратовская область</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Ломоносова, 28</div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">пн–пт 08:00–20:00 <small>сб 08:00–16:00 · вс 10:00–16:00</small></div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Безболезненность и комфортный подход <small>Честный и индивидуальный подход · Современное оборудование и комплексный подход</small></div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>Строго деловой стиль</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">engelsstom.ru/smile</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Улыбки»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: глубокий синий и голубой логотипа, сиренево-синий кнопок и плашек сайта, светлые оттенки того же синего для подложек, белый фон и чёрный текст.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#225190;color:#FFFFFF;border-color:#225190">
+        <div class="role">Акцентный</div><div class="name">Синий логотипа</div><div class="hex">#225190</div>
+      </div>
+      <div class="swatch" style="background:#4595B4;color:#FFFFFF;border-color:#4595B4">
+        <div class="role">Акцентный · доп.</div><div class="name">Голубой логотипа</div><div class="hex">#4595B4</div>
+      </div>
+      <div class="swatch" style="background:#7F95CD;color:#000000;border-color:#7F95CD">
+        <div class="role">Основной</div><div class="name">Сиренево-синий</div><div class="hex">#7F95CD</div>
+      </div>
+      <div class="swatch" style="background:#A5B5DC;color:#000000;border-color:#A5B5DC">
+        <div class="role">Второстепенный</div><div class="name">Светлый сиренево-синий</div><div class="hex">#A5B5DC</div>
+      </div>
+      <div class="swatch" style="background:#B9C5E3;color:#000000;border-color:#B9C5E3">
+        <div class="role">Фоновый · плашки</div><div class="name">Бледный синий</div><div class="hex">#B9C5E3</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#000000;border-color:#D9E1E1">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+      <div class="swatch" style="background:#000000;color:#FFFFFF;border-color:#000000">
+        <div class="role">Текстовый</div><div class="name">Чёрный</div><div class="hex">#000000</div>
+      </div>
+    </div>
+    <div class="bb-notes">
+      <div class="bb-row"><span class="bb-k">Типографика</span><p>Геометрический гротеск без засечек: заголовки и кнопки прописными буквами, полужирные; основной текст — строчными, обычное начертание. Логотип — антиква прописными с контуром зуба.</p></div>
+      <div class="bb-row"><span class="bb-k">Графика</span><p>Крупные скругления углов у фото и плашек, кнопки-«капсулы» с белым контуром, тонкие белые линии-разделители на цветных плашках, монохромная гамма одного синего.</p></div>
+      <div class="bb-row"><span class="bb-k">Фото</span><p>Светлые клинические интерьеры, белый фон, врачи в белой форме за работой с пациентом, мягкий дневной свет, крупные планы оборудования.</p></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">Шаг 1</div><p>Знакомство с клиникой: взрослая стоматология в Энгельсе, направления работы и подход: безболезненность и комфортный подход, честный и индивидуальный подход, современное оборудование и комплексный подход.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 2</div><p>С чего начинается лечение: диагностика на рентгене и КТ и понятный план лечения.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 3</div><p>Лечение: кариес и пульпит, пломбы из современных материалов с подбором оттенка под цвет зуба.</p></div>
+      <div class="cycle-row"><div class="tag">Шаг 4</div><p>Восстановление: протезирование коронками, мостами, винирами и съёмными протезами, подготовка после удаления.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», строго деловой стиль — спокойно, по фактам, без шуток и разговорных оборотов. Каждая новость начинается с короткого вступления от лица клиники, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail, нет слов «безопасно», «эффективно», «лучший». Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1</span><h3>Стоматология «Улыбка» в Энгельсе: взрослая стоматология на ул. Ломоносова, 28</h3></div>
+        <span class="purpose">Имиджевый</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Команда наших врачей приветствует Вас! Мы предоставляем профессиональные услуги по взрослой стоматологии.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Сфера: взрослая стоматология.<span class="src">бриф</span></li>
+        <li>Безболезненность и комфортный подход.<span class="src">бриф</span></li>
+        <li>Честный и индивидуальный подход.<span class="src">бриф</span></li>
+        <li>Современное оборудование и комплексный подход.<span class="src">бриф</span></li>
+        <li>Направления: лечение кариеса и пульпита; профессиональная гигиена (Air Flow, ультразвук); протезирование (коронки, мосты, виниры, съёмные протезы); удаление зубов (в том числе зубов мудрости); исправление прикуса (брекеты, элайнеры); отбеливание зубов; лечение дёсен и пародонтологические процедуры; диагностика (рентген, КТ); неотложная помощь.<span class="src">бриф</span></li>
+        <li>Режим работы: пн–пт 08:00–20:00; сб 08:00–16:00; вс 10:00–16:00.<span class="src">бриф</span></li>
+        <li>Адрес: Энгельс, ул. Ломоносова, 28.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Стоматология «Улыбка» в Энгельсе — взрослая стоматология на Ломоносова, 28</span></div>
+        <div class="meta-row"><span><b>Title · </b>Стоматология в Энгельсе на Ломоносова, 28 | Улыбка</span></div>
+        <div class="meta-row"><span><b>Description · </b>Стоматология «Улыбка» в Энгельсе: взрослая стоматология, лечение, гигиена, протезирование, исправление прикуса и диагностика. Режим работы: пн–пт 08:00–20:00, сб 08:00–16:00, вс 10:00–16:00.</span></div>
+        <div class="chips">
+          <span class="chip-kw">стоматология Энгельс</span><span class="chip-kw">стоматология Улыбка Энгельс</span>
+          <span class="chip-kw">стоматолог Энгельс</span><span class="chip-kw">взрослая стоматология Энгельс</span>
+          <span class="chip-kw">стоматологическая клиника Энгельс</span><span class="chip-kw">стоматология Ломоносова 28</span>
+          <span class="chip-kw">лечение зубов Энгельс</span>
+          <span class="chip-kw">стоматология Саратовская область</span>
+          <span class="chip-kw">запись к стоматологу Энгельс</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на приём в клинику «Улыбка».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Взрослая стоматология»</div>
+        <p>Композиция: светлый кабинет — врач в белой форме у кресла с пациентом, мягкий дневной свет; тезис на скруглённой плашке в нижней трети, логотип в верхнем левом углу. Текст и логотип — не более 20% площади.</p>
+        <p>Цвета: плашка — сиренево-синий #7F95CD, тезис — белый #FFFFFF прописными, тонкая линия под тезисом — белый #FFFFFF.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2</span><h3>Рентген и КТ зубов в Энгельсе: с чего начинается лечение в стоматологии «Улыбка»</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы начинаем лечение с диагностики: снимки показывают состояние корней, каналов и костной ткани, и на их основе мы составляем понятный план лечения.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Диагностика (рентген, КТ) — делают снимки, чтобы точно увидеть состояние корней, каналов и костной ткани и составить понятный план лечения.<span class="src">бриф</span></li>
+        <li>Диагностика и лечение с помощью цифровых технологий.<span class="src">сайт</span></li>
+        <li>Честный и индивидуальный подход.<span class="src">бриф</span></li>
+        <li>Индивидуальный подбор лечения и способа оплаты.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Рентген и КТ зубов в Энгельсе — диагностика в стоматологии «Улыбка»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Рентген и КТ зубов в Энгельсе | Стоматология Улыбка</span></div>
+        <div class="meta-row"><span><b>Description · </b>Диагностика в стоматологии «Улыбка» в Энгельсе: рентген и КТ показывают состояние корней, каналов и костной ткани. По снимкам составляем понятный план лечения.</span></div>
+        <div class="chips">
+          <span class="chip-kw">КТ зубов Энгельс</span><span class="chip-kw">рентген зубов Энгельс</span>
+          <span class="chip-kw">снимок зуба Энгельс</span><span class="chip-kw">компьютерная томография зубов Энгельс</span>
+          <span class="chip-kw">диагностика зубов Энгельс</span><span class="chip-kw">план лечения зубов Энгельс</span>
+          <span class="chip-kw">цифровая стоматология Энгельс</span><span class="chip-kw">консультация стоматолога Энгельс</span>
+          <span class="chip-kw">стоматология Энгельс</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на диагностику в клинику «Улыбка».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Сначала — диагностика»</div>
+        <p>Композиция: врач рассматривает снимок зубов на мониторе, в кадре клиническое оборудование; тезис на белой скруглённой плашке в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — белый #FFFFFF, тезис — синий логотипа #225190, акцентная линия — голубой #4595B4.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3</span><h3>Лечение кариеса и пульпита в Энгельсе: пломбы в цвет зуба в стоматологии «Улыбка»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>При лечении кариеса и пульпита мы убираем поражённые ткани, ставим пломбы из современных материалов и подбираем оттенок под цвет зуба.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Лечение кариеса и пульпита — убирают поражённые ткани, ставят пломбы из современных материалов, подбирают оттенок под цвет зуба.<span class="src">бриф</span></li>
+        <li>Безболезненность и комфортный подход.<span class="src">бриф</span></li>
+        <li>Современное оборудование и комплексный подход.<span class="src">бриф</span></li>
+        <li>Опытные стоматологи, постоянно повышающие свою квалификацию.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Лечение кариеса и пульпита в Энгельсе — стоматология «Улыбка»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Лечение кариеса и пульпита в Энгельсе | Улыбка</span></div>
+        <div class="meta-row"><span><b>Description · </b>Лечение кариеса и пульпита в стоматологии «Улыбка» в Энгельсе: убираем поражённые ткани, ставим пломбы из современных материалов в цвет зуба.</span></div>
+        <div class="chips">
+          <span class="chip-kw">лечение кариеса Энгельс</span><span class="chip-kw">лечение пульпита Энгельс</span>
+          <span class="chip-kw">пломба на зуб Энгельс</span><span class="chip-kw">пломба в цвет зуба Энгельс</span>
+          <span class="chip-kw">лечение зубов без боли Энгельс</span>
+          <span class="chip-kw">стоматолог-терапевт Энгельс</span><span class="chip-kw">стоматолог Энгельс</span>
+          <span class="chip-kw">стоматология Улыбка Энгельс</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на лечение в клинику «Улыбка».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Пломба в цвет зуба»</div>
+        <p>Композиция: крупный план — врач в перчатках за работой у кресла, светлый клинический фон, без кадров «до/после»; тезис на скруглённой плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — синий логотипа #225190, тезис — белый #FFFFFF прописными, мелкая подложка-капсула под логотипом — бледный синий #B9C5E3.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4</span><h3>Протезирование зубов в Энгельсе: коронки, мосты, виниры и съёмные протезы в «Улыбке»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы восстанавливаем утраченные и сильно разрушенные зубы, чтобы вернуть жевательную функцию и эстетику, а при необходимости готовим к протезированию после удаления.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Протезирование (коронки, мосты, виниры, съёмные протезы) — восстанавливают утраченные или сильно разрушенные зубы, возвращают жевательную функцию и эстетику.<span class="src">бриф</span></li>
+        <li>Удаление зубов (в том числе зубов мудрости) — выполняют аккуратно, с современной анестезией; при необходимости готовят к дальнейшему протезированию.<span class="src">бриф</span></li>
+        <li>Индивидуальный подбор лечения и способа оплаты.<span class="src">сайт</span></li>
+        <li>Современное оборудование и комплексный подход.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Протезирование зубов в Энгельсе — стоматология «Улыбка»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Протезирование зубов в Энгельсе: коронки, мосты, виниры | Улыбка</span></div>
+        <div class="meta-row"><span><b>Description · </b>Протезирование в стоматологии «Улыбка» в Энгельсе: коронки, мосты, виниры и съёмные протезы восстанавливают утраченные и разрушенные зубы, возвращают жевательную функцию и эстетику.</span></div>
+        <div class="chips">
+          <span class="chip-kw">протезирование зубов Энгельс</span><span class="chip-kw">коронки на зубы Энгельс</span>
+          <span class="chip-kw">мостовидный протез Энгельс</span><span class="chip-kw">виниры Энгельс</span>
+          <span class="chip-kw">съемные протезы Энгельс</span><span class="chip-kw">стоматолог-ортопед Энгельс</span>
+          <span class="chip-kw">удаление зуба мудрости Энгельс</span><span class="chip-kw">восстановление зубов Энгельс</span>
+          <span class="chip-kw">стоматология Ломоносова Энгельс</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на консультацию стоматолога-ортопеда в клинику «Улыбка».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Протезирование зубов»</div>
+        <p>Композиция: врач показывает модель челюсти пациенту в светлом кабинете; тезис на скруглённой плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — светлый сиренево-синий #A5B5DC, тезис — чёрный #000000 прописными, линия-разделитель — синий логотипа #225190.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Неотложная помощь</div><span class="slide-no">Сторис 1 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Быстро снимают острую боль</span>
+          <span class="fact-pill">Помогают при травмах и воспалениях</span>
+          <span class="fact-pill">Назначают первичные меры до основного лечения</span>
+          <span class="fact-pill">пн–пт 08:00–20:00</span>
+          <span class="fact-pill">сб 08:00–16:00</span>
+          <span class="fact-pill">вс 10:00–16:00</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон синий логотипа #225190, заголовок белым #FFFFFF прописными, три пункта помощи белым списком, режим работы — на скруглённой плашке бледный синий #B9C5E3 с чёрным #000000 текстом внизу слайда. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Профессиональная гигиена</div><span class="slide-no">Сторис 2 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Air Flow</span>
+          <span class="fact-pill">Ультразвук</span>
+          <span class="fact-pill">Снимают налёт и камень</span>
+          <span class="fact-pill">Убирают пигментацию</span>
+          <span class="fact-pill">Делают зубы чище и светлее без агрессивного отбеливания</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок синим логотипа #225190 прописными, Air Flow и ультразвук — две капсулы сиренево-синим #7F95CD с белым текстом, результаты — чёрным #000000 списком с тонкими разделителями голубым #4595B4.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Отбеливание зубов</div><span class="slide-no">Сторис 3 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Например, Zoom или лазер</span>
+          <span class="fact-pill">Строго после оценки состояния эмали</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон бледный синий #B9C5E3, строка «Например, Zoom или лазер» — на белой скруглённой карточке текстом синим логотипа #225190, условие «после оценки состояния эмали» — на плашке сиренево-синим #7F95CD внизу. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Исправление прикуса</div><span class="slide-no">Сторис 4 · 1 слайд</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Брекеты</span>
+          <span class="fact-pill">Элайнеры</span>
+          <span class="fact-pill">Выравнивают зубы</span>
+          <span class="fact-pill">Корректируют смыкание</span>
+          <span class="fact-pill">Улыбка ровнее, нагрузка на зубы — равномернее</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон сиренево-синий #7F95CD, заголовок белым #FFFFFF прописными, «Брекеты» и «Элайнеры» — две белые капсулы с текстом синим логотипа #225190, три результата — белым списком с тонкими белыми разделителями.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — знакомство, диагностика, лечение, восстановление <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Взрослая стоматология на ул. Ломоносова, 28</b>Знакомство с клиникой: направления, подход, режим работы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Неотложная помощь</b>Острая боль, травмы и воспаления, режим работы клиники</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Рентген и КТ: с чего начинается лечение</b>Снимки корней, каналов и костной ткани, понятный план лечения</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Профессиональная гигиена</b>Air Flow и ультразвук: налёт, камень, пигментация</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Лечение кариеса и пульпита</b>Пломбы из современных материалов, оттенок под цвет зуба</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Отбеливание зубов</b>Например, Zoom или лазер, строго после оценки состояния эмали</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Протезирование зубов</b>Коронки, мосты, виниры, съёмные протезы, подготовка после удаления</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Исправление прикуса</b>Брекеты и элайнеры: выравнивают зубы и корректируют смыкание</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Бриф компании от 14.10.2026</span>
+      <a href="https://engelsstom.ru/smile" target="_blank" rel="noopener">engelsstom.ru/smile</a>
+      <a href="https://yandex.ru/maps/-/CXBiIZ4H" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://go.2gis.com/nDq31" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
