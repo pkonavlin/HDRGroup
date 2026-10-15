@@ -53,12 +53,11 @@ section:last-of-type{border-bottom:0}
 .fact .v{font-weight:600;font-size:14.5px;line-height:1.4}
 .fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px;margin-top:2px}
 .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:22px}
-.sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
-.sw .chip{height:88px}
-.sw .lb{padding:10px 12px 12px}
-.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
-.sw .nm{font-weight:700;font-size:13.5px;margin-top:3px}
-.sw .hx{font-family:var(--mono);font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.sw{border-radius:12px;min-height:118px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:1px solid var(--line)}
+.sw.lt{color:#FFFFFF}.sw.dk{color:#121212}
+.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
+.sw .nm{font-weight:700;font-size:13.5px}
+.sw .hx{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
 .chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:22px;counter-reset:c}
 .chain li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;counter-increment:c}
 .chain li::before{content:"Шаг " counter(c);display:block;font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:4px}
@@ -128,7 +127,7 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
 <div class="wrap">
 
 <section class="hero" id="company">
-  <span class="eyebrow">ТЗ · Этап 2 · карточка компании на Яндекс Картах и 2ГИС</span>
+  <span class="eyebrow">ТЗ · Этап 3 · карточка компании на Яндекс Картах и 2ГИС</span>
   <h1>Дантист — <span>стоматологическая клиника</span> на ул. Кочетова в Великом Новгороде</h1>
   <p class="sub">ООО «Стоматологическая клиника «Дантист» — стоматологическая поликлиника и зуботехническая лаборатория в Западном районе с 2006 года: терапевтическая, хирургическая и ортопедическая стоматология для взрослых пациентов. Новости и сторис этапа публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
   <div class="pills">
@@ -174,25 +173,25 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
   <h2 class="h2">Фирменная палитра Дантист</h2>
   <p class="sub">После анализа ресурсов компании определены фирменные цвета Дантист: бирюзовый в логотипе, кнопках записи, информационной полосе и заголовках историй, глубокий и небесно-голубой в фоне главного фото и обложки сообщества, песочный как единый дополнительный акцент, светло-серый фон блоков и почти чёрный текст.</p>
   <div class="swatches">
-    <div class="sw"><div class="chip" style="background:#68BBBD"></div><div class="lb"><div class="role">Акцентный</div><div class="nm">Бирюзовый</div><div class="hx">#68BBBD</div></div></div>
-    <div class="sw"><div class="chip" style="background:#4C95B7"></div><div class="lb"><div class="role">Основной</div><div class="nm">Глубокий голубой</div><div class="hx">#4C95B7</div></div></div>
-    <div class="sw"><div class="chip" style="background:#91D0E8"></div><div class="lb"><div class="role">Второстепенный</div><div class="nm">Небесно-голубой</div><div class="hx">#91D0E8</div></div></div>
-    <div class="sw"><div class="chip" style="background:#C7A87C"></div><div class="lb"><div class="role">Дополнительный</div><div class="nm">Песочный</div><div class="hx">#C7A87C</div></div></div>
-    <div class="sw"><div class="chip" style="background:#F0F0F0;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Светло-серый</div><div class="hx">#F0F0F0</div></div></div>
-    <div class="sw"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div><div class="lb"><div class="role">Фоновый</div><div class="nm">Белый</div><div class="hx">#FFFFFF</div></div></div>
-    <div class="sw"><div class="chip" style="background:#121212"></div><div class="lb"><div class="role">Текстовый</div><div class="nm">Почти чёрный</div><div class="hx">#121212</div></div></div>
+    <div class="sw dk" style="background:#68BBBD"><div class="role">Акцентный</div><div class="nm">Бирюзовый</div><div class="hx">#68BBBD</div></div>
+    <div class="sw lt" style="background:#4C95B7"><div class="role">Основной</div><div class="nm">Глубокий голубой</div><div class="hx">#4C95B7</div></div>
+    <div class="sw dk" style="background:#91D0E8"><div class="role">Второстепенный</div><div class="nm">Небесно-голубой</div><div class="hx">#91D0E8</div></div>
+    <div class="sw dk" style="background:#C7A87C"><div class="role">Дополнительный</div><div class="nm">Песочный</div><div class="hx">#C7A87C</div></div>
+    <div class="sw dk" style="background:#F0F0F0"><div class="role">Фоновый</div><div class="nm">Светло-серый</div><div class="hx">#F0F0F0</div></div>
+    <div class="sw dk" style="background:#FFFFFF"><div class="role">Фоновый</div><div class="nm">Белый</div><div class="hx">#FFFFFF</div></div>
+    <div class="sw lt" style="background:#121212"><div class="role">Текстовый</div><div class="nm">Почти чёрный</div><div class="hx">#121212</div></div>
   </div>
 </section>
 
 <section id="logic">
   <span class="eyebrow">Логика цикла</span>
-  <h2 class="h2">От «что есть в клинике» — к «как клиника ведёт пациента»</h2>
-  <p class="sub">Этап 1 рассказал о клинике: полный спектр услуг, профилактика, технологии, своя зуботехническая лаборатория и команда. Этап 2 раскрывает то, чего в карточке компании ещё не было: как составляется план лечения и из чего складывается его цена, а после лаборатории — какие конструкции в ней изготавливают и из каких материалов.</p>
+  <h2 class="h2">От плана и протезирования — к сохранению зуба и имплантации</h2>
+  <p class="sub">Этап 1 рассказал о клинике, этап 2 — о плане лечения с прозрачной ценой и о коронках из лаборатории клиники. Этап 3 продолжает обе линии слогана «Мы сохраним вашу улыбку»: если зуб болит — как клиника лечит пульпит и периодонтит, чтобы зуб остался; если зуба уже нет — как его восстанавливают имплантацией.</p>
   <ul class="chain">
-    <li><b>План лечения</b><span>Несколько вариантов и цена без скрытых платежей</span></li>
-    <li><b>Что входит в стоимость</b><span>Анестезия, рентген, материалы, медикаменты</span></li>
-    <li><b>Коронки и протезы</b><span>Что изготавливает лаборатория клиники</span></li>
-    <li><b>Коронки: материалы</b><span>Четыре вида коронок</span></li>
+    <li><b>Если зуб болит</b><span>Лечение пульпита и периодонтита</span></li>
+    <li><b>Как развивается кариес</b><span>От эмали до корня</span></li>
+    <li><b>Имплантация</b><span>Когда зуба уже нет</span></li>
+    <li><b>Имплантация по шагам</b><span>От снимка до коронки</span></li>
   </ul>
 </section>
 
@@ -204,53 +203,53 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
 
   <article class="theme" id="news-1">
     <div class="th-head">
-      <div><div class="num">Новость 1</div><h3 class="th-title">План лечения зубов в клинике «Дантист»: несколько вариантов на выбор и цена без скрытых платежей</h3></div>
-      <span class="tag">Доверительный</span>
+      <div><div class="num">Новость 1</div><h3 class="th-title">Если зуб болит: как в клинике «Дантист» лечат пульпит и периодонтит, чтобы сохранить зуб</h3></div>
+      <span class="tag">Экспертный</span>
     </div>
     <div class="blk"><span class="h">Вступление (тон и голос)</span>
-      <p class="intro">Мы составляем для пациента несколько вариантов плана лечения, чтобы он выбрал самый оптимальный и удобный для себя. Так пациент заранее знает, что будет делать врач, что делать ему самому и сколько будет стоить всё лечение.</p>
+      <p class="intro">Если появилась боль, даже самая небольшая, лучше сразу прийти к нам. Так зуб можно вовремя спасти и сэкономить на лечении. Берегите вашу улыбку — мы вам в этом поможем.</p>
     </div>
     <div class="blk"><span class="h">Тезисы</span><ul class="list">
-      <li>Лечение в «Дантист» начинается с диагностики — приёма и рентгена; по её итогам врач составляет план</li>
-      <li>Что даёт план: пациент полностью осведомлён о проблемах, о том, что будет делать доктор, что делать ему самому и сколько будет стоить всё лечение</li>
-      <li>Стоматологи предлагают несколько вариантов плана лечения — пациент выбирает оптимальный и удобный для себя</li>
-      <li>Лечение проводится в соответствии с клиническими протоколами диагностики и лечения</li>
-      <li>Без скрытых платежей: цена сразу включает анестезию, бахилы, рентген, необходимые материалы и медикаменты</li>
-      <li>Итог: пациент понимает весь путь лечения до его начала</li>
+      <li>Продолжение линии «Мы сохраним вашу улыбку»: в направлении «Если зуб болит» — диагностика, лечение кариеса, пульпита и периодонтита</li>
+      <li>Как развивается кариес: пока поражена эмаль — ничего не чувствуется; затем появляется чувствительность к температуре, сладкому, солёному и кислому</li>
+      <li>Когда процесс доходит до пульпы, где проходит нерв, начинается воспаление с резкой болью — пульпит</li>
+      <li>Если боль «прошла сама», это не выздоровление: воспаление идёт дальше, к тканям у корня, — периодонтит</li>
+      <li>Лечение начинается с точной диагностики — приёма и рентгена; врач объясняет план и варианты лечения (связка с темой этапа 2)</li>
+      <li>Цель лечения пульпита и периодонтита — сохранить собственный зуб; гарантия на пломбу — 1 год</li>
     </ul></div>
     <div class="blk"><span class="h">SEO</span><div class="kws">
-      <span class="kw">план лечения зубов</span><span class="kw">стоматология Великий Новгород</span><span class="kw">стоматологическая клиника Великий Новгород</span><span class="kw">стоимость лечения зубов</span><span class="kw">диагностика зубов</span><span class="kw">рентген зуба</span><span class="kw">консультация стоматолога</span><span class="kw">стоматология на Кочетова</span><span class="kw">стоматология Западный район</span>
+      <span class="kw">лечение пульпита Великий Новгород</span><span class="kw">лечение периодонтита</span><span class="kw">болит зуб</span><span class="kw">лечение кариеса Великий Новгород</span><span class="kw">лечение каналов зуба</span><span class="kw">сохранить зуб</span><span class="kw">стоматолог-терапевт Великий Новгород</span><span class="kw">стоматология на Кочетова</span><span class="kw">стоматологическая клиника Великий Новгород</span>
     </div></div>
-    <p class="cta">CTA: Записывайтесь на приём — составим план лечения</p>
+    <p class="cta">CTA: Записывайтесь на приём — врач проведёт диагностику и подберёт лечение</p>
     <div class="cover"><span class="h">ТЗ на обложку</span>
-      <div class="ct">Понятный план</div>
-      <p>Фон <span class="dot" style="background:#4C95B7"></span>#4C95B7 с плавным переходом в <span class="dot" style="background:#91D0E8"></span>#91D0E8, как на главном фото сайта. Слева — фото врача клиники с пациентом у снимка. Тезис белым, крупно, справа; под ним плашка <span class="dot" style="background:#68BBBD"></span>#68BBBD со скруглёнными краями, как кнопки сайта. Текст — не более 20% площади.</p>
+      <div class="ct">Сохраним зуб</div>
+      <p>Фон — градиент <span class="dot" style="background:#4C95B7"></span>#4C95B7 → <span class="dot" style="background:#91D0E8"></span>#91D0E8, как на главной сайта. По центру — объёмная модель зуба в разрезе с подсвеченной пульпой и корнями. Тезис белым, крупно; под ним плашка <span class="dot" style="background:#68BBBD"></span>#68BBBD со скруглёнными краями. Текст — не более 20% площади.</p>
     </div>
   </article>
 
   <article class="theme" id="news-2">
     <div class="th-head">
-      <div><div class="num">Новость 2</div><h3 class="th-title">Коронки и протезы в «Дантист»: какие конструкции изготавливает зуботехническая лаборатория клиники</h3></div>
+      <div><div class="num">Новость 2</div><h3 class="th-title">Имплантация зубов в «Дантист»: как восстанавливают зуб, которого уже нет</h3></div>
       <span class="tag">Экспертный</span>
     </div>
     <div class="blk"><span class="h">Вступление (тон и голос)</span>
-      <p class="intro">Если зуб разрушен, мы помогаем его восстановить. За годы работы у нас накоплен опыт изготовления виниров, безметалловой керамики и компьютерного протезирования с оксидом циркония.</p>
+      <p class="intro">Когда зуб разрушен или утрачен, мы помогаем его восстановить. Имплантация — один из способов, которые мы предлагаем пациенту в плане лечения наряду с коронками и протезами.</p>
     </div>
     <div class="blk"><span class="h">Тезисы</span><ul class="list">
-      <li>Продолжение темы собственной зуботехнической лаборатории из этапа 1 — теперь о том, какие конструкции в ней изготавливают</li>
-      <li>Коронки: штампованные, цельнометаллические, металлокерамические, из циркония — чем различаются по материалу</li>
-      <li>Цирконий и безметалловая керамика — компьютерное протезирование с оксидом циркония</li>
-      <li>Мостовидный протез — когда нужно восстановить несколько зубов подряд</li>
-      <li>Частичный и полный съёмный протез</li>
-      <li>Протезированием занимаются стоматологи-ортопеды клиники; вид конструкции врач подбирает после осмотра и включает в план лечения</li>
+      <li>Продолжение темы протезирования из этапа 2: коронки и протезы восстанавливают зуб, а имплантация — способ вернуть зуб, которого уже нет</li>
+      <li>Имплантация входит в направление клиники «Если зуб разрушен» вместе с коронками, мостовидными и съёмными протезами</li>
+      <li>Начало — консультация и диагностика со снимком; решение об имплантации и вариантах восстановления врач включает в план лечения</li>
+      <li>В клинике работают стоматологи-хирурги и стоматологи-ортопеды, а также челюстно-лицевой хирург</li>
+      <li>Коронку на имплант изготавливает зуботехническая лаборатория клиники — связка с темой лаборатории из этапа 1</li>
+      <li>Гарантия на ортопедические конструкции — 2 года</li>
     </ul></div>
     <div class="blk"><span class="h">SEO</span><div class="kws">
-      <span class="kw">протезирование зубов Великий Новгород</span><span class="kw">коронки на зубы</span><span class="kw">металлокерамическая коронка</span><span class="kw">циркониевая коронка</span><span class="kw">безметалловая керамика</span><span class="kw">мостовидный протез</span><span class="kw">съёмный протез</span><span class="kw">стоматолог-ортопед Великий Новгород</span><span class="kw">зуботехническая лаборатория Великий Новгород</span>
+      <span class="kw">имплантация зубов Великий Новгород</span><span class="kw">установка импланта</span><span class="kw">зубной имплант</span><span class="kw">коронка на имплант</span><span class="kw">восстановление утраченного зуба</span><span class="kw">стоматолог-хирург Великий Новгород</span><span class="kw">стоматолог-ортопед</span><span class="kw">стоматология Западный район</span>
     </div></div>
-    <p class="cta">CTA: Записывайтесь на консультацию стоматолога-ортопеда</p>
+    <p class="cta">CTA: Записывайтесь на консультацию по имплантации</p>
     <div class="cover"><span class="h">ТЗ на обложку</span>
-      <div class="ct">Коронки и протезы</div>
-      <p>Фон <span class="dot" style="background:#F0F0F0"></span>#F0F0F0. По центру — фото коронок в руках зубного техника. Тезис <span class="dot" style="background:#121212"></span>#121212 на белой плашке, под ним тонкая линия <span class="dot" style="background:#68BBBD"></span>#68BBBD. Небольшой акцент — круглая иконка зуба цветом <span class="dot" style="background:#C7A87C"></span>#C7A87C. Текст — не более 20% площади.</p>
+      <div class="ct">Имплантация зубов</div>
+      <p>Фон <span class="dot" style="background:#F0F0F0"></span>#F0F0F0. По центру — объёмная модель импланта с коронкой. Тезис <span class="dot" style="background:#121212"></span>#121212 на белой плашке, под ним тонкая линия <span class="dot" style="background:#68BBBD"></span>#68BBBD. Небольшой акцент — круглая иконка зуба цветом <span class="dot" style="background:#C7A87C"></span>#C7A87C. Текст — не более 20% площади.</p>
     </div>
   </article>
 </section>
@@ -262,20 +261,20 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
 
   <article class="story" id="story-1">
     <div class="num">История 1</div>
-    <div class="sh">Что уже входит в стоимость</div>
-    <div class="topic">Цена без скрытых платежей</div>
-    <ul class="facts-s"><li>Анестезия</li><li>Рентген</li><li>Необходимые материалы и медикаменты</li><li>Бахилы</li></ul>
-    <div class="kws"><span class="kw">стоимость лечения зубов</span><span class="kw">стоматология Великий Новгород</span><span class="kw">лечение зубов</span></div>
-    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF. Заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD, подзаголовок «Без скрытых платежей» — <span class="dot" style="background:#121212"></span>#121212. Четыре пункта — в блоке <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 со скруглёнными углами и обводкой <span class="dot" style="background:#68BBBD"></span>#68BBBD, текст пунктов #68BBBD. Справа у блока — объёмная модель зуба, маркеры пунктов <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными #121212: «Цена лечения — без доплат».</div>
+    <div class="sh">Как развивается кариес</div>
+    <div class="topic">От эмали до корня</div>
+    <ul class="facts-s"><li>Эмаль — не ощущается</li><li>Дентин — чувствительность</li><li>Пульпа — резкая боль</li><li>У корня — воспаление тканей</li></ul>
+    <div class="kws"><span class="kw">лечение кариеса Великий Новгород</span><span class="kw">лечение пульпита</span><span class="kw">болит зуб</span></div>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF, заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD. Четыре стадии — столбиком в блоке <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 со скруглёнными углами и обводкой #68BBBD, текст стадий #68BBBD. Справа — объёмная модель зуба в разрезе, слои подписаны тонкими линиями. Маркеры стадий <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными <span class="dot" style="background:#121212"></span>#121212: «Лечить вовремя — сохранить зуб».</div>
   </article>
 
   <article class="story" id="story-2">
     <div class="num">История 2</div>
-    <div class="sh">Коронки: четыре материала</div>
-    <div class="topic">Из чего делают коронки в «Дантист»</div>
-    <ul class="facts-s"><li>Штампованная</li><li>Цельнометаллическая</li><li>Металлокерамика</li><li>Цирконий</li></ul>
-    <div class="kws"><span class="kw">коронки на зубы Великий Новгород</span><span class="kw">протезирование зубов</span><span class="kw">циркониевая коронка</span></div>
-    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF, заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD. Четыре материала — сеткой 2×2 в плашках <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 с обводкой #68BBBD, у каждой объёмная модель коронки; плашка «Цирконий» с акцентной обводкой <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными <span class="dot" style="background:#121212"></span>#121212: «Материал подбирает стоматолог-ортопед».</div>
+    <div class="sh">Имплантация по шагам</div>
+    <div class="topic">От снимка до коронки</div>
+    <ul class="facts-s"><li>Консультация и снимок</li><li>Установка импланта</li><li>Приживление</li><li>Коронка из лаборатории клиники</li></ul>
+    <div class="kws"><span class="kw">имплантация зубов Великий Новгород</span><span class="kw">установка импланта</span><span class="kw">коронка на имплант</span></div>
+    <div class="dz"><b>Дизайн слайда</b>Фон <span class="dot" style="background:#FFFFFF"></span>#FFFFFF, заголовок заглавными <span class="dot" style="background:#68BBBD"></span>#68BBBD. Четыре шага — вертикальной лентой с номерами в кружках <span class="dot" style="background:#68BBBD"></span>#68BBBD, каждый шаг в плашке <span class="dot" style="background:#F0F0F0"></span>#F0F0F0 со скруглёнными углами. Справа внизу — объёмная модель импланта с коронкой. Последний шаг выделен обводкой <span class="dot" style="background:#C7A87C"></span>#C7A87C. Внизу строка заглавными <span class="dot" style="background:#121212"></span>#121212: «Гарантия на ортопедию — 2 года».</div>
   </article>
 </section>
 
@@ -286,7 +285,7 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
   <details class="stage">
     <summary><div class="stage-h"><b>Этап 1</b><span class="badge done">опубликован</span><small>4 новости · 4 истории</small></div></summary>
     <ul class="rm">
-      <li><div class="f">Новость 1</div><div class="n">Современная стоматология для всей семьи</div><div class="x">Полный спектр услуг для взрослых и детей, все этапы в одном месте</div></li>
+      <li><div class="f">Новость 1</div><div class="n">Современная стоматология для всей семьи</div><div class="x">Полный спектр услуг, все этапы в одном месте</div></li>
       <li class="s"><div class="f">История 1</div><div class="n">Когда пора записаться к стоматологу</div><div class="x">Признаки, при которых не стоит откладывать визит</div></li>
       <li><div class="f">Новость 2</div><div class="n">Почему важно регулярно посещать стоматолога</div><div class="x">Профилактика, осмотры, профессиональная гигиена</div></li>
       <li class="s"><div class="f">История 2</div><div class="n">Полный спектр стоматологических услуг в одном месте</div><div class="x">Диагностика, лечение, удаление, протезирование</div></li>
@@ -297,15 +296,25 @@ details.stage[open] summary .stage-h::after{content:"Свернуть"}
     </ul>
   </details>
 
-  <div class="stage">
-    <div class="stage-h"><b>Этап 2</b><span class="badge">актуальный</span><small>2 новости · 2 истории</small></div>
+  <details class="stage">
+    <summary><div class="stage-h"><b>Этап 2</b><span class="badge done">опубликован</span><small>2 новости · 2 истории</small></div></summary>
     <ul class="rm">
-      <li><a href="#news-1"><div class="f">Новость 1</div><div class="n">План лечения зубов: несколько вариантов и цена без скрытых платежей</div><div class="x">Выбор плана, что входит в цену</div></a></li>
-      <li class="s"><a href="#story-1"><div class="f">История 1</div><div class="n">Что уже входит в стоимость</div><div class="x">Анестезия, рентген, материалы, медикаменты, бахилы</div></a></li>
-      <li><a href="#news-2"><div class="f">Новость 2</div><div class="n">Коронки и протезы из лаборатории клиники</div><div class="x">Виды коронок, цирконий, мостовидные и съёмные протезы</div></a></li>
-      <li class="s"><a href="#story-2"><div class="f">История 2</div><div class="n">Коронки: четыре материала</div><div class="x">Штампованная, цельнометаллическая, металлокерамика, цирконий</div></a></li>
+      <li><div class="f">Новость 1</div><div class="n">План лечения зубов: несколько вариантов и цена без скрытых платежей</div><div class="x">Выбор плана, что входит в цену</div></li>
+      <li class="s"><div class="f">История 1</div><div class="n">Что уже входит в стоимость</div><div class="x">Анестезия, рентген, материалы, медикаменты, бахилы</div></li>
+      <li><div class="f">Новость 2</div><div class="n">Коронки и протезы из лаборатории клиники</div><div class="x">Виды коронок, цирконий, мостовидные и съёмные протезы</div></li>
+      <li class="s"><div class="f">История 2</div><div class="n">Коронки: четыре материала</div><div class="x">Штампованная, цельнометаллическая, металлокерамика, цирконий</div></li>
     </ul>
-  </div>
+  </details>
+
+  <details class="stage" open>
+    <summary><div class="stage-h"><b>Этап 3</b><span class="badge">актуальный</span><small>2 новости · 2 истории</small></div></summary>
+    <ul class="rm">
+      <li><a href="#news-1"><div class="f">Новость 1</div><div class="n">Если зуб болит: лечение пульпита и периодонтита</div><div class="x">Как развивается боль и почему важно лечить вовремя</div></a></li>
+      <li class="s"><a href="#story-1"><div class="f">История 1</div><div class="n">Как развивается кариес</div><div class="x">Эмаль, дентин, пульпа, ткани у корня</div></a></li>
+      <li><a href="#news-2"><div class="f">Новость 2</div><div class="n">Имплантация зубов</div><div class="x">Как восстанавливают зуб, которого уже нет</div></a></li>
+      <li class="s"><a href="#story-2"><div class="f">История 2</div><div class="n">Имплантация по шагам</div><div class="x">От снимка до коронки</div></a></li>
+    </ul>
+  </details>
 </section>
 </div>
 
