@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ТЗ Monaco Beach</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Layout: sticky top bar + single column of sections; agency chrome only, client colors live in brandbook swatches */
+  :root {
+    --ocean: #0E3B47; --teal: #1B6B78; --ice: #F5F8F8; --roe: #C4572B;
+    --bg: #F5F8F8; --card: #FFFFFF; --ink: #0E3B47; --ink-soft: #4C6670;
+    --line: #D9E4E4; --accent: #1B6B78; --accent-2: #C4572B; --chip-bg: #EAF2F2;
+    --tone-bg: #FBEFE9; --badge-ink: #FFFFFF;
+    --shadow: 0 1px 2px rgba(14,59,71,.06), 0 10px 28px rgba(14,59,71,.06);
+    --font-display: 'Bricolage Grotesque', Georgia, serif;
+    --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #081A1F; --card: #0E282E; --ink: #E9F4F4; --ink-soft: #9BB8BC;
+      --line: #1C3A40; --accent: #4FB8C4; --accent-2: #E1804F; --chip-bg: #12333A;
+      --tone-bg: #2A2320; --badge-ink: #081A1F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 14px 32px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #081A1F; --card: #0E282E; --ink: #E9F4F4; --ink-soft: #9BB8BC;
+    --line: #1C3A40; --accent: #4FB8C4; --accent-2: #E1804F; --chip-bg: #12333A;
+    --tone-bg: #2A2320; --badge-ink: #081A1F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 14px 32px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+  header.topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+    display: flex; align-items: center; gap: 10px 24px; flex-wrap: wrap;
+    padding-block: 12px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background: var(--card); border-bottom: 1px solid var(--line); box-shadow: var(--shadow);
+  }
+  .brandmark { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; white-space: nowrap; }
+  nav.topnav { display: flex; gap: 4px; overflow-x: auto; min-width: 0; max-width: 100%; }
+  nav.topnav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; padding: 7px 11px; border-radius: 7px; white-space: nowrap; }
+  nav.topnav a:hover { background: var(--chip-bg); color: var(--ink); }
+  .topbar-tag { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); background: var(--chip-bg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  section { padding-block: 52px; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+  section:last-of-type { border-bottom: none; padding-bottom: 64px; }
+
+  h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 4.5vw, 44px); margin: 0 0 6px; text-wrap: balance; letter-spacing: -.01em; }
+  h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin: 0 0 6px; text-wrap: balance; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-2); margin: 0 0 10px; }
+  .lede { color: var(--ink-soft); max-width: 68ch; font-size: 15.5px; margin: 0 0 26px; }
+
+  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 0; }
+  .fact { background: var(--card); padding: 16px 18px; min-width: 0; }
+  .fact dt { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 0 0 6px; }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 600; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .swatch { border-radius: 12px; min-height: 128px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; border: 1px solid var(--line); }
+  .swatch .role { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; opacity: .85; }
+  .swatch .name { font-size: 14px; font-weight: 600; }
+  .swatch .hex { font-family: var(--font-mono); font-size: 13px; }
+  .sw-light { color: #F4F1EA; }
+  .sw-dark { color: #17140C; }
+
+  .sequence { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .seq-chip { display: flex; align-items: baseline; gap: 8px; background: var(--chip-bg); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 13.5px; }
+  .seq-chip b { font-family: var(--font-mono); color: var(--accent-2); font-size: 12px; }
+  .seq-arrow { color: var(--ink-soft); }
+  .seq-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 18px 0 8px; }
+  .seq-label:first-of-type { margin-top: 0; }
+
+  .tone-banner { background: var(--tone-bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; font-size: 14.5px; margin: 0 0 22px; max-width: 78ch; }
+  .tone-banner b { color: var(--accent-2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; display: block; margin-bottom: 4px; }
+
+  .cards { display: flex; flex-direction: column; gap: 20px; }
+  .theme-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .theme-head { display: flex; align-items: baseline; gap: 8px 14px; flex-wrap: wrap; padding: 20px 22px 14px; }
+  .theme-num { font-family: var(--font-mono); font-size: 13px; color: var(--accent-2); }
+  .theme-head h3 { font-family: var(--font-display); font-size: 19px; font-weight: 700; margin: 0; text-wrap: balance; min-width: 0; flex: 1 1 260px; }
+  .purpose-tag { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); background: var(--chip-bg); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .theme-body { padding: 0 22px 22px; display: flex; flex-direction: column; gap: 14px; }
+  .blk-lbl { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent-2); display: block; margin-bottom: 5px; }
+  .voice { border-left: 3px solid var(--accent-2); padding: 2px 0 2px 14px; font-size: 15px; font-style: italic; max-width: 70ch; }
+  ul.dev { margin: 0; padding-left: 20px; font-size: 14.5px; max-width: 74ch; }
+  ul.dev li { margin-bottom: 6px; }
+  .kw-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .kw { font-family: var(--font-mono); font-size: 11.5px; background: var(--chip-bg); border: 1px solid var(--line); border-radius: 5px; padding: 3px 9px; }
+  .cover-tz { padding: 12px 14px; background: var(--chip-bg); border-radius: 8px; font-size: 14px; }
+  .cover-tz p { margin: 0 0 6px; }
+  .cover-tz p:last-child { margin: 0; }
+  .cta-line { font-weight: 600; color: var(--accent-2); font-size: 14.5px; }
+
+  .story-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
+  .story-card h3 { font-family: var(--font-display); font-size: 18px; margin: 0; }
+  .story-card ul { margin: 0; padding-left: 20px; font-size: 14.5px; }
+  .story-card ul li { margin-bottom: 5px; }
+  .design-note { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; background: var(--chip-bg); border-radius: 8px; padding: 10px 12px; }
+  .dots { display: flex; gap: 4px; flex: none; padding-top: 2px; }
+  .dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); }
+
+  details.stage { border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
+  details.stage[open] { border-color: var(--accent); }
+  details.stage summary { cursor: pointer; list-style: none; padding: 14px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  details.stage summary::-webkit-details-marker { display: none; }
+  .stage-title { font-size: 15px; font-weight: 600; }
+  .stage-badge { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 3px 9px; border-radius: 999px; background: var(--accent-2); color: var(--badge-ink); }
+  .road { list-style: none; margin: 0; padding: 4px 18px 20px 18px; }
+  .road li { position: relative; padding: 0 0 16px 28px; }
+  .road li::before { content: ""; position: absolute; left: 6px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--card); border: 2px solid var(--accent); }
+  .road li::after { content: ""; position: absolute; left: 11px; top: 20px; bottom: -2px; width: 2px; background: var(--line); }
+  .road li:last-child { padding-bottom: 0; }
+  .road li:last-child::after { display: none; }
+  .road li.st::before { border-color: var(--accent-2); }
+  .road .fmt { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); }
+  .road .t { font-weight: 600; display: block; }
+  .road .th { font-size: 14px; color: var(--ink-soft); }
+
+  @media (max-width: 560px) {
+    .topbar-tag { margin-left: 0; }
+    .theme-head, .theme-body { padding-left: 16px; padding-right: 16px; }
+    .story-card { padding: 16px; }
+  }
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="brandmark">Monaco Beach</div>
+  <nav class="topnav" aria-label="Разделы">
+    <a href="#company">Компания</a>
+    <a href="#brandbook">Брендбук</a>
+    <a href="#logic">Логика цикла</a>
+    <a href="#news">Новости</a>
+    <a href="#stories">Сторис</a>
+    <a href="#map">Карта тем</a>
+  </nav>
+  <span class="topbar-tag">Этап 01 · 4 новости + 4 сторис</span>
+</header>
+
+<div class="wrap">
+
+  <section id="company">
+    <p class="eyebrow">ТЗ на контент · Яндекс Карты и 2ГИС</p>
+    <h1>Monaco Beach</h1>
+    <p class="lede">Элитный аква-стриптиз клуб, Нижний Новгород. Клуб только что открылся. Новости и сторис публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
+    <dl class="facts-grid">
+      <div class="fact"><dt>Формат</dt><dd>Элитный аква-стриптиз клуб</dd></div>
+      <div class="fact"><dt>Адрес</dt><dd>Нижне-Волжская наб., 19, 2 этаж</dd></div>
+      <div class="fact"><dt>Открытие</dt><dd>Новый клуб, только открылся</dd></div>
+      <div class="fact"><dt>Начало работы</dt><dd>С 21:00</dd></div>
+      <div class="fact"><dt>Пространство</dt><dd>Основной зал с аква-сценой, VIP-комнаты, бассейн с водопадом</dd></div>
+      <div class="fact"><dt>Для кого</dt><dd>Комфорт для мужчин и женщин</dd></div>
+    </dl>
+  </section>
+
+  <section id="brandbook">
+    <p class="eyebrow">Раздел 02</p>
+    <h2>Мини-брендбук</h2>
+    <p class="lede">После анализа ресурсов компании определена фирменная палитра Monaco Beach: глубокий чёрный фон и золото с металлическим переливом.</p>
+    <div class="swatch-row">
+      <div class="swatch sw-light" style="background:#040404"><span class="role">Фоновый</span><span class="name">Чёрный</span><span class="hex">#040404</span></div>
+      <div class="swatch sw-dark" style="background:linear-gradient(100deg,#F8E8A0 0%,#E0C068 45%,#A07830 100%)"><span class="role">Акцентный</span><span class="name">Золото, градиент</span><span class="hex">#F8E8A0 → #A07830</span></div>
+      <div class="swatch sw-dark" style="background:#B6985B"><span class="role">Основной</span><span class="name">Матовое золото</span><span class="hex">#B6985B</span></div>
+      <div class="swatch sw-dark" style="background:#D5BE77"><span class="role">Второстепенный</span><span class="name">Светлое золото</span><span class="hex">#D5BE77</span></div>
+      <div class="swatch sw-dark" style="background:#E0E0D0"><span class="role">Текстовый</span><span class="name">Тёплый белый</span><span class="hex">#E0E0D0</span></div>
+    </div>
+  </section>
+
+  <section id="logic">
+    <p class="eyebrow">Раздел 03</p>
+    <h2>Логика цикла</h2>
+    <p class="lede">Первый этап знакомит город с новым клубом. Новости идут от факта открытия к атмосфере, затем к основному залу и VIP-комнатам. Сторис дают короткие факты: где клуб, для кого он, что внутри и как забронировать вечер.</p>
+    <p class="seq-label">Новости</p>
+    <div class="sequence">
+      <div class="seq-chip"><b>01</b> Открытие</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>02</b> Атмосфера</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>03</b> Основной зал</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>04</b> VIP-комнаты</div>
+    </div>
+    <p class="seq-label">Сторис</p>
+    <div class="sequence">
+      <div class="seq-chip"><b>01</b> Мы открылись</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>02</b> Для мужчин и женщин</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>03</b> Что внутри</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>04</b> Бронь вечера</div>
+    </div>
+  </section>
+
+  <section id="news">
+    <p class="eyebrow">Раздел 04</p>
+    <h2>Новости</h2>
+    <p class="lede">SEO-тексты для карточки Monaco Beach на Яндекс Картах и в 2ГИС, до 3000 знаков с пробелами. К каждой новости — обложка.</p>
+    <div class="tone-banner"><b>Тон текстов</b>Пишем от лица клуба (мы), спокойно и с приглашением прийти. Каждая тема раскрывает свою часть клуба, без повторения полного списка услуг в каждом тексте. SEO-ключи вплетаются в предложения, без списков. Телефон и ссылки в текст не ставим, слова «лучший» и «самый» не используем, алкоголь не упоминаем.</div>
+
+    <div class="cards">
+      <article class="theme-card">
+        <div class="theme-head"><span class="theme-num">01</span><h3>Monaco Beach открылся в Нижнем Новгороде</h3><span class="purpose-tag">Анонсирующий</span></div>
+        <div class="theme-body">
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Мы открылись. Monaco Beach — элитный аква-стриптиз клуб на Нижне-Волжской набережной, созданный для тех, кто ценит атмосферу и яркие впечатления.</p></div>
+          <div><span class="blk-lbl">Тезисы</span>
+            <ul class="dev">
+              <li>Monaco Beach — новый аква-стриптиз клуб Нижнего Новгорода, клуб только открылся и приглашает первых гостей</li>
+              <li>Адрес: Нижне-Волжская набережная, 19, 2 этаж; клуб открыт с 21:00</li>
+              <li>Коротко о составе клуба: основной зал с аква-сценой, VIP-комнаты, бассейн с водопадом (подробно раскрываются в новостях 02–04)</li>
+              <li>Клуб создан с комфортом для мужчин и женщин</li>
+            </ul>
+          </div>
+          <div><span class="blk-lbl">SEO-ключи</span>
+            <div class="kw-row"><span class="kw">стриптиз клуб Нижний Новгород</span><span class="kw">аква стриптиз клуб Нижний Новгород</span><span class="kw">новый стриптиз клуб Нижний Новгород</span><span class="kw">открытие клуба Нижний Новгород</span><span class="kw">стриптиз клуб Нижне-Волжская набережная</span><span class="kw">ночной клуб Нижний Новгород</span><span class="kw">Monaco Beach Нижний Новгород</span></div>
+          </div>
+          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
+            <p><b>Тезис:</b> «Мы открылись»</p>
+            <p><b>Визуал:</b> чёрный фон #040404, золотая корона из логотипа и надпись Monaco Beach градиентным золотом #F8E8A0 → #A07830, под ней огни, отражённые в тёмной воде. Тонкий золотой разделитель с ромбом. Без фото танцовщиц, без контактов, текст не больше 20% площади.</p>
+          </div>
+          <p class="cta-line">CTA: Бронируйте свой первый вечер в Monaco Beach</p>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-head"><span class="theme-num">02</span><h3>Лазурный берег на Нижне-Волжской набережной</h3><span class="purpose-tag">Имиджевый</span></div>
+        <div class="theme-body">
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">В Monaco Beach огни Лазурного берега отражаются в воде, пальмы теряются в мягком золотом свете, а у бассейна ниспадает водопад.</p></div>
+          <div><span class="blk-lbl">Тезисы</span>
+            <ul class="dev">
+              <li>Пространство клуба оформлено в образе Лазурного берега: огни в воде, яхты, пальмы в золотом свете</li>
+              <li>Величественный водопад у бассейна превращает пространство в тропический оазис</li>
+              <li>Музыка задаёт ритм вечеру</li>
+              <li>Формулировка клуба: «тропический оазис в сердце Монако», элитная атмосфера и премиум-сервис</li>
+            </ul>
+          </div>
+          <div><span class="blk-lbl">SEO-ключи</span>
+            <div class="kw-row"><span class="kw">клуб с бассейном Нижний Новгород</span><span class="kw">аква стриптиз Нижний Новгород</span><span class="kw">клуб с водопадом Нижний Новгород</span><span class="kw">атмосферный клуб Нижний Новгород</span><span class="kw">элитный клуб Нижний Новгород</span><span class="kw">вечерний отдых Нижний Новгород</span></div>
+          </div>
+          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
+            <p><b>Тезис:</b> «Тропический оазис»</p>
+            <p><b>Визуал:</b> водопад у бассейна с подсветкой воды, пальмы и тёплый золотой свет; заголовок градиентным золотом на тёмной части кадра. Без людей в кадре, без контактов.</p>
+          </div>
+          <p class="cta-line">CTA: Приходите увидеть Лазурный берег в Нижнем Новгороде</p>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-head"><span class="theme-num">03</span><h3>Аква-сцена и выступления каждый вечер</h3><span class="purpose-tag">Продуктовый</span></div>
+        <div class="theme-body">
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Каждый вечер в основном зале Monaco Beach на аква-сцене проходят яркие выступления.</p></div>
+          <div><span class="blk-lbl">Тезисы</span>
+            <ul class="dev">
+              <li>Основной зал — уютный зал с аква-сценой</li>
+              <li>Звук и свет зала — часть шоу (в тексте без превосходной степени)</li>
+              <li>Яркие выступления каждый вечер и незабываемая атмосфера</li>
+              <li>Шоу на воде — главное отличие формата аква-стриптиз клуба</li>
+            </ul>
+          </div>
+          <div><span class="blk-lbl">SEO-ключи</span>
+            <div class="kw-row"><span class="kw">шоу программа стриптиз клуб Нижний Новгород</span><span class="kw">аква шоу Нижний Новгород</span><span class="kw">стриптиз шоу каждый вечер</span><span class="kw">аква сцена клуб</span><span class="kw">ночное шоу Нижний Новгород</span></div>
+          </div>
+          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
+            <p><b>Тезис:</b> «Шоу на воде»</p>
+            <p><b>Визуал:</b> аква-сцена основного зала с подсвеченной голубой водой, лампы и свечи на столиках, золотые блики. Без откровенных поз и белья в кадре, без контактов.</p>
+          </div>
+          <p class="cta-line">CTA: Бронируйте вечер в основном зале</p>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-head"><span class="theme-num">04</span><h3>VIP-комнаты Monaco Beach</h3><span class="purpose-tag">Продуктовый</span></div>
+        <div class="theme-body">
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Для тех, кто хочет провести вечер в уединении, в Monaco Beach есть VIP-комнаты с индивидуальным обслуживанием.</p></div>
+          <div><span class="blk-lbl">Тезисы</span>
+            <ul class="dev">
+              <li>VIP-комнаты — уединённая атмосфера</li>
+              <li>Индивидуальное обслуживание</li>
+              <li>Роскошная «Сирена»</li>
+              <li>Элитная атмосфера и премиум-сервис</li>
+            </ul>
+          </div>
+          <div><span class="blk-lbl">SEO-ключи</span>
+            <div class="kw-row"><span class="kw">VIP комната стриптиз клуб Нижний Новгород</span><span class="kw">приватный вечер Нижний Новгород</span><span class="kw">VIP зона клуб Нижний Новгород</span><span class="kw">индивидуальное обслуживание клуб</span><span class="kw">элитный стриптиз клуб Нижний Новгород</span></div>
+          </div>
+          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
+            <p><b>Тезис:</b> «VIP-комнаты»</p>
+            <p><b>Визуал:</b> интерьер VIP-комнаты: хрустальная люстра, тёмная мебель, панорамное окно на ночной залив с яхтами. Заголовок золотом #D5BE77, тонкая золотая рамка #B6985B по краю. Без людей, без контактов.</p>
+          </div>
+          <p class="cta-line">CTA: Бронируйте VIP-комнату на свой вечер</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="stories">
+    <p class="eyebrow">Раздел 05</p>
+    <h2>Сторис</h2>
+    <p class="lede">Один слайд — один факт. Короткие тезисы для карточки Monaco Beach на Яндекс Картах и в 2ГИС.</p>
+    <div class="cards">
+      <article class="story-card">
+        <h3>01 · Мы открылись</h3>
+        <ul><li>Monaco Beach — аква-стриптиз клуб</li><li>Нижне-Волжская наб., 19, 2 этаж</li><li>С 21:00</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#F8E8A0"></span><span class="dot" style="background:#A07830"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, золотая корона сверху, «Мы открылись» градиентным золотом, адрес текстом #E0E0D0 под тонким золотым разделителем с ромбом.</span></div>
+      </article>
+      <article class="story-card">
+        <h3>02 · Для мужчин и женщин</h3>
+        <ul><li>Комфорт для мужчин и женщин</li><li>Элитная атмосфера и премиум-сервис</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#D5BE77"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, линейные золотые иконки короны и бриллианта, подписи капслоком #D5BE77, как в блоке преимуществ на сайте.</span></div>
+      </article>
+      <article class="story-card">
+        <h3>03 · Что внутри</h3>
+        <ul><li>Основной зал с аква-сценой</li><li>VIP-комнаты</li><li>Бассейн с водопадом</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Фото водопада у бассейна, затемнённое снизу; три пункта в тонких золотых рамках #B6985B, текст #E0E0D0. Без людей в кадре.</span></div>
+      </article>
+      <article class="story-card">
+        <h3>04 · Забронируйте вечер</h3>
+        <ul><li>Вечер в Monaco Beach бронируется заранее</li><li>Контакты для брони — в карточке компании</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#F8E8A0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Ночная панорама залива с яхтами, «Забронируйте свой вечер» градиентным золотом, плашка-кнопка матовым золотом #B6985B с тёмным текстом. Номер телефона на слайд не ставить.</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="map">
+    <p class="eyebrow">Раздел 06</p>
+    <h2>Карта тем</h2>
+    <details class="stage" open>
+      <summary><span class="stage-title">Этап 01 · знакомство с клубом</span><span class="stage-badge">актуальный</span></summary>
+      <ol class="road">
+        <li><span class="fmt">Новость 01</span><span class="t">Monaco Beach открылся в Нижнем Новгороде</span><span class="th">Новый аква-стриптиз клуб на Нижне-Волжской набережной</span></li>
+        <li class="st"><span class="fmt">Сторис 01</span><span class="t">Мы открылись</span><span class="th">Формат, адрес, время открытия</span></li>
+        <li><span class="fmt">Новость 02</span><span class="t">Лазурный берег на Нижне-Волжской набережной</span><span class="th">Атмосфера Лазурного берега и водопад у бассейна</span></li>
+        <li class="st"><span class="fmt">Сторис 02</span><span class="t">Для мужчин и женщин</span><span class="th">Комфорт для всех гостей, премиум-сервис</span></li>
+        <li><span class="fmt">Новость 03</span><span class="t">Аква-сцена и выступления каждый вечер</span><span class="th">Основной зал и шоу на воде</span></li>
+        <li class="st"><span class="fmt">Сторис 03</span><span class="t">Что внутри</span><span class="th">Основной зал, VIP-комнаты, бассейн с водопадом</span></li>
+        <li><span class="fmt">Новость 04</span><span class="t">VIP-комнаты Monaco Beach</span><span class="th">Уединение и индивидуальное обслуживание</span></li>
+        <li class="st"><span class="fmt">Сторис 04</span><span class="t">Забронируйте вечер</span><span class="th">Бронь заранее через контакты карточки</span></li>
+      </ol>
+    </details>
+  </section>
+
+</div>
+
+</body>
+</html>
