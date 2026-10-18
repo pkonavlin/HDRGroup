@@ -166,6 +166,19 @@ section + section{border-top:1px solid var(--line);}
 }
 .cta-line{font-size:13.5px;font-weight:600;color:var(--accent-ink);border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;}
 
+.tone-banner{
+  font-size:13.5px;color:var(--ink-soft);line-height:1.6;max-width:72ch;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:12px;
+  padding:13px 16px;margin:0 0 22px;
+}
+.post-intro{
+  font-size:14.5px;font-weight:500;line-height:1.6;color:var(--ink);
+  margin:0 0 14px;padding-left:13px;border-left:3px solid var(--roe);
+}
+.thesis-list{margin:0 0 14px;padding-left:19px;}
+.thesis-list li{font-size:14.5px;line-height:1.62;color:var(--ink);margin-bottom:7px;}
+.thesis-list li:last-child{margin-bottom:0;}
+
 /* Stories */
 .story-note{font-size:14px;color:var(--ink-soft);margin:-8px 0 26px;}
 .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
@@ -183,23 +196,34 @@ section + section{border-top:1px solid var(--line);}
 .story-design{font-size:13px;color:var(--ink-soft);line-height:1.55;}
 .story-design b{color:var(--ink);}
 
-/* Карта тем / timeline */
-.timeline{border-left:2px solid var(--line);padding-left:22px;margin-left:6px;}
-.tl-stage{position:relative;padding-bottom:28px;}
-.tl-stage:last-child{padding-bottom:0;}
-.tl-stage:before{
-  content:"";position:absolute;left:-28px;top:3px;width:11px;height:11px;border-radius:50%;
-  background:var(--roe);border:2px solid var(--bg);
+/* Карта тем / roadmap accordion */
+.roadmap{display:flex;flex-direction:column;gap:12px;}
+.rm-stage{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:0;overflow:hidden;
 }
-.tl-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
-.tl-title{font-weight:700;font-size:15.5px;}
+.rm-stage summary{
+  cursor:pointer;list-style:none;padding:16px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-weight:700;font-size:15.5px;
+}
+.rm-stage summary::-webkit-details-marker{display:none;}
+.rm-stage summary:before{
+  content:"›";display:inline-block;transform:rotate(0deg);transition:transform .15s;
+  color:var(--ink-soft);font-size:18px;width:14px;
+}
+.rm-stage[open] summary:before{transform:rotate(90deg);}
 .badge{
   font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
   background:rgba(197,87,43,.12);color:var(--roe);padding:3px 9px;border-radius:999px;font-weight:600;
 }
-.tl-list{margin:6px 0 0;padding:0;list-style:none;font-size:13.5px;color:var(--ink-soft);}
-.tl-list li{padding:3px 0;}
-.tl-list b{color:var(--ink);font-weight:600;}
+.rm-list{margin:0;padding:0 20px 18px;list-style:none;border-top:1px solid var(--line);}
+.rm-list li{padding:10px 0 10px 0;font-size:13.5px;color:var(--ink);line-height:1.5;border-bottom:1px dashed var(--line);}
+.rm-list li:last-child{border-bottom:none;}
+.rm-list i{color:var(--ink-soft);font-style:normal;}
+.rm-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--accent-ink-2);display:inline-block;min-width:92px;
+}
 
 /* Sources */
 .sources-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
@@ -234,9 +258,9 @@ footer.foot{padding:40px 0 56px;}
 
 <section id="hero" class="hero">
   <div class="wrap">
-    <span class="eyebrow">Этап 1 · Яндекс Карты и 2ГИС</span>
+    <span class="eyebrow">Этап 2 · Яндекс Карты и 2ГИС</span>
     <h1 class="section-title">Кафе «Престиж», Саратов</h1>
-    <p class="lede">Контент-план для карточки компании на Яндекс Картах и 2ГИС: 4 новости с обложкой и 4 сторис в формате презентации (один слайд на тему). Темы построены на банкетном направлении, кухне, кондитерском цехе и банном комплексе кафе «Престиж».</p>
+    <p class="lede">Контент-план для карточки компании на Яндекс Картах и 2ГИС: 2 новости с обложкой и 2 сторис в формате презентации (один слайд на тему). Этап 1 раскрыл банкетное направление, кухню, кондитерский цех и баню; этап 2 продолжает повествование повседневными форматами — доставкой еды и обедами — и расширяет аудиторию карточки за пределы гостей банкета.</p>
     <div class="fact-grid">
       <div class="fact"><div class="k">Сфера</div><div class="v">Банкеты и кейтеринг<small>кафе-ресторан для мероприятий</small></div></div>
       <div class="fact"><div class="k">Адрес</div><div class="v">ул. Танкистов, 51А<small>Саратов</small></div></div>
@@ -286,13 +310,11 @@ footer.foot{padding:40px 0 56px;}
   <div class="wrap">
     <div class="section-head">
       <span class="section-num">03 · Логика цикла</span>
-      <h2 class="section-title">Последовательность этапа 1</h2>
+      <h2 class="section-title">Последовательность этапа 2</h2>
     </div>
     <div class="cycle-row">
-      <div class="cycle-step"><div class="num">01</div><h4>Банкеты и залы</h4><p>Знакомство с банкетной инфраструктурой — пять залов, кабинки, веранда</p></div>
-      <div class="cycle-step"><div class="num">02</div><h4>Кухня</h4><p>Мясо на мангале и банкетное меню — качество продукции</p></div>
-      <div class="cycle-step"><div class="num">03</div><h4>Кондитерский цех</h4><p>Собственное производство десертов для сладкого стола</p></div>
-      <div class="cycle-step"><div class="num">04</div><h4>Баня и сауна</h4><p>Дополнительный сервис — отличие от других банкетных площадок</p></div>
+      <div class="cycle-step"><div class="num">01</div><h4>Доставка еды</h4><p>Кафе выходит за пределы зала — заказ на дом</p></div>
+      <div class="cycle-step"><div class="num">02</div><h4>Обеды</h4><p>Повседневный визит — не только банкет</p></div>
     </div>
   </div>
 </section>
@@ -303,97 +325,57 @@ footer.foot{padding:40px 0 56px;}
       <span class="section-num">04 · Новости</span>
       <h2 class="section-title">Контент-план: новости для карточки компании</h2>
     </div>
+    <p class="tone-banner">Тексты строятся на тёплом голосе от лица кафе «Престиж»: каждая карточка открывается коротким вступлением от первого лица, тезисы ниже раскрывают факты без повтора одного и того же перечня услуг от темы к теме. SEO-ключи вынесены отдельным блоком для копирайтера.</p>
 
     <div class="post-card">
       <div class="post-head">
-        <div><div class="post-num">Новость 01</div><div class="post-title">Банкетные залы кафе «Престиж» в Саратове: пространство для торжества любого масштаба</div></div>
-        <span class="tag">Имиджевая</span>
+        <div><div class="post-num">Новость 05</div><div class="post-title">Доставка еды из кафе «Престиж» в Саратове: банкетное меню с доставкой на дом</div></div>
+        <span class="tag">Сервисная</span>
       </div>
-      <div class="post-body">
-        <p>Кафе «Престиж» на улице Танкистов, 51А в Саратове предлагает пять банкетных залов вместимостью от 10 до 70 гостей — для свадьбы, юбилея, корпоратива или дня рождения. Закрытые кабинки до 10 человек подходят для камерной встречи, а летняя веранда — для тёплого сезона. В залах — современный дизайнерский интерьер, кондиционеры, музыкальное оборудование и караоке, отдельные столики для чайной церемонии и подарков. Аренда банкетного зала включает обслуживание несколькими официантами, а гости могут принести на банкет собственный алкоголь. По данным Яндекс Карт направление «Мероприятия» набирает 92% положительных отзывов, а «Банкетный зал» — 89%. Забронировать банкетный зал в кафе «Престиж» в Саратове можно заранее по телефону.</p>
-      </div>
+      <p class="post-intro">Мы в кафе «Престиж» знаем: вкусный стол нужен не только на банкет — иногда его просто хочется дома.</p>
+      <ul class="thesis-list">
+        <li>Кафе «Престиж» в Саратове принимает заказы на доставку еды на дом — оформить заказ можно онлайн на сайте или по телефону</li>
+        <li>Формат «еда навынос» подтверждён карточкой заведения на Яндекс Картах как действующая услуга</li>
+      </ul>
       <div class="post-meta">
-        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-обзор + сетка фото пяти залов</div></div>
-        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Интерьерные фото залов, светлая подложка, вместимость крупным числом</div></div>
-        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото самого просторного зала (до 70 человек) с сервированными столами, надпись «5 залов для банкета», лого в углу</div></div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка с акцентом на сервис доставки и навынос</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Фото готового блюда или упаковки на вынос, светлый фон</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото блюда в упаковке на вынос или крупный кадр готового блюда, подпись «Доставка еды», лого в углу</div></div>
       </div>
       <div class="chips">
-        <span class="chip-tag">#банкетныйзалсаратов</span>
-        <span class="chip-tag">#кафедлябанкетасаратов</span>
-        <span class="chip-tag">#свадьбасаратов</span>
-        <span class="chip-tag">#юбилейсаратов</span>
-        <span class="chip-tag">#деньрожденияресторансаратов</span>
-      </div>
-      <div class="cta-line">CTA: забронировать банкетный зал в кафе «Престиж» — по телефону, указанному в карточке на Яндекс Картах</div>
-    </div>
-
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 02</div><div class="post-title">Кухня кафе «Престиж»: банкетное меню и мясо на мангале</div></div>
-        <span class="tag">Экспертная</span>
-      </div>
-      <div class="post-body">
-        <p>Меню кафе «Престиж» в Саратове построено вокруг банкетной и мангальной кухни: горячие мясные блюда готовятся на углях, в зале работает соус-бар, а гостям доступны блюда из баранины, говядины, свинины, птицы и рыбы. Отдельное направление — холодные закуски, фуршетное и банкетное меню для больших мероприятий, а по запросу повара готовят блюда, которых нет в основном меню. Качество продукции — ключевое преимущество заведения: по отзывам на Яндекс Картах категория «Еда» набирает 87% положительных оценок, а «Чистота» — 93%. Такой подход к банкетному меню делает кафе «Престиж» удобным выбором для организации застолья в Саратове на любое количество гостей.</p>
-      </div>
-      <div class="post-meta">
-        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка с фото блюда крупным планом</div></div>
-        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Тёплый предметный кадр блюда на мангале, короткая подпись сверху</div></div>
-        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Крупное фото мясного блюда на углях, подпись «Мясо на мангале», лого в углу</div></div>
-      </div>
-      <div class="chips">
-        <span class="chip-tag">#банкетноеменюсаратов</span>
-        <span class="chip-tag">#мясонамангалесаратов</span>
-        <span class="chip-tag">#шашлыксаратов</span>
-        <span class="chip-tag">#кухнянабанкет</span>
+        <span class="chip-tag">#доставкаедысаратов</span>
+        <span class="chip-tag">#едадомойсаратов</span>
+        <span class="chip-tag">#едановыноссаратов</span>
+        <span class="chip-tag">#заказедысаратов</span>
         <span class="chip-tag">#кафепрестижсаратов</span>
       </div>
-      <div class="cta-line">CTA: посмотреть полное меню кафе «Престиж» и выбрать блюда для банкета</div>
+      <div class="cta-line">CTA: оформить заказ с доставкой — онлайн на сайте или по телефону кафе «Престиж»</div>
     </div>
 
     <div class="post-card">
       <div class="post-head">
-        <div><div class="post-num">Новость 03</div><div class="post-title">Кондитерский цех кафе «Престиж»: сладкий стол для любого праздника</div></div>
-        <span class="tag">Продающая</span>
+        <div><div class="post-num">Новость 06</div><div class="post-title">Обеды в кафе «Престиж»: повседневный стол в Саратове не только по поводу</div></div>
+        <span class="tag">Имиджевая</span>
       </div>
-      <div class="post-body">
-        <p>В кафе «Престиж» работает собственный кондитерский цех, который готовит десерты и выпечку для банкетного стола — от классического чизкейка и тирамису до авторского штруделя «Престиж» и горячего макового торта. Хачапури, тарталетки и профитроли из фуршетного меню дополняют сладкую часть праздничного стола. По отзывам на Яндекс Картах категория «Выпечка» получает 89% положительных оценок — один из самых высоких показателей карточки заведения. Десерты собственного производства избавляют от необходимости заказывать сладкий стол отдельно и делают организацию банкета в кафе «Престиж» комплексной.</p>
-      </div>
+      <p class="post-intro">Кафе «Престиж» открыто каждый день — зал ждёт гостей не только на праздник, но и на обычный обед.</p>
+      <ul class="thesis-list">
+        <li>Помимо банкетных залов, кафе «Престиж» работает ежедневно с 11:00 до 24:00</li>
+        <li>«Обеды» — одно из заявленных направлений работы кафе, наравне с банкетами и кейтерингом</li>
+        <li>Карточка заведения на Яндекс Картах входит в подборку «Бизнес-ланчи в Саратове: лучшие заведения для обеда»</li>
+      </ul>
       <div class="post-meta">
-        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-подборка из 3–4 десертов</div></div>
-        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Светлый предметный кадр десертов на сервированном столе</div></div>
-        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото сладкого стола или торта, подпись «Свой кондитерский цех», лого в углу</div></div>
+        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка-приглашение на обед</div></div>
+        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Светлый кадр сервированного стола на 1–2 персоны, дневной свет</div></div>
+        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото сервированного обеденного стола, подпись «Обеды каждый день», лого в углу</div></div>
       </div>
       <div class="chips">
-        <span class="chip-tag">#кондитерскаясаратов</span>
-        <span class="chip-tag">#десертынабанкетсаратов</span>
-        <span class="chip-tag">#выпечкасаратов</span>
-        <span class="chip-tag">#сладкийстолсаратов</span>
-        <span class="chip-tag">#тортнабанкетсаратов</span>
+        <span class="chip-tag">#обедысаратов</span>
+        <span class="chip-tag">#бизнесланчсаратов</span>
+        <span class="chip-tag">#кафенаобедсаратов</span>
+        <span class="chip-tag">#пообедатьсаратов</span>
+        <span class="chip-tag">#кафепрестижсаратов</span>
       </div>
-      <div class="cta-line">CTA: уточнить состав сладкого стола на банкет по телефону кафе «Престиж»</div>
-    </div>
-
-    <div class="post-card">
-      <div class="post-head">
-        <div><div class="post-num">Новость 04</div><div class="post-title">Баня и сауна при кафе «Престиж»: банный комплекс с бассейном и хамамом в центре Саратова</div></div>
-        <span class="tag">Дифференцирующая</span>
-      </div>
-      <div class="post-body">
-        <p>При кафе «Престиж» на улице Танкистов, 51А работает собственный банный комплекс — двухэтажное здание с бассейном, хамамом и русской баней в центре Саратова. Формат подходит для отдыха компанией друзей или всей семьёй, а при заказе бани или сауны гости получают скидку на кухню кафе. Провести банкет и попариться в бане можно в одном месте, без переезда между локациями. По отзывам на Яндекс Картах направление «Баня» набирает 71% положительных оценок. Сочетание банкетного зала и банного комплекса делает кафе «Престиж» удобной площадкой для больших семейных праздников в Саратове.</p>
-      </div>
-      <div class="post-meta">
-        <div class="meta-block"><div class="k">Формат</div><div class="v">Карточка с фото банного комплекса</div></div>
-        <div class="meta-block"><div class="k">Дизайн поста</div><div class="v">Интерьерное фото бани или бассейна, акцент на «2 этажа»</div></div>
-        <div class="meta-block full"><div class="k">ТЗ на обложку</div><div class="v">Фото бассейна или парной, подпись «Баня и сауна при кафе», лого в углу</div></div>
-      </div>
-      <div class="chips">
-        <span class="chip-tag">#банясаратов</span>
-        <span class="chip-tag">#саунасаратов</span>
-        <span class="chip-tag">#банясбассейномсаратов</span>
-        <span class="chip-tag">#хамамсаратов</span>
-        <span class="chip-tag">#кафесбанейсаратов</span>
-      </div>
-      <div class="cta-line">CTA: забронировать баню или сауну при кафе «Престиж» — скидка на кухню при заказе</div>
+      <div class="cta-line">CTA: прийти на обед в кафе «Престиж» — открыто ежедневно с 11:00 до 24:00</div>
     </div>
 
   </div>
@@ -405,35 +387,21 @@ footer.foot{padding:40px 0 56px;}
       <span class="section-num">05 · Сторис</span>
       <h2 class="section-title">Контент-план: сторис в формате презентации</h2>
     </div>
-    <p class="story-note">Формат — один слайд на тему, без обложки. Темы зеркалят новости этапа 1.</p>
+    <p class="story-note">Один слайд — один факт. Темы этапа 2 зеркалят новости этого же этапа.</p>
     <div class="story-grid">
 
       <div class="story-card">
-        <span class="post-num">Сторис 01</span>
-        <h4>Банкетные залы</h4>
-        <div class="story-thesis">5 залов на 10–70 гостей + закрытые кабинки</div>
-        <div class="story-design"><b>Дизайн слайда:</b> фото зала с сервировкой на весь кадр, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
+        <span class="post-num">Сторис 05</span>
+        <h4>Доставка еды</h4>
+        <div class="story-thesis">Доставка еды из меню кафе на дом</div>
+        <div class="story-design"><b>Дизайн слайда:</b> фото готового блюда или упаковки на вынос, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
       </div>
 
       <div class="story-card">
-        <span class="post-num">Сторис 02</span>
-        <h4>Кухня</h4>
-        <div class="story-thesis">Мясо на мангале + банкетное меню</div>
-        <div class="story-design"><b>Дизайн слайда:</b> крупный предметный кадр блюда на углях, тезис малиново-бордовым (#B92E56) в верхней части слайда, логотип в углу.</div>
-      </div>
-
-      <div class="story-card">
-        <span class="post-num">Сторис 03</span>
-        <h4>Кондитерский цех</h4>
-        <div class="story-thesis">Свой кондитерский цех — десерты для банкета</div>
-        <div class="story-design"><b>Дизайн слайда:</b> светлый предметный кадр десерта крупным планом, тезис тёмным (#423A2E) на светлой плашке, акцентная линия #B92E56, логотип в углу.</div>
-      </div>
-
-      <div class="story-card">
-        <span class="post-num">Сторис 04</span>
-        <h4>Баня и сауна</h4>
-        <div class="story-thesis">Баня, сауна и бассейн в одном здании</div>
-        <div class="story-design"><b>Дизайн слайда:</b> интерьерное фото бани или бассейна, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
+        <span class="post-num">Сторис 06</span>
+        <h4>Обеды</h4>
+        <div class="story-thesis">Обеды каждый день — не только на банкет</div>
+        <div class="story-design"><b>Дизайн слайда:</b> светлый кадр сервированного обеденного стола, тезис малиново-бордовым (#B92E56) на светлой плашке снизу, логотип в углу.</div>
       </div>
 
     </div>
@@ -446,14 +414,29 @@ footer.foot{padding:40px 0 56px;}
       <span class="section-num">06 · Карта тем</span>
       <h2 class="section-title">История публикаций</h2>
     </div>
-    <div class="timeline">
-      <div class="tl-stage">
-        <div class="tl-head"><span class="tl-title">Этап 1 — 15.09.2026</span><span class="badge">актуальный</span></div>
-        <ul class="tl-list">
-          <li><b>Новости:</b> Банкетные залы · Кухня и мангал · Кондитерский цех · Баня и сауна</li>
-          <li><b>Сторис:</b> Банкетные залы · Кухня · Кондитерский цех · Баня и сауна</li>
-        </ul>
-      </div>
+    <div class="roadmap">
+      <details class="rm-stage">
+        <summary>Этап 1 — 15.09.2026</summary>
+        <ol class="rm-list">
+          <li><span class="rm-tag">Новость 1</span> Банкетные залы кафе «Престиж» — <i>5 залов на 10–70 чел., закрытые кабинки, летняя веранда</i></li>
+          <li><span class="rm-tag">История 1</span> Банкетные залы — <i>5 залов на 10–70 гостей + закрытые кабинки</i></li>
+          <li><span class="rm-tag">Новость 2</span> Кухня кафе «Престиж» — <i>мангальные блюда, банкетное меню, качество продукции</i></li>
+          <li><span class="rm-tag">История 2</span> Кухня — <i>мясо на мангале + банкетное меню</i></li>
+          <li><span class="rm-tag">Новость 3</span> Кондитерский цех — <i>собственное производство десертов, «Выпечка» — 89% положительных</i></li>
+          <li><span class="rm-tag">История 3</span> Кондитерский цех — <i>свой кондитерский цех — десерты для банкета</i></li>
+          <li><span class="rm-tag">Новость 4</span> Баня и сауна — <i>банный комплекс с бассейном и хамамом</i></li>
+          <li><span class="rm-tag">История 4</span> Баня и сауна — <i>баня, сауна и бассейн в одном здании</i></li>
+        </ol>
+      </details>
+      <details class="rm-stage" open>
+        <summary>Этап 2 — 18.10.2026 <span class="badge">актуальный</span></summary>
+        <ol class="rm-list">
+          <li><span class="rm-tag">Новость 5</span> Доставка еды — <i>доставка на дом, еда навынос</i></li>
+          <li><span class="rm-tag">История 5</span> Доставка еды — <i>доставка еды из меню кафе на дом</i></li>
+          <li><span class="rm-tag">Новость 6</span> Обеды — <i>ежедневные обеды, не только банкеты</i></li>
+          <li><span class="rm-tag">История 6</span> Обеды — <i>обеды каждый день — не только на банкет</i></li>
+        </ol>
+      </details>
     </div>
   </div>
 </section>
