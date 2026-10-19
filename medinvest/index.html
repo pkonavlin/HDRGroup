@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Мединвест — ТЗ</title>
 </head>
 <body>
@@ -17,11 +17,13 @@
   :root:not([data-theme="light"]){
     --ocean:#EAF3F4; --teal:#7FCBD8; --ice:#0C1A1E; --roe:#E08052; --roe-soft:#C4572B;
     --ink:#EAF3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#0F2226; --bg:#0A1518;
+    color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --ocean:#EAF3F4; --teal:#7FCBD8; --ice:#0C1A1E; --roe:#E08052; --roe-soft:#C4572B;
   --ink:#EAF3F4; --ink-soft:#9FB6BC; --line:#1E3339; --card:#0F2226; --bg:#0A1518;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:'Public Sans',system-ui,sans-serif;margin:0;padding-block:0;line-height:1.5}
@@ -30,7 +32,6 @@ h1,h2,h3,.display{font-family:'Bricolage Grotesque',system-ui,sans-serif;text-wr
 a{color:inherit}
 .wrap{max-width:980px;margin:0 auto;padding:0 20px}
 
-/* topbar */
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ocean);color:var(--ice);
   display:flex;align-items:center;gap:24px;padding:14px 20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
 .topbar .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;letter-spacing:.2px;flex:0 0 auto}
@@ -44,7 +45,6 @@ section + section{border-top:1px solid var(--line)}
 h2{font-size:clamp(24px,4vw,32px);margin:0 0 28px}
 .lede{color:var(--ink-soft);max-width:62ch;margin:-16px 0 28px}
 
-/* hero / facts */
 .hero-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:28px}
 .hero-title{font-size:clamp(30px,5vw,44px);margin:0;font-weight:800}
 .hero-sub{color:var(--ink-soft);margin-top:8px;max-width:56ch}
@@ -52,12 +52,11 @@ h2{font-size:clamp(24px,4vw,32px);margin:0 0 28px}
   background:var(--card);border:1px solid var(--line);border-radius:100px;padding:6px 12px;color:var(--teal)}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);
   border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.fact{background:var(--card);padding:20px}
+.fact{background:var(--card);padding:20px;min-width:0}
 .fact .k{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
 .fact .v{font-size:15px;margin-top:6px;font-weight:600}
 .fact .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:12.5px;margin-top:3px}
 
-/* brandbook swatches */
 .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
 .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
 .swatch .chip{height:74px}
@@ -66,21 +65,36 @@ h2{font-size:clamp(24px,4vw,32px);margin:0 0 28px}
 .swatch .name{font-weight:700;font-size:14px;margin-top:3px}
 .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:2px}
 
-/* логика цикла */
-.cycle{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:8px;padding-left:24px}
+.cycle{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:8px;padding-left:24px;margin-bottom:36px}
 .cycle .step{position:relative;padding:0 0 26px}
 .cycle .step:last-child{padding-bottom:0}
 .cycle .step::before{content:"";position:absolute;left:-31px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--roe)}
 .cycle .step .t{font-weight:700}
-.cycle .step .d{color:var(--ink-soft);font-size:14.5px;margin-top:3px;max-width:60ch}
+.cycle .step .d{color:var(--ink-soft);font-size:14.5px;margin-top:3px;max-width:62ch}
 
-/* news cards */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px;font-variant-numeric:tabular-nums}
+.tbl th{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:500}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td.n{text-align:right;white-space:nowrap}
+.tbl th.n{text-align:right}
+.tbl .up{color:var(--teal);font-weight:700}
+.tbl .dn{color:var(--roe);font-weight:700}
+.tbl .grp td{background:var(--ice);font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.src{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;max-width:80ch}
+
+.tone-banner{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:12px;padding:14px 18px;margin:0 0 24px;font-size:14px;color:var(--ink-soft)}
+.tone-banner b{color:var(--ink)}
+
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:20px}
 .card-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:14px}
 .card h3{margin:0;font-size:20px}
 .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
   background:var(--ice);border:1px solid var(--line);color:var(--teal);border-radius:100px;padding:5px 10px;white-space:nowrap}
 .cover-thesis{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--roe);white-space:nowrap}
+.blk-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin:0 0 6px}
+.intro{margin:0 0 16px;font-size:15px;color:var(--ink);background:var(--ice);border-radius:10px;padding:12px 14px}
 .thesis-list{margin:0 0 16px;padding-left:20px;color:var(--ink);font-size:14.5px}
 .thesis-list li{margin-bottom:7px}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
@@ -90,30 +104,38 @@ h2{font-size:clamp(24px,4vw,32px);margin:0 0 28px}
 .cta{display:inline-block;font-size:13.5px;font-weight:700;color:var(--roe)}
 .cover-box{margin-top:16px;background:var(--ice);border:1px dashed var(--line);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--ink-soft)}
 .cover-box .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--teal);margin-bottom:6px;letter-spacing:.05em}
+.data-box{margin:0 0 16px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--ink-soft)}
+.data-box ul{margin:6px 0 0;padding-left:18px}
+.data-box li{margin-bottom:4px}
+.data-box b{color:var(--ink)}
+.data-box .q{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:8px;word-break:break-word}
 
-/* stories */
-.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-.story-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
-.story-card h3{margin:0 0 10px;font-size:17px}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.story-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;min-width:0}
+.story-card h3{margin:0 0 10px;font-size:18px}
 .story-card p{margin:0 0 14px;font-size:14px;color:var(--ink)}
-.design-note{background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft)}
+.story-card ol{margin:0 0 14px;padding-left:20px;font-size:14px}
+.story-card ol li{margin-bottom:5px}
+.design-note{background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft);margin-top:12px}
 .design-note .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--teal);margin-bottom:5px;letter-spacing:.05em;display:block}
 
-/* map / timeline */
-.timeline{border-left:2px solid var(--line);margin-left:8px}
-.tl-stage{padding-left:24px;position:relative;margin-bottom:8px}
-.tl-stage .stage-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.tl-stage .stage-head::before{content:"";position:absolute;left:-8px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--roe);border:3px solid var(--bg)}
+.timeline{border-left:2px solid var(--line);margin-left:8px;display:flex;flex-direction:column;gap:14px}
+.tl-stage{padding-left:24px;position:relative}
+.tl-stage summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:2px 0 10px;font-size:16px}
+.tl-stage summary::-webkit-details-marker{display:none}
+.tl-stage summary::before{content:"";position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--line);border:3px solid var(--bg)}
+.tl-stage[open] summary::before{background:var(--roe)}
+.tl-stage summary:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
 .stage-badge{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;background:var(--roe);color:#fff;border-radius:100px;padding:4px 10px}
 .tl-item{display:flex;gap:14px;padding:9px 0;font-size:14px;border-top:1px solid var(--line)}
-.tl-item:first-of-type{border-top:none}
 .tl-item .tl-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);flex:0 0 96px}
-.tl-item .tl-txt{color:var(--ink-soft)}
+.tl-item .tl-txt{color:var(--ink-soft);min-width:0}
 .tl-item .tl-txt b{color:var(--ink);font-weight:600}
 
-footer{padding:40px 0 60px;font-size:13px;color:var(--ink-soft)}
-footer a{color:var(--teal);text-decoration:none}
-footer ul{padding-left:18px;margin:10px 0 0}
+@media (max-width:520px){
+  .tl-item{flex-direction:column;gap:2px}
+  .tl-item .tl-tag{flex:none}
+}
 </style>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -127,7 +149,6 @@ footer ul{padding-left:18px;margin:10px 0 0}
     <a href="#news">Новости</a>
     <a href="#stories">Сторис</a>
     <a href="#map">Карта тем</a>
-    <a href="#sources">Источники</a>
   </nav>
 </div>
 
@@ -138,7 +159,7 @@ footer ul{padding-left:18px;margin:10px 0 0}
     <div>
       <p class="eyebrow">ТЗ · контент для Яндекс Карт и 2ГИС</p>
       <h1 class="hero-title">Глазная клиника «Мединвест»</h1>
-      <p class="hero-sub">Офтальмологический центр микрохирургии глаза в Челябинске: медцентр и клиника, коррекция зрения, оптика. Этап 1 — 4 новости и 4 сторис.</p>
+      <p class="hero-sub">Офтальмологический центр микрохирургии глаза в Челябинске: медцентр и клиника, коррекция зрения, оптика. Этап 2 — 2 новости и 2 сторис.</p>
     </div>
     <span class="badge">● Челябинск, ул. Университетская набережная, 50</span>
   </div>
@@ -151,7 +172,7 @@ footer ul{padding-left:18px;margin:10px 0 0}
     <div class="fact"><div class="k">География пациентов</div><div class="v">США, Турция, Италия<small>Австрия, Израиль, ОАЭ и др.</small></div></div>
     <div class="fact"><div class="k">Врачи и оборудование</div><div class="v">Постоянное повышение квалификации<small>клиника следит за развитием офтальмологии в мире</small></div></div>
     <div class="fact"><div class="k">Направления</div><div class="v">Диагностика и лечение<small>Лазерные операции · Хирургия · Детская офтальмология · Ортокератология · Оптика</small></div></div>
-    <div class="fact"><div class="k">Яндекс Карты</div><div class="v">5,0 · 277 отзывов<small>отметка «Good place 2026»</small></div></div>
+    <div class="fact"><div class="k">Яндекс Карты</div><div class="v">5,0 · 804 оценки · 280 отзывов<small>отметка «Хорошее место 2026»</small></div></div>
     <div class="fact"><div class="k">Публикация</div><div class="v">Карточка на Яндекс Картах<small>и 2ГИС — новости и сторис</small></div></div>
     <div class="fact"><div class="k">Тон общения</div><div class="v">На «Вы»<small>уместен лёгкий неформальный тон</small></div></div>
   </div>
@@ -177,124 +198,149 @@ footer ul{padding-left:18px;margin:10px 0 0}
 </section>
 
 <section id="cycle">
-  <p class="eyebrow">Раздел 03</p>
+  <p class="eyebrow">Раздел 03 · Этап 2</p>
   <h2>Логика цикла</h2>
   <div class="cycle">
-    <div class="step"><div class="t">1. Историческое доверие</div><div class="d">Открываем с факта, который формирует доверие к клинике как к пионеру направления — первая лазерная коррекция ФРК в России выполнена именно в «Мединвесте».</div></div>
-    <div class="step"><div class="t">2. Операционные методы сегодня</div><div class="d">От истории — к действующим методикам: лазерная коррекция (SBK, FEMTO SUPER LASIK) и факоэмульсификация катаракты как два основных хирургических направления клиники.</div></div>
-    <div class="step"><div class="t">3. Альтернатива без операции</div><div class="d">Ортокератология — решение для тех, кто пока не готов к операции или кому она не показана: коррекция зрения ночными линзами.</div></div>
-    <div class="step"><div class="t">4. Полный цикл — оптика</div><div class="d">Цикл закрывается оптикой: специализированные линзы для сложных случаев и контроль миопии у детей — клиника сопровождает пациента на всех этапах, от диагностики до подбора очков и линз.</div></div>
+    <div class="step"><div class="t">1. Ребёнок у офтальмолога</div><div class="d">Этап 1 закрыл хирургию, ночные линзы и оптику. Этап 2 открывается приёмом детского офтальмолога: когда и зачем показывать ребёнка врачу. Это пятая приоритетная тема из анкеты клиента, которая в Этапе 1 не вошла.</div></div>
+    <div class="step"><div class="t">2. Когда нужен аппаратный курс</div><div class="d">От профилактического приёма к лечению амблиопии («ленивый глаз») на аппарате «Амблиотрон» — детская линия клиники, дополняющая Stellest из Этапа 1.</div></div>
+    <div class="step"><div class="t">3. Лечение халязиона</div><div class="d">Халязион: запрос с растущим спросом в Челябинске, лечение которого есть в клинике. Показывает, что «Мединвест» занимается не только лазерной коррекцией и катарактой.</div></div>
+    <div class="step"><div class="t">4. Обследование глаз</div><div class="d">Цикл закрывается приоритетной темой «приём офтальмолога»: из чего состоит базовое комплексное обследование глаз по данным страницы «Диагностика зрения».</div></div>
   </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Запрос (Челябинск)</th><th class="n">12 мес, окт 2025 – сен 2026</th><th class="n">Пред. 12 мес</th><th class="n">Рост за год</th><th class="n">Июл–сен 2026 к июл–сен 2025</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="5">Взяты в темы</td></tr>
+        <tr><td>детский офтальмолог</td><td class="n">9 471</td><td class="n">7 841</td><td class="n up">+21%</td><td class="n up">+17%</td></tr>
+        <tr><td>халязион</td><td class="n">16 875</td><td class="n">13 618</td><td class="n up">+24%</td><td class="n up">+27%</td></tr>
+        <tr><td>ленивый глаз</td><td class="n">1 334</td><td class="n">962</td><td class="n up">+39%</td><td class="n up">+44%</td></tr>
+        <tr><td>офтальмолог челябинск (общий спрос)</td><td class="n">42 766</td><td class="n">33 992</td><td class="n up">+26%</td><td class="n up">+38%</td></tr>
+        <tr><td>проверка зрения</td><td class="n">15 658</td><td class="n">14 384</td><td class="n up">+9%</td><td class="n up">+4%</td></tr>
+        <tr><td>окт глаза</td><td class="n">2 264</td><td class="n">1 978</td><td class="n up">+14%</td><td class="n up">+5%</td></tr>
+        <tr class="grp"><td colspan="5">Проверены и не взяты</td></tr>
+        <tr><td>глаукома / лечение глаукомы</td><td class="n">23 232 / 1 889</td><td class="n">24 283 / 2 104</td><td class="n dn">−4% / −10%</td><td class="n">+3% / −19%</td></tr>
+        <tr><td>возрастная макулярная дегенерация</td><td class="n">240</td><td class="n">314</td><td class="n dn">−24%</td><td class="n dn">−42%</td></tr>
+        <tr><td>кератоконус</td><td class="n">1 759</td><td class="n">1 547</td><td class="n up">+14%</td><td class="n dn">−30%</td></tr>
+        <tr><td>миопия у детей</td><td class="n">1 027</td><td class="n">878</td><td class="n up">+17%</td><td class="n up">+25%</td></tr>
+        <tr><td>эйлеа</td><td class="n">666</td><td class="n">462</td><td class="n up">+44%</td><td class="n up">+38%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">Источник: Яндекс Wordstat, регион Челябинск, все устройства, месячная динамика окт 2024 – сен 2026. Число запросов, содержащих слово, с учётом словоформ. Данные сняты 19.10.2026.</p>
+  <ul class="thesis-list" style="margin-top:16px;color:var(--ink-soft);font-size:13.5px">
+    <li>Глаукома и ВМД: спрос не растёт, по ВМД падает.</li>
+    <li>Миопия у детей: растёт, но тема Stellest уже вышла в Этапе 1.</li>
+    <li>Кератоконус: за последние три месяца спрос упал, год к году рост нестабилен.</li>
+    <li>«Эйлеа»: растёт, но это рецептурный препарат, и по правилам модерации Яндекса его нельзя продвигать в постах.</li>
+  </ul>
 </section>
 
 <section id="news">
-  <p class="eyebrow">Раздел 04 · Этап 1</p>
+  <p class="eyebrow">Раздел 04 · Этап 2</p>
   <h2>Новости</h2>
   <p class="lede">Публикуются в карточке компании на Яндекс Картах и 2ГИС. До 3000 знаков с пробелами, CTA — без телефона и e-mail в тексте (контакты — в карточке компании).</p>
 
+  <div class="tone-banner"><b>Тон новостей.</b> Тёплый, от первого лица клиники («мы»). Каждая новость открывается вступлением из фактов, дальше — тезисы без перечня услуг клиники.</div>
+
   <div class="card">
     <div class="card-top">
-      <div><h3>Лазерная коррекция зрения: первая в России методика родом из Челябинска</h3></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертно-продающий</span><span class="cover-thesis">обложка: «1996 год»</span></div>
+      <div><h3>Детский офтальмолог в Челябинске: когда показывать ребёнка врачу и как проходит приём</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертный</span><span class="cover-thesis">обложка: «Детский офтальмолог»</span></div>
     </div>
+
+    <div class="data-box">
+      <div class="blk-lbl">Обоснование по Wordstat (Челябинск)</div>
+      <ul>
+        <li><b>9 471</b> запрос «детский офтальмолог» за 12 месяцев, на 21% больше, чем в предыдущие 12 месяцев; за июль – сентябрь 2026 — 3 246, на 17% больше, чем годом ранее.</li>
+        <li>Сезонность: пик в августе 2026 — 1 354 запроса в месяц (+24% к августу 2025). В ноябре – декабре 2025 запросов было на 40% и 44% больше, чем в ноябре – декабре 2024 (699 против 498 и 606 против 420).</li>
+        <li>Общий спрос «офтальмолог челябинск»: 42 766 за 12 месяцев (+26%), в сентябре 2026 — 4 889 (+58% к сентябрю 2025).</li>
+      </ul>
+      <div class="q">Топ запросов за 30 дней: детский офтальмолог 1067 · детский офтальмолог челябинск 747 · платный детский офтальмолог 142 · офтальмолог детский челябинск платно 127 · детский врач офтальмолог 50 · детский офтальмолог цена 41 · прием детского офтальмолога 35 · офтальмолог детский записаться 32</div>
+    </div>
+
+    <div class="blk-lbl">Вступление (тон и голос)</div>
+    <p class="intro">Мы рассказываем, в каком возрасте ребёнка стоит показать офтальмологу и как проходит приём: забота о здоровье глаз нужна уже с первых месяцев жизни малыша.</p>
+
+    <div class="blk-lbl">Тезисы</div>
     <ul class="thesis-list">
-      <li>Методика ФРК применяется в «Мединвесте» с 1996 года — тогда в России она была выполнена впервые; сегодня клиника также проводит SBK SUPER LASIK и FEMTO SUPER LASIK</li>
-      <li>Клиника работает более 30 лет, суммарный опыт по всем направлениям — 75 000+ операций (по анкете клиники); персонал проходит постоянное повышение квалификации, клиника следит за развитием офтальмологии в мире</li>
-      <li>До 30 сентября — коррекция обоих глаз от 50 000 ₽ вместо 60 000 ₽ (формат цены — «от N ₽»)</li>
-      <li>Перед коррекцией — бесплатное комплексное обследование; после операции — наблюдение врача в течение 1 месяца бесплатно</li>
-      <li>Формулировки нейтральные: «современная методика», «применяется с 1996 года» — без слов «безопасно/эффективно» без документального подтверждения (медуслуги)</li>
+      <li>Первый осмотр — на первом месяце после рождения: врач оценивает положение глаз, соответствие зрительных навыков возрасту, отсутствие врождённых патологий (катаракты, глаукомы и др.)</li>
+      <li>Следующий приём — в 1 год (выявление астигматизма, дальнозоркости, близорукости); затем перед детским садом и перед школой; в школьном возрасте — каждый год</li>
+      <li>Как проходит приём: консультация, проверка остроты зрения, биомикроскопия, исследование глазного дна, скиаскопия; УЗИ глаза, МРТ-диагностика нервов (при необходимости), периметрия. По результатам диагностики подбирается тактика лечения, при необходимости специалист назначит очки или линзы</li>
+      <li>Когда не откладывать визит: выделения из глаз, слезоточивость, отёк век, зрачки разного размера, ухудшение зрения, двоение или искажение, покраснение склер, резь, жжение, светобоязнь, частое моргание; ребёнок трёт или прищуривает глаза</li>
+      <li>Порядок приёма: дети от 0 до 15 лет приходят на первый приём с родителем (родитель вписан в свидетельство о рождении) или законным представителем; подростки 15–18 лет при первом посещении тоже с законным представителем. Нотариальная доверенность не является достаточным основанием для подписания информированного добровольного согласия сторонним сопровождающим (в том числе бабушкой, дедушкой)</li>
+      <li>Цена по прайсу на странице: первичный приём врача-офтальмолога с комплексом исследований для диагностики нарушения зрения у детей до 18 лет — 3 200 ₽; повторный (по прежнему диагнозу до 12 месяцев) — 2 700 ₽ (данные сайта на 19.10.2026; перед публикацией подтвердить у клиента, что цены действуют)</li>
     </ul>
     <div class="chips">
-      <span class="chip-kw">лазерная коррекция зрения Челябинск</span><span class="chip-kw">ФРК коррекция зрения</span><span class="chip-kw">SBK SUPER LASIK</span><span class="chip-kw">FEMTO SUPER LASIK</span><span class="chip-kw">глазная клиника Мединвест</span><span class="chip-kw">коррекция зрения лазером</span><span class="chip-kw">офтальмологическая клиника Челябинск</span><span class="chip-kw">зрение без очков</span>
+      <span class="chip-kw">детский офтальмолог Челябинск</span><span class="chip-kw">платный детский офтальмолог</span><span class="chip-kw">детский врач офтальмолог</span><span class="chip-kw">приём детского офтальмолога</span><span class="chip-kw">запись к детскому офтальмологу</span><span class="chip-kw">детский офтальмолог цена</span><span class="chip-kw">проверка зрения у ребёнка</span><span class="chip-kw">диагностика зрения детей</span><span class="chip-kw">глазная клиника Мединвест</span>
     </div>
-    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на обследование</span></div>
-    <span class="cta">CTA: «Записывайтесь на бесплатное обследование перед коррекцией»</span>
-    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото операционной / лазерного оборудования либо портрет хирурга (из архива клиники). Спокойная голубая гамма — фирменный голубой #0ABAEE, фон может быть на оттенке #8AD2FA (с сайта). Логотип и текст — не более 20% площади. Без слов «акция», «купить», без фото «до/после».</div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Источник на сайте:</b> medinvestltd.ru/services/priyem-detskogo-oftalmologa/</span><span><b>Цель:</b> запись на приём</span></div>
+    <span class="cta">CTA: «Записывайтесь на приём детского офтальмолога»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото детского приёма или кабинета (из архива клиники), без крупного плана лица ребёнка и без «до/после». Светлый фон #F6F8F9, фирменный голубой #0ABAEE — акцентной плашкой, красный #E30513 — малым акцентом. Логотип и текст — не более 20% площади, без слов «акция», «купить».</div>
   </div>
 
   <div class="card">
     <div class="card-top">
-      <div><h3>Факоэмульсификация катаракты: как проходит замена хрусталика на ИОЛ</h3></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертно-продающий</span><span class="cover-thesis">обложка: «Замена хрусталика»</span></div>
+      <div><h3>Халязион на веке: чем отличается от ячменя и как его лечат</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертный</span><span class="cover-thesis">обложка: «Халязион на веке»</span></div>
     </div>
-    <ul class="thesis-list">
-      <li>ФЭК — современный метод лечения катаракты: помутневший хрусталик заменяется на интраокулярную линзу (ИОЛ)</li>
-      <li>До 30 сентября — установка американского хрусталика от 41 500 ₽ вместо 48 000 ₽</li>
-      <li>Пенсионерам — скидка 15% до 30 сентября (можно указать применимость к диагностике и операции)</li>
-      <li>После операции — наблюдение врача в течение 1 месяца бесплатно</li>
-      <li>Без превосходных степеней («лучший хрусталик» и т.п.) — характеристики хрусталика давать нейтрально, по факту происхождения</li>
-    </ul>
-    <div class="chips">
-      <span class="chip-kw">факоэмульсификация катаракты Челябинск</span><span class="chip-kw">замена хрусталика глаза</span><span class="chip-kw">лечение катаракты</span><span class="chip-kw">ИОЛ хрусталик</span><span class="chip-kw">американский хрусталик</span><span class="chip-kw">операция катаракты цена</span><span class="chip-kw">глазная клиника Мединвест</span><span class="chip-kw">хирургия катаракты</span>
-    </div>
-    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на диагностику</span></div>
-    <span class="cta">CTA: «Записывайтесь на диагностику катаракты»</span>
-    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото операционного микроскопа или пациента старшего возраста на приёме (из архива клиники). Фирменный красный #E30513 — акцентной плашкой, не основным фоном. Без слов «акция», без фото «до/после».</div>
-  </div>
 
-  <div class="card">
-    <div class="card-top">
-      <div><h3>Ночные линзы для взрослых: зрение без операции и без очков днём</h3></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">экспертный</span><span class="cover-thesis">обложка: «Ночные линзы»</span></div>
+    <div class="data-box">
+      <div class="blk-lbl">Обоснование по Wordstat (Челябинск)</div>
+      <ul>
+        <li><b>16 875</b> запросов «халязион» за 12 месяцев, на 24% больше, чем в предыдущие 12 месяцев; за июль – сентябрь 2026 — 4 766 (+27% к тому же периоду 2025).</li>
+        <li>Каждый из 12 последних месяцев выше аналогичного месяца годом ранее; в сентябре 2026 — 1 541 запрос в месяц против 1 121 в сентябре 2025.</li>
+        <li>С августа 2026 в статистике появился запрос «халязион челябинск»: 92 в августе, 135 в сентябре (в предыдущие месяцы в статистике не отображался).</li>
+        <li>Соседний запрос «ячмень на глазу»: 27 377 за 12 месяцев (+11%); на сайте клиники сказано, что халязион путают с ячменём.</li>
+      </ul>
+      <div class="q">Топ запросов за 30 дней: халязион 1451 · халязион на глазу 340 · халязион лечение 130 · удаление халязиона 100 · халязион челябинск 75 · халязион на веке 65 · халязион причины 64 · халязион у ребенка 51 · халязион операция 47</div>
     </div>
-    <ul class="thesis-list">
-      <li>Ортокератологические линзы надеваются на ночь и временно меняют форму роговицы — днём человек видит чётко без очков и без дневных контактных линз</li>
-      <li>Аудитория темы — взрослые с миопией и астигматизмом (тема детских ночных линз уже публиковалась на карточке 25.08.2026 — не дублировать, делать акцент на взрослых)</li>
-      <li>До 30 сентября — ночные линзы от 38 500 ₽ вместо 41 500 ₽; линзы с астигматическим дизайном — 40 000 ₽</li>
-      <li>Метод — альтернатива для тех, кому пока не подходит лазерная коррекция или кто не готов к операции</li>
-    </ul>
-    <div class="chips">
-      <span class="chip-kw">ортокератология Челябинск</span><span class="chip-kw">ночные линзы для зрения</span><span class="chip-kw">ночные линзы цена</span><span class="chip-kw">коррекция зрения без операции</span><span class="chip-kw">астигматизм ночные линзы</span><span class="chip-kw">миопия без очков</span><span class="chip-kw">глазная клиника Мединвест</span>
-    </div>
-    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Актуальность акции:</b> до 30.09.2026</span><span><b>Цель:</b> запись на подбор линз</span></div>
-    <span class="cta">CTA: «Записывайтесь на подбор ночных линз»</span>
-    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Макро-фото линзы или глаза (из архива клиники). Холодная голубая гамма — фирменный голубой #0ABAEE, фон #8AD2FA (с сайта). Без слов «акция», без фото «до/после», без крупного текста поверх снимка.</div>
-  </div>
 
-  <div class="card">
-    <div class="card-top">
-      <div><h3>Оптика «Мединвеста»: линзы для сложных случаев и контроль миопии у детей</h3></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="tag">имиджево-экспертный</span><span class="cover-thesis">обложка: «Оптика и линзы»</span></div>
-    </div>
+    <div class="blk-lbl">Вступление (тон и голос)</div>
+    <p class="intro">Шишка на веке не всегда ячмень: мы объясняем, чем халязион отличается от ячменя и как его лечат в нашей клинике.</p>
+
+    <div class="blk-lbl">Тезисы</div>
     <ul class="thesis-list">
-      <li>В оптике клиники — жёсткие газопроницаемые линзы, склеральные линзы, призматическая коррекция для сложных случаев (кератоконус, высокая степень астигматизма)</li>
-      <li>Отдельно — очковые линзы Stellest® (Essilor®) для контроля прогрессирования близорукости у детей</li>
-      <li>Мягкие контактные линзы — базовый подбор для взрослых и подростков</li>
-      <li>Подбор — только после полной диагностики зрения у офтальмолога клиники</li>
+      <li>Халязион — хроническое заболевание: закупорка сальной железы века, из-за которой секрет скапливается внутри. Внешне похож на ячмень, поэтому их путают</li>
+      <li>Симптомы: уплотнение внутри тканей века, покраснение и отёк, болезненность при прикосновении, выпадение ресниц, жжение, слезотечение, светобоязнь, гнойные выделения</li>
+      <li>Что способствует: проблемы ЖКТ, ячмень, кожные и инфекционные заболевания, хронический стресс, ослабленный иммунитет, а также ношение контактных линз, частые респираторные заболевания, несоблюдение гигиены</li>
+      <li>Как лечат в клинике: инъекционное лечение (назначается при острой или хронической форме) и хирургическое — скальпелем (амбулаторно, под местной анестезией, 20 минут) или лазером</li>
+      <li>Профилактика: не трогать и не тереть веки грязными руками, умываться после пыльных помещений и улицы, надевать и снимать контактные линзы только чистыми сухими руками, хранить линзы в контейнере и чаще менять раствор</li>
+      <li>При затяжном течении возможны осложнения (астигматизм, деформация роговицы, гипопигментация), поэтому визит к врачу не откладывать</li>
     </ul>
     <div class="chips">
-      <span class="chip-kw">оптика Челябинск</span><span class="chip-kw">контактные линзы Мединвест</span><span class="chip-kw">склеральные линзы</span><span class="chip-kw">жёсткие газопроницаемые линзы</span><span class="chip-kw">линзы Stellest</span><span class="chip-kw">контроль миопии у детей</span><span class="chip-kw">подбор линз Челябинск</span>
+      <span class="chip-kw">халязион</span><span class="chip-kw">халязион на глазу</span><span class="chip-kw">халязион лечение</span><span class="chip-kw">удаление халязиона</span><span class="chip-kw">халязион Челябинск</span><span class="chip-kw">халязион на веке</span><span class="chip-kw">халязион причины</span><span class="chip-kw">халязион у ребёнка</span><span class="chip-kw">халязион операция</span><span class="chip-kw">ячмень или халязион</span><span class="chip-kw">глазная клиника Мединвест</span>
     </div>
-    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Цель:</b> запись на подбор линз</span></div>
-    <span class="cta">CTA: «Записывайтесь на подбор линз»</span>
-    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Фото витрины оптики или подбора линз пациенту (из архива клиники). Светлый фон (#F6F8F9), фирменный голубой #0ABAEE — акцентом.</div>
+    <div class="meta-row"><span><b>Объём:</b> до 3000 знаков</span><span><b>Источник на сайте:</b> medinvestltd.ru/services/drugie-metody-lech/lechenie-i-udalenie-khalyaziona/</span><span><b>Цель:</b> запись на консультацию</span></div>
+    <span class="cta">CTA: «Записывайтесь на консультацию офтальмолога»</span>
+    <div class="cover-box"><div class="lbl">ТЗ на обложку</div>Нейтральный кадр кабинета или офтальмологического оборудования (из архива клиники). Без крупных планов век с патологией и без «до/после». Фон — фирменный голубой #0ABAEE с лёгким оттенком #8AD2FA, акцент — красный #E30513 малой деталью. Логотип и текст — не более 20% площади.</div>
   </div>
 </section>
 
 <section id="stories">
-  <p class="eyebrow">Раздел 05 · Этап 1</p>
+  <p class="eyebrow">Раздел 05 · Этап 2</p>
   <h2>Сторис</h2>
   <p class="lede">Один слайд — один факт. Публикуются в карточке на Яндекс Картах и 2ГИС.</p>
   <div class="story-grid">
     <div class="story-card">
-      <h3>1996 год</h3>
-      <p>В «Мединвесте» в России впервые проведена лазерная коррекция зрения методом ФРК.</p>
-      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупная цифра «1996» на плашке фирменного красного (#E30513), тезис — белым текстом ниже, фон — голубой градиент (#8AD2FA, оттенок с сайта), логотип клиники внизу.</div>
+      <h3>Ленивый глаз</h3>
+      <p>Амблиопия («ленивый глаз»): лечение на аппарате «Амблиотрон». Пациент смотрит видеофильм, а прибор по ЭЭГ учитывает активность зрительной коры мозга. Показан в комплексном лечении при всех видах амблиопии (в том числе у взрослых).</p>
+      <div class="data-box" style="margin:0 0 12px"><div class="blk-lbl">Wordstat (Челябинск)</div>«ленивый глаз»: 1 334 запроса за 12 месяцев, +39% к предыдущим 12; за июль – сентябрь 2026 +44%. Объём небольшой, но это самый быстрый рост среди выбранных тем этапа.<div class="q">Топ за 30 дней: ленивый глаз 104 · синдром ленивого глаза 36 · ленивый глаз у взрослых 4 · ленивый глаз у детей 4 · как вылечить ленивый глаз 3</div></div>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Фон — фирменный голубой #0ABAEE. Заголовок «Ленивый глаз» крупно тёмно-серым #333333. Плашка «Амблиотрон» — красная #E30513 с белым текстом. Фото аппарата из архива клиники, логотип внизу. Источник: medinvestltd.ru/services/detskaya-oftalmologiya/lechenie-ambliotron/</div>
     </div>
     <div class="story-card">
-      <h3>75 000+ операций</h3>
-      <p>Более 30 лет работы — «Мединвесту» доверяют пациенты из США, Турции, Италии, Австрии, Израиля и ОАЭ.</p>
-      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупная цифра «75 000+» акцентом на плашке фирменного голубого (#0ABAEE) или доп. оттенков презентаций (#6FB6D7 / #65A4C9), под ней — тезис о географии пациентов.</div>
-    </div>
-    <div class="story-card">
-      <h3>Линзы на ночь</h3>
-      <p>Ортокератологические линзы надеваются перед сном — днём видно чётко без очков и без дневных линз.</p>
-      <div class="design-note"><span class="lbl">Дизайн слайда</span>Крупное макро-фото линзы или глаза на весь слайд, плашка с тезисом на фирменном голубом (#0ABAEE), логотип внизу.</div>
-    </div>
-    <div class="story-card">
-      <h3>Stellest для детей</h3>
-      <p>Очковые линзы Stellest® замедляют прогрессирование близорукости у детей — в оптике «Мединвеста».</p>
-      <div class="design-note"><span class="lbl">Дизайн слайда</span>Фото ребёнка в очках или очковых линз (из архива клиники), светлый фон (#F6F8F9), акцентная плашка фирменного красного (#E30513).</div>
+      <h3>Обследование глаз</h3>
+      <ol>
+        <li>Авторефрактометрия: рефракция глаз</li>
+        <li>Тонометрия: внутриглазное давление без контакта</li>
+        <li>Острота зрения: определение пробными линзами</li>
+        <li>Биомикроскопия: осмотр глаза под микроскопом</li>
+        <li>Офтальмоскопия: осмотр глазного дна с широким зрачком</li>
+        <li>Консультация врача-офтальмолога</li>
+      </ol>
+      <p>Для выявления противопоказаний к лазерной коррекции дополнительно: ОКТ-пахиметрия и кератотопография. После закапывания капель дискомфорт может длиться 2–3 часа, после обследования за руль садиться нельзя.</p>
+      <div class="data-box" style="margin:0 0 12px"><div class="blk-lbl">Wordstat (Челябинск)</div>«офтальмолог челябинск»: 42 766 за 12 месяцев (+26%), за июль – сентябрь 2026 +38%; «проверка зрения»: 15 658 (+9%); «окт глаза»: 2 264 (+14%).<div class="q">Топ за 30 дней: офтальмолог челябинск 4289 · офтальмолог челябинск платно 411 · офтальмолог челябинск взрослый 277 · проверка зрения челябинск 227 · прием офтальмолога челябинск 186 · окт глаза челябинск 68 · обследование глаз челябинск 13</div></div>
+      <div class="design-note"><span class="lbl">Дизайн слайда</span>Шесть плашек 3×2 в квадрантном формате клиентской презентации «Почему выбирают нас»: плашки #6FB6D7 и #65A4C9 с тёмно-серым текстом #333333, фон #F6F8F9, заголовок «Обследование глаз» тёмно-серым #333333, красная полоса #E30513 с предупреждением про руль. Источник: medinvestltd.ru/services/diagnostika-zreniya/</div>
     </div>
   </div>
 </section>
@@ -303,8 +349,8 @@ footer ul{padding-left:18px;margin:10px 0 0}
   <p class="eyebrow">Раздел 06</p>
   <h2>Карта тем</h2>
   <div class="timeline">
-    <div class="tl-stage">
-      <div class="stage-head"><b>Этап 1</b><span class="stage-badge">актуальный</span></div>
+    <details class="tl-stage">
+      <summary><b>Этап 1</b></summary>
       <div class="tl-item"><span class="tl-tag">Новость 1</span><span class="tl-txt"><b>Лазерная коррекция зрения</b> — 1996 год, первая ФРК в России, акция до 30.09</span></div>
       <div class="tl-item"><span class="tl-tag">История 1</span><span class="tl-txt"><b>1996 год</b> — факт-цифра о первой ФРК в России</span></div>
       <div class="tl-item"><span class="tl-tag">Новость 2</span><span class="tl-txt"><b>Факоэмульсификация катаракты</b> — замена хрусталика на ИОЛ, американский хрусталик по акции</span></div>
@@ -313,18 +359,16 @@ footer ul{padding-left:18px;margin:10px 0 0}
       <div class="tl-item"><span class="tl-tag">История 3</span><span class="tl-txt"><b>Линзы на ночь</b> — как работает ортокератология</span></div>
       <div class="tl-item"><span class="tl-tag">Новость 4</span><span class="tl-txt"><b>Оптика</b> — линзы для сложных случаев и контроль миопии у детей</span></div>
       <div class="tl-item"><span class="tl-tag">История 4</span><span class="tl-txt"><b>Stellest для детей</b> — контроль близорукости очковыми линзами</span></div>
-    </div>
+    </details>
+    <details class="tl-stage" open>
+      <summary><b>Этап 2</b><span class="stage-badge">актуальный</span></summary>
+      <div class="tl-item"><span class="tl-tag">Новость 1</span><span class="tl-txt"><b>Детский офтальмолог</b> — когда показывать ребёнка врачу, как проходит приём, порядок приёма несовершеннолетних</span></div>
+      <div class="tl-item"><span class="tl-tag">История 1</span><span class="tl-txt"><b>Ленивый глаз</b> — лечение амблиопии на аппарате «Амблиотрон»</span></div>
+      <div class="tl-item"><span class="tl-tag">Новость 2</span><span class="tl-txt"><b>Халязион на веке</b> — чем отличается от ячменя, симптомы, лечение инъекциями и операцией</span></div>
+      <div class="tl-item"><span class="tl-tag">История 2</span><span class="tl-txt"><b>Обследование глаз</b> — шесть шагов базового обследования</span></div>
+    </details>
   </div>
 </section>
-
-<footer id="sources">
-  <div class="eyebrow" style="margin-bottom:6px">Источники</div>
-  <ul>
-    <li><a href="https://medinvestltd.ru/" target="_blank">medinvestltd.ru</a> — официальный сайт клиники</li>
-    <li><a href="https://yandex.ru/profile/-/CXEmjU7v" target="_blank">Карточка «Мединвест» на Яндекс Картах</a></li>
-    <li>Анкета клиента «Старт проекта» — ответы от 22.09.2026</li>
-  </ul>
-</footer>
 
 </div>
 
