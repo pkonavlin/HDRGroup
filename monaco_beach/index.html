@@ -97,7 +97,7 @@
   .purpose-tag { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); background: var(--chip-bg); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
   .theme-body { padding: 0 22px 22px; display: flex; flex-direction: column; gap: 14px; }
   .blk-lbl { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent-2); display: block; margin-bottom: 5px; }
-  .voice { border-left: 3px solid var(--accent-2); padding: 2px 0 2px 14px; font-size: 15px; font-style: italic; max-width: 70ch; }
+  .voice { border-left: 3px solid var(--accent-2); padding: 2px 0 2px 14px; font-size: 15px; font-style: italic; max-width: 70ch; margin: 0; }
   ul.dev { margin: 0; padding-left: 20px; font-size: 14.5px; max-width: 74ch; }
   ul.dev li { margin-bottom: 6px; }
   .kw-row { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -105,7 +105,7 @@
   .cover-tz { padding: 12px 14px; background: var(--chip-bg); border-radius: 8px; font-size: 14px; }
   .cover-tz p { margin: 0 0 6px; }
   .cover-tz p:last-child { margin: 0; }
-  .cta-line { font-weight: 600; color: var(--accent-2); font-size: 14.5px; }
+  .cta-line { font-weight: 600; color: var(--accent-2); font-size: 14.5px; margin: 0; }
 
   .story-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
   .story-card h3 { font-family: var(--font-display); font-size: 18px; margin: 0; }
@@ -159,14 +159,16 @@
   <section id="company">
     <p class="eyebrow">ТЗ на контент · Яндекс Карты и 2ГИС</p>
     <h1>Monaco Beach</h1>
-    <p class="lede">Элитный аква-стриптиз клуб, Нижний Новгород. Клуб только что открылся. Новости и сторис публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
+    <p class="lede">Элитный аква-стриптиз клуб, Нижний Новгород. Новая компания, только открылась. Новости и сторис публикуются в карточке компании на Яндекс Картах и в 2ГИС.</p>
     <dl class="facts-grid">
       <div class="fact"><dt>Формат</dt><dd>Элитный аква-стриптиз клуб</dd></div>
       <div class="fact"><dt>Адрес</dt><dd>Нижне-Волжская наб., 19, 2 этаж</dd></div>
-      <div class="fact"><dt>Открытие</dt><dd>Новый клуб, только открылся</dd></div>
+      <div class="fact"><dt>Статус</dt><dd>Только открылся</dd></div>
       <div class="fact"><dt>Начало работы</dt><dd>С 21:00</dd></div>
-      <div class="fact"><dt>Пространство</dt><dd>Основной зал с аква-сценой, VIP-комнаты, бассейн с водопадом</dd></div>
+      <div class="fact"><dt>Пространство</dt><dd>Основной зал с аква-сценой, VIP-комнаты, отдельные комнаты</dd></div>
+      <div class="fact"><dt>Меню</dt><dd>Безалкогольные напитки, свежевыжатые соки, холодные закуски</dd></div>
       <div class="fact"><dt>Для кого</dt><dd>Комфорт для мужчин и женщин</dd></div>
+      <div class="fact"><dt>В карточке</dt><dd>Wi-Fi, парковка</dd></div>
     </dl>
   </section>
 
@@ -186,20 +188,20 @@
   <section id="logic">
     <p class="eyebrow">Раздел 03</p>
     <h2>Логика цикла</h2>
-    <p class="lede">Первый этап знакомит город с новым клубом. Новости идут от факта открытия к атмосфере, затем к основному залу и VIP-комнатам. Сторис дают короткие факты: где клуб, для кого он, что внутри и как забронировать вечер.</p>
+    <p class="lede">Первый этап знакомит город с новым клубом. Новости идут от факта открытия к основному залу, затем к комнатам клуба и меню. Сторис дают короткие факты: открытие, для кого клуб, свежевыжатые соки, бронирование вечера.</p>
     <p class="seq-label">Новости</p>
     <div class="sequence">
       <div class="seq-chip"><b>01</b> Открытие</div><span class="seq-arrow">→</span>
-      <div class="seq-chip"><b>02</b> Атмосфера</div><span class="seq-arrow">→</span>
-      <div class="seq-chip"><b>03</b> Основной зал</div><span class="seq-arrow">→</span>
-      <div class="seq-chip"><b>04</b> VIP-комнаты</div>
+      <div class="seq-chip"><b>02</b> Основной зал</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>03</b> Комнаты клуба</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>04</b> Меню</div>
     </div>
     <p class="seq-label">Сторис</p>
     <div class="sequence">
       <div class="seq-chip"><b>01</b> Мы открылись</div><span class="seq-arrow">→</span>
       <div class="seq-chip"><b>02</b> Для мужчин и женщин</div><span class="seq-arrow">→</span>
-      <div class="seq-chip"><b>03</b> Что внутри</div><span class="seq-arrow">→</span>
-      <div class="seq-chip"><b>04</b> Бронь вечера</div>
+      <div class="seq-chip"><b>03</b> Свежевыжатые соки</div><span class="seq-arrow">→</span>
+      <div class="seq-chip"><b>04</b> Забронируй свой вечер</div>
     </div>
   </section>
 
@@ -207,19 +209,19 @@
     <p class="eyebrow">Раздел 04</p>
     <h2>Новости</h2>
     <p class="lede">SEO-тексты для карточки Monaco Beach на Яндекс Картах и в 2ГИС, до 3000 знаков с пробелами. К каждой новости — обложка.</p>
-    <div class="tone-banner"><b>Тон текстов</b>Пишем от лица клуба (мы), спокойно и с приглашением прийти. Каждая тема раскрывает свою часть клуба, без повторения полного списка услуг в каждом тексте. SEO-ключи вплетаются в предложения, без списков. Телефон и ссылки в текст не ставим, слова «лучший» и «самый» не используем, алкоголь не упоминаем.</div>
+    <div class="tone-banner"><b>Тон и правила текстов</b>Пишем от лица клуба (мы), с приглашением прийти. В текстах только факты из этого ТЗ, без дописанных деталей. SEO-ключи вплетаются в предложения. Телефон, ссылки и превосходные степени не используем. Алкоголь, кальяны, сигары, казино и покер в текстах и на обложках не упоминаются: эти тематики запрещены к продвижению правилами Яндекса.</div>
 
     <div class="cards">
       <article class="theme-card">
         <div class="theme-head"><span class="theme-num">01</span><h3>Monaco Beach открылся в Нижнем Новгороде</h3><span class="purpose-tag">Анонсирующий</span></div>
         <div class="theme-body">
-          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Мы открылись. Monaco Beach — элитный аква-стриптиз клуб на Нижне-Волжской набережной, созданный для тех, кто ценит атмосферу и яркие впечатления.</p></div>
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Мы открылись. Monaco Beach — элитный аква-стриптиз клуб, созданный для тех, кто ценит атмосферу и яркие впечатления.</p></div>
           <div><span class="blk-lbl">Тезисы</span>
             <ul class="dev">
-              <li>Monaco Beach — новый аква-стриптиз клуб Нижнего Новгорода, клуб только открылся и приглашает первых гостей</li>
-              <li>Адрес: Нижне-Волжская набережная, 19, 2 этаж; клуб открыт с 21:00</li>
-              <li>Коротко о составе клуба: основной зал с аква-сценой, VIP-комнаты, бассейн с водопадом (подробно раскрываются в новостях 02–04)</li>
-              <li>Клуб создан с комфортом для мужчин и женщин</li>
+              <li>Monaco Beach — новый элитный аква-стриптиз клуб в Нижнем Новгороде, только открылся</li>
+              <li>Адрес: Нижне-Волжская набережная, 19, 2 этаж; начало работы — с 21:00</li>
+              <li>В клубе: основной зал с аква-сценой, VIP-комнаты, отдельные комнаты (каждое пространство раскрывается в следующих новостях)</li>
+              <li>Комфорт для мужчин и женщин</li>
             </ul>
           </div>
           <div><span class="blk-lbl">SEO-ключи</span>
@@ -227,78 +229,77 @@
           </div>
           <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
             <p><b>Тезис:</b> «Мы открылись»</p>
-            <p><b>Визуал:</b> чёрный фон #040404, золотая корона из логотипа и надпись Monaco Beach градиентным золотом #F8E8A0 → #A07830, под ней огни, отражённые в тёмной воде. Тонкий золотой разделитель с ромбом. Без фото танцовщиц, без контактов, текст не больше 20% площади.</p>
+            <p><b>Визуал:</b> фирменная графика: чёрный фон #040404, золотая корона из логотипа, надпись Monaco Beach градиентным золотом #F8E8A0 → #A07830, тонкий золотой разделитель с ромбом. Без людей в кадре, без контактов, текст не больше 20% площади.</p>
           </div>
-          <p class="cta-line">CTA: Бронируйте свой первый вечер в Monaco Beach</p>
+          <p class="cta-line">CTA: Забронируй свой вечер в Monaco Beach</p>
         </div>
       </article>
 
       <article class="theme-card">
-        <div class="theme-head"><span class="theme-num">02</span><h3>Лазурный берег на Нижне-Волжской набережной</h3><span class="purpose-tag">Имиджевый</span></div>
+        <div class="theme-head"><span class="theme-num">02</span><h3>Основной зал с аква-сценой</h3><span class="purpose-tag">Продуктовый</span></div>
         <div class="theme-body">
-          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">В Monaco Beach огни Лазурного берега отражаются в воде, пальмы теряются в мягком золотом свете, а у бассейна ниспадает водопад.</p></div>
-          <div><span class="blk-lbl">Тезисы</span>
-            <ul class="dev">
-              <li>Пространство клуба оформлено в образе Лазурного берега: огни в воде, яхты, пальмы в золотом свете</li>
-              <li>Величественный водопад у бассейна превращает пространство в тропический оазис</li>
-              <li>Музыка задаёт ритм вечеру</li>
-              <li>Формулировка клуба: «тропический оазис в сердце Монако», элитная атмосфера и премиум-сервис</li>
-            </ul>
-          </div>
-          <div><span class="blk-lbl">SEO-ключи</span>
-            <div class="kw-row"><span class="kw">клуб с бассейном Нижний Новгород</span><span class="kw">аква стриптиз Нижний Новгород</span><span class="kw">клуб с водопадом Нижний Новгород</span><span class="kw">атмосферный клуб Нижний Новгород</span><span class="kw">элитный клуб Нижний Новгород</span><span class="kw">вечерний отдых Нижний Новгород</span></div>
-          </div>
-          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
-            <p><b>Тезис:</b> «Тропический оазис»</p>
-            <p><b>Визуал:</b> водопад у бассейна с подсветкой воды, пальмы и тёплый золотой свет; заголовок градиентным золотом на тёмной части кадра. Без людей в кадре, без контактов.</p>
-          </div>
-          <p class="cta-line">CTA: Приходите увидеть Лазурный берег в Нижнем Новгороде</p>
-        </div>
-      </article>
-
-      <article class="theme-card">
-        <div class="theme-head"><span class="theme-num">03</span><h3>Аква-сцена и выступления каждый вечер</h3><span class="purpose-tag">Продуктовый</span></div>
-        <div class="theme-body">
-          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Каждый вечер в основном зале Monaco Beach на аква-сцене проходят яркие выступления.</p></div>
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Основной зал Monaco Beach — уютный зал с аква-сценой, незабываемой атмосферой и яркими выступлениями каждый вечер.</p></div>
           <div><span class="blk-lbl">Тезисы</span>
             <ul class="dev">
               <li>Основной зал — уютный зал с аква-сценой</li>
-              <li>Звук и свет зала — часть шоу (в тексте без превосходной степени)</li>
-              <li>Яркие выступления каждый вечер и незабываемая атмосфера</li>
-              <li>Шоу на воде — главное отличие формата аква-стриптиз клуба</li>
+              <li>Незабываемая атмосфера</li>
+              <li>Яркие выступления каждый вечер</li>
+              <li>Элитная атмосфера и премиум сервис</li>
             </ul>
           </div>
           <div><span class="blk-lbl">SEO-ключи</span>
-            <div class="kw-row"><span class="kw">шоу программа стриптиз клуб Нижний Новгород</span><span class="kw">аква шоу Нижний Новгород</span><span class="kw">стриптиз шоу каждый вечер</span><span class="kw">аква сцена клуб</span><span class="kw">ночное шоу Нижний Новгород</span></div>
+            <div class="kw-row"><span class="kw">аква сцена Нижний Новгород</span><span class="kw">шоу программа стриптиз клуб Нижний Новгород</span><span class="kw">стриптиз шоу каждый вечер</span><span class="kw">аква стриптиз шоу</span><span class="kw">ночное шоу Нижний Новгород</span></div>
           </div>
           <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
-            <p><b>Тезис:</b> «Шоу на воде»</p>
-            <p><b>Визуал:</b> аква-сцена основного зала с подсвеченной голубой водой, лампы и свечи на столиках, золотые блики. Без откровенных поз и белья в кадре, без контактов.</p>
+            <p><b>Тезис:</b> «Основной зал»</p>
+            <p><b>Визуал:</b> фирменная графика на чёрном фоне #040404, заголовок градиентным золотом, тонкая золотая рамка #B6985B по краю. Фото танцовщиц на обложку не ставить. Без контактов.</p>
           </div>
           <p class="cta-line">CTA: Бронируйте вечер в основном зале</p>
         </div>
       </article>
 
       <article class="theme-card">
-        <div class="theme-head"><span class="theme-num">04</span><h3>VIP-комнаты Monaco Beach</h3><span class="purpose-tag">Продуктовый</span></div>
+        <div class="theme-head"><span class="theme-num">03</span><h3>VIP-комнаты и отдельные комнаты Monaco Beach</h3><span class="purpose-tag">Продуктовый</span></div>
         <div class="theme-body">
-          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Для тех, кто хочет провести вечер в уединении, в Monaco Beach есть VIP-комнаты с индивидуальным обслуживанием.</p></div>
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">Кроме основного зала, в Monaco Beach есть VIP-комнаты с уединённой атмосферой и индивидуальным обслуживанием, а также отдельные комнаты.</p></div>
           <div><span class="blk-lbl">Тезисы</span>
             <ul class="dev">
-              <li>VIP-комнаты — уединённая атмосфера</li>
-              <li>Индивидуальное обслуживание</li>
-              <li>Роскошная «Сирена»</li>
-              <li>Элитная атмосфера и премиум-сервис</li>
+              <li>VIP-комнаты: уединённая атмосфера, индивидуальное обслуживание</li>
+              <li>В VIP-комнатах — «Сирена»</li>
+              <li>Отдельные комнаты в клубе (их назначение в тексте не раскрывается — правила Яндекса)</li>
+              <li>Элитная атмосфера и премиум сервис</li>
             </ul>
           </div>
           <div><span class="blk-lbl">SEO-ключи</span>
-            <div class="kw-row"><span class="kw">VIP комната стриптиз клуб Нижний Новгород</span><span class="kw">приватный вечер Нижний Новгород</span><span class="kw">VIP зона клуб Нижний Новгород</span><span class="kw">индивидуальное обслуживание клуб</span><span class="kw">элитный стриптиз клуб Нижний Новгород</span></div>
+            <div class="kw-row"><span class="kw">VIP комната стриптиз клуб Нижний Новгород</span><span class="kw">VIP зона клуб Нижний Новгород</span><span class="kw">индивидуальное обслуживание клуб</span><span class="kw">элитный стриптиз клуб Нижний Новгород</span><span class="kw">отдельная комната клуб Нижний Новгород</span></div>
           </div>
           <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
             <p><b>Тезис:</b> «VIP-комнаты»</p>
-            <p><b>Визуал:</b> интерьер VIP-комнаты: хрустальная люстра, тёмная мебель, панорамное окно на ночной залив с яхтами. Заголовок золотом #D5BE77, тонкая золотая рамка #B6985B по краю. Без людей, без контактов.</p>
+            <p><b>Визуал:</b> фирменная графика: чёрный фон #040404, золотая корона, заголовок светлым золотом #D5BE77, тонкая рамка #B6985B. Без людей, без контактов, без игровой и курительной атрибутики.</p>
           </div>
           <p class="cta-line">CTA: Бронируйте VIP-комнату на свой вечер</p>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <div class="theme-head"><span class="theme-num">04</span><h3>Меню Monaco Beach: холодные закуски и свежевыжатые соки</h3><span class="purpose-tag">Продуктовый</span></div>
+        <div class="theme-body">
+          <div><span class="blk-lbl">Вступление (тон и голос)</span><p class="voice">К вечеру в Monaco Beach мы подаём холодные закуски, свежевыжатые соки и безалкогольные напитки.</p></div>
+          <div><span class="blk-lbl">Тезисы</span>
+            <ul class="dev">
+              <li>Холодные закуски: фруктовая тарелка — 4 500 ₽, сырная тарелка — 4 000 ₽, мясная тарелка — 4 300 ₽, оливки / маслины — 2 400 ₽, икра красная — 9 400 ₽, конфеты — 2 000 ₽</li>
+              <li>Свежевыжатые соки: апельсиновый, грейпфрутовый, яблочный, морковный — 2 000 ₽</li>
+              <li>Безалкогольные напитки: Aqua Minerale 0,250 — 500 ₽, Coca-Cola / Coca-Cola Zero — 700 ₽, Red Bull — 900 ₽, соки в ассортименте — 700 ₽</li>
+            </ul>
+          </div>
+          <div><span class="blk-lbl">SEO-ключи</span>
+            <div class="kw-row"><span class="kw">меню клуба Нижний Новгород</span><span class="kw">закуски в клубе Нижний Новгород</span><span class="kw">свежевыжатые соки Нижний Новгород</span><span class="kw">фруктовая тарелка Нижний Новгород</span><span class="kw">сырная тарелка</span><span class="kw">ночной клуб с меню Нижний Новгород</span></div>
+          </div>
+          <div class="cover-tz"><span class="blk-lbl">ТЗ на обложку</span>
+            <p><b>Тезис:</b> «Меню клуба»</p>
+            <p><b>Визуал:</b> на основе материалов меню компании: фруктовая и сырная тарелки, стаканы свежевыжатых соков на тёмном мраморе, тёплый золотой свет. В кадре нет бутылок и бокалов с алкоголем, кальянов и людей. Заголовок градиентным золотом, без цен и контактов.</p>
+          </div>
+          <p class="cta-line">CTA: Забронируй свой вечер и попробуй меню Monaco Beach</p>
         </div>
       </article>
     </div>
@@ -311,23 +312,23 @@
     <div class="cards">
       <article class="story-card">
         <h3>01 · Мы открылись</h3>
-        <ul><li>Monaco Beach — аква-стриптиз клуб</li><li>Нижне-Волжская наб., 19, 2 этаж</li><li>С 21:00</li></ul>
+        <ul><li>Monaco Beach — элитный аква-стриптиз клуб</li><li>Нижне-Волжская наб., 19, 2 этаж</li><li>С 21:00</li></ul>
         <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#F8E8A0"></span><span class="dot" style="background:#A07830"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, золотая корона сверху, «Мы открылись» градиентным золотом, адрес текстом #E0E0D0 под тонким золотым разделителем с ромбом.</span></div>
       </article>
       <article class="story-card">
         <h3>02 · Для мужчин и женщин</h3>
-        <ul><li>Комфорт для мужчин и женщин</li><li>Элитная атмосфера и премиум-сервис</li></ul>
-        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#D5BE77"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, линейные золотые иконки короны и бриллианта, подписи капслоком #D5BE77, как в блоке преимуществ на сайте.</span></div>
+        <ul><li>Комфорт для мужчин и женщин</li><li>Элитная атмосфера и премиум сервис</li><li>Тропический оазис в сердце Монако</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#D5BE77"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, линейные золотые иконки пальмы, короны и бриллианта, подписи капслоком #D5BE77, как в блоке преимуществ на сайте.</span></div>
       </article>
       <article class="story-card">
-        <h3>03 · Что внутри</h3>
-        <ul><li>Основной зал с аква-сценой</li><li>VIP-комнаты</li><li>Бассейн с водопадом</li></ul>
-        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Фото водопада у бассейна, затемнённое снизу; три пункта в тонких золотых рамках #B6985B, текст #E0E0D0. Без людей в кадре.</span></div>
+        <h3>03 · Свежевыжатые соки</h3>
+        <ul><li>Апельсиновый, грейпфрутовый, яблочный, морковный</li><li>2 000 ₽</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#E0E0D0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Стаканы соков и фрукты из материалов меню на тёмном фоне, заголовок градиентным золотом, список вкусов #E0E0D0. Без бутылок и бокалов с алкоголем.</span></div>
       </article>
       <article class="story-card">
-        <h3>04 · Забронируйте вечер</h3>
-        <ul><li>Вечер в Monaco Beach бронируется заранее</li><li>Контакты для брони — в карточке компании</li></ul>
-        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#F8E8A0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Ночная панорама залива с яхтами, «Забронируйте свой вечер» градиентным золотом, плашка-кнопка матовым золотом #B6985B с тёмным текстом. Номер телефона на слайд не ставить.</span></div>
+        <h3>04 · Забронируй свой вечер</h3>
+        <ul><li>Забронируй свой вечер и получи максимум впечатлений</li><li>Контакты для брони — в карточке компании</li></ul>
+        <div class="design-note"><span class="dots"><span class="dot" style="background:#040404"></span><span class="dot" style="background:#B6985B"></span><span class="dot" style="background:#F8E8A0"></span></span><span><span class="blk-lbl">Дизайн слайда</span>Чёрный фон, «Забронируй свой вечер» градиентным золотом, плашка-кнопка матовым золотом #B6985B с тёмным текстом. Номер телефона на слайд не ставить.</span></div>
       </article>
     </div>
   </section>
@@ -338,14 +339,14 @@
     <details class="stage" open>
       <summary><span class="stage-title">Этап 01 · знакомство с клубом</span><span class="stage-badge">актуальный</span></summary>
       <ol class="road">
-        <li><span class="fmt">Новость 01</span><span class="t">Monaco Beach открылся в Нижнем Новгороде</span><span class="th">Новый аква-стриптиз клуб на Нижне-Волжской набережной</span></li>
-        <li class="st"><span class="fmt">Сторис 01</span><span class="t">Мы открылись</span><span class="th">Формат, адрес, время открытия</span></li>
-        <li><span class="fmt">Новость 02</span><span class="t">Лазурный берег на Нижне-Волжской набережной</span><span class="th">Атмосфера Лазурного берега и водопад у бассейна</span></li>
-        <li class="st"><span class="fmt">Сторис 02</span><span class="t">Для мужчин и женщин</span><span class="th">Комфорт для всех гостей, премиум-сервис</span></li>
-        <li><span class="fmt">Новость 03</span><span class="t">Аква-сцена и выступления каждый вечер</span><span class="th">Основной зал и шоу на воде</span></li>
-        <li class="st"><span class="fmt">Сторис 03</span><span class="t">Что внутри</span><span class="th">Основной зал, VIP-комнаты, бассейн с водопадом</span></li>
-        <li><span class="fmt">Новость 04</span><span class="t">VIP-комнаты Monaco Beach</span><span class="th">Уединение и индивидуальное обслуживание</span></li>
-        <li class="st"><span class="fmt">Сторис 04</span><span class="t">Забронируйте вечер</span><span class="th">Бронь заранее через контакты карточки</span></li>
+        <li><span class="fmt">Новость 01</span><span class="t">Monaco Beach открылся в Нижнем Новгороде</span><span class="th">Новый элитный аква-стриптиз клуб, Нижне-Волжская наб., 19</span></li>
+        <li class="st"><span class="fmt">Сторис 01</span><span class="t">Мы открылись</span><span class="th">Формат, адрес, с 21:00</span></li>
+        <li><span class="fmt">Новость 02</span><span class="t">Основной зал с аква-сценой</span><span class="th">Уютный зал, яркие выступления каждый вечер</span></li>
+        <li class="st"><span class="fmt">Сторис 02</span><span class="t">Для мужчин и женщин</span><span class="th">Комфорт для мужчин и женщин, премиум сервис</span></li>
+        <li><span class="fmt">Новость 03</span><span class="t">VIP-комнаты и отдельные комнаты Monaco Beach</span><span class="th">Уединённая атмосфера, индивидуальное обслуживание</span></li>
+        <li class="st"><span class="fmt">Сторис 03</span><span class="t">Свежевыжатые соки</span><span class="th">Четыре вкуса, 2 000 ₽</span></li>
+        <li><span class="fmt">Новость 04</span><span class="t">Меню Monaco Beach: холодные закуски и свежевыжатые соки</span><span class="th">Закуски, соки и безалкогольные напитки с ценами</span></li>
+        <li class="st"><span class="fmt">Сторис 04</span><span class="t">Забронируй свой вечер</span><span class="th">Бронирование через контакты карточки</span></li>
       </ol>
     </details>
   </section>
