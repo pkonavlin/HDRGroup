@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Резидент Сервис»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .params{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.vc .param{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2);background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:4px 9px}
+.vc .param b{color:var(--ink-3);font-weight:500}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px}
+.vc .rule{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink-2)}
+.vc .rule b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:4px}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:96px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Резидент Сервис · Екатеринбург</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>РЕЗИДЕНТ СЕРВИС РЕЗИДЕНТ</span><span>РЕЗИДЕНТ СЕРВИС РЕЗИДЕНТ</span><span>РЕЗИДЕНТ СЕРВИС РЕЗИДЕНТ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Резидент Сервис» на <em>Авито</em></h1>
+      <p>Ведение профиля компании на Авито: аналитика спроса и конкурентов в Екатеринбурге и Свердловской области, предложение, стратегия и контент-план объявлений. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Резидент Сервис</b></div>
+        <div><span>География</span><b>Екатеринбург и область</b></div>
+        <div><span>Направление</span><b>Заказной автобус на 19 мест</b></div>
+        <div><span>Площадка</span><b>Авито</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 20.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Объявлений в профиле Авито</span><span class="t-n c">0</span><span class="t-s">профиль зарегистрирован 19.10.2026</span></div>
+        <div class="tile"><span class="t-k">Объявлений в категории</span><span class="t-n y">1 115</span><span class="t-s">«Пассажирские перевозки», Екатеринбург</span></div>
+        <div class="tile"><span class="t-k">Запросов «аренда автобуса»</span><span class="t-n y">8 130</span><span class="t-s">за 12 месяцев, Свердловская область</span></div>
+        <div class="tile"><span class="t-k">«Заказать автобус для детей»</span><span class="t-n g">+27%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Аналитика Авито и предложение по ведению профиля</h3><p>Выдача Авито по каждому направлению из анкеты, спрос по Вордстату для Свердловской области, объявления Авито в поиске Яндекса, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>7 тем объявлений с обложками: город, дети, сотрудники, область, корпоратив, межгород, свадьба.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 23.10</span><span class="st wait">ждём компанию</span></div><h3>Согласование списка тем</h3><p>Порядок работы из анкеты: сначала список тем, затем готовые объявления.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 23.10</span><span class="st wait">ждём компанию</span></div><h3>Логотип и собственные фото автобуса</h3><p>Логотип для аватара профиля — квадрат 1024 × 1024. Фото автобуса снаружи и в салоне: Авито принимает только собственные снимки, по ним собираем 7 обложек.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">24.10</span><span class="st next">следующий шаг</span></div><h3>Оформление профиля</h3><p>Аватар и блок «О компании». Название, описание и логотип Авито проверяет до трёх рабочих дней, поэтому профиль запускаем до первого объявления.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">26.10 — 11.11</span><span class="st next">публикации</span></div><h3>7 объявлений этапа 1</h3><p>По одному объявлению раз в 2–3 дня, без выхода в праздник 4 ноября.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после первых объявлений</span><span class="st next">обсудить</span></div><h3>Бюджет кошелька Авито и выделение</h3><p>Сумма кошелька и подключение выделения цветом или XL для приоритетных объявлений. Дальше — ежемесячная статистика и обновление объявлений.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">следующие этапы</span><span class="st next">план</span></div><h3>Яндекс Карты и 2ГИС</h3><p>Заполнение карточек компании и ведение обеих площадок после запуска профиля на Авито.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Как вывести профиль в выдачу Авито</h3>
+          <p>Выдача Авито и соседи по ней, спрос против конкуренции по каждому направлению, предложение по ведению профиля и стратегия по этапам.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>7 объявлений для Авито</h3>
+          <ul>
+            <li>26.10 — Аренда автобуса с водителем</li>
+            <li>28.10 — Перевозка детей</li>
+            <li>30.10 — Доставка сотрудников</li>
+            <li>02.11 — Поездки по области</li>
+            <li>05.11 — Корпоратив · 09.11 — Межгород · 11.11 — Свадьба</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Авито · Екатеринбург и Свердловская область · заказной автобус · замер 20.10.2026</span>
+  <h1>Как вывести «Резидент Сервис» в выдачу Авито</h1>
+  <p>Выдача Авито в категории «Пассажирские перевозки» и по каждому направлению из анкеты, спрос по Вордстату для Свердловской области, видимость объявлений Авито в поиске Яндекса. На этой основе — предложение и стратегия ведения профиля компании на Авито.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">не виден</span><p><b>Профиль на Авито пока пустой</b>Ни одного объявления, ни одного отзыва, нет логотипа и фото. Профиль зарегистрирован 19.10.2026 — поиск Авито компанию ещё не показывает ни по одному запросу.</p></div>
+    <div class="v"><span class="pill warn">конкуренция</span><p><b>1 115 объявлений в «Пассажирских перевозках» Екатеринбурга</b>Под направления компании — от 169 до 340 объявлений на запрос. На первой странице 28–36 из 50 объявлений идут с платным продвижением, 33–41 из 50 — с отзывами.</p></div>
+    <div class="v"><span class="pill good">окно</span><p><b>Дети и «заказ автобуса» — больше всего спроса на одно объявление</b>«заказать автобус для детей» — 324 запроса в месяц на 203 объявления, «заказ автобуса» — 520 на 340. По свадьбам и корпоративам объявлений больше, чем запросов.</p></div>
+    <div class="v"><span class="pill good">растёт</span><p><b>Детские перевозки — единственное растущее направление</b>«заказать автобус для детей» +27% за январь–сентябрь 2026 к 2025, «перевозка детей автобусом» в сентябре 2026 +32% к сентябрю 2025.</p></div>
+    <div class="v"><span class="pill good">бонус</span><p><b>Объявления Авито видны и в поиске Яндекса</b>Авито — №1 в органике Яндекса по «аренда автобуса с водителем екатеринбург», №2 по «заказ автобуса екатеринбург», №3 по «заказать автобус для детей екатеринбург».</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Объявлений в профиле</div><div class="n">0</div><div class="s">отзывов — 0</div></div>
+    <div class="kpi"><div class="k">Конкурентов в категории</div><div class="n">1 115</div><div class="s">«Пассажирские перевозки», Екатеринбург</div></div>
+    <div class="kpi"><div class="k">С продвижением на 1-й странице</div><div class="n">40 из 50</div><div class="s">выдача категории 20.10.2026</div></div>
+    <div class="kpi"><div class="k">Запросов на объявление</div><div class="n">1,6</div><div class="s">дети — лучшее соотношение</div></div>
+  </div>
+</section>
+
+<section id="avito">
+  <div class="sh"><h2>Выдача Авито</h2><p>Поиск по Екатеринбургу 20.10.2026, раздел «Услуги». Объявлений «Резидент Сервис» в выдаче нет ни по одному запросу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Срез выдачи</th><th class="r">Объявлений</th><th>Что видно на первой странице</th></tr></thead>
+    <tbody>
+      <tr><td>категория «Пассажирские перевозки»</td><td class="r num">1 115</td><td>автобусы, минивэны, такси-межгород и трансфер вперемешку; 40 из 50 с продвижением</td></tr>
+      <tr><td>«заказ автобуса 20 мест»</td><td class="r num">221</td><td>почти все объявления с ценой «от»: от 500 до 2 000 ₽; одно — «Цена договорная»</td></tr>
+      <tr class="me"><td><b>профиль «Резидент Сервис»</b></td><td class="r num">0</td><td>зарегистрирован 19.10.2026, отзывов нет</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по выдаче: что они показывают</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Объявление</th><th class="r">Цена</th><th>Что вынесено в текст</th></tr></thead>
+    <tbody>
+      <tr><td>Автобус на заказ. Пассажирские перевозки. Трансфер</td><td class="r num">от 1 300 ₽</td><td>физлица и юрлица, с НДС и без; детские перевозки с согласованием в ГИБДД; лицензия, страховка</td></tr>
+      <tr><td>Заказ, аренда автобуса на 8–55 мест</td><td class="r num">от 1 500 ₽</td><td>Mercedes Sprinter на 20 мест, автобусы 35–55 мест, минивэны</td></tr>
+      <tr><td>Заказ автобусов 6, 13, 17, 20 мест</td><td class="r num">от 1 000 ₽</td><td>детские перевозки с уведомлением в ГИБДД, сплавы, прицеп, лицензия</td></tr>
+      <tr><td>Заказ автобуса с водителем Екатеринбург и по Уралу</td><td class="r num">от 1 700 ₽</td><td>«более 15 лет»; дети, спортивные команды, экскурсии, свадьба</td></tr>
+      <tr><td>Аренда автобуса с водителем в Екатеринбурге</td><td class="r num">от 1 500 ₽</td><td>скидка 2 000 ₽ новым клиентам при заказе от 15 000 ₽</td></tr>
+      <tr><td>Заказ, аренда автобуса, пассажирские перевозки</td><td class="r num">от 1 500 ₽</td><td>Iveco Daily на 19 мест, трёхточечные ремни, багажные полки, ТВ</td></tr>
+      <tr><td>Пассажирские перевозки. Аренда автобуса</td><td class="r num">от 1 500 ₽</td><td>автобусы на 18–20 мест; рейтинг 5,0, 6 отзывов, реквизиты проверены</td></tr>
+      <tr><td>Заказ, аренда автобусов</td><td class="r num">от 1 000 ₽</td><td>до 52 мест; рейтинг 4,9, 22 отзыва</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">Сегмент на 17–20 мест в выдаче самый плотный: Ford Transit, Peugeot Boxer, Iveco Daily, Mercedes Sprinter. Соседи выигрывают не автобусом, а оформлением: собственные фото, отзывы, проверенные реквизиты, понятная цена и продвижение.</p>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему профиль пока не виден</h2><p>Каждая причина подтверждена данными профиля, анкеты компании или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Нет ни одного объявления</h3></div>
+      <p>Профиль зарегистрирован 19.10.2026, в нём 0 объявлений. Поиск Авито показывает объявления, а не профили, поэтому сейчас компания не участвует в выдаче ни по одному запросу.</p>
+      <p class="next">Этап 1 контент-плана — 7 объявлений, каждое под свой запрос: город, дети, сотрудники, область, корпоратив, межгород, свадьба.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Нет собственных фото автобуса</h3></div>
+      <p>По анкете: «Пока нет фотографий», использовать можно «Только наши фото». Первое фото — обложка объявления в поиске, и Авито принимает только собственные снимки. У соседей по выдаче по 1–5 фото на объявление.</p>
+      <p class="next">Снять автобус снаружи и в салоне. Компания отметила, что видео для объявлений тоже может снять.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Профиль без логотипа, описания и отзывов</h3></div>
+      <p>Аватара и блока «О компании» нет, отзывов 0. У соседей на первой странице 6–22 отзыва и рейтинг 4,6–5,0. Логотип компания предоставит файлом.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Первая страница выкуплена продвижением</h3></div>
+      <p>40 из 50 объявлений на первой странице категории идут с платным продвижением. Тариф и подписка на Авито у компании не подключены, бюджет кошелька по анкете — «Определим вместе».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Объявления с ценой выглядят понятнее</h3></div>
+      <p>Почти все соседи показывают цену «от»: от 500 до 2 000 ₽. Формат цены у компании — «Договорная». Это допустимо, но в выдаче такое объявление проигрывает тем, где цена видна сразу.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="directions">
+  <div class="sh"><h2>Направления: спрос против конкуренции</h2><p>Спрос — Вордстат, Свердловская область, запросов в месяц. Конкуренция — число объявлений в выдаче Авито по Екатеринбургу под этот запрос, 20.10.2026. Чем больше запросов на одно объявление, тем легче новому профилю получить обращения.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Направление</th><th>Запрос в Яндексе</th><th class="r">Спрос</th><th class="r">Объявлений на Авито</th><th class="r">Запросов на объявление</th><th>С продвижением / с отзывами</th></tr></thead>
+    <tbody>
+      <tr><td><b>Выезды детей</b></td><td>заказать автобус для детей</td><td class="r num">324</td><td class="r num">203</td><td class="r num">1,6</td><td>34 / 41 из 50</td></tr>
+      <tr><td><b>Выезды детей</b></td><td>автобус для школьников</td><td class="r num">273</td><td class="r num">169</td><td class="r num">1,6</td><td>34 / 37 из 50</td></tr>
+      <tr><td><b>Город и область</b></td><td>заказ автобуса</td><td class="r num">520</td><td class="r num">340</td><td class="r num">1,5</td><td>31 / 40 из 50</td></tr>
+      <tr><td><b>Межгород</b></td><td>междугородние перевозки</td><td class="r num">180</td><td class="r num">321</td><td class="r num">0,6</td><td>31 / 40 из 50</td></tr>
+      <tr><td><b>Сотрудники</b></td><td>перевозка сотрудников</td><td class="r num">137</td><td class="r num">256</td><td class="r num">0,5</td><td>34 / 36 из 50</td></tr>
+      <tr><td><b>Город и область</b></td><td>микроавтобус с водителем</td><td class="r num">144</td><td class="r num">421</td><td class="r num">0,3</td><td>29 / 38 из 50</td></tr>
+      <tr><td><b>Свадьбы</b></td><td>автобус на свадьбу</td><td class="r num">21</td><td class="r num">321</td><td class="r num">0,07</td><td>31 / 37 из 50</td></tr>
+      <tr><td><b>Корпоративы</b></td><td>автобус на корпоратив</td><td class="r">ниже порога</td><td class="r num">283</td><td class="r">—</td><td>28 / 38 из 50</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что из этого следует</h3><ul>
+      <li><b>Основной поток обращений — дети и «заказ автобуса» по городу.</b> Эти объявления выходят первыми, на них в первую очередь идёт бюджет кошелька.</li>
+      <li><b>Сотрудники и межгород</b> — средняя конкуренция, B2B-заказы и длинные поездки. Объявления работают стабильно, без сезонных провалов.</li>
+      <li><b>Свадьбы и корпоративы</b> — объявлений на Авито в 10+ раз больше, чем запросов. Эти объявления держим в профиле для полноты, но без продвижения вне сезона.</li>
+    </ul></div>
+    <div class="note"><h3>Кто стоит в выдаче на всех запросах</h3><ul>
+      <li>Одни и те же 3–4 объявления открывают выдачу почти по каждому направлению: «Автобус на заказ. Пассажирские перевозки. Трансфер», «Аренда автобуса для поездок и мероприятий», «Аренда автобуса для любых поездок», «Заказ Автобуса. Доставка сотрудников».</li>
+      <li>Это широкие объявления «обо всём сразу» с продвижением. Узкое объявление под конкретный запрос — способ обойти их без самой большой ставки.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Свердловской области</h2><p>Вордстат, регион «Свердловская область», все устройства. Частоты — за последние доступные 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="a"><h3>«аренда автобуса»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −19%</div></div>
+    <div class="chart" data-chart="k"><h3>«перевозка детей автобусом»</h3><div class="cs">запросов в месяц · сентябрь 2026 к 2025: +32%</div></div>
+    <div class="chart" data-chart="d"><h3>«заказать автобус для детей»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +27%</div></div>
+    <div class="chart" data-chart="s"><h3>«перевозка сотрудников»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +1%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: «заказать автобус» и детские запросы растут в сентябре–октябре (пик — октябрь 2025, 1 067 и 223 запроса), детский спрос почти пропадает летом. «Перевозка сотрудников» ровная круглый год с подъёмами в декабре и марте. «Автобус на свадьбу» — пик в июне–июле, минимум в ноябре–декабре.</p>
+
+  <h3>Заказ и аренда автобуса</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-core"></tbody></table></div>
+
+  <h3>Направления из анкеты компании</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Направление</th><th>Запросов в месяц</th></tr></thead><tbody id="t-dir"></tbody></table></div>
+
+  <h3>Информационный и брендовый спрос</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead><tbody id="t-info"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Ядро — «аренда» и «заказать» автобус</b>: «заказать автобус» 1 059, «аренда автобуса» 791, «заказ автобуса» 520 запросов в месяц. С «екатеринбург» и «с водителем» — ещё около 600.</li>
+      <li><b>Дети — самый большой узкий сегмент</b>: «заказать автобус для детей» 324, «автобус для школьников» 273, «арендовать автобус для перевозки детей» 88. Сейчас сезон.</li>
+      <li><b>Сотрудники — стабильный B2B</b>: «перевозка сотрудников» 137, «развоз сотрудников» 88, «доставка персонала» 48.</li>
+      <li><b>Свадьбы и корпоративы — малые объёмы</b>: «автобус на свадьбу» 21; «автобус на корпоратив» ниже порога Вордстата. Эти объявления работают на добор, а не на поток.</li>
+    </ul></div>
+    <div class="note"><h3>Как ищут вместимость</h3><ul>
+      <li>«микроавтобус с водителем» — <b>144</b>, «аренда микроавтобуса» — <b>239</b>: автобус на 19 мест люди часто ищут словом «микроавтобус».</li>
+      <li>«микроавтобус 19 мест» — 21, «микроавтобус на 20 человек с водителем» — 8.</li>
+      <li>В текстах объявлений нужны оба слова — «автобус» и «микроавтобус» — и число мест.</li>
+    </ul></div>
+  </div>
+</section>
+
+
+<section id="yandex">
+  <div class="sh"><h2>Объявления Авито в поиске Яндекса</h2><p>Органическая выдача Яндекса по Екатеринбургу 20.10.2026, рекламные блоки исключены. Объявление на Авито получает показы не только внутри площадки, но и из поиска Яндекса.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Место Авито</th><th>Кто рядом</th></tr></thead>
+    <tbody>
+      <tr><td>аренда автобуса с водителем екатеринбург</td><td class="r num">1</td><td>goodway96.ru, Яндекс Услуги, Яндекс Карты, e-trans66.ru</td></tr>
+      <tr><td>заказ автобуса екатеринбург</td><td class="r num">2</td><td>Яндекс Карты, Яндекс Услуги, 2ГИС, e-trans66.ru, goodway96.ru</td></tr>
+      <tr><td>заказать автобус для детей екатеринбург</td><td class="r num">3</td><td>Яндекс Карты, goodway96.ru, avtobus196.ru, e-trans66.ru</td></tr>
+      <tr><td>доставка сотрудников автобус екатеринбург</td><td class="r">нет в топ-10</td><td>Яндекс Карты, e-trans66.ru, avtobus196.ru, ikarus.group, autobus.ru</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">Заголовок объявления на Авито попадает в выдачу Яндекса, поэтому в нём стоят формулировки, которыми ищут в Яндексе: «аренда автобуса с водителем», «заказ автобуса для перевозки детей», «доставка сотрудников».</p>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Площадка: что изменилось на Авито в 2026 году</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Закон о платформах</div><div class="n">01.10.2026</div><div class="s">вступил в силу 289-ФЗ</div></div>
+    <div class="kpi"><div class="k">Оплата за целевое действие</div><div class="n">от 0,80 ₽</div><div class="s">Профессиональный план</div></div>
+    <div class="kpi"><div class="k">Лимит частного исполнителя</div><div class="n">10</div><div class="s">объявлений в шести подкатегориях услуг</div></div>
+    <div class="kpi"><div class="k">Модерация профиля</div><div class="n">до 3 дней</div><div class="s">название, описание, логотип</div></div>
+  </div>
+  <div class="two" style="margin-top:16px">
+    <div class="note"><h3>Правила площадки</h3><ul>
+      <li><b>С 1 октября действует 289-ФЗ о цифровых платформах.</b> Блокировка — только с объяснением причины, о существенных изменениях условий площадка предупреждает за 45 дней. Авито обязано следить за лицензиями и разрешительными документами продавцов.</li>
+      <li><b>Профессиональный план.</b> С июня Авито переводит продавцов на оплату за целевые действия: переход в объявление, звонок, сообщение в чат, просмотр номера — от 0,80 ₽ в зависимости от категории и региона.</li>
+      <li><b>Лимит для частных исполнителей.</b> В шести подкатегориях услуг — не больше 10 объявлений. 7 объявлений этапа 1 в лимит укладываются.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для профиля</h3><ul>
+      <li>Выигрывает не число объявлений, а их разная суть: одинаковые и похожие объявления Авито блокирует или прячет.</li>
+      <li>Главный результат по анкете — сообщения в чате. Скорость ответа в чате напрямую влияет на заявки.</li>
+      <li>Кошелёк Авито пополняет компания, это не стоимость работ агентства. Сумму и лимиты расходов согласуем заранее.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="offer">
+  <div class="sh"><h2>Предложение: ведение профиля на Авито</h2><p>Что входит в работу HDR Group с профилем «Резидент Сервис» и что нужно от компании.</p></div>
+  <div class="two">
+    <div class="note"><h3>Делает HDR Group</h3><ul>
+      <li><b>Оформление профиля.</b> Аватар из логотипа компании, текст блока «О компании» без контактов и ссылок.</li>
+      <li><b>5–7 объявлений по пакету.</b> Темы по спросу на Авито, SEO-заголовок до 50 знаков, текст с ключевыми запросами в первых 200 знаках, категория и параметры: пассажирские перевозки, автобус, 19 мест.</li>
+      <li><b>Обложка под каждое объявление.</b> Индивидуальный дизайн в фирменных цветах компании, на собственном фото автобуса, по правилам Авито.</li>
+      <li><b>Контроль модерации и правил.</b> Без контактов в тексте и на фото, без похожих объявлений, без запрещённых слов.</li>
+      <li><b>План продвижения.</b> Какие объявления продвигать, когда подключать выделение и XL, лимиты расходов кошелька.</li>
+      <li><b>Статистика и обновление.</b> Просмотры, контакты и сообщения по каждому объявлению; слабые объявления получают новый заголовок, обложку или фото.</li>
+    </ul></div>
+    <div class="note"><h3>Нужно от компании</h3><ul>
+      <li><b>Согласовать список тем</b> — по анкете сначала список тем, затем готовые объявления.</li>
+      <li><b>Логотип файлом</b> — для аватара нужен квадрат 1024 × 1024.</li>
+      <li><b>Собственные фото автобуса</b> — снаружи и в салоне; при возможности видео.</li>
+      <li><b>Кошелёк Авито</b> — сумму определяем вместе.</li>
+      <li><b>Рабочий чат</b> — Telegram, как выбрано в анкете.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>Первые четыре этапа — ведение профиля на Авито. Яндекс Карты и 2ГИС — следующие площадки, после того как профиль на Авито начнёт стабильно приносить обращения.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Запустить профиль</h3><span class="when">до 26.10</span></div>
+      <ol>
+        <li><b>Аватар и «О компании».</b><span>Логотип — квадрат 1024 × 1024. Описание без контактов и ссылок: заказной автобус на 19 мест, Екатеринбург и область, новый автопарк, опытные водители, бронирование заранее, заявки до 21:00. Модерация — до трёх рабочих дней, поэтому отправляем до первого объявления.</span></li>
+        <li><b>Фотосессия автобуса.</b><span>Снаружи в три четверти, сбоку, сзади, салон с рядами кресел, водительское место. Только собственные снимки, без чужих логотипов. Из этих кадров собираем 7 разных обложек и разные наборы фото для каждого объявления.</span></li>
+        <li><b>Видео.</b><span>Компания готова снять: от 5 секунд до 3 минут, обзор салона, без музыки и контактов.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Выпустить 7 объявлений</h3><span class="when">26.10 — 11.11</span></div>
+      <ol>
+        <li><b>По одному объявлению раз в 2–3 дня.</b><span>Новый профиль не публикует всё сразу: так объявления проходят модерацию по одному и не попадают под проверку на похожие. Первыми выходят город и дети — там больше всего запросов на одно объявление.</span></li>
+        <li><b>Каждое объявление — под свой запрос.</b><span>Узкий заголовок вместо «всё обо всём»: так объявление обходит широкие продвинутые объявления конкурентов в выдаче по конкретному запросу.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Отзывы и рейтинг</h3><span class="when">с первых заказов, постоянно</span></div>
+      <ol>
+        <li><b>Отзыв после каждой поездки.</b><span>У соседей по выдаче 6–22 отзыва и рейтинг 4,6–5,0, у компании пока 0. Отзыв на Авито оставляет пассажир, который заказал поездку через площадку: только реальные заказы, без вознаграждения.</span></li>
+        <li><b>Ответы на отзывы.</b><span>На каждый отзыв — ответ от имени компании.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Продвижение и ежемесячное ведение</h3><span class="when">с ноября, каждый месяц</span></div>
+      <ol>
+        <li><b>Кошелёк Авито.</b><span>Сумму определяем вместе с компанией. Начинаем с двух объявлений с лучшим соотношением спроса и конкуренции — «заказ автобуса» по городу и «перевозка детей».</span></li>
+        <li><b>Выделение цветом и XL.</b><span>Компания отметила «Обсудим». Подключать на 7 дней в пиковые периоды: детские поездки — сентябрь–октябрь, корпоративы — конец ноября–декабрь, свадьбы — май–июль.</span></li>
+        <li><b>Статистика раз в месяц.</b><span>Просмотры, контакты и сообщения по каждому объявлению. Объявления с просмотрами, но без сообщений получают новый заголовок, обложку или фото; темы следующих месяцев — по сезонам спроса из этой аналитики.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Следующие этапы: Яндекс Карты и 2ГИС</h3><span class="when">после запуска Авито</span></div>
+      <ol>
+        <li><b>Заполнить карточки компании.</b><span>Сейчас карточек «Резидент Сервис» на Яндекс Картах и 2ГИС нет. Первые карточки по «заказ автобуса» на Яндекс Картах — с 49–215 оценками. Заполняем рубрики, описание, фото и прайс из уже готовых материалов Авито.</span></li>
+        <li><b>Вести обе площадки.</b><span>Новости и сторис на карточках, ответы на отзывы. Карты и 2ГИС стоят в первых строках поиска Яндекса по всем запросам направления — это второй источник обращений после Авито.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Авито: поиск по Екатеринбургу 20.10.2026, раздел «Услуги»: категория «Пассажирские перевозки» и запросы по каждому направлению из анкеты; на первой странице — первые 50 объявлений.</li>
+    <li>Вордстат: регион «Свердловская область», все устройства, частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026. Внутренняя статистика поиска Авито закрыта, поэтому спрос оценивается по Яндексу.</li>
+    <li>Поиск Яндекса: Екатеринбург, 20.10.2026, рекламные блоки исключены.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://www.avito.ru/user/acd6a30f824bca699deb87d8cc3e6b86/profile" target="_blank" rel="noopener">Профиль «Резидент Сервис» на Авито</a>
+    <a href="https://www.avito.ru/ekaterinburg/predlozheniya_uslug/passazhirskie_perevozki-ASgBAgICAUSYC8CIjgM" target="_blank" rel="noopener">Авито — «Пассажирские перевозки», Екатеринбург</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://vc.ru/marketing/3162498-izmeneniya-na-avito-novye-pravila-rabotyi-i-blokirovki-akkauntov" target="_blank" rel="noopener">vc.ru — что изменится на Авито с 1 октября 2026</a>
+    <a href="https://bidline.ru/blog/izmeneniya-avito-iyul-2026" target="_blank" rel="noopener">Bidline — изменения Авито в июле 2026</a>
+  </div>
+</section>
+
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Заказной автобус · Екатеринбург и Свердловская область</span>
+    <h1>«Резидент Сервис» — ТЗ на объявления, этап 1</h1>
+    <p class="lead">7 объявлений с обложкой в индивидуальном дизайне компании. Публикация — профиль компании «Резидент Сервис» на Авито, по одному объявлению раз в 2–3 дня с 26 октября 2026 года.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Автобус заказной на 19 мест <small>Междугородний</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Екатеринбург <small>ближайшие города в радиусе 100 км</small></div></div>
+      <div class="fact"><div class="k">Размещение</div><div class="v">Екатеринбург, Сысерть, Арамиль <small>Берёзовский, Исток, Верхняя Пышма</small></div></div>
+      <div class="fact"><div class="k">Направления</div><div class="v">Заказные перевозки <small>выезды детей · доставка сотрудников до работы · свадьбы, корпоративы</small></div></div>
+      <div class="fact"><div class="k">Приоритет</div><div class="v">Заказные перевозки <small>по городу и области</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Заявки до 21:00 <small>автопарк работает круглосуточно</small></div></div>
+      <div class="fact"><div class="k">Цена и оплата</div><div class="v">Договорная <small>все формы оплаты</small></div></div>
+      <div class="fact"><div class="k">Тон</div><div class="v">Дружелюбный, простым языком <small>без прямого обращения</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Резидент Сервис»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек объявлений: тёмно-зелёный плашек и логотипа, шалфейный зелёный рамок, кремовый акцент, светлый фон и тёмный хвойный текста.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#053921;color:#FFFFFF;border-color:#053921">
+        <div class="role">Основной</div><div class="name">Тёмно-зелёный</div><div class="hex">#053921</div>
+      </div>
+      <div class="swatch" style="background:#84B09D;color:#082312;border-color:#84B09D">
+        <div class="role">Второстепенный</div><div class="name">Шалфейный зелёный</div><div class="hex">#84B09D</div>
+      </div>
+      <div class="swatch" style="background:#F9F3E2;color:#082312;border-color:#E6DCC2">
+        <div class="role">Акцентный</div><div class="name">Кремовый</div><div class="hex">#F9F3E2</div>
+      </div>
+      <div class="swatch" style="background:#FBFDF8;color:#082312;border-color:#DCE6DE">
+        <div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#FBFDF8</div>
+      </div>
+      <div class="swatch" style="background:#082312;color:#FBFDF8;border-color:#082312">
+        <div class="role">Текстовый</div><div class="name">Тёмный хвойный</div><div class="hex">#082312</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность объявлений этапа</h2>
+      <p>Порядок выхода — по объёму спроса и сезону: сначала город и дети, затем сотрудники и область, ближе к декабрю — корпоративы. Одно объявление раз в 2–3 дня, 4 ноября — без публикации.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">26.10</div><p>Аренда автобуса на 19 мест с водителем по Екатеринбургу — главный запрос площадки.</p></div>
+      <div class="cycle-row"><div class="tag">28.10</div><p>Перевозка детей: выезды детей на заказном автобусе — сезон детского спроса.</p></div>
+      <div class="cycle-row"><div class="tag">30.10</div><p>Доставка сотрудников до работы — круглосуточный автопарк.</p></div>
+      <div class="cycle-row"><div class="tag">02.11</div><p>Поездки по области: Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Автобус на корпоратив — бронирование даты заранее к сезону корпоративов.</p></div>
+      <div class="cycle-row"><div class="tag">09.11</div><p>Междугородние поездки в ближайшие города в радиусе 100 км.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Автобус на свадьбу для гостей — бронирование даты заранее.</p></div>
+    </div>
+  </section>
+
+  <section id="ads">
+    <div class="sec-head">
+      <span class="sec-num">03 · Объявления</span>
+      <h2>Темы объявлений</h2>
+      <p>7 тем с обложкой. Публикация — профиль компании «Резидент Сервис» на Авито, категория «Услуги» → «Пассажирские перевозки».</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> дружелюбный, простым языком, без прямого обращения к покупателю — без «вы» и «ты». Каждое объявление начинается со вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по анкете компании. SEO-ключи вплетаются в текст органично, без повторов подряд; в тексте есть и «автобус», и «микроавтобус», и число мест. В тексте и на фото нет телефона, e-mail, ссылок и мессенджеров — связь только через кнопки объявления и чат Авито. Без «лучший», «№1», капса, «акция» и «срочно». Заголовок — до 50 знаков, суть и ключевой запрос — в первых 200 знаках текста.</div>
+
+    <div class="rules">
+      <div class="rule"><b>Одно объявление — одна суть</b>Одинаковые и похожие объявления Авито блокирует или прячет: у каждого свой заголовок, своя обложка и свой набор фото.</div>
+      <div class="rule"><b>Только собственные фото</b>Без контактов, рамок, рекламных надписей и чужих логотипов. Короткие надписи и иконки с преимуществами — если не перекрывают автобус.</div>
+      <div class="rule"><b>Логотип на фото</b>Только полупрозрачный водяной знак: не плотнее 50% и не больше половины кадра.</div>
+      <div class="rule"><b>Формат обложки</b>4 : 3, от 1600 × 1200 px. Надпись — в центральной зоне, чтобы не обрезалась в квадратном превью.</div>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">7 объявлений · актуальный</span></div>
+
+    <!-- 1 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 1 · 26 октября</span><h3>Аренда автобуса на 19 мест с водителем в Екатеринбурге</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы предоставляем заказной автобус на 19 мест с водителем по Екатеринбургу. Поездку можно забронировать заранее, а автобус подаём в краткие сроки.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Автобус заказной на 19 мест. Междугородний.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее. Поставка автобуса в краткие сроки.<span class="src">анкета</span></li>
+        <li>Новый автопарк, опытные водители.<span class="src">анкета</span></li>
+        <li>Заявки принимаем до 21:00. Автопарк работает круглосуточно.<span class="src">анкета</span></li>
+        <li>Все формы оплаты. Цена — договорная.<span class="src">анкета</span></li>
+        <li>Работаем с выездом к клиенту: Екатеринбург и ближайшие города.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Аренда автобуса на 19 мест с водителем (38 знаков)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Заказной автобус на 19 мест с водителем по Екатеринбургу и области. Поездку можно забронировать заранее, автобус подаём в краткие сроки. Новый автопарк, опытные водители, все формы оплаты.</span></div>
+        <div class="chips">
+          <span class="chip-kw">аренда автобуса екатеринбург</span><span class="chip-kw">аренда автобуса с водителем</span>
+          <span class="chip-kw">аренда автобуса екатеринбург с водителем</span><span class="chip-kw">заказать автобус екатеринбург</span>
+          <span class="chip-kw">заказ автобуса екатеринбург</span><span class="chip-kw">автобус на заказ</span>
+          <span class="chip-kw">микроавтобус с водителем</span><span class="chip-kw">аренда микроавтобуса екатеринбург</span>
+          <span class="chip-kw">заказать микроавтобус с водителем</span><span class="chip-kw">микроавтобус 19 мест</span>
+          <span class="chip-kw">автобус с водителем</span><span class="chip-kw">пассажирские перевозки екатеринбург</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> дата, маршрут и расчёт поездки — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Автобус с водителем»</div>
+        <p>Концепт: «готов к подаче». Собственное фото автобуса компании в три четверти на городской улице Екатеринбурга, двери открыты. Тезис на плашке в нижней трети, справа — кремовый круг с цифрой «19» и подписью «мест». Логотип — полупрозрачным водяным знаком в правом верхнем углу.</p>
+        <p>Цвета: плашка — тёмно-зелёный #053921, тезис — светлый #FBFDF8, круг — кремовый #F9F3E2 с цифрой тёмным хвойным #082312.</p>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 2 · 28 октября</span><h3>Заказ автобуса для перевозки детей в Екатеринбурге</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Выезды детей — одно из наших направлений. Для них есть заказной автобус на 19 мест, новый автопарк и опытные водители.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Заказные перевозки: выезды детей.<span class="src">анкета</span></li>
+        <li>Возможность возить детей, опытные водители.<span class="src">анкета</span></li>
+        <li>Новый автопарк. Автобус заказной на 19 мест.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее.<span class="src">анкета</span></li>
+        <li>Екатеринбург и ближайшие города: Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Заказ автобуса для перевозки детей, 19 мест (43 знака)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Заказ автобуса для перевозки детей в Екатеринбурге: заказной автобус на 19 мест для выездов детей. Новый автопарк, опытные водители, бронирование заранее и все формы оплаты.</span></div>
+        <div class="chips">
+          <span class="chip-kw">заказать автобус для детей</span><span class="chip-kw">перевозка детей автобусом заказ</span>
+          <span class="chip-kw">арендовать автобус для перевозки детей</span><span class="chip-kw">заказ автобуса для перевозки детей екатеринбург</span>
+          <span class="chip-kw">автобус для школьников екатеринбург</span><span class="chip-kw">заказать автобус для школьников</span>
+          <span class="chip-kw">аренда автобуса для детей</span><span class="chip-kw">автобус для перевозки детей</span>
+          <span class="chip-kw">заказать автобус для экскурсии</span><span class="chip-kw">микроавтобус для детей заказ</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> дату выезда и маршрут удобно согласовать заранее — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Выезды детей»</div>
+        <p>Концепт: «место для каждого». Собственное фото салона автобуса компании: ряды кресел уходят вглубь, свет из окон, людей в кадре нет. Тезис на кремовой подложке в верхней левой четверти, под ним тонкая шалфейная линия. Логотип — полупрозрачным водяным знаком в правом нижнем углу.</p>
+        <p>Цвета: подложка — кремовый #F9F3E2, тезис — тёмно-зелёный #053921, линия — шалфейный зелёный #84B09D.</p>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 3 · 30 октября</span><h3>Доставка сотрудников до работы на заказном автобусе</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Доставку сотрудников до работы мы берём на себя: заказной автобус на 19 мест, опытные водители и автопарк, который работает круглосуточно.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Заказные перевозки: доставка сотрудников до работы.<span class="src">анкета</span></li>
+        <li>Автопарк работает круглосуточно. Заявки принимаем до 21:00.<span class="src">анкета</span></li>
+        <li>Новый автопарк, опытные водители.<span class="src">анкета</span></li>
+        <li>Все формы оплаты.<span class="src">анкета</span></li>
+        <li>Екатеринбург и ближайшие города в радиусе 100 км.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Доставка сотрудников до работы на автобусе (42 знака)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Доставка сотрудников до работы на заказном автобусе на 19 мест — Екатеринбург и ближайшие города. Автопарк работает круглосуточно, водители опытные, все формы оплаты.</span></div>
+        <div class="chips">
+          <span class="chip-kw">доставка сотрудников</span><span class="chip-kw">перевозка сотрудников</span>
+          <span class="chip-kw">перевозка сотрудников на работу</span><span class="chip-kw">развоз сотрудников екатеринбург</span>
+          <span class="chip-kw">развоз сотрудников после работы</span><span class="chip-kw">доставка персонала на работу</span>
+          <span class="chip-kw">автобус для сотрудников</span><span class="chip-kw">перевозка сотрудников до места работы и обратно</span>
+          <span class="chip-kw">корпоративный развоз сотрудников</span><span class="chip-kw">заказ автобуса для перевозки</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> график поездок и расчёт — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Доставка сотрудников»</div>
+        <p>Концепт: «рабочая смена». Собственное фото автобуса компании ранним утром или вечером с включёнными фарами, сбоку, на фоне промзоны или парковки без вывесок. Тезис на диагональной ленте через левый нижний угол, рядом иконка часов с подписью «круглосуточно». Логотип — полупрозрачным водяным знаком в правом верхнем углу.</p>
+        <p>Цвета: лента — тёмно-зелёный #053921, тезис — светлый #FBFDF8, иконка и подпись — кремовый #F9F3E2.</p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 4 · 2 ноября</span><h3>Заказной автобус по Свердловской области: Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Работаем не только в Екатеринбурге: заказной автобус на 19 мест приезжает в Сысерть, Арамиль, Берёзовский, Исток и Верхнюю Пышму.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Екатеринбург, Сысерть, Арамиль, Березовский, Исток, В. Пышма — все прилегающие к Екатеринбургу города.<span class="src">анкета</span></li>
+        <li>Заказные перевозки по городу и области.<span class="src">анкета</span></li>
+        <li>Работаем с выездом к клиенту.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее. Поставка автобуса в краткие сроки.<span class="src">анкета</span></li>
+        <li>Все формы оплаты.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Заказной автобус по Свердловской области (40 знаков)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Заказной автобус на 19 мест по Свердловской области: Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма и Екатеринбург. Выезд к месту посадки, бронирование заранее.</span></div>
+        <div class="chips">
+          <span class="chip-kw">заказ автобуса свердловская область</span><span class="chip-kw">пассажирские перевозки екатеринбург</span>
+          <span class="chip-kw">заказ автобуса сысерть</span><span class="chip-kw">заказ автобуса арамиль</span>
+          <span class="chip-kw">аренда автобуса березовский</span><span class="chip-kw">аренда автобуса верхняя пышма</span>
+          <span class="chip-kw">автобус исток</span><span class="chip-kw">пригородные пассажирские перевозки</span>
+          <span class="chip-kw">заказать микроавтобус екатеринбург</span><span class="chip-kw">организация пассажирских перевозок</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> точку посадки и время подачи — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Город и область»</div>
+        <p>Концепт: «карта маршрутов». Слева — собственное фото автобуса компании на загородной дороге среди леса. Справа — светлая панель со схемой: точка «Екатеринбург» в центре и пять тонких лучей к подписям Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма. Тезис над схемой. Логотип — полупрозрачным водяным знаком в левом верхнем углу.</p>
+        <p>Цвета: панель — светлый #FBFDF8, лучи — шалфейный зелёный #84B09D, точка и тезис — тёмно-зелёный #053921, подписи городов — тёмный хвойный #082312.</p>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 5 · 5 ноября</span><h3>Автобус на корпоратив с водителем: 19 мест, Екатеринбург и область</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>На корпоратив мы подаём заказной автобус на 19 мест с опытным водителем. Дату можно забронировать заранее.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Заказные перевозки: свадьбы, корпоративы.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее.<span class="src">анкета</span></li>
+        <li>Автопарк работает круглосуточно. Заявки принимаем до 21:00.<span class="src">анкета</span></li>
+        <li>Опытные водители, новый автопарк.<span class="src">анкета</span></li>
+        <li>Все формы оплаты.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Автобус на корпоратив с водителем, 19 мест (42 знака)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Автобус на корпоратив с водителем: заказной автобус на 19 мест по Екатеринбургу и области. Дату можно забронировать заранее, заявки принимаются до 21:00, все формы оплаты.</span></div>
+        <div class="chips">
+          <span class="chip-kw">автобус на корпоратив</span><span class="chip-kw">заказ автобуса на корпоратив</span>
+          <span class="chip-kw">аренда автобуса на мероприятие</span><span class="chip-kw">микроавтобус на корпоратив</span>
+          <span class="chip-kw">заказать автобус екатеринбург</span><span class="chip-kw">аренда автобуса с водителем для перевозки</span>
+          <span class="chip-kw">автобус на новогодний корпоратив</span><span class="chip-kw">перевозка гостей на автобусе</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> дату корпоратива и маршрут — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Автобус на корпоратив»</div>
+        <p>Концепт: «вечерняя подача». Собственное фото автобуса компании вечером у входа в здание без вывесок, тёплый свет из окон и фар. Тезис на полупрозрачной плашке в нижней трети по центру. Логотип — полупрозрачным водяным знаком в правом верхнем углу.</p>
+        <p>Цвета: плашка — тёмно-зелёный #053921 с прозрачностью 85%, тезис — кремовый #F9F3E2, тонкая рамка-уголок плашки — шалфейный зелёный #84B09D.</p>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 6 · 9 ноября</span><h3>Междугородние поездки на автобусе на 19 мест: ближайшие города в радиусе 100 км</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Наш заказной автобус на 19 мест — междугородний. Возим из Екатеринбурга в ближайшие города в радиусе 100 км, например в Невьянск и Реж.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Автобус заказной на 19 мест. Междугородний.<span class="src">анкета</span></li>
+        <li>Екатеринбург и все ближайшие города: Сысерть, Арамиль, Невьянск, Реж и т.д. в радиусе 100 км.<span class="src">анкета</span></li>
+        <li>Опытные водители, новый автопарк.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее.<span class="src">анкета</span></li>
+        <li>Все формы оплаты.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Междугородние поездки на автобусе, 19 мест (42 знака)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Междугородние поездки на заказном автобусе на 19 мест из Екатеринбурга в ближайшие города в радиусе 100 км: Невьянск, Реж, Сысерть, Арамиль. Новый автопарк, опытные водители.</span></div>
+        <div class="chips">
+          <span class="chip-kw">междугородние перевозки</span><span class="chip-kw">междугородние перевозки пассажиров</span>
+          <span class="chip-kw">междугородние автобусные перевозки</span><span class="chip-kw">аренда автобуса межгород</span>
+          <span class="chip-kw">заказ автобуса межгород</span><span class="chip-kw">автобус екатеринбург невьянск заказ</span>
+          <span class="chip-kw">автобус екатеринбург реж заказ</span><span class="chip-kw">аренда автобуса с водителем на сутки</span>
+          <span class="chip-kw">трансфер екатеринбург автобус</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> маршрут и дату поездки — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Межгород до 100 км»</div>
+        <p>Концепт: «дорога за город». Собственное фото автобуса компании на трассе, вид сзади-сбоку, дорога уходит к горизонту. Тезис в верхней трети на прозрачном фоне неба, справа — кремовый круг с подписью «100 км». Логотип — полупрозрачным водяным знаком в левом нижнем углу.</p>
+        <p>Цвета: тезис — тёмно-зелёный #053921 с тонкой светлой обводкой #FBFDF8, круг — кремовый #F9F3E2 с текстом тёмным хвойным #082312.</p>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Объявление 7 · 11 ноября</span><h3>Автобус на свадьбу для гостей: 19 мест, с водителем</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="params"><span class="param"><b>Категория ·</b> Пассажирские перевозки</span><span class="param"><b>Транспорт ·</b> автобус</span><span class="param"><b>Мест ·</b> 19</span><span class="param"><b>Цена ·</b> договорная</span><span class="param"><b>Город ·</b> Екатеринбург</span></div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>На свадьбу мы подаём заказной автобус на 19 мест с опытным водителем. Дату свадьбы можно забронировать заранее.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Заказные перевозки: свадьбы, корпоративы.<span class="src">анкета</span></li>
+        <li>Возможно бронировать заранее. Поставка автобуса в краткие сроки.<span class="src">анкета</span></li>
+        <li>Опытные водители, новый автопарк.<span class="src">анкета</span></li>
+        <li>Екатеринбург и ближайшие города в радиусе 100 км.<span class="src">анкета</span></li>
+        <li>Все формы оплаты.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>Заголовок · </b>Автобус на свадьбу для гостей, 19 мест (38 знаков)</span></div>
+        <div class="meta-row"><span><b>Первые 200 знаков · </b>Автобус на свадьбу для гостей: заказной автобус на 19 мест с водителем по Екатеринбургу и области. Дату свадьбы можно забронировать заранее, автобус подаём в краткие сроки.</span></div>
+        <div class="chips">
+          <span class="chip-kw">автобус на свадьбу</span><span class="chip-kw">заказать автобус на свадьбу</span>
+          <span class="chip-kw">аренда автобуса на свадьбу</span><span class="chip-kw">микроавтобус на свадьбу</span>
+          <span class="chip-kw">заказать микроавтобус на свадьбу</span><span class="chip-kw">автобус для гостей на свадьбу</span>
+          <span class="chip-kw">перевозка гостей на свадьбу</span><span class="chip-kw">аренда автобуса екатеринбург</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> дату свадьбы и маршрут — в сообщениях чата Авито.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Автобус на свадьбу»</div>
+        <p>Концепт: «праздничный день». Собственное фото автобуса компании крупным планом у светлого фасада, мягкий дневной свет. Тезис на светлой подложке в верхней трети, вокруг подложки тонкий растительный орнамент в углах. Логотип — полупрозрачным водяным знаком в правом нижнем углу.</p>
+        <p>Цвета: подложка — светлый #FBFDF8, тезис — тёмно-зелёный #053921, орнамент — шалфейный зелёный #84B09D.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">04 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — город, дети, сотрудники, область, корпоратив, межгород, свадьба <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Объявление 1</span><span class="txt"><b>Аренда автобуса на 19 мест с водителем в Екатеринбурге</b>26.10 · бронирование заранее, подача в краткие сроки</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 2</span><span class="txt"><b>Заказ автобуса для перевозки детей</b>28.10 · выезды детей, опытные водители, новый автопарк</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 3</span><span class="txt"><b>Доставка сотрудников до работы</b>30.10 · автопарк круглосуточно, заявки до 21:00</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 4</span><span class="txt"><b>Заказной автобус по Свердловской области</b>02.11 · Сысерть, Арамиль, Берёзовский, Исток, Верхняя Пышма</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 5</span><span class="txt"><b>Автобус на корпоратив с водителем</b>05.11 · бронирование даты заранее</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 6</span><span class="txt"><b>Междугородние поездки в радиусе 100 км</b>09.11 · Невьянск, Реж и ближайшие города</span></div>
+        <div class="stage-item"><span class="fmt">Объявление 7</span><span class="txt"><b>Автобус на свадьбу для гостей</b>11.11 · бронирование даты заранее</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Анкета компании «Старт проекта» от 20.10.2026</span>
+      <a href="https://t.me/residentservis/844/850" target="_blank" rel="noopener">Telegram «Резидент Сервис»</a>
+      <a href="https://www.avito.ru/user/acd6a30f824bca699deb87d8cc3e6b86/profile" target="_blank" rel="noopener">Профиль на Авито</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={a:[818,852,660,754,751,928,884,752,956,860,702,873,869,728,518,535,435,674,764,765,719,701,634,788],
+k:[872,667,680,504,653,624,709,528,473,405,382,629,645,563,579,390,450,604,606,565,523,570,466,833],
+d:[111,84,43,14,16,12,19,11,11,6,7,151,223,80,35,15,10,16,25,22,11,7,19,188],
+s:[97,116,166,131,128,156,95,101,92,115,69,120,146,115,136,62,86,143,137,92,114,103,131,149]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-core':[['заказать автобус','коммерческое',1059],['аренда автобуса','коммерческое',791],['заказ автобуса','коммерческое',520],['аренда автобуса екатеринбург','коммерческое, гео',262],['заказать автобус екатеринбург','коммерческое, гео',253],['аренда микроавтобуса','коммерческое',239],['аренда автобуса с водителем','коммерческое',185],['заказ автобуса екатеринбург','коммерческое, гео',151],['микроавтобус с водителем','коммерческое',144],['автобус на заказ','коммерческое',135],['заказать микроавтобус','коммерческое',116],['аренда автобуса екатеринбург с водителем','коммерческое, гео',71]],
+ 't-dir':[['заказать автобус для детей','выезды детей',324],['автобус для школьников','выезды детей',273],['арендовать автобус для перевозки детей','выезды детей',88],['перевозка детей автобусом заказ','выезды детей',81],['междугородние перевозки','межгород',180],['перевозка сотрудников','сотрудники',137],['развоз сотрудников','сотрудники',88],['доставка персонала','сотрудники',48],['пригородные пассажирские перевозки','область',52],['автобус на свадьбу','свадьбы',21],['заказать автобус на свадьбу','свадьбы',7],['микроавтобус на свадьбу','свадьбы',7]],
+ 't-info':[['перевозка детей','в основном правила перевозки',3570],['правила перевозки детей','требования и документы',937],['трансфер екатеринбург','аэропорт, межгород',851],['организованная перевозка детей','правила, уведомление ГИБДД',451],['заказать автобус для экскурсии','экскурсии',51],['сколько стоит заказать автобус','цена',29],['аренда автобуса стоимость','цена',28],['резидент сервис','бренд, запрос неоднозначный',20]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['avito','Выдача Авито'],['why','Почему не виден'],['directions','Направления'],['demand','Спрос'],['yandex','Авито в Яндексе'],['market','Площадка'],['offer','Предложение'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['ads','Объявления'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
