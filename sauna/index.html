@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Сауна»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+.vc .ref{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink-2);min-width:0}
+.vc .ref b{display:block;color:var(--ink);font:700 14.5px var(--f-display);margin-bottom:4px}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Сауна · Санкт-Петербург</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>САУНА САУНА САУНА САУНА</span><span>САУНА САУНА САУНА САУНА</span><span>САУНА САУНА САУНА САУНА</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Сауна» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка Санкт-Петербурга, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Сауна</b></div>
+        <div><span>Город</span><b>Санкт-Петербург</b></div>
+        <div><span>Адрес</span><b>наб. Обводного канала, 209</b></div>
+        <div><span>Направления</span><b>Сауна · Бассейн · Бильярд · Караоке</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 21.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«сауна на обводном» на Картах</span><span class="t-n y">4</span><span class="t-s">место из 42 карточек в выдаче</span></div>
+        <div class="tile"><span class="t-k">«сауна с бассейном» на Картах</span><span class="t-n c">нет</span><span class="t-s">в первых 41 из 124 карточек</span></div>
+        <div class="tile"><span class="t-k">Отзывов в 2026 году</span><span class="t-n c">7</span><span class="t-s">5 из них с оценкой 1–2</span></div>
+        <div class="tile"><span class="t-k">Спрос «сауна с бассейном»</span><span class="t-n g">5 376</span><span class="t-s">запросов за 30 дней в Петербурге</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах и в органике, причины просадки, спрос по Вордстату, сравнение с соседями по выдаче, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис под запросы, по которым карточки сейчас нет в выдаче: сауна с бассейном и бильярдом, праздник компанией, круглосуточно и сутки со скидкой 50%, что взять с собой.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">ожидаем</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет работает только на просмотр, редактирование карточки недоступно. К моменту восстановления тексты, обложки и сторис первой недели будут готовы.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">сразу после восстановления</span><span class="st next">следующий шаг</span></div><h3>Описание, прайс, единые данные</h3><p>Описание компании, обновлённый прайс с доплатой за гостей и вениками, одна цена часа и одна вместимость на Яндексе, 2ГИС и сайте, ответы на отзывы.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">29.10 · 05.11 · 12.11 · 19.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Что входит и сколько стоит, праздник компанией, сутки со скидкой 50%, что взять с собой — по одной новости и одной сторис в неделю, по четвергам.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после восстановления</span><span class="st next">обсудить</span></div><h3>Тариф Яндекс Бизнеса</h3><p>Выбор тарифа, который убирает рекламу конкурентов с карточки «Сауны» и сохраняет новости и сторис.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 9 запросам на Картах и 4 запросам в органике, сравнение с соседями по Обводному каналу, спрос и сезонность в Петербурге, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>29.10 — Сауна с бассейном и бильярдом у Нарвской</li>
+            <li>05.11 — День рождения и встреча компанией</li>
+            <li>12.11 — Круглосуточно, сутки со скидкой 50%</li>
+            <li>19.11 — Что взять с собой в сауну</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Санкт-Петербург · сауна с бассейном · замер 21.10.2026</span>
+  <h1>Где «Сауна» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 9 запросам, сайт в органической выдаче Яндекса, спрос по Вордстату для региона «Санкт-Петербург» и сравнение с карточками, которые стоят выше.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>По адресным запросам карточка в выдаче</b>«сауна на обводном» — 4 место из 42, «сауна нарвская» — 7 из 13, «сауна адмиралтейский район» — 12 из 22. Выше стоят Сауна-Люкс, Сауны Питера и Петровские бани с рейтингом 5,0 и 436–2 792 оценками.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По услугам карточки не видно</b>«сауна с бассейном», «сауна с бильярдом», «сауна с караоке», «сауна круглосуточно», «сауна», «сауна недорого» — «Сауны» нет в первых 25–41 карточках. Хотя бассейн, бильярд, караоке и круглосуточная работа у неё есть.</p></div>
+    <div class="v"><span class="pill crit">риск</span><p><b>Рейтинг 4,0 и отзывы без ответов</b>75 оценок, 34 отзыва, ответ компании — на 1 отзыв. В 2026 году 7 отзывов, 5 из них с оценкой 1–2. В 2ГИС рейтинг 2,9 по 17 оценкам.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Сайт не входит в топ-20 Яндекса по коммерческим запросам</b>Находится только по названию с адресом. По https сайт не открывается, нет robots.txt и sitemap.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Начинается высокий сезон</b>Пик спроса — октябрь–январь. За январь–сентябрь 2026 спрос ниже прошлого года: «сауна спб» −20%, «сауна с бассейном» −25%. Октябрь–декабрь 2025 был на уровне 2024 года.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,0</div><div class="s">75 оценок, 34 отзыва</div></div>
+    <div class="kpi"><div class="k">Ответов компании на отзывы</div><div class="n">1</div><div class="s">из 34 отзывов</div></div>
+    <div class="kpi"><div class="k">Фото на карточке</div><div class="n">46</div><div class="s">у соседей по выдаче 69–84</div></div>
+    <div class="kpi"><div class="k">Новости и сторис</div><div class="n">0</div><div class="s">сторис есть у всех соседей</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Санкт-Петербургу, без геолокации пользователя. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто выше или в топе</th></tr></thead>
+    <tbody>
+      <tr><td>сауна на обводном</td><td class="r num">4 из 42</td><td>Сауна-Люкс 5,0 / 436, Сауны Питера (Обводного, 147) 5,0 / 1 021, Петровские бани (Обводного, 219) 5,0 / 2 792</td></tr>
+      <tr><td>сауна нарвская</td><td class="r num">7 из 13</td><td>Сауны Питера (Нарвский, 11Ж) 5,0 / 606, Оздоровительный банный комплекс, Wellness Liga, Петровские бани</td></tr>
+      <tr><td>сауна адмиралтейский район</td><td class="r num">12 из 22</td><td>Лоцманские бани 5,0 / 1 177, Siberia 5,0 / 318, Петровские бани, Балтийские бани, Казачьи бани</td></tr>
+      <tr><td>сауна с бассейном</td><td class="r">нет в 41 из 124</td><td>Gw Fitness, Tauras-Fitness, С-фитнес, Susanin — фитнес-клубы с бассейном</td></tr>
+      <tr><td>сауна с бильярдом</td><td class="r">нет в 31 из 45</td><td>Купидон 5,0 / 504, Капля 4,5 / 333, Гейзер 5,0 / 250, Аннушка 4,4 / 1 552</td></tr>
+      <tr><td>сауна с караоке</td><td class="r">нет в 25 из 52</td><td>Cherish 4,9 / 4 745, Бастион 5,0 / 95, Купидон, Сауна Байкал</td></tr>
+      <tr><td>сауна круглосуточно</td><td class="r">нет в 25 из 71</td><td>Бастион, Купидон, Сауна Байкал 4,9 / 313, Камелот 5,0 / 257</td></tr>
+      <tr><td>сауна</td><td class="r">нет в 25 из 67</td><td>Медвежка 4,7 / 172, Джой 4,8 / 434, Сауна Байкал, Купидон</td></tr>
+      <tr><td>сауна недорого</td><td class="r">нет в 25 из 61</td><td>Мастерская Пара 5,0 / 247, Медвежка, Сауна-Люкс, Джой</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточка против соседей по Обводному каналу</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки / отзывы</th><th class="r">Фото</th><th>Сторис</th><th>Цена часа</th><th>Акция на карточке</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Сауна</b><div class="sub">Обводного, 209</div></td><td class="r num">4,0</td><td class="r num">75 / 34</td><td class="r num">46</td><td>нет</td><td>1 000–1 400 ₽</td><td>скидка 50% при бронировании на сутки</td></tr>
+      <tr><td>Сауна-Люкс<div class="sub">Литейный, 30 · реклама на Картах</div></td><td class="r num">5,0</td><td class="r num">436 / 343</td><td class="r num">83</td><td>есть</td><td>от 1 500 ₽</td><td>скидки постоянным гостям</td></tr>
+      <tr><td>Сауны Питера<div class="sub">Обводного, 147–149Д</div></td><td class="r num">5,0</td><td class="r num">1 021 / 614</td><td class="r num">83</td><td>есть</td><td>1 200–2 400 ₽</td><td>—</td></tr>
+      <tr><td>Петровские бани<div class="sub">Обводного, 219–221</div></td><td class="r num">5,0</td><td class="r num">2 792 / 2 006</td><td class="r num">84</td><td>есть</td><td>от 300 ₽</td><td>новогодний пакет</td></tr>
+      <tr><td>Голдинские бани<div class="sub">Салова, 49А · реклама на Картах</div></td><td class="r num">5,0</td><td class="r num">451 / 247</td><td class="r num">79</td><td>есть</td><td>1 500–3 300 ₽</td><td>четвёртый час в подарок</td></tr>
+      <tr><td>Банька на Тамбовской<div class="sub">Тамбовская, 24</div></td><td class="r num">4,8</td><td class="r num">173 / 90</td><td class="r num">69</td><td>есть</td><td>1 500–2 000 ₽</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>7–11 октября 2026 года беспилотники атаковали дата-центры Яндекса. С 16 октября кабинет Яндекс Бизнеса открыт только для просмотра: редактирование карточки и запуск продвижения недоступны, на 19 октября это не изменилось. Всё, что ниже требует правок в кабинете, мы внесём, как только Яндекс Бизнес вернётся в штатный режим.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка не рассказывает об услугах</h3></div>
+      <p>Описания нет, новостей и сторис нет. В прайсе три позиции с пометкой «Давно не обновлялось»: аренда на час, «Для пар» и бильярд. Бассейн и караоке на карточке упомянуты только в «Особенностях», без текста и цен. Поэтому по запросам «сауна с бассейном», «сауна с бильярдом», «сауна с караоке» карточка не набирает релевантности.</p>
+      <p>У всех пяти соседей по выдаче есть сторис и <b>69–84 фото</b>, у «Сауны» — 46.</p>
+      <p class="next">После восстановления редактирования добавим описание, расширим прайс (доплата за гостей, веники, полотенца, простыни, тапочки, бильярд) и выпустим новости и сторис этапа 1.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Рейтинг 4,0 и отзывы без ответов</h3></div>
+      <p>34 отзыва, ответ компании — на <b>1</b>. В 2026 году 7 отзывов, 5 из них с оценкой 1–2. В разборе отзывов Яндекса положительных упоминаний бассейна 5 из 13, персонала 7 из 16. У соседей по выдаче рейтинг 5,0 при сотнях оценок.</p>
+      <p>Рейтинг и свежие отзывы — факторы ранжирования на Картах, и по ним карточка проигрывает сильнее всего. На 2ГИС картина та же: 2,9 по 17 оценкам.</p>
+      <p class="next">Отвечать на каждый отзыв, начиная с отзывов 2026 года. Просить отзыв после визита ссылкой или QR, без вознаграждения.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Данные о сауне расходятся между площадками</h3></div>
+      <p>Яндекс сверяет данные карточки с сайтом и другими источниками, а человек видит разные цифры и сомневается. Что расходится сейчас:</p>
+      <p><b>Цена часа:</b> прайс Яндекса — 1 500 ₽ до 4 человек, особенности Яндекса и сайт — 1 000–1 400 ₽, 2ГИС — 1 400 ₽ до 4 человек и 300 ₽ за каждого следующего (прайс обновлён 25 июня 2025). <b>Вместимость:</b> сайт и Яндекс — до 15 человек, 2ГИС — до 8. <b>Парная:</b> Яндекс — русская и финская, сайт — финская. <b>Название:</b> Яндекс — «Сауна», 2ГИС — «Сеть саун», сайт — «Сауна Уют На Обводном 209». <b>Район:</b> сайт — Кировский, 2ГИС — Адмиралтейский.</p>
+      <p class="next">Привести все площадки к одному названию «Сауна» и одним данным по цене, вместимости и парной.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>На карточке показывается реклама конкурентов</h3></div>
+      <p>В блоке похожих мест самой карточки «Сауны» показываются рекламные карточки: Сауны Питера (две точки), Brooms и Баня/сауна Новоизмайловская. Человек, уже открывший карточку, видит предложение уйти к другим.</p>
+      <p>Это следствие новой политики Яндекс Карт. С конца июля 2026 года Яндекс постепенно переводит карточки организаций на тарифы: <b>Базовый</b> (бесплатный), <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки может показываться реклама других организаций, а новости, истории и фото в товарах и услугах скрываются. Расширенный тариф убирает рекламу конкурентов с карточки и возвращает новости и истории; Продвинутый добавляет к этому приоритетные показы в выдаче. Стоимость назначается в кабинете индивидуально и считается за 90 дней.</p>
+      <p class="next">Когда Яндекс Бизнес включится, обсудим с представителем «Сауны» покупку тарифа.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион Санкт-Петербург, первые 2–3 страницы выдачи, рекламу не считали.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Сайт сауны</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>сауна с бассейном спб</td><td class="r">нет в топ-20</td><td>Яндекс Карты, 2ГИС, Авито, 101sauna, Zoon, bannik.ru, saunapiter, vsaunah</td></tr>
+      <tr><td>сауна с бильярдом спб</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Zoon, 2ГИС, sauna.ru, bannik.ru, Авито, vsaunah, saunapiter</td></tr>
+      <tr><td>сауна на обводном канале</td><td class="r">нет в топ-20</td><td>Яндекс Карты, 2ГИС, Siberia, Zoon, saunapiter, сайт Петровских бань, sauna.spb.ru</td></tr>
+      <tr><td>сауна уют на обводном 209</td><td class="r num">1</td><td>сайт сауны, затем Яндекс Карты, vsaunah, bani-spb, 2ГИС</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на сайте мешает</h3><ul>
+      <li><b>Одна страница на все услуги.</b> Главная, «О нас», «Залы», «Контакты». Нет страниц под бассейн, праздники и компании.</li>
+      <li><b>По https сайт не открывается</b>, работает только http. Нет robots.txt и sitemap.xml (ответ 404).</li>
+      <li><b>Title без услуг</b>: «Сауна Уют На Обводном 209 в Санкт-Петербурге: скидки, фото, цены, отзывы» — нет «с бассейном», «с бильярдом». У всех 13 изображений нет alt.</li>
+      <li>На сайте указан Кировский район, на 2ГИС — Адмиралтейский. Разметка LocalBusiness и Метрика есть.</li>
+    </ul></div>
+    <div class="note"><h3>Кто забирает органику</h3><ul>
+      <li>Первые 10 мест по коммерческим запросам — агрегаторы (Яндекс Карты, 2ГИС, Авито, Zoon) и каталоги саун (bannik.ru, vsaunah, saunapiter, 101sauna, sauna.spb.ru).</li>
+      <li>Сайт сауны работает на платформе каталога vsaunah, и страница этого каталога стоит рядом с сайтом даже по названию.</li>
+      <li>Быстрее всего гости приходят через карточку и профили в каталогах саун.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Санкт-Петербурге</h2><p>Вордстат, регион «Санкт-Петербург», все устройства. Частоты — за 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="s"><h3>«сауна спб»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −20%</div></div>
+    <div class="chart" data-chart="p"><h3>«сауна с бассейном»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −25%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: пик с октября по январь (максимум — январь), спад с апреля по июнь. «Снять сауну»: −12% за январь–сентябрь 2026, но октябрь–декабрь 2025 был выше прошлого года на 11%. Сезон 2026 начинается сейчас: август–сентябрь уже выше июня на 35–60%.</p>
+
+  <h3>Коммерческие запросы</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-com"></tbody>
+  </table></div>
+
+  <h3>Адресные и брендовые запросы</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что ищут</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-geo"></tbody>
+  </table></div>
+
+  <h3>Информационный спрос — материал для новостей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-info"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Главный коммерческий запрос — сауна с бассейном</b>: 5 376 в месяц, из них «сауна с бассейном в спб» — 1 028. Бассейн у «Сауны» есть, и это первая тема контента.</li>
+      <li><b>Запросы под услуги небольшие, но целевые</b>: с бильярдом 171, круглосуточно 85, день рождения в сауне 84, с караоке 78, баня с парильщиком 46.</li>
+      <li><b>В общем запросе «сауна» много нецелевых формулировок</b>, поэтому SEO-ключи берём только коммерческие: услуга, город, адрес.</li>
+    </ul></div>
+    <div class="note"><h3>Узнаваемость</h3><ul>
+      <li>«сауна уют» — <b>4</b> запроса в месяц.</li>
+      <li>Адресный спрос есть: «сауна обводный канал» 80, «сауна на обводном» 67, «сауна на нарвской» 30. По нему карточка уже в выдаче.</li>
+      <li>Человек выбирает сауну на Картах среди десятков карточек, поэтому решают рейтинг, фото, цена и акция в выдаче.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Рынок бань и саун РФ, 2024</div><div class="n">44,3 млрд ₽</div><div class="s">+16,1% к 2023 году</div></div>
+    <div class="kpi"><div class="k">Оценка рынка на конец 2025</div><div class="n">≈53 млрд ₽</div><div class="s">прогноз на 2029 — ≈73 млрд ₽</div></div>
+    <div class="kpi"><div class="k">Спрос на бани и сауны СПб и ЛО</div><div class="n">≈+30%</div><div class="s">начало 2026 к 2025, оценка участника рынка</div></div>
+    <div class="kpi"><div class="k">Карточек в выдаче «сауна с бассейном»</div><div class="n">124</div><div class="s">Яндекс Карты, Петербург</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Рынок растёт в деньгах, а поисковый спрос в Яндексе по Петербургу за январь–сентябрь 2026 ниже прошлого года. Конкуренция идёт за тех, кто уже ищет сауну: выигрывает карточка, которая показывает бассейн, цену и выгоду прямо в выдаче и держит высокий рейтинг.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первые два этапа дают основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней после восстановления</span></div>
+      <ol>
+        <li><b>Единые данные на всех площадках.</b><span>Название «Сауна», одна цена часа, одна вместимость, одна парная на Яндексе, 2ГИС и сайте.</span></li>
+        <li><b>Описание и прайс.</b><span>Описание «О компании» с бассейном, бильярдом и караоке. Прайс: 1 400 ₽ в час до 4 человек с доплатой 300 ₽ за каждого следующего гостя, веники, тапочки, простыни и полотенца, бильярд.</span></li>
+        <li><b>Акция — заметным блоком.</b><span>Сутки со скидкой 50% есть на Яндексе и 2ГИС. Держать её актуальной и с фото, чтобы выгода была видна в выдаче, как у Голдинских бань.</span></li>
+        <li><b>Фото до уровня соседей.</b><span>Бассейн с подсветкой, парная, бильярд, караоке, комната отдыха — от 46 до 70–80 фото.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить отзывы и контент</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Ответить на все отзывы.</b><span>Начиная с семи отзывов 2026 года. Дальше — ответ на каждый новый отзыв.</span></li>
+        <li><b>Просить отзыв после визита.</b><span>Ссылка или QR на карточку у администратора. Отзывы только от реальных гостей, без вознаграждения: Яндекс снимает подозрительные.</span></li>
+        <li><b>Новости и сторис каждую неделю.</b><span>Темы — из спроса: бассейн, бильярд и караоке, праздники в сауне, круглосуточная работа, что есть на месте.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Занять агрегаторы и каталоги саун</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС, bannik.ru, Zoon, vsaunah, saunapiter, 101sauna, Авито.</b><span>Они стоят на первой странице по каждому коммерческому запросу. Профиль с одинаковыми названием, адресом, ценой и фото на каждой площадке. На 2ГИС — та же работа с отзывами, что и на Яндексе.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Подготовить сайт к поиску</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Техническая база.</b><span>Рабочий https, robots.txt и sitemap.xml, alt у изображений, Яндекс Вебмастер, исправленный район.</span></li>
+        <li><b>Страницы под спрос.</b><span>Сауна с бассейном, бильярд и караоке для компании, день рождения в сауне, сутки со скидкой. В title и H1 — услуга, «Обводный канал» и «Санкт-Петербург», цена.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Расширенный убирает с карточки рекламу четырёх конкурентов и сохраняет новости и истории. Продвинутый добавляет приоритетные показы. Обсудить после восстановления Яндекс Бизнеса.</span></li>
+        <li><b>Яндекс Директ.</b><span>«сауна с бассейном спб», «снять сауну с бассейном», «сауна с бильярдом спб» и адресные запросы. Бюджет усиливать с октября по январь.</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">Соседи по Обводному каналу — банные комплексы с сотнями и тысячами отзывов. Спорить с ними масштабом нет смысла. Сильная сторона «Сауны» — цена 1 400 ₽ в час до 4 человек на нижней границе соседей (1 200–3 300 ₽) при полном наборе в одном зале: парная, бассейн, бильярд, караоке, комната отдыха, круглосуточная работа и сутки со скидкой 50%. На это и опираются темы контента.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Санкт-Петербургу 21.10.2026 без геолокации пользователя; данные карточек (рубрики, рейтинг, фото, сторис, акции, реклама) взяты из данных страниц карточек.</li>
+    <li>Органика: Яндекс, регион Санкт-Петербург, первые 2–3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Санкт-Петербург», все устройства.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/sauna/222175406688/" target="_blank" rel="noopener">Карточка «Сауна» на Яндекс Картах</a>
+    <a href="https://2gis.ru/spb/firm/5348553838556380" target="_blank" rel="noopener">Карточка на 2ГИС</a>
+    <a href="http://xn----209--2nfablly8hgcfncc0c1bds8x.xn--p1ai/" target="_blank" rel="noopener">сауна-на-обводном209-уют.рф</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://adindex.ru/news/digital/2026/10/16/350059.phtml" target="_blank" rel="noopener">AdIndex — Яндекс частично восстановил Бизнес</a>
+    <a href="https://ppc.world/news/chto-izvestno-o-rabote-metriki-appmetrica-vebmastera-yandeks-biznesa-api-direkta-i-promostranic-status/" target="_blank" rel="noopener">PPC.World — статус Яндекс Бизнеса</a>
+    <a href="https://www.sostav.ru/blogs/264343/88933" target="_blank" rel="noopener">Sostav / AnalyticResearchGroup — рынок бань и саун</a>
+    <a href="https://www.dp.ru/a/2026/06/17/spros-na-bani-i-sauni-v-peterburge" target="_blank" rel="noopener">Деловой Петербург — спрос на бани и сауны в 2026</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+    <a href="https://zvenom.ru/blog/tarify-yandeks-biznesa.html" target="_blank" rel="noopener">Звеном — что стало платным в карточке организации</a>
+  </div>
+</section>
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Сауна · баня · Санкт-Петербург</span>
+    <h1>«Сауна» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю по четвергам с 29 октября 2026 года — карточка компании «Сауна» на Яндекс Картах и 2ГИС. Факты взяты только из данных, которые совпадают на действующих площадках компании: сайт, карточки Яндекса и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Сауна <small>Бассейн · бильярд · караоке</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Санкт-Петербург</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">наб. Обводного канала, 209 <small>1,3 км от метро Нарвская</small></div></div>
+      <div class="fact"><div class="k">График</div><div class="v">Круглосуточно <small>по предварительной записи</small></div></div>
+      <div class="fact"><div class="k">Цена</div><div class="v">1 400 ₽ в час до 4 человек <small>+300 ₽ в час за каждого следующего гостя</small></div></div>
+      <div class="fact"><div class="k">Вместимость</div><div class="v">До 15 гостей</div></div>
+      <div class="fact"><div class="k">Бассейн</div><div class="v">2,5 × 3,5 × 2 м <small>подсветка, фильтрация</small></div></div>
+      <div class="fact"><div class="k">Акция</div><div class="v">Сутки со скидкой 50%</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Сауны»</h2>
+      <p>Для обложек новостей и слайдов сторис «Сауны» сформирован фирменный стиль: тёмная вода бассейна, янтарный свет парной, обожжённое дерево и тёплый молочный фон. Основа — три референса дизайна банных сайтов, цвета сняты с них по пикселям.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#0C1820;color:#F8F4EC;border-color:#0C1820">
+        <div class="role">Основной</div><div class="name">Ночная вода</div><div class="hex">#0C1820</div>
+      </div>
+      <div class="swatch" style="background:#B48C5C;color:#101418;border-color:#B48C5C">
+        <div class="role">Акцентный</div><div class="name">Янтарь парной</div><div class="hex">#B48C5C</div>
+      </div>
+      <div class="swatch" style="background:#7C3408;color:#F8F4EC;border-color:#7C3408">
+        <div class="role">Второстепенный</div><div class="name">Обожжённое дерево</div><div class="hex">#7C3408</div>
+      </div>
+      <div class="swatch" style="background:#F8F4EC;color:#101418;border-color:#E6DED2">
+        <div class="role">Фоновый</div><div class="name">Тёплый молочный</div><div class="hex">#F8F4EC</div>
+      </div>
+      <div class="swatch" style="background:#101418;color:#F8F4EC;border-color:#101418">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#101418</div>
+      </div>
+    </div>
+    <div class="refs">
+      <div class="ref"><b>Тёмная парная с янтарём</b>Почти чёрный графит, дерево полков и янтарные акценты кнопок — отсюда графит и янтарь.</div>
+      <div class="ref"><b>Светлый банный лендинг</b>Молочный фон и тёплая подсветка дерева — отсюда фон и обожжённое дерево.</div>
+      <div class="ref"><b>Глубокий тёмно-синий spa</b>Тёмная сине-зелёная основа под фото воды — отсюда цвет бассейна.</div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа отвечают на главные вопросы гостя — что внутри, сколько стоит, можно ли прийти компанией, когда работает и что брать с собой — и закрывают запросы, по которым карточки сейчас нет в выдаче. Одна новость и одна сторис в неделю, с 29 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">29.10</div><p>Что такое «Сауна» и что в неё входит: один зал с парной, бассейном с подсветкой, бильярдом, караоке и комнатой отдыха; цена и график.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Праздник и встреча компанией: до 15 гостей, бильярд и караоке, можно со своей едой, доплата за гостя.</p></div>
+      <div class="cycle-row"><div class="tag">12.11</div><p>Круглосуточная работа и главное предложение: сутки со скидкой 50%, предварительная запись, способы оплаты.</p></div>
+      <div class="cycle-row"><div class="tag">19.11</div><p>Что взять с собой: полотенца, простыни, тапочки, веники, мыло и посуда есть на месте.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и тепло, от лица сауны. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 29 октября</span><h3>Сауна с бассейном и бильярдом у метро Нарвская: что ждёт вас в зале и сколько стоит час</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас можно не только попариться: парная, бассейн, бильярд и караоке собраны в одном зале на набережной Обводного канала.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Сауна и баня на наб. Обводного канала, 209, в 1,3 км от метро Нарвская.<span class="src">карточка</span></li>
+        <li>В зале — парная, бассейн 2,5 × 3,5 × 2 м с подсветкой и фильтрацией, душ и обливное ведро.<span class="src">сайт · карточка</span></li>
+        <li>После парной — бильярд, караоке и комната отдыха, Wi-Fi.<span class="src">сайт · карточка · 2ГИС</span></li>
+        <li>Аренда — 1 400 ₽ в час до 4 человек, каждый следующий гость — 300 ₽ в час, минимум 1 час.<span class="src">2ГИС · сайт</span></li>
+        <li>Работаем круглосуточно, по предварительной записи.<span class="src">карточка · 2ГИС</span></li>
+        <li>Есть парковка.<span class="src">сайт · карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Сауна с бассейном и бильярдом на Обводном канале у метро Нарвская</span></div>
+        <div class="meta-row"><span><b>Title · </b>Сауна с бассейном в СПб у метро Нарвская — 1 400 ₽ в час, круглосуточно</span></div>
+        <div class="meta-row"><span><b>Description · </b>Сауна с бассейном на наб. Обводного канала, 209: парная, бассейн с подсветкой, бильярд, караоке, комната отдыха. 1 400 ₽ в час до 4 человек, круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">сауна с бассейном спб</span><span class="chip-kw">сауна с бассейном в спб</span>
+          <span class="chip-kw">снять сауну с бассейном в спб</span><span class="chip-kw">сауна санкт петербург с бассейном</span>
+          <span class="chip-kw">сауна с бильярдом и бассейном</span><span class="chip-kw">сауна на нарвской</span>
+          <span class="chip-kw">сауна обводный канал</span><span class="chip-kw">сауна на обводном</span>
+          <span class="chip-kw">сауна цена</span><span class="chip-kw">аренда сауны спб</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> узнайте, свободна ли сауна на нужную дату, и бронируйте заранее.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Сауна с бассейном у Нарвской»</div>
+        <p>Композиция: реальное фото бассейна с подсветкой с карточки сауны на весь кадр; тезис на плашке в нижней трети, под ним строка «парная · бассейн · бильярд · караоке». Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — ночная вода #0C1820, тезис — тёплый молочный #F8F4EC, строка под тезисом и тонкая линия над ним — янтарь #B48C5C.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>День рождения и встреча компанией в сауне на Обводном канале: до 15 гостей, бильярд и караоке</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>К нам приходят не только попариться: здесь можно посидеть с друзьями, отметить праздник или провести время с семьёй.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Зал рассчитан на 4 человека и принимает до 15 гостей; за каждого гостя сверх четырёх — 300 ₽ в час.<span class="src">сайт · карточка · 2ГИС</span></li>
+        <li>Бильярд и караоке в зале, аудиоцентр и телевизор.<span class="src">сайт · карточка</span></li>
+        <li>Можно со своей едой: обеденная зона, холодильник, микроволновая печь, чайник и посуда.<span class="src">сайт</span></li>
+        <li>Комната отдыха.<span class="src">сайт · 2ГИС</span></li>
+        <li>Бассейн с подсветкой и парная — в том же зале.<span class="src">сайт · карточка</span></li>
+        <li>Работаем круглосуточно, по предварительной записи.<span class="src">карточка · 2ГИС</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>День рождения в сауне с бильярдом и караоке в Санкт-Петербурге</span></div>
+        <div class="meta-row"><span><b>Title · </b>Сауна для компании до 15 человек в СПб: бильярд, караоке, бассейн</span></div>
+        <div class="meta-row"><span><b>Description · </b>Отметить день рождения или собраться компанией в сауне на Обводном канале: до 15 гостей, бильярд, караоке, бассейн, можно со своей едой. Круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">день рождения в сауне</span><span class="chip-kw">день рождения в сауне с бассейном</span>
+          <span class="chip-kw">сауна с бильярдом спб</span><span class="chip-kw">сауны спб с бассейном и бильярдом</span>
+          <span class="chip-kw">сауна с караоке</span><span class="chip-kw">сауна с караоке и бассейном спб</span>
+          <span class="chip-kw">сауна для компании спб</span><span class="chip-kw">большая сауна</span>
+          <span class="chip-kw">снять сауну спб</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте сауну для праздника заранее.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Праздник на 15 гостей»</div>
+        <p>Композиция: реальное фото бильярдного стола в зале с карточки сауны; тезис в верхней трети на светлой подложке, под ним строка «бильярд · караоке · бассейн».</p>
+        <p>Цвета: подложка — тёплый молочный #F8F4EC, тезис — графит #101418, строка под тезисом — обожжённое дерево #7C3408.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 12 ноября</span><h3>Сауна круглосуточно на Обводном канале: аренда на сутки со скидкой 50%</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы работаем круглосуточно, и, если хочется не торопиться, сауну можно взять на целые сутки — со скидкой 50%.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>При аренде сауны на сутки — скидка 50%.<span class="src">сайт · карточка · 2ГИС</span></li>
+        <li>График — круглосуточно.<span class="src">сайт · карточка · 2ГИС</span></li>
+        <li>Работаем по предварительной записи: на сайте можно проверить, свободна ли сауна на нужную дату.<span class="src">сайт · карточка</span></li>
+        <li>Обычная аренда — 1 400 ₽ в час до 4 человек, минимум 1 час.<span class="src">2ГИС · сайт</span></li>
+        <li>Оплата наличными или банковским переводом.<span class="src">карточка · 2ГИС</span></li>
+        <li>За сутки — парная, бассейн, бильярд, караоке и комната отдыха в одном зале.<span class="src">сайт · карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Сауна круглосуточно на Обводном канале: сутки со скидкой 50%</span></div>
+        <div class="meta-row"><span><b>Title · </b>Круглосуточная сауна в СПб: аренда на сутки со скидкой 50% — Обводный канал, 209</span></div>
+        <div class="meta-row"><span><b>Description · </b>Сауна с бассейном работает круглосуточно. При аренде на сутки скидка 50%. Бильярд, караоке, комната отдыха, 1 400 ₽ в час до 4 человек.</span></div>
+        <div class="chips">
+          <span class="chip-kw">сауна круглосуточно</span><span class="chip-kw">сауны спб круглосуточно</span>
+          <span class="chip-kw">сауна круглосуточно санкт петербург</span><span class="chip-kw">сауна посуточно</span>
+          <span class="chip-kw">сауна на сутки спб</span><span class="chip-kw">сауна недорого спб</span>
+          <span class="chip-kw">сауна с бассейном недорого</span><span class="chip-kw">сауна на обводном канале</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте сауну на сутки заранее.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Круглосуточно. Сутки −50%»</div>
+        <p>Композиция: реальное фото парной или зала с карточки сауны; тезис крупно в верхней трети на тёмной плашке. Слова «акция», «купить», «продать» на обложке не используются.</p>
+        <p>Цвета: плашка — ночная вода #0C1820, «Круглосуточно» — тёплый молочный #F8F4EC, «Сутки −50%» — янтарь #B48C5C.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 19 ноября</span><h3>Что взять с собой в сауну на Обводном канале: полотенца, простыни, тапочки и веники есть на месте</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Прийти к нам можно налегке: всё, что нужно для бани, вы найдёте на месте.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Полотенца — 150 ₽, простыни — 150 ₽, тапочки — 100 ₽.<span class="src">сайт</span></li>
+        <li>Веники: берёзовый, дубовый, липовый, эвкалиптовый — 600 ₽; со своим веником — 400 ₽.<span class="src">сайт · 2ГИС</span></li>
+        <li>Мыло и посуда есть в зале.<span class="src">сайт</span></li>
+        <li>Холодильник, микроволновая печь и чайник — можно прийти со своей едой.<span class="src">сайт</span></li>
+        <li>Wi-Fi и телевизор.<span class="src">сайт · карточка</span></li>
+        <li>Парковка рядом с сауной.<span class="src">сайт · карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Что взять с собой в сауну: что есть в сауне на Обводном канале</span></div>
+        <div class="meta-row"><span><b>Title · </b>Что взять в сауну — полотенца, тапочки и веники на месте | Сауна на Обводном, 209</span></div>
+        <div class="meta-row"><span><b>Description · </b>В сауне на Обводном канале на месте есть полотенца, простыни, тапочки, веники берёзовый, дубовый, липовый и эвкалиптовый, мыло и посуда. Можно со своей едой.</span></div>
+        <div class="chips">
+          <span class="chip-kw">что взять с собой в сауну</span><span class="chip-kw">веники для бани</span>
+          <span class="chip-kw">эвкалиптовый веник</span><span class="chip-kw">дубовый веник</span>
+          <span class="chip-kw">сауна с бассейном спб</span><span class="chip-kw">сауна на нарвской</span>
+          <span class="chip-kw">сауна рядом</span><span class="chip-kw">отдых в сауне</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте сауну заранее и приходите налегке.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Приходите налегке»</div>
+        <p>Композиция: аккуратная стопка полотенец и простыней рядом с веником на деревянной лавке; тезис на плашке в нижней трети.</p>
+        <p>Цвета: плашка — графит #101418, тезис — тёплый молочный #F8F4EC, вертикальная полоса слева от тезиса — янтарь #B48C5C.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Всё в одном зале</div><span class="slide-no">Сторис 1 · 29 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Парная</span>
+          <span class="fact-pill">Бассейн с подсветкой</span>
+          <span class="fact-pill">Бильярд</span>
+          <span class="fact-pill">Караоке</span>
+          <span class="fact-pill">Комната отдыха</span>
+          <span class="fact-pill">1 400 ₽/час до 4 человек</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон — фото бассейна с подсветкой под плашкой ночная вода #0C1820. Заголовок тёплым молочным #F8F4EC, пять пунктов столбиком молочным с янтарными маркерами #B48C5C, цена внизу крупно янтарём.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Праздник на 15 гостей</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Бильярд</span>
+          <span class="fact-pill">Караоке</span>
+          <span class="fact-pill">Можно со своей едой</span>
+          <span class="fact-pill">+300 ₽/час за гостя сверх 4</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёплый молочный #F8F4EC, заголовок графитом #101418, «15 гостей» крупно обожжённым деревом #7C3408, пункты списком графитом, маркеры янтарём #B48C5C.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Сутки −50%</div><span class="slide-no">Сторис 3 · 12 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Круглосуточно</span>
+          <span class="fact-pill">По предварительной записи</span>
+          <span class="fact-pill">Наличные или перевод</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон ночная вода #0C1820, «−50%» крупно янтарём #B48C5C, «Сутки» и условия тёплым молочным #F8F4EC, тонкая янтарная линия между блоками.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Приходите налегке</div><span class="slide-no">Сторис 4 · 19 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Полотенца — 150 ₽</span>
+          <span class="fact-pill">Простыни — 150 ₽</span>
+          <span class="fact-pill">Тапочки — 100 ₽</span>
+          <span class="fact-pill">Веники — 600 ₽</span>
+          <span class="fact-pill">Мыло и посуда</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит #101418, заголовок тёплым молочным #F8F4EC, список с ценами в две колонки: названия молочным, цены янтарём #B48C5C.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — что входит, праздник, сутки −50%, что взять с собой <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Сауна с бассейном и бильярдом у метро Нарвская</b>29.10 · парная, бассейн с подсветкой, бильярд, караоке, комната отдыха; 1 400 ₽ в час до 4 человек</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Всё в одном зале</b>29.10 · пять зон зала и цена часа</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>День рождения и встреча компанией</b>05.11 · до 15 гостей, бильярд, караоке, можно со своей едой</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Праздник на 15 гостей</b>05.11 · бильярд, караоке, +300 ₽ за гостя</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Сауна круглосуточно: сутки со скидкой 50%</b>12.11 · предварительная запись, оплата наличными или переводом</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Сутки −50%</b>12.11 · круглосуточно, по записи</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Что взять с собой в сауну</b>19.11 · полотенца, простыни, тапочки, веники, мыло и посуда на месте</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Приходите налегке</b>19.11 · что есть на месте и цены</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <a href="http://xn----209--2nfablly8hgcfncc0c1bds8x.xn--p1ai/" target="_blank" rel="noopener">сауна-на-обводном209-уют.рф</a>
+      <a href="https://yandex.ru/maps/-/CXRiFA1N" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://go.2gis.com/vJWDt" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={s:[13339,14231,12934,16562,14802,12271,9336,8114,9847,10459,10331,10907,14821,14972,11228,16065,11260,9391,7848,7114,6133,7577,8176,8516],
+p:[8562,9668,8267,11568,9140,8228,5933,5213,6270,7058,6829,7160,9853,10108,7008,10667,7578,5979,4642,3740,3673,4239,5234,5085]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=46,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-120)lx-=140;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-com':[['сауна спб','коммерческое, гео',8799],['сауна с бассейном','коммерческое',5328],['снять сауну','коммерческое',1471],['сауна с бассейном в спб','коммерческое, гео',1028],['сауна недорого','коммерческое, цена',528],['снять сауну с бассейном','коммерческое',371],['сауна с бассейном недорого','коммерческое, цена',362],['аренда сауны','коммерческое',322],['семейная сауна','коммерческое',215],['сауна с бильярдом','коммерческое',169],['сауна круглосуточно','коммерческое',83],['день рождения в сауне','праздник',82],['сауна с караоке','коммерческое',70],['баня с парильщиком','коммерческое',46]],
+ 't-geo':[['сауна обводный канал','адрес',80],['сауна на обводном','адрес',67],['сауна на нарвской','метро',30],['сауна адмиралтейский','район',41],['сауна уют','название',4]],
+ 't-info':[['можно ли в баню','противопоказания, когда можно',4625],['веники для бани','какие бывают',1665],['парилка в бане','как париться',1265],['польза сауны','польза и вред',402],['температура в сауне','режим парной',203]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
