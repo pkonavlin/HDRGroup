@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «БухПрофИнформ»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+.p-src{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>БухПрофИнформ · Владивосток</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>БУХПРОФИНФОРМ БУХПРОФИНФОРМ</span><span>БУХПРОФИНФОРМ БУХПРОФИНФОРМ</span><span>БУХПРОФИНФОРМ БУХПРОФИНФОРМ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«БухПрофИнформ» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка Владивостока, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>ООО «БухПрофИнформ»</b></div>
+        <div><span>Город</span><b>Владивосток</b></div>
+        <div><span>Направления</span><b>Бухгалтерия · Аутсорсинг · Юруслуги</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 20.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Позиция по бухгалтерским запросам</span><span class="t-n y">3–4</span><span class="t-s">на Яндекс Картах, Владивосток</span></div>
+        <div class="tile"><span class="t-k">Юридические запросы</span><span class="t-n c">нет</span><span class="t-s">карточки нет в выдаче ни по одному</span></div>
+        <div class="tile"><span class="t-k">Отзывов в 2026 году</span><span class="t-n c">0</span><span class="t-s">последний — 5 декабря 2025</span></div>
+        <div class="tile"><span class="t-k">Спрос на юруслуги</span><span class="t-n g">+55%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах и в органике, причины просадки, спрос по Вордстату, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>3 новости с обложками и 3 сторис под юридические запросы: суд и иски, ликвидация и изменения в ООО, налоговые споры. Темы не повторяют 10 уже опубликованных сторис.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">ожидаем к 27.10</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет работает с ограничениями. К этому дню тексты, обложки и сторис первой недели будут готовы.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">27.10</span><span class="st next">следующий шаг</span></div><h3>Синяя галочка, рубрики, прайс</h3><p>Описание компании, новый прайс, рубрики «Регистрация и ликвидация предприятий» и «Налоговые консультанты». Рубрики ставим до первой новости, чтобы юридические публикации работали на выдачу.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 11.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Юрист для бизнеса, ликвидация и изменения в ООО, налоговые споры с ИФНС — по одной новости и одной сторис в неделю.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после восстановления</span><span class="st next">обсудить</span></div><h3>Тариф Яндекс Бизнеса</h3><p>Выбор тарифа, который убирает рекламу конкурентов с карточки и сохраняет новости и сторис.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 8 запросам на Картах и в органике, сравнение с соседями по выдаче, спрос и сезонность во Владивостоке, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Юридические услуги для бизнеса</li>
+            <li>05.11 — Ликвидация и изменения в ООО</li>
+            <li>11.11 — Налоговые споры с ИФНС</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Владивосток · бухгалтерия, аутсорсинг, юруслуги · замер 20.10.2026</span>
+  <h1>Где «БухПрофИнформ» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 8 запросам, сайт в органической выдаче Яндекса по 8 запросам, спрос по Вордстату для региона «Владивосток» и сравнение с карточками, которые стоят выше.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Бухгалтерские запросы на Картах — 3–4 место</b>«бухгалтер» №3, «аутсорсинг бухгалтерии» №3, «бухгалтерские услуги» №4. Выше стоят карточки с синей галочкой, у которых меньше отзывов и ниже рейтинг.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Юридические запросы — карточки нет вообще</b>«юридические услуги» (28 карточек в выдаче), «юрист», «регистрация ООО», «ликвидация ООО», «налоговый юрист» — «БухПрофИнформ» не показывается ни разу, хотя рубрика «юридические услуги» на карточке есть.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Сайт не входит в топ-30 Яндекса ни по одному коммерческому запросу</b>Находится только по названию компании. На сайте 3 страницы, нет страниц услуг, нет страницы юруслуг, нет H1 и описаний.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Отзывы перестали приходить</b>14 отзывов, последний — 5 декабря 2025. За 2026 год — ни одного. У юридических лидеров на Картах 42–120 отзывов.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Юридический спрос растёт, бухгалтерский стоит</b>«юридические услуги»: +55% за январь–сентябрь 2026 к 2025. «бухгалтерские услуги»: −6% за тот же период. Но почти весь юридический спрос во Владивостоке — от частных лиц, B2B-запросы единичные.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,7</div><div class="s">14 оценок, все 5★</div></div>
+    <div class="kpi"><div class="k">Отзывов в 2026 году</div><div class="n">0</div><div class="s">10 в 2024, 3 в 2025</div></div>
+    <div class="kpi"><div class="k">Синяя галочка</div><div class="n">нет</div><div class="s">у обоих соседей сверху есть</div></div>
+    <div class="kpi"><div class="k">Страниц в индексе Яндекса</div><div class="n">47</div><div class="s">из них страниц услуг — 0</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Владивостоку, без геолокации пользователя. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто выше или в топе</th></tr></thead>
+    <tbody>
+      <tr><td>бухгалтер</td><td class="r num">3 из 25</td><td>Абсолют Консалт ✓, Бухгалтерия Плюс ✓</td></tr>
+      <tr><td>аутсорсинг бухгалтерии</td><td class="r num">3 из 34</td><td>Базовый элемент ✓ (0 отзывов), Абсолют Консалт ✓ / АльтерГрупп</td></tr>
+      <tr><td>бухгалтерские услуги</td><td class="r num">4 из 25</td><td>Абсолют Консалт ✓, Бухгалтерия Плюс ✓, Посольство финансов</td></tr>
+      <tr><td>юридические услуги</td><td class="r">нет в 28</td><td>Заря ✓ 47 отз., Кейс ✓ 46, 4 Партнёра ✓ 120, Инмар ✓ 42, Гордош и партнеры ✓ 66</td></tr>
+      <tr><td>юрист</td><td class="r">нет</td><td>Заря ✓, Гордош ✓, Единый центр защиты ✓ 118, Юрист для людей ✓, 4 Партнёра ✓</td></tr>
+      <tr><td>регистрация ООО</td><td class="r">нет в 25</td><td>Заря ✓, Военные Адвокаты ✓, Гордош ✓, Lawyer Up ✓, ИФНС (ЕРЦ)</td></tr>
+      <tr><td>ликвидация ООО</td><td class="r">нет в 20</td><td>ИФНС (ЕРЦ), Гордош ✓, Правовая защита ✓, ЗаконНик РФ</td></tr>
+      <tr><td>налоговый юрист</td><td class="r">нет в 5</td><td>Индасолекс ✓, Гордош ✓, ИФНС, Заря ✓</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">✓ — синяя галочка «Информация подтверждена владельцем». В выдаче «юридические услуги» она у 23 из 28 карточек.</p>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки / отзывы</th><th>Галочка</th><th>Рубрики</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>БухПрофИнформ</b></td><td class="r num">4,7</td><td class="r num">14 / 14</td><td>нет</td><td>бухгалтерские услуги, аутсорсинг, юридические услуги</td></tr>
+      <tr><td>Абсолют Консалт</td><td class="r num">4,3</td><td class="r num">6 / 2</td><td>есть</td><td>бухгалтерские услуги, аутсорсинг, налоговые консультанты</td></tr>
+      <tr><td>Бухгалтерия Плюс</td><td class="r num">4,4</td><td class="r num">17 / 7</td><td>есть</td><td>бухгалтерские услуги, юридические услуги, финансовый консалтинг</td></tr>
+      <tr><td>АльтерГрупп</td><td class="r num">5,0</td><td class="r num">34 / 20</td><td>нет</td><td>аутсорсинг (+ нерелевантные рубрики); покупает рекламу на Картах</td></tr>
+      <tr><td>4 Партнёра</td><td class="r num">5,0</td><td class="r num">120 / 106</td><td>есть</td><td>юридические услуги, адвокаты; «Хорошее место 2026»</td></tr>
+      <tr><td>Гордош и партнеры</td><td class="r num">5,0</td><td class="r num">66 / 60</td><td>есть</td><td>юридические услуги, регистрация и ликвидация предприятий; «Хорошее место 2026»</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>7–11 октября 2026 года беспилотники атаковали дата-центры Яндекса в Сасове, Калуге и Владимире; площадки в Сасове и Владимире остановлены полностью. После этого Яндекс Бизнес работает частично и с ограничениями доступа, кабинеты Директа, Метрика и Вебмастер недоступны. Сроков восстановления Яндекс не называет. Всё, что ниже требует правок в кабинете, мы внесём, как только Яндекс Бизнес вернётся в штатный режим.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Нет синей галочки</h3></div>
+      <p>В данных карточки <b>has_verified_owner = false</b>, на карточке висит кнопка «Вы владелец этой организации?». Абсолют Консалт (6 оценок, 4,3) и Бухгалтерия Плюс (17 оценок, 4,4) стоят выше при худших цифрах, но с галочкой. В юридической выдаче без галочки в топе почти никого нет.</p>
+      <p>Галочку не дают без пяти заполненных блоков, и её снимают, если обязательные блоки не обновлялись 90 дней. Что блокирует сейчас: <b>нет описания «О компании»</b>, <b>прайс помечен «Давно не обновлялось»</b>, <b>телефон на сайте и на карточке разный</b> (расхождение с сайтом — одна из причин отказа). Без галочки компания не может участвовать в «Хорошем месте».</p>
+      <p class="next">Как только Яндекс Бизнес заработает в штатном режиме, мы заполним недостающие блоки, обновим прайс и сразу получим галочку.</p>
+      <span class="ev">сайт: +7 (964) 454-83-65 · карточка: +7 (902) 524-04-02</span>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Юридическое направление на Картах почти не заявлено</h3></div>
+      <p>«Юридические услуги» стоят третьей рубрикой из трёх. Из юридического на карточке только три позиции прайса, и он устарел. Новостей нет, описания нет, 10 сторис почти все про бухгалтерию. В итоге по юридическим запросам карточка не набирает релевантности и проигрывает узким юридическим компаниям с 40–120 отзывами.</p>
+      <p>Лидеры добавляют точные рубрики: у Гордош и партнеры — «регистрация и ликвидация предприятий», у Абсолют Консалт — «налоговые консультанты». У «БухПрофИнформ» таких рубрик нет, хотя услуги есть.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Отзывы остановились</h3></div>
+      <p>14 отзывов: 10 в 2024 (четыре из них с 14 по 18 апреля), 3 в 2025, <b>0 в 2026</b>. Последний — 5 декабря 2025. Свежесть и поток отзывов — один из факторов ранжирования на Картах, и по нему карточка проседает. Хорошо, что на все 14 отзывов есть ответы компании.</p>
+      <p>Рейтинг 4,7 при всех оценках 5★ — так Яндекс сглаживает рейтинг при малом числе оценок. С ростом числа отзывов он поднимется сам.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточка не обновляется: нет новостей, прайс старый</h3></div>
+      <p>Новостей на карточке нет. Прайс с пометкой «Давно не обновлялось», в нём есть позиция <b>«Регистрация/ликвидация ООО/ИП, от 1 ₽»</b>: выглядит как ошибка и снижает доверие. Описания нет. Карточка выглядит заброшенной и для Яндекса, и для человека.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>На карточке показывается реклама конкурентов</h3></div>
+      <p>В блоке «Похожие места» самой карточки «БухПрофИнформ» крутятся рекламные карточки конкурентов (в данных 2 объявления, среди них АльтерГрупп). Человек, уже открывший карточку, видит предложение уйти к другим.</p>
+      <p>Это следствие новой политики Яндекс Карт. С конца июля 2026 года Яндекс постепенно переводит карточки организаций на тарифы: <b>Базовый</b> (бесплатный), <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки может показываться реклама других организаций, а новости, истории и фото в товарах и услугах скрываются. Расширенный тариф убирает рекламу конкурентов с карточки и возвращает новости и истории; Продвинутый добавляет к этому приоритетные показы в выдаче. Стоимость назначается в кабинете индивидуально и считается за 90 дней.</p>
+      <p class="next">Когда Яндекс Бизнес включится, обсудим с представителем «БухПрофИнформ» покупку тарифа.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Конкуренты показывают цену и акцию прямо в выдаче</h3></div>
+      <p>Почти у всех юридических карточек в сниппете есть цена. У Зари плашка акции «Выгода до 25 000 ₽». У «БухПрофИнформ» цена в сниппете бухгалтерской выдачи есть, но с устаревшего прайса. Акции нет.</p>
+      <p>Такая подача возможна за счёт того, что конкуренты покупают приоритетную рекламу на Яндекс Картах: в данных выдачи Заря и АльтерГрупп помечены как рекламодатели. Продвинутый тариф даёт приоритетные показы, зелёную метку на карте и показывает акцию на более заметном месте.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион Владивосток, первые 3 страницы выдачи, рекламу не считали.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">bukhprofinform.ru</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>бухгалтерские услуги владивосток</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Фарпост, Яндекс Услуги, Авито, Zoon, Моё дело, Profi</td></tr>
+      <tr><td>аутсорсинг бухгалтерии владивосток</td><td class="r">нет в топ-30</td><td>Яндекс Услуги, Фарпост, Яндекс Карты, Моё дело, 2ГИС</td></tr>
+      <tr><td>бухгалтерское сопровождение владивосток</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Фарпост, 2ГИС, Яндекс Услуги, Авито</td></tr>
+      <tr><td>бухгалтер для ип владивосток</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Яндекс Услуги, Фарпост, Авито, 2ГИС, 1С:БО Форус</td></tr>
+      <tr><td>юридические услуги владивосток</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Яндекс Услуги, Zoon, Фарпост, Profi</td></tr>
+      <tr><td>регистрация ооо владивосток</td><td class="r">нет в топ-30</td><td>ВТБ, Альфа, Сбер, Т-Банк, Точка, nalog.ru</td></tr>
+      <tr><td>налоговые споры владивосток</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Яндекс Услуги, Zoon, юрфирмы</td></tr>
+      <tr><td>бухпрофинформ</td><td class="r num">1</td><td>сайт компании, затем 2ГИС, Яндекс Карты, Rusprofile</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на сайте мешает</h3><ul>
+      <li><b>Одна посадочная страница на всё.</b> Всего 3 страницы: главная, «Финансовый учёт», блог. Ни одной страницы под услугу, ни одной под юридическое направление (слово «юридический» на главной не встречается).</li>
+      <li><b>Нет H1 и meta description</b> ни на одной странице. Title главной «БухПрофИнформ — бухгалтерские услуги», без города. «Владивосток» на главной упоминается 1 раз.</li>
+      <li><b>robots.txt пустой</b> (0 байт), нет разметки schema.org, у всех 31 изображения нет alt, WordPress 6.5.</li>
+    </ul></div>
+    <div class="note"><h3>Блог работает вхолостую</h3><ul>
+      <li>Около 68 постов с апреля 2026, это много. Но темы — цифровой рубль, инвестмонеты, золото, крипта, ГосЛог. Нет связи с услугами и с Владивостоком.</li>
+      <li>У постов нет описаний и H1, адреса длинные, в части адресов эмодзи.</li>
+      <li>Метрика стоит, sitemap есть: базу для работы чинить не нужно, нужно перестроить структуру и смысл.</li>
+    </ul></div>
+  </div>
+  <p class="small" style="margin-top:16px">Важно для стратегии: первые 8–10 мест органики по всем коммерческим запросам заняты агрегаторами (2ГИС, Яндекс Карты, Яндекс Услуги, Фарпост, Авито, Zoon, Profi). Даже хороший сайт будет бороться за 9–12 места. Быстрее всего клиенты приходят через карточку и профили на этих площадках.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос во Владивостоке</h2><p>Вордстат, регион «Владивосток», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="b"><h3>«бухгалтерские услуги»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: −6%</div></div>
+    <div class="chart" data-chart="j"><h3>«юридические услуги»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: +55%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность бухгалтерии: пик февраль–апрель (отчётная кампания) и октябрь–декабрь, провал в январе и июле–августе. Летом 2026 спрос ниже прошлогоднего на 20–28%. Юридический спрос растёт второй год подряд, пик — май 2026 (1 977).</p>
+
+  <h3>Бухгалтерия: что реально ищут</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-buh"></tbody>
+  </table></div>
+
+  <h3>Юридическое направление</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-jur"></tbody>
+  </table></div>
+
+  <h3>Информационный спрос — материал для новостей и блога</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-info"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Коммерческий бухгалтерский спрос маленький</b>: вместе с вариантами около 300–400 запросов в месяц на весь город. «бухгалтер» (4 902) и «бухгалтерия» (5 835) — это вакансии, курсы и 1С.</li>
+      <li><b>Юридический спрос в 6–8 раз больше, но частный</b>: бесплатная консультация, банкротство физлиц, военный юрист, наследство. B2B-ядро крошечное: налоговые споры 33, юридическое сопровождение 38, бизнес-юрист 27, представительство в суде 76.</li>
+      <li><b>Информационный спрос огромный</b>: УСН 6 464, 3-НДФЛ 1 491, налоговая декларация 1 092, налоговая проверка 777, ликвидация ООО 467. На нём строятся новости и блог.</li>
+    </ul></div>
+    <div class="note"><h3>Узнаваемость бренда</h3><ul>
+      <li>«бухпрофинформ» — <b>11</b> запросов в месяц.</li>
+      <li>«бухгалтерия плюс» — 21, «4 партнера» — 95 (из них 14 с «владивосток»).</li>
+      <li>Человек почти никогда не ищет компанию по названию. Он выбирает её на Картах среди 25 карточек, поэтому важны галочка, отзывы и цена в сниппете.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Субъектов МСП в Приморском крае</div><div class="n">91 185</div><div class="s">на 10.07.2026, +3,1% за год</div></div>
+    <div class="kpi"><div class="k">Рост рынка бухгалтерского аутсорсинга РФ</div><div class="n">+10,4%</div><div class="s">итог 2025 (в 2024 около +38%)</div></div>
+    <div class="kpi"><div class="k">Юридический аутсорсинг РФ</div><div class="n">8,8 млрд ₽</div><div class="s">2025, рост ×4 с 2021</div></div>
+    <div class="kpi"><div class="k">Исполнителей на Яндекс Услугах</div><div class="n">168</div><div class="s">бухгалтерия, Владивосток</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Клиентская база растёт, рынок аутсорсинга растёт медленнее, чем в 2024: клиенты считают деньги. Значит, выигрывает тот, у кого цена прозрачна и видна сразу (прайс, цена в сниппете), а доверие подтверждено (галочка, свежие отзывы).</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первый этап даёт основной эффект на Картах и почти ничего не стоит.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Получить синюю галочку — сразу после восстановления Яндекс Бизнеса.</b><span>Подтвердить права владельца (кнопка «Вы владелец?» или передача прав через поддержку Яндекс Бизнеса). Заполнить описание «О компании», обновить прайс и убрать позицию «от 1 ₽», указать один телефон на сайте и на карточке. Дальше раз в 90 дней подтверждать актуальность данных.</span></li>
+        <li><b>Перестроить рубрики.</b><span>Главная остаётся «Бухгалтерские услуги». Добавить «Регистрация и ликвидация предприятий» и «Налоговые консультанты» — по ним сейчас выигрывают конкуренты, а услуги у компании есть.</span></li>
+        <li><b>Расширить юридический прайс.</b><span>Сейчас три позиции. Добавить регистрацию и ликвидацию, внесение изменений, налоговые споры, досудебные претензии, сопровождение проверок, с ценами «от».</span></li>
+        <li><b>Добавить акцию.</b><span>Бесплатная консультация уже есть в особенностях карточки. Оформить её отдельным блоком акции, чтобы она появилась плашкой в выдаче, как у Зари.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить поток отзывов и контента</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Просить отзыв после каждой закрытой задачи.</b><span>Ссылка или QR на карточку в чате с ведущим бухгалтером, который уже есть у компании. Цель — ровный поток каждый месяц, а не всплеск. Отзывы только от реальных клиентов, без вознаграждения: Яндекс снимает подозрительные.</span></li>
+        <li><b>Новости на карточке каждую неделю.</b><span>Темы — из информационного спроса: УСН и патент, отчётность ИП, налоговые проверки, ликвидация, регистрация. Половина новостей про юридическое направление, чтобы Яндекс связал карточку с юридическими запросами.</span></li>
+        <li><b>Сторис — обновлять, а не копить.</b><span>Убрать устаревшие, добавить юридические и цены.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Занять агрегаторы из топа выдачи</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>Яндекс Услуги, Фарпост, 2ГИС, Авито, Zoon, Profi.</b><span>Они стоят на первой странице по каждому коммерческому запросу. Профиль на каждой площадке с одинаковыми названием, адресом, телефоном и прайсом — самый быстрый путь в органику. Фарпост для Владивостока особенно сильный.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Пересобрать сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Страница под каждую услугу.</b><span>Ведение учёта ООО, бухгалтерия ИП (УСН, патент), нулевая отчётность, зарплата и кадры, восстановление учёта, отчётность для ломбардов, регистрация и ликвидация, налоговые споры, представительство в суде. В title и H1 — услуга и «Владивосток», цена «от», форма заявки.</span></li>
+        <li><b>Техническая база.</b><span>H1 и description на всех страницах, robots.txt со ссылкой на sitemap, разметка LocalBusiness, alt у картинок, обновление WordPress, Яндекс Вебмастер, цели в Метрике.</span></li>
+        <li><b>Блог перевести на коммерческие темы.</b><span>Темы из таблицы информационного спроса, со ссылкой на страницу услуги в каждом посте и с упоминанием города. Короткие адреса без эмодзи.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Расширенный убирает рекламу конкурентов с карточки и сохраняет новости и истории. Продвинутый добавляет приоритетные показы и заметную акцию. Обсудить с компанией после восстановления Яндекс Бизнеса.</span></li>
+        <li><b>Яндекс Директ — узкие коммерческие запросы.</b><span>Объём бухгалтерского спроса маленький, поэтому только точные запросы с «услуги», «цена», «для ИП», «для ООО» и городом. Бюджет усиливать в феврале–апреле и октябре–декабре.</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">Бухгалтерия и юрист в одной компании — сильная связка для малого бизнеса, но так же позиционируются Бухгалтерия Плюс и Бухгалтерско-Юридическая Компания. Отличить «БухПрофИнформ» могут узкие направления, которые у компании уже есть: отчётность для ломбардов, налоговые споры с ИФНС, импорт из ЕАЭС. Широкий частный юридический спрос (банкротство физлиц, наследство) — не профиль компании. Если не расширять услуги, бороться за запрос «юрист» не стоит, лучше брать B2B-юридические темы через карточку и новости.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Владивостоку 20.10.2026 без геолокации пользователя; данные карточек (рубрики, галочка, рейтинг, реклама) взяты из данных страниц карточек.</li>
+    <li>Органика: Яндекс, регион 75, первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Владивосток», все устройства.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/bukhprofinform/1701527271/" target="_blank" rel="noopener">Карточка «БухПрофИнформ» на Яндекс Картах</a>
+    <a href="https://bukhprofinform.ru/" target="_blank" rel="noopener">bukhprofinform.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://elama.ru/blog/kak-poluchit-sinyuyu-galochku-yandex-biznes/" target="_blank" rel="noopener">eLama — как получить синюю галочку в Яндекс Бизнесе</a>
+    <a href="https://opora.ru/site/assets/files/106444/reestra_msp.pdf" target="_blank" rel="noopener">ОПОРА РОССИИ — статистика реестра МСП</a>
+    <a href="https://marketing.rbc.ru/landings/analiz-rynka-bukhgalterskikh-uslug/" target="_blank" rel="noopener">РБК Исследования — рынок бухгалтерских услуг</a>
+    <a href="https://businesstat.ru/news/legal_outsourcing/" target="_blank" rel="noopener">BusinesStat — рынок юридического аутсорсинга</a>
+    <a href="https://yandex.ru/company/news/09-10-2026-01" target="_blank" rel="noopener">Яндекс — что происходит с нашими дата-центрами</a>
+    <a href="https://prosto.ru/blog/article/kakie-servisy-yandeksa-ne-rabotayut-posle-atak-na-data-centry" target="_blank" rel="noopener">Prosto.ru — какие сервисы Яндекса не работают после атак</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+    <a href="https://zvenom.ru/blog/tarify-yandeks-biznesa.html" target="_blank" rel="noopener">Звеном — что стало платным в карточке организации</a>
+  </div>
+</section>
+
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Бухгалтерские и юридические услуги · Владивосток</span>
+    <h1>«БухПрофИнформ» — ТЗ на контент, этап 1</h1>
+    <p class="lead">3 новости с обложкой и 3 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «БухПрофИнформ» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Бухгалтерские услуги <small>Аутсорсинг · Юридические услуги</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Владивосток</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Всеволода Сибирцева, 15 <small>этаж 7</small></div></div>
+      <div class="fact"><div class="k">Компания</div><div class="v">ООО «БухПрофИнформ» <small>сопровождение бухгалтерского учета для предприятий любой формы собственности</small></div></div>
+      <div class="fact"><div class="k">Главный оффер</div><div class="v">Бухгалтерия всегда на связи <small>от 2 000 ₽</small></div></div>
+      <div class="fact"><div class="k">Консультации</div><div class="v">Бесплатная консультация <small>Онлайн консультации</small></div></div>
+      <div class="fact"><div class="k">Формат работы</div><div class="v">Аутсорсинг · Под ключ</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">bukhprofinform.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «БухПрофИнформ»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: тёмно-синий логотипа, кобальтовый синий кнопок и заголовков сайта, белый и светло-голубой фон, графит текста.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#0A1B4F;color:#FFFFFF;border-color:#0A1B4F">
+        <div class="role">Основной</div><div class="name">Тёмно-синий логотипа</div><div class="hex">#0A1B4F</div>
+      </div>
+      <div class="swatch" style="background:#00319C;color:#FFFFFF;border-color:#00319C">
+        <div class="role">Акцентный</div><div class="name">Кобальтовый синий</div><div class="hex">#00319C</div>
+      </div>
+      <div class="swatch" style="background:#F2F7FC;color:#1E222E;border-color:#DCE6F2">
+        <div class="role">Второстепенный</div><div class="name">Светло-голубой</div><div class="hex">#F2F7FC</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#1E222E;border-color:#DCE6F2">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+      <div class="swatch" style="background:#1E222E;color:#F2F7FC;border-color:#1E222E">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#1E222E</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым во Владивостоке ищут юридические услуги для бизнеса. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Юридическое направление компании: представление интересов в суде, исковые заявления, споры с контрагентами, госорганами и налоговой.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Ликвидация ООО и ИП и изменения в компании: смена директора и участников, адреса, ОКВЭД, устава — документы для ФНС под ключ.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Налоговые споры с ИФНС: от анализа акта проверки и возражений до сопровождения в суде.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>3 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и по делу, с теплом к предпринимателю. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">3 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Юридические услуги для бизнеса во Владивостоке: суд, исковые заявления, споры с контрагентами</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кроме бухгалтерии, мы ведём юридические вопросы бизнеса: готовим исковые заявления и представляем интересы компаний в суде.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Направления компании: Бухгалтерские услуги, Аутсорсинг, Юридические услуги.<span class="src">бриф</span></li>
+        <li>Представление интересов в суде — сопровождение споров с контрагентами, госорганами и налоговой, от 15 000 ₽.<span class="src">прайс компании</span></li>
+        <li>Готовим документы, собираем доказательства, участвуем в заседаниях и защищаем ваш бизнес на всех этапах процесса.<span class="src">прайс компании</span></li>
+        <li>Исковые заявления готовим с учётом судебной практики и требований процессуального законодательства, от 10 000 ₽.<span class="src">прайс компании</span></li>
+        <li>Бесплатная консультация, онлайн консультации.<span class="src">карточка</span></li>
+        <li>Офис — Владивосток, ул. Всеволода Сибирцева, 15, этаж 7.<span class="src">карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Юридические услуги для бизнеса во Владивостоке — «БухПрофИнформ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Юрист для бизнеса во Владивостоке: суд и исковые заявления | БухПрофИнформ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Юридические услуги для бизнеса во Владивостоке: представление интересов в суде от 15 000 ₽, исковые заявления от 10 000 ₽, споры с контрагентами, госорганами и налоговой. Бесплатная консультация.</span></div>
+        <div class="chips">
+          <span class="chip-kw">юридические услуги владивосток</span><span class="chip-kw">юридические услуги для бизнеса владивосток</span>
+          <span class="chip-kw">юрист для бизнеса владивосток</span><span class="chip-kw">бизнес юрист владивосток</span>
+          <span class="chip-kw">представительство в суде владивосток</span><span class="chip-kw">представление интересов в суде</span>
+          <span class="chip-kw">исковое заявление в суд владивосток</span><span class="chip-kw">составление искового заявления</span>
+          <span class="chip-kw">юрист арбитражный суд владивосток</span><span class="chip-kw">споры с контрагентами юрист</span>
+          <span class="chip-kw">консультация юриста владивосток</span><span class="chip-kw">услуги юриста для ООО</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию юриста — очно или онлайн.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Юрист для бизнеса»</div>
+        <p>Композиция: крупный план — исковое заявление и ручка на столе переговоров, рядом папка с делом; тезис на плашке в нижней трети, слева вертикальная полоса, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёмно-синий #0A1B4F, тезис — белый #FFFFFF, вертикальная полоса — кобальтовый синий #00319C.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Ликвидация ООО и ИП и изменения в компании во Владивостоке: директор, адрес, ОКВЭД, устав</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Закрыть компанию или поменять в ней директора, адрес или виды деятельности — это документы для ФНС. Мы готовим и подаём их и сопровождаем до результата.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Регистрация и ликвидация ООО/ИП во Владивостоке под ключ: подготовка и подача документов в ФНС и фонды, сопровождение до результата.<span class="src">прайс компании</span></li>
+        <li>При желании сразу подключим бухгалтерское сопровождение и отчётность.<span class="src">прайс компании</span></li>
+        <li>Внесение изменений в ООО: смена директора и участников, адреса, ОКВЭД, устава — от 4 000 ₽.<span class="src">прайс компании</span></li>
+        <li>Готовим и подаём документы в ФНС, сопровождаем до результата.<span class="src">прайс компании</span></li>
+        <li>Подбор УСН и патента: анализ бизнеса, расчёт налоговой нагрузки, подготовка заявлений в ИФНС — от 7 000 ₽.<span class="src">прайс компании</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Ликвидация ООО и ИП и внесение изменений в ООО во Владивостоке</span></div>
+        <div class="meta-row"><span><b>Title · </b>Ликвидация ООО и смена директора во Владивостоке | БухПрофИнформ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Ликвидация ООО и ИП во Владивостоке под ключ: документы в ФНС и фонды, сопровождение до результата. Внесение изменений в ООО — смена директора, адреса, ОКВЭД, устава — от 4 000 ₽.</span></div>
+        <div class="chips">
+          <span class="chip-kw">ликвидация ООО владивосток</span><span class="chip-kw">ликвидация ИП владивосток</span>
+          <span class="chip-kw">закрыть ООО владивосток</span><span class="chip-kw">закрытие ИП владивосток</span>
+          <span class="chip-kw">ликвидация ООО под ключ</span><span class="chip-kw">упрощённая ликвидация ООО</span>
+          <span class="chip-kw">внесение изменений в ООО владивосток</span><span class="chip-kw">смена директора ООО</span>
+          <span class="chip-kw">смена юридического адреса ООО</span><span class="chip-kw">изменение ОКВЭД</span>
+          <span class="chip-kw">регистрация и ликвидация предприятий владивосток</span><span class="chip-kw">подбор системы налогообложения</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на сайте — подготовим документы для ФНС.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Ликвидация и изменения в ООО»</div>
+        <p>Композиция: стопка документов с печатью и папкой-скоросшивателем на светлом столе; тезис в верхней трети на светлой подложке, логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — светло-голубой #F2F7FC, тезис — кобальтовый синий #00319C, тонкая линия под тезисом — тёмно-синий #0A1B4F.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 11 ноября</span><h3>Налоговые споры с ИФНС во Владивостоке: от акта проверки до суда</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если по итогам налоговой проверки пришли акт и доначисления, мы разбираем их и защищаем позицию компании — в ИФНС и при необходимости в суде.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Налоговые споры с ИФНС под ключ: анализ акта и решения, подготовка пояснений и возражений, оспаривание доначислений, сопровождение в суде — от 10 000 ₽.<span class="src">прайс компании</span></li>
+        <li>«БухПрофИнформ» помогает снизить налоговые риски и защитить бизнес во Владивостоке.<span class="src">прайс компании</span></li>
+        <li>Налоговый аудит — это не просто формальность, а важный инструмент для защиты бизнеса.<span class="src">блог сайта</span></li>
+        <li>Бухгалтерия и юридические услуги в одной компании: Бухгалтерские услуги, Аутсорсинг, Юридические услуги.<span class="src">бриф</span></li>
+        <li>Бесплатная консультация, онлайн консультации.<span class="src">карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Налоговые споры с ИФНС во Владивостоке — «БухПрофИнформ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Налоговые споры и возражения на акт проверки во Владивостоке | БухПрофИнформ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Налоговые споры с ИФНС во Владивостоке: анализ акта и решения, пояснения и возражения, оспаривание доначислений, сопровождение в суде — от 10 000 ₽.</span></div>
+        <div class="chips">
+          <span class="chip-kw">налоговые споры владивосток</span><span class="chip-kw">налоговый юрист владивосток</span>
+          <span class="chip-kw">юрист по налоговым спорам</span><span class="chip-kw">оспаривание доначислений налогов</span>
+          <span class="chip-kw">возражения на акт налоговой проверки</span><span class="chip-kw">акт налоговой проверки что делать</span>
+          <span class="chip-kw">выездная налоговая проверка</span><span class="chip-kw">камеральная налоговая проверка</span>
+          <span class="chip-kw">досудебное урегулирование налоговых споров</span><span class="chip-kw">налоговый консультант владивосток</span>
+          <span class="chip-kw">сопровождение налоговой проверки владивосток</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию — очно или онлайн.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Налоговые споры с ИФНС»</div>
+        <p>Композиция: деловая встреча — документы с пометками и калькулятор на столе переговоров; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — кобальтовый синий #00319C, тезис — белый #FFFFFF, рамка-уголок — тёмно-синий #0A1B4F.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>3 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">3 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Юрист для бизнеса</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Суд — от 15 000 ₽</span>
+          <span class="fact-pill">Исковое заявление — от 10 000 ₽</span>
+          <span class="fact-pill">Налоговые споры — от 10 000 ₽</span>
+          <span class="fact-pill">Бесплатная консультация</span>
+          <span class="fact-pill">Онлайн консультации</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, слева вертикальная полоса кобальтовым синим #00319C, логотип в верхнем левом углу. Заголовок кобальтовым синим #00319C, услуги списком графитом #1E222E, цены справа жирным тёмно-синим #0A1B4F.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Изменения в ООО — от 4 000 ₽</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Смена директора и участников</span>
+          <span class="fact-pill">Смена адреса</span>
+          <span class="fact-pill">ОКВЭД</span>
+          <span class="fact-pill">Устав</span>
+          <span class="fact-pill">Документы в ФНС</span>
+          <span class="fact-pill">Ликвидация ООО и ИП под ключ</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светло-голубой #F2F7FC, заголовок кобальтовым синим #00319C, цена «от 4 000 ₽» крупно тёмно-синим #0A1B4F, пункты списком графитом #1E222E. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Акт налоговой проверки: 4 шага</div><span class="slide-no">Сторис 3 · 11 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">1 · Анализ акта и решения</span>
+          <span class="fact-pill">2 · Пояснения и возражения</span>
+          <span class="fact-pill">3 · Оспаривание доначислений</span>
+          <span class="fact-pill">4 · Сопровождение в суде</span>
+          <span class="fact-pill">От 10 000 ₽</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #0A1B4F, заголовок белым #FFFFFF, номера шагов крупными цифрами кобальтовым синим #00319C на белых квадратах, названия шагов белым.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — юридические услуги, ликвидация и изменения в ООО, налоговые споры <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Юридические услуги для бизнеса: суд, исковые заявления, споры с контрагентами</b>28.10 · суд от 15 000 ₽, иски от 10 000 ₽, бесплатная консультация</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Юрист для бизнеса</b>28.10 · три услуги с ценами</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Ликвидация ООО и ИП и изменения в компании</b>05.11 · документы в ФНС под ключ, изменения в ООО от 4 000 ₽, подбор УСН и патента</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Изменения в ООО — от 4 000 ₽</b>05.11 · директор, адрес, ОКВЭД, устав</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Налоговые споры с ИФНС: от акта проверки до суда</b>11.11 · анализ акта, возражения, оспаривание доначислений, суд</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Акт налоговой проверки: 4 шага</b>11.11 · от анализа акта до суда</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Бриф компании от 13.10.2026, прайс компании</span>
+      <a href="https://bukhprofinform.ru/" target="_blank" rel="noopener">bukhprofinform.ru</a>
+      <a href="https://bukhprofinform.ru/nalogovyj-audit-eto-ne-prosto-formalnost-a-vazhnyj-instrument-dlya-zashhity-biznesa/" target="_blank" rel="noopener">Блог: налоговый аудит</a>
+      <a href="https://yandex.ru/maps/-/CXuPnFPC" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={b:[278,272,308,277,359,311,260,229,209,230,229,269,316,289,292,149,259,363,384,284,246,167,173,195],
+j:[614,624,754,659,805,700,675,634,723,938,629,1361,1454,1285,906,866,928,1063,1373,1977,1323,1432,1106,990]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-buh':[['бухгалтерские услуги','коммерческое',192],['бухгалтерская компания','в основном инфо',124],['ведение бухгалтерского учёта','в основном инфо',92],['услуги бухгалтера','коммерческое',72],['кадровый учёт','смешанное',51],['нулевая отчётность','смешанное',37],['ведение бухгалтерии','смешанное',26],['бухгалтерское сопровождение','коммерческое',22],['бухгалтерские услуги владивосток','коммерческое, гео',21],['бухгалтер для ИП','коммерческое',20],['восстановление бухгалтерского учёта','коммерческое',11],['аутсорсинг бухгалтерии','коммерческое',10]],
+ 't-jur':[['юрист','смешанное, в основном частное',11581],['юрист владивосток','смешанное, гео',1767],['юридические услуги','смешанное',1543],['юридическая консультация','в основном частное',1460],['консультация юриста владивосток','коммерческое, гео',143],['юридические услуги владивосток','коммерческое, гео',136],['представительство в суде','коммерческое',76],['юридическое сопровождение','B2B',38],['налоговые споры','B2B',33],['бизнес юрист владивосток','B2B, гео',27],['налоговый юрист','B2B',19],['арбитражный юрист','B2B',18]],
+ 't-info':[['усн','налоги на упрощёнке',6464],['3 ндфл','декларации и вычеты',1491],['налоговая декларация','как подать, сроки',1092],['налоговая проверка','проверки и контрагенты',777],['регистрация ИП','как открыть ИП',590],['ликвидация ООО','в т.ч. упрощённая — 156',467],['патент ИП','стоимость и лимиты',393],['регистрация ООО','адрес, документы',274],['отчётность ИП','что и когда сдавать',208]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
