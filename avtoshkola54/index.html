@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Аудит сети Автошкола 54</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one sticky bar (name left, section chips), single reading column 1120px, charts in quiet panels; road-sign blue accent, status traffic-light colors */
+:root{
+  --bg:#F3F4F1; --panel:#FFFFFF; --sunk:#E8EAE5; --ink:#16202A; --ink2:#46525E; --ink3:#77828C;
+  --line:rgba(22,32,42,.12); --accent:#1E5BC6; --accent2:#7FA6E8; --accent-soft:rgba(30,91,198,.10);
+  --good:#1F8A5B; --warn:#C98712; --bad:#C8432F; --good-soft:rgba(31,138,91,.12); --warn-soft:rgba(201,135,18,.14); --bad-soft:rgba(200,67,47,.12);
+  --comp:#8B96A1;
+  --f-display:'Unbounded',system-ui,sans-serif; --f-body:'Golos Text',system-ui,-apple-system,'Segoe UI',sans-serif; --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F151C; --panel:#17202A; --sunk:#111922; --ink:#E7ECF1; --ink2:#AEB9C4; --ink3:#7E8B97;
+  --line:rgba(231,236,241,.12); --accent:#6E9CF0; --accent2:#3C64AE; --accent-soft:rgba(110,156,240,.14);
+  --good:#4CC28C; --warn:#E3A93C; --bad:#EE7562; --good-soft:rgba(76,194,140,.14); --warn-soft:rgba(227,169,60,.15); --bad-soft:rgba(238,117,98,.15);
+  --comp:#6C7884; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151C; --panel:#17202A; --sunk:#111922; --ink:#E7ECF1; --ink2:#AEB9C4; --ink3:#7E8B97;
+  --line:rgba(231,236,241,.12); --accent:#6E9CF0; --accent2:#3C64AE; --accent-soft:rgba(110,156,240,.14);
+  --good:#4CC28C; --warn:#E3A93C; --bad:#EE7562; --good-soft:rgba(76,194,140,.14); --warn-soft:rgba(227,169,60,.15); --bad-soft:rgba(238,117,98,.15);
+  --comp:#6C7884; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--panel)}
+h1,h2,h3{margin:0;text-wrap:balance}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:18px;height:52px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:15px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand i{display:inline-block;width:18px;height:18px;border-radius:4px;background:var(--accent);position:relative}
+.brand i::after{content:"";position:absolute;inset:5px 7px;background:var(--panel);border-radius:1px}
+.chips{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1}
+.chips::-webkit-scrollbar{display:none}
+.chips a{font-size:13px;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:6px;white-space:nowrap}
+.chips a:hover{background:var(--sunk);color:var(--ink)}
+
+header.hero{padding-block:40px 8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,4vw,38px);line-height:1.15;margin-top:10px;max-width:22ch}
+.lede{color:var(--ink2);margin:12px 0 0;max-width:68ch}
+.notice{margin-top:18px;display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:8px;padding:10px 14px;font-size:13.5px;color:var(--ink);max-width:820px}
+.notice b{white-space:nowrap}
+
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:26px}
+.kpi{background:var(--panel);padding:16px 16px 14px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1.1}
+.kpi .l{font-size:13px;color:var(--ink2);margin-top:6px}
+.kpi .s{font-size:12px;color:var(--ink3);margin-top:2px}
+
+section{padding-block:44px 8px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.sec-n{font-family:var(--f-mono);font-size:12px;color:var(--accent);font-weight:600}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(19px,2.6vw,24px)}
+.sec-sub{color:var(--ink2);margin:4px 0 18px;max-width:72ch;font-size:14px}
+
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.fact .big{font-family:var(--f-display);font-size:30px;font-weight:700;line-height:1;color:var(--accent)}
+.fact .big.bad{color:var(--bad)} .fact .big.warn{color:var(--warn)} .fact .big.good{color:var(--good)}
+.fact .t{font-weight:600;margin-top:10px;font-size:14.5px}
+.fact .d{font-size:13px;color:var(--ink2);margin-top:4px}
+
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.panel h3{font-size:14.5px;font-weight:600}
+.panel .meta{font-size:12px;color:var(--ink3);margin-top:2px}
+.chart{margin-top:12px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{fill:var(--ink2);font-family:var(--f-body);font-size:11px}
+.chart .mono,.chart text.mono{font-family:var(--f-mono)}
+.grid line{stroke:var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink2);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.legend i.ln{height:3px;border-radius:2px}
+
+#tip{position:fixed;z-index:100;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:6px;max-width:260px;opacity:0;transition:opacity .08s}
+#tip b{font-weight:600}
+
+.tblbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tblbar button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);padding:6px 12px;border-radius:999px;cursor:pointer}
+.tblbar button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:1040px}
+th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;background:var(--sunk);font-weight:600;color:var(--ink2);font-size:12px;cursor:pointer;user-select:none}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);z-index:1}
+th:first-child{background:var(--sunk);z-index:2}
+td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-body)}
+td.l{text-align:left;font-family:var(--f-body)}
+td.weak{color:var(--bad);font-weight:600}
+tr:last-child td{border-bottom:0}
+th[aria-sort="ascending"]::after{content:" ↑"} th[aria-sort="descending"]::after{content:" ↓"}
+.pill{display:inline-block;font-family:var(--f-body);font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px}
+.pill.strong{background:var(--good-soft);color:var(--good)} .pill.mid{background:var(--warn-soft);color:var(--warn)} .pill.risk{background:var(--bad-soft);color:var(--bad)}
+.city{display:block;font-size:11.5px;color:var(--ink3)}
+
+.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.cmp div{background:var(--sunk);border-radius:8px;padding:12px;min-width:0}
+.cmp .k{font-size:12px;color:var(--ink2)}
+.cmp .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;gap:6px}
+.cmp .row b{font-family:var(--f-mono);font-size:18px}
+.cmp .row span{font-size:12px;color:var(--ink3)}
+
+.cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.scard{border-radius:10px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);min-width:0}
+.scard .tag{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.scard .tag.now{color:var(--accent)} .scard .tag.up{color:var(--good)} .scard .tag.down{color:var(--ink3)}
+.scard .h{font-weight:600;font-size:15px;margin-top:6px}
+.scard .d{font-size:13px;color:var(--ink2);margin-top:4px}
+
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rule{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.rule .big{font-family:var(--f-display);font-size:24px;font-weight:700;color:var(--accent);line-height:1.1}
+.rule .t{font-weight:600;margin-top:8px}
+.rule .d{font-size:13px;color:var(--ink2);margin-top:4px}
+.rule .src{font-size:12px;margin-top:8px}
+
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+.step{padding:16px;border-right:1px solid var(--line);min-width:0;position:relative}
+.step:last-child{border-right:0}
+.step .when{font-family:var(--f-mono);font-size:12px;color:var(--accent);font-weight:600}
+.step .h{font-family:var(--f-display);font-weight:700;font-size:15px;margin-top:8px;line-height:1.25}
+.step ul{margin:10px 0 0;padding-left:16px;font-size:13px;color:var(--ink2)}
+.step li+li{margin-top:4px}
+
+footer{padding-block:44px 48px;font-size:12.5px;color:var(--ink2)}
+footer h3{font-size:13px;margin-bottom:8px;color:var(--ink)}
+footer ul{margin:0;padding-left:16px}
+footer li+li{margin-top:3px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;border-top:1px solid var(--line);padding-top:20px}
+
+@media (max-width:900px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.facts,.cards3{grid-template-columns:repeat(2,minmax(0,1fr))}.route{grid-template-columns:repeat(2,minmax(0,1fr))}.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:720px){.grid2,.rules,.fgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.facts,.cards3,.route{grid-template-columns:minmax(0,1fr)}.step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.kpi .v{font-size:22px}.kpi:last-child{grid-column:span 2}.brand span{display:none}}
+</style>
+</head>
+<body>
+<nav class="bar" aria-label="Разделы"><div class="wrap">
+  <div class="brand"><i aria-hidden="true"></i>Автошкола<span>&nbsp;54</span></div>
+  <div class="chips">
+    <a href="#top">Главное</a><a href="#rep">Репутация</a><a href="#all">Филиалы</a><a href="#state">Карточки</a><a href="#comp">Конкуренты</a><a href="#search">Как ищут</a><a href="#market">Спрос</a><a href="#season">Сезонность</a><a href="#rules">Поводы</a><a href="#route">Маршрут</a>
+  </div>
+</div></nav>
+
+<main>
+<header class="hero" id="top"><div class="wrap">
+  <div class="eyebrow">Новосибирск и область · 26 карточек на Яндекс Картах · данные на 20.10.2026</div>
+  <h1>Автошкола 54: анализ филиалов, спрос региона и точки роста</h1>
+  <p class="lede">Все 26 карточек сети на Яндекс Картах в сравнении с ближайшими автошколами вокруг каждого филиала и со спросом в Вордстате по Новосибирску и области.</p>
+  <div class="notice"><b>Без кабинета.</b><span>Сети нет в нашем кабинете Яндекс Бизнеса, поэтому переходы, звонки, маршруты, доля в зоне и геовизор недоступны. Отчёт собран по публичным данным карточек и Вордстату; трафик заменён оценками и отзывами.</span></div>
+  <div class="kpis" id="kpis"></div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">00</span><h2>Главное за 30 секунд</h2></div>
+  <div class="facts" id="facts" style="margin-top:14px"></div>
+</div></section>
+
+<section id="rep"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">01</span><h2>Где копится репутация сети</h2></div>
+  <p class="sec-sub">Оценки на Картах — главный сигнал, по которому Яндекс ранжирует карточку и по которому человек выбирает автошколу.</p>
+  <div class="panel"><h3>Оценки по филиалам</h3><div class="meta">Все 26 карточек сети</div>
+    <div class="chart" id="c-ratings"></div>
+    <div class="legend"><span><i style="background:var(--good)"></i>Сильная</span><span><i style="background:var(--warn)"></i>Средняя</span><span><i style="background:var(--bad)"></i>Риск</span></div>
+  </div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="panel"><h3>Новые отзывы сети по месяцам</h3><div class="meta">Октябрь 2024 — сентябрь 2026, все филиалы</div><div class="chart" id="c-revm"></div>
+      <div class="legend"><span><i class="ln" style="background:var(--accent)"></i>Все отзывы</span><span><i class="ln" style="background:var(--bad)"></i>Оценка 1–2</span></div></div>
+    <div class="panel"><h3>Доля оценок сети</h3><div class="meta">Топ-3 карточки против остальных 23</div><div class="chart" id="c-share"></div></div>
+  </div>
+</div></section>
+
+<section id="all"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">02</span><h2>Сравнение всех филиалов</h2></div>
+  <p class="sec-sub">Нажмите на заголовок столбца, чтобы отсортировать.</p>
+  <div class="tblbar" id="flt" role="group" aria-label="Фильтр по статусу">
+    <button type="button" id="f-all" data-f="all" aria-pressed="true">Все</button>
+    <button type="button" id="f-strong" data-f="strong" aria-pressed="false">Сильная</button>
+    <button type="button" id="f-mid" data-f="mid" aria-pressed="false">Средняя</button>
+    <button type="button" id="f-risk" data-f="risk" aria-pressed="false">Риск</button>
+  </div>
+  <div class="tblwrap"><table id="tbl"><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
+</div></section>
+
+<section id="state"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">03</span><h2>Состояние карточек</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Сколько из 26 филиалов проседает</h3><div class="meta">Публичные данные карточек на 20.10.2026</div><div class="chart" id="c-gaps"></div></div>
+    <div class="panel"><h3>Рейтинг и число оценок</h3><div class="meta">24 филиала с рейтингом</div><div class="chart" id="c-scatter"></div>
+      </div>
+  </div>
+</div></section>
+
+<section id="comp"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">04</span><h2>Конкуренты</h2></div>
+  <p class="sec-sub">Зона филиала — автошколы в радиусе 2,5 км в Новосибирске и 6 км в городах области (138 карточек конкурентов). Сила в зоне — число оценок.</p>
+  <div class="panel"><h3>Филиал и лидер его зоны</h3><div class="meta">Число оценок, все 26 зон</div>
+    <div class="chart" id="c-pairs"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Филиал Автошколы 54</span><span><i style="background:var(--comp)"></i>Лидер зоны</span></div></div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="panel"><h3>Кто чаще всего обходит сеть</h3><div class="meta">В скольких зонах у конкурента больше оценок, чем у филиала</div><div class="chart" id="c-top"></div></div>
+    <div class="panel"><h3>Медианный филиал против медианного конкурента</h3><div class="meta">26 филиалов против 138 карточек вокруг них</div><div class="cmp" id="cmp"></div>
+      <h3 style="margin-top:18px">Брендовый спрос за 12 месяцев</h3><div class="meta">Вордстат, Новосибирская область, окт 2025 — сен 2026, к прошлому году</div><div class="chart" id="c-brands"></div></div>
+  </div>
+</div></section>
+
+<section id="search"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">05</span><h2>Как клиенты ищут автошколу</h2></div>
+  <p class="sec-sub">Геовизор без кабинета недоступен, поэтому источник здесь — уточнения запросов в Вордстате по области за последний срез.</p>
+  <div class="grid2">
+    <div class="panel"><h3>Что добавляют к названию «Автошкола 54»</h3><div class="meta">Запросов с брендом за срез</div><div class="chart" id="c-bsplit"></div>
+      <h3 style="margin-top:18px">Бренд + город области</h3><div class="chart" id="c-towns"></div></div>
+    <div class="panel"><h3>Уточнения общего запроса «автошкола»</h3><div class="meta">Запросов за срез</div><div class="chart" id="c-cats"></div></div>
+  </div>
+  <div class="panel" style="margin-top:14px"><h3>Брендовый спрос: Автошкола 54 против Вектора</h3><div class="meta">Новосибирская область, по месяцам</div><div class="chart" id="c-bline"></div>
+    <div class="legend"><span><i class="ln" style="background:var(--accent)"></i>Автошкола 54</span><span><i class="ln" style="background:var(--comp)"></i>Вектор</span></div></div>
+</div></section>
+
+<section id="market"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">06</span><h2>Спрос на рынке</h2></div>
+  <div class="panel"><h3>Запрос «автошкола» по месяцам</h3><div class="meta">Вордстат, все устройства, октябрь 2024 — сентябрь 2026</div><div class="chart" id="c-main"></div>
+    <div class="legend"><span><i class="ln" style="background:var(--accent)"></i>Новосибирская область</span><span><i class="ln" style="background:var(--accent2)"></i>Новосибирск</span></div></div>
+  <div class="panel" style="margin-top:14px"><h3>Что растёт и что падает</h3><div class="meta">Область, последние 12 месяцев к предыдущим 12</div><div class="chart" id="c-div"></div></div>
+</div></section>
+
+<section id="season"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">07</span><h2>Сезонность</h2></div>
+  <div class="panel"><h3>Спрос по направлениям</h3><div class="meta">Область, октябрь 2025 — сентябрь 2026</div><div class="chart" id="c-heat"></div></div>
+  <div class="cards3" id="scards"></div>
+</div></section>
+
+<section id="rules"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">08</span><h2>Новые правила — готовые поводы для контента</h2></div>
+  <div class="rules" style="margin-top:14px">
+    <div class="rule"><div class="big">38 → 42 часа</div><div class="t">Больше практики на категорию B</div><div class="d">С 1 марта 2026 действуют новые примерные программы обучения водителей (приказ Минпросвещения № 567): вождения больше, теорию можно проходить онлайн в реальном времени, полный переход — до 1 сентября 2026.</div><div class="src"><a href="https://harant.ru/blog/yuridicheskie-novosti/novye-pravila-obucheniya-v-avtoshkolah-chto-izmenilos-s-1-marta-2026-goda/" target="_blank" rel="noopener">harant.ru</a></div></div>
+    <div class="rule"><div class="big">60 дней</div><div class="t">Между теорией и практикой в ГИБДД</div><div class="d">Постановление Правительства № 508 от 30.04.2026: практический экзамен назначат не позже 60 дней после теории; за подсказки на экзамене — пересдача не раньше чем через год. Часть норм — с 1 марта 2027.</div><div class="src"><a href="https://ppt.ru/amp/news/prava/utverzhdeny-novye-pravila-sdachi-ekzamenov-na-prava" target="_blank" rel="noopener">ppt.ru</a> · <a href="https://www.vbr.ru/novosti/shtrafy-i-zaprety/2026/05/05/ekzamen-na-prava-2026--za-proval-mogyt-zapretit-peresdacy-na-celii-god/" target="_blank" rel="noopener">vbr.ru</a></div></div>
+    <div class="rule"><div class="big">19,5%</div><div class="t">Сдают городскую практику с первого раза</div><div class="d">Статистика МВД за 2025 год в пересказе Сравни: теорию с первой попытки сдают 42,9%. На этом фоне цифра сети «93% сдают с первого раза» с сайта — сильный аргумент для карточек.</div><div class="src"><a href="https://www.sravni.ru/text/avto-shkoly-mogut-podorozhat/" target="_blank" rel="noopener">sravni.ru</a> · <a href="https://avtoshkola54.com/" target="_blank" rel="noopener">avtoshkola54.com</a></div></div>
+    <div class="rule"><div class="big">+10–30%</div><div class="t">Обучение может подорожать</div><div class="d">Новый профстандарт инструкторов ужесточает требования к ним; участники рынка ждут роста цен. Повод говорить про рассрочку без банков и фиксацию цены по договору.</div><div class="src"><a href="https://www.sravni.ru/text/avto-shkoly-mogut-podorozhat/" target="_blank" rel="noopener">sravni.ru</a></div></div>
+  </div>
+</div></section>
+
+<section id="route"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">09</span><h2>Маршрут роста</h2></div>
+  <p class="sec-sub">Четыре шага для всей сети по календарю спроса.</p>
+  <div class="route" id="routeSteps"></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="fgrid">
+    <div><h3>Источники</h3><ul>
+      <li><a href="https://yandex.ru/maps/65/novosibirsk/chain/avtoshkola_54/30786194044/" target="_blank" rel="noopener">Сеть «Автошкола 54» на Яндекс Картах</a> — 26 карточек, рейтинги, оценки, отзывы и ответы на них, фото, истории, награды</li>
+      <li>Поиск «автошкола» на Яндекс Картах вокруг каждого филиала — 138 карточек конкурентов</li>
+      <li><a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a> — Новосибирск и Новосибирская область, октябрь 2024 — сентябрь 2026, все устройства</li>
+      <li><a href="https://avtoshkola54.com/" target="_blank" rel="noopener">avtoshkola54.com</a> — адреса, услуги, акции</li>
+      <li><a href="https://harant.ru/blog/yuridicheskie-novosti/novye-pravila-obucheniya-v-avtoshkolah-chto-izmenilos-s-1-marta-2026-goda/" target="_blank" rel="noopener">harant.ru</a>, <a href="https://ppt.ru/amp/news/prava/utverzhdeny-novye-pravila-sdachi-ekzamenov-na-prava" target="_blank" rel="noopener">ppt.ru</a>, <a href="https://www.vbr.ru/novosti/shtrafy-i-zaprety/2026/05/05/ekzamen-na-prava-2026--za-proval-mogyt-zapretit-peresdacy-na-celii-god/" target="_blank" rel="noopener">vbr.ru</a>, <a href="https://www.sravni.ru/text/avto-shkoly-mogut-podorozhat/" target="_blank" rel="noopener">sravni.ru</a></li>
+    </ul></div>
+    <div><h3>Даты и ограничения</h3><ul>
+      <li>Карточки и конкуренты собраны 20.10.2026; «за 12 месяцев» — с 20.10.2025.</li>
+      <li>Сети нет в кабинете Яндекс Бизнеса агентства: переходы, звонки, маршруты, доля в зоне и геовизор не показаны. Кабинет в режиме восстановления.</li>
+      <li>Зоны конкурентов построены по поиску Карт вокруг филиала, а не по блоку «Конкуренты» кабинета; выдача поиска ограничена, мелкие точки могли не попасть.</li>
+      <li>Запрос «автошкола 54» может частично включать поиск автошкол по коду региона; по уточнениям Вордстата это в основном бренд.</li>
+      <li>На сайте указаны адреса Цветной пр., 2 и ул. Бориса Богаткова, 248А — своих карточек сети по ним на Картах не найдено. В Кольцово есть отдельная карточка «Автошкола 54» вне сети (34 оценки, без сайта и фото).</li>
+    </ul></div>
+  </div>
+</div></footer>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D={"B": [{"id": "1166762306", "addr": "Красный просп., 82", "city": "Новосибирск", "rating": 4.8, "ratings": 584, "reviews": 363, "photos": 292, "good": "2026", "stTotal": 11, "st12": 4, "lastStory": "2026-08-25", "rev12": 95, "revPrev": 96, "avg12": 4.3, "ans12": 86, "neg12": 16, "negNoAns12": 4, "lag": 1.49, "zone": {"R": 2500, "n": 23, "rank": 1, "of": 24, "leader": {"t": "Автостатус", "a": "Красный просп., 200", "n": 212, "r": 4.7}, "compMedN": 49}, "status": "strong", "ansPct": 91, "uniq": 0}, {"id": "64876859863", "addr": "пл. Карла Маркса, 7", "city": "Новосибирск", "rating": 4.2, "ratings": 66, "reviews": 28, "photos": 114, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 11, "revPrev": 4, "avg12": 4.3, "ans12": 10, "neg12": 2, "negNoAns12": 0, "lag": 1.69, "zone": {"R": 2500, "n": 20, "rank": 8, "of": 21, "leader": {"t": "Вектор", "a": "Геодезическая ул., 4/1", "n": 212, "r": 4.4}, "compMedN": 37}, "status": "mid", "ansPct": 91, "uniq": 0}, {"id": "117009374688", "addr": "ул. Кутателадзе, 4/4 (Академгородок)", "city": "Новосибирск", "rating": 4.4, "ratings": 87, "reviews": 55, "photos": 108, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 23, "revPrev": 19, "avg12": 4.5, "ans12": 22, "neg12": 2, "negNoAns12": 0, "lag": 1.89, "zone": {"R": 2500, "n": 4, "rank": 2, "of": 5, "leader": {"t": "Чудо светофор", "a": "просп. Академика Коптюга, 15", "n": 95, "r": 4.7}, "compMedN": 39.5}, "status": "mid", "ansPct": 96, "uniq": 0}, {"id": "64706701729", "addr": "ул. Кирова, 29", "city": "Новосибирск", "rating": 4.4, "ratings": 20, "reviews": 14, "photos": 92, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 11, "revPrev": 3, "avg12": 5.0, "ans12": 11, "neg12": 0, "negNoAns12": 0, "lag": 1.04, "zone": {"R": 2500, "n": 8, "rank": 8, "of": 9, "leader": {"t": "За рулём", "a": "Красный просп., 42", "n": 87, "r": 4.6}, "compMedN": 34.5}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "131077537546", "addr": "ул. Кошурникова, 45/1", "city": "Новосибирск", "rating": 4.4, "ratings": 33, "reviews": 16, "photos": 88, "good": null, "stTotal": 12, "st12": 12, "lastStory": "2026-08-26", "rev12": 11, "revPrev": 2, "avg12": 5.0, "ans12": 11, "neg12": 0, "negNoAns12": 0, "lag": 0.86, "zone": {"R": 2500, "n": 11, "rank": 8, "of": 12, "leader": {"t": "Автостатус", "a": "ул. Кошурникова, 8", "n": 124, "r": 4.8}, "compMedN": 42}, "status": "mid", "ansPct": 100, "uniq": 1}, {"id": "17490461086", "addr": "ул. Ленина, 52", "city": "Новосибирск", "rating": 4.1, "ratings": 18, "reviews": 8, "photos": 72, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 4, "revPrev": 2, "avg12": 4.0, "ans12": 3, "neg12": 1, "negNoAns12": 0, "lag": 0.9, "zone": {"R": 2500, "n": 13, "rank": 12, "of": 14, "leader": {"t": "Вектор", "a": "Красный просп., 79", "n": 102, "r": 4.6}, "compMedN": 41}, "status": "mid", "ansPct": 75, "uniq": 0}, {"id": "149354398248", "addr": "ул. Титова, 198", "city": "Новосибирск", "rating": 4.4, "ratings": 9, "reviews": 3, "photos": 83, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 2, "revPrev": 1, "avg12": 5.0, "ans12": 2, "neg12": 0, "negNoAns12": 0, "lag": 1.87, "zone": {"R": 2500, "n": 9, "rank": 6, "of": 10, "leader": {"t": "Сигнал", "a": "Троллейная ул., 83/2", "n": 25, "r": 4.2}, "compMedN": 16}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "57609084274", "addr": "Комсомольская ул., 2/2 (Северо-Чемской)", "city": "Новосибирск", "rating": 4.4, "ratings": 30, "reviews": 8, "photos": 88, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 6, "revPrev": 1, "avg12": 5.0, "ans12": 5, "neg12": 0, "negNoAns12": 0, "lag": 0.92, "zone": {"R": 2500, "n": 2, "rank": 1, "of": 3, "leader": {"t": "Автодебют", "a": "ул. Александра Чистякова, 8", "n": 4, "r": 4.1}, "compMedN": 2}, "status": "mid", "ansPct": 83, "uniq": 0}, {"id": "183675170315", "addr": "ул. Тюленина, 8", "city": "Новосибирск", "rating": 4.6, "ratings": 22, "reviews": 8, "photos": 85, "good": "2026", "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 4, "revPrev": 1, "avg12": 5.0, "ans12": 4, "neg12": 0, "negNoAns12": 0, "lag": 3.22, "zone": {"R": 2500, "n": 9, "rank": 9, "of": 10, "leader": {"t": "Форсаж", "a": "ул. Макаренко, 36", "n": 167, "r": 5.0}, "compMedN": 40}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "197297048476", "addr": "ул. Королёва, 29", "city": "Новосибирск", "rating": 4.3, "ratings": 10, "reviews": 2, "photos": 80, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 1, "revPrev": 1, "avg12": 5.0, "ans12": 1, "neg12": 0, "negNoAns12": 0, "lag": 5.95, "zone": {"R": 2500, "n": 14, "rank": 14, "of": 15, "leader": {"t": "Автостатус", "a": "ул. Кошурникова, 8", "n": 124, "r": 4.8}, "compMedN": 41.5}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "8379002350", "addr": "ул. Петухова, 69", "city": "Новосибирск", "rating": 4.1, "ratings": 54, "reviews": 18, "photos": 85, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 9, "revPrev": 2, "avg12": 4.9, "ans12": 8, "neg12": 0, "negNoAns12": 0, "lag": 0.9, "zone": {"R": 2500, "n": 8, "rank": 2, "of": 9, "leader": {"t": "НКТЛ", "a": "ул. Сибиряков-Гвардейцев, 56/1", "n": 65, "r": 4.6}, "compMedN": 16.5}, "status": "mid", "ansPct": 89, "uniq": 0}, {"id": "53853299130", "addr": "Широкая ул., 139", "city": "Новосибирск", "rating": 4.1, "ratings": 19, "reviews": 7, "photos": 98, "good": null, "stTotal": 10, "st12": 10, "lastStory": "2026-08-25", "rev12": 5, "revPrev": 0, "avg12": 5.0, "ans12": 5, "neg12": 0, "negNoAns12": 0, "lag": 1.64, "zone": {"R": 2500, "n": 7, "rank": 6, "of": 8, "leader": {"t": "Сигнал", "a": "Широкая ул., 15", "n": 150, "r": 4.6}, "compMedN": 21}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "107646593528", "addr": "Выборная ул., 89/4", "city": "Новосибирск", "rating": 4.2, "ratings": 23, "reviews": 14, "photos": 80, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 9, "revPrev": 4, "avg12": 5.0, "ans12": 9, "neg12": 0, "negNoAns12": 0, "lag": 1.81, "zone": {"R": 2500, "n": 3, "rank": 2, "of": 4, "leader": {"t": "Мегаполис", "a": "Выборная ул., 144/1", "n": 35, "r": 4.4}, "compMedN": 7}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "219310411187", "addr": "Лазурная ул., 4/3", "city": "Новосибирск", "rating": 4.3, "ratings": 14, "reviews": 4, "photos": 78, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 3, "revPrev": 0, "avg12": 5.0, "ans12": 0, "neg12": 0, "negNoAns12": 0, "lag": null, "zone": {"R": 2500, "n": 10, "rank": 8, "of": 11, "leader": {"t": "Автостатус", "a": "ул. Кошурникова, 33", "n": 97, "r": 4.9}, "compMedN": 30}, "status": "mid", "ansPct": 0, "uniq": 0}, {"id": "83527864022", "addr": "просп. Карла Маркса, 30", "city": "Новосибирск", "rating": 4.3, "ratings": 14, "reviews": 2, "photos": 81, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 0, "revPrev": 0, "avg12": null, "ans12": 0, "neg12": 0, "negNoAns12": 0, "lag": null, "zone": {"R": 2500, "n": 17, "rank": 15, "of": 18, "leader": {"t": "Вектор", "a": "Геодезическая ул., 4/1", "n": 212, "r": 4.4}, "compMedN": 37}, "status": "mid", "ansPct": null, "uniq": 0}, {"id": "54224053451", "addr": "ул. Шукшина, 7/1", "city": "Новосибирск", "rating": 4.2, "ratings": 7, "reviews": 4, "photos": 80, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 4, "revPrev": 0, "avg12": 5.0, "ans12": 4, "neg12": 0, "negNoAns12": 0, "lag": 1.32, "zone": {"R": 2500, "n": 3, "rank": 3, "of": 4, "leader": {"t": "Автолюкс", "a": "ул. Одоевского, 1/2", "n": 62, "r": 4.1}, "compMedN": 8}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "241657079847", "addr": "Часовая ул., 6/5", "city": "Новосибирск", "rating": 4.1, "ratings": 25, "reviews": 8, "photos": 74, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 3, "revPrev": 1, "avg12": 3.7, "ans12": 2, "neg12": 1, "negNoAns12": 0, "lag": 3.43, "zone": {"R": 2500, "n": 1, "rank": 2, "of": 2, "leader": {"t": "АвтоЛидер", "a": "ул. Энгельса, 12", "n": 36, "r": 4.3}, "compMedN": 36}, "status": "mid", "ansPct": 67, "uniq": 0}, {"id": "138017745002", "addr": "Первомайская ул., 168", "city": "Новосибирск", "rating": 4.2, "ratings": 19, "reviews": 6, "photos": 76, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 2, "revPrev": 0, "avg12": 5.0, "ans12": 2, "neg12": 0, "negNoAns12": 0, "lag": 6.19, "zone": {"R": 2500, "n": 4, "rank": 4, "of": 5, "leader": {"t": "Фаворит", "a": "Первомайская ул., 198", "n": 36, "r": 4.0}, "compMedN": 24}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "230276378140", "addr": "ул. Ильича, 6 (Академгородок)", "city": "Новосибирск", "rating": 4.8, "ratings": 19, "reviews": 17, "photos": 67, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 17, "revPrev": 0, "avg12": 4.8, "ans12": 15, "neg12": 1, "negNoAns12": 0, "lag": 1.72, "zone": {"R": 2500, "n": 3, "rank": 3, "of": 4, "leader": {"t": "Чудо светофор", "a": "просп. Академика Коптюга, 15", "n": 95, "r": 4.7}, "compMedN": 65}, "status": "mid", "ansPct": 88, "uniq": 0}, {"id": "72869674906", "addr": "ул. Ленина, 94", "city": "Бердск", "rating": 4.1, "ratings": 11, "reviews": 2, "photos": 72, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 1, "revPrev": 0, "avg12": 5.0, "ans12": 1, "neg12": 0, "negNoAns12": 0, "lag": 0.64, "zone": {"R": 6000, "n": 9, "rank": 7, "of": 10, "leader": {"t": "Сибирский тракт 154", "a": "ул. Ленина, 87, Бердск", "n": 85, "r": 5.0}, "compMedN": 32}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "10892454426", "addr": "Комсомольская ул., 27", "city": "Искитим", "rating": null, "ratings": 0, "reviews": 2, "photos": 58, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 2, "revPrev": 0, "avg12": 5.0, "ans12": 0, "neg12": 0, "negNoAns12": 0, "lag": null, "zone": {"R": 6000, "n": 6, "rank": 7, "of": 7, "leader": {"t": "Автошкола", "a": "ул. Пушкина, 103, Искитим", "n": 202, "r": 5.0}, "compMedN": 29.5}, "status": "risk", "ansPct": 0, "uniq": 0}, {"id": "216496178168", "addr": "ул. Кутузова, 39А", "city": "Карасук", "rating": null, "ratings": 0, "reviews": 1, "photos": 53, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 1, "revPrev": 0, "avg12": 5.0, "ans12": 1, "neg12": 0, "negNoAns12": 0, "lag": 1.26, "zone": {"R": 6000, "n": 2, "rank": 3, "of": 3, "leader": {"t": "Форвард", "a": "Союзная ул., 30, Карасук", "n": 67, "r": 4.2}, "compMedN": 57}, "status": "risk", "ansPct": 100, "uniq": 0}, {"id": "61899124461", "addr": "Никольский просп., 1", "city": "Кольцово", "rating": 4.6, "ratings": 26, "reviews": 13, "photos": 79, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 6, "revPrev": 2, "avg12": 5.0, "ans12": 6, "neg12": 0, "negNoAns12": 0, "lag": 1.67, "zone": {"R": 6000, "n": 3, "rank": 2, "of": 4, "leader": {"t": "Автолюкс", "a": "Вознесенская ул., 3, Кольцово", "n": 41, "r": 4.7}, "compMedN": 8}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "167197994080", "addr": "Геодезическая ул., 25", "city": "Обь", "rating": 4.3, "ratings": 5, "reviews": 5, "photos": 79, "good": null, "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 5, "revPrev": 0, "avg12": 5.0, "ans12": 5, "neg12": 0, "negNoAns12": 0, "lag": 0.92, "zone": {"R": 6000, "n": 2, "rank": 3, "of": 3, "leader": {"t": "Мегаполис", "a": "ул. Максима Горького, 6, Обь", "n": 48, "r": 4.0}, "compMedN": 29.5}, "status": "mid", "ansPct": 100, "uniq": 0}, {"id": "133808492244", "addr": "ул. Остальцова, 23Б", "city": "Сузун", "rating": 4.9, "ratings": 22, "reviews": 20, "photos": 88, "good": "2026", "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 11, "revPrev": 9, "avg12": 5.0, "ans12": 9, "neg12": 0, "negNoAns12": 0, "lag": 1.21, "zone": {"R": 6000, "n": 1, "rank": 2, "of": 2, "leader": {"t": "Сузунская автошкола", "a": "Партизанская ул., 100, Сузун", "n": 58, "r": 4.3}, "compMedN": 58}, "status": "mid", "ansPct": 82, "uniq": 0}, {"id": "185852299664", "addr": "Пролетарская ул., 101/1", "city": "Черепаново", "rating": 4.9, "ratings": 64, "reviews": 48, "photos": 87, "good": "2026", "stTotal": 11, "st12": 11, "lastStory": "2026-08-25", "rev12": 14, "revPrev": 34, "avg12": 4.7, "ans12": 13, "neg12": 1, "negNoAns12": 0, "lag": 2.74, "zone": {"R": 6000, "n": 1, "rank": 1, "of": 2, "leader": {"t": "Мотор", "a": "ул. Спирякова, 197, Черепаново", "n": 22, "r": 4.3}, "compMedN": 22}, "status": "strong", "ansPct": 93, "uniq": 0}], "M24": ["окт 24", "ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "kpi": {"cards": 26, "ratings": 1201, "rev12": 260, "revYoy": 43, "wavg": 4.59, "rankMed": 3.5, "ans": 90}, "facts": {"leaders": 3, "lasts": 5, "top3share": 61, "noRating": 2, "lt10": 5, "gap": -34, "sameStories": 25}, "months": {"2024-10": [3, 11, 1, 3], "2024-11": [7, 19, 4, 7], "2024-12": [9, 37, 2, 8], "2025-01": [9, 40, 1, 9], "2025-02": [8, 32, 2, 8], "2025-03": [16, 71, 2, 16], "2025-04": [18, 85, 1, 18], "2025-05": [9, 43, 0, 9], "2025-06": [19, 85, 2, 19], "2025-07": [11, 47, 2, 11], "2025-08": [49, 235, 2, 49], "2025-09": [12, 58, 0, 12], "2025-10": [29, 135, 2, 27], "2025-11": [25, 122, 1, 25], "2025-12": [20, 96, 1, 20], "2026-01": [18, 86, 1, 18], "2026-02": [24, 116, 1, 24], "2026-03": [21, 93, 3, 20], "2026-04": [16, 76, 1, 16], "2026-05": [5, 21, 1, 5], "2026-06": [4, 16, 1, 3], "2026-07": [16, 67, 3, 16], "2026-08": [28, 131, 2, 28], "2026-09": [34, 149, 5, 34]}, "top": [{"name": "АвтоЛидер", "zones": 10, "avgN": 36}, {"name": "Вектор", "zones": 9, "avgN": 82}, {"name": "Автостатус", "zones": 6, "avgN": 98}, {"name": "Перекрёсток", "zones": 6, "avgN": 69}, {"name": "Мегаполис", "zones": 6, "avgN": 47}, {"name": "Фаворит", "zones": 6, "avgN": 36}, {"name": "Автолюкс", "zones": 6, "avgN": 35}, {"name": "АвтоСтар54", "zones": 4, "avgN": 17}, {"name": "ДОСААФ", "zones": 3, "avgN": 93}, {"name": "За рулём", "zones": 3, "avgN": 83}], "compMed": {"n": 138, "rating": 4.4, "ratings": 29.5, "reviews": 12, "photos": 25}, "ourMed": {"rating": 4.3, "ratings": 19.5, "reviews": 8, "photos": 80.5}, "main": {"city": [23341, 20455, 18970, 27569, 26165, 28521, 25508, 25108, 27880, 31224, 31098, 29146, 25792, 22212, 18651, 22988, 22062, 24724, 25210, 24400, 24887, 24094, 24764, 27470], "obl": [31440, 28329, 25797, 37283, 34508, 38127, 33965, 33127, 36640, 42000, 41760, 38374, 34848, 30037, 25707, 32580, 31080, 34011, 34895, 33481, 34740, 34476, 35660, 37788]}, "queries": [{"q": "налоговый вычет автошкола", "obl12": 2629, "oblYoy": 57, "city12": 2096, "cityYoy": 57}, {"q": "автошкола онлайн", "obl12": 2463, "oblYoy": 44, "city12": 1350, "cityYoy": 6}, {"q": "медкомиссия на права", "obl12": 58965, "oblYoy": 33, "city12": 45686, "cityYoy": 33}, {"q": "автошкола категория а", "obl12": 2930, "oblYoy": 22, "city12": 2054, "cityYoy": 22}, {"q": "автошкола материнский капитал", "obl12": 813, "oblYoy": 17, "city12": 551, "cityYoy": 13}, {"q": "восстановление навыков вождения", "obl12": 385, "oblYoy": 14, "city12": 366, "cityYoy": 17}, {"q": "экзамен гибдд", "obl12": 70140, "oblYoy": 13, "city12": 45572, "cityYoy": 5}, {"q": "автошкола скидки", "obl12": 408, "oblYoy": 13, "city12": 324, "cityYoy": 16}, {"q": "пересдача экзамена гибдд", "obl12": 1537, "oblYoy": 9, "city12": 1065, "cityYoy": 13}, {"q": "автошкола акпп", "obl12": 135, "oblYoy": 2, "city12": 94, "cityYoy": -22}, {"q": "получить права", "obl12": 114166, "oblYoy": 0, "city12": 77831, "cityYoy": -5}, {"q": "уроки вождения", "obl12": 5504, "oblYoy": -1, "city12": 3993, "cityYoy": 0}, {"q": "лучшая автошкола", "obl12": 3728, "oblYoy": -1, "city12": 3042, "cityYoy": -3}, {"q": "обучение вождению", "obl12": 7157, "oblYoy": -2, "city12": 5114, "cityYoy": -4}, {"q": "инструктор по вождению женщина", "obl12": 116, "oblYoy": -3, "city12": 76, "cityYoy": -24}, {"q": "права на мотоцикл", "obl12": 19319, "oblYoy": -4, "city12": 11685, "cityYoy": -7}, {"q": "автошкола рядом", "obl12": 387, "oblYoy": -4, "city12": 317, "cityYoy": 1}, {"q": "автошкола рассрочка", "obl12": 1087, "oblYoy": -5, "city12": 896, "cityYoy": -5}, {"q": "билеты пдд", "obl12": 167510, "oblYoy": -5, "city12": 99594, "cityYoy": -12}, {"q": "автошкола стоимость обучения", "obl12": 2438, "oblYoy": -8, "city12": 1670, "cityYoy": 1}, {"q": "автошкола категория с", "obl12": 2574, "oblYoy": -8, "city12": 1823, "cityYoy": -11}, {"q": "частный инструктор по вождению", "obl12": 448, "oblYoy": -8, "city12": 365, "cityYoy": -1}, {"q": "страх вождения", "obl12": 588, "oblYoy": -12, "city12": 420, "cityYoy": -18}, {"q": "автошкола отзывы", "obl12": 13570, "oblYoy": -12, "city12": 9927, "cityYoy": -15}, {"q": "мотошкола", "obl12": 6684, "oblYoy": -13, "city12": 5098, "cityYoy": -15}, {"q": "автодром", "obl12": 116184, "oblYoy": -13, "city12": 64163, "cityYoy": -20}, {"q": "права на скутер", "obl12": 4088, "oblYoy": -20, "city12": 2437, "cityYoy": -19}, {"q": "автошкола цена", "obl12": 16806, "oblYoy": -23, "city12": 12689, "cityYoy": -26}, {"q": "автошкола выходного дня", "obl12": 94, "oblYoy": -41, "city12": 68, "cityYoy": -41}], "brands": [{"n": "Автошкола 54", "v": 37355, "yoy": 23}, {"n": "Вектор", "v": 28243, "yoy": 29}, {"n": "Автостатус", "v": 21674, "yoy": 18}, {"n": "ДОСААФ", "v": 9375, "yoy": 22}, {"n": "Фаворит", "v": 9280, "yoy": -6}, {"n": "Мегаполис", "v": 8080, "yoy": -19}, {"n": "За рулём", "v": 5251, "yoy": -6}, {"n": "Перекрёсток", "v": 5173, "yoy": -8}, {"n": "Сигнал", "v": 3375, "yoy": 1}, {"n": "Драйв", "v": 3252, "yoy": 2}, {"n": "Автолюкс", "v": 2821, "yoy": -10}, {"n": "АвтоЛидер", "v": 2654, "yoy": -9}, {"n": "Чудо светофор", "v": 2407, "yoy": -4}, {"n": "Форсаж", "v": 2286, "yoy": -25}, {"n": "АвтоСтар 54", "v": 1476, "yoy": -11}, {"n": "Сибирский тракт", "v": 1457, "yoy": 36}], "brandLine": {"a": [2243, 2116, 2022, 2510, 2519, 2661, 2389, 2236, 2636, 2600, 3130, 3335, 2960, 2515, 2291, 2825, 2887, 3286, 3371, 3547, 3333, 3210, 3308, 3822], "b": [1183, 1110, 961, 1443, 1520, 1750, 1775, 2013, 2241, 2613, 2682, 2627, 2365, 1877, 1615, 2380, 2186, 2290, 2586, 2574, 2574, 2524, 2458, 2814]}, "season": [["Автошкола (общий спрос)", [34848, 30037, 25707, 32580, 31080, 34011, 34895, 33481, 34740, 34476, 35660, 37788]], ["Мото: категория А, мотошкола", [1628, 1258, 1072, 1376, 1417, 1974, 3444, 3446, 3923, 3817, 3157, 2421]], ["Скутер (категория М)", [208, 147, 106, 149, 163, 276, 499, 568, 642, 557, 474, 299]], ["Категория С", [264, 217, 205, 205, 197, 265, 191, 187, 192, 193, 238, 220]], ["Медкомиссия на права", [4746, 3828, 3047, 4973, 4905, 5322, 5039, 4615, 5415, 6032, 5666, 5377]], ["Налоговый вычет", [168, 130, 147, 241, 352, 274, 283, 199, 179, 205, 208, 243]], ["Онлайн-обучение", [147, 124, 112, 153, 139, 199, 160, 219, 187, 362, 370, 291]], ["Уроки и восстановление", [580, 384, 366, 414, 314, 521, 490, 547, 605, 685, 700, 731]]], "onlinePrev": 304, "brandSplit": [["Название сети", 5277], ["Сайт, телефон, адрес", 700], ["Город области или район", 470], ["Цена и тарифы", 443], ["Отзывы и инструкторы", 383]], "townSplit": [["Черепаново", 99], ["Карасук", 96], ["Бердск", 65], ["Искитим", 62], ["Кольцово", 58], ["Академгородок", 42], ["Сузун", 34]], "catSplit": [["Цена, «сколько стоит»", 6937], ["Конкуренты по названию", 16070], ["Город области", 2775], ["«Какая лучше», рейтинг, отзывы", 2689], ["Район или берег Новосибирска", 1261], ["Категория, АКПП или механика", 1136], ["Налоговый вычет", 703]]};
+(function(){
+const NS='http://www.w3.org/2000/svg';
+const fmt=(n,dg)=>n==null?'—':Number(n).toLocaleString('ru-RU',{minimumFractionDigits:dg||0,maximumFractionDigits:dg||0});
+const fr=(n)=>n==null?'—':Number(n).toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1});
+const pct=n=>(n>0?'+':n<0?'−':'')+fmt(Math.abs(n))+'%';
+const css=v=>'var(--'+v+')';
+const stCol={strong:'good',mid:'warn',risk:'bad'};
+const stName={strong:'Сильная',mid:'Средняя',risk:'Риск'};
+const label=b=>b.addr+(b.city!=='Новосибирск'?', '+b.city:'');
+const tip=document.getElementById('tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;const x=e.clientX,y=e.clientY,w=tip.offsetWidth,h=tip.offsetHeight;let L=x+14,T=y+14;if(L+w>innerWidth-8)L=x-w-14;if(T+h>innerHeight-8)T=y-h-14;tip.style.left=Math.max(8,L)+'px';tip.style.top=Math.max(8,T)+'px'}
+function hideTip(){tip.style.opacity=0}
+function el(tag,attrs,parent){const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);if(parent)parent.appendChild(n);return n}
+function svg(id,W,H){const host=document.getElementById(id);const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});host.appendChild(s);return s}
+function hover(node,html){node.style.cursor='default';node.addEventListener('mousemove',e=>showTip(e,html));node.addEventListener('mouseleave',hideTip);node.addEventListener('touchstart',e=>{showTip(e.touches[0],html)},{passive:true})}
+function txt(s,x,y,t,o){const n=el('text',Object.assign({x,y},o||{}),s);n.textContent=t;return n}
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v||1)));for(const m of [1,2,2.5,5,10])if(m*p>=v)return m*p;return 10*p}
+
+/* horizontal bars */
+function hbars(id,rows,o){o=o||{};const W=o.W||560,lw=o.lw||170,rh=o.rh||22,H=rows.length*rh+8;const s=svg(id,W,H);const max=o.max||Math.max(...rows.map(r=>r.v))*1.08;const cw=W-lw-56;
+ rows.forEach((r,i)=>{const y=i*rh+4;const g=el('g',{},s);const t=txt(g,lw-8,y+rh/2+4,r.l,{'text-anchor':'end'});if(r.lc)t.setAttribute('fill',r.lc);
+  const bw=Math.max(r.v>0?2:0,r.v/max*cw);el('rect',{x:lw,y:y+4,width:bw,height:rh-8,rx:3,fill:r.c||css('accent')},g);
+  txt(g,lw+bw+6,y+rh/2+4,r.vl!=null?r.vl:fmt(r.v),{class:'mono'});
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);hover(hit,r.tip||`<b>${r.l}</b><br>${fmt(r.v)}`)});}
+
+/* line chart */
+function lines(id,labels,series,o){o=o||{};const W=o.W||1040,H=o.H||240,pl=48,pr=12,pt=10,pb=26;const s=svg(id,W,H);const all=series.flatMap(x=>x.d);const max=niceMax(Math.max(...all));const cw=W-pl-pr,ch=H-pt-pb;const X=i=>pl+i*cw/(labels.length-1),Y=v=>pt+ch-v/max*ch;
+ const gg=el('g',{class:'grid'},s);for(let k=0;k<=5;k++){const v=max*k/5;el('line',{x1:pl,x2:W-pr,y1:Y(v),y2:Y(v)},gg);txt(s,pl-6,Y(v)+4,fmt(v),{'text-anchor':'end',class:'mono'})}
+ labels.forEach((l,i)=>{if(i%(o.step||3)===0||i===labels.length-1)txt(s,X(i),H-6,l,{'text-anchor':'middle'})});
+ series.forEach(se=>{let dp=se.d.map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join(' ');if(se.area){el('path',{d:dp+` L${X(se.d.length-1)} ${Y(0)} L${X(0)} ${Y(0)} Z`,fill:se.c,opacity:.10},s)}
+  el('path',{d:dp,fill:'none',stroke:se.c,'stroke-width':se.w||2.2,'stroke-linejoin':'round','stroke-linecap':'round'},s);const li=se.d.length-1;el('circle',{cx:X(li),cy:Y(se.d[li]),r:3.5,fill:se.c},s)});
+ const band=cw/(labels.length-1);labels.forEach((l,i)=>{const r=el('rect',{x:X(i)-band/2,y:pt,width:band,height:ch,fill:'transparent'},s);hover(r,`<b>${o.full?o.full[i]:l}</b>`+series.map(se=>`<br>${se.n}: ${fmt(se.d[i])}`).join(''))});}
+
+const B=D.B;const NARROW=(document.documentElement.clientWidth||innerWidth)<640;const WW=NARROW?460:1040,LW=NARROW?175:250;
+/* KPIs */
+const K=D.kpi;
+document.getElementById('kpis').innerHTML=[
+ [fmt(K.cards),'карточек сети','19 в Новосибирске, 7 в области'],
+ [fmt(K.ratings),'оценок на Картах','переходы — нет доступа к кабинету'],
+ [fmt(K.rev12),'отзывов за 12 месяцев',pct(K.revYoy)+' к прошлому году'],
+ [fr(K.wavg),'средний рейтинг','взвешенный по числу оценок'],
+ [fr(K.rankMed),'медианное место в зоне','по числу оценок среди автошкол рядом']
+].map(k=>`<div class="kpi"><div class="v num">${k[0]}</div><div class="l">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
+
+/* facts */
+const F=D.facts;
+document.getElementById('facts').innerHTML=[
+ ['bad',`${F.leaders} из ${K.cards}`,'филиалов — №1 в своей зоне','по числу оценок; в '+F.lasts+' зонах филиал сети последний'],
+ ['warn',F.top3share+'%','всех оценок сети на 3 карточках','остальные 23 делят '+(100-F.top3share)+'%'],
+ ['bad',F.sameStories+' из '+K.cards,'показывают один и тот же набор историй','последняя публикация в сети — 26.08.2026, 55 дней тишины'],
+ ['bad',String(F.noRating),'карточки без рейтинга','Искитим и Карасук; ещё '+F.lt10+' карточек с числом оценок меньше 10'],
+ ['warn',pct(F.gap),'оценок у медианного филиала',''+fr(D.ourMed.ratings)+' против '+fr(D.compMed.ratings)+' у медианного конкурента рядом'],
+ ['good','+57%','рост запроса «налоговый вычет автошкола»','самый быстрорастущий запрос региона, 12 месяцев к прошлым 12']
+].map(f=>`<div class="fact"><div class="big num ${f[0]}">${f[1]}</div><div class="t">${f[2]}</div><div class="d">${f[3]}</div></div>`).join('');
+
+/* 01 ratings bars */
+const byR=[...B].sort((a,b)=>b.ratings-a.ratings);
+hbars('c-ratings',byR.map(b=>({l:label(b),v:b.ratings,c:css(stCol[b.status]),tip:`<b>${label(b)}</b><br>Оценок: ${fmt(b.ratings)}<br>Рейтинг: ${b.rating?fr(b.rating):'нет'}<br>Статус: ${stName[b.status]}`})),{W:1040,lw:250,rh:21});
+const mk=Object.keys(D.months).sort();
+lines('c-revm',D.M24,[{n:'Отзывы',d:mk.map(k=>D.months[k][0]),c:css('accent'),area:true},{n:'Оценка 1–2',d:mk.map(k=>D.months[k][2]),c:css('bad')}],{W:520,H:220,step:6});
+(function(){const s=svg('c-share',520,220);const tot=K.ratings;const top=byR.slice(0,3);let x=0;const W=500,y=40,h=44;
+ top.forEach((b,i)=>{const w=b.ratings/tot*W;const r=el('rect',{x:10+x,y,width:w-2,height:h,rx:3,fill:css('accent'),opacity:1-i*0.22},s);hover(r,`<b>${label(b)}</b><br>${fmt(b.ratings)} оценок · ${fmt(b.ratings/tot*100)}%`);x+=w});
+ const rest=tot-top.reduce((a,b)=>a+b.ratings,0);const r2=el('rect',{x:10+x,y,width:W-x,height:h,rx:3,fill:css('comp'),opacity:.5},s);hover(r2,`<b>Остальные 23 карточки</b><br>${fmt(rest)} оценок · ${fmt(rest/tot*100)}%`);
+ txt(s,10,y-12,'Топ-3 карточки: '+D.facts.top3share+'%',{'font-weight':'600'});txt(s,510,y-12,'23 карточки: '+(100-D.facts.top3share)+'%',{'text-anchor':'end'});
+ const L=[['Карточек с числом оценок ≥ 50',B.filter(b=>b.ratings>=50).length],['от 20 до 49',B.filter(b=>b.ratings>=20&&b.ratings<50).length],['от 10 до 19',B.filter(b=>b.ratings>=10&&b.ratings<20).length],['меньше 10',B.filter(b=>b.ratings<10).length]];
+ L.forEach((l,i)=>{const yy=120+i*24;txt(s,10,yy,l[0]);txt(s,510,yy,fmt(l[1]),{'text-anchor':'end',class:'mono'});el('line',{x1:10,x2:510,y1:yy+8,y2:yy+8,stroke:css('line')},s)});})();
+
+/* 02 table */
+const cols=[
+ ['Филиал','addr','l'],['Статус','status','l'],['Рейтинг','rating'],['Оценки','ratings'],['Отзывы','reviews'],['Отзывов за 12 мес','rev12'],['Ответы за 12 мес','ansPct'],['Фото','photos'],['Публикаций за год','st12'],['Своих публикаций','uniq'],['Место в зоне','rank'],['Лидер зоны','leader','l'],['Оценок у лидера','leaderN']];
+B.forEach(b=>{b.rank=b.zone.rank;b.leader=b.zone.leader?b.zone.leader.t:'—';b.leaderN=b.zone.leader?b.zone.leader.n:0});
+const weak={rating:b=>!b.rating||b.rating<4.3,ratings:b=>b.ratings<20,reviews:b=>b.reviews<10,rev12:b=>b.rev12<3,ansPct:b=>b.ansPct!=null&&b.ansPct<90,photos:b=>b.photos<10,st12:b=>b.st12===0,uniq:b=>b.uniq===0,rank:b=>b.rank>3};
+let sortK='ratings',sortD=-1,filt='all';
+const th=document.getElementById('thead');
+th.innerHTML=cols.map(c=>`<th data-k="${c[1]}" scope="col" tabindex="0">${c[0]}</th>`).join('');
+function render(){const rows=B.filter(b=>filt==='all'||b.status===filt).sort((a,b)=>{let x=a[sortK],y=b[sortK];if(x==null)x=-1;if(y==null)y=-1;if(typeof x==='string')return x.localeCompare(y,'ru')*sortD;return (x-y)*sortD});
+ document.getElementById('tbody').innerHTML=rows.map(b=>'<tr>'+cols.map(c=>{const k=c[1];let v=b[k];const w=weak[k]&&weak[k](b)?' weak':'';
+  if(k==='addr')return `<td>${b.addr}<span class="city">${b.city}</span></td>`;
+  if(k==='status')return `<td class="l"><span class="pill ${b.status}">${stName[b.status]}</span></td>`;
+  if(k==='rating')v=b.rating?fr(b.rating):'нет';
+  else if(k==='ansPct')v=b.ansPct==null?'—':b.ansPct+'%';
+  else if(k==='uniq')v=b.uniq?'1':'0';
+  else if(k==='rank')v=b.rank+' из '+b.zone.of;
+  else if(k==='leader')return `<td class="l">${v}</td>`;
+  else v=fmt(v);
+  return `<td class="${w.trim()}">${v}</td>`}).join('')+'</tr>').join('');
+ th.querySelectorAll('th').forEach(h=>h.setAttribute('aria-sort',h.dataset.k===sortK?(sortD>0?'ascending':'descending'):'none'))}
+th.addEventListener('click',e=>{const h=e.target.closest('th');if(!h)return;const k=h.dataset.k;if(k===sortK)sortD=-sortD;else{sortK=k;sortD=-1}render()});
+th.addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.click()}});
+document.getElementById('flt').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;filt=b.dataset.f;document.querySelectorAll('#flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()});
+render();
+
+/* 03 gaps */
+const N=B.length;
+const gaps=[
+ ['Нет своих публикаций, только общий набор',B.filter(b=>!b.uniq).length],
+ ['Нет новых публикаций 55+ дней',B.filter(b=>b.lastStory<='2026-08-26').length],
+ ['Меньше 20 оценок',B.filter(b=>b.ratings<20).length],
+ ['Рейтинг ниже 4,5',B.filter(b=>b.rating&&b.rating<4.5).length],
+ ['Не больше 2 отзывов за 12 месяцев',B.filter(b=>b.rev12<=2).length],
+ ['Меньше 10 оценок',B.filter(b=>b.ratings<10).length],
+ ['Нет рейтинга',B.filter(b=>!b.rating).length],
+ ['Рейтинг ниже 4,0',B.filter(b=>b.rating&&b.rating<4).length],
+ ['Нет историй',B.filter(b=>!b.stTotal).length],
+ ['Меньше 10 фото',B.filter(b=>b.photos<10).length]];
+hbars('c-gaps',gaps.map(g=>({l:g[0],v:g[1],max:N,c:g[1]/N>.5?css('bad'):g[1]>0?css('warn'):css('good'),vl:g[1]+' из '+N,tip:`<b>${g[0]}</b><br>${g[1]} из ${N} филиалов`})),{W:520,lw:250,rh:26,max:N});
+(function(){const W=520,H=320,pl=40,pr=14,pt=10,pb=34;const s=svg('c-scatter',W,H);const xmin=1,xmax=1000;const X=v=>pl+(Math.log10(Math.max(v,1))-Math.log10(xmin))/(Math.log10(xmax)-Math.log10(xmin))*(W-pl-pr);const ymin=3.5,ymax=5;const Y=v=>pt+(ymax-v)/(ymax-ymin)*(H-pt-pb);
+ const gg=el('g',{class:'grid'},s);[1,10,100,1000].forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:pt,y2:H-pb},gg);txt(s,X(v),H-pb+16,fmt(v),{'text-anchor':'middle',class:'mono'})});[3.5,4,4.5,5].forEach(v=>{el('line',{x1:pl,x2:W-pr,y1:Y(v),y2:Y(v)},gg);txt(s,pl-6,Y(v)+4,fr(v),{'text-anchor':'end',class:'mono'})});
+ txt(s,W-pr,H-4,'оценок',{'text-anchor':'end'});
+ B.filter(b=>b.rating).forEach(b=>{const p=el('circle',{cx:X(b.ratings),cy:Y(b.rating),r:5.5,fill:css('accent'),stroke:css('panel'),'stroke-width':1.5},s);hover(p,`<b>${label(b)}</b><br>${fr(b.rating)} · ${fmt(b.ratings)} оценок`)});})();
+
+/* 04 comp */
+(function(){const rows=[...B].sort((a,b)=>(b.zone.leader?b.zone.leader.n:0)-(a.zone.leader?a.zone.leader.n:0));const W=WW,lw=LW,rh=30,H=rows.length*rh+8;const s=svg('c-pairs',W,H);const max=Math.max(...rows.map(b=>Math.max(b.ratings,b.zone.leader?b.zone.leader.n:0)))*1.15;const cw=W-lw-60;
+ rows.forEach((b,i)=>{const y=i*rh+4;const L=b.zone.leader;txt(s,lw-8,y+rh/2+4,label(b),{'text-anchor':'end'});
+  const w1=Math.max(2,b.ratings/max*cw);el('rect',{x:lw,y:y+3,width:w1,height:11,rx:2,fill:css('accent')},s);txt(s,lw+w1+5,y+12,fmt(b.ratings),{class:'mono'});
+  const ln=L?L.n:0;const w2=Math.max(ln?2:0,ln/max*cw);el('rect',{x:lw,y:y+15,width:w2,height:11,rx:2,fill:css('comp')},s);txt(s,lw+w2+5,y+24,fmt(ln)+(b.zone.rank===1?' · филиал лидирует':''),{class:'mono'});
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);hover(hit,`<b>${label(b)}</b><br>Филиал: ${fmt(b.ratings)} оценок, ${b.rating?fr(b.rating):'без рейтинга'}<br>Лидер зоны: ${L?L.t+', '+L.a:'—'} — ${fmt(ln)} оценок${L&&L.r?', '+fr(L.r):''}<br>Место филиала: ${b.zone.rank} из ${b.zone.of}`)});})();
+hbars('c-top',D.top.map(t=>({l:t.name,v:t.zones,c:css('comp'),vl:t.zones+' зон',tip:`<b>${t.name}</b><br>Обходит филиал в ${t.zones} зонах<br>В среднем ${fmt(t.avgN)} оценок там`})),{W:520,lw:120,rh:24,max:12});
+document.getElementById('cmp').innerHTML=[['Рейтинг',fr(D.ourMed.rating),fr(D.compMed.rating)],['Оценки',fr(D.ourMed.ratings),fr(D.compMed.ratings)],['Отзывы',fmt(D.ourMed.reviews),fmt(D.compMed.reviews)],['Фото',fr(D.ourMed.photos),fmt(D.compMed.photos)]]
+ .map(r=>`<div><div class="k">${r[0]}</div><div class="row"><b>${r[1]}</b><span>филиал сети</span></div><div class="row"><b style="color:var(--ink3)">${r[2]}</b><span>конкурент рядом</span></div></div>`).join('');
+hbars('c-brands',D.brands.map(b=>({l:b.n,v:b.v,c:b.n==='Автошкола 54'?css('accent'):css('comp'),lc:b.n==='Автошкола 54'?css('ink'):null,vl:fmt(b.v)+'  '+pct(b.yoy),tip:`<b>${b.n}</b><br>${fmt(b.v)} запросов за 12 мес<br>${pct(b.yoy)} к прошлому году`})),{W:520,lw:120,rh:22});
+
+/* 05 search */
+hbars('c-bsplit',D.brandSplit.map(r=>({l:r[0],v:r[1],tip:`<b>${r[0]}</b><br>${fmt(r[1])} запросов`})),{W:520,lw:190,rh:26});
+hbars('c-towns',D.townSplit.map(r=>({l:r[0],v:r[1],c:css('accent2'),tip:`<b>«автошкола 54 ${r[0].toLowerCase()}»</b><br>${fmt(r[1])} запросов`})),{W:520,lw:190,rh:22});
+hbars('c-cats',D.catSplit.sort((a,b)=>b[1]-a[1]).map(r=>({l:r[0],v:r[1],tip:`<b>${r[0]}</b><br>${fmt(r[1])} запросов`})),{W:520,lw:220,rh:30});
+lines('c-bline',D.M24,[{n:'Автошкола 54',d:D.brandLine.a,c:css('accent'),area:true},{n:'Вектор',d:D.brandLine.b,c:css('comp')}],{W:WW,H:NARROW?260:220,step:NARROW?6:3});
+
+/* 06 market */
+lines('c-main',D.M24,[{n:'Область',d:D.main.obl,c:css('accent'),area:true},{n:'Новосибирск',d:D.main.city,c:css('accent2')}],{W:WW,H:NARROW?260:240,step:NARROW?6:3});
+(function(){const q=D.queries;const W=WW,rh=22,H=q.length*rh+30,lw=NARROW?190:0,mid=NARROW?lw+(W-lw)/2:W/2+90;const s=svg('c-div',W,H);const max=Math.max(...q.map(x=>Math.abs(x.oblYoy)));const sc=(W-mid-44)/max;
+ el('line',{x1:mid,x2:mid,y1:0,y2:H-20,stroke:css('line')},s);
+ q.forEach((x,i)=>{const y=i*rh+4;const v=x.oblYoy;const w=Math.max(2,Math.abs(v)*sc);const up=v>=0;
+  el('rect',{x:up?mid:mid-w,y:y+4,width:w,height:rh-8,rx:2,fill:up?css('good'):css('bad')},s);
+  if(NARROW)txt(s,lw-8,y+rh/2+4,x.q,{'text-anchor':'end'});else txt(s,up?mid-8:mid+8,y+rh/2+4,x.q,{'text-anchor':up?'end':'start'});
+  txt(s,up?mid+w+6:mid-w-6,y+rh/2+4,pct(v),{'text-anchor':up?'start':'end',class:'mono'});
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);hover(hit,`<b>${x.q}</b><br>Область: ${fmt(x.obl12)} за 12 мес, ${pct(x.oblYoy)}<br>Новосибирск: ${fmt(x.city12)}, ${pct(x.cityYoy)}`)});})();
+
+/* 07 season */
+(function(){const M=['окт','ноя','дек','янв','фев','мар','апр','май','июн','июл','авг','сен'];const rows=D.season;const W=WW,lw=NARROW?150:230,rh=34,H=rows.length*rh+28,cw=(W-lw)/12;const s=svg('c-heat',W,H);
+ M.forEach((m,i)=>txt(s,lw+i*cw+cw/2,14,NARROW?m.slice(0,1).toUpperCase():m,{'text-anchor':'middle'}));
+ rows.forEach((r,j)=>{const y=22+j*rh;txt(s,lw-10,y+rh/2+4,r[0],{'text-anchor':'end'});const mx=Math.max(...r[1]),mn=Math.min(...r[1]);
+  r[1].forEach((v,i)=>{const t=mx===mn?0.5:(v-mn)/(mx-mn);const c=el('rect',{x:lw+i*cw+1,y:y+1,width:cw-2,height:rh-2,rx:3,fill:css('accent'),'fill-opacity':(0.08+t*0.86).toFixed(2)},s);
+   const yr=i<3?'2025':'2026';hover(c,`<b>${r[0]}</b><br>${M[i]} ${yr}: ${fmt(v)} запросов${v===mx?'<br>пик года':''}`)})});})();
+const sd=D.season;const motoMax=Math.max(...sd[1][1]);const motoNow=sd[1][1][11];const onl=sd[6][1];
+document.getElementById('scards').innerHTML=[
+ ['now','На пике сейчас','Общий спрос «автошкола»',`Сентябрь 2026 — максимум года: ${fmt(sd[0][1][11])} запросов по области. Осенний набор групп идёт прямо сейчас.`],
+ ['up','Набирает обороты','Онлайн-обучение и вычет',`«Автошкола онлайн» в августе–сентябре — ${fmt(onl[10]+onl[11])} запросов против ${fmt(D.onlinePrev)} годом раньше; «налоговый вычет» +57% за год.`],
+ ['down','Сезонный спад','Мото: категории А и М',`С пика в июне 2026 (${fmt(motoMax)}) до ${fmt(motoNow)} в сентябре: ${pct(Math.round((motoNow/motoMax-1)*100))}. Время копить отзывы мотоучеников к весне.`]
+].map(c=>`<div class="scard"><div class="tag ${c[0]}">${c[1]}</div><div class="h">${c[2]}</div><div class="d">${c[3]}</div></div>`).join('');
+
+/* 09 route */
+document.getElementById('routeSteps').innerHTML=[
+ ['Ноябрь','Порядок во всех 26 карточках',['Рейтинг для Искитима и Карасука: сбор оценок выпускников','Описание, услуги и цены в каждой карточке','Ответы на все новые отзывы, включая негатив про ожидание']],
+ ['Ежемесячно','Свой контент в каждом филиале',['Новости и истории каждый месяц, а не общий набор','Локальные поводы: адрес, класс, инструктор, маршрут','Публикации про вычет, рассрочку и новые 42 часа']],
+ ['Декабрь — март','Зимний сезон: категория B',['Январский всплеск спроса — акции и рассрочка в сторис','Тема «зимнее вождение» и восстановление навыков','Сбор отзывов сдавших экзамен в каждом филиале']],
+ ['Апрель — август','Летний сезон: мото и B',['Мотошкола и категория М с апреля','Истории с автодрома и экзаменационных маршрутов','Подготовка к пику набора в сентябре']]
+].map(s=>`<div class="step"><div class="when">${s[0]}</div><div class="h">${s[1]}</div><ul>${s[2].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+})();
+</script>
+</body>
+</html>
