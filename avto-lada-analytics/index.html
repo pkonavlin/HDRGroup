@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Авто-Лада на Картах</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: «дорожный лист» — тёмная асфальтовая шапка с разметкой, дальше светлые разделы-«перегоны», у каждого номер этапа маршрута */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#14171c; --ink-2:#4a505b; --ink-3:#7a808b; --line:#dfe2e8; --line-2:#eceef2;
+  --asphalt:#1c2027; --asphalt-ink:#eef0f3; --marking:#f2c230;
+  --accent:#1f56c9; --accent-soft:#e6eefc;
+  --s-us:#2a78d6; --s-them:#eb6834; --s-3:#1baf7a; --s-grey:#a3a9b3;
+  --good:#1a8f4c; --good-bg:#e3f4ea; --warn:#b77900; --warn-bg:#fdf1d6; --bad:#c9302c; --bad-bg:#fbe3e2;
+  --f-display:"Unbounded","Onest",system-ui,sans-serif; --f-body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121418; --surface:#1a1d23; --ink:#eef0f3; --ink-2:#b9bec8; --ink-3:#8a909b; --line:#2c3039; --line-2:#23272e;
+  --asphalt:#0d0f12; --asphalt-ink:#eef0f3; --marking:#e9b923; --accent:#6d9bf2; --accent-soft:#1d2a44;
+  --s-us:#3987e5; --s-them:#d95926; --s-3:#199e70; --s-grey:#5c626d;
+  --good:#45c07a; --good-bg:#16301f; --warn:#e3a530; --warn-bg:#352a10; --bad:#ef6a66; --bad-bg:#3a1a1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121418; --surface:#1a1d23; --ink:#eef0f3; --ink-2:#b9bec8; --ink-3:#8a909b; --line:#2c3039; --line-2:#23272e;
+  --asphalt:#0d0f12; --asphalt-ink:#eef0f3; --marking:#e9b923; --accent:#6d9bf2; --accent-soft:#1d2a44;
+  --s-us:#3987e5; --s-them:#d95926; --s-3:#199e70; --s-grey:#5c626d;
+  --good:#45c07a; --good-bg:#16301f; --warn:#e3a530; --warn-bg:#352a10; --bad:#ef6a66; --bad-bg:#3a1a1a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono)}
+/* hero */
+.hero{background:var(--asphalt);color:var(--asphalt-ink);position:relative;overflow:hidden}
+.hero .wrap{padding-block:48px 40px;display:grid;gap:28px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--marking) 0 48px,transparent 48px 84px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--marking)}
+.hero h1{font-size:clamp(28px,4.6vw,52px);line-height:1.08;font-weight:700;max-width:18ch}
+.hero p.lead{color:#c3c8d1;max-width:62ch;margin:0;font-size:17px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{border:1px solid #343a45;border-radius:10px;padding:14px 16px;display:grid;gap:4px;background:rgba(255,255,255,.02)}
+.kpi b{font-family:var(--f-display);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;color:#fff}
+.kpi span{font-size:13px;color:#aeb4be}
+.kpi.hot b{color:var(--marking)}
+/* sections */
+section.blk{padding-block:48px 8px}
+.sh{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:baseline;margin-bottom:20px}
+.km{font-family:var(--f-mono);font-size:12px;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:2px 6px;letter-spacing:.06em;white-space:nowrap}
+.sh h2{font-size:clamp(20px,2.6vw,28px);font-weight:700}
+.sh p{grid-column:2;margin:0;color:var(--ink-2);max-width:70ch}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 14px;min-width:0}
+.panel h3{font-family:var(--f-body);font-size:15px;font-weight:600;margin-bottom:12px;color:var(--ink)}
+.panel .sub{font-size:13px;color:var(--ink-3);margin:-8px 0 12px}
+/* findings */
+.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
+.find{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
+.find .big{font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1;font-variant-numeric:tabular-nums;grid-row:span 2;min-width:3.4ch}
+.find .t{font-weight:600}
+.find .d{font-size:14px;color:var(--ink-2);grid-column:2}
+.find.bad .big{color:var(--bad)} .find.warn .big{color:var(--warn)} .find.good .big{color:var(--good)} .find.acc .big{color:var(--accent)}
+/* bars */
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(120px,230px) 1fr auto;gap:10px;align-items:center;font-size:13px}
+.bar .l{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .track{height:14px;position:relative;display:block;min-width:0}
+.bar .fill{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
+.bar .v{font-family:var(--f-mono);font-size:12px;color:var(--ink);min-width:5ch;text-align:right}
+.bar.us .l{color:var(--ink);font-weight:600}
+.bar:hover .fill{filter:brightness(1.1)}
+/* diverging */
+.div{display:grid;gap:5px}
+.drow{display:grid;grid-template-columns:minmax(150px,230px) 1fr 1fr 56px;align-items:center;gap:0;font-size:13px}
+.drow .l{color:var(--ink-2);padding-right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow .neg{display:flex;justify-content:flex-end;border-right:1px solid var(--ink-3);height:16px}
+.drow .pos{display:flex;height:16px}
+.drow .neg i{background:var(--bad);border-radius:4px 0 0 4px;height:100%;display:block}
+.drow .pos i{background:var(--good);border-radius:0 4px 4px 0;height:100%;display:block}
+.drow .v{font-family:var(--f-mono);font-size:12px;text-align:right}
+.drow .v.p{color:var(--good)} .drow .v.n{color:var(--bad)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.tag.good{background:var(--good-bg);color:var(--good)} .tag.warn{background:var(--warn-bg);color:var(--warn)} .tag.bad{background:var(--bad-bg);color:var(--bad)} .tag.acc{background:var(--accent-soft);color:var(--accent)}
+/* chart svg */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.chart .grid line{stroke:var(--line-2)}
+.chart .axis line{stroke:var(--line)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.12);min-width:140px;z-index:5;display:none}
+.tip b{display:block;font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:400;margin-bottom:4px}
+.tip .r{display:flex;justify-content:space-between;gap:14px}
+.tip .r span:last-child{font-family:var(--f-mono)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);margin-bottom:8px}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+/* heatmap */
+.heat{display:grid;grid-template-columns:110px repeat(12,minmax(26px,1fr));gap:3px;font-size:11px;min-width:520px}
+.heat .h{font-family:var(--f-mono);color:var(--ink-3);text-align:center}
+.heat .rl{color:var(--ink-2);font-size:12px;align-self:center}
+.heat .c{height:28px;border-radius:4px;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;color:transparent}
+.heat .c:hover{color:var(--ink);outline:1px solid var(--ink-3)}
+.scroll{overflow-x:auto}
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:1180px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line-2);white-space:nowrap}
+th{font-weight:600;color:var(--ink-2);font-size:12px;position:sticky;top:0;background:var(--surface);cursor:pointer;user-select:none}
+th:hover{color:var(--accent)}
+th.sorted::after{content:" ↓";color:var(--accent)} th.sorted.asc::after{content:" ↑"}
+td:first-child,th:first-child,td:nth-child(2),th:nth-child(2){text-align:left}
+td{font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--line-2)}
+td .name{font-weight:600}
+td .city{display:block;font-size:11px;color:var(--ink-3)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.miss{color:var(--bad);font-weight:600}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button:focus-visible,th:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* competitor duel */
+.duel{display:grid;gap:10px}
+.zl{display:grid;gap:5px}
+.zr{display:grid;grid-template-columns:minmax(120px,170px) 1fr 44px;gap:10px;align-items:center;font-size:13px}
+.zr .l{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zr .tr{display:grid;gap:2px}
+.zr .tr i{display:block;height:7px;border-radius:0 3px 3px 0;min-width:2px}
+.zr .v{font-family:var(--f-mono);font-size:12px;text-align:right}
+.drw{display:grid;grid-template-columns:1fr 120px 1fr;align-items:center;gap:10px;font-size:13px}
+.drw .lt{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.drw .rt{display:flex;align-items:center;gap:8px}
+.drw .mid{text-align:center;color:var(--ink-3);font-size:12px}
+.drw i{display:block;height:14px}
+.drw .lt i{background:var(--s-us);border-radius:4px 0 0 4px}
+.drw .rt i{background:var(--s-them);border-radius:0 4px 4px 0}
+.drw .val{font-family:var(--f-mono);font-size:12px;min-width:4ch}
+.duel-head{display:grid;grid-template-columns:1fr 120px 1fr;font-weight:600;font-size:14px}
+.duel-head span:first-child{text-align:right;color:var(--s-us)} .duel-head span:last-child{color:var(--s-them)}
+/* steps */
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;counter-reset:st}
+.st{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:8px;align-content:start}
+.st .when{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+.st h3{font-family:var(--f-body);font-size:16px;font-weight:700}
+.st ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;display:grid;gap:4px}
+.law{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px}
+.law .it{border-left:3px solid var(--marking);padding:4px 0 4px 14px;display:grid;gap:2px}
+.law .it b{font-family:var(--f-display);font-size:22px}
+.law .it span{font-size:14px;color:var(--ink-2)}
+.note{font-size:12px;color:var(--ink-3)}
+footer{padding-block:40px 56px;color:var(--ink-3);font-size:12px}
+footer a{color:var(--ink-2)}
+@media (max-width:620px){
+  .zr{grid-template-columns:110px 1fr 40px}
+  .bar{grid-template-columns:110px 1fr auto}
+  .drow{grid-template-columns:120px 1fr 1fr 48px}
+  .sh{grid-template-columns:1fr} .sh p{grid-column:1}
+  .drw,.duel-head{grid-template-columns:1fr 80px 1fr}
+}
+@media (prefers-reduced-motion:no-preference){.fill,.drow i{transition:width .5s ease}}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Аудит сети на Яндекс Картах · Свердловская область · октябрь 2026</div>
+    <h1>Авто-Лада: анализ филиалов, спрос региона и точки роста</h1>
+    <p class="lead">Разобрали все 32 карточки сети по статистике Яндекс Бизнеса за 12 месяцев, сравнили каждый филиал с конкурентами его зоны и наложили на спрос из Вордстата за два года.</p>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</header>
+
+<main>
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 0</span><h2>Главное за 30 секунд</h2></div>
+  <div class="finds" id="finds"></div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 1</span><h2>Куда приходит трафик сети</h2><p>Переходы в карточку за октябрь 2025 — сентябрь 2026 и действия клиентов по месяцам.</p></div>
+  <div class="grid2">
+    <div class="panel"><h3>Переходы в карточку по филиалам, 12 месяцев</h3><div class="bars" id="branchBars"></div></div>
+    <div style="display:grid;gap:20px;align-content:start;min-width:0">
+      <div class="panel"><h3>Переходы в карточки сети по месяцам</h3><div class="chart" id="chVisits"></div></div>
+      <div class="panel"><h3>Целевые действия сети по месяцам</h3><div class="legend" id="lgActs"></div><div class="chart" id="chActs"></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 2</span><h2>Сравнение всех филиалов</h2><p>Публичные данные карточек и статистика кабинета. Нажмите на заголовок столбца, чтобы отсортировать.</p></div>
+  <div class="filters" role="group" aria-label="Фильтр по статусу">
+    <button id="f-all" data-f="all" aria-pressed="true">Все</button>
+    <button id="f-strong" data-f="strong" aria-pressed="false">Сильные</button>
+    <button id="f-mid" data-f="mid" aria-pressed="false">Средние</button>
+    <button id="f-risk" data-f="risk" aria-pressed="false">В зоне риска</button>
+  </div>
+  <div class="tbl-wrap"><table id="tbl"><thead><tr>
+    <th data-k="name">Филиал</th><th data-k="status">Статус</th><th data-k="rating">Рейтинг</th><th data-k="ratings">Оценок</th><th data-k="reviews">Отзывов</th><th data-k="photos">Фото</th><th data-k="posts">Публикаций за год</th><th data-k="stories">Сторис</th><th data-k="zshare">Доля в зоне</th><th data-k="leader">Лидер зоны</th><th data-k="visits">Переходы</th><th data-k="phone">Звонки</th><th data-k="route">Маршруты</th><th data-k="site">На сайт</th><th data-k="conv">Конверсия в действие</th>
+  </tr></thead><tbody></tbody></table></div>
+  <p class="note" id="tblNote"></p>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 3</span><h2>Состояние карточек</h2><p>Сколько из 32 офлайн-карточек проседает по каждому фактору ранжирования в Картах.</p></div>
+  <div class="grid2">
+    <div class="panel"><h3>Пробелы в наполнении</h3><div class="bars" id="gapBars"></div></div>
+    <div class="panel"><h3>Рейтинг и число оценок по филиалам</h3><div class="chart" id="chScatter"></div></div>
+  </div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 4</span><h2>Конкуренты забирают внимание в Картах</h2><p>Блок «Конкуренты» Яндекс Бизнеса по каждому из 32 филиалов, неделя 28.09–04.10.2026: доля переходов среди похожих автошкол в зоне филиала.</p></div>
+  <div class="grid2">
+    <div class="panel"><h3>Доля филиала и лидера в зоне, %</h3><div class="legend" id="lgZone"></div><div class="zl" id="zoneBars"></div></div>
+    <div style="display:grid;gap:20px;align-content:start;min-width:0">
+      <div class="panel"><h3>Кто чаще всего обходит филиалы сети</h3><div class="sub">Число зон, где конкурент в топе, и его средняя доля там</div><div class="bars" id="compTop"></div></div>
+      <div class="panel"><h3>Филиал Авто-Лады против конкурента в его зоне</h3><div class="sub">Медианные значения по 32 филиалам и 124 карточкам конкурентов</div><div class="duel" id="duel"></div></div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:20px"><h3>Брендовый спрос, запросов за 12 месяцев</h3><div class="sub">Свердловская область, окт 2025 — сен 2026, изменение к прошлому году</div><div class="bars" id="brandBars"></div></div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 5</span><h2>Как клиенты находят филиалы</h2><p>Геовизор кабинета: последние визиты во все 32 карточки, 1 591 визит, сентябрь — октябрь 2026.</p></div>
+  <div class="grid2">
+    <div style="display:grid;gap:20px;align-content:start;min-width:0"><div class="panel"><h3>Источник визита</h3><div class="bars" id="geoBars"></div></div><div class="panel"><h3>Что уточняют в общих запросах</h3><div class="bars" id="geoThemes"></div></div></div>
+    <div class="panel"><h3>Брендовый спрос: Авто-Лада и Вектор по месяцам</h3><div class="legend" id="lgBrand"></div><div class="chart" id="chBrand"></div></div>
+  </div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 6</span><h2>Спрос на рынке</h2><p>Яндекс Вордстат, все устройства, октябрь 2024 — сентябрь 2026.</p></div>
+  <div class="grid2">
+    <div class="panel"><h3>Запрос «автошкола» по месяцам</h3><div class="legend" id="lgMarket"></div><div class="chart" id="chMarket"></div></div>
+    <div class="panel"><h3>Что растёт и что падает</h3><div class="sub">Свердловская область, год к году (окт 25 — сен 26 против окт 24 — сен 25)</div><div class="div" id="yoy"></div></div>
+  </div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 7</span><h2>Сезонность: когда какой спрос на пике</h2><p>Свердловская область, окт 2025 — сен 2026, запросов в месяц.</p></div>
+  <div class="panel scroll"><div class="heat" id="heat"></div></div>
+  <div class="grid3" style="margin-top:20px" id="phases"></div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 8</span><h2>Новые правила 2026 года — готовые поводы для контента</h2><p>Приказ Минпросвещения о программах подготовки водителей, переход с 1 марта по 1 сентября 2026.</p></div>
+  <div class="law">
+    <div class="it"><b>42 часа</b><span>практики на категорию B вместо 38: больше парковки и перестроений в городе</span></div>
+    <div class="it"><b>Онлайн-теория</b><span>можно проходить дистанционно с идентификацией, очный формат сохраняется</span></div>
+    <div class="it"><b>Модули</b><span>новую категорию можно открыть без повторного полного курса</span></div>
+    <div class="it"><b>На предприятии</b><span>вождение грузовика и автобуса можно осваивать в транспортных компаниях по договору с автошколой</span></div>
+  </div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <div class="sh"><span class="km">КМ 9</span><h2>Маршрут роста</h2><p>Что делаем с сетью, по шагам и по сезонам спроса.</p></div>
+  <div class="road">
+    <div class="st"><div class="when">Месяц 1</div><h3>Навести порядок в 32 карточках</h3><ul><li>Заполнить карточки без рейтинга и с 1–5 фото</li><li>Единые часы, телефоны, услуги и категории «мотошкола»</li><li>Ответы на все отзывы, отработка негатива на 9 филиалах ниже 4,0</li></ul></div>
+    <div class="st"><div class="when">Каждый месяц</div><h3>Публикации и сторис во всех филиалах</h3><ul><li>SEO-новости под растущие запросы: категории C и D, медкомиссия, вычет</li><li>Сторис с автодромом, автопарком, инструкторами</li><li>Единый контент-план на сеть с адаптацией под район и город филиала</li></ul></div>
+    <div class="st"><div class="when">Ноябрь — февраль</div><h3>Зимний спрос</h3><ul><li>Снегоход и трактор: пик в декабре — январе</li><li>Акция «категория A + снегоход» заранее, до весеннего пика мото</li><li>Налоговый вычет за обучение: пик в феврале — апреле</li></ul></div>
+    <div class="st"><div class="when">Март — август</div><h3>Сезон мото и прав</h3><ul><li>Категория A и мотошкола: рост с марта, пик в апреле — июне</li><li>Квадроцикл и лодка: май — июль</li><li>Медкомиссия на права: апрель — август, связка с записью на обучение</li></ul></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap" style="display:grid;gap:6px">
+  <div>Источники: кабинет Яндекс Бизнеса сети «Авто-Лада» (статистика филиалов, «Конкуренты», геовизор), публичные карточки Яндекс Карт на 20.10.2026, Яндекс Вордстат (регионы Екатеринбург и Свердловская область), сайт <a href="https://avto-lada.com" target="_blank" rel="noopener">avto-lada.com</a>, <a href="https://harant.ru/blog/yuridicheskie-novosti/novye-pravila-obucheniya-v-avtoshkolah-chto-izmenilos-s-1-marta-2026-goda/" target="_blank" rel="noopener">Гарант</a>, <a href="https://profile.ru/?p=1750490" target="_blank" rel="noopener">Профиль</a>.</div>
+  <div>Кабинет Яндекс Бизнеса работает в режиме ограниченной функциональности, последние обработанные данные статистики — 06.10.2026. Онлайн-карточка без адреса в сравнение не включена.</div>
+</div></footer>
+
+<div class="tip" id="tip"></div>
+
+<script>
+const D = {"branches": [{"id": "1007050859", "name": "8 Марта 4", "city": "Екатеринбург", "visits": 9616, "disc": 7705, "phone": 509, "route": 489, "site": 220, "act": 1218, "conv": 12.7, "rating": 4.7, "ratings": 140, "reviews": 85, "photos": 56, "posts": 0, "lastpost": "2025-09-09", "stories": true, "verified": false, "award": "2026", "status": "strong", "anomaly": false, "monthly": [318, 269, 667, 1194, 973, 686, 853, 735, 647, 1024, 1529, 721], "zshare": 9, "zrank": 4, "zn": 10, "leader": "Вектор", "leadpct": 42, "zr": 1}, {"id": "218046426141", "name": "Красных Героев 20к1", "city": "Берёзовский", "visits": 5837, "disc": 3742, "phone": 411, "route": 647, "site": 385, "act": 1443, "conv": 24.7, "rating": 4.4, "ratings": 142, "reviews": 64, "photos": 19, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "mid", "anomaly": false, "monthly": [889, 835, 650, 577, 368, 330, 370, 348, 387, 420, 402, 261], "zshare": 23, "zrank": 2, "zn": 8, "leader": "СТШ ДОСААФ им. Михаила Чуркина", "leadpct": 44, "zr": 10}, {"id": "85058372564", "name": "Черняховского 69Д (автодром Химмаш)", "city": "Екатеринбург", "visits": 4292, "disc": 2518, "phone": 35, "route": 288, "site": 28, "act": 351, "conv": 8.2, "rating": 4.4, "ratings": 522, "reviews": 164, "photos": 17, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [414, 311, 338, 275, 257, 368, 314, 422, 448, 437, 413, 295], "zshare": 15, "zrank": 2, "zn": 10, "leader": "Калина-Авто", "leadpct": 19, "zr": 5}, {"id": "122956603045", "name": "Академика Парина 46/5", "city": "Екатеринбург", "visits": 2699, "disc": 1474, "phone": 111, "route": 157, "site": 190, "act": 458, "conv": 17.0, "rating": 4.7, "ratings": 55, "reviews": 39, "photos": 23, "posts": 1, "lastpost": "2025-11-24", "stories": true, "verified": false, "award": null, "status": "strong", "anomaly": false, "monthly": [198, 201, 185, 223, 258, 264, 206, 283, 225, 225, 197, 234], "zshare": 5, "zrank": 8, "zn": 10, "leader": "Центр-А. В. С.", "leadpct": 35, "zr": 5}, {"id": "85913069052", "name": "Кузнецова 11", "city": "Заречный", "visits": 2568, "disc": 1913, "phone": 318, "route": 122, "site": 160, "act": 600, "conv": 23.4, "rating": 3.7, "ratings": 33, "reviews": 9, "photos": 3, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [227, 146, 134, 246, 187, 219, 232, 211, 262, 198, 240, 266], "zshare": 51, "zrank": 1, "zn": 5, "leader": "Авто-Лада", "leadpct": 51, "zr": 10}, {"id": "1002637206", "name": "Космонавтов 50А", "city": "Екатеринбург", "visits": 1751, "disc": 1034, "phone": 77, "route": 191, "site": 132, "act": 400, "conv": 22.8, "rating": 3.7, "ratings": 16, "reviews": 7, "photos": 42, "posts": 5, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "risk", "anomaly": false, "monthly": [210, 141, 98, 132, 180, 193, 150, 160, 119, 122, 104, 142], "zshare": 5, "zrank": 6, "zn": 9, "leader": "Прайм-авто", "leadpct": 38, "zr": 1}, {"id": "180533402262", "name": "Торговая 2", "city": "Екатеринбург", "visits": 1590, "disc": 839, "phone": 159, "route": 99, "site": 89, "act": 347, "conv": 21.8, "rating": 4.2, "ratings": 13, "reviews": 2, "photos": 23, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "mid", "anomaly": false, "monthly": [110, 132, 104, 130, 115, 150, 149, 120, 108, 138, 144, 190], "zshare": 6, "zrank": 7, "zn": 10, "leader": "Точка вождения", "leadpct": 26, "zr": 5}, {"id": "197607185669", "name": "Пархоменко 9", "city": "Нижний Тагил", "visits": 1461, "disc": 911, "phone": 101, "route": 72, "site": 61, "act": 234, "conv": 16.0, "rating": 5.0, "ratings": 62, "reviews": 30, "photos": 38, "posts": 0, "lastpost": "2024-12-10", "stories": true, "verified": true, "award": "2026", "status": "strong", "anomaly": false, "monthly": [122, 145, 87, 128, 129, 118, 117, 112, 132, 99, 142, 130], "zshare": 7, "zrank": 7, "zn": 10, "leader": "Вектор", "leadpct": 24, "zr": 5}, {"id": "190002043899", "name": "Краснолесья 12А", "city": "Екатеринбург", "visits": 1453, "disc": 680, "phone": 71, "route": 55, "site": 125, "act": 251, "conv": 17.3, "rating": 4.8, "ratings": 19, "reviews": 15, "photos": 24, "posts": 1, "lastpost": "2025-11-24", "stories": true, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [127, 89, 78, 97, 114, 126, 131, 179, 174, 113, 92, 133], "zshare": 2, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 32, "zr": 5}, {"id": "1030461532", "name": "Сулимова 27", "city": "Екатеринбург", "visits": 1300, "disc": 831, "phone": 75, "route": 51, "site": 90, "act": 216, "conv": 16.6, "rating": 4.0, "ratings": 28, "reviews": 11, "photos": 22, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "mid", "anomaly": false, "monthly": [119, 62, 61, 95, 120, 152, 101, 98, 99, 126, 125, 142], "zshare": 1, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 44, "zr": 5}, {"id": "83216996067", "name": "Репина 84", "city": "Екатеринбург", "visits": 1211, "disc": 611, "phone": 46, "route": 67, "site": 160, "act": 273, "conv": 22.5, "rating": 4.7, "ratings": 13, "reviews": 12, "photos": 9, "posts": 1, "lastpost": "2025-11-24", "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [79, 54, 83, 83, 135, 111, 101, 107, 120, 89, 136, 113], "zshare": 0.9, "zrank": 10, "zn": 10, "leader": "Вектор", "leadpct": 22, "zr": 5}, {"id": "1254108937", "name": "Белореченская 10", "city": "Екатеринбург", "visits": 1148, "disc": 641, "phone": 49, "route": 51, "site": 87, "act": 187, "conv": 16.3, "rating": 3.3, "ratings": 12, "reviews": 6, "photos": 27, "posts": 5, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "risk", "anomaly": false, "monthly": [83, 71, 82, 98, 88, 110, 105, 92, 94, 77, 110, 138], "zshare": 1, "zrank": 9, "zn": 9, "leader": "Авто-Мастер", "leadpct": 52, "zr": 5}, {"id": "115960730895", "name": "Шейнкмана 32", "city": "Екатеринбург", "visits": 1145, "disc": 566, "phone": 46, "route": 117, "site": 75, "act": 238, "conv": 20.8, "rating": 3.4, "ratings": 5, "reviews": 1, "photos": 18, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [91, 78, 82, 91, 76, 96, 108, 98, 120, 150, 75, 80], "zshare": 0.9, "zrank": 10, "zn": 10, "leader": "Вектор", "leadpct": 38, "zr": 1}, {"id": "107942391134", "name": "Уктус", "city": "Екатеринбург", "visits": 1089, "disc": 617, "phone": 29, "route": 27, "site": 88, "act": 144, "conv": 13.2, "rating": 3.8, "ratings": 6, "reviews": 3, "photos": 28, "posts": 1, "lastpost": "2025-11-24", "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [85, 70, 71, 68, 79, 104, 96, 135, 108, 94, 75, 104], "zshare": 0.7, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 27, "zr": 5}, {"id": "193996026523", "name": "Куйбышева 139", "city": "Екатеринбург", "visits": 1022, "disc": 450, "phone": 34, "route": 33, "site": 54, "act": 121, "conv": 11.8, "rating": 4.7, "ratings": 38, "reviews": 29, "photos": 36, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "strong", "anomaly": false, "monthly": [63, 55, 56, 63, 96, 80, 127, 75, 111, 83, 92, 121], "zshare": 0.3, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 43, "zr": 5}, {"id": "171705420833", "name": "Амундсена 74", "city": "Екатеринбург", "visits": 979, "disc": 627, "phone": 31, "route": 47, "site": 91, "act": 169, "conv": 17.3, "rating": 4.3, "ratings": 5, "reviews": 5, "photos": 20, "posts": 1, "lastpost": "2025-11-24", "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [78, 73, 65, 73, 74, 81, 69, 105, 115, 86, 76, 84], "zshare": 1, "zrank": 9, "zn": 9, "leader": "Свердловская областная автошкола", "leadpct": 31, "zr": 5}, {"id": "242480679723", "name": "Свердлова 64", "city": "Екатеринбург", "visits": 971, "disc": 556, "phone": 60, "route": 60, "site": 103, "act": 223, "conv": 23.0, "rating": 4.3, "ratings": 8, "reviews": 5, "photos": 11, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [68, 49, 70, 99, 68, 92, 85, 104, 66, 78, 90, 102], "zshare": 0.8, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 46, "zr": 5}, {"id": "1276695427", "name": "Титова 11", "city": "Екатеринбург", "visits": 936, "disc": 526, "phone": 30, "route": 61, "site": 72, "act": 163, "conv": 17.4, "rating": 4.2, "ratings": 25, "reviews": 8, "photos": 28, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "mid", "anomaly": false, "monthly": [123, 96, 83, 100, 108, 113, 115, 138, 47, 0, 0, 13], "zshare": 1, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 27, "zr": 5}, {"id": "162759131917", "name": "Спортивная 6А", "city": "Берёзовский", "visits": 885, "disc": 571, "phone": 64, "route": 31, "site": 49, "act": 144, "conv": 16.3, "rating": 3.9, "ratings": 8, "reviews": 3, "photos": 5, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [66, 52, 36, 77, 78, 79, 97, 88, 68, 111, 74, 59], "zshare": 4, "zrank": 6, "zn": 8, "leader": "СТШ ДОСААФ им. Михаила Чуркина", "leadpct": 47, "zr": 10}, {"id": "152010468187", "name": "Университетский 9к1", "city": "Екатеринбург", "visits": 858, "disc": 385, "phone": 26, "route": 23, "site": 43, "act": 92, "conv": 10.7, "rating": null, "ratings": 0, "reviews": 0, "photos": 25, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [72, 63, 73, 60, 92, 69, 86, 85, 70, 75, 60, 53], "zshare": 1, "zrank": 10, "zn": 10, "leader": "Точка вождения", "leadpct": 35, "zr": 1}, {"id": "1213546192", "name": "Софьи Перовской 111", "city": "Екатеринбург", "visits": 762, "disc": 404, "phone": 31, "route": 14, "site": 30, "act": 75, "conv": 9.8, "rating": 4.0, "ratings": 25, "reviews": 4, "photos": 10, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [60, 45, 78, 67, 64, 61, 80, 60, 63, 73, 75, 36], "zshare": 0.9, "zrank": 10, "zn": 10, "leader": "Вектор", "leadpct": 26, "zr": 5}, {"id": "41991722061", "name": "Ленина 117", "city": "Большой Исток", "visits": 666, "disc": 458, "phone": 58, "route": 13, "site": 55, "act": 126, "conv": 18.9, "rating": 3.8, "ratings": 8, "reviews": 2, "photos": 4, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [49, 51, 28, 48, 61, 55, 66, 46, 86, 69, 61, 46], "zshare": 4, "zrank": 10, "zn": 10, "leader": "Калина-Авто", "leadpct": 17, "zr": 10}, {"id": "1017447852", "name": "Первомайская 73", "city": "Екатеринбург", "visits": 665, "disc": 361, "phone": 12, "route": 19, "site": 33, "act": 64, "conv": 9.6, "rating": 3.9, "ratings": 5, "reviews": 3, "photos": 13, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [86, 57, 49, 40, 74, 66, 45, 53, 47, 43, 47, 58], "zshare": 0.5, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 63, "zr": 1}, {"id": "1738966032", "name": "Фролова 3", "city": "Екатеринбург", "visits": 665, "disc": 349, "phone": 30, "route": 27, "site": 105, "act": 162, "conv": 24.4, "rating": 4.4, "ratings": 15, "reviews": 11, "photos": 11, "posts": 1, "lastpost": "2025-11-24", "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [0, 31, 38, 52, 75, 94, 54, 67, 71, 70, 57, 56], "zshare": 0.8, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 50, "zr": 5}, {"id": "1216928198", "name": "Ильича 48Б", "city": "Екатеринбург", "visits": 655, "disc": 356, "phone": 5, "route": 1, "site": 11, "act": 17, "conv": 2.6, "rating": null, "ratings": 0, "reviews": 1, "photos": 9, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [83, 63, 34, 52, 82, 53, 62, 66, 43, 58, 41, 18], "zshare": 0.9, "zrank": 10, "zn": 10, "leader": "Прайм-авто", "leadpct": 31, "zr": 1}, {"id": "1081229469", "name": "Билимбаевская 26", "city": "Екатеринбург", "visits": 518, "disc": 259, "phone": 36, "route": 61, "site": 93, "act": 190, "conv": 36.7, "rating": 3.9, "ratings": 18, "reviews": 6, "photos": 17, "posts": 5, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "risk", "anomaly": false, "monthly": [0, 0, 0, 0, 0, 0, 39, 93, 116, 94, 97, 79], "zshare": 2, "zrank": 10, "zn": 10, "leader": "Ultimate Drift School", "leadpct": 23, "zr": 5}, {"id": "86375473099", "name": "Орджоникидзе 19Б", "city": "Берёзовский", "visits": 490, "disc": 295, "phone": 12, "route": 19, "site": 34, "act": 65, "conv": 13.3, "rating": null, "ratings": 0, "reviews": 0, "photos": 2, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [32, 18, 20, 43, 34, 43, 43, 52, 42, 59, 59, 45], "zshare": 1, "zrank": 10, "zn": 10, "leader": "Прайм-авто", "leadpct": 41, "zr": 10}, {"id": "1235558572", "name": "Ленина 12А", "city": "Горный Щит", "visits": 387, "disc": 204, "phone": 33, "route": 4, "site": 51, "act": 88, "conv": 22.7, "rating": 4.0, "ratings": 5, "reviews": 0, "photos": 1, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": false, "monthly": [25, 29, 19, 10, 23, 29, 54, 48, 39, 48, 38, 25], "zshare": 5, "zrank": 8, "zn": 10, "leader": "Профессионал", "leadpct": 28, "zr": 10}, {"id": "207416241030", "name": "Гражданская 6", "city": "Екатеринбург", "visits": 331, "disc": 180, "phone": 3, "route": 8, "site": 41, "act": 52, "conv": 15.7, "rating": null, "ratings": 0, "reviews": 0, "photos": 12, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [26, 23, 22, 24, 26, 34, 45, 39, 28, 16, 21, 27], "zshare": 0.2, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 48, "zr": 5}, {"id": "55853212471", "name": "Выйская 70", "city": "Нижний Тагил", "visits": 158, "disc": 74, "phone": 6, "route": 5, "site": 6, "act": 17, "conv": 10.8, "rating": null, "ratings": 0, "reviews": 0, "photos": 3, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "risk", "anomaly": false, "monthly": [8, 14, 5, 15, 11, 9, 13, 16, 15, 7, 17, 28], "zshare": 0.8, "zrank": 10, "zn": 10, "leader": "Вектор", "leadpct": 22, "zr": 5}, {"id": "230064505969", "name": "1 Мая 57/2", "city": "Арамиль", "visits": 121, "disc": 68, "phone": 8, "route": 2, "site": 2, "act": 12, "conv": 9.9, "rating": null, "ratings": 0, "reviews": 0, "photos": 12, "posts": 4, "lastpost": "2026-08-28", "stories": true, "verified": true, "award": null, "status": "risk", "anomaly": false, "monthly": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 94], "zshare": 10, "zrank": 5, "zn": 8, "leader": "Калина-Авто", "leadpct": 23, "zr": 10}, {"id": "1283610068", "name": "Высоцкого 14", "city": "Екатеринбург", "visits": 21, "disc": 13, "phone": 116, "route": 63, "site": 343, "act": 522, "conv": null, "rating": 4.3, "ratings": 11, "reviews": 3, "photos": 9, "posts": 0, "lastpost": null, "stories": false, "verified": false, "award": null, "status": "mid", "anomaly": true, "monthly": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21], "zshare": 2, "zrank": 10, "zn": 10, "leader": "Авто-Мастер", "leadpct": 54, "zr": 5}], "months": ["окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "chain": {"visits": [3911, 3323, 3396, 4261, 4045, 3986, 4113, 4235, 4071, 4282, 4718, 3915], "calls": [199, 128, 118, 211, 236, 213, 218, 270, 256, 283, 268, 232], "routes": [284, 222, 192, 206, 231, 237, 184, 222, 255, 309, 287, 295], "site": [246, 201, 165, 304, 277, 293, 326, 316, 280, 236, 217, 245]}, "wm": ["окт 24", "ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "yoy": [{"q": "медкомиссия на права", "y1": 42071, "y2": 52784, "ch": 25.5, "last": 4670, "label": "Медкомиссия на права"}, {"q": "вычет за автошколу", "y1": 1328, "y2": 1922, "ch": 44.7, "last": 143, "label": "Налоговый вычет за обучение"}, {"q": "права на трактор", "y1": 8005, "y2": 9338, "ch": 16.7, "last": 713, "label": "Права на трактор"}, {"q": "права на снегоход", "y1": 3320, "y2": 3839, "ch": 15.6, "last": 195, "label": "Права на снегоход"}, {"q": "права категории с", "y1": 23308, "y2": 26624, "ch": 14.2, "last": 2338, "label": "Права категории C (грузовик)"}, {"q": "права категории д", "y1": 3293, "y2": 3764, "ch": 14.3, "last": 392, "label": "Права категории D (автобус)"}, {"q": "обучение вождению", "y1": 9595, "y2": 10241, "ch": 6.7, "last": 865, "label": "Обучение вождению"}, {"q": "категория а", "y1": 125053, "y2": 132245, "ch": 5.8, "last": 10992, "label": "Категория A"}, {"q": "права на квадроцикл", "y1": 18395, "y2": 19504, "ch": 6.0, "last": 1591, "label": "Права на квадроцикл"}, {"q": "пересдача экзамена гибдд", "y1": 3583, "y2": 3813, "ch": 6.4, "last": 358, "label": "Пересдача экзамена ГИБДД"}, {"q": "уроки вождения", "y1": 8080, "y2": 8477, "ch": 4.9, "last": 825, "label": "Уроки вождения"}, {"q": "инструктор по вождению", "y1": 18984, "y2": 19605, "ch": 3.3, "last": 1745, "label": "Инструктор по вождению"}, {"q": "права на мотоцикл", "y1": 26271, "y2": 26377, "ch": 0.4, "last": 2354, "label": "Права на мотоцикл"}, {"q": "автошкола", "y1": 641677, "y2": 635739, "ch": -0.9, "last": 54900, "label": "Автошкола (общий спрос)"}, {"q": "обучение бпла", "y1": 6785, "y2": 6506, "ch": -4.1, "last": 492, "label": "Обучение БПЛА"}, {"q": "права на лодку", "y1": 5013, "y2": 4799, "ch": -4.3, "last": 317, "label": "Права на лодку"}, {"q": "восстановление навыков вождения", "y1": 613, "y2": 566, "ch": -7.7, "last": 60, "label": "Восстановление навыков"}, {"q": "автошкола автомат", "y1": 1609, "y2": 1480, "ch": -8.0, "last": 143, "label": "Автошкола на автомате"}, {"q": "онлайн автошкола", "y1": 3943, "y2": 3571, "ch": -9.4, "last": 237, "label": "Онлайн-автошкола"}, {"q": "автошкола рассрочка", "y1": 573, "y2": 487, "ch": -15.0, "last": 72, "label": "Автошкола в рассрочку"}, {"q": "автошкола цена", "y1": 22867, "y2": 18827, "ch": -17.7, "last": 1674, "label": "Автошкола цена"}, {"q": "оператор бпла обучение", "y1": 3225, "y2": 2539, "ch": -21.3, "last": 193, "label": "Оператор БПЛА"}, {"q": "категория е прицеп", "y1": 1412, "y2": 1039, "ch": -26.4, "last": 96, "label": "Категория E (прицеп)"}, {"q": "контраварийная подготовка", "y1": 341, "y2": 252, "ch": -26.1, "last": 25, "label": "Контраварийная подготовка"}, {"q": "дистанционное обучение автошкола", "y1": 463, "y2": 336, "ch": -27.4, "last": 18, "label": "Дистанционное обучение"}], "heat": [{"label": "Мотоцикл (A)", "v": [1579, 1170, 850, 1098, 1043, 2091, 3105, 3585, 3106, 3318, 3078, 2354]}, {"label": "Квадроцикл", "v": [1141, 992, 946, 1308, 1378, 1720, 2024, 2071, 2329, 2103, 1901, 1591]}, {"label": "Лодка", "v": [359, 238, 184, 279, 301, 372, 455, 509, 607, 665, 513, 317]}, {"label": "Снегоход", "v": [288, 379, 502, 918, 592, 314, 134, 120, 142, 129, 126, 195]}, {"label": "Трактор", "v": [686, 944, 1132, 729, 803, 914, 826, 648, 653, 609, 681, 713]}, {"label": "Медкомиссия", "v": [3570, 3332, 3140, 4008, 4086, 5122, 5197, 4520, 5003, 5152, 4984, 4670]}, {"label": "Категория C", "v": [2716, 2246, 1795, 1887, 1902, 2190, 2472, 2173, 2290, 2454, 2161, 2338]}, {"label": "Автошкола", "v": [56323, 46701, 39633, 49232, 48404, 59399, 58149, 53571, 58650, 56150, 54627, 54900]}], "brands": [{"name": "Вектор", "y1": 43024, "y2": 48595, "ch": 12.9}, {"name": "Свердловская автошкола", "y1": 33498, "y2": 38077, "ch": 13.7}, {"name": "ДОСААФ", "y1": 13493, "y2": 12831, "ch": -4.9}, {"name": "Авто-Лада", "y1": 11161, "y2": 11895, "us": true, "ch": 6.6}, {"name": "Курсант", "y1": 6952, "y2": 8536, "ch": 22.8}, {"name": "Точка вождения", "y1": 0, "y2": 5858, "ch": null}, {"name": "Автостатус", "y1": 4273, "y2": 4794, "ch": 12.2}, {"name": "Экстрим", "y1": 3156, "y2": 3654, "ch": 15.8}, {"name": "Перекрёсток", "y1": 1309, "y2": 3503, "ch": 167.6}, {"name": "Клаксон", "y1": 3353, "y2": 3301, "ch": -1.6}, {"name": "Мотоакадемия", "y1": 4493, "y2": 3277, "ch": -27.1}, {"name": "Империя вождения", "y1": 2263, "y2": 2731, "ch": 20.7}, {"name": "Драйвер", "y1": 2015, "y2": 2676, "ch": 32.8}, {"name": "Формула", "y1": 1959, "y2": 1976, "ch": 0.9}], "market": {"ekb": [25939, 27274, 22047, 32500, 29216, 31771, 30612, 29236, 34707, 39488, 37126, 33357, 32301, 25917, 21828, 26322, 26839, 34683, 32006, 29813, 31822, 28800, 27481, 29479], "obl": [46089, 46775, 38100, 54917, 50121, 54377, 53044, 49952, 58758, 67626, 64255, 57663, 56323, 46701, 39633, 49232, 48404, 59399, 58149, 53571, 58650, 56150, 54627, 54900], "moto": [1236, 1128, 903, 1291, 1291, 2120, 2793, 3238, 3630, 3353, 3159, 2129, 1579, 1170, 850, 1098, 1043, 2091, 3105, 3585, 3106, 3318, 3078, 2354], "cat": [14232, 13314, 12404, 14039, 14656, 16491, 17753, 17399, 20050, 20597, 19154, 17254, 18141, 15091, 13433, 14060, 14476, 17786, 19526, 18699, 19774, 19353, 17571, 17647], "med": [2194, 2020, 1741, 3042, 3301, 3500, 4066, 3325, 4104, 5448, 6008, 3322, 3570, 3332, 3140, 4008, 4086, 5122, 5197, 4520, 5003, 5152, 4984, 4670]}, "comp": {"8 Марта 4 (неделя 28.09-04.10, радиус 1 км)": [["Вектор", 42, 5.0, 1095, 905, 478], ["Перекрёсток", 15, 4.9, 110, 79, 60], ["МотоАкадемия", 12, 5.0, 152, 101, 99], ["Авто-Лада 8 Марта", 9, 4.7, 139, 83, 57], ["ДОСААФ ЕКБ", 6, 3.9, 13, 2, 8], ["Формула", 6, 5.0, 82, 70, 60], ["Курсант", 5, 5.0, 129, 112, 67], ["Свердловская автошкола", 3, 5.0, 126, 86, 122], ["Авто-Лада (др. филиал)", 1, 3.4, 5, 1, 19]], "8 Марта: discovery рядом 542, лидер 212, Авто-Лада 46 (8%)": 1, "Берёзовский Красных Героев (радиус 10 км)": [["СТШ ДОСААФ им. Чуркина", 44, 4.9, 196, 91, 40], ["Авто-Лада Красных Героев", 23, 4.4, 140, 63, 20], ["АСпорт", 12, 4.4, 66, 36, 62], ["Авента", 9, 3.7, 36, 12, 7], ["Зачёт", 4, 4.4, 12, 5, 7], ["Авто-Лада Спортивная", 4, 3.9, 8, 3, 6], ["Авто-Лада Орджоникидзе", 3, null, 0, 0, 3], ["Клаксон", 2, 3.5, 15, 4, 5]], "Н.Тагил Пархоменко (радиус 5 км)": [["Вектор", 24, 5.0, 429, 393, 454], ["РусАвтоШкола", 13, 4.7, 56, 24, 14], ["Авто-Премиум", 13, 4.2, 90, 43, 29], ["Джек", 11, 5.0, 163, 94, 113], ["Авангард", 9, 4.9, 107, 74, 67], ["Академия-Авто", 8, 4.7, 88, 53, 31], ["Авто-Лада Пархоменко", 7, 5.0, 62, 30, 39], ["Авто-Премиум 2", 6, 4.5, 37, 28, 41], ["Демидовские автошколы", 6, 4.9, 93, 74, 15], ["Люкс", 3, 4.5, 32, 9, 39]]}, "lada": [873, 602, 620, 930, 898, 1064, 915, 875, 1099, 1152, 1058, 1075, 1099, 851, 752, 948, 1026, 1059, 1008, 1069, 995, 985, 1049, 1054], "vector": [2768, 2614, 2382, 3661, 3267, 3462, 3594, 3578, 4056, 4578, 4614, 4450, 4798, 3798, 2909, 3903, 3669, 4458, 4587, 4317, 4595, 3961, 3853, 3747], "geo": [["Поиск по названию «Авто-Лада»", 377], ["Общий запрос «автошкола» и уточнения", 603], ["Клик по метке на карте", 229], ["Переход из Поиска и по ссылкам", 353], ["Похожие места", 20], ["Поиск конкурентов", 9]], "compTop": [["Авто-Мастер", 11, 47.4, 16.3], ["Вектор", 21, 18.6, 12.2], ["Точка вождения", 19, 12.9, 7.7], ["Свердловская автошкола", 17, 14.0, 7.4], ["Прайм-авто", 9, 21.4, 6.0], ["СТШ ДОСААФ им. Михаила Чуркина", 3, 35.7, 3.3], ["Центр-А. В. С.", 6, 17.7, 3.3], ["Профессионал", 7, 11.3, 2.5], ["Авто-Премиум", 7, 10.7, 2.3], ["Свердловская областная автошкола", 3, 25.0, 2.3], ["Перекрёсток", 7, 10.3, 2.2], ["Курсант", 10, 7.0, 2.2]], "med": {"us": {"rating": 4.2, "ratings": 12.5, "reviews": 5, "photos": 17}, "them": {"rating": 4.9, "ratings": 56.5, "reviews": 39.5, "photos": 43}}, "geoThemes": [["Город области", 31], ["Район или адрес", 28], ["Цена, рассрочка", 15], ["Категория A/A1, мото", 8], ["Категории C, D, трактор", 6], ["Рейтинг, «хорошая автошкола»", 4]]};
+const $ = s => document.querySelector(s);
+const fmt = n => n==null ? '—' : Number(n).toLocaleString('ru-RU');
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const tip = $('#tip');
+function showTip(html, x, y){ tip.innerHTML = html; tip.style.display='block'; const w=tip.offsetWidth, h=tip.offsetHeight; let L=x+14, T=y+14; if(L+w>window.scrollX+document.documentElement.clientWidth-8) L=x-w-14; tip.style.left=L+'px'; tip.style.top=T+'px'; }
+function hideTip(){ tip.style.display='none'; }
+
+const B = D.branches;
+const tot = k => B.reduce((a,b)=>a+(b[k]||0),0);
+const chainVisits = D.chain.visits.reduce((a,b)=>a+b,0);
+const calls = D.chain.calls.reduce((a,b)=>a+b,0), routes=D.chain.routes.reduce((a,b)=>a+b,0), site=D.chain.site.reduce((a,b)=>a+b,0);
+const rated = B.filter(b=>b.rating);
+const wAvg = rated.reduce((a,b)=>a+b.rating*b.ratings,0)/rated.reduce((a,b)=>a+b.ratings,0);
+const top3 = B.slice(0,3).reduce((a,b)=>a+b.visits,0)/tot('visits');
+const below4 = B.filter(b=>b.rating && b.rating<4).length, norating = B.filter(b=>!b.rating).length;
+const noPosts = B.filter(b=>b.posts===0).length, noStories=B.filter(b=>!b.stories).length, fewPhotos=B.filter(b=>b.photos<10).length, fewRatings=B.filter(b=>b.ratings<10).length;
+
+// KPIs
+$('#kpis').innerHTML = [
+  [B.length,'офлайн-карточек сети на Картах'],
+  [fmt(chainVisits),'переходов в карточки за 12 месяцев'],
+  [fmt(calls+routes+site),'целевых действий: звонки, маршруты, сайт'],
+  [wAvg.toFixed(2).replace('.',','),'средний рейтинг, взвешенный по оценкам'],
+  ['1%','медианная доля филиала в трафике своей зоны',true]
+].map(([v,l,h])=>`<div class="kpi${h?' hot':''}"><b>${v}</b><span>${l}</span></div>`).join('');
+
+// findings
+$('#finds').innerHTML = [
+  ['bad', '1 из 32', 'филиал лидирует в своей зоне', 'Только Заречный. В 21 зоне карточка Авто-Лады последняя в списке конкурентов Яндекса.'],
+  ['bad', Math.round(top3*100)+'%', 'трафика сети приходится на 3 карточки', 'Остальные 29 филиалов делят между собой меньше 60% переходов.'],
+  ['bad', noPosts, 'филиалов без единой публикации за год', 'Ещё 6 публиковали 1 раз. Регулярный контент есть только у 9 карточек.'],
+  ['warn', below4+norating, 'карточек с рейтингом ниже 4,0 или без рейтинга', `${below4} ниже 4,0 и ${norating} без оценок. Карты показывают такие реже.`],
+  ['acc', '4,5×', 'меньше оценок у филиала, чем у конкурента рядом', 'Медиана: 12 оценок у филиала Авто-Лады против 57 у конкурентов в его зоне.'],
+  ['good', '+26%', 'рост запроса «медкомиссия на права» за год', 'Растут также категории C и D (+14%), трактор (+17%), снегоход (+16%), налоговый вычет (+45%).']
+].map(([c,b,t,d])=>`<div class="find ${c}"><div class="big num">${b}</div><div class="t">${t}</div><div class="d">${d}</div></div>`).join('');
+
+// status helpers
+const ST = {strong:['Сильная','good'], mid:['Средняя','warn'], risk:['Риск','bad']};
+const stColor = s => s==='strong'?css('--good'):s==='mid'?css('--warn'):css('--bad');
+
+// branch bars
+function bars(el, items, max){
+  max = max || Math.max(...items.map(i=>i.v));
+  el.innerHTML = items.map(i=>`<div class="bar${i.us?' us':''}" data-t="${encodeURIComponent(i.tip||'')}"><span class="l" title="${i.l}">${i.l}</span><span class="track"><span class="fill" style="width:${Math.max(.5,i.v/max*100)}%;background:${i.c}"></span></span><span class="v num">${i.vs!=null?i.vs:fmt(i.v)}</span></div>`).join('');
+  el.querySelectorAll('.bar').forEach(r=>{ const t=decodeURIComponent(r.dataset.t); if(!t) return; r.addEventListener('mousemove',e=>showTip(t,e.pageX,e.pageY)); r.addEventListener('mouseleave',hideTip); });
+}
+bars($('#branchBars'), B.filter(b=>!b.anomaly).map(b=>({l:(b.city!=='Екатеринбург'?b.city+', ':'')+b.name.replace(' (автодром Химмаш)',' (Химмаш)'), v:b.visits, c:stColor(b.status),
+  tip:`<b>${b.name}</b><div class="r"><span>Переходы</span><span>${fmt(b.visits)}</span></div><div class="r"><span>Звонки</span><span>${fmt(b.phone)}</span></div><div class="r"><span>Маршруты</span><span>${fmt(b.route)}</span></div><div class="r"><span>Рейтинг</span><span>${b.rating?String(b.rating).replace('.',','):'нет'}</span></div><div class="r"><span>Статус</span><span>${ST[b.status][0]}</span></div>`})));
+
+// line chart
+function line(el, labels, series, opt={}){
+  const W=560, H=opt.h||220, P={l:48,r:14,t:12,b:28};
+  const all=series.flatMap(s=>s.values); let max=Math.max(...all); const min=opt.min!=null?opt.min:0;
+  const step = niceStep(max-min); max = Math.ceil(max/step)*step;
+  const x=i=>P.l+i*(W-P.l-P.r)/(labels.length-1), y=v=>P.t+(H-P.t-P.b)*(1-(v-min)/(max-min));
+  let g='<g class="grid">'; for(let v=min; v<=max; v+=step){ g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}"/><text x="${P.l-8}" y="${y(v)+4}" text-anchor="end">${v>=1000?(v/1000).toLocaleString('ru-RU')+'k':v}</text>`;} g+='</g>';
+  const every = labels.length>14?3:2;
+  let xl = labels.map((l,i)=> i%every===0||i===labels.length-1 ? `<text x="${x(i)}" y="${H-8}" text-anchor="middle">${l}</text>`:'').join('');
+  let paths = series.map(s=>{ const d=s.values.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join(''); const area = s.area?`<path d="${d}L${x(s.values.length-1)},${y(min)}L${x(0)},${y(min)}Z" fill="${s.color}" opacity=".10"/>`:''; const last=s.values.length-1; return area+`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(last)}" cy="${y(s.values[last])}" r="4" fill="${s.color}" stroke="${css('--surface')}" stroke-width="2"/>`;}).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.aria||''}">${g}${xl}${paths}<line class="xh" x1="0" x2="0" y1="${P.t}" y2="${H-P.b}" stroke="${css('--ink-3')}" stroke-dasharray="3 3" style="display:none"/><rect x="${P.l}" y="${P.t}" width="${W-P.l-P.r}" height="${H-P.t-P.b}" fill="transparent"/></svg>`;
+  const svg=el.querySelector('svg'), xh=svg.querySelector('.xh');
+  svg.addEventListener('mousemove',e=>{ const r=svg.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width*W; let i=Math.round((px-P.l)/((W-P.l-P.r)/(labels.length-1))); i=Math.max(0,Math.min(labels.length-1,i)); xh.setAttribute('x1',x(i)); xh.setAttribute('x2',x(i)); xh.style.display='';
+    showTip(`<b>${labels[i]}</b>`+series.map(s=>`<div class="r"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${s.color};margin-right:6px"></i>${s.name}</span><span>${fmt(s.values[i])}</span></div>`).join(''), e.pageX, e.pageY); });
+  svg.addEventListener('mouseleave',()=>{xh.style.display='none';hideTip();});
+}
+function niceStep(range){ const raw=range/4; const p=Math.pow(10,Math.floor(Math.log10(raw))); const n=raw/p; return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p; }
+function legend(el, items){ el.innerHTML = items.map(i=>`<span><i style="background:${i.color}"></i>${i.name}</span>`).join(''); }
+
+line($('#chVisits'), D.months, [{name:'Переходы',values:D.chain.visits,color:css('--s-us'),area:true}], {aria:'Переходы в карточки сети по месяцам'});
+const acts=[{name:'Маршруты',values:D.chain.routes,color:css('--s-us')},{name:'Переходы на сайт',values:D.chain.site,color:css('--s-them')},{name:'Звонки',values:D.chain.calls,color:css('--s-3')}];
+legend($('#lgActs'), acts); line($('#chActs'), D.months, acts, {aria:'Действия по месяцам'});
+
+// table
+let sortK='visits', asc=false, filt='all';
+function cell(v, bad){ return v==null||v===0&&bad ? `<span class="miss">${v==null?'—':0}</span>` : fmt(v); }
+function renderTable(){
+  const rows = B.filter(b=>filt==='all'||b.status===filt).slice().sort((a,b)=>{ let A=a[sortK], Bv=b[sortK]; if(sortK==='status'){const o={strong:0,mid:1,risk:2}; A=o[A]; Bv=o[Bv];} if(typeof A==='boolean'){A=+A;Bv=+Bv;} if(A==null) A=-1; if(Bv==null) Bv=-1; if(typeof A==='string') return asc?A.localeCompare(Bv):Bv.localeCompare(A); return asc?A-Bv:Bv-A; });
+  $('#tbl tbody').innerHTML = rows.map(b=>`<tr>
+    <td><span class="name">${b.name}</span><span class="city">${b.city}${b.award?' · «Хорошее место 2026»':''}</span></td>
+    <td><span class="tag ${ST[b.status][1]}">${ST[b.status][0]}</span></td>
+    <td>${b.rating?`<span class="dot" style="background:${b.rating>=4.5?css('--good'):b.rating>=4?css('--warn'):css('--bad')}"></span>${String(b.rating).replace('.',',')}`:'<span class="miss">нет</span>'}</td>
+    <td>${cell(b.ratings,true)}</td><td>${cell(b.reviews,true)}</td><td>${b.photos<10?`<span class="miss">${b.photos}</span>`:b.photos}</td>
+    <td>${cell(b.posts,true)}</td><td>${b.stories?'есть':'<span class="miss">нет</span>'}</td><td>${b.zshare>=10?b.zshare:`<span class="miss">${String(b.zshare).replace('.',',')}</span>`}%</td><td style="text-align:left">${b.leader.startsWith('Авто-Лада')?'<b>Авто-Лада</b>':b.leader} · ${b.leadpct}%</td>
+    <td>${b.anomaly?'<span title="Статистика переходов в эту карточку начинается с сентября 2026">'+fmt(b.visits)+' *</span>':fmt(b.visits)}</td><td>${fmt(b.phone)}</td><td>${fmt(b.route)}</td><td>${fmt(b.site)}</td>
+    <td>${b.conv==null?'—':String(b.conv).replace('.',',')+'%'}</td></tr>`).join('');
+  document.querySelectorAll('#tbl th').forEach(th=>{ th.classList.toggle('sorted',th.dataset.k===sortK); th.classList.toggle('asc',th.dataset.k===sortK&&asc); });
+}
+document.querySelectorAll('#tbl th').forEach(th=>{ th.tabIndex=0; const go=()=>{ if(sortK===th.dataset.k) asc=!asc; else {sortK=th.dataset.k; asc=th.dataset.k==='name';} renderTable(); }; th.addEventListener('click',go); th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}}); });
+document.querySelectorAll('.filters button').forEach(bt=>bt.addEventListener('click',()=>{ filt=bt.dataset.f; document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===bt)); renderTable(); }));
+renderTable();
+$('#tblNote').textContent = 'Статус: «Сильная» — рейтинг от 4,5 и от 30 оценок; «Риск» — рейтинг ниже 4,0 или его нет. * Высоцкого, 14: переходы в карточку учитываются Яндексом только с сентября 2026, действия — за весь год.';
+
+// gaps
+const N=B.length;
+bars($('#gapBars'), [
+  {l:'Нет сторис', v:noStories},{l:'Нет публикаций за год', v:noPosts},{l:'Меньше 10 оценок', v:fewRatings},{l:'Рейтинг ниже 4,0', v:below4},{l:'Меньше 10 фото', v:fewPhotos},{l:'Нет рейтинга', v:norating}
+].map(i=>({...i, c:css('--bad'), vs:`${i.v} из ${N}`})), N);
+
+// scatter rating vs ratings (log x)
+(function(){ const el=$('#chScatter'); const W=560,H=260,P={l:40,r:16,t:12,b:34}; const pts=B.filter(b=>b.rating);
+  const lx=v=>Math.log10(v), xmin=0, xmax=Math.log10(600); const x=v=>P.l+(lx(v)-xmin)/(xmax-xmin)*(W-P.l-P.r); const y=v=>P.t+(H-P.t-P.b)*(1-(v-3)/(5-3));
+  let g='<g class="grid">'; [3,3.5,4,4.5,5].forEach(v=>g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}"/><text x="${P.l-8}" y="${y(v)+4}" text-anchor="end">${String(v).replace('.',',')}</text>`); [1,10,100,500].forEach(v=>g+=`<text x="${x(v)}" y="${H-12}" text-anchor="middle">${v}</text>`); g+='</g>';
+  const dots=pts.map(b=>`<circle data-id="${b.id}" cx="${x(Math.max(1,b.ratings))}" cy="${y(b.rating)}" r="7" fill="${stColor(b.status)}" stroke="${css('--surface')}" stroke-width="2" style="cursor:pointer"/>`).join('');
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Рейтинг и число оценок">${g}<text x="${W-P.r}" y="${H-0}" text-anchor="end">оценок, логарифмическая шкала</text>${dots}</svg>`;
+  el.querySelectorAll('circle').forEach(c=>{ const b=B.find(z=>z.id===c.dataset.id); c.addEventListener('mousemove',e=>showTip(`<b>${b.city}, ${b.name}</b><div class="r"><span>Рейтинг</span><span>${String(b.rating).replace('.',',')}</span></div><div class="r"><span>Оценок</span><span>${b.ratings}</span></div>`,e.pageX,e.pageY)); c.addEventListener('mouseleave',hideTip); });
+})();
+
+// zone bars: own vs leader
+legend($('#lgZone'),[{name:'Филиал Авто-Лады',color:css('--s-us')},{name:'Лидер зоны',color:css('--s-grey')}]);
+$('#zoneBars').innerHTML = B.slice().sort((a,b)=>b.zshare-a.zshare).map(b=>`<div class="zr" data-t="${encodeURIComponent(`<b>${b.city}, ${b.name}</b><div class="r"><span>Доля филиала</span><span>${String(b.zshare).replace('.',',')}%</span></div><div class="r"><span>Место в зоне</span><span>${b.zrank} из ${b.zn}</span></div><div class="r"><span>Лидер</span><span>${b.leader} · ${b.leadpct}%</span></div><div class="r"><span>Радиус зоны</span><span>${b.zr} км</span></div>`)}"><span class="l">${(b.city!=='Екатеринбург'?b.city+', ':'')+b.name.replace(' (автодром Химмаш)',' (Химмаш)')}</span><span class="tr"><i style="width:${Math.max(.5,b.zshare)/65*100}%;background:${css('--s-us')}"></i><i style="width:${b.leadpct/65*100}%;background:${css('--s-grey')}"></i></span><span class="v num">${String(b.zshare).replace('.',',')}</span></div>`).join('');
+document.querySelectorAll('#zoneBars .zr').forEach(r=>{ r.addEventListener('mousemove',e=>showTip(decodeURIComponent(r.dataset.t),e.pageX,e.pageY)); r.addEventListener('mouseleave',hideTip); });
+bars($('#compTop'), D.compTop.slice(0,8).map(([n,z,avg])=>({l:n, v:z, vs:`${z} зон · ${String(avg).replace('.',',')}%`, c:css('--s-them'), tip:`<b>${n}</b><div class="r"><span>Зон с этим конкурентом</span><span>${z} из 32</span></div><div class="r"><span>Средняя доля в них</span><span>${String(avg).replace('.',',')}%</span></div>`})), 32);
+document.querySelectorAll('#compTop .v').forEach(v=>v.style.minWidth='12ch');
+(function(){ const u=D.med.us, th=D.med.them;
+  const rows=[['Рейтинг',u.rating,th.rating,5],['Оценок',u.ratings,th.ratings],['Отзывов',u.reviews,th.reviews],['Фото',u.photos,th.photos]];
+  $('#duel').innerHTML = `<div class="duel-head"><span>Авто-Лада</span><span></span><span>Конкуренты</span></div>` + rows.map(([l,a,b,m])=>{ m=m||Math.max(a,b); const f=v=>String(v).replace('.',','); return `<div class="drw"><div class="lt"><span class="val num">${f(a)}</span><i style="width:${a/m*100}%"></i></div><div class="mid">${l}</div><div class="rt"><i style="width:${b/m*100}%"></i><span class="val num">${f(b)}</span></div></div>`; }).join('');
+})();
+
+// brands
+bars($('#brandBars'), D.brands.map(b=>({l:b.name, v:b.y2, us:!!b.us, c:b.us?css('--s-us'):css('--s-grey'), vs:fmt(b.y2)+(b.ch==null?' · новый':` · ${b.ch>0?'+':''}${String(b.ch).replace('.',',')}%`), tip:`<b>${b.name}</b><div class="r"><span>окт 24 — сен 25</span><span>${fmt(b.y1)}</span></div><div class="r"><span>окт 25 — сен 26</span><span>${fmt(b.y2)}</span></div>`})));
+document.querySelectorAll('#brandBars .v').forEach(v=>v.style.minWidth='13ch');
+
+// geo
+const geoTot=D.geo.reduce((a,b)=>a+b[1],0);
+bars($('#geoBars'), D.geo.map(([l,v])=>({l, v, vs:Math.round(v/geoTot*100)+'%', c: l.startsWith('Общий')?css('--s-them'):css('--s-us'), tip:`<b>${l}</b><div class="r"><span>Визитов</span><span>${v} из ${geoTot}</span></div>`})));
+bars($('#geoThemes'), D.geoThemes.map(([l,v])=>({l, v, c:css('--s-them')})));
+const bs=[{name:'Авто-Лада',values:D.lada,color:css('--s-us')},{name:'Вектор',values:D.vector,color:css('--s-them')}];
+legend($('#lgBrand'),bs); line($('#chBrand'), D.wm, bs, {aria:'Брендовый спрос'});
+
+// market
+const ms=[{name:'Свердловская область',values:D.market.obl,color:css('--s-us'),area:true},{name:'Екатеринбург',values:D.market.ekb,color:css('--s-them')}];
+legend($('#lgMarket'),ms); line($('#chMarket'), D.wm, ms, {aria:'Спрос на автошколу', h:240});
+
+// yoy diverging
+(function(){ const mx=Math.max(...D.yoy.map(r=>Math.abs(r.ch)));
+  const lab=r=> r.ch>=10?'<span class="tag good">растёт</span>':r.ch<=-10?'<span class="tag bad">падает</span>':'';
+  $('#yoy').innerHTML = D.yoy.slice().sort((a,b)=>b.ch-a.ch).map(r=>`<div class="drow" data-t="${encodeURIComponent(`<b>${r.label}</b><div class="r"><span>окт 24 — сен 25</span><span>${fmt(r.y1)}</span></div><div class="r"><span>окт 25 — сен 26</span><span>${fmt(r.y2)}</span></div>`)}"><span class="l" title="${r.label}">${r.label}</span><span class="neg">${r.ch<0?`<i style="width:${-r.ch/mx*100}%"></i>`:''}</span><span class="pos">${r.ch>0?`<i style="width:${r.ch/mx*100}%"></i>`:''}</span><span class="v num ${r.ch>=0?'p':'n'}">${r.ch>0?'+':''}${Math.round(r.ch)}%</span></div>`).join('');
+  document.querySelectorAll('#yoy .drow').forEach(r=>{ r.addEventListener('mousemove',e=>showTip(decodeURIComponent(r.dataset.t),e.pageX,e.pageY)); r.addEventListener('mouseleave',hideTip); });
+})();
+
+// heatmap
+(function(){ const mo=['окт','ноя','дек','янв','фев','мар','апр','май','июн','июл','авг','сен']; let h='<div></div>'+mo.map(m=>`<div class="h">${m}</div>`).join('');
+  const acc=css('--accent');
+  D.heat.forEach(r=>{ const mx=Math.max(...r.v), mn=Math.min(...r.v); h+=`<div class="rl">${r.label}</div>`+r.v.map((v,i)=>{ const t=(v-mn)/(mx-mn||1); return `<div class="c num" title="${r.label}, ${mo[i]}: ${fmt(v)}" style="background:color-mix(in oklab, ${acc} ${Math.round(8+t*82)}%, ${css('--surface')})">${fmt(v)}</div>`; }).join(''); });
+  $('#heat').innerHTML=h;
+  const peak=r=>{const m=Math.max(...r.v); return mo[r.v.indexOf(m)];};
+  const get=l=>D.heat.find(r=>r.label===l);
+  $('#phases').innerHTML=[
+    ['На пике сейчас','bad',`Категория C: октябрь — максимум года, ${fmt(get('Категория C').v[0])} запросов. Медкомиссия держится выше 3 500 в месяц.`],
+    ['Набирает обороты','good',`Снегоход: пик в ${peak(get('Снегоход'))}, трактор в ${peak(get('Трактор'))}. Контент нужен за 1–2 месяца до пика.`],
+    ['Сезонный спад','warn',`Мотоцикл и квадроцикл: пик в ${peak(get('Мотоцикл (A)'))}, к декабрю спрос падает в 3–4 раза. Готовим весеннюю волну с февраля.`]
+  ].map(([t,c,d])=>`<div class="panel"><h3><span class="tag ${c}">${t}</span></h3><div style="font-size:14px;color:var(--ink-2)">${d}</div></div>`).join('');
+})();
+</script>
+
+</body>
+</html>
