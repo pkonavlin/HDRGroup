@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Департамент Согласований»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+.p-src{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Департамент Согласований · Екатеринбург</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>СОГЛАСОВАНИЯ СОГЛАСОВАНИЯ</span><span>СОГЛАСОВАНИЯ СОГЛАСОВАНИЯ</span><span>СОГЛАСОВАНИЯ СОГЛАСОВАНИЯ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Департамент Согласований» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка Екатеринбурга, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Департамент Согласований</b></div>
+        <div><span>Город</span><b>Екатеринбург</b></div>
+        <div><span>Направления</span><b>Согласование вывесок · Паспорт фасада · Рекламные конструкции</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 20.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«Согласование вывески» на Картах</span><span class="t-n g">1–4</span><span class="t-s">место в выдаче по Екатеринбургу</span></div>
+        <div class="tile"><span class="t-k">«Паспорт фасада» на Картах</span><span class="t-n c">нет</span><span class="t-s">при 405 запросах в месяц</span></div>
+        <div class="tile"><span class="t-k">Отзывы без ответа</span><span class="t-n c">5 из 9</span><span class="t-s">все пять — июль и август 2026</span></div>
+        <div class="tile"><span class="t-k">Спрос «закон о вывесках»</span><span class="t-n g">+183%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах и 2ГИС, сайт в органике Яндекса, спрос по Вордстату за 2 года, причины просадки и стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис под запросы, по которым карточки нет в выдаче: паспорт фасада, вывески на русском языке, разрешение на рекламную конструкцию, предписания и штрафы.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">ожидаем к 27.10</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет работает с ограничениями. К этому дню тексты, обложки и сторис первой недели будут готовы.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">27.10</span><span class="st next">следующий шаг</span></div><h3>Тариф, описание, рубрики, прайс</h3><p>Расширенный тариф, на котором новости и истории видны на карточке. Описание «О компании», рубрики «Изготовление вывесок» и «Архитектурное бюро», единый прайс с сайтом, ответы на 5 свежих отзывов.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 11.11 · 18.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Паспорт фасада, вывески на русском языке, разрешение на рекламную конструкцию, предписание о демонтаже — по одной новости и одной сторис в неделю.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">обсудить</span></div><h3>2ГИС и сайты</h3><p>Объединение дубля карточки «СогласованиеЕкб» в 2ГИС, единые адрес, телефон и часы работы на всех ресурсах, страница «Паспорт фасада» на сайте.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 10 запросам на Картах и в органике, сравнение с соседями по выдаче, спрос и сезонность в Екатеринбурге, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Паспорт фасада и согласование вывески</li>
+            <li>05.11 — Вывески на русском языке с 1 марта 2026</li>
+            <li>11.11 — Разрешение на рекламную конструкцию</li>
+            <li>18.11 — Предписание о демонтаже и штрафы</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Екатеринбург · согласование наружной рекламы · замер 20.10.2026</span>
+  <h1>Где «Департамент Согласований» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 10 запросам, рубрика в 2ГИС, сайты компании в органической выдаче Яндекса, спрос по Вордстату для региона «Екатеринбург» и сравнение с карточками, которые стоят рядом.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Профильные запросы на Картах — 1–4 место</b>«согласование наружной рекламы» и «наружная реклама» — 1–2 место, «согласование вывески» — 1–4, «согласование вывески на фасаде» — 1–3. В части показов Яндекс выводит карточку в рекламном слоте.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Самый большой узкий запрос — «паспорт фасада» — карточку не находит</b>405 запросов в месяц в Екатеринбурге. На Картах по «паспорт фасада здания» показывается одна карточка с таким названием и 0 отзывов. «Департамента Согласований» там нет, хотя услуга есть на обоих сайтах компании.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Разрешение, дизайн вывески, юрист по рекламе — карточки нет</b>«разрешение на вывеску», «разрешение на рекламную конструкцию», «дизайн вывески», «юрист по рекламе», «вывеска на русском языке» — в первых 25 карточках компании нет или она появляется эпизодически.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>На карточке нет описания, новостей и историй</b>Карточка состоит из рубрик, прайса и 9 отзывов. На 5 последних отзывов (июль–август 2026) компания не ответила. Яндексу не на чем связать карточку с паспортом фасада, разрешениями и юридической помощью.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Общий спрос на наружку падает, спрос из-за закона растёт</b>«наружная реклама» −25%, «рекламная конструкция» −17% за январь–сентябрь 2026 к 2025. А «закон о вывесках» +183%, «штраф за вывеску» +240%: с 1 марта 2026 вывески должны быть на русском языке.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,5</div><div class="s">9 оценок, 9 отзывов</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">5,0</div><div class="s">21 оценка, 11-е место из 16 в рубрике</div></div>
+    <div class="kpi"><div class="k">Синяя галочка</div><div class="n">есть</div><div class="s">«Владелец следит за актуальностью»</div></div>
+    <div class="kpi"><div class="k">Сайтов у компании</div><div class="n">2</div><div class="s">разные адреса и телефоны</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Екатеринбургу, без геолокации пользователя, по три замера на запрос. Позиция плавает между загрузками, поэтому указан диапазон.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в топе</th></tr></thead>
+    <tbody>
+      <tr><td>согласование наружной рекламы</td><td class="r num">1 из 3</td><td>РедФокс (1 отзыв) — других карточек нет</td></tr>
+      <tr><td>согласование рекламной конструкции</td><td class="r num">1 из 3</td><td>в рекламном слоте; рядом РедФокс</td></tr>
+      <tr><td>наружная реклама</td><td class="r num">1–2 из 45</td><td>Хэт-Трик ✓, Пушка наружка ✓ 17, Ra66.ru ✓ 24; реклама: РПК Лайт Бокс, LightBox, Арифметика</td></tr>
+      <tr><td>согласование вывески на фасаде</td><td class="r num">1–3 из 13</td><td>Деловой стиль ✓ 29, Мти-центр ✓ 22</td></tr>
+      <tr><td>согласование вывески</td><td class="r num">1–4 из 22</td><td>Деловой стиль ✓ 29, Мти-центр ✓ 22, Печатный Мастер 527; реклама: РПК Лайт Бокс, Опора, LightBox</td></tr>
+      <tr><td>согласование рекламы</td><td class="r num">1–10 из 21</td><td>Деловой стиль ✓, Показ 25; реклама: Арифметика, Форт Диалог-Исеть, Ситипринт</td></tr>
+      <tr><td>разрешение на вывеску</td><td class="r">нет в 2 из 3</td><td>Пушка наружка ✓ 17, Мти-центр ✓ 22; реклама: Право на защиту, LightBox</td></tr>
+      <tr><td>разрешение на рекламную конструкцию</td><td class="r">нет в 2 из 3</td><td>ВС-Групп 21, Андаменто ✓, Конверсия 12; реклама: Арифметика, ipos digital</td></tr>
+      <tr><td>паспорт фасада здания</td><td class="r">нет</td><td>одна карточка «Паспорт фасадов здания» (архитектурное бюро, 0 отзывов)</td></tr>
+      <tr><td>вывеска на русском языке</td><td class="r">нет в 21</td><td>Смарт-Л ✓ 112, Индустрия рекламы 48, Ремаг ✓ 19</td></tr>
+      <tr><td>дизайн вывески · изготовление вывесок · юрист по рекламе</td><td class="r">нет в 25</td><td>изготовители вывесок, 7 из 7 первых мест — реклама; юрфирмы с 23–121 отзывом</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">✓ — синяя галочка «Информация подтверждена владельцем», число — количество отзывов.</p>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Отзывы</th><th>Галочка</th><th>Рубрики</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Департамент Согласований</b></td><td class="r num">4,5</td><td class="r num">9</td><td>есть</td><td>наружная реклама, согласование наружной рекламы, рекламное агентство</td></tr>
+      <tr><td>Деловой стиль</td><td class="r num">5,0</td><td class="r num">29</td><td>есть</td><td>изготовление вывесок, широкоформатная печать, рекламное агентство</td></tr>
+      <tr><td>Мти-центр</td><td class="r num">4,9</td><td class="r num">22</td><td>есть</td><td>изготовление вывесок, наружная реклама, рекламная продукция</td></tr>
+      <tr><td>Смарт-Л</td><td class="r num">5,0</td><td class="r num">112</td><td>есть</td><td>рекламное агентство, наружная реклама, изготовление вывесок</td></tr>
+      <tr><td>Пушка наружка</td><td class="r num">4,8</td><td class="r num">17</td><td>есть</td><td>в 2ГИС — рубрика «Согласование наружной рекламы»</td></tr>
+      <tr><td>РедФокс</td><td class="r num">4,2</td><td class="r num">1</td><td>нет</td><td>наружная реклама, согласование наружной рекламы, изготовление вывесок</td></tr>
+      <tr><td>Паспорт фасадов здания</td><td class="r num">—</td><td class="r num">0</td><td>нет</td><td>архитектурное бюро, согласование перепланировок, проектная организация; оплачено выделение на карте</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>С 8 по 11 октября 2026 года беспилотники атаковали дата-центры Яндекса в Сасове, Калуге и Владимире; площадки в Сасове и Владимире остановлены полностью. После этого Яндекс Бизнес работает частично и с ограничениями доступа, кабинет Директа закрыт, Метрика и Вебмастер не работают. Сроков восстановления Яндекс не называет. Всё, что ниже требует правок в кабинете, мы внесём, как только Яндекс Бизнес вернётся в штатный режим.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка не заявляет половину услуг компании</h3></div>
+      <p>На карточке три рубрики: «Наружная реклама», «Согласование наружной рекламы», «Рекламное агентство». Описания «О компании» нет, <b>новостей и историй нет</b>. Паспорт фасада, технический проект, экспертиза СРО и юридическое сопровождение есть только строками в прайсе.</p>
+      <p>Поэтому карточка сильна там, где запрос совпадает с рубрикой («согласование наружной рекламы» — 1 место), и не видна там, где запрос про конкретную услугу: «паспорт фасада», «разрешение на рекламную конструкцию», «юрист по рекламе». Соседи по выдаче берут эти запросы рубриками: у изготовителей вывесок — «Изготовление вывесок», у карточки «Паспорт фасадов здания» — «Архитектурное бюро» и «Проектная организация».</p>
+      <p class="next">Как только Яндекс Бизнес заработает в штатном режиме, мы добавим описание и рубрики и начнём публиковать новости под эти запросы.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Данные компании на разных ресурсах не совпадают</h3></div>
+      <p>На карточке указаны два сайта. На soglreklama.ru — адрес пер. Химиков, 3, телефон +7 919 114-60-07, часы пн–пт 9:00–18:00. На soglasovanie66.ru — ул. 8 Марта, 5 и +7 912 673-01-98. На карточке — пер. Химиков, 3, +7 912 673-01-98 и пн–пт 10:00–19:00. В 2ГИС у компании <b>две карточки по одному адресу</b>: «Департамент согласований» и «СогласованиеЕкб».</p>
+      <p>Яндекс сверяет данные карточки с сайтом и обзвоном. Расхождения в адресе, телефоне и часах снижают доверие к карточке, а дубль в 2ГИС делит отзывы и показы между двумя профилями.</p>
+      <span class="ev">карточка: +7 (912) 673-01-98 · soglreklama.ru: +7 919 114-60-07 · soglasovanie66.ru: ул. 8 Марта, 5</span>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Отзывы: мало и без ответов</h3></div>
+      <p>На Яндексе 9 отзывов, в 2ГИС — 21. У соседей по выдаче на Картах 17–112 отзывов. На <b>5 последних отзывов</b> (22 июля – 8 августа 2026) ответа компании нет, ответы есть только на 4 отзыва 2025 года. Поток и свежесть отзывов, а также ответы на них — факторы ранжирования на Картах.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Прайс карточки расходится с сайтом</h3></div>
+      <p>Прайс обновлён 23 июля 2026 года, но цены в нём другие, чем на soglreklama.ru: согласование вывески при наличии паспорта фасада — 24 500 ₽ на карточке и 28 500 ₽ на сайте, крышная вывеска — от 75 000 и от 85 000 ₽, дорожный указатель — 50 000 и 70 000 ₽. Позиция «Согласование вывески в регионах по всей России» стоит на карточке за <b>1 ₽</b> — выглядит как ошибка. В 2ГИС третий вариант цен.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>На карточке показывается реклама конкурентов</h3></div>
+      <p>В блоке «Похожие места» самой карточки стоит промо-объявление «Рекламной группы Арифметика»: «Размещение наружной рекламы в Екатеринбурге». Человек, уже открывший карточку, видит предложение уйти к другим.</p>
+      <p>Это следствие новой политики Яндекс Карт. С лета 2026 года карточки организаций переводят на тарифы: <b>Базовый</b> (бесплатный), <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки показывается реклама других организаций, а публикации и истории скрываются. Расширенный тариф убирает рекламу конкурентов и возвращает публикации и истории; Продвинутый добавляет продвижение в Картах и Поиске и зелёную метку. Стоимость считается в кабинете индивидуально, за 90 дней.</p>
+      <p class="next">Новости и сторис из контент-плана будут видны на карточке только на Расширенном тарифе. Когда Яндекс Бизнес включится, обсудим с представителем компании его покупку.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайты в органической выдаче</h2><p>Яндекс, регион Екатеринбург, первые 3 страницы выдачи, рекламу не считали. У компании два сайта, в таблице указан тот, что стоит выше.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>технический проект рекламной конструкции екатеринбург</td><td class="r num">2 · soglreklama.ru</td><td>Яндекс Услуги, bdmproekt.ru, lightnr.ru</td></tr>
+      <tr><td>согласование рекламной конструкции екатеринбург</td><td class="r num">3 · soglreklama.ru</td><td>mugiso.midural.ru, 2ГИС</td></tr>
+      <tr><td>юрист по наружной рекламе екатеринбург</td><td class="r num">3 · soglasovanie66.ru</td><td>Яндекс Услуги, 2ГИС</td></tr>
+      <tr><td>согласование медиафасада екатеринбург</td><td class="r num">4 · soglreklama.ru</td><td>mugiso.midural.ru, rskled.ru, согласование.рф</td></tr>
+      <tr><td>разрешение на вывеску екатеринбург</td><td class="r num">12 · soglreklama.ru</td><td>mugiso.midural.ru, согласование.рф, mfc66.ru, rpkluxexpo.ru, 2ГИС</td></tr>
+      <tr><td>паспорт фасада екатеринбург</td><td class="r num">13 · soglasovanie66.ru</td><td>согласование.рф, Яндекс Услуги, Яндекс Карты, l-arch.ru, proektfasad.ru, Авито</td></tr>
+      <tr><td>согласование вывески екатеринбург</td><td class="r num">18 · soglreklama.ru</td><td>согласование.рф, rpkluxexpo.ru, 2ГИС, mugiso.midural.ru, atmosphera-media.ru</td></tr>
+      <tr><td>согласование наружной рекламы екатеринбург</td><td class="r num">24 · soglreklama.ru</td><td>2ГИС, Яндекс Карты, mugiso.midural.ru, atmosphera-media.ru</td></tr>
+      <tr><td>вывеска на русском языке екатеринбург</td><td class="r">нет в топ-30</td><td>ra-ds.ru, Яндекс, Авито, Маркет, 2ГИС, 66.ru</td></tr>
+      <tr><td>департамент согласований</td><td class="r num">1 · soglasovanie66.ru</td><td>затем Яндекс Карты, 2ГИС, Яндекс Услуги, soglreklama.ru</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на soglreklama.ru работает</h3><ul>
+      <li><b>Своя страница под каждую конструкцию.</b> Вывески, стелы, медиа-экраны, заборы, дизайн, юридическое сопровождение, изготовление — у всех есть title, description и H1 с городом.</li>
+      <li><b>Техническая база в порядке.</b> robots.txt со ссылкой на sitemap, sitemap обновлялся 6 октября 2026, Метрика стоит, на главной есть разметка JSON-LD.</li>
+      <li>Отсюда хорошие позиции по техническим запросам: технический проект, рекламная конструкция, медиафасад.</li>
+    </ul></div>
+    <div class="note"><h3>Что мешает</h3><ul>
+      <li><b>Нет страницы «Паспорт фасада».</b> Услуга есть только строкой в прайсе, а это самый частый узкий запрос в нише. По нему сайт soglasovanie66.ru — на 13 месте, soglreklama.ru в топ-30 нет.</li>
+      <li><b>Нет материала о вывесках на русском языке</b>, хотя спрос вырос почти в 3 раза.</li>
+      <li><b>Дубль главной</b> — страница /page72191725.html с тем же title и текстом. У 14 из 21 изображения на главной нет alt.</li>
+      <li><b>Два сайта делят спрос.</b> soglreklama.ru и soglasovanie66.ru конкурируют друг с другом в одной выдаче, с разными адресами и телефонами.</li>
+    </ul></div>
+  </div>
+  <p class="small" style="margin-top:16px">Важно для стратегии: по запросам о вывесках первые места органики занимают сайт МУГИСО, 2ГИС, Яндекс Карты и Яндекс Услуги. Карточка на Картах и профили на этих площадках приводят человека быстрее, чем сайт.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Екатеринбурге</h2><p>Вордстат, регион «Екатеринбург», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="p"><h3>«паспорт фасада»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +2%</div></div>
+    <div class="chart" data-chart="z"><h3>«вывески закон»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +183%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">«Паспорт фасада» держится на уровне 380–490 запросов в месяц весь 2026 год, провал только в январе. Запросы о законе о вывесках резко выросли в феврале и марте 2026 (624 и 958) — перед вступлением в силу требования о русском языке на вывесках 1 марта — и после этого остаются выше уровня 2025 года.</p>
+
+  <h3>Коммерческий спрос</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-com"></tbody>
+  </table></div>
+
+  <h3>Информационный спрос — материал для новостей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-info"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Паспорт фасада — главный узкий запрос ниши</b>: 368 запросов «паспорт фасада» и 138 «паспорта фасадов екатеринбург» в месяц. Это втрое больше, чем «согласование вывески» (101).</li>
+      <li><b>Спрос, рождённый законом</b>: «закон о вывесках» +183%, «штраф за вывеску» +240%, «вывески на иностранном языке» выросли с единиц до 222 запросов в марте 2026.</li>
+      <li><b>Общий рекламный спрос снижается</b>: «наружная реклама» −25%, «рекламная конструкция» −17%, «изготовление вывесок» −13%, «разрешение на установку рекламной конструкции» −34%. Рынок не растёт, обращения придётся забирать у соседей по выдаче.</li>
+    </ul></div>
+    <div class="note"><h3>Сезонность</h3><ul>
+      <li>«согласование вывески»: пики в феврале–апреле и в сентябре–октябре, провал в январе (43 в 2026).</li>
+      <li>«паспорт фасада»: ровный спрос с апреля по август, провал в январе.</li>
+      <li>Ноябрь — хорошее время для запуска: спрос идёт после сентябрьского пика, а к февралю–марту карточка успеет набрать релевантность.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Рекламный рынок Екатеринбурга</div><div class="n">3,5 млрд ₽</div><div class="s">2025, +5% к 2024; ТВ, радио и наружная реклама</div></div>
+    <div class="kpi"><div class="k">Место среди городов-миллионников</div><div class="n">2-е</div><div class="s">после Санкт-Петербурга, без Москвы</div></div>
+    <div class="kpi"><div class="k">Вывески на русском языке</div><div class="n">с 1.03.2026</div><div class="s">168-ФЗ, поправки в закон о защите прав потребителей</div></div>
+    <div class="kpi"><div class="k">Мест в рубрике 2ГИС</div><div class="n">16</div><div class="s">«Согласование наружной рекламы», Екатеринбург</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Чисто профильных компаний по согласованию в Екатеринбурге мало: на Яндекс Картах по «согласование наружной рекламы» всего 3 карточки. Основная конкуренция — изготовители вывесок и рекламные агентства, которые берут согласование в комплекте и покупают рекламу на Картах. Новый закон о русском языке на вывесках даёт поводы для обращения всем, у кого вывеска на латинице.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Единые данные на всех ресурсах.</b><span>Один адрес, один телефон и одни часы работы на карточке Яндекса, в 2ГИС, на soglreklama.ru и soglasovanie66.ru. Сейчас адреса, телефоны и часы различаются.</span></li>
+        <li><b>Описание «О компании» и рубрики.</b><span>В описании — паспорт фасада, технический проект, экспертиза, юридическое сопровождение. Добавить рубрики «Изготовление вывесок» и «Архитектурное бюро» — по ним сейчас выигрывают соседи.</span></li>
+        <li><b>Прайс как на сайте.</b><span>Свести цены карточки с сайтом, убрать позицию за 1 ₽, добавить отдельной строкой разработку паспорта фасада и технический проект.</span></li>
+        <li><b>Ответить на 5 отзывов</b><span>за июль–август 2026 и отвечать на новые в течение недели.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить поток отзывов и контента</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Новости на карточке каждую неделю.</b><span>Темы — из спроса, по которому карточки нет: паспорт фасада, вывески на русском языке, разрешения, предписания и штрафы.</span></li>
+        <li><b>Сторис парой к каждой новости.</b><span>Один слайд — услуга и её этапы.</span></li>
+        <li><b>Просить отзыв после выдачи разрешения.</b><span>Ссылка на карточку вместе с документами. Отзывы только от реальных заказчиков, без вознаграждения: Яндекс снимает подозрительные.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Агрегаторы</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС.</b><span>Объединить дубль «СогласованиеЕкб» с основной карточкой, подтвердить актуальность данных («Компания давно не обновляла данные»), добавить описание и прайс как на сайте.</span></li>
+        <li><b>Яндекс Услуги и Авито.</b><span>Стоят на первой странице органики по «паспорт фасада» и «технический проект». Профиль с тем же названием, адресом, телефоном и ценами.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Страница «Паспорт фасада» на soglreklama.ru.</b><span>В title и H1 — «паспорт фасада» и «Екатеринбург», этапы, цена «от», форма заявки.</span></li>
+        <li><b>Материал о вывесках на русском языке.</b><span>Что требует 168-ФЗ, кого касается, как согласовать новую вывеску.</span></li>
+        <li><b>Техника.</b><span>Убрать дубль главной /page72191725.html (301 или canonical), alt у изображений, разметка LocalBusiness с единым адресом и телефоном.</span></li>
+        <li><b>Решить вопрос двух сайтов.</b><span>Либо один основной, либо разные задачи без пересечения в выдаче и с одинаковыми контактами.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Расширенный тариф Яндекс Бизнеса.</b><span>Без него новости и истории на карточке не видны, а на карточке крутится реклама конкурентов. Обсудить с компанией после восстановления Яндекс Бизнеса.</span></li>
+        <li><b>Яндекс Директ — узкие запросы.</b><span>«паспорт фасада екатеринбург», «согласование вывески», «разрешение на вывеску», «вывеска на русском языке». Бюджет усиливать в феврале–апреле и сентябре–октябре.</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">По профильным запросам «согласование наружной рекламы» у компании почти нет соперников на Картах. Сражение идёт за соседние запросы, где согласование ищут через конкретную задачу: паспорт фасада, разрешение, новая вывеска по закону, предписание о демонтаже. Там карточку обходят изготовители вывесок с 20–110 отзывами и рекламой. Сильная сторона «Департамента Согласований» — полный цикл документов (паспорт фасада, технический и электрический проект, экспертиза СРО, юридическое сопровождение), и именно её контент-план выносит на карточку.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Екатеринбургу 20.10.2026 без геолокации пользователя, по три замера на запрос; данные карточек (рубрики, галочка, рейтинг, реклама) взяты из данных страниц карточек.</li>
+    <li>2ГИС: карточка компании и рубрика «Согласование наружной рекламы», Екатеринбург.</li>
+    <li>Органика: Яндекс, регион 54, первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Екатеринбург», все устройства.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/departament_soglasovaniy/186720308780/" target="_blank" rel="noopener">Карточка «Департамент Согласований» на Яндекс Картах</a>
+    <a href="https://2gis.ru/ekaterinburg/firm/70000001061000575" target="_blank" rel="noopener">Карточка компании в 2ГИС</a>
+    <a href="https://soglreklama.ru/" target="_blank" rel="noopener">soglreklama.ru</a>
+    <a href="https://soglasovanie66.ru/" target="_blank" rel="noopener">soglasovanie66.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://www.retail.ru/news/s-1-marta-vstupyat-v-silu-novye-trebovaniya-k-vyveskam-i-ukazatelyam-18-fevralya-2026-274653/" target="_blank" rel="noopener">Retail.ru — с 1 марта вступят в силу новые требования к вывескам</a>
+    <a href="https://www.sostav.ru/blogs/269751/81706" target="_blank" rel="noopener">АКАР Урал — рекламный рынок Екатеринбурга 2025</a>
+    <a href="https://yandex.ru/company/news/09-10-2026-01" target="_blank" rel="noopener">Яндекс — что происходит с нашими дата-центрами</a>
+    <a href="https://prosto.ru/blog/article/kakie-servisy-yandeksa-ne-rabotayut-posle-atak-na-data-centry" target="_blank" rel="noopener">Prosto.ru — какие сервисы Яндекса не работают после атак</a>
+    <a href="https://www.e1.ru/text/economics/2026/10/20/76710041/" target="_blank" rel="noopener">E1.ru — сбои бизнеса после атак на дата-центры</a>
+    <a href="https://zvenom.ru/blog/tarify-yandeks-biznesa.html" target="_blank" rel="noopener">Звеном — тарифы Яндекс Бизнеса</a>
+  </div>
+</section>
+
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Согласование наружной рекламы · Екатеринбург</span>
+    <h1>«Департамент Согласований» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Департамент Согласований» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Согласование наружной рекламы <small>Наружная реклама · Рекламное агентство</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Екатеринбург <small>Работаем по всей России</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">пер. Химиков, 3</div></div>
+      <div class="fact"><div class="k">Компания</div><div class="v">Департамент Согласований <small>«Согласование ЕКБ»</small></div></div>
+      <div class="fact"><div class="k">Главный оффер</div><div class="v">Согласование рекламной конструкции под ключ <small>Дизайн-макет, паспорт фасада, технический проект</small></div></div>
+      <div class="fact"><div class="k">Консультации</div><div class="v">Бесплатная консультация <small>от ведущего специалиста</small></div></div>
+      <div class="fact"><div class="k">Формат работы</div><div class="v">Под ключ или на любом этапе <small>подключаемся как с нуля, так и к уже начатым проектам</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">soglreklama.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Департамента Согласований»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: тёмно-синий заголовков и кнопок сайта, оранжевый акцентных кнопок, терракотовый логотипа, светлый фон и чёрный текст.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#072A48;color:#FFFFFF;border-color:#072A48">
+        <div class="role">Основной</div><div class="name">Тёмно-синий</div><div class="hex">#072A48</div>
+      </div>
+      <div class="swatch" style="background:#FF9209;color:#072A48;border-color:#FF9209">
+        <div class="role">Акцентный</div><div class="name">Оранжевый</div><div class="hex">#FF9209</div>
+      </div>
+      <div class="swatch" style="background:#E07F45;color:#072A48;border-color:#E07F45">
+        <div class="role">Второстепенный</div><div class="name">Терракотовый логотипа</div><div class="hex">#E07F45</div>
+      </div>
+      <div class="swatch" style="background:#E9EAE5;color:#072A48;border-color:#E9EAE5">
+        <div class="role">Фоновый</div><div class="name">Светлый серый</div><div class="hex">#E9EAE5</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#072A48;border-color:#DADBD5">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+      <div class="swatch" style="background:#000000;color:#E9EAE5;border-color:#3A3A3A">
+        <div class="role">Текстовый</div><div class="name">Чёрный</div><div class="hex">#000000</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым в Екатеринбурге ищут согласование через конкретную задачу. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Паспорт фасада: разработка паспорта и согласование вывески через него в Администрации города.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Вывески на русском языке: требование 168-ФЗ с 1 марта 2026 года, макет и согласование новой вывески.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Разрешение на рекламную конструкцию: дизайн-проект, расчёты нагрузок, технический и электрический проект, экспертиза СРО.</p></div>
+      <div class="cycle-row"><div class="tag">18.11</div><p>Юридическое сопровождение: предписание о демонтаже, штрафы, споры с контролирующими органами.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и по делу, с теплом к предпринимателю. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона, e-mail и цен. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Паспорт фасада в Екатеринбурге: разработка паспорта и согласование вывески в Администрации</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы разрабатываем паспорт фасада и через него согласуем вывеску в Администрации города — от эскиза до документов.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Согласование вывески через разработку паспорта фасада здания.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Разработаем паспорт фасада. Подготовим эскизный проект. Согласуем с Администрацией города.<span class="src">сайт soglasovanie66.ru</span></li>
+        <li>Чтобы понять, какие документы нужны для рекламы в конкретном районе, необходимо изучить правила благоустройства и паспорт фасадов.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Чаще всего в согласовании отказывают из-за превышения допустимых размеров, неправильного размещения на фасаде и несоответствия архитектурному облику здания.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Согласуем вывески на памятниках архитектуры.<span class="src">сайт soglasovanie66.ru</span></li>
+        <li>Бесплатная консультация: на этом этапе проверяем, возможно ли согласование.<span class="src">сайт soglasovanie66.ru</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Паспорт фасада и согласование вывески в Екатеринбурге — «Департамент Согласований»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Паспорт фасада в Екатеринбурге: разработка и согласование вывески | Департамент Согласований</span></div>
+        <div class="meta-row"><span><b>Description · </b>Разработка паспорта фасада здания и согласование вывески в Администрации Екатеринбурга: эскизный проект, документы, вывески на памятниках архитектуры. Бесплатная консультация.</span></div>
+        <div class="chips">
+          <span class="chip-kw">паспорт фасада екатеринбург</span><span class="chip-kw">паспорта фасадов екатеринбург</span>
+          <span class="chip-kw">паспорт фасада екатеринбург администрация</span><span class="chip-kw">разработка паспорта фасада</span>
+          <span class="chip-kw">согласованные паспорта фасадов</span><span class="chip-kw">паспорт фасада здания</span>
+          <span class="chip-kw">согласование вывески через паспорт фасада</span><span class="chip-kw">согласование вывески на фасаде</span>
+          <span class="chip-kw">согласование вывески екатеринбург</span><span class="chip-kw">как согласовать вывеску на фасаде здания</span>
+          <span class="chip-kw">вывеска на фасаде здания</span><span class="chip-kw">согласование вывески на объекте культурного наследия</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию — проверим, возможно ли согласование вашей вывески.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Паспорт фасада»</div>
+        <p>Композиция: фасад здания в Екатеринбурге с вывесками на первом этаже, поверх — тонкие линии чертежа с разметкой зоны размещения вывески; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёмно-синий #072A48, тезис — белый #FFFFFF, линии чертежа — оранжевый #FF9209.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Вывески на русском языке с 1 марта 2026 года: что изменилось для бизнеса в Екатеринбурге</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>С 1 марта 2026 года информация на вывесках должна быть на русском языке. Мы готовим макет новой вывески и согласуем её.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>С 1 марта 2026 года вся информация, размещаемая на информационных вывесках и указателях, должна быть выполнена на русском языке.<span class="src">retail.ru</span></li>
+        <li>Поправки в закон о защите прав потребителей внёс Федеральный закон от 24.06.2025 № 168-ФЗ.<span class="src">retail.ru</span></li>
+        <li>Речь идёт о вывесках, указателях, табличках, информационных знаках, билбордах, растяжках со сведениями информационного (не рекламного) характера.<span class="src">retail.ru</span></li>
+        <li>К оформлению рекламных вывесок есть требования: учитываются размеры, шрифты, подсветка, цветовые решения и способ размещения на фасаде.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Дизайн, изготовление макета вывески (шрифта, лого).<span class="src">сайт soglreklama.ru</span></li>
+        <li>Согласование вывесок, юридическое сопровождение рекламы.<span class="src">сайт soglreklama.ru</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Вывески на русском языке с 1 марта 2026 года — согласование в Екатеринбурге</span></div>
+        <div class="meta-row"><span><b>Title · </b>Закон о вывесках на русском языке: макет и согласование вывески в Екатеринбурге | Департамент Согласований</span></div>
+        <div class="meta-row"><span><b>Description · </b>С 1 марта 2026 года информация на вывесках должна быть на русском языке (168-ФЗ). Дизайн макета вывески, подбор шрифта и согласование новой вывески в Екатеринбурге.</span></div>
+        <div class="chips">
+          <span class="chip-kw">вывески на русском языке</span><span class="chip-kw">закон о вывесках</span>
+          <span class="chip-kw">вывески на русском языке закон</span><span class="chip-kw">закон о вывесках на иностранном языке</span>
+          <span class="chip-kw">вывески на иностранном языке</span><span class="chip-kw">168-ФЗ вывески</span>
+          <span class="chip-kw">замена вывески екатеринбург</span><span class="chip-kw">дизайн вывески екатеринбург</span>
+          <span class="chip-kw">макет вывески</span><span class="chip-kw">согласование новой вывески</span>
+          <span class="chip-kw">согласование вывески екатеринбург</span><span class="chip-kw">требования к вывескам 2026</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставьте заявку на консультацию — разберём вашу вывеску и требования к ней.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Вывеска на русском языке»</div>
+        <p>Композиция: вход в магазин с вывеской, набранной кириллицей, крупный план букв; тезис на светлой подложке в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — светлый серый #E9EAE5, тезис — тёмно-синий #072A48, тонкая линия под тезисом — терракотовый #E07F45.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 11 ноября</span><h3>Разрешение на установку рекламной конструкции в Екатеринбурге: технический проект, расчёты и экспертиза</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Разрешение на рекламную конструкцию начинается с проекта. Мы готовим всю техническую документацию — от дизайн-проекта до экспертизы.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Дизайн-проект рекламной конструкции — основа для всех работ. Если у вас его нет, поможем в разработке.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Делаем расчёт ветровой нагрузки, прочностный расчёт, расчёт несущей конструкции, узлов крепления и фундамента рекламной конструкции.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Технический проект разрабатывает сертифицированный технолог. Документ состоит из описания и схемы рекламной конструкции. Учтены ГОСТ, СП и СНиП.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Электрический проект состоит из расчёта и подбора средств защиты электроцепи от утечки и замыкания.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Проектные материалы проходят процедуру экспертизы; проекты заверяют компетентные организации, заключение СРО.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Согласовываем и готовим документацию для рекламных вывесок, крышных установок, уличных стел, уличных флагов, рекламных заборов, щитов 3х6, суперсайтов, диджитал экранов и других нестандартных конструкций.<span class="src">сайт soglreklama.ru</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Разрешение на установку рекламной конструкции в Екатеринбурге</span></div>
+        <div class="meta-row"><span><b>Title · </b>Технический проект и разрешение на рекламную конструкцию в Екатеринбурге | Департамент Согласований</span></div>
+        <div class="meta-row"><span><b>Description · </b>Разрешение на установку рекламной конструкции в Екатеринбурге: дизайн-проект, расчёт ветровых и снеговых нагрузок, технический и электрический проект, экспертиза СРО.</span></div>
+        <div class="chips">
+          <span class="chip-kw">разрешение на установку рекламной конструкции</span><span class="chip-kw">разрешение на установку и эксплуатацию рекламной конструкции</span>
+          <span class="chip-kw">технический проект рекламной конструкции</span><span class="chip-kw">согласование рекламной конструкции екатеринбург</span>
+          <span class="chip-kw">расчёт ветровой нагрузки рекламной конструкции</span><span class="chip-kw">электрический проект вывески</span>
+          <span class="chip-kw">экспертиза проекта СРО</span><span class="chip-kw">согласование стелы</span>
+          <span class="chip-kw">согласование крышной установки</span><span class="chip-kw">согласование медиаэкрана</span>
+          <span class="chip-kw">согласование в МУГИСО</span><span class="chip-kw">разрешение на вывеску екатеринбург</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> отправьте заявку на согласование — определим перечень работ по вашему объекту.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Проект рекламной конструкции»</div>
+        <p>Композиция: инженерный чертёж стелы или крышной установки на рабочем столе, рядом распечатанные расчёты; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёмно-синий #072A48, тезис — белый #FFFFFF, рамка-уголок — оранжевый #FF9209.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 18 ноября</span><h3>Предписание о демонтаже и штраф за рекламу: юридическое сопровождение в Екатеринбурге</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если пришло предписание о демонтаже вывески или штраф за рекламу, мы разбираем ситуацию и защищаем интересы компании.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Помогаем разбираться со штрафами. Работаем с предписаниями по демонтажу.<span class="src">сайт soglasovanie66.ru</span></li>
+        <li>Ответственность за незаконное размещение рекламы может наступить как для рекламодателя, так и для собственника здания.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Подготовка юридических заключений по размещению конструкций; сопровождение при проверках и в суде.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Решение споров с контролирующими органами; защита в случае получения предписания на демонтаж рекламных конструкций; помощь при наложении административного штрафа за рекламу.<span class="src">сайт soglreklama.ru</span></li>
+        <li>Проведение консультации по маркировке рекламы.<span class="src">сайт soglreklama.ru</span></li>
+        <li>В «Департаменте согласований» работают практикующие юристы в сфере рекламы.<span class="src">сайт soglreklama.ru</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Предписание о демонтаже вывески и штраф за рекламу — юрист в Екатеринбурге</span></div>
+        <div class="meta-row"><span><b>Title · </b>Юрист по наружной рекламе в Екатеринбурге: предписание о демонтаже, штрафы | Департамент Согласований</span></div>
+        <div class="meta-row"><span><b>Description · </b>Юридическое сопровождение наружной рекламы в Екатеринбурге: предписание о демонтаже, административный штраф, споры с контролирующими органами, консультации по маркировке рекламы.</span></div>
+        <div class="chips">
+          <span class="chip-kw">юрист по рекламе екатеринбург</span><span class="chip-kw">юрист по наружной рекламе</span>
+          <span class="chip-kw">предписание о демонтаже вывески</span><span class="chip-kw">демонтаж вывески</span>
+          <span class="chip-kw">штраф за вывеску</span><span class="chip-kw">штраф за рекламу без разрешения</span>
+          <span class="chip-kw">незаконное размещение рекламы</span><span class="chip-kw">ответственность за незаконную рекламу</span>
+          <span class="chip-kw">консультация по маркировке рекламы</span><span class="chip-kw">юридическое сопровождение рекламы</span>
+          <span class="chip-kw">юридическая консультация реклама</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию — разберём ваше предписание.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Предписание о демонтаже»</div>
+        <p>Композиция: деловая встреча — документ с печатью и папка с делом на столе переговоров, на фоне размытая городская вывеска; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — терракотовый #E07F45, тезис — тёмно-синий #072A48, тонкая рамка — белый #FFFFFF.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Паспорт фасада</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Разработаем паспорт фасада</span>
+          <span class="fact-pill">Подготовим эскизный проект</span>
+          <span class="fact-pill">Согласуем с Администрацией города</span>
+          <span class="fact-pill">Вывески на памятниках архитектуры</span>
+          <span class="fact-pill">Бесплатная консультация</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый серый #E9EAE5, логотип в верхнем левом углу, заголовок тёмно-синим #072A48, пункты списком чёрным #000000 с маркерами-квадратами оранжевым #FF9209.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Вывеска на русском языке</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">С 1 марта 2026 года</span>
+          <span class="fact-pill">168-ФЗ</span>
+          <span class="fact-pill">Размеры · шрифты · подсветка · цвет</span>
+          <span class="fact-pill">Макет вывески</span>
+          <span class="fact-pill">Согласование вывески</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #072A48, заголовок белым #FFFFFF, дата «1 марта 2026» крупно оранжевым #FF9209, пункты белым. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Проект рекламной конструкции: 5 шагов</div><span class="slide-no">Сторис 3 · 11 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">1 · Дизайн-проект</span>
+          <span class="fact-pill">2 · Расчёты нагрузок</span>
+          <span class="fact-pill">3 · Технический проект</span>
+          <span class="fact-pill">4 · Электрический проект</span>
+          <span class="fact-pill">5 · Экспертиза СРО</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, слева вертикальная полоса тёмно-синим #072A48, номера шагов крупными цифрами терракотовым #E07F45, названия шагов тёмно-синим #072A48.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Пришло предписание о демонтаже</div><span class="slide-no">Сторис 4 · 18 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Юридические заключения</span>
+          <span class="fact-pill">Сопровождение при проверках и в суде</span>
+          <span class="fact-pill">Споры с контролирующими органами</span>
+          <span class="fact-pill">Помощь при штрафе</span>
+          <span class="fact-pill">Маркировка рекламы</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон терракотовый #E07F45, заголовок тёмно-синим #072A48, пункты на белых плашках #FFFFFF текстом #072A48. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — паспорт фасада, вывески на русском языке, разрешения, юридическое сопровождение <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Паспорт фасада: разработка паспорта и согласование вывески</b>28.10 · эскизный проект, Администрация города, памятники архитектуры</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Паспорт фасада</b>28.10 · четыре услуги и бесплатная консультация</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Вывески на русском языке с 1 марта 2026 года</b>05.11 · 168-ФЗ, требования к оформлению, макет и согласование</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Вывеска на русском языке</b>05.11 · дата, закон, макет, согласование</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Разрешение на установку рекламной конструкции</b>11.11 · дизайн-проект, расчёты, технический и электрический проект, экспертиза</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Проект рекламной конструкции: 5 шагов</b>11.11 · от дизайн-проекта до экспертизы СРО</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Предписание о демонтаже и штраф за рекламу</b>18.11 · юридические заключения, проверки и суд, споры с контролирующими органами</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Пришло предписание о демонтаже</b>18.11 · пять направлений юридической помощи</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <a href="https://soglreklama.ru/" target="_blank" rel="noopener">soglreklama.ru</a>
+      <a href="https://soglreklama.ru/catalog/yuridicheskoe-soprovozhdenie" target="_blank" rel="noopener">soglreklama.ru — юридическое сопровождение</a>
+      <a href="https://soglasovanie66.ru/" target="_blank" rel="noopener">soglasovanie66.ru</a>
+      <a href="https://yandex.ru/maps/-/CXFlzT9B" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://go.2gis.com/xJQvt" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+      <a href="https://www.retail.ru/news/s-1-marta-vstupyat-v-silu-novye-trebovaniya-k-vyveskam-i-ukazatelyam-18-fevralya-2026-274653/" target="_blank" rel="noopener">Retail.ru — требования к вывескам с 1 марта 2026</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={p:[363,379,330,294,351,430,450,388,386,447,435,450,454,437,280,199,374,403,483,475,476,491,410,380],
+z:[27,43,34,28,103,55,27,39,243,119,71,78,89,100,92,157,624,958,147,74,38,58,41,59]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-com':[['изготовление вывесок','коммерческое, смежное',194],['заказать вывеску екатеринбург','коммерческое, смежное',132],['согласование вывески','коммерческое',101],['разрешение на установку рекламной конструкции','коммерческое',35],['согласование рекламы','коммерческое',19],['согласование рекламных конструкций','коммерческое',17],['как согласовать вывеску на фасаде здания','смешанное',14],['согласование вывески на фасаде','коммерческое',11],['согласование вывески с администрацией города','коммерческое',7],['юрист по рекламе','коммерческое',5]],
+ 't-info':[['паспорт фасада','что это, где взять, согласование',368],['медиафасад','требования, размещение',148],['паспорта фасадов екатеринбург','реестр, администрация',138],['схема размещения рекламных конструкций','муниципальная схема',101],['дизайн код екатеринбурга','правила оформления фасадов',71],['согласованные паспорта фасадов','реестр',49],['паспорт фасада екатеринбург администрация','где получить',48],['демонтаж вывески','предписания',29],['закон о вывесках','русский язык, иностранный язык',24],['вывески на русском языке','требования 168-ФЗ',18]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайты'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
