@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Лаборатория красоты»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:360px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+.p-src{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+@media(max-width:360px){.vc .story-top{flex-direction:column;gap:4px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Лаборатория красоты · Нижнекамск</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ЛАБОРАТОРИЯ КРАСОТЫ</span><span>ЛАБОРАТОРИЯ КРАСОТЫ</span><span>ЛАБОРАТОРИЯ КРАСОТЫ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Лаборатория красоты» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка Нижнекамска, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Лаборатория красоты</b></div>
+        <div><span>Город</span><b>Нижнекамск</b></div>
+        <div><span>Направления</span><b>Ногти · Брови и ресницы · Эпиляция · Уход за телом</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 21.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Позиция по маникюру и педикюру</span><span class="t-n y">3</span><span class="t-s">на Яндекс Картах, из 61 организации</span></div>
+        <div class="tile"><span class="t-k">Лазерная эпиляция и прессотерапия</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первых 25 результатах</span></div>
+        <div class="tile"><span class="t-k">Новостей и историй на Картах</span><span class="t-n c">0</span><span class="t-s">прайс помечен «Давно не обновлялось»</span></div>
+        <div class="tile"><span class="t-k">Спрос на педикюр</span><span class="t-n g">+11%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах по 20 запросам, сайт в органике, спрос по Вордстату для Нижнекамска, причины просадки, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис. Новости ведут карточку в выдачу по лазерной эпиляции, аппаратному педикюру, бровям и прессотерапии — там, где карточка сейчас слабая или её нет.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">ожидаем к 27.10</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет с 16 октября открыт только для просмотра, редактирование карточки недоступно. К восстановлению тексты, обложки и сторис первой недели будут готовы.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">27.10</span><span class="st next">следующий шаг</span></div><h3>Рубрики, прайс, название</h3><p>Рубрики под эпиляцию, солярий и процедуры для тела, единый прайс с 2ГИС, одно название «Лаборатория красоты» на всех площадках. Рубрики ставим до первой новости, чтобы публикации работали на выдачу.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 11.11 · 18.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Лазерная эпиляция, педикюр с аппаратной обработкой, брови и ресницы, прессотерапия и уход за телом — по одной новости и одной сторис в неделю.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после восстановления</span><span class="st next">обсудить</span></div><h3>Тариф Яндекс Бизнеса</h3><p>Выбор тарифа, который убирает рекламу конкурентов с карточки и сохраняет новости и истории.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 20 запросам на Картах и в органике, сравнение с соседями по выдаче, спрос и сезонность в Нижнекамске, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Лазерная эпиляция</li>
+            <li>05.11 — Педикюр с аппаратной обработкой</li>
+            <li>11.11 — Брови и ресницы</li>
+            <li>18.11 — Прессотерапия и уход за телом</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Нижнекамск · салон красоты · замер 21.10.2026</span>
+  <h1>Где «Лаборатория красоты» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 20 запросам, сайт в органической выдаче Яндекса по 9 запросам, спрос по Вордстату для региона «Нижнекамск» и сравнение с карточками, которые стоят выше.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Ногти, брови и ресницы на Картах — 2–4 место</b>«маникюр» №3, «педикюр» №3, «ногтевая студия» №3, «японский маникюр» №4, «ламинирование ресниц» №2, «ламинирование бровей» №3. Выше по ногтям стоят Люкс Нэйлс и Dee Nails.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Лазерная эпиляция и прессотерапия — карточки нет</b>«лазерная эпиляция» (38 организаций), «эпиляция» (52), «прессотерапия» (26) — «Лаборатории красоты» нет в первых 25 результатах, хотя оба направления есть на сайте компании.</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>Аппаратный педикюр, брови, салон красоты — 7–10 место</b>«аппаратный педикюр» №7, «салон красоты» №7, «солярий» №8, «коррекция бровей» №10, «коррекция фигуры» №18.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Сайт не входит в топ-30 Яндекса ни по одному запросу</b>Включая название компании. По запросу site:lab.onligo.ru Яндекс не находит ни одной страницы: сайт не проиндексирован.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Педикюр растёт, маникюр и эпиляция снижаются</b>«педикюр нижнекамск»: +17% за январь–сентябрь 2026 к 2025, «педикюр»: +11%. «маникюр»: −23%, «лазерная эпиляция»: −19%. Запросы с городом стабильны: «маникюр нижнекамск» +1%, «салон красоты нижнекамск» +2%.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,9</div><div class="s">155 оценок, 64 отзыва</div></div>
+    <div class="kpi"><div class="k">Отзывов на 2ГИС</div><div class="n">249</div><div class="s">рейтинг 5, номинант Премии 2ГИС 2026</div></div>
+    <div class="kpi"><div class="k">Новостей и историй на Картах</div><div class="n">0</div><div class="s">прайс «Давно не обновлялось»</div></div>
+    <div class="kpi"><div class="k">Рубрик на Яндекс Картах</div><div class="n">3</div><div class="s">нет эпиляции, солярия и ухода за телом</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Нижнекамску, без геолокации пользователя, первые 25 результатов. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в топе</th></tr></thead>
+    <tbody>
+      <tr><td>маникюр</td><td class="r num">3 из 61</td><td>Люкс Нэйлс (69 отз.), Dee Nails (95 отз., реклама)</td></tr>
+      <tr><td>педикюр</td><td class="r num">3 из 61</td><td>Люкс Нэйлс, Dee Nails</td></tr>
+      <tr><td>ногтевая студия</td><td class="r num">3 из 59</td><td>Люкс Нэйлс, Dee Nails</td></tr>
+      <tr><td>японский маникюр</td><td class="r num">4 из 16</td><td>Люкс Нэйлс, Dee Nails, Be Beauty A. M.</td></tr>
+      <tr><td>наращивание ногтей</td><td class="r num">4 из 44</td><td>Люкс Нэйлс, Dee Nails, Центр подологии и эстетики</td></tr>
+      <tr><td>аппаратный педикюр</td><td class="r num">7 из 51</td><td>Центр подологии и эстетики (77), Люкс Нэйлс, Dee Nails, Подолог НК, Podospecific</td></tr>
+      <tr><td>ламинирование ресниц</td><td class="r num">2 из 31</td><td>Ламинирование ресниц</td></tr>
+      <tr><td>ламинирование бровей</td><td class="r num">3 из 32</td><td>Студия Вершининой Анжелики, Ламинирование ресниц</td></tr>
+      <tr><td>коррекция бровей</td><td class="r num">10 из 56</td><td>Студия Вершининой Анжелики, Бьюти-студия Елены Бочкарёвой, Omelchenko Studio (397)</td></tr>
+      <tr><td>салон красоты</td><td class="r num">7 из 45</td><td>Ремикс, CoCô, Елена, Be Beauty A. M., Babor</td></tr>
+      <tr><td>солярий</td><td class="r num">8 из 22</td><td>Bronze me, Темма (340), Lotus studio</td></tr>
+      <tr><td>шугаринг</td><td class="r num">9 из 23</td><td>Хочу Сегодняnk, Evostudio, Лазер Лаб</td></tr>
+      <tr><td>восковая депиляция</td><td class="r num">7 из 30</td><td>Лазер Лаб (202), Babor, Хочу Сегодняnk</td></tr>
+      <tr><td>лазерная эпиляция</td><td class="r">нет в 25 из 38</td><td>Лазер Лаб (202), Магия Эпиляции, Laser Queen (294), Laser Pro</td></tr>
+      <tr><td>эпиляция</td><td class="r">нет в 25 из 52</td><td>Лазер Лаб, Магия Эпиляции, Like Me, Laser Queen</td></tr>
+      <tr><td>прессотерапия</td><td class="r">нет в 25 из 26</td><td>Енот, Лазер Лаб, Bonnita</td></tr>
+      <tr><td>коррекция фигуры</td><td class="r num">18 из 43</td><td>Like Me, Доктор Элен, Grand Float, Body Lpg</td></tr>
+      <tr><td>подарочный сертификат салон красоты</td><td class="r num">14 из 49</td><td>Be Beauty A. M., Виртуоз, Omelchenko Studio</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — число отзывов.</p>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки / отзывы</th><th>Рубрики</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Лаборатория красоты</b></td><td class="r num">4,9</td><td class="r num">155 / 64</td><td>салон красоты, салон бровей и ресниц, ногтевая студия</td></tr>
+      <tr><td>Люкс Нэйлс</td><td class="r num">4,9</td><td class="r num">89 / 69</td><td>ногтевая студия; «Хорошее место»</td></tr>
+      <tr><td>Dee Nails</td><td class="r num">5,0</td><td class="r num">116 / 95</td><td>ногтевая студия, салон бровей и ресниц, салон красоты; реклама в выдаче</td></tr>
+      <tr><td>Лазер Лаб</td><td class="r num">5,0</td><td class="r">— / 202</td><td>лидер по эпиляции, восковой депиляции, прессотерапии; «Хорошее место»</td></tr>
+      <tr><td>Магия Эпиляции</td><td class="r num">5,0</td><td class="r">— / 37</td><td>№2 по лазерной эпиляции; «Хорошее место»</td></tr>
+      <tr><td>Центр подологии и эстетики</td><td class="r num">5,0</td><td class="r num">86 / 77</td><td>подология, ногтевая студия; №1 по аппаратному педикюру</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>7–11 октября 2026 года беспилотники атаковали дата-центры Яндекса. С 16 октября кабинет Яндекс Бизнеса снова открыт, но только для просмотра: редактирование карточки, создание и продление кампаний недоступны, уже запущенные кампании продолжают работать. Сроков полного восстановления Яндекс не называет. Всё, что ниже требует правок в кабинете, мы внесём, как только Яндекс Бизнес вернётся в штатный режим.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Рубрики не покрывают эпиляцию, солярий и процедуры для тела</h3></div>
+      <p>У карточки три рубрики: <b>салон красоты, салон бровей и ресниц, ногтевая студия</b>. Ни одна не связана с эпиляцией, солярием или аппаратным уходом за телом. Поэтому по «лазерная эпиляция», «эпиляция» и «прессотерапия» карточки нет в первых 25 результатах, а по «коррекция фигуры» она 18-я, хотя на сайте компании есть и лазерная эпиляция, и прессотерапия, и солярий.</p>
+      <p>Лидеры этих выдач заявлены узко: Лазер Лаб и Магия Эпиляции — эпиляция, Енот — прессотерапия.</p>
+      <p class="next">Как только Яндекс Бизнес заработает в штатном режиме, добавим рубрики под эпиляцию, солярий и аппаратные процедуры и поддержим их новостями этапа 1.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточка не обновляется: новостей и историй нет, прайс старый</h3></div>
+      <p>На Яндекс Картах <b>0 новостей и 0 историй</b>. Прайс помечен «Давно не обновлялось» и расходится с 2ГИС, где цены обновлены 14 апреля 2026 года: например, маникюр без покрытия на Яндексе — 990 ₽, на 2ГИС — от 1 190 ₽. Расхождение цен на двух площадках снижает доверие.</p>
+      <span class="ev">Яндекс: прайс «Давно не обновлялось» · 2ГИС: «Обновлено 14 апреля 2026»</span>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>На Яндексе отзывов меньше, чем у соседей, и вчетверо меньше, чем на 2ГИС</h3></div>
+      <p>64 отзыва на Яндекс Картах против 95 у Dee Nails и 69 у Люкс Нэйлс — двух карточек, которые стоят выше по ногтевым запросам. На 2ГИС у компании <b>249 отзывов</b>. Поток на Яндексе есть (не меньше 8 отзывов за 2026 год), но он заметно слабее, чем на 2ГИС.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>На карточке показывается реклама конкурентов</h3></div>
+      <p>В блоке «Похожие места» карточки «Лаборатория красоты» есть рекламная карточка салона Макон. Человек, уже открывший карточку, видит предложение уйти к другим. В выдаче «маникюр» рекламное место над «Лабораторией красоты» занимает Dee Nails.</p>
+      <p>Это следствие новой политики Яндекс Карт. С конца июля 2026 года Яндекс переводит карточки организаций на тарифы: <b>Базовый</b> (бесплатный), <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки может показываться реклама других организаций, а новости, истории и фото в товарах и услугах скрываются. Расширенный тариф убирает рекламу конкурентов с карточки и возвращает новости и истории; Продвинутый добавляет приоритетные показы в выдаче. Стоимость назначается в кабинете индивидуально и считается за 90 дней.</p>
+      <p class="next">Когда Яндекс Бизнес включится, обсудим с представителем «Лаборатории красоты» покупку тарифа.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Название компании на площадках написано по-разному</h3></div>
+      <p>На Яндекс Картах компания называется «Лаборатория Красоты», на 2ГИС — «лаб, Лаборатория красоты», на сайте — «лаб, лаборатория красоты». Брендовый спрос из-за этого размыт: «бьюти лаб нижнекамск» — 28 запросов в месяц, «лаборатория красоты» — 3.</p>
+      <p class="next">Приводим все площадки к одному названию — «Лаборатория красоты».</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион Нижнекамск, первые 3 страницы выдачи, рекламу не считали.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">lab.onligo.ru</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>маникюр нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Авито, 2ГИС, Яндекс Услуги, Zoon, Profi, dikidi, ВКонтакте</td></tr>
+      <tr><td>педикюр нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Авито, 2ГИС, Яндекс Услуги, Zoon, Profi</td></tr>
+      <tr><td>салон красоты нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Zoon, Яндекс Услуги, chio-chio, Yell, Авито</td></tr>
+      <tr><td>лазерная эпиляция нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Яндекс Услуги, Zoon, Авито, сайты студий эпиляции</td></tr>
+      <tr><td>ламинирование ресниц нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Авито, 2ГИС, Яндекс Услуги, Zoon, Profi, ВКонтакте</td></tr>
+      <tr><td>коррекция бровей нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Авито, 2ГИС, Яндекс Услуги, Zoon, Profi</td></tr>
+      <tr><td>прессотерапия нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, сайты массажных салонов, Zoon, Яндекс Услуги</td></tr>
+      <tr><td>солярий нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Zoon, Яндекс Услуги, Авито, сайты соляриев</td></tr>
+      <tr><td>лаборатория красоты нижнекамск</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, ВКонтакте, Zoon, Яндекс Услуги, справочники</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на сайте мешает</h3><ul>
+      <li><b>Сайт не проиндексирован Яндексом.</b> По запросу site:lab.onligo.ru нет ни одной страницы, поэтому его нет даже по названию компании.</li>
+      <li><b>Одна страница на всё.</b> Сайт — одностраничник на поддомене платформы ONLIGO, в карте сайта один адрес. Отдельных страниц под маникюр, педикюр, эпиляцию, брови, солярий нет.</li>
+      <li><b>Нет города в заголовках.</b> Title и H1 — «Лаборатория красоты», без «Нижнекамск» и без услуг. Описание перечисляет направления, но тоже без города. Текста на странице около 1 300 знаков.</li>
+    </ul></div>
+    <div class="note"><h3>Что уже в порядке</h3><ul>
+      <li>robots.txt открыт для индексации и ссылается на sitemap.</li>
+      <li>Есть разметка LocalBusiness с адресом, телефонами и часами работы, стоит Яндекс Метрика.</li>
+      <li>У всех изображений заполнен alt, адрес и часы совпадают с карточками.</li>
+    </ul></div>
+  </div>
+  <p class="small" style="margin-top:16px">Важно для стратегии: первые 6–8 мест органики по всем коммерческим запросам заняты Яндекс Картами, 2ГИС, Яндекс Услугами, Авито, Zoon и Profi. Даже хороший сайт будет бороться за места после них. Быстрее всего клиенты приходят через карточку и профили на этих площадках.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Нижнекамске</h2><p>Вордстат, регион «Нижнекамск», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="m"><h3>«маникюр»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: −23%</div></div>
+    <div class="chart" data-chart="p"><h3>«педикюр»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: +11%</div></div>
+    <div class="chart" data-chart="l"><h3>«лазерная эпиляция»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: −19%</div></div>
+    <div class="chart" data-chart="s"><h3>«солярий»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: −1%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: маникюр — пик в декабре (5 823 в 2024, 4 198 в 2025), провал в январе–феврале. Педикюр и солярий — пик в мае–июле (педикюр 872 в мае 2026, солярий 986), минимум в октябре–январе. Лазерная эпиляция ровная, с подъёмом в марте и сентябре.</p>
+
+  <h3>Ногти, брови, ресницы</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-nail"></tbody>
+  </table></div>
+
+  <h3>Эпиляция, солярий, уход за телом</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-body"></tbody>
+  </table></div>
+
+  <h3>Информационный спрос — материал для новостей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-info"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Эпиляция — второй по объёму спрос после ногтей</b>: «эпиляция» 564, «лазерная эпиляция» 421, с городом — 90 и 68. Именно здесь карточки нет в выдаче.</li>
+      <li><b>Общие запросы падают, запросы с городом держатся.</b> «маникюр» −23%, но «маникюр нижнекамск» +1%, «педикюр нижнекамск» +17%. Ищут конкретное место рядом — это работа Карт.</li>
+      <li><b>Солярий — сезонный</b>: «солярий нижнекамск» 75 в месяц, весной и летом в 2–3 раза больше. Тему выгодно усиливать с марта.</li>
+    </ul></div>
+    <div class="note"><h3>Узнаваемость бренда</h3><ul>
+      <li>«бьюти лаб нижнекамск» — <b>28</b> запросов в месяц, +18% к прошлому году.</li>
+      <li>«лаборатория красоты» — 3 в месяц; «лаб нижнекамск» — 55, но 42 из них — «лазер лаб нижнекамск», конкурент.</li>
+      <li>Человек почти никогда не ищет салон по названию. Он выбирает его на Картах среди 45–60 карточек, поэтому важны рубрики, свежие публикации, отзывы и цена в сниппете.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Салонов красоты в России</div><div class="n">70 324</div><div class="s">I квартал 2026, +18,6% за год</div></div>
+    <div class="kpi"><div class="k">Оборот отрасли</div><div class="n">81,8 млрд ₽</div><div class="s">I квартал 2026, +5%</div></div>
+    <div class="kpi"><div class="k">Рост оборота салонов Казани</div><div class="n">+27,5%</div><div class="s">лучший результат среди миллионников</div></div>
+    <div class="kpi"><div class="k">Организаций на Картах Нижнекамска</div><div class="n">61</div><div class="s">по запросу «маникюр»; 52 — «эпиляция»</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Салонов становится больше быстрее, чем растёт оборот: на одну точку приходится меньше денег, конкуренция за клиента растёт. В Нижнекамске это видно по выдаче: по маникюру 61 организация, по эпиляции 52. Выигрывает тот, кто виден по каждому своему направлению, а не только по главному.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первый этап даёт основной эффект на Картах и почти ничего не стоит.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Добавить рубрики.</b><span>Главная остаётся «Салон красоты». Добавить рубрики под эпиляцию, солярий и аппаратные процедуры для тела — по ним сейчас карточки нет в выдаче, а услуги у компании есть.</span></li>
+        <li><b>Обновить прайс и свести его с 2ГИС.</b><span>Одни и те же цены на обеих площадках, разделы под каждое направление с сайта: маникюр, педикюр, брови, ресницы, солярий, лазерная эпиляция, прессотерапия.</span></li>
+        <li><b>Одно название — «Лаборатория красоты».</b><span>Привести к нему карточки на Яндекс Картах и 2ГИС, сайт и профили на агрегаторах, вместе с описанием с направлениями и городом.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить поток контента и отзывов</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Новости на карточке каждую неделю.</b><span>Темы — направления, где карточка слабая: эпиляция, аппаратный педикюр, брови, прессотерапия, солярий. Так Яндекс связывает карточку с этими запросами.</span></li>
+        <li><b>Сторис — по одной в неделю.</b><span>Короткие факты о направлениях, режиме работы и записи.</span></li>
+        <li><b>Перенести поток отзывов с 2ГИС на Яндекс.</b><span>Ссылка или QR на карточку Яндекса на ресепшене и в сообщении после визита. Отзывы только от реальных клиентов, без вознаграждения: Яндекс снимает подозрительные.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Занять агрегаторы из топа выдачи</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>Яндекс Услуги, Авито, Zoon, Profi, dikidi.</b><span>Они стоят на первой странице по каждому коммерческому запросу. Профиль на каждой площадке с одинаковыми названием, адресом, телефоном и прайсом — самый быстрый путь в органику.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Пересобрать сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Добиться индексации.</b><span>Добавить сайт в Яндекс Вебмастер, отправить sitemap на переобход.</span></li>
+        <li><b>Страница под каждое направление.</b><span>Маникюр, педикюр, брови, ресницы, лазерная эпиляция, солярий, прессотерапия. В title и H1 — услуга и «Нижнекамск», цены «от», кнопка записи.</span></li>
+        <li><b>Свой домен.</b><span>Поддомен платформы ограничивает структуру и контроль над сайтом; для роста в органике нужен собственный адрес.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Расширенный убирает рекламу конкурентов с карточки и сохраняет новости и истории. Продвинутый добавляет приоритетные показы. Обсудить с компанией после восстановления Яндекс Бизнеса.</span></li>
+        <li><b>Яндекс Директ — эпиляция и солярий.</b><span>Там, где карточке ещё долго расти до топа: «лазерная эпиляция нижнекамск», «эпиляция нижнекамск», «солярий нижнекамск». Солярий усиливать с марта по июль.</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">Ногти — сильная сторона: третье место по маникюру и педикюру при 61 организации в выдаче. Рост — в направлениях, о которых Карты пока не знают: лазерная эпиляция, прессотерапия, солярий. Компания позиционирует себя словами «Уход в деталях» и «Время для себя» — от маникюра и педикюра до ухода за бровями, ресницами и телом. Задача этапа — чтобы карточка показывалась по каждому из этих направлений, а не только по ногтям.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Нижнекамску 21.10.2026 без геолокации пользователя, первые 25 результатов; рубрики, рейтинг и реклама взяты из данных страниц карточек.</li>
+    <li>Органика: Яндекс, регион Нижнекамск, первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Нижнекамск», все устройства; частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/laboratoriya_krasoty/58575148519/" target="_blank" rel="noopener">Карточка «Лаборатория красоты» на Яндекс Картах</a>
+    <a href="https://2gis.ru/nizhnekamsk/firm/70000001025425777" target="_blank" rel="noopener">Карточка на 2ГИС</a>
+    <a href="https://lab.onligo.ru/" target="_blank" rel="noopener">lab.onligo.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://finance.mail.ru/article/sber-chislo-dejstvuyuschih-salonov-krasotyi-v-rf-v-i-kvartale-uvelichilos-na-186-69209651/" target="_blank" rel="noopener">ТАСС / Сбер — число салонов красоты в I квартале 2026</a>
+    <a href="https://adindex.ru/news/digital/2026/10/16/350059.phtml" target="_blank" rel="noopener">AdIndex — Яндекс частично восстановил Метрику, Вебмастер и Бизнес</a>
+    <a href="https://ppc.world/news/chto-izvestno-o-rabote-metriki-appmetrica-vebmastera-yandeks-biznesa-api-direkta-i-promostranic-status/" target="_blank" rel="noopener">ppc.world — статус Яндекс Бизнеса</a>
+    <a href="https://novayagazeta.eu/amp/articles/2026/10/12/ataki-na-iandeks-obrushili-runet" target="_blank" rel="noopener">Новая газета Европа — атаки на дата-центры Яндекса</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+    <a href="https://zvenom.ru/blog/tarify-yandeks-biznesa.html" target="_blank" rel="noopener">Звеном — что стало платным в карточке организации</a>
+  </div>
+</section>
+
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Салон красоты · Нижнекамск</span>
+    <h1>«Лаборатория красоты» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Лаборатория красоты» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Салон красоты <small>Ногтевая студия · Салон бровей и ресниц</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Нижнекамск</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">проспект Шинников, 38 <small>рядом ТЦ Берёзка</small></div></div>
+      <div class="fact"><div class="k">Компания</div><div class="v">Лаборатория красоты <small>Уход в деталях</small></div></div>
+      <div class="fact"><div class="k">Направления</div><div class="v">Маникюр · Педикюр · Брови · Ресницы <small>Солярий · Лазерная эпиляция · Прессотерапия · Парфюм на распив</small></div></div>
+      <div class="fact"><div class="k">Время работы</div><div class="v">Ежедневно <small>10:00–20:00</small></div></div>
+      <div class="fact"><div class="k">Запись</div><div class="v">Онлайн-запись <small>Предварительная запись</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">lab.onligo.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Лаборатории красоты»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: лаймово-кремовый фон и чёрный знак логотипа «л—а—б», графит-олива и светлое дерево интерьера салона.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#EAF2B6;color:#000000;border-color:#EAF2B6">
+        <div class="role">Основной</div><div class="name">Лаймово-кремовый</div><div class="hex">#EAF2B6</div>
+      </div>
+      <div class="swatch" style="background:#000000;color:#EAF2B6;border-color:#2A2A2A">
+        <div class="role">Текстовый</div><div class="name">Чёрный знака</div><div class="hex">#000000</div>
+      </div>
+      <div class="swatch" style="background:#4C4840;color:#F4F1E8;border-color:#4C4840">
+        <div class="role">Акцентный</div><div class="name">Графит-олива</div><div class="hex">#4C4840</div>
+      </div>
+      <div class="swatch" style="background:#BA9564;color:#000000;border-color:#BA9564">
+        <div class="role">Второстепенный</div><div class="name">Светлое дерево</div><div class="hex">#BA9564</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым в Нижнекамске карточку сейчас не видно или она стоит ниже пятого места. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Лазерная эпиляция и восковая эпиляция — направление, по которому карточки нет в выдаче. Сторис — солярий.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Педикюр: частичный, полный и гигиенический, аппаратная обработка пальчиков и стоп. Сторис — три формата педикюра.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Брови и ресницы: архитектура бровей, ламинирование и вельвет ресниц. Сторис — ресницы.</p></div>
+      <div class="cycle-row"><div class="tag">18.11</div><p>Прессотерапия и аппаратный уход за телом. Сторис — режим работы и способы записи и оплаты.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и тепло, в голосе самой компании: «Любить, заботиться, ухаживать». Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. Без слов о безопасности и эффективности процедур. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Лазерная эпиляция в Нижнекамске — в «Лаборатории красоты» на проспекте Шинников</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Остановиться и не бежать, уделить себе время — так мы в «Лаборатории красоты» понимаем уход. Одно из наших направлений — лазерная эпиляция.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Лазерная эпиляция — одно из направлений «Лаборатории красоты».<span class="src">сайт</span></li>
+        <li>Кроме лазерной, в салоне делают восковую эпиляцию.<span class="src">2ГИС</span></li>
+        <li>Уход в деталях: от маникюра и педикюра до ухода за бровями, ресницами и телом.<span class="src">сайт</span></li>
+        <li>«Нам важно быть вовлечёнными в каждый визит и каждый разговор — и всегда хочется сделать ещё лучше».<span class="src">сайт</span></li>
+        <li>Есть противопоказания, проконсультируйтесь с врачом.<span class="src">2ГИС</span></li>
+        <li>Ежедневно с 10:00 до 20:00, Нижнекамск, проспект Шинников, 38.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Лазерная эпиляция в Нижнекамске — «Лаборатория красоты»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Лазерная эпиляция в Нижнекамске на проспекте Шинников | Лаборатория красоты</span></div>
+        <div class="meta-row"><span><b>Description · </b>Лазерная и восковая эпиляция в Нижнекамске: «Лаборатория красоты», проспект Шинников, 38. Ежедневно с 10:00 до 20:00, онлайн-запись.</span></div>
+        <div class="chips">
+          <span class="chip-kw">лазерная эпиляция нижнекамск</span><span class="chip-kw">эпиляция нижнекамск</span>
+          <span class="chip-kw">лазерная эпиляция</span><span class="chip-kw">лазерная эпиляция в салоне красоты</span>
+          <span class="chip-kw">восковая эпиляция нижнекамск</span><span class="chip-kw">восковая депиляция</span>
+          <span class="chip-kw">удаление волос нижнекамск</span><span class="chip-kw">эпиляция проспект шинников</span>
+          <span class="chip-kw">запись на лазерную эпиляцию</span><span class="chip-kw">салон красоты нижнекамск</span>
+          <span class="chip-kw">лаборатория красоты нижнекамск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на лазерную эпиляцию онлайн — ждём вас каждый день с 10 до 20.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Лазерная эпиляция»</div>
+        <p>Композиция: крупный план — плечо и рука с гладкой кожей в мягком дневном свете, светлый нейтральный фон; тезис на плашке в нижней трети, логотип «л—а—б» в верхнем левом углу. Текст и логотип — не больше 20% площади.</p>
+        <p>Цвета: плашка — лаймово-кремовый #EAF2B6, тезис — чёрный #000000, тонкая линия под тезисом — графит-олива #4C4840.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Педикюр в Нижнекамске: частичный, полный и гигиенический, с аппаратной обработкой пальчиков и стоп</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Уход в деталях» — так мы называем свои направления. Сегодня рассказываем о педикюре.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Частичный, полный и гигиенический педикюр без покрытия.<span class="src">сайт</span></li>
+        <li>Аппаратная обработка пальчиков и стоп.<span class="src">сайт</span></li>
+        <li>Покрытие лаком или гель-лаком — для частичного и полного педикюра.<span class="src">сайт</span></li>
+        <li>Женский и мужской педикюр.<span class="src">2ГИС</span></li>
+        <li>«Очень любим своё дело. И нам важно ваше мнение».<span class="src">сайт</span></li>
+        <li>Ежедневно с 10:00 до 20:00, проспект Шинников, 38.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Педикюр в Нижнекамске — «Лаборатория красоты»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Аппаратный педикюр с покрытием в Нижнекамске | Лаборатория красоты</span></div>
+        <div class="meta-row"><span><b>Description · </b>Педикюр в Нижнекамске: частичный, полный и гигиенический, аппаратная обработка пальчиков и стоп, покрытие лаком или гель-лаком. Проспект Шинников, 38, ежедневно с 10:00 до 20:00.</span></div>
+        <div class="chips">
+          <span class="chip-kw">педикюр нижнекамск</span><span class="chip-kw">аппаратный педикюр</span>
+          <span class="chip-kw">аппаратный педикюр нижнекамск</span><span class="chip-kw">педикюр с покрытием</span>
+          <span class="chip-kw">педикюр гель-лак</span><span class="chip-kw">гигиенический педикюр</span>
+          <span class="chip-kw">полный педикюр</span><span class="chip-kw">обработка стоп</span>
+          <span class="chip-kw">мужской педикюр нижнекамск</span><span class="chip-kw">маникюр педикюр нижнекамск</span>
+          <span class="chip-kw">ногтевая студия нижнекамск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте формат педикюра и записывайтесь онлайн.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Педикюр в деталях»</div>
+        <p>Композиция: рабочее место мастера педикюра — кресло и светлое дерево интерьера салона, аккуратно разложенные инструменты; тезис в верхней трети на светлой подложке, логотип «л—а—б» в верхнем левом углу.</p>
+        <p>Цвета: подложка — лаймово-кремовый #EAF2B6, тезис — чёрный #000000, акцентная полоса слева — светлое дерево #BA9564.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 11 ноября</span><h3>Брови и ресницы в Нижнекамске: архитектура бровей, ламинирование и вельвет ресниц</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Любить, заботиться, ухаживать — в том числе за бровями и ресницами. Рассказываем, что для этого есть в «Лаборатории красоты».</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Архитектура бровей: коррекция бровей и консультация мастера.<span class="src">сайт</span></li>
+        <li>Ламинирование и вельвет ресниц.<span class="src">сайт</span></li>
+        <li>Окрашивание и ламинирование бровей, окрашивание и наращивание ресниц.<span class="src">2ГИС</span></li>
+        <li>Салон бровей и ресниц — одна из рубрик компании на Яндекс Картах.<span class="src">карточка</span></li>
+        <li>Ежедневно с 10:00 до 20:00, онлайн-запись.<span class="src">сайт, карточка</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Брови и ресницы в Нижнекамске — «Лаборатория красоты»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Коррекция бровей и ламинирование ресниц в Нижнекамске | Лаборатория красоты</span></div>
+        <div class="meta-row"><span><b>Description · </b>Архитектура бровей, коррекция и окрашивание бровей, ламинирование и вельвет ресниц в Нижнекамске. Проспект Шинников, 38, ежедневно с 10:00 до 20:00.</span></div>
+        <div class="chips">
+          <span class="chip-kw">коррекция бровей нижнекамск</span><span class="chip-kw">коррекция бровей</span>
+          <span class="chip-kw">архитектура бровей</span><span class="chip-kw">окрашивание бровей</span>
+          <span class="chip-kw">ламинирование бровей</span><span class="chip-kw">ламинирование ресниц нижнекамск</span>
+          <span class="chip-kw">ламинирование ресниц</span><span class="chip-kw">вельвет ресниц</span>
+          <span class="chip-kw">окрашивание ресниц</span><span class="chip-kw">салон бровей и ресниц нижнекамск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на архитектуру бровей и ламинирование ресниц онлайн.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Брови и ресницы»</div>
+        <p>Композиция: крупный план — взгляд с ухоженными бровями и ресницами, профиль в три четверти, мягкий свет; тезис на плашке в нижней трети, логотип «л—а—б» в верхнем левом углу.</p>
+        <p>Цвета: плашка — графит-олива #4C4840, тезис — лаймово-кремовый #EAF2B6, рамка-уголок — светлое дерево #BA9564.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 18 ноября</span><h3>Прессотерапия и аппаратный уход за телом в Нижнекамске</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Наш уход — от маникюра и педикюра до ухода за телом. Сегодня — о прессотерапии и аппаратных процедурах.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Прессотерапия — одно из направлений «Лаборатории красоты».<span class="src">сайт</span></li>
+        <li>Аппаратный массаж, мадеротерапия, лимфодренаж.<span class="src">2ГИС</span></li>
+        <li>От маникюра и педикюра до ухода за бровями, ресницами и телом.<span class="src">сайт</span></li>
+        <li>Есть противопоказания, проконсультируйтесь с врачом.<span class="src">2ГИС</span></li>
+        <li>Ежедневно с 10:00 до 20:00, проспект Шинников, 38.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Прессотерапия в Нижнекамске — «Лаборатория красоты»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Прессотерапия, лимфодренаж и мадеротерапия в Нижнекамске | Лаборатория красоты</span></div>
+        <div class="meta-row"><span><b>Description · </b>Прессотерапия, аппаратный массаж, мадеротерапия и лимфодренаж в Нижнекамске. «Лаборатория красоты», проспект Шинников, 38, ежедневно с 10:00 до 20:00.</span></div>
+        <div class="chips">
+          <span class="chip-kw">прессотерапия нижнекамск</span><span class="chip-kw">прессотерапия</span>
+          <span class="chip-kw">прессотерапия что это за процедура</span><span class="chip-kw">лимфодренаж нижнекамск</span>
+          <span class="chip-kw">аппаратный массаж нижнекамск</span><span class="chip-kw">мадеротерапия нижнекамск</span>
+          <span class="chip-kw">коррекция фигуры нижнекамск</span><span class="chip-kw">уход за телом нижнекамск</span>
+          <span class="chip-kw">аппаратные процедуры для тела</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на прессотерапию онлайн и уделите время себе.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Уход за телом»</div>
+        <p>Композиция: кабинет аппаратных процедур — кушетка, светлое дерево и мягкий свет, без людей в кадре; тезис на плашке в нижней трети, логотип «л—а—б» в верхнем левом углу.</p>
+        <p>Цвета: плашка — чёрный #000000, тезис — лаймово-кремовый #EAF2B6, тонкая линия — светлое дерево #BA9564.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Солярий в «Лаборатории красоты»</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Вертикальный солярий</span>
+          <span class="fact-pill">Ежедневно 10:00–20:00</span>
+          <span class="fact-pill">Проспект Шинников, 38</span>
+          <span class="fact-pill">Рядом ТЦ Берёзка</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон чёрный #000000, заголовок лаймово-кремовым #EAF2B6, факты списком лаймово-кремовым #EAF2B6 с тонкими разделителями светлым деревом #BA9564. Логотип «л—а—б» в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Педикюр: три формата</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Частичный</span>
+          <span class="fact-pill">Полный</span>
+          <span class="fact-pill">Гигиенический без покрытия</span>
+          <span class="fact-pill">Аппаратная обработка пальчиков и стоп</span>
+          <span class="fact-pill">Лак или гель-лак</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон лаймово-кремовый #EAF2B6, заголовок чёрным #000000, три формата крупными строками графит-оливой #4C4840, строка о покрытии внизу на плашке светлого дерева #BA9564.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Ресницы: ламинирование и вельвет</div><span class="slide-no">Сторис 3 · 11 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Ламинирование ресниц</span>
+          <span class="fact-pill">Вельвет ресниц</span>
+          <span class="fact-pill">Окрашивание ресниц</span>
+          <span class="fact-pill">Архитектура бровей</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит-олива #4C4840, заголовок лаймово-кремовым #EAF2B6, услуги списком лаймово-кремовым #EAF2B6, маркеры светлым деревом #BA9564. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Каждый день с 10 до 20</div><span class="slide-no">Сторис 4 · 18 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Ежедневно 10:00–20:00</span>
+          <span class="fact-pill">Онлайн-запись</span>
+          <span class="fact-pill">Картой, наличными, по QR-коду</span>
+          <span class="fact-pill">«Плати частями»</span>
+          <span class="fact-pill">Пандус</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон лаймово-кремовый #EAF2B6, «10–20» крупно чёрным #000000, остальные факты списком графит-оливой #4C4840. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — эпиляция, педикюр, брови и ресницы, уход за телом <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Лазерная эпиляция в Нижнекамске</b>28.10 · лазерная и восковая эпиляция, проспект Шинников, 38</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Солярий в «Лаборатории красоты»</b>28.10 · вертикальный солярий, ежедневно 10–20</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Педикюр: частичный, полный, гигиенический</b>05.11 · аппаратная обработка пальчиков и стоп, лак или гель-лак</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Педикюр: три формата</b>05.11 · форматы и покрытие</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Брови и ресницы</b>11.11 · архитектура бровей, ламинирование и вельвет ресниц</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Ресницы: ламинирование и вельвет</b>11.11 · услуги для ресниц и бровей</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Прессотерапия и уход за телом</b>18.11 · прессотерапия, аппаратный массаж, мадеротерапия, лимфодренаж</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Каждый день с 10 до 20</b>18.11 · онлайн-запись, способы оплаты, пандус</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <a href="https://lab.onligo.ru/" target="_blank" rel="noopener">lab.onligo.ru</a>
+      <a href="https://yandex.ru/maps/org/laboratoriya_krasoty/58575148519/" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://2gis.ru/nizhnekamsk/firm/70000001025425777" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={m:[4396,5091,5823,4125,3814,4397,3931,3798,4560,4246,3768,3388,3587,3400,4198,2822,2510,3073,2868,3223,3633,3489,3145,2961],
+p:[218,297,294,298,281,378,350,654,919,813,515,292,357,285,288,310,334,515,570,872,844,772,454,314],
+l:[517,701,489,799,613,709,536,534,630,676,562,474,584,573,516,505,421,551,480,459,493,514,598,464],
+s:[283,310,368,333,390,476,562,921,977,871,483,305,419,342,301,309,357,525,562,986,891,812,527,296]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-nail':[['маникюр','в основном инфо: дизайн, тренды',2842],['педикюр','смешанное',277],['маникюр нижнекамск','коммерческое, гео',262],['ламинирование ресниц','смешанное',231],['салон красоты нижнекамск','коммерческое, гео',118],['педикюр нижнекамск','коммерческое, гео, +17%',39],['ламинирование бровей','смешанное',37],['японский маникюр','смешанное',36],['коррекция бровей','смешанное',35],['бьюти лаб нижнекамск','брендовое, +18%',28],['ламинирование ресниц нижнекамск','коммерческое, гео',23],['маникюр педикюр нижнекамск','коммерческое, гео',23],['коррекция бровей нижнекамск','коммерческое, гео',15]],
+ 't-body':[['эпиляция','смешанное',564],['лазерная эпиляция','смешанное',421],['солярий','смешанное, сезонное',275],['шугаринг','смешанное',175],['эпиляция нижнекамск','коммерческое, гео',90],['rf лифтинг','в основном инфо',87],['солярий нижнекамск','коммерческое, гео',75],['лазерная эпиляция нижнекамск','коммерческое, гео',68],['обертывание','смешанное',45],['шугаринг нижнекамск','коммерческое, гео',34],['прессотерапия','смешанное',29],['коррекция фигуры','смешанное',23]],
+ 't-info':[['маникюр 2026','тренды и дизайн',627],['маникюр осень 2026','сезонный дизайн',246],['после эпиляции','уход после процедуры',65],['после солярия','уход после загара',41],['лазерная эпиляция сколько','стоимость и число сеансов',30],['ламинирование ресниц сколько','стоимость и стойкость',19],['прессотерапия что это за процедура','как проходит процедура',12],['как часто делать ламинирование ресниц','периодичность',9]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
