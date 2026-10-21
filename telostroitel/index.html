@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Телостроитель»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+[hidden]{display:none!important}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Телостроитель · Нижний Тагил</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ТЕЛОСТРОИТЕЛЬ ТЕЛОСТРОИТЕЛЬ</span><span>ТЕЛОСТРОИТЕЛЬ ТЕЛОСТРОИТЕЛЬ</span><span>ТЕЛОСТРОИТЕЛЬ ТЕЛОСТРОИТЕЛЬ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Телостроитель» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка фитнеса в Нижнем Тагиле, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Фитнес-клуб «Телостроитель»</b></div>
+        <div><span>Город</span><b>Нижний Тагил</b></div>
+        <div><span>Направления</span><b>Тренажёрный зал · Групповые программы · Персональные тренировки · Солярий</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 21.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«солярий» на Яндекс Картах</span><span class="t-n c">нет</span><span class="t-s">карточки нет среди 25 мест в выдаче</span></div>
+        <div class="tile"><span class="t-k">«групповые тренировки»</span><span class="t-n y">7</span><span class="t-s">место из 13 на Картах, Нижний Тагил</span></div>
+        <div class="tile"><span class="t-k">Отзывов в 2026 году</span><span class="t-n c">2</span><span class="t-s">у Bright Fit — 215, у Халка — 140</span></div>
+        <div class="tile"><span class="t-k">Спрос «солярий нижний тагил»</span><span class="t-n g">+12%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах по 24 запросам, сайт в органике Яндекса, спрос по Вордстату в Нижнем Тагиле, причины просадки, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">21.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис под запросы, где карточка слабая или её нет: солярий, групповые программы «Телостроитель Woman», тренажёрный зал, персональные тренировки.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">срок не объявлен</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет открыт только для просмотра, редактирование карточек недоступно. Тексты, обложки и сторис первой недели будут готовы заранее.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после восстановления</span><span class="st next">следующий шаг</span></div><h3>Рубрики, описание, единые цены</h3><p>Рубрики «Солярий» и «Стретчинг», описание с «Телостроитель Woman», одинаковые цены на сайте, Яндекс Картах и 2ГИС. Рубрики ставим до первой новости, чтобы публикации работали на выдачу.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 11.11 · 18.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Солярий, «Телостроитель Woman», тренажёрный зал, персональные тренировки — по одной новости и одной сторис в неделю.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 24 запросам на Картах и 9 запросам в органике, сравнение с соседями по выдаче, спрос и сезонность в Нижнем Тагиле, рынок фитнеса, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Солярий в «Телостроителе»</li>
+            <li>05.11 — «Телостроитель Woman»: групповые программы для девушек</li>
+            <li>11.11 — Тренажёрный зал: безлимит и PREMIUM</li>
+            <li>18.11 — Персональные тренировки</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Нижний Тагил · фитнес-клуб, тренажёрный зал, солярий · замер 21.10.2026</span>
+  <h1>Где «Телостроитель» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 24 запросам, сайт в органической выдаче Яндекса по 9 запросам, спрос по Вордстату для региона «Нижний Тагил» и сравнение с карточками соседей по выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Основные запросы на Картах — 1 место</b>«фитнес», «фитнес клуб», «тренажерный зал», «спортзал», «качалка», «персональный тренер», «кроссфит», «женский фитнес» — карточка первая. Это первое место держится на рекламе: в данных выдачи карточка помечена как рекламная.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Солярий — карточки нет совсем</b>По запросам «солярий», «солярий нижний тагил», «вертикальный солярий», «турбосолярий» «Телостроителя» нет ни на одном месте, хотя солярий в клубе есть. В выдаче стоят студии загара с 6–14 отзывами.</p></div>
+    <div class="v"><span class="pill warn">ниже соседей</span><p><b>Групповые тренировки и растяжка — 2–7 место</b>«групповые тренировки» №7, «стретчинг» №3, «растяжка» №2. Выше стоят Levita с рубрикой «Стретчинг» и Магнетика.</p></div>
+    <div class="v"><span class="pill crit">главное</span><p><b>Отзывы почти перестали приходить</b>34 отзыва за всё время, в 2026 году — 2, в 2025 — 4. У Bright Fit 215 отзывов, у Халка 140, у МетроFitness 120.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Сайт не входит в топ-30 Яндекса ни по одному коммерческому запросу</b>Находится только по названию компании. С карточки ведёт витрина программы лояльности UDS, отдельного сайта с услугами нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,7</div><div class="s">98 оценок, 34 отзыва</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">4,5</div><div class="s">44 оценки, 31 отзыв</div></div>
+    <div class="kpi"><div class="k">Новостей компании на Картах</div><div class="n">0</div><div class="s">сторис собирает сам Яндекс из фото и отзывов</div></div>
+    <div class="kpi"><div class="k">Награда</div><div class="n">2026</div><div class="s">«Хорошее место 2026» на Яндекс Картах</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Нижнему Тагилу, без геолокации пользователя. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>фитнес клуб</td><td class="r num">1 из 25</td><td>Bright Fit 215 отз., МетроFitness 120, Софит 40, Халк 140</td></tr>
+      <tr><td>фитнес</td><td class="r num">1 из 25</td><td>Bright Fit, МетроFitness, Софит, Халк, Фитанит 95</td></tr>
+      <tr><td>тренажерный зал</td><td class="r num">1 из 25</td><td>Bright Fit, МетроFitness, Халк, Софит, Уралец 191</td></tr>
+      <tr><td>спортзал</td><td class="r num">1 из 25</td><td>Bright Fit, МетроFitness, Халк, Софит</td></tr>
+      <tr><td>тренажерный зал для женщин</td><td class="r num">1 из 25</td><td>МетроFitness, Халк, Фитанит, Bright Fit</td></tr>
+      <tr><td>персональный тренер</td><td class="r num">1 из 6</td><td>Bright Fit, МетроFitness, Софит, Савад 30</td></tr>
+      <tr><td>кроссфит</td><td class="r num">1 из 8</td><td>МетроFitness, Халк, Софит, Hard work 29</td></tr>
+      <tr><td>растяжка</td><td class="r num">2 из 25</td><td>Levita 114 отз., МетроFitness, Гараж 24</td></tr>
+      <tr><td>стретчинг</td><td class="r num">3 из 22</td><td>Levita 114, Levita 69, МетроFitness</td></tr>
+      <tr><td>групповые тренировки</td><td class="r num">7 из 13</td><td>Магнетика 106 отз., Bright Fit 215, МетроFitness 120, Гараж 24, Софит 40</td></tr>
+      <tr><td>солярий</td><td class="r">нет в 25</td><td>Корсика 6 отз., Golden Sun 10, Пекло загар 14, ЗаТеплом 10</td></tr>
+      <tr><td>вертикальный солярий</td><td class="r">нет в 10</td><td>Golden Sun, ЗаТеплом, Пекло загар, Корсика</td></tr>
+      <tr><td>турбосолярий</td><td class="r">нет в 9</td><td>Golden Sun, Пекло загар, ЗаТеплом, Корсика</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">По запросам «качалка», «женский фитнес», «фитнес для женщин», «фитнес для беременных», «детский фитнес», «trx», «функциональный тренинг» и «абонемент в тренажерный зал» карточка тоже первая. В фитнес-выдачах рекламными помечены «Телостроитель» и МетроFitness, в выдаче «групповые тренировки» — ещё Магнетика.</p>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки / отзывы</th><th>Реклама на Картах</th><th>Рубрики и акции</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Телостроитель</b></td><td class="r num">4,7</td><td class="r num">98 / 34</td><td>есть</td><td>фитнес-клуб, тренажёрный зал, спортивный клуб; акция «Хочешь скидку?»; «Хорошее место 2026»</td></tr>
+      <tr><td>Bright Fit</td><td class="r num">4,9</td><td class="r num">717 / 215</td><td>нет</td><td>фитнес-клуб, тренажёрный зал; акция «Черная пятница», скидки до 60%; «Хорошее место 2026»</td></tr>
+      <tr><td>Халк</td><td class="r num">5,0</td><td class="r num">496 / 140</td><td>нет</td><td>фитнес-клуб, тренажёрный зал, спортивное питание</td></tr>
+      <tr><td>МетроFitness</td><td class="r num">4,7</td><td class="r num">389 / 120</td><td>есть</td><td>фитнес-клуб, тренажёрный зал</td></tr>
+      <tr><td>Фитанит</td><td class="r num">5,0</td><td class="r num">225 / 95</td><td>нет</td><td>фитнес-клуб; акция «12 часов фитнеса бесплатно»</td></tr>
+      <tr><td>Levita</td><td class="r num">5,0</td><td class="r num">185 / 114</td><td>нет</td><td>фитнес-клуб, стретчинг, школа танцев</td></tr>
+      <tr><td>Софит</td><td class="r num">4,4</td><td class="r num">171 / 40</td><td>нет</td><td>фитнес-клуб, тренажёрный зал</td></tr>
+      <tr><td>Гараж</td><td class="r num">4,9</td><td class="r num">28 / 24</td><td>нет</td><td>фитнес-клуб, тренажёрный зал, солярий; «Хорошее место 2026»</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>В начале октября 2026 года беспилотники атаковали дата-центры Яндекса в Сасове, Калуге и Владимире. С 16 октября кабинет Яндекс Бизнеса открыт только для просмотра: редактирование карточек и запуск новых кампаний недоступны, ранее запущенное продвижение продолжает работать. 20 октября Яндекс восстановил основные функции Директа, сроков полного восстановления Бизнеса не называет. Всё, что ниже требует правок в кабинете, мы внесём, как только редактирование вернётся.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Первые места держатся на рекламе, а не на силе карточки</h3></div>
+      <p>По 17 из 24 запросов «Телостроитель» стоит первым, и везде он помечен как рекламная карточка. По отзывам он уступает всем соседям сверху: <b>34 отзыва</b> против 215 у Bright Fit, 140 у Халка и 120 у МетроFitness. Если продвижение остановится, карточка опустится туда, где её держат отзывы и контент.</p>
+      <p>Реклама приводит человека на карточку, где нет новостей компании и свежих отзывов. Сторис на карточке собирает сам Яндекс из фото и отзывов, компания их не публикует.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Солярий на Яндекс Картах не заявлен</h3></div>
+      <p>На карточке три рубрики: <b>«Фитнес-клуб», «Спортивный, тренажёрный зал», «Спортивный клуб, секция»</b>. Рубрики «Солярий» нет, слова «солярий» нет ни в особенностях, ни в описании. Поэтому по четырём запросам про солярий карточки нет совсем. При этом солярий в клубе есть, а в 2ГИС у «Телостроитель Woman» указаны вертикальный солярий и турбосолярий.</p>
+      <p>У фитнес-клуба Гараж рубрика «Солярий» есть. Студии загара, которые занимают эту выдачу, имеют по 6–14 отзывов — здесь карточка «Телостроителя» с 34 отзывами и наградой может встать в первые строки.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Отзывы остановились</h3></div>
+      <p>34 отзыва: <b>2 в 2026 году</b> (апрель и октябрь), 4 в 2025, 4 в 2024, остальные — 2019–2023. Свежесть и поток отзывов — один из факторов ранжирования на Картах. Хорошо, что на отзывы есть ответы компании.</p>
+      <p>Оценок 98, а отзывов с текстом 34: люди ставят звёзды, но не пишут. Отзыв с текстом даёт карточке больше, чем оценка без текста.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Групповые программы и растяжка видны слабо</h3></div>
+      <p>«Телостроитель Woman» — групповые программы только для девушек на втором этаже — на Яндекс Картах отдельно не заявлен: нет рубрики «Стретчинг», нет описания компании. В выдаче «групповые тренировки» карточка на 7 месте, в «стретчинге» её обходят карточки Levita с этой рубрикой.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>Над карточкой показывается реклама другого клуба</h3></div>
+      <p>Над карточкой «Телостроителя» в Яндекс Картах показывается рекламный баннер другой компании (aversfit.promo): карта на 4 месяца фитнеса с бассейном. Человек, уже открывший карточку, видит предложение уйти к другим.</p>
+      <p>С июля 2026 года Яндекс тестирует тарифы для карточек: <b>Базовый</b>, <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки может показываться реклама конкурентов, а новости и истории скрываются. Расширенный убирает рекламу других организаций из карточки и возвращает новости и истории, Продвинутый добавляет приоритетные показы и зелёную метку.</p>
+      <p class="next">Когда Яндекс Бизнес заработает в штатном режиме, проверим в кабинете, какой тариф подключён у карточки, и обсудим с «Телостроителем» тариф без рекламы других организаций.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Данные расходятся между площадками</h3></div>
+      <p>Абонемент на 12 групповых тренировок: на Яндекс Картах 3 600 ₽, на сайте и в 2ГИС — 3 800 ₽. Расписание кроссфита на сайте и в прайсе Яндекс Карт указано по-разному. Время работы «Телостроитель Woman» в группе ВКонтакте — пн–вс 08:00–21:00, на сайте — пн–сб 08:00–22:00, вс 09:00–21:00. В 2ГИС у «Телостроитель Woman» отдельная карточка, на Яндекс Картах — одна общая. Расхождения снижают доверие и Яндекса, и человека.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион Нижний Тагил, первые 3 страницы выдачи, рекламу не считали.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Сайт компании</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>фитнес клуб нижний тагил</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Zoon, brightfit.ru, metrofitness.ru, Flamp, Fitmost, fitanit.ru</td></tr>
+      <tr><td>тренажерный зал нижний тагил</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Zoon, brightfit.ru, metrofitness.ru, Flamp, Яндекс Услуги</td></tr>
+      <tr><td>спортзал нижний тагил</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Zoon, brightfit.ru, metrofitness.ru, fitanit.ru, insait-nt.ru</td></tr>
+      <tr><td>солярий нижний тагил</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Zoon, Яндекс Услуги, Авито, Dikidi, metrofitness.ru</td></tr>
+      <tr><td>групповые тренировки нижний тагил</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, brightfit.ru, metrofitness.ru, Zoon, fitanit.ru, Авито, mfitness.pro</td></tr>
+      <tr><td>растяжка нижний тагил</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Zoon, levitafamily.ru, Авито, Яндекс Услуги</td></tr>
+      <tr><td>кроссфит нижний тагил</td><td class="r">нет в топ-30</td><td>2ГИС, Zoon, Яндекс Карты, Яндекс Услуги, hwfit.ru, ВКонтакте</td></tr>
+      <tr><td>персональный тренер нижний тагил</td><td class="r">нет в топ-30</td><td>Яндекс Карты, Яндекс Услуги, Авито, 2ГИС, Zoon, metrofitness.ru; группа «Телостроитель Woman» во ВКонтакте — 22 место</td></tr>
+      <tr><td>телостроитель нижний тагил</td><td class="r num">4</td><td>Яндекс Карты, ВКонтакте, 2ГИС, затем fktelostroitel.uds.app</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что мешает</h3><ul>
+      <li><b>Отдельного сайта с услугами нет.</b> С карточек ведёт fktelostroitel.uds.app — витрина программы лояльности UDS: прайс, новости, контакты. Страниц под тренажёрный зал, групповые программы, солярий и персональные тренировки нет.</li>
+      <li><b>Заголовки не про город и услуги.</b> Title витрины — «Телостроитель™️ - Тренировки в любом формате - доступные каждому», без «Нижний Тагил» и «фитнес-клуб». H1 один — «Телостроитель™️». В description эмодзи вместо перечня услуг.</li>
+      <li><b>Домен telostroitel-fitness.ru занят квизом.</b> Одна страница с тестом из трёх вопросов на конструкторе Marquiz: в коде страницы пустые title и description (title подставляет скрипт), текста на странице около 400 знаков. Ссылки на него с карточек нет.</li>
+    </ul></div>
+    <div class="note"><h3>Что уже в порядке</h3><ul>
+      <li>У витрины UDS есть sitemap, canonical и разметка schema.org, почти у всех картинок есть alt.</li>
+      <li>На витрине подробный прайс с описанием абонементов — готовый материал для страниц услуг и новостей.</li>
+      <li>По названию компании первые строки выдачи — карточка на Яндекс Картах, ВКонтакте и 2ГИС.</li>
+    </ul></div>
+  </div>
+  <p class="small" style="margin-top:16px">Важно для стратегии: первые места органики по всем коммерческим запросам занимают Яндекс Карты, 2ГИС, Zoon, Яндекс Услуги и Авито, следом идут сайты Bright Fit и МетроFitness. Быстрее всего клиенты приходят через карточку на Картах и профили на этих площадках.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Нижнем Тагиле</h2><p>Вордстат, регион «Нижний Тагил», все устройства. Частоты — общее число запросов, содержащих фразу, за сентябрь 2026, динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="f"><h3>«фитнес клуб»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: −17%</div></div>
+    <div class="chart" data-chart="s"><h3>«солярий»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: +2%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность фитнеса: высокие месяцы — январь–март (март 2025 — 983) и осень, минимум — май (май 2026 — 451). С июля 2026 спрос снова растёт: сентябрь 2026 — 719. Солярий живёт в обратном ритме: пик в мае–июне (май 2026 — 1 377), минимум в декабре–феврале (декабрь 2025 — 532).</p>
+
+  <h3>Зал и фитнес: что реально ищут</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-gym"></tbody>
+  </table></div>
+
+  <h3>Групповые программы и тренировки для женщин</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-grp"></tbody>
+  </table></div>
+
+  <h3>Солярий — материал для новостей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-sol"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Зал ищут стабильно</b>: «спортзал нижний тагил» +2% к прошлому году, «тренажерный зал нижний тагил» +6%. Общий «фитнес клуб» просел на 17%.</li>
+      <li><b>Солярий — крупный и растущий спрос, где карточки нет</b>: «солярий» 671 в месяц, «солярий нижний тагил» 253 (+12% к прошлому году).</li>
+      <li><b>Групповые направления по отдельности небольшие</b>: «растяжка» 1 050 (много запросов не про фитнес), табата 246, тренировки для женщин 145 (+5%), МФР 83. «стретчинг» −47%, «trx» −38%, «кроссфит» −28%.</li>
+    </ul></div>
+    <div class="note"><h3>Узнаваемость бренда</h3><ul>
+      <li>«телостроитель» — <b>64</b> запроса в сентябре, −32% за январь–сентябрь к прошлому году.</li>
+      <li>«халк фитнес» — 127, «софит» — 347 (+88%), «брайт фит» — 564.</li>
+      <li>С июля 2026 резко вырос спрос на «М-Фитнес»: «м фитнес» — 552 запроса в июле, 378 в сентябре; год назад — от 1 до 21 запроса в месяц.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Рынок фитнес-услуг РФ, прогноз 2026</div><div class="n">365 млрд ₽</div><div class="s">+15% к 2025, FitnessData</div></div>
+    <div class="kpi"><div class="k">Рост рынка в 2025</div><div class="n">+20%</div><div class="s">до 316,5 млрд ₽</div></div>
+    <div class="kpi"><div class="k">Средний чек в фитнес-клубах</div><div class="n">4,1 тыс. ₽</div><div class="s">2025, +9%, «Платформа ОФД»</div></div>
+    <div class="kpi"><div class="k">Карточек в выдаче «фитнес клуб»</div><div class="n">25</div><div class="s">выдача Яндекс Карт по Нижнему Тагилу заполнена до предела</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Рынок растёт, но медленнее: в 2024 году рост был 23%, в 2025 — 20%, на 2026 прогнозируют 15%. Крупные сети расширяются в регионы, а маржа клубов снижается. В Нижнем Тагиле это видно по выдаче: сайты Bright Fit и МетроFitness стоят в органике сразу после агрегаторов, а с июля резко вырос спрос на «М-Фитнес». Выигрывает тот, у кого заметнее цена и акция в выдаче и свежие отзывы на карточке.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первые два этапа дают основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней, после восстановления Яндекс Бизнеса</span></div>
+      <ol>
+        <li><b>Добавить рубрики «Солярий» и «Стретчинг».</b><span>Это откроет карточке выдачу по солярию, где её сейчас нет совсем, и поднимет её в растяжке и групповых тренировках.</span></li>
+        <li><b>Заполнить описание компании.</b><span>Тренажёрный зал на первом этаже, «Телостроитель Woman» с групповыми программами для девушек и солярием на втором, персональные тренировки, адрес — Садовая, 3.</span></li>
+        <li><b>Свести цены к одному виду.</b><span>Одинаковый прайс на сайте, Яндекс Картах и 2ГИС, в том числе абонемент на 12 групповых тренировок и расписание кроссфита. Добавить в прайс Карт солярий.</span></li>
+        <li><b>Сохранить акцию в выдаче.</b><span>Акция «Хочешь скидку?» уже есть. Её стоит обновлять под сезон, как это делают Bright Fit и Фитанит.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить поток отзывов и контента</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Просить отзыв с текстом после тренировки.</b><span>Ссылка или QR на карточку на ресепшене и в боте клуба в Telegram и MAX. Цель — ровный поток каждый месяц. Отзывы только от реальных клиентов, без вознаграждения: Яндекс снимает подозрительные.</span></li>
+        <li><b>Новости на карточке каждую неделю.</b><span>Темы — из запросов, где карточка слабая: солярий, групповые программы, тренажёрный зал, персональные тренировки.</span></li>
+        <li><b>Сторис к каждой новости.</b><span>Один слайд, одна мысль, фирменные цвета компании.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Занять агрегаторы из топа выдачи</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС, Zoon, Яндекс Услуги, Авито, Flamp.</b><span>Они стоят на первой странице по каждому коммерческому запросу. В 2ГИС стоит связать карточки «Телостроителя» и «Телостроитель Woman» одним описанием и прайсом, на остальных площадках — профиль с одинаковыми названием, адресом и телефоном.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сделать сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Свой сайт на telostroitel-fitness.ru вместо одного квиза.</b><span>Страницы под тренажёрный зал, «Телостроитель Woman» и групповые программы, солярий, персональные тренировки, кроссфит. В title и H1 — услуга и «Нижний Тагил», цены, форма записи на пробное занятие; квиз оставить как форму на странице.</span></li>
+        <li><b>Техническая база.</b><span>Title и description на каждой странице, robots.txt и sitemap, Яндекс Метрика и Вебмастер, разметка LocalBusiness. Ссылку на сайт поставить в карточки Яндекс Карт и 2ГИС.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапов 1–2</span></div>
+      <ol>
+        <li><b>Продвижение на Картах — сохранить.</b><span>Сейчас именно оно держит первые места. Чем больше отзывов и контента на карточке, тем больше звонков дают те же показы.</span></li>
+        <li><b>Яндекс Директ — по сезону.</b><span>Фитнес и абонементы — январь–март и сентябрь–ноябрь, солярий — апрель–июнь. Только запросы с городом и словами «абонемент», «цена», «запись».</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">«Телостроитель» сочетает на двух этажах одного здания тренажёрный зал, групповые программы только для девушек и солярий. Из 12 фитнес-клубов в начале выдачи «фитнес клуб» рубрику «Солярий» на Яндекс Картах заявил только Гараж. Эту связку и стоит показывать на карточке: рубриками, описанием и новостями.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Нижнему Тагилу 21.10.2026 без геолокации пользователя; рубрики, рейтинг, отзывы, акции и рекламный статус взяты из данных страниц карточек и выдачи.</li>
+    <li>Органика: Яндекс, регион «Нижний Тагил», первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Нижний Тагил», все устройства, октябрь 2024 — сентябрь 2026. Свежие данные после 07.10.2026 Яндекс пока не обновил.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/telostroitel/1676494098/" target="_blank" rel="noopener">Карточка «Телостроитель» на Яндекс Картах</a>
+    <a href="https://2gis.ru/ntagil/firm/70000001020403900" target="_blank" rel="noopener">Карточка «Телостроитель» в 2ГИС</a>
+    <a href="https://fktelostroitel.uds.app/c" target="_blank" rel="noopener">fktelostroitel.uds.app</a>
+    <a href="https://telostroitel-fitness.ru/" target="_blank" rel="noopener">telostroitel-fitness.ru</a>
+    <a href="https://vk.ru/fktelostroitel" target="_blank" rel="noopener">ВКонтакте — «Фитнес клуб Телостроитель Нижний Тагил»</a>
+    <a href="https://vk.ru/fitness_woman_nt" target="_blank" rel="noopener">ВКонтакте — «Женский фитнес «Телостроитель»»</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://ppc.world/news/chto-izvestno-o-rabote-metriki-appmetrica-vebmastera-yandeks-biznesa-api-direkta-i-promostranic-status/" target="_blank" rel="noopener">ppc.world — статус Яндекс Бизнеса, Метрики и Вебмастера</a>
+    <a href="https://vc.ru/marketing/3199382-yandeks-vosstanovil-dostup-k-biznes-kabinetu" target="_blank" rel="noopener">vc.ru — Яндекс восстановил доступ к кабинету Бизнеса</a>
+    <a href="https://ria.ru/20261020/jandeks-2125652588.html" target="_blank" rel="noopener">РИА Новости — Яндекс восстановил основные функции Директа</a>
+    <a href="https://www.kommersant.ru/doc/8339818" target="_blank" rel="noopener">Коммерсантъ — рынок фитнес-услуг в 2026 году</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+  </div>
+</section>
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Фитнес-клуб · Нижний Тагил</span>
+    <h1>«Телостроитель» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Телостроитель» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Фитнес-клуб <small>Тренажёрный зал · Групповые программы · Солярий</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Нижний Тагил</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Садовая ул., 3 <small>«Телостроитель» — 1 этаж, «Телостроитель Woman» — 2 этаж</small></div></div>
+      <div class="fact"><div class="k">Компания</div><div class="v">Персональный ФК «Телостроитель» <small>Тренировки в МИНИ группах · Персональные тренировки · Солярий</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–сб 08:00–22:00 <small>вс 09:00–21:00; «Телостроитель Woman» — пн–вс 08:00–21:00</small></div></div>
+      <div class="fact"><div class="k">Первое занятие</div><div class="v">Пробное занятие <small>запись через бота в Telegram и MAX</small></div></div>
+      <div class="fact"><div class="k">Лояльность</div><div class="v">Бонусная программа UDS <small>«копите бонусные баллы и получайте скидки»</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">fktelostroitel.uds.app</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Телостроителя»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис. У «Телостроителя» — почти чёрный фон, оранжевый и бронзовый оформления сообщества, жёлтый пазла логотипа, белый. У «Телостроитель Woman» — своя палитра: почти чёрный, малиновый, тёмно-малиновый, светло-розовый, белый.</p>
+    </div>
+    <h3 style="font:700 17px var(--f-display);margin:0 0 12px">«Телостроитель» — для материалов о клубе, зале, солярии и персональных тренировках</h3>
+    <div class="swatches">
+      <div class="swatch" style="background:#100408;color:#FFFFFF;border-color:rgba(152,161,172,.35)">
+        <div class="role">Фоновый</div><div class="name">Почти чёрный</div><div class="hex">#100408</div>
+      </div>
+      <div class="swatch" style="background:#E17E1A;color:#100408;border-color:#E17E1A">
+        <div class="role">Основной</div><div class="name">Оранжевый</div><div class="hex">#E17E1A</div>
+      </div>
+      <div class="swatch" style="background:#C8853D;color:#100408;border-color:#C8853D">
+        <div class="role">Второстепенный</div><div class="name">Бронзовый</div><div class="hex">#C8853D</div>
+      </div>
+      <div class="swatch" style="background:#FED942;color:#100408;border-color:#FED942">
+        <div class="role">Акцентный</div><div class="name">Жёлтый пазла</div><div class="hex">#FED942</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#100408;border-color:#FFFFFF">
+        <div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+    </div>
+    <h3 style="font:700 17px var(--f-display);margin:28px 0 12px">«Телостроитель Woman» — для материалов о групповых программах для девушек</h3>
+    <div class="swatches">
+      <div class="swatch" style="background:#100101;color:#FFFFFF;border-color:rgba(152,161,172,.35)">
+        <div class="role">Фоновый</div><div class="name">Почти чёрный</div><div class="hex">#100101</div>
+      </div>
+      <div class="swatch" style="background:#E43072;color:#FFFFFF;border-color:#E43072">
+        <div class="role">Основной</div><div class="name">Малиновый Woman</div><div class="hex">#E43072</div>
+      </div>
+      <div class="swatch" style="background:#BC2761;color:#FFFFFF;border-color:#BC2761">
+        <div class="role">Второстепенный</div><div class="name">Тёмно-малиновый</div><div class="hex">#BC2761</div>
+      </div>
+      <div class="swatch" style="background:#FE8EB4;color:#100101;border-color:#FE8EB4">
+        <div class="role">Акцентный</div><div class="name">Светло-розовый</div><div class="hex">#FE8EB4</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#100101;border-color:#FFFFFF">
+        <div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым карточки нет в выдаче или она стоит ниже соседей, и на направлениях, которые держат её первые места. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Солярий в «Телостроителе»: второй этаж, абонементы по минутам, новые лампы.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>«Телостроитель Woman»: групповые программы только для девушек и их направления.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Тренажёрный зал: безлимитный абонемент на 1 и 6 месяцев и абонемент PREMIUM.</p></div>
+      <div class="cycle-row"><div class="tag">18.11</div><p>Персональные тренировки: направления, что входит в абонемент, блоки на 6, 10 и 50 занятий.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и по делу, с теплом к человеку, который решил заниматься. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Тезисы — дословные формулировки источника, указанного у каждого тезиса; в тексте их можно связывать между собой, не меняя смысла и не добавляя новых фактов. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Солярий в Нижнем Тагиле на Садовой, 3: вертикальный солярий и турбосолярий в «Телостроителе»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В нашем фитнес-клубе есть солярий. Он находится на втором этаже, в «Телостроитель Woman», на Садовой, 3.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«У нас в фитнес клубах: … ☀Солярий».<span class="src">сайт</span></li>
+        <li>«Телостроитель Wоman - Садовая д.3 (2 этаж)».<span class="src">сайт</span></li>
+        <li>Вертикальный солярий, турбосолярий.<span class="src">2ГИС</span></li>
+        <li>Абонемент в солярий: 1 мин — 15 ₽, 30 минут — 390 ₽, 60 минут — 720 ₽; «Действие абонемента 2 месяца».<span class="src">сайт</span></li>
+        <li>Безлимитный абонемент в солярий: «Лампы новые».<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Солярий в Нижнем Тагиле на Садовой, 3 — «Телостроитель»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Солярий в Нижнем Тагиле: вертикальный и турбосолярий, абонементы | Телостроитель</span></div>
+        <div class="meta-row"><span><b>Description · </b>Солярий в фитнес-клубе «Телостроитель» в Нижнем Тагиле, Садовая, 3: вертикальный солярий и турбосолярий, новые лампы, абонементы на 30 и 60 минут, абонемент действует 2 месяца.</span></div>
+        <div class="chips">
+          <span class="chip-kw">солярий нижний тагил</span><span class="chip-kw">солярий</span>
+          <span class="chip-kw">вертикальный солярий</span><span class="chip-kw">турбосолярий</span>
+          <span class="chip-kw">абонемент в солярий</span><span class="chip-kw">солярий цена</span>
+          <span class="chip-kw">загар в солярии</span><span class="chip-kw">солярий рядом</span>
+          <span class="chip-kw">солярий нижний тагил вокзал</span><span class="chip-kw">солярий в фитнес клубе</span>
+          <span class="chip-kw">солярий садовая нижний тагил</span><span class="chip-kw">безлимит солярий</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите в солярий на втором этаже «Телостроителя».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Солярий на Садовой, 3»</div>
+        <p>Композиция: кабина вертикального солярия с включённым тёплым светом ламп, вид спереди, дверь приоткрыта; тезис на плашке в нижней трети, логотип в верхнем левом углу. Текст и логотип занимают не более 20% площади.</p>
+        <p>Цвета: плашка — почти чёрный #100408, тезис — жёлтый #FED942, тонкая линия под тезисом — оранжевый #E17E1A.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Групповые тренировки для девушек в Нижнем Тагиле: «Телостроитель Woman» — TRX, табата, растяжка, МФР</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Телостроитель Woman» — это наши групповые программы только для девушек. Мы занимаемся на втором этаже клуба на Садовой, 3.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Телостроитель Woman - групповые программы только для девушек».<span class="src">сайт</span></li>
+        <li>«Женское фитнес пространство». «Порядка 10 разнообразных направлений для вашего стройного тела, настроения и любви к себе».<span class="src">ВК Woman</span></li>
+        <li>«Пространство без стресса: только девушки, никакой суеты и оценивающих взглядов».<span class="src">ВК Woman</span></li>
+        <li>«Абонемент в любой зал групповых программ на 8 или 12 тренировок. Входят любые направления нашей студии».<span class="src">сайт</span></li>
+        <li>«Функциональные, интервальные направления, силовые тренировки, проработка узких зон пресс, TRX, ягодицы, табатта, мягкие техники растяжка, МФР, кроссфит для женщин».<span class="src">сайт</span></li>
+        <li>Направления тренеров: Dance mix, Ягодицы+пресс, Functional, Гибкое тело, Full body, Степ-аэробика, TRX, Fly fitness, групповая тренировка по методу Дж. Пилатес, Stretching.<span class="src">ВК Woman</span></li>
+        <li>«Можно посещать любые направления, которые вам понравятся в любое время согласно расписания».<span class="src">сайт</span></li>
+        <li>8 тренировок — 2 990 ₽, 12 тренировок — 3 800 ₽, разовое посещение — 600 ₽; «Абонемент действует 30 дней».<span class="src">сайт</span></li>
+        <li>«Посещение мастер классов и семинаров приглашенных специалистов по специальной цене».<span class="src">сайт</span></li>
+        <li>Отдельный женский зал.<span class="src">2ГИС</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Групповые тренировки для девушек в Нижнем Тагиле — «Телостроитель Woman»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Групповые тренировки для женщин в Нижнем Тагиле: TRX, табата, растяжка | Телостроитель Woman</span></div>
+        <div class="meta-row"><span><b>Description · </b>Групповые программы только для девушек в «Телостроитель Woman», Нижний Тагил, Садовая, 3: функциональные и силовые тренировки, TRX, табата, растяжка, МФР. Абонементы на 8 и 12 тренировок.</span></div>
+        <div class="chips">
+          <span class="chip-kw">групповые тренировки нижний тагил</span><span class="chip-kw">фитнес для женщин</span>
+          <span class="chip-kw">женский фитнес нижний тагил</span><span class="chip-kw">тренировки для женщин</span>
+          <span class="chip-kw">растяжка нижний тагил</span><span class="chip-kw">стретчинг</span>
+          <span class="chip-kw">табата</span><span class="chip-kw">trx тренировки</span>
+          <span class="chip-kw">мфр</span><span class="chip-kw">функциональный тренинг</span>
+          <span class="chip-kw">женский фитнес клуб</span><span class="chip-kw">групповые занятия фитнес</span>
+          <span class="chip-kw">степ аэробика нижний тагил</span><span class="chip-kw">пилатес нижний тагил</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на пробное занятие в «Телостроитель Woman».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Групповые программы для девушек»</div>
+        <p>Композиция: групповая тренировка в светлом зале — девушки выполняют упражнение с петлями TRX, кадр сбоку на уровне пояса; тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета — палитра «Телостроитель Woman»: плашка — малиновый #E43072, тезис — белый #FFFFFF, рамка-уголок — светло-розовый #FE8EB4.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 11 ноября</span><h3>Тренажёрный зал в Нижнем Тагиле: безлимитный абонемент на 1 и 6 месяцев и абонемент PREMIUM</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас безлимитный абонемент в тренажёрный зал: он не ограничен по времени и количеству тренировок.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Безлимитный абонемент на посещение тренажерного зала. 1 месяц или 6 месяцев Не ограничен по времени и количеству тренировок».<span class="src">сайт</span></li>
+        <li>Безлимитный абонемент: 1 месяц — 2 150 ₽, 6 месяцев — 6 800 ₽.<span class="src">сайт</span></li>
+        <li>Абонемент PREMIUM на 1, 6 и 12 месяцев: «Количество занятий с тренером: 15/40/80», «Посещение любых тренировок студии по расписанию», «Безлимитное посещение самостоятельных тренировок в любом зале Телостроитель».<span class="src">сайт</span></li>
+        <li>В PREMIUM: «Участие во всех мастер классах специалистов студии, бесплатно», «Посещение сауны».<span class="src">сайт</span></li>
+        <li>«Фитнес доступен каждому💪🏻 ИДЕМ К ЦЕЛЯМ ВМЕСТЕ!»<span class="src">ВК</span></li>
+        <li>«Пн-сб: с 08:00 до 22:00 Вс: с 09:00 до 21:00».<span class="src">ВК · сайт</span></li>
+        <li>Парковка бесплатная; от железнодорожного вокзала — 254 м.<span class="src">Яндекс Карты</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Тренажёрный зал в Нижнем Тагиле — «Телостроитель»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Тренажёрный зал в Нижнем Тагиле: безлимит от 2 150 ₽, абонемент PREMIUM | Телостроитель</span></div>
+        <div class="meta-row"><span><b>Description · </b>Тренажёрный зал «Телостроитель» в Нижнем Тагиле, Садовая, 3: безлимитный абонемент на 1 и 6 месяцев, абонемент PREMIUM с занятиями с тренером и сауной. Работаем ежедневно, бесплатная парковка.</span></div>
+        <div class="chips">
+          <span class="chip-kw">тренажерный зал нижний тагил</span><span class="chip-kw">спортзал нижний тагил</span>
+          <span class="chip-kw">тренажерный зал</span><span class="chip-kw">спортзал</span>
+          <span class="chip-kw">качалка нижний тагил</span><span class="chip-kw">абонемент в тренажерный зал</span>
+          <span class="chip-kw">абонемент в спортзал</span><span class="chip-kw">безлимитный абонемент</span>
+          <span class="chip-kw">фитнес клуб нижний тагил</span><span class="chip-kw">тренажерный зал цены</span>
+          <span class="chip-kw">тренажерный зал рядом с вокзалом</span><span class="chip-kw">фитнес нижний тагил</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на пробное занятие.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Безлимит в тренажёрный зал»</div>
+        <p>Композиция: тренажёрный зал клуба, ряд силовых тренажёров и стойка с гантелями в перспективе, без людей в фокусе; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — почти чёрный #100408, тезис — белый #FFFFFF, акцентная полоса слева — оранжевый #E17E1A.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 18 ноября</span><h3>Персональные тренировки в Нижнем Тагиле: сила, выносливость, стройность — тренажёрный зал входит в абонемент</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы даём возможность тренироваться с тренером в том формате, в котором удобно вам.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Направления персонального тренинга: Сила Выносливость Стройность Восстановление после травм».<span class="src">сайт</span></li>
+        <li>«И самое главное, при покупке абонемента ничего дополнительно оплачивать не нужно, в ваш персональный абонемент входят все услуги: посещение тренажерного зала кардио зона зона кроссфит индивидуальная тренировка».<span class="src">сайт</span></li>
+        <li>6 тренировок — 5 800 ₽, 10 тренировок — 7 900 ₽, 50 тренировок — 34 500 ₽.<span class="src">сайт</span></li>
+        <li>«…абонементы на 50 тренировок с сроком действия 6 месяцев, 10 тренировок - сроком действия 40 дней, 6 тренировок срок 1 месяц».<span class="src">сайт</span></li>
+        <li>«Достижение результатов и грамотно построенные тренировки для достижения ваших целей».<span class="src">сайт</span></li>
+        <li>Личный тренер, консультации по спортивному питанию.<span class="src">Яндекс Карты</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Персональные тренировки в Нижнем Тагиле — «Телостроитель»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Персональный тренер в Нижнем Тагиле: абонементы на 6, 10 и 50 тренировок | Телостроитель</span></div>
+        <div class="meta-row"><span><b>Description · </b>Персональные тренировки в фитнес-клубе «Телостроитель», Нижний Тагил: сила, выносливость, стройность. Тренажёрный зал, кардио и зона кроссфита входят в абонемент.</span></div>
+        <div class="chips">
+          <span class="chip-kw">персональный тренер нижний тагил</span><span class="chip-kw">персональные тренировки</span>
+          <span class="chip-kw">персональный тренер</span><span class="chip-kw">фитнес тренер нижний тагил</span>
+          <span class="chip-kw">тренировки с тренером</span><span class="chip-kw">индивидуальная тренировка</span>
+          <span class="chip-kw">тренер в тренажерном зале</span><span class="chip-kw">тренировки в тренажерном зале</span>
+          <span class="chip-kw">фитнес для начинающих</span><span class="chip-kw">абонемент на персональные тренировки</span>
+          <span class="chip-kw">фитнес клуб нижний тагил</span><span class="chip-kw">личный тренер</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на пробное занятие с тренером.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Тренировка с тренером»</div>
+        <p>Композиция: тренер страхует занимающегося у силовой рамы, кадр на уровне груди, тёмный зал с тёплым светом; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — оранжевый #E17E1A, тезис — почти чёрный #100408, тонкая линия под тезисом — жёлтый #FED942.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Солярий на втором этаже</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Вертикальный солярий</span>
+          <span class="fact-pill">Турбосолярий</span>
+          <span class="fact-pill">30 минут — 390 ₽</span>
+          <span class="fact-pill">60 минут — 720 ₽</span>
+          <span class="fact-pill">Действие абонемента 2 месяца</span>
+          <span class="fact-pill">Садовая, 3, 2 этаж</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #100408, заголовок жёлтым #FED942, цены крупно белым #FFFFFF, маркеры пунктов оранжевым #E17E1A. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Телостроитель Woman</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">TRX</span>
+          <span class="fact-pill">Ягодицы + пресс</span>
+          <span class="fact-pill">Растяжка</span>
+          <span class="fact-pill">Степ-аэробика</span>
+          <span class="fact-pill">Пилатес</span>
+          <span class="fact-pill">Dance mix</span>
+          <span class="fact-pill">МФР</span>
+          <span class="fact-pill">8 тренировок — 2 990 ₽</span>
+          <span class="fact-pill">12 тренировок — 3 800 ₽</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> палитра «Телостроитель Woman»: фон почти чёрный #100101, заголовок малиновым #E43072, направления белым #FFFFFF, цены на плашках тёмно-малинового #BC2761 белым текстом, тонкие разделители светло-розовым #FE8EB4. Логотип Woman в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Безлимит в тренажёрный зал</div><span class="slide-no">Сторис 3 · 11 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">1 месяц — 2 150 ₽</span>
+          <span class="fact-pill">6 месяцев — 6 800 ₽</span>
+          <span class="fact-pill">Не ограничен по времени и количеству тренировок</span>
+          <span class="fact-pill">Пн–сб 08:00–22:00</span>
+          <span class="fact-pill">Вс 09:00–21:00</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #100408, заголовок белым #FFFFFF, цены крупно оранжевым #E17E1A, время работы жёлтым #FED942 внизу слайда.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Персональные тренировки</div><span class="slide-no">Сторис 4 · 18 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Сила</span>
+          <span class="fact-pill">Выносливость</span>
+          <span class="fact-pill">Стройность</span>
+          <span class="fact-pill">6 тренировок — 5 800 ₽</span>
+          <span class="fact-pill">10 тренировок — 7 900 ₽</span>
+          <span class="fact-pill">Зал входит в абонемент</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон оранжевый #E17E1A, заголовок и направления тёмным #100408, цены на белых плашках #FFFFFF тёмным текстом #100408.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — солярий, «Телостроитель Woman», тренажёрный зал, персональные тренировки <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Солярий на Садовой, 3: вертикальный солярий и турбосолярий</b>28.10 · второй этаж, абонементы по минутам, новые лампы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Солярий на втором этаже</b>28.10 · виды солярия и цены</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>«Телостроитель Woman»: групповые программы для девушек</b>05.11 · направления, абонементы на 8 и 12 тренировок</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Телостроитель Woman</b>05.11 · направления и цены</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Тренажёрный зал: безлимит и PREMIUM</b>11.11 · 1 и 6 месяцев, PREMIUM с тренером и сауной</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Безлимит в тренажёрный зал</b>11.11 · цены и время работы</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Персональные тренировки</b>18.11 · направления, что входит в абонемент, 6/10/50 тренировок</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Персональные тренировки</b>18.11 · направления и цены</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <a href="https://fktelostroitel.uds.app/c" target="_blank" rel="noopener">fktelostroitel.uds.app</a>
+      <a href="https://fktelostroitel.uds.app/c/goods" target="_blank" rel="noopener">Сайт: прайс</a>
+      <a href="https://fktelostroitel.uds.app/c/about" target="_blank" rel="noopener">Сайт: о компании</a>
+      <a href="https://yandex.ru/maps/-/CXRZAPKp" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://go.2gis.com/yPGPD" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+      <a href="https://vk.ru/fktelostroitel" target="_blank" rel="noopener">ВКонтакте — «Фитнес клуб Телостроитель Нижний Тагил»</a>
+      <a href="https://vk.ru/fitness_woman_nt" target="_blank" rel="noopener">ВКонтакте — «Женский фитнес «Телостроитель»»</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={f:[557,726,546,818,843,983,777,538,642,680,688,657,714,758,504,772,551,635,550,451,523,647,682,719],
+s:[468,538,548,582,650,831,1003,1311,1346,1066,864,541,661,616,532,562,551,782,929,1377,1350,1200,941,671]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=44,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026"><g>${g}</g><path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-gym':[['фитнес','смешанное',3840],['спортзал','смешанное',1298],['тренажерный зал','смешанное',939],['фитнес клуб','коммерческое',719],['фитнес клуб нижний тагил','коммерческое, гео',432],['качалка','смешанное',423],['спортзал нижний тагил','коммерческое, гео',361],['тренажерный зал нижний тагил','коммерческое, гео',307],['тренажерный зал для женщин','коммерческое',73],['абонемент в спортзал','коммерческое',25],['персональный тренер','коммерческое',23]],
+ 't-grp':[['растяжка','смешанное',1050],['табата','в основном инфо',246],['стретчинг','смешанное',146],['тренировки для женщин','смешанное',145],['trx','смешанное',87],['мфр','смешанное',83],['кроссфит','смешанное',79],['женский фитнес','коммерческое',57],['фитнес для женщин','смешанное',52],['функциональный тренинг','смешанное',39],['групповые тренировки','коммерческое',30],['детский фитнес','коммерческое',19]],
+ 't-sol':[['солярий','смешанное',671],['солярий нижний тагил','коммерческое, гео',253],['можно ли в солярий','противопоказания и правила',42],['крем для солярия','косметика для загара',19],['загар в солярии','как загорать',13],['солярий рядом','коммерческое, гео',10]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
