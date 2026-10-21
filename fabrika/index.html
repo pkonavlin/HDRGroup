@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Фабрика на Картах</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Лофт-фабрика: бетон, графит и раскалённый уголь. Узкая колонка-цех, секции как пролёты, цифры моноширинным. */
+:root{
+  --bg:#eef0ef; --surface:#ffffff; --ink:#1d2321; --mute:#5e6865; --line:#d5dad8;
+  --ember:#d2541b; --ember-soft:#f6ded2; --smoke:#2f6f73; --smoke-soft:#d6e8e8;
+  --good:#2e7d4f; --bad:#c23a2b; --bad-soft:#f8dcd8; --grid:#e3e7e5;
+  --f-display:"Oswald","Arial Narrow",sans-serif; --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151918; --surface:#1e2422; --ink:#e7ebe9; --mute:#9aa5a1; --line:#2f3734;
+  --ember:#f07a3e; --ember-soft:#3d2418; --smoke:#62b3b7; --smoke-soft:#1d3536;
+  --good:#5fbf86; --bad:#ef6a5a; --bad-soft:#41211d; --grid:#2a312e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151918; --surface:#1e2422; --ink:#e7ebe9; --mute:#9aa5a1; --line:#2f3734;
+  --ember:#f07a3e; --ember-soft:#3d2418; --smoke:#62b3b7; --smoke-soft:#1d3536;
+  --good:#5fbf86; --bad:#ef6a5a; --bad-soft:#41211d; --grid:#2a312e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;letter-spacing:.01em}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.08;text-transform:uppercase}
+h2{font-size:clamp(21px,3vw,28px);text-transform:uppercase}
+h3{font-size:16px;font-family:var(--f-body);font-weight:600;letter-spacing:0}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header.top{padding-block:36px 8px;display:grid;gap:14px}
+.eyebrow{font:600 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ember)}
+.sub{color:var(--mute);max-width:65ch;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:3px solid var(--ink);border-bottom:1px solid var(--line);margin-top:22px}
+.kpi{padding:14px 12px 14px 0;display:grid;gap:4px;align-content:start}
+.kpi+.kpi{padding-left:14px;border-left:1px solid var(--line)}
+.kpi b{font:600 clamp(24px,3.4vw,34px)/1 var(--f-mono)}
+.kpi span{font-size:13px;color:var(--mute)}
+.nodata{margin-top:10px;font-size:13px;color:var(--mute)}
+.nodata b{color:var(--ink);font-weight:600}
+section{padding-block:40px 0;display:grid;gap:18px}
+.sh{display:grid;gap:6px;border-top:1px solid var(--line);padding-top:18px}
+.sh .n{font:600 12px/1 var(--f-mono);color:var(--mute);letter-spacing:.1em}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:6px;align-content:start}
+.fact b{font:600 34px/1 var(--f-mono);color:var(--ember)}
+.fact.good b{color:var(--good)}
+.fact p{margin:0;font-weight:500}
+.fact small{color:var(--mute);font-size:13px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px;min-width:0;align-content:start}
+.panel .cap{font-size:12.5px;color:var(--mute)}
+.chart{width:100%;min-width:0}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--mute);font:11px var(--f-mono)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+th{font:600 11.5px var(--f-mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mute);cursor:pointer;user-select:none}
+th[aria-sort] {color:var(--ink)}
+td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-body)}
+td small{display:block;color:var(--mute);font-size:11.5px}
+tr.me td{background:var(--ember-soft)}
+tr.me td:first-child{background:var(--ember-soft);font-weight:600}
+.w{color:var(--bad);font-weight:600}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font:600 11px var(--f-body)}
+.pill.s{background:var(--smoke-soft);color:var(--smoke)}
+.pill.m{background:var(--ember-soft);color:var(--ember)}
+.pill.r{background:var(--bad-soft);color:var(--bad)}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:500 13px var(--f-body);padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,th:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+.chk{display:grid;gap:10px}
+.chk .row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.6fr) 28px 84px;gap:10px;align-items:center;font-size:13.5px}
+.bar{height:14px;background:var(--grid);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--smoke)}
+.tag{font:600 11px var(--f-body);white-space:nowrap;padding:2px 8px;border-radius:99px;text-align:center}
+.tag.ok{background:var(--smoke-soft);color:var(--smoke)}
+.tag.no{background:var(--bad-soft);color:var(--bad)}
+.season{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.season .panel b{font:600 26px/1 var(--f-mono);color:var(--ember)}
+.season .panel h3{font-family:var(--f-display);text-transform:uppercase;font-weight:500;font-size:13px;letter-spacing:.06em;color:var(--mute)}
+.news{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.news .panel b{font:600 22px/1.1 var(--f-display);text-transform:uppercase}
+.news .panel .d{font:600 12px var(--f-mono);color:var(--ember)}
+.news a,footer a{color:var(--smoke)}
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:3px solid var(--ink)}
+.step{padding:14px 14px 0 0;display:grid;gap:8px;align-content:start}
+.step+.step{padding-left:14px;border-left:1px solid var(--line)}
+.step .when{font:600 12px var(--f-mono);color:var(--ember);letter-spacing:.06em;text-transform:uppercase}
+.step ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--mute)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+#tip{position:fixed;pointer-events:none;z-index:20;background:var(--ink);color:var(--bg);font:12px/1.4 var(--f-mono);padding:6px 9px;border-radius:4px;max-width:260px;opacity:0;transition:opacity .1s}
+footer{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mute);display:grid;gap:8px}
+footer ul{margin:0;padding-left:18px;display:grid;gap:3px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi{padding-left:0!important;border-left:0!important;border-bottom:1px solid var(--line)}
+ .facts,.season{grid-template-columns:repeat(2,minmax(0,1fr))}.route{grid-template-columns:repeat(2,minmax(0,1fr))}.step{padding-left:0!important;border-left:0!important;padding-bottom:14px}}
+@media (max-width:620px){.facts,.season,.grid2,.news,.route{grid-template-columns:minmax(0,1fr)}.chk .row{grid-template-columns:minmax(0,1fr) 28px 84px;row-gap:6px}.chk .row .bar{grid-column:1/-1;grid-row:2}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Ресторан и кальян-бар · Ростов-на-Дону, Нахичевань · октябрь 2026</div>
+  <h1>Фабрика: анализ карточки, спрос региона и точки роста</h1>
+  <p class="sub">Карточка на Яндекс Картах против 24 заведений в радиусе 2,3 км и спрос Ростова и области по Вордстату.</p>
+  <div class="kpis">
+    <div class="kpi"><b>1</b><span>карточка: ул. Богданова, 86</span></div>
+    <div class="kpi"><b>5,0</b><span>рейтинг, «Хорошее место 2026»</span></div>
+    <div class="kpi"><b>158</b><span>оценок · 19-е место из 25 в зоне</span></div>
+    <div class="kpi"><b>1 307</b><span>брендовых запросов за 12 мес</span></div>
+    <div class="kpi"><b>100%</b><span>отзывов с ответом, медиана 4 дня</span></div>
+  </div>
+  <p class="nodata"><b>Переходы, звонки, маршруты и доля в зоне:</b> нет данных, карточка не подключена к нашему кабинету Яндекс Бизнеса.</p>
+</header>
+
+<section>
+  <div class="sh"><span class="n">ГЛАВНОЕ ЗА 30 СЕКУНД</span><h2>Сильная карточка, которую мало слышно</h2></div>
+  <div class="facts">
+    <div class="fact good"><b>7 из 25</b><p>карточек зоны с наградой «Хорошее место 2026»</p><small>Фабрика среди них, с рейтингом 5,0</small></div>
+    <div class="fact"><b>×2,2</b><p>меньше оценок, чем у типичного соседа</p><small>158 против медианы 350; у 18 из 24 соседей оценок больше</small></div>
+    <div class="fact"><b>−62%</b><p>новых отзывов во втором полугодии работы</p><small>74 за сен–фев против 28 за апр–сен</small></div>
+    <div class="fact"><b>0</b><p>новостей на карточке</p><small>вкладки «Новости» нет, есть одна акция «Счастливые рёбра»</small></div>
+    <div class="fact"><b>×9</b><p>брендовый спрос тёзки «Ла фабрика»</p><small>11 871 против 1 307 запросов «фабрика богданова» за 12 мес</small></div>
+    <div class="fact good"><b>+24%</b><p>самый быстрый рост: «рёбра свиные»</p><small>26 208 запросов в Ростове за 12 мес; фирменное блюдо Фабрики</small></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">01</span><h2>Пульс карточки</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Новые отзывы по месяцам</h3><div class="cap">сентябрь 2025 — сентябрь 2026 · 124 отзыва</div><div class="chart" id="c-rev"></div></div>
+    <div class="panel"><h3>Оценки в отзывах</h3><div class="cap">124 отзыва по звёздам</div><div class="chart" id="c-dist"></div></div>
+  </div>
+  <div class="panel"><h3>О чём пишут гости</h3><div class="cap">упоминания в отзывах: положительные и отрицательные</div>
+    <div class="legend"><span><i style="background:var(--smoke)"></i>положительно</span><span><i style="background:var(--bad)"></i>отрицательно</span></div>
+    <div class="chart" id="c-asp"></div></div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">02</span><h2>Фабрика и 24 соседа</h2><p class="sub">Заведения в радиусе 2,3 км от Богданова, 86. Брендовый спрос за 12 месяцев, где измерен.</p></div>
+  <div class="filters" role="group" aria-label="Фильтр по статусу">
+    <button type="button" data-f="all" aria-pressed="true">Все · 25</button>
+    <button type="button" data-f="Сильная" aria-pressed="false">Сильная</button>
+    <button type="button" data-f="Средняя" aria-pressed="false">Средняя</button>
+    <button type="button" data-f="Риск" aria-pressed="false">Риск</button>
+  </div>
+  <div class="tbl"><table id="tb"><thead><tr>
+    <th data-k="t" tabindex="0">Заведение</th><th data-k="km" tabindex="0">км</th><th data-k="s" tabindex="0">Статус</th><th data-k="r" tabindex="0">Рейтинг</th><th data-k="n" tabindex="0">Оценки</th><th data-k="rv" tabindex="0">Отзывы</th><th data-k="ph" tabindex="0">Фото</th><th data-k="st" tabindex="0">Сторис</th><th data-k="gp" tabindex="0">Хорошее место</th><th data-k="ans3" tabindex="0">Ответы из 3</th><th data-k="b" tabindex="0">Бренд, 12 мес</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">03</span><h2>Состояние карточек зоны</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Сколько из 25 карточек проседает</h3><div class="cap">Фабрика и 24 соседа</div><div class="chk" id="c-chk"></div></div>
+    <div class="panel"><h3>Рейтинг × число оценок</h3><div class="cap">25 карточек зоны</div><div class="chart" id="c-sc"></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">04</span><h2>Конкуренты</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Фабрика против медианы соседей</h3><div class="cap">24 карточки в радиусе 2,3 км</div>
+      <div class="legend"><span><i style="background:var(--ember)"></i>Фабрика</span><span><i style="background:var(--smoke)"></i>медиана соседей</span></div>
+      <div class="chart" id="c-med"></div></div>
+    <div class="panel"><h3>Самые «громкие» соседи</h3><div class="cap">по числу оценок</div><div class="chart" id="c-top"></div></div>
+  </div>
+  <div class="panel"><h3>Брендовый спрос: Фабрика и рестораны района</h3><div class="cap">Вордстат, Ростов-на-Дону, окт 2025 — сен 2026; в подсказке изменение к прошлому году</div><div class="chart" id="c-brand"></div></div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">05</span><h2>Как ищут Фабрику</h2><p class="sub">Источников визитов из геовизора нет без доступа к кабинету. Картину по бренду даёт Вордстат.</p></div>
+  <div class="grid2">
+    <div class="panel"><h3>Запросы со словом «фабрика»</h3><div class="cap">Ростов-на-Дону, 12 мес</div><div class="chart" id="c-fq"></div></div>
+    <div class="panel"><h3>Фабрика против «Ла фабрики» по месяцам</h3><div class="cap">Ростов-на-Дону, окт 2024 — сен 2026</div>
+      <div class="legend"><span><i style="background:var(--ember)"></i>«фабрика богданова»</span><span><i style="background:var(--smoke)"></i>«ла фабрика»</span></div>
+      <div class="chart" id="c-bl"></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">06</span><h2>Спрос на рынке</h2></div>
+  <div class="panel"><h3>«ресторан»: город и область</h3><div class="cap">Вордстат, окт 2024 — сен 2026</div>
+    <div class="legend"><span><i style="background:var(--ember)"></i>Ростов-на-Дону</span><span><i style="background:var(--smoke)"></i>Ростовская область</span></div>
+    <div class="chart" id="c-main"></div></div>
+  <div class="panel"><h3>Что растёт, что падает</h3><div class="cap">Ростов-на-Дону, последние 12 мес к предыдущим 12</div><div class="chart" id="c-div"></div></div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">07</span><h2>Сезонность</h2></div>
+  <div class="panel"><h3>Спрос по направлениям</h3><div class="cap">Ростов-на-Дону, окт 2025 — сен 2026</div><div class="chart" id="c-heat"></div></div>
+  <div class="season">
+    <div class="panel"><h3>На пике сейчас</h3><b>13 275</b><p><strong>«кальян»</strong> в сентябре. Пик года пришёлся на август: 16 276.</p></div>
+    <div class="panel"><h3>Набирает обороты</h3><b>×4,6</b><p><strong>«новогодний корпоратив»</strong>: 230 в августе, 1 050 в сентябре. Пик прошлого сезона — 5 674 в декабре.</p></div>
+    <div class="panel"><h3>Сезонный спад</h3><b>−63%</b><p><strong>«летняя веранда»</strong>: 1 029 в июне, 377 в сентябре.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">08</span><h2>Поводы для контента</h2></div>
+  <div class="news">
+    <div class="panel"><span class="d">27.03.2026</span><b>ИИ Яндекс Карт подбирает ресторан по блюду</b><p>Чат на Картах ищет заведение по меню, отзывам, фото и описанию карточки. Описанные блюда в меню и посты о них попадают в эти ответы.</p><p class="cap"><a href="https://3dnews.ru/1139033/yandeks-karti-nauchilis-razdavat-soveti-s-pomoshchyu-ii" target="_blank" rel="noopener">3DNews</a></p></div>
+    <div class="panel"><span class="d">01.04 — 31.12.2026</span><b>Общепит на УСН освобождён от НДС</b><p>Условия: доход за 2025 год до 60 млн ₽ и не меньше 70% выручки от общепита. Повод для поста о ценах без подорожания, если компания подпадает.</p><p class="cap"><a href="https://www.garant.ru/news/2056411/" target="_blank" rel="noopener">Гарант</a> · <a href="https://saby.ru/articles/presto/novosti_obshchepita_aprel_2026" target="_blank" rel="noopener">Saby</a></p></div>
+    <div class="panel"><span class="d">01.06.2026</span><b>Кофе в маркировке</b><p>Кофе и цикорий вошли в обязательную маркировку. Повод рассказать о кофе и кофе с собой, которые есть в меню.</p><p class="cap"><a href="https://saby.ru/articles/presto/novosti_obshchepita_aprel_2026" target="_blank" rel="noopener">Saby</a></p></div>
+    <div class="panel"><span class="d">перенос на 01.03.2027</span><b>20% российских вин в карте</b><p>Требование к винной карте отложили на год. Повод показать донскую кухню и винные пары: Фабрика уже проводила гастроужин с донским меню.</p><p class="cap"><a href="https://saby.ru/articles/presto/novosti_obshchepita_aprel_2026" target="_blank" rel="noopener">Saby</a> · <a href="https://t.me/s/fabrikaredaks" target="_blank" rel="noopener">ТГ Фабрики</a></p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="n">09</span><h2>Маршрут роста</h2></div>
+  <div class="route">
+    <div class="step"><span class="when">Ноябрь</span><h3>Порядок в карточке</h3><ul><li>Открыть вкладку новостей первыми постами</li><li>Описать блюда в меню под ИИ-поиск Карт</li><li>Собирать оценки у гостей: цель — медиана соседей, 350</li><li>Обновить сезонные фото</li></ul></div>
+    <div class="step"><span class="when">Каждый месяц</span><h3>Контент без пауз</h3><ul><li>Новости и сторис в карточке ежемесячно</li><li>Темы из реального меню и афиши: рёбра, кальян, стендап, пивной четверг</li><li>Ответы на отзывы в прежнем темпе</li></ul></div>
+    <div class="step"><span class="when">Ноябрь — январь</span><h3>Зимний сезон</h3><ul><li>Корпоративы: пик «корпоратив» в декабре, 23 990</li><li>«Новогодний корпоратив» уже растёт</li><li>Рёбра: пик спроса в декабре, 2 493</li></ul></div>
+    <div class="step"><span class="when">Май — август</span><h3>Летний сезон</h3><ul><li>Кальян: пик в августе, 16 276</li><li>«Где поесть»: максимум в июле–августе</li><li>Дни рождения: «день рождения ресторан» в августе — 511</li></ul></div>
+  </div>
+</section>
+
+<footer>
+  <strong>Источники и ограничения</strong>
+  <ul>
+    <li>Карточка и соседи: публичные данные <a href="https://yandex.ru/maps/org/fabrika/178860656686/" target="_blank" rel="noopener">Яндекс Карт</a>, собраны 21.10.2026. Зона — 24 заведения общепита в радиусе 2,3 км из выдачи Карт по запросам «ресторан», «кафе», «бар», «кальян-бар» и соседним.</li>
+    <li>Спрос: <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>, регионы Ростов-на-Дону и Ростовская область, все устройства, окт 2024 — сен 2026.</li>
+    <li>Брендовый спрос измерен по формулировкам «фабрика богданова», «ла фабрика», «хинкали джан», «тамада ресторан», «анатолия ресторан», «сад онлайн», «бессонница караоке», «мангал хаус», «долма ресторан», «шато ресторан», «старый мост кафе», «хванчкара ресторан». У Фабрики первые запросы — с сентября 2025, сравнения к прошлому году нет.</li>
+    <li>Переходы, действия, доля в зоне конкурентов и геовизор недоступны: карточки нет в нашем кабинете Яндекс Бизнеса (кабинет к тому же работает в режиме восстановления).</li>
+    <li>Ответы на отзывы у соседей — по трём последним отзывам в карточке. Публикации соседей не сравнивались.</li>
+    <li>Афиша и акции Фабрики: <a href="https://t.me/s/fabrikaredaks" target="_blank" rel="noopener">@fabrikaredaks</a>.</li>
+  </ul>
+</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+<script>
+const D={"cards": [{"t": "Фабрика", "a": "ул. Богданова, 86, Нахичевань", "cats": "Ресторан, кальян-бар", "r": 5, "n": 158, "rv": 124, "ph": 110, "st": true, "gp": "2026", "ans3": 3, "km": 0, "s": "Сильная", "b": 1307, "id": "178860656686"}, {"t": "Сицилия", "a": "ул. Богданова, 71", "cats": "Пиццерия, кафе", "r": 4.9, "n": 1719, "rv": 639, "ph": 173, "st": true, "gp": "2026", "ans3": 3, "km": 0.34, "s": "Сильная", "b": null, "id": "145286736327"}, {"t": "Хванчкара", "a": "ул. Сарьяна, 87/13", "cats": "Ресторан", "r": 4.6, "n": 416, "rv": 195, "ph": 76, "st": false, "gp": null, "ans3": 0, "km": 0.37, "s": "Сильная", "b": 83, "id": "137083586023"}, {"t": "Мак кухня", "a": "ул. 35-я Линия, 124А", "cats": "Кафе", "r": 4.2, "n": 243, "rv": 139, "ph": 22, "st": false, "gp": null, "ans3": 0, "km": 0.37, "s": "Средняя", "b": null, "id": "224997217297"}, {"t": "Loyal cafe", "a": "ул. 35-я Линия, 42/49", "cats": "Банкетный зал", "r": 4.9, "n": 23, "rv": 18, "ph": 21, "st": false, "gp": null, "ans3": 0, "km": 0.47, "s": "Средняя", "b": null, "id": "201775566901"}, {"t": "Пивбаза", "a": "Комсомольская ул., 21/18", "cats": "Спортбар, бар", "r": 4.3, "n": 57, "rv": 19, "ph": 7, "st": false, "gp": null, "ans3": 0, "km": 0.74, "s": "Средняя", "b": null, "id": "93241226471"}, {"t": "Старый мост", "a": "Инициативная ул., 2А", "cats": "Кафе", "r": 4.4, "n": 562, "rv": 215, "ph": 39, "st": false, "gp": null, "ans3": 0, "km": 0.92, "s": "Средняя", "b": 788, "id": "46169629317"}, {"t": "РакиИкар", "a": "ул. 23-я Линия, 13/9", "cats": "Рыба и морепродукты, бар", "r": 4.7, "n": 212, "rv": 100, "ph": 35, "st": false, "gp": null, "ans3": 2, "km": 0.99, "s": "Сильная", "b": null, "id": "1311049683"}, {"t": "3 Печи", "a": "Советская ул., 11А", "cats": "Кафе", "r": 5.0, "n": 99, "rv": 77, "ph": 43, "st": false, "gp": null, "ans3": 0, "km": 1.49, "s": "Сильная", "b": null, "id": "180442037734"}, {"t": "Balagan", "a": "ул. 18-я Линия, 8", "cats": "Ресторан, кальян-бар", "r": 4.3, "n": 49, "rv": 27, "ph": 20, "st": false, "gp": null, "ans3": 1, "km": 1.52, "s": "Средняя", "b": null, "id": "125462492677"}, {"t": "Мимино", "a": "Буйнакская ул., 2А", "cats": "Ресторан, банкетный зал", "r": 4.3, "n": 487, "rv": 181, "ph": 68, "st": false, "gp": null, "ans3": 0, "km": 1.7, "s": "Средняя", "b": null, "id": "1225351558"}, {"t": "Марьяж", "a": "1-я Майская ул., 21", "cats": "Кафе, ресторан", "r": 4.7, "n": 1102, "rv": 480, "ph": 126, "st": true, "gp": null, "ans3": 1, "km": 1.71, "s": "Сильная", "b": null, "id": "1144146359"}, {"t": "Смольный", "a": "Горсоветская ул., 45", "cats": "Кальян-бар, ресторан", "r": 5.0, "n": 252, "rv": 215, "ph": 64, "st": false, "gp": "2026", "ans3": 2, "km": 1.78, "s": "Сильная", "b": null, "id": "113732082091"}, {"t": "Шато", "a": "ул. Ченцова, 12/42", "cats": "Ресторан, бар", "r": 4.4, "n": 283, "rv": 108, "ph": 49, "st": false, "gp": null, "ans3": 1, "km": 1.82, "s": "Средняя", "b": 981, "id": "41147003524"}, {"t": "Мангал Хаус", "a": "ул. Ченцова, 95/6", "cats": "Кафе, ресторан", "r": 4.7, "n": 244, "rv": 89, "ph": 53, "st": false, "gp": null, "ans3": 2, "km": 1.83, "s": "Сильная", "b": 1871, "id": "14391670530"}, {"t": "Хинкали Djan", "a": "ул. 8-я Линия, 1/37", "cats": "Ресторан, кальян-бар", "r": 5.0, "n": 2720, "rv": 1356, "ph": 306, "st": false, "gp": null, "ans3": 1, "km": 1.86, "s": "Сильная", "b": 10155, "id": "28997456049"}, {"t": "Гастропаб Милтон", "a": "ул. 12-я Линия, 24", "cats": "Бар, ресторан", "r": 4.5, "n": 266, "rv": 126, "ph": 92, "st": false, "gp": null, "ans3": 2, "km": 1.87, "s": "Сильная", "b": null, "id": "109488844019"}, {"t": "Сад on line", "a": "ул. 14-я Линия, 62", "cats": "Ресторан, банкетный зал", "r": 4.7, "n": 1641, "rv": 767, "ph": 240, "st": true, "gp": "2026", "ans3": 1, "km": 2.1, "s": "Сильная", "b": 12185, "id": "136986131775"}, {"t": "Наталия", "a": "Советская ул., 54", "cats": "Кафе", "r": 4.8, "n": 150, "rv": 73, "ph": 41, "st": false, "gp": null, "ans3": 0, "km": 2.1, "s": "Сильная", "b": null, "id": "161008142256"}, {"t": "Долма", "a": "ул. Мясникова, 101", "cats": "Ресторан, банкетный зал", "r": 4.7, "n": 444, "rv": 271, "ph": 181, "st": true, "gp": "2026", "ans3": 3, "km": 2.11, "s": "Сильная", "b": 1275, "id": "6714526494"}, {"t": "Бессонница", "a": "ул. Закруткина, 66/3", "cats": "Караоке-клуб, ресторан", "r": 5.0, "n": 472, "rv": 396, "ph": 229, "st": true, "gp": "2026", "ans3": 3, "km": 2.13, "s": "Сильная", "b": 3666, "id": "114436004919"}, {"t": "Тамада", "a": "просп. Сельмаш, 1Д", "cats": "Ресторан, кафе", "r": 4.9, "n": 3754, "rv": 1530, "ph": 214, "st": true, "gp": "2026", "ans3": 3, "km": 2.14, "s": "Сильная", "b": 9622, "id": "1129068903"}, {"t": "Daar", "a": "ул. 20-я Линия, 65/90", "cats": "Кафе, ресторан", "r": 4.8, "n": 48, "rv": 40, "ph": 46, "st": true, "gp": null, "ans3": 0, "km": 2.17, "s": "Сильная", "b": null, "id": "173622574511"}, {"t": "Sergio", "a": "просп. Сельмаш, 1Г", "cats": "Ресторан, кафе", "r": 4.4, "n": 910, "rv": 424, "ph": 58, "st": false, "gp": null, "ans3": 0, "km": 2.27, "s": "Средняя", "b": null, "id": "1075811002"}, {"t": "Анатолия", "a": "просп. Шолохова, 31А", "cats": "Ресторан", "r": 4.9, "n": 2900, "rv": 1319, "ph": 588, "st": true, "gp": null, "ans3": 3, "km": 2.27, "s": "Сильная", "b": 10216, "id": "230222791990"}], "rev": [{"m": "2025-09", "v": 6}, {"m": "2025-10", "v": 15}, {"m": "2025-11", "v": 35}, {"m": "2025-12", "v": 3}, {"m": "2026-01", "v": 10}, {"m": "2026-02", "v": 5}, {"m": "2026-03", "v": 22}, {"m": "2026-04", "v": 4}, {"m": "2026-05", "v": 6}, {"m": "2026-06", "v": 7}, {"m": "2026-07", "v": 4}, {"m": "2026-08", "v": 5}, {"m": "2026-09", "v": 2}], "dist": {"1": 9, "2": 2, "3": 5, "4": 3, "5": 105}, "aspects": [["Персонал", 77, 14], ["Еда", 79, 10], ["Кальян", 49, 3], ["Атмосфера", 39, 2], ["Напитки", 18, 4], ["Время ожидания", 21, 4], ["Интерьер", 22, 0], ["Мясо", 13, 6]], "chk": [{"l": "Нет сторис", "n": 16, "fab": false}, {"l": "Нет награды «Хорошее место»", "n": 18, "fab": false}, {"l": "Без ответа на 3 последних отзыва", "n": 10, "fab": false}, {"l": "Меньше 50 фото", "n": 10, "fab": false}, {"l": "Меньше 100 оценок", "n": 5, "fab": false}, {"l": "Рейтинг ниже 4,5", "n": 7, "fab": false}], "med": {"r": 4.7, "n": 349.5, "rv": 188.0, "ph": 61.0}, "fab": {"r": 5, "n": 158, "rv": 124, "ph": 110}, "top": [{"t": "Тамада", "n": 3754, "r": 4.9, "km": 2.14}, {"t": "Анатолия", "n": 2900, "r": 4.9, "km": 2.27}, {"t": "Хинкали Djan", "n": 2720, "r": 5.0, "km": 1.86}, {"t": "Сицилия", "n": 1719, "r": 4.9, "km": 0.34}, {"t": "Сад on line", "n": 1641, "r": 4.7, "km": 2.1}, {"t": "Марьяж", "n": 1102, "r": 4.7, "km": 1.71}, {"t": "Sergio", "n": 910, "r": 4.4, "km": 2.27}, {"t": "Старый мост", "n": 562, "r": 4.4, "km": 0.92}], "brand": [{"t": "Сад on line", "v": 12185, "p": 14186}, {"t": "Ла фабрика", "v": 11871, "p": 14271}, {"t": "Анатолия", "v": 10216, "p": 10441}, {"t": "Хинкали Djan", "v": 10155, "p": 12486}, {"t": "Тамада", "v": 9622, "p": 10945}, {"t": "Бессонница", "v": 3666, "p": 2448}, {"t": "Мангал Хаус", "v": 1871, "p": 2521}, {"t": "Фабрика", "v": 1307, "p": 351}, {"t": "Долма", "v": 1275, "p": 1507}, {"t": "Шато", "v": 981, "p": 934}, {"t": "Старый мост", "v": 788, "p": 992}, {"t": "Хванчкара", "v": 83, "p": 136}], "fabQ": [{"l": "«фабрика богданова»", "v": 1307}, {"l": "«фабрика ресторан» без «ла»", "v": 6736}, {"l": "«ла фабрика»", "v": 11871}], "months": ["2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"], "m12": ["2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"], "brandLine": {"Фабрика": [0, 0, 0, 0, 0, 0, 2, 1, 0, 39, 30, 279, 193, 161, 94, 133, 99, 70, 77, 96, 89, 82, 102, 111], "Ла фабрика": [1494, 1358, 1278, 1410, 1214, 1416, 970, 1103, 1042, 947, 978, 1061, 1316, 1088, 993, 977, 917, 1121, 896, 898, 832, 881, 891, 1061]}, "main": {"Ростов-на-Дону": [150050, 161008, 150752, 153570, 139761, 154461, 130373, 141402, 148761, 158554, 151242, 147284, 170659, 164589, 140806, 129890, 124768, 138651, 124590, 130238, 130888, 141115, 141949, 138372], "Ростовская область": [239142, 249167, 237628, 249609, 221074, 241641, 205664, 222938, 238793, 265663, 255600, 246065, 281124, 268559, 234659, 224428, 201580, 224330, 206084, 213327, 215700, 233247, 241286, 225230]}, "div": [{"q": "ребра свиные", "v": 26208, "p": 21165, "d": 23.8}, {"q": "кальян бар", "v": 3949, "p": 3654, "d": 8.1}, {"q": "ресторан с кальяном", "v": 1111, "p": 1086, "d": 2.3}, {"q": "стендап", "v": 130945, "p": 128667, "d": 1.8}, {"q": "кальян", "v": 137802, "p": 136779, "d": 0.7}, {"q": "стейк", "v": 146781, "p": 145744, "d": 0.7}, {"q": "гастроужин", "v": 1916, "p": 1902, "d": 0.7}, {"q": "пивной бар", "v": 4721, "p": 4816, "d": -2.0}, {"q": "летняя веранда", "v": 4943, "p": 5104, "d": -3.2}, {"q": "где поесть", "v": 50078, "p": 52777, "d": -5.1}, {"q": "новогодний корпоратив", "v": 15666, "p": 16654, "d": -5.9}, {"q": "ресторан", "v": 1676515, "p": 1787218, "d": -6.2}, {"q": "день рождения ресторан", "v": 5244, "p": 5618, "d": -6.7}, {"q": "банкетный зал", "v": 21386, "p": 23542, "d": -9.2}, {"q": "ресторан с живой музыкой", "v": 5357, "p": 5933, "d": -9.7}, {"q": "кальянная", "v": 47528, "p": 54478, "d": -12.8}, {"q": "семейный ресторан", "v": 1857, "p": 2130, "d": -12.8}, {"q": "кафе", "v": 785091, "p": 910261, "d": -13.8}, {"q": "гриль бар", "v": 1474, "p": 1731, "d": -14.8}, {"q": "корпоратив", "v": 81579, "p": 99418, "d": -17.9}, {"q": "караоке", "v": 348423, "p": 434990, "d": -19.9}, {"q": "крафтовое пиво", "v": 3881, "p": 4871, "d": -20.3}, {"q": "доставка еды", "v": 95420, "p": 125373, "d": -23.9}, {"q": "кафе на день рождения", "v": 1691, "p": 2266, "d": -25.4}, {"q": "бизнес ланч", "v": 11109, "p": 14967, "d": -25.8}], "heat": [{"q": "кальян", "v": [11484, 10289, 9597, 9972, 9326, 10438, 10187, 12002, 11821, 13135, 16276, 13275]}, {"q": "корпоратив", "v": [9711, 13106, 23990, 5771, 3493, 3341, 2562, 2951, 3277, 4014, 3940, 5423]}, {"q": "новогодний корпоратив", "v": [3084, 3883, 5674, 995, 159, 121, 118, 118, 97, 137, 230, 1050]}, {"q": "банкетный зал", "v": [2544, 2191, 1428, 1609, 1587, 1498, 1369, 1747, 1634, 1693, 1903, 2183]}, {"q": "день рождения ресторан", "v": [591, 550, 350, 516, 383, 391, 386, 360, 326, 373, 511, 507]}, {"q": "ребра свиные", "v": [2079, 2252, 2493, 2219, 2151, 2243, 2089, 2116, 1834, 2142, 2191, 2399]}, {"q": "стейк", "v": [12967, 12774, 15523, 12479, 11207, 11843, 11440, 11310, 10533, 11190, 12778, 12737]}, {"q": "бизнес ланч", "v": [1219, 1013, 803, 536, 687, 947, 1009, 972, 976, 1089, 926, 932]}, {"q": "летняя веранда", "v": [134, 91, 91, 226, 99, 223, 293, 847, 1029, 905, 628, 377]}, {"q": "где поесть", "v": [4234, 3460, 2481, 3645, 2987, 3965, 4150, 4920, 5034, 5330, 5235, 4637]}, {"q": "гастроужин", "v": [193, 250, 158, 157, 150, 104, 149, 101, 135, 134, 106, 279]}]};
+const fmt=n=>n==null?'—':Number(n).toLocaleString('ru-RU',{maximumFractionDigits:1});
+const fr=n=>Number(n).toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1});
+const MN=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const ml=s=>{const [y,m]=s.split('-');return MN[+m-1]+' '+y.slice(2)};
+const tip=document.getElementById('tip');
+function bindTip(root){root.querySelectorAll('[data-tip]').forEach(el=>{
+  el.addEventListener('mousemove',e=>{tip.innerHTML=el.getAttribute('data-tip');tip.style.opacity=1;
+    const w=tip.offsetWidth;let x=e.clientX+14;if(x+w>innerWidth-8)x=e.clientX-w-14;tip.style.left=Math.max(8,x)+'px';tip.style.top=(e.clientY+14)+'px'});
+  el.addEventListener('mouseleave',()=>tip.style.opacity=0);
+  el.addEventListener('touchstart',e=>{tip.innerHTML=el.getAttribute('data-tip');tip.style.opacity=1;const t=e.touches[0];tip.style.left=Math.min(t.clientX,innerWidth-270)+'px';tip.style.top=(t.clientY+16)+'px'},{passive:true});
+});}
+const cw=id=>Math.max(300,Math.round(document.getElementById(id).clientWidth||520));
+const S=(w,h,inner)=>`<svg viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
+function nice(max){const p=Math.pow(10,Math.floor(Math.log10(max)));for(const m of [1,2,2.5,5,10]){if(m*p>=max)return m*p}return 10*p}
+
+// vertical bars
+function vbars(id,labels,vals,o={}){const W=cw(id),H=220,L=36,B=26,T=10,R=6;const mx=nice(Math.max(...vals));const bw=(W-L-R)/vals.length;
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,y=H-B-(H-B-T)*i/4;g+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${L-6}" y="${y+4}" text-anchor="end">${fmt(v)}</text>`}
+  vals.forEach((v,i)=>{const h=(H-B-T)*v/mx,x=L+i*bw+bw*.15;g+=`<rect x="${x}" y="${H-B-h}" width="${bw*.7}" height="${Math.max(h,1)}" rx="2" fill="${o.color?o.color(i):'var(--ember)'}" data-tip="${o.tip?o.tip(i):labels[i]+': '+fmt(v)}"/>`;
+    if(!o.every||i%o.every===0)g+=`<text x="${x+bw*.35}" y="${H-8}" text-anchor="middle">${labels[i]}</text>`});
+  const el=document.getElementById(id);el.innerHTML=S(W,H,g);bindTip(el)}
+
+// table
+const STC={'Сильная':'s','Средняя':'m','Риск':'r'};let sortK='n',sortDir=-1,filt='all';
+function renderT(){const rows=D.cards.filter(c=>filt==='all'||c.s===filt).slice().sort((a,b)=>{let x=a[sortK],y=b[sortK];if(x==null)x=-1;if(y==null)y=-1;if(typeof x==='boolean'){x=+x;y=+y}return (x>y?1:x<y?-1:0)*sortDir});
+  document.querySelector('#tb tbody').innerHTML=rows.map(c=>`<tr class="${c.t==='Фабрика'?'me':''}"><td>${c.t}<small>${c.cats}</small></td><td>${c.km?fr(c.km):'—'}</td><td><span class="pill ${STC[c.s]}">${c.s}</span></td>
+  <td class="${c.r<4.5?'w':''}">${fr(c.r)}</td><td class="${c.n<100?'w':''}">${fmt(c.n)}</td><td>${fmt(c.rv)}</td><td class="${c.ph<50?'w':''}">${fmt(c.ph)}</td><td class="${c.st?'':'w'}">${c.st?'есть':'нет'}</td><td>${c.gp?c.gp:'—'}</td><td class="${c.ans3===0?'w':''}">${c.ans3}</td><td>${c.b==null?'—':fmt(c.b)}</td></tr>`).join('');
+  document.querySelectorAll('#tb th').forEach(th=>{th.removeAttribute('aria-sort');if(th.dataset.k===sortK)th.setAttribute('aria-sort',sortDir>0?'ascending':'descending')})}
+document.querySelectorAll('#tb th').forEach(th=>{const go=()=>{const k=th.dataset.k;if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=k==='t'||k==='km'?1:-1}renderT()};th.addEventListener('click',go);th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{filt=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));renderT()}));
+document.querySelectorAll('.filters button').forEach(b=>{const f=b.dataset.f;if(f!=='all')b.textContent=f+' · '+D.cards.filter(c=>c.s===f).length});
+renderT();
+
+// checks
+document.getElementById('c-chk').innerHTML=D.chk.map(c=>`<div class="row" data-tip="${c.l}: ${c.n} из 25"><span>${c.l}</span><div class="bar"><i style="width:${c.n/25*100}%"></i></div><span class="num" style="text-align:right">${c.n}</span><span class="tag ${c.fab?'no':'ok'}">Фабрика ${c.fab?'✗':'✓'}</span></div>`).join('');bindTip(document.getElementById('c-chk'));
+
+function drawAll(){
+vbars('c-rev',D.rev.map(r=>ml(r.m)),D.rev.map(r=>r.v),{every:2,tip:i=>`${ml(D.rev[i].m)}: ${D.rev[i].v} отз.`});
+vbars('c-dist',['1★','2★','3★','4★','5★'],[1,2,3,4,5].map(k=>D.dist[k]),{color:i=>i<2?'var(--bad)':i<4?'var(--mute)':'var(--smoke)',tip:i=>`${i+1}★: ${D.dist[i+1]} отз. (${fr(D.dist[i+1]/124*100)}%)`});
+
+// horizontal bars
+function hbars(id,rows,o={}){const W=cw(id),rh=o.rh||26,L=o.L||150,R=60,H=rows.length*rh+6;const mx=o.max||Math.max(...rows.map(r=>r.v));let g='';
+  rows.forEach((r,i)=>{const y=i*rh+4,w=(W-L-R)*r.v/mx;g+=`<text x="${L-8}" y="${y+rh/2+2}" text-anchor="end" style="fill:var(--ink);font-family:var(--f-body);font-size:12px${r.me?';font-weight:600':''}">${r.l}</text><rect x="${L}" y="${y+4}" width="${Math.max(w,2)}" height="${rh-10}" rx="2" fill="${r.c||'var(--smoke)'}" data-tip="${r.tip||r.l+': '+fmt(r.v)}"/><text x="${L+Math.max(w,2)+6}" y="${y+rh/2+2}">${r.lab||fmt(r.v)}</text>`});
+  const el=document.getElementById(id);el.innerHTML=S(W,H,g);bindTip(el)}
+
+// aspects diverging
+(function(){const W=cw('c-asp'),rh=28,L=118,mid=L+(W-L)/2,H=D.aspects.length*rh+6,mx=80,half=(W-L)/2-34;let g=`<line x1="${mid}" x2="${mid}" y1="0" y2="${H}" stroke="var(--line)"/>`;
+  D.aspects.forEach((a,i)=>{const y=i*rh+4,wp=half*a[1]/mx,wn=half*a[2]/mx;g+=`<text x="${L-8}" y="${y+rh/2+2}" text-anchor="end" style="fill:var(--ink);font-family:var(--f-body);font-size:12px">${a[0]}</text>
+  <rect x="${mid-wn}" y="${y+5}" width="${Math.max(wn,1)}" height="${rh-12}" rx="2" fill="var(--bad)" data-tip="${a[0]}: ${a[2]} отрицательных"/><text x="${mid-wn-6}" y="${y+rh/2+2}" text-anchor="end">${a[2]}</text>
+  <rect x="${mid}" y="${y+5}" width="${wp}" height="${rh-12}" rx="2" fill="var(--smoke)" data-tip="${a[0]}: ${a[1]} положительных"/><text x="${mid+wp+6}" y="${y+rh/2+2}">${a[1]}</text>`});
+  const el=document.getElementById('c-asp');el.innerHTML=S(W,H,g);bindTip(el)})();
+
+// scatter log x
+(function(){const W=cw('c-sc'),H=260,L=36,B=30,T=10,R=12;const xs=v=>L+(W-L-R)*(Math.log10(v)-1)/(Math.log10(5000)-1);const ys=v=>H-B-(H-B-T)*(v-4)/1;let g='';
+  [4,4.25,4.5,4.75,5].forEach(v=>{g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--grid)"/><text x="${L-6}" y="${ys(v)+4}" text-anchor="end">${fr(v)}</text>`});
+  [10,30,100,300,1000,3000].forEach(v=>{g+=`<line x1="${xs(v)}" x2="${xs(v)}" y1="${T}" y2="${H-B}" stroke="var(--grid)"/><text x="${xs(v)}" y="${H-10}" text-anchor="middle">${fmt(v)}</text>`});
+  D.cards.slice().sort((a,b)=>a.t==='Фабрика'?1:-1).forEach(c=>{const me=c.t==='Фабрика';g+=`<circle cx="${xs(c.n)}" cy="${ys(c.r)}" r="${me?8:5}" fill="${me?'var(--ember)':'var(--smoke)'}" fill-opacity="${me?1:.7}" stroke="var(--surface)" data-tip="${c.t}: ${fr(c.r)} · ${fmt(c.n)} оценок"/>`;if(me)g+=`<text x="${xs(c.n)}" y="${ys(c.r)-13}" text-anchor="middle" style="fill:var(--ember);font-weight:600">Фабрика</text>`});
+  const el=document.getElementById('c-sc');el.innerHTML=S(W,H,g);bindTip(el)})();
+
+// median comparison
+(function(){const rows=[['Рейтинг','r',x=>fr(x)],['Оценки','n',fmt],['Отзывы','rv',fmt],['Фото','ph',fmt]];const W=cw('c-med'),rh=50,L=80,R=60,H=rows.length*rh;let g='';
+  rows.forEach((r,i)=>{const a=D.fab[r[1]],b=r[1]==='r'?D.med[r[1]]:Math.round(D.med[r[1]]),mx=Math.max(a,b),y=i*rh+4,w=W-L-R;g+=`<text x="${L-8}" y="${y+22}" text-anchor="end" style="fill:var(--ink);font-family:var(--f-body);font-size:12px">${r[0]}</text>
+  <rect x="${L}" y="${y+4}" width="${w*a/mx}" height="16" rx="2" fill="var(--ember)" data-tip="Фабрика: ${r[2](a)}"/><text x="${L+w*a/mx+6}" y="${y+16}">${r[2](a)}</text>
+  <rect x="${L}" y="${y+24}" width="${w*b/mx}" height="16" rx="2" fill="var(--smoke)" data-tip="Медиана соседей: ${r[2](b)}"/><text x="${L+w*b/mx+6}" y="${y+36}">${r[2](b)}</text>`});
+  const el=document.getElementById('c-med');el.innerHTML=S(W,H,g);bindTip(el)})();
+
+hbars('c-top',[...D.top.map(t=>({l:t.t,v:t.n,tip:`${t.t}: ${fmt(t.n)} оценок · ${fr(t.r)} · ${fr(t.km)} км`})),{l:'Фабрика',v:D.fab.n,c:'var(--ember)',me:1,tip:'Фабрика: 158 оценок · 5,0'}],{L:130});
+hbars('c-brand',D.brand.map(b=>{const d=b.t==='Фабрика'?null:(b.v-b.p)/b.p*100;return {l:b.t,v:b.v,c:b.t==='Фабрика'?'var(--ember)':'var(--smoke)',me:b.t==='Фабрика',tip:`${b.t}: ${fmt(b.v)} за 12 мес`+(d==null?' · бренд с сен 2025':` · ${d>0?'+':''}${fr(d)}% к прошлому году`)}}),{L:120,rh:24,W:1000});
+hbars('c-fq',D.fabQ.map((q,i)=>({l:['фабрика богданова','фабрика ресторан','ла фабрика'][i],v:q.v,c:i===0?'var(--ember)':i===1?'var(--mute)':'var(--smoke)',tip:`${q.l}: ${fmt(q.v)} за 12 мес`})),{L:130,rh:40});
+
+// lines
+function lines(id,series,labels,colors){const W=cw(id),H=230,L=48,B=26,T=10,R=10;const all=series.flatMap(s=>s.v);const mx=nice(Math.max(...all));const xs=i=>L+(W-L-R)*i/(labels.length-1),ys=v=>H-B-(H-B-T)*v/mx;let g='';
+  for(let i=0;i<=4;i++){const v=mx*i/4;g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--grid)"/><text x="${L-6}" y="${ys(v)+4}" text-anchor="end">${fmt(v)}</text>`}
+  labels.forEach((l,i)=>{if(i%3===0)g+=`<text x="${xs(i)}" y="${H-8}" text-anchor="middle">${ml(l)}</text>`});
+  series.forEach((s,k)=>{g+=`<polyline fill="none" stroke="${colors[k]}" stroke-width="2.4" stroke-linejoin="round" points="${s.v.map((v,i)=>xs(i)+','+ys(v)).join(' ')}"/>`;
+    s.v.forEach((v,i)=>g+=`<circle cx="${xs(i)}" cy="${ys(v)}" r="${i===s.v.length-1?4:2.5}" fill="${colors[k]}" data-tip="${s.n}, ${ml(labels[i])}: ${fmt(v)}"/>`)});
+  const el=document.getElementById(id);el.innerHTML=S(W,H,g);bindTip(el)}
+lines('c-bl',[{n:'«фабрика богданова»',v:D.brandLine['Фабрика']},{n:'«ла фабрика»',v:D.brandLine['Ла фабрика']}],D.months,['var(--ember)','var(--smoke)']);
+lines('c-main',Object.entries(D.main).map(([n,v])=>({n,v})),D.months,['var(--ember)','var(--smoke)'],1000);
+
+// diverging yoy
+(function(){const W=Math.max(560,cw('c-div')),rh=22,L=190,R=60,G=56,H=D.div.length*rh+6,mx=Math.max(...D.div.map(d=>Math.abs(d.d)));const sc=(W-L-R-G)/(2*mx),mid=L+G+mx*sc;let g=`<line x1="${mid}" x2="${mid}" y1="0" y2="${H}" stroke="var(--line)"/>`;
+  D.div.forEach((d,i)=>{const y=i*rh+3,w=Math.abs(d.d)*sc,x=d.d>=0?mid:mid-w;g+=`<text x="${L-8}" y="${y+rh/2+3}" text-anchor="end" style="fill:var(--ink);font-family:var(--f-body);font-size:12px">${d.q}</text>
+  <rect x="${x}" y="${y+3}" width="${Math.max(w,1.5)}" height="${rh-7}" rx="2" fill="${d.d>=0?'var(--smoke)':'var(--bad)'}" data-tip="«${d.q}»: ${fmt(d.v)} за 12 мес, было ${fmt(d.p)} · ${d.d>0?'+':''}${fr(d.d)}%"/>
+  <text x="${d.d>=0?x+w+6:x-6}" y="${y+rh/2+3}" text-anchor="${d.d>=0?'start':'end'}">${d.d>0?'+':''}${fr(d.d)}%</text>`});
+  const el=document.getElementById('c-div');el.innerHTML=`<div style="overflow-x:auto"><div style="min-width:560px">${S(W,H,g)}</div></div>`;bindTip(el)})();
+
+// heatmap
+(function(){const W=Math.max(560,cw('c-heat')),rh=26,L=170,cW=(W-L)/12,H=D.heat.length*rh+24;let g='';
+  D.m12.forEach((m,i)=>g+=`<text x="${L+i*cW+cW/2}" y="14" text-anchor="middle">${ml(m).split(' ')[0]}</text>`);
+  D.heat.forEach((h,r)=>{const mx=Math.max(...h.v),mn=Math.min(...h.v);g+=`<text x="${L-8}" y="${24+r*rh+rh/2+3}" text-anchor="end" style="fill:var(--ink);font-family:var(--f-body);font-size:12px">${h.q}</text>`;
+    h.v.forEach((v,i)=>{const t=(v-mn)/((mx-mn)||1);const pk=v===mx;g+=`<rect x="${L+i*cW+1}" y="${24+r*rh+1}" width="${cW-2}" height="${rh-2}" rx="2" fill="var(--ember)" fill-opacity="${(.08+.88*t).toFixed(2)}" data-tip="«${h.q}», ${ml(D.m12[i])}: ${fmt(v)}${pk?' · пик года':''}"/>`})});
+  const el=document.getElementById('c-heat');el.innerHTML=`<div style="overflow-x:auto"><div style="min-width:560px">${S(W,H,g)}</div></div>`;bindTip(el)})();
+}
+drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150)});
+</script>
+
+</body>
+</html>
