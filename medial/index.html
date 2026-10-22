@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Аналитика Медиаль</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: clinical report sheet — sticky section bar, wide single column, charts on quiet panels */
+:root{
+  --bg:#f3f6f6; --panel:#ffffff; --ink:#122129; --muted:#5b6c73; --line:#dbe4e5;
+  --accent:#0b7a83; --accent-soft:#d6eef0; --ink2:#2f4650;
+  --good:#1b8a4b; --warn:#b7791f; --bad:#c2410c; --bad-soft:#fde7dc;
+  --c2:#8a5cf6; --c3:#94a3ab;
+  --f-display:"Onest","Segoe UI",system-ui,sans-serif;
+  --f-body:"Onest","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1619; --panel:#142126; --ink:#e4eef0; --muted:#93a8ae; --line:#24363c;
+  --accent:#3cc3cc; --accent-soft:#16383c; --ink2:#c3d5d9;
+  --good:#4ade80; --warn:#f2b84b; --bad:#ff8a5c; --bad-soft:#3a1f15; --c2:#b39cff; --c3:#5f747b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1619; --panel:#142126; --ink:#e4eef0; --muted:#93a8ae; --line:#24363c;
+  --accent:#3cc3cc; --accent-soft:#16383c; --ink2:#c3d5d9;
+  --good:#4ade80; --warn:#f2b84b; --bad:#ff8a5c; --bad-soft:#3a1f15; --c2:#b39cff; --c3:#5f747b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;align-items:center;gap:18px;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+nav.bar b{font-family:var(--f-display);font-weight:700;white-space:nowrap;color:var(--accent)}
+nav.bar a{color:var(--muted);text-decoration:none;white-space:nowrap;font-size:13px}
+nav.bar a:hover,nav.bar a:focus-visible{color:var(--ink)}
+header.hero{padding-block:40px 8px}
+.eyebrow{font:600 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(28px,4.6vw,46px)/1.08 var(--f-display);letter-spacing:-.02em;margin:12px 0 10px;text-wrap:balance}
+h1 span{color:var(--accent)}
+.sub{color:var(--muted);max-width:68ch;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:26px}
+.kpi{background:var(--panel);padding:16px 16px 14px;min-width:0}
+.kpi .v{font:600 28px/1.1 var(--f-mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi .l{font-size:13px;color:var(--muted);margin-top:6px}
+.kpi .n{font:12px/1.3 var(--f-mono);color:var(--accent);margin-top:4px}
+section{padding-block:34px 6px;scroll-margin-top:60px}
+h2{font:700 24px/1.2 var(--f-display);margin:0 0 4px;letter-spacing:-.01em;text-wrap:balance}
+h2 .num{font:600 13px var(--f-mono);color:var(--accent);margin-right:10px;vertical-align:3px}
+.lead{color:var(--muted);margin:0 0 16px;max-width:72ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.panel h3{font:600 15px/1.3 var(--f-display);margin:0 0 2px}
+.panel .meta{font:12px var(--f-mono);color:var(--muted);margin-bottom:10px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.fact .big{font:600 34px/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:-.03em}
+.fact.risk .big{color:var(--bad)}
+.fact .t{font-weight:600}
+.fact .d{font-size:13px;color:var(--muted)}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--muted);font:11px var(--f-mono)}
+svg .lbl{fill:var(--ink);font:12px var(--f-body)}
+svg .val{fill:var(--ink);font:600 11px var(--f-mono)}
+.grid line{stroke:var(--line)}
+.panel>div[id]{overflow-x:auto}
+.panel>div[id]>svg{min-width:540px}
+#scatter>svg{min-width:420px}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font:600 12px var(--f-body);color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--panel)}
+th:first-child,td:first-child{text-align:left}
+th[aria-sort="ascending"]::after{content:" ↑"}th[aria-sort="descending"]::after{content:" ↓"}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+td.weak{color:var(--bad);font-weight:600}
+tr.me td{background:var(--accent-soft)}
+tr.me td:first-child{font-weight:700}
+.addr{display:block;color:var(--muted);font-size:12px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font:600 11px var(--f-body)}
+.pill.s{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.m{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.r{background:var(--bad-soft);color:var(--bad)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{font:500 13px var(--f-body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.filters button:focus-visible,th:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{display:grid;gap:10px}
+.ci{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ci:last-child{border-bottom:0;padding-bottom:0}
+.ci .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--f-mono)}
+.ic.ok{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.ic.no{background:var(--bad-soft);color:var(--bad)}
+.ic.na{background:var(--line);color:var(--muted)}
+.ci b{display:block;font-weight:600}
+.ci span{font-size:13px;color:var(--muted)}
+.ci .r{font:600 13px var(--f-mono);white-space:nowrap}
+.season{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.season .panel b{font:600 18px var(--f-display);display:block;margin:4px 0}
+.news{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.news .panel .big{font:600 30px/1.05 var(--f-mono);color:var(--accent);letter-spacing:-.02em}
+.news .panel p{margin:8px 0;font-size:14px}
+.news a,footer a{color:var(--accent)}
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+.step{background:var(--panel);padding:16px;margin:0 1px 0 0;display:flex;flex-direction:column;gap:6px}
+.step:last-child{margin:0}
+.step .when{font:600 12px var(--f-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.step b{font:600 16px/1.3 var(--f-display)}
+.step ul{margin:4px 0 0;padding-left:18px;font-size:13px;color:var(--ink2)}
+.step li+li{margin-top:4px}
+.nodata{border:1px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:13px;background:var(--panel)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{margin-top:40px;padding-block:24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer h4{font:600 13px var(--f-display);color:var(--ink);margin:16px 0 6px}
+footer ul{margin:0;padding-left:18px}
+#tip{position:fixed;pointer-events:none;z-index:20;background:var(--ink);color:var(--panel);font:12px/1.4 var(--f-mono);padding:7px 9px;border-radius:8px;max-width:260px;opacity:0;transition:opacity .12s}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis .kpi:last-child{grid-column:1/-1}.facts,.grid3,.season{grid-template-columns:repeat(2,minmax(0,1fr))}.route{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.grid2,.facts,.grid3,.season,.news,.route{grid-template-columns:1fr}.step{margin:0 0 1px}}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+</style>
+</head>
+<body>
+
+<nav class="bar"><div class="wrap">
+  <b>Медиаль</b>
+  <a href="#s1">Видимость</a><a href="#s2">Сравнение</a><a href="#s3">Карточка</a><a href="#s4">Конкуренты</a><a href="#s5">Бренд</a><a href="#s6">Спрос</a><a href="#s7">Сезонность</a><a href="#s8">Поводы</a><a href="#s9">Маршрут</a>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Клинический центр · Ижевск, Совхозная 3А · данные на 22.10.2026</div>
+  <h1>Медиаль: анализ карточки, <span>спрос региона</span> и точки роста</h1>
+  <p class="sub">У клиники рейтинг 4,9 и «Хорошее место 2026», но карточка на клинику почти не работает. Видимость в поиске Карт сейчас целиком куплена рекламой, а сама карточка не обновляется: отзывы без ответа, сторис с июня, три рубрики на полтора десятка направлений.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<section id="top">
+  <h2>Главное за 30 секунд</h2>
+  <div class="facts" id="facts"></div>
+</section>
+
+<section id="s1">
+  <h2><span class="num">01</span>Где карточку показывают в поиске Карт</h2>
+  <p class="lead">Позиция «Медиаль» в выдаче Яндекс Карт по 21 запросу, Ижевск, без авторизации. Во всех показах карточка стоит в рекламном блоке. В обычной выдаче без рекламы её нет ни по одному запросу.</p>
+  <div class="panel"><h3>Позиция в выдаче, первые 25 мест</h3><div class="meta">Яндекс Карты · 22.10.2026 · два замера</div><div class="legend"><span><i style="background:var(--accent)"></i>замер 1, реклама</span><span><i style="background:var(--c2)"></i>замер 2, реклама</span><span><i style="background:var(--bad)"></i>нет в первых 25</span></div><div id="posChart"></div></div>
+  <div class="nodata" style="margin-top:16px">Переходы, звонки, маршруты и долю в зоне конкурентов показывает только кабинет Яндекс Бизнеса. Доступа к карточке у нас пока нет — эти графики появятся после подключения.</div>
+</section>
+
+<section id="s2">
+  <h2><span class="num">02</span>Медиаль и 14 карточек конкурентов</h2>
+  <p class="lead">Частные медцентры, которые чаще всего стоят рядом с «Медиаль» в выдаче по тем же 21 запросам.</p>
+  <div class="filters" role="group" aria-label="Статус карточки">
+    <button type="button" data-f="all" aria-pressed="true">Все</button>
+    <button type="button" data-f="Сильная" aria-pressed="false">Сильная</button>
+    <button type="button" data-f="Средняя" aria-pressed="false">Средняя</button>
+    <button type="button" data-f="Риск" aria-pressed="false">Риск</button>
+  </div>
+  <div class="tscroll"><table id="cmp"><thead><tr>
+    <th data-k="t" tabindex="0">Карточка</th><th data-k="status" tabindex="0">Статус</th><th data-k="r" tabindex="0">Рейтинг</th><th data-k="rc" tabindex="0">Оценки</th><th data-k="rv" tabindex="0">Отзывы</th><th data-k="ph" tabindex="0">Фото</th><th data-k="st" tabindex="0">Сторис</th><th data-k="gp" tabindex="0">Хорошее место</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="s3">
+  <h2><span class="num">03</span>Состояние карточки</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Чек-лист карточки «Медиаль»</h3><div class="meta">публичная карточка · 22.10.2026</div><div class="check" id="check"></div></div>
+    <div class="panel"><h3>Рейтинг × число оценок</h3><div class="meta">15 карточек · 22.10.2026</div><div id="scatter"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Отзывы по месяцам и ответы клиники</h3><div class="meta">все 189 отзывов карточки · ноя 2025 — окт 2026 (по 22.10)</div><div class="legend"><span><i style="background:var(--accent)"></i>с ответом</span><span><i style="background:var(--bad)"></i>без ответа</span></div><div id="revChart"></div></div>
+  <div class="panel" style="margin-top:16px"><h3>За что хвалят и ругают в отзывах</h3><div class="meta">аспекты отзывов Яндекс Карт · доля положительных</div><div id="aspects"></div></div>
+</section>
+
+<section id="s4">
+  <h2><span class="num">04</span>Конкуренты</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Кто стоит в обычной выдаче без рекламы</h3><div class="meta">показов в топ-10 по 21 запросу · все карточки бренда · 22.10.2026</div><div id="orgChart"></div></div>
+    <div class="panel"><h3>Кто покупает рекламу в Картах</h3><div class="meta">запросов из 21, где бренд показан в рекламном блоке · 22.10.2026</div><div id="adChart"></div></div>
+  </div>
+  <div style="margin-top:16px">
+    <div class="panel"><h3>Медиаль против медианы конкурентов</h3><div class="meta">14 карточек конкурентов</div><div class="legend"><span><i style="background:var(--accent)"></i>Медиаль</span><span><i style="background:var(--c3)"></i>медиана конкурентов</span></div><div id="medChart"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Брендовый спрос клиник Ижевска</h3><div class="meta">Вордстат · Ижевск · окт 2025 — сен 2026 · изменение к прошлому году</div><div id="brandChart"></div></div>
+</section>
+
+<section id="s5">
+  <h2><span class="num">05</span>Как ищут «Медиаль»</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Что добавляют к названию клиники</h3><div class="meta">Вордстат · Удмуртия · 08.09–07.10.2026</div><div id="brandIntent"></div></div>
+    <div class="panel"><h3>Бренд по месяцам: Медиаль и Медицея</h3><div class="meta">Вордстат · Ижевск · окт 2024 — сен 2026</div><div class="legend"><span><i style="background:var(--accent)"></i>Медиаль</span><span><i style="background:var(--c3)"></i>Медицея</span></div><div id="brandLines"></div></div>
+  </div>
+  <div class="nodata" style="margin-top:16px">Источники визитов (поиск по бренду, по категории, клики по метке) показывает геовизор кабинета. Добавим после доступа к карточке.</div>
+</section>
+
+<section id="s6">
+  <h2><span class="num">06</span>Спрос на рынке</h2>
+  <div class="panel"><h3>«Медицинский центр» по месяцам</h3><div class="meta">Вордстат · окт 2024 — сен 2026</div><div class="legend"><span><i style="background:var(--accent)"></i>Ижевск</span><span><i style="background:var(--c2)"></i>Удмуртия</span></div><div id="mainLine"></div></div>
+  <div class="panel" style="margin-top:16px"><h3>Что растёт и что падает</h3><div class="meta">Вордстат · Ижевск · окт 2025 — сен 2026 к окт 2024 — сен 2025</div><div id="yoy"></div></div>
+</section>
+
+<section id="s7">
+  <h2><span class="num">07</span>Сезонность направлений</h2>
+  <div class="panel"><h3>Запросы по месяцам</h3><div class="meta">Вордстат · Ижевск · окт 2025 — сен 2026</div><div style="overflow-x:auto"><div id="heat" style="min-width:640px"></div></div></div>
+  <div class="season" id="seasonCards"></div>
+</section>
+
+<section id="s8">
+  <h2><span class="num">08</span>Готовые поводы для контента</h2>
+  <div class="news" id="news"></div>
+</section>
+
+<section id="s9">
+  <h2><span class="num">09</span>Маршрут роста</h2>
+  <p class="lead">Шаги идут по сезонам спроса из блока 07.</p>
+  <div class="route" id="route"></div>
+</section>
+
+<footer>
+  <h4>Источники</h4>
+  <ul>
+    <li>Карточка «Медиаль» на Яндекс Картах: <a href="https://yandex.ru/maps/org/medial/237844972448/" target="_blank" rel="noopener">yandex.ru/maps/org/medial/237844972448</a>; карточки конкурентов и выдача Карт по 21 запросу — 22.10.2026.</li>
+    <li>Яндекс Вордстат: <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">wordstat.yandex.ru</a>, регионы Ижевск и Удмуртская Республика, окт 2024 — сен 2026.</li>
+    <li>Сайт клиники: <a href="https://медиаль.рф/" target="_blank" rel="noopener">медиаль.рф</a>.</li>
+    <li id="newsSrc"></li>
+  </ul>
+  <h4>Ограничения</h4>
+  <ul>
+    <li>Карточки «Медиаль» нет в нашем кабинете Яндекс Бизнеса: переходы, целевые действия, доли в зонах конкурентов, геовизор и история публикаций недоступны и на странице не показаны.</li>
+    <li>У клиники одна карточка на Картах (Совхозная 3А), других филиалов Карты и сайт не показывают.</li>
+    <li>Позиции в выдаче Карт сняты без авторизации, 22.10.2026, первые 25 результатов. Рекламные места отмечены Яндексом маркировкой рекламы. Рекламодатель в обычной выдаче не дублируется, поэтому органическая позиция «Медиаль» по запросам с её рекламой публично не видна.</li>
+    <li>Отзывы и ответы посчитаны по всем 189 отзывам карточки на 22.10.2026.</li>
+    <li>Вордстат на момент сбора работал в режиме «некоторые данные могут быть временно недоступны».</li>
+  </ul>
+</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = {"months": ["окт 24", "ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "monthsFull": ["октябрь 2024", "ноябрь 2024", "декабрь 2024", "январь 2025", "февраль 2025", "март 2025", "апрель 2025", "май 2025", "июнь 2025", "июль 2025", "август 2025", "сентябрь 2025", "октябрь 2025", "ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026"], "pos": {"медцентр": [4, 5], "клиника": [7, 0], "частная клиника": [7, 7], "уролог": [2, 3], "урология": [4, 3], "урологический центр": [1, 1], "хирург": [9, 10], "проктолог": [2, 6], "флеболог": [3, 3], "гинеколог": [3, 3], "эндокринолог": [4, 4], "онколог": [4, 3], "колоноскопия": [1, 3], "узи": [6, 8], "удаление щитовидной железы": [2, 2], "стационар": [0, 0], "травматолог": [2, 2], "невролог": [3, 3], "анализы": [7, 0], "маммолог": [0, 0], "эндоскопия": [0, 0]}, "org": [["Доктор плюс", 67], ["Академия здоровья", 15], ["Медсервис", 11], ["Medical Balance", 11], ["НоваГрупп", 10], ["Ижмедцентр", 8], ["Берлин Медикал Клиник", 7], ["Клиника Капачинской", 5], ["Медиаль", 0]], "ads": [["Алан Клиник", 19], ["Медицея", 18], ["Докториус", 18], ["Астера Клиник", 17], ["Аксион медицинский центр", 17], ["Лада Эстет", 16], ["Медиаль", 16], ["Здоровая Я", 10], ["Медси", 10], ["Ситилаб", 9], ["БиоЛайфМед", 8]], "rev": [["ноя", 5, 0, "ноябрь 2025"], ["дек", 9, 0, "декабрь 2025"], ["янв", 4, 0, "январь 2026"], ["фев", 2, 0, "февраль 2026"], ["мар", 6, 0, "март 2026"], ["апр", 3, 0, "апрель 2026"], ["май", 5, 0, "май 2026"], ["июн", 3, 0, "июнь 2026"], ["июл", 6, 0, "июль 2026"], ["авг", 6, 1, "август 2026"], ["сен", 9, 1, "сентябрь 2026"], ["окт", 15, 14, "октябрь 2026, по 22.10"]], "posTotal": {"медцентр": 55, "клиника": 54, "частная клиника": 62, "уролог": 65, "урология": 59, "урологический центр": 4, "хирург": 79, "проктолог": 43, "флеболог": 41, "гинеколог": 71, "эндокринолог": 70, "онколог": 59, "колоноскопия": 50, "узи": 75, "удаление щитовидной железы": 42, "стационар": 45, "травматолог": 66, "невролог": 73, "анализы": 45, "маммолог": 41, "эндоскопия": 56}, "cards": [{"t": "Алан Клиник", "a": "Советская ул., 13", "r": 4.5, "rc": 825, "rv": 433, "ph": 115, "st": false, "gp": true, "ansP": 86, "freq": 4, "me": false, "status": "Сильная"}, {"t": "Здоровая Я", "a": "Автозаводская ул., 50", "r": 4.7, "rc": 297, "rv": 87, "ph": 39, "st": true, "gp": false, "ansP": 86, "freq": 10, "me": false, "status": "Сильная"}, {"t": "Академия здоровья", "a": "ул. 30 лет Победы, 43", "r": 4.1, "rc": 454, "rv": 263, "ph": 133, "st": true, "gp": false, "ansP": 100, "freq": 3, "me": false, "status": "Средняя"}, {"t": "Лада Эстет", "a": "ул. Карла Маркса, 206В", "r": 5, "rc": 1500, "rv": 774, "ph": 212, "st": true, "gp": true, "ansP": 100, "freq": 7, "me": false, "status": "Сильная"}, {"t": "Лада Эстет", "a": "Майская ул., 29", "r": 5, "rc": 785, "rv": 355, "ph": 6, "st": true, "gp": true, "ansP": 94, "freq": 16, "me": false, "status": "Сильная"}, {"t": "Клиника Эксперт", "a": "Широкий пер., 38А", "r": 5, "rc": 301, "rv": 186, "ph": 35, "st": true, "gp": false, "ansP": 98, "freq": 6, "me": false, "status": "Сильная"}, {"t": "Медси", "a": "Советская ул., 14", "r": 4.5, "rc": 101, "rv": 47, "ph": 26, "st": true, "gp": false, "ansP": 30, "freq": 15, "me": false, "status": "Сильная"}, {"t": "БиоЛайфМед", "a": "Пушкинская ул., 286", "r": 4.7, "rc": 12, "rv": 12, "ph": 15, "st": false, "gp": false, "ansP": 75, "freq": 12, "me": false, "status": "Средняя"}, {"t": "Медси", "a": "ул. Орджоникидзе, 53", "r": 4.5, "rc": 164, "rv": 90, "ph": 45, "st": true, "gp": false, "ansP": 38, "freq": 16, "me": false, "status": "Сильная"}, {"t": "Медицея", "a": "Широкий пер., 38А", "r": 4.9, "rc": 3647, "rv": 1276, "ph": 129, "st": true, "gp": true, "ansP": 100, "freq": 15, "me": false, "status": "Сильная"}, {"t": "Медси", "a": "ул. Карла Маркса, 453А", "r": 4.6, "rc": 566, "rv": 216, "ph": 30, "st": true, "gp": true, "ansP": 30, "freq": 14, "me": false, "status": "Сильная"}, {"t": "Медси", "a": "ул. Карла Маркса, 455", "r": 5, "rc": 451, "rv": 313, "ph": 35, "st": true, "gp": true, "ansP": 18, "freq": 11, "me": false, "status": "Сильная"}, {"t": "Астера Клиник", "a": "ул. имени Репина, 35", "r": 4.7, "rc": 114, "rv": 71, "ph": 52, "st": true, "gp": false, "ansP": 100, "freq": 8, "me": false, "status": "Сильная"}, {"t": "Медицея", "a": "ул. Шумайлова, 20А", "r": 4.9, "rc": 887, "rv": 300, "ph": 86, "st": true, "gp": true, "ansP": 100, "freq": 6, "me": false, "status": "Сильная"}, {"t": "Медиаль", "a": "Совхозная ул., 3А", "r": 4.9, "rc": 424, "rv": 189, "ph": 94, "st": true, "gp": true, "ansP": 80, "freq": 0, "me": true, "status": "Сильная"}], "med": {"r": 4.7, "rc": 452.5, "rv": 239.5, "ph": 42.0, "ansP": 90.0}, "kpis": [{"v": "1", "l": "карточка на Яндекс Картах", "n": "Совхозная 3А · стационар там же"}, {"v": "4,9", "l": "рейтинг · 424 оценки", "n": "«Хорошее место 2026»"}, {"v": "0 из 21", "l": "запросов, где карточка есть в обычной выдаче", "n": "все показы — рекламные места"}, {"v": "16", "l": "отзывов без ответа", "n": "ответов нет с 06.10.2026"}, {"v": "29 599", "l": "брендовых запросов за 12 мес", "n": "+26,4% к прошлому году"}], "facts": [{"big": "0 из 21", "t": "запросов, где «Медиаль» видна без рекламы", "d": "по 16–18 запросам карточка стоит только в рекламном блоке; в обычной выдаче там Доктор плюс, Академия здоровья, Медсервис", "risk": true}, {"big": "3", "t": "направления клиники без единого показа", "d": "эндоскопия, маммолог, стационар: карточки нет в первых 25 ни в одном из 4 замеров", "risk": true}, {"big": "16", "t": "отзывов без ответа", "d": "в т. ч. 1★ от 11.08 и 3★ от 15.09; после 06.10.2026 ответов нет совсем", "risk": true}, {"big": "с июня", "t": "висит сторис «Июнь выезды»", "d": "расписание выездного приёма в Нефтекамске на 6–27 июня, стоит второй после «Награды 2026»", "risk": true}, {"big": "424 vs 3 647", "t": "оценок у Медиаль и у Медицеи", "d": "при одинаковом рейтинге 4,9; медиана 14 конкурентов — 453", "risk": true}, {"big": "+26,4%", "t": "рост брендового спроса за год", "d": "29 599 запросов «Медиаль» в Ижевске: люди ищут клинику  карточка должна их удерживать", "risk": false}], "check": [{"s": "ok", "t": "Рейтинг и награда", "d": "4,9 и «Хорошее место 2026»", "v": "4,9"}, {"s": "ok", "t": "Фото", "d": "больше медианы конкурентов (42)", "v": "94"}, {"s": "no", "t": "Видимость без рекламы", "d": "в обычной выдаче карточки нет ни по одному из 21 запроса", "v": "0 из 21"}, {"s": "no", "t": "Ответы на отзывы", "d": "16 без ответа, в т. ч. негатив от 11.08 и 15.09; последний ответ — 06.10.2026", "v": "173 из 189"}, {"s": "no", "t": "Негатив в отзывах", "d": "10 отзывов на 1–3 звезды за последние 12 месяцев из 75; «время ожидания» — 63% положительных", "v": "10"}, {"s": "no", "t": "Сторис", "d": "«Июнь выезды»: расписание приёма в Нефтекамске на июнь, висит 4 месяца", "v": "5"}, {"s": "no", "t": "Рубрики", "d": "3 рубрики: медцентр, диагностический и урологический центр. Нет хирургии, гинекологии, эндоскопии, стационара", "v": "3"}, {"s": "no", "t": "Оценки", "d": "меньше медианы конкурентов (453); у Медицеи 3 647", "v": "424"}, {"s": "na", "t": "Публикации", "d": "история новостей видна только в кабинете", "v": "нет данных"}], "aspects": [["Персонал", 141, 122, 9], ["Качество лечения", 79, 70, 8], ["Время ожидания", 26, 15, 9], ["Чистота", 19, 19, 0], ["Анализы", 11, 7, 3], ["Оборудование", 10, 9, 1]], "freq": [{"t": "Лада Эстет · Майская", "a": "Майская ул., 29", "freq": 16, "me": false}, {"t": "Медси · Орджоникидзе", "a": "ул. Орджоникидзе, 53", "freq": 16, "me": false}, {"t": "Медси · Советская", "a": "Советская ул., 14", "freq": 15, "me": false}, {"t": "Медицея · Широкий", "a": "Широкий пер., 38А", "freq": 15, "me": false}, {"t": "Медси · Карла Маркса", "a": "ул. Карла Маркса, 453А", "freq": 14, "me": false}, {"t": "БиоЛайфМед · Пушкинская", "a": "Пушкинская ул., 286", "freq": 12, "me": false}, {"t": "Медси · Карла Маркса", "a": "ул. Карла Маркса, 455", "freq": 11, "me": false}, {"t": "Здоровая Я · Автозаводская", "a": "Автозаводская ул., 50", "freq": 10, "me": false}, {"t": "Астера Клиник · имени Репина", "a": "ул. имени Репина, 35", "freq": 8, "me": false}, {"t": "Лада Эстет · Карла Маркса", "a": "ул. Карла Маркса, 206В", "freq": 7, "me": false}, {"t": "Клиника Эксперт · Широкий", "a": "Широкий пер., 38А", "freq": 6, "me": false}, {"t": "Медицея · Шумайлова", "a": "ул. Шумайлова, 20А", "freq": 6, "me": false}, {"t": "Алан Клиник · Советская", "a": "Советская ул., 13", "freq": 4, "me": false}, {"t": "Академия здоровья · 30 лет Победы", "a": "ул. 30 лет Победы, 43", "freq": 3, "me": false}, {"t": "Медиаль", "a": "Совхозная ул., 3А", "freq": 0, "me": true}], "medCmp": [{"l": "Рейтинг", "me": 4.9, "med": 4.7, "dec": true}, {"l": "Оценки", "me": 424, "med": 452.5}, {"l": "Отзывы", "me": 189, "med": 239.5}, {"l": "Фото", "me": 94, "med": 42.0}], "brands": [{"t": "Доктор плюс", "v": 630496, "y": 26.4, "me": false}, {"t": "Медицея", "v": 307082, "y": 19.3, "me": false}, {"t": "Академия здоровья", "v": 86230, "y": -2.4, "me": false}, {"t": "Лада Эстет", "v": 78309, "y": 18.4, "me": false}, {"t": "Медси", "v": 71061, "y": 8.0, "me": false}, {"t": "Медиаль", "v": 29599, "y": 26.4, "me": true}, {"t": "Алан Клиник", "v": 22575, "y": 6.2, "me": false}, {"t": "Докториус", "v": 20564, "y": -24.4, "me": false}, {"t": "Ижмедцентр", "v": 14282, "y": 16.4, "me": false}, {"t": "Астера Клиник", "v": 9150, "y": 95.8, "me": false}, {"t": "Здоровая Я", "v": 8802, "y": 29.9, "me": false}, {"t": "Аксион", "v": 6664, "y": 1.1, "me": false}, {"t": "Файбер клиник", "v": 3854, "y": 21.5, "me": false}, {"t": "Клиника Эксперт", "v": 3736, "y": 34.6, "me": false}, {"t": "НоваГрупп", "v": 3458, "y": 3.4, "me": false}, {"t": "БиоЛайфМед", "v": 714, "y": null, "me": false}], "intent": [["официальный сайт", 685], ["телефон", 238], ["адрес на Совхозной 3А", 158], ["отзывы", 99], ["врачи", 90], ["урологи", 65], ["цены", 53]], "medialM": [1811, 1774, 1702, 1983, 2157, 2322, 2258, 1808, 1959, 1952, 1838, 1851, 2707, 2331, 2284, 2341, 2343, 2715, 2728, 2246, 2419, 2618, 2319, 2548], "mediceyaM": [20847, 20951, 19672, 22950, 24183, 25473, 23350, 20924, 19088, 19951, 18895, 21046, 27261, 24921, 24304, 23880, 23078, 27554, 28214, 24168, 25109, 26110, 25885, 26598], "main": {"c": [3884, 3990, 3797, 3992, 4356, 4456, 4480, 3374, 3389, 3983, 4232, 4013, 4532, 4105, 4288, 3513, 3613, 4057, 4043, 3238, 3404, 3681, 3546, 3849], "r": [5853, 6071, 5604, 6130, 6596, 6641, 6783, 5022, 5155, 5994, 6219, 6279, 7159, 6381, 6539, 5622, 5940, 6647, 6442, 5006, 5548, 5888, 5884, 5990]}, "yoy": [{"q": "чекап", "l": 4481, "p": 3009, "y": 48.9, "r": 6137}, {"q": "онлайн консультация врача", "l": 1106, "p": 784, "y": 41.1, "r": 1653}, {"q": "удаление желчного пузыря", "l": 14234, "p": 10841, "y": 31.3, "r": 26786}, {"q": "эндокринолог", "l": 76558, "p": 61055, "y": 25.4, "r": 121683}, {"q": "фгдс", "l": 13822, "p": 11027, "y": 25.3, "r": 23008}, {"q": "колоноскопия", "l": 63212, "p": 50521, "y": 25.1, "r": 109763}, {"q": "удаление камней", "l": 6040, "p": 4858, "y": 24.3, "r": 10075}, {"q": "невролог", "l": 127662, "p": 104383, "y": 22.3, "r": 208699}, {"q": "сдать анализы", "l": 94348, "p": 77384, "y": 21.9, "r": 148823}, {"q": "урология", "l": 12737, "p": 10838, "y": 17.5, "r": 17690}, {"q": "узи", "l": 265365, "p": 232019, "y": 14.4, "r": 438531}, {"q": "онколог", "l": 40663, "p": 35668, "y": 14.0, "r": 64226}, {"q": "травматолог", "l": 46917, "p": 41540, "y": 12.9, "r": 77812}, {"q": "уролог", "l": 58885, "p": 52674, "y": 11.8, "r": 97725}, {"q": "мрт", "l": 200411, "p": 179684, "y": 11.5, "r": 316236}, {"q": "гинеколог", "l": 188097, "p": 170086, "y": 10.6, "r": 318188}, {"q": "грыжа", "l": 83817, "p": 75780, "y": 10.6, "r": 148778}, {"q": "геморрой", "l": 93514, "p": 84741, "y": 10.4, "r": 173014}, {"q": "дмс", "l": 34736, "p": 31594, "y": 9.9, "r": 48829}, {"q": "варикоз", "l": 34580, "p": 31700, "y": 9.1, "r": 58823}, {"q": "дневной стационар", "l": 7756, "p": 7196, "y": 7.8, "r": 11714}, {"q": "удалить родинку", "l": 3018, "p": 2799, "y": 7.8, "r": 4657}, {"q": "проктолог", "l": 27939, "p": 25953, "y": 7.7, "r": 45874}, {"q": "частная клиника", "l": 15496, "p": 14385, "y": 7.7, "r": 25819}, {"q": "маммолог", "l": 16826, "p": 15642, "y": 7.6, "r": 26558}, {"q": "удаление щитовидной железы", "l": 1530, "p": 1427, "y": 7.2, "r": 2619}, {"q": "щитовидная железа", "l": 59398, "p": 56225, "y": 5.6, "r": 100131}, {"q": "хирург", "l": 154723, "p": 146754, "y": 5.4, "r": 247604}, {"q": "флеболог", "l": 14949, "p": 14267, "y": 4.8, "r": 24328}, {"q": "платная клиника", "l": 12436, "p": 11943, "y": 4.1, "r": 22904}, {"q": "налоговый вычет за лечение", "l": 6834, "p": 6598, "y": 3.6, "r": 10171}, {"q": "простатит", "l": 26373, "p": 25674, "y": 2.7, "r": 50867}, {"q": "медцентр", "l": 20203, "p": 20286, "y": -0.4, "r": 32187}, {"q": "медицинский центр", "l": 45869, "p": 47946, "y": -4.3, "r": 73046}, {"q": "обрезание", "l": 15053, "p": 16431, "y": -8.4, "r": 25699}], "heat": [{"q": "уролог", "d": [5306, 5528, 5069, 4597, 4716, 5014, 5602, 4443, 4293, 4467, 4724, 5126]}, {"q": "гинеколог", "d": [15988, 15245, 13422, 14119, 13898, 16548, 17567, 14523, 15137, 16938, 17002, 17710]}, {"q": "хирург", "d": [14860, 13993, 12821, 11782, 12763, 14350, 13371, 11141, 12085, 11728, 12108, 13721]}, {"q": "колоноскопия", "d": [5474, 6153, 5233, 4386, 4752, 5434, 5908, 4632, 5166, 5048, 5101, 5925]}, {"q": "эндокринолог", "d": [6406, 6017, 4931, 5312, 5935, 7382, 7279, 6982, 6533, 6107, 6384, 7290]}, {"q": "варикоз", "d": [2596, 2781, 2180, 2382, 2171, 3170, 3479, 3155, 3164, 3572, 3166, 2764]}, {"q": "проктолог", "d": [2375, 2511, 2302, 2433, 2360, 2492, 2743, 2140, 2045, 2186, 2145, 2207]}, {"q": "налоговый вычет за лечение", "d": [381, 512, 628, 858, 929, 1148, 858, 359, 301, 269, 323, 268]}], "season": [{"h": "на пике сейчас", "t": "Хирург, грыжа", "d": "октябрь — пиковый месяц года: хирург +15% к среднему, грыжа +26%"}, {"h": "набирает обороты", "t": "Колоноскопия, уролог", "d": "ноябрь — пик колоноскопии (+17%), уролог +13%; простатит держится выше среднего с августа"}, {"h": "сезонный спад", "t": "Эндокринолог, варикоз", "d": "в декабре −23% и −24% к среднему; налоговый вычет при этом начинает расти и пикует в марте (×2)"}], "news": [{"big": "с 1.09.2026", "t": "Новые правила платных медуслуг", "d": "Постановление № 659 от 30.05.2026: смета может быть твёрдой или приблизительной, а для налогового вычета больше не нужен штамп «Для налоговых органов».", "src": [["Медвестник", "https://medvestnik.ru/content/news/utverjdeny-novye-pravila-predostavleniya-platnyh-meduslug.html"], ["Гарант", "https://www.garant.ru/products/ipo/prime/doc/414222049/"]]}, {"big": "19 500 ₽", "t": "Налоговый вычет за лечение", "d": "Лимит расходов 150 000 ₽ в год, дорогостоящее лечение — без лимита. Вернуть можно за три прошлых года. Спрос на вычет в Ижевске пикует в марте.", "src": [["finance.mail.ru", "https://finance.mail.ru/article/nalogovyy-vychet-za-lechenie-77/"]]}, {"big": "4,07 млн", "t": "Проверили репродуктивное здоровье в I квартале 2026", "d": "Диспансеризацию прошёл примерно каждый пятый из тех, кому она положена. Повод для урологии, андрологии и гинекологии.", "src": [["profile.ru", "https://profile.ru/news/society/bolee-58-zhenshhin-i-87-muzhchin-v-rossii-reproduktivno-zdorovy-1861852/"]]}, {"big": "ТироВел", "t": "Центр хирургии щитовидной железы", "d": "Открытие центра объявлено на сайте клиники. В Ижевске ищут «эндокринолог» 76 558 раз в год (+25%), а по запросам «эндокринолог» и «удаление щитовидной железы» карточку видно только в рекламном блоке.", "src": [["медиаль.рф", "https://медиаль.рф/"]]}], "route": [{"when": "ноябрь", "t": "Навести порядок в карточке", "items": ["ответить на 16 отзывов, начиная с негатива", "добавить рубрики: хирургия, гинекология, эндоскопия, стационар", "заменить сторис «Июнь выезды»"]}, {"when": "каждый месяц", "t": "Контент в карточке", "items": ["новости и сторис каждый месяц под запросы, где карточки нет в обычной выдаче", "просьба об отзыве после приёма — догнать медиану в 450 оценок"]}, {"when": "декабрь — апрель", "t": "Зимний сезон", "items": ["налоговый вычет: справка для ФНС, пик в марте", "онколог, эндокринолог, УЗИ — пики март–апрель", "чекап «Моё здоровье»"]}, {"when": "май — сентябрь", "t": "Летний сезон", "items": ["флебология и варикоз: пик июль (+24%)", "урология и простатит: рост с августа", "хирургия: подготовка к осеннему пику"]}]};
+const fmt = n => n==null?'—':(Math.round(n*10)/10).toLocaleString('ru-RU');
+const fi = n => Math.round(n).toLocaleString('ru-RU');
+const pct = n => (n>0?'+':'')+fmt(n)+'%';
+const NS='http://www.w3.org/2000/svg';
+const tip=document.getElementById('tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8);tip.style.left=x+'px';tip.style.top=y+'px'}
+function hideTip(){tip.style.opacity=0}
+function bindTip(el,html){el.addEventListener('mousemove',e=>showTip(e,html));el.addEventListener('mouseleave',hideTip);el.addEventListener('touchstart',e=>{showTip(e.touches[0],html)},{passive:true})}
+function svg(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.setAttribute('role','img');return s}
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e}
+const css=v=>`var(--${v})`;
+
+/* KPI + facts */
+document.getElementById('kpis').innerHTML=D.kpis.map(k=>`<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div><div class="n">${k.n}</div></div>`).join('');
+document.getElementById('facts').innerHTML=D.facts.map(f=>`<div class="fact${f.risk?' risk':''}"><div class="big">${f.big}</div><div class="t">${f.t}</div><div class="d">${f.d}</div></div>`).join('');
+
+/* 01 positions */
+(function(){const P=D.pos;const rows=Object.keys(P).map(q=>({q,a:P[q][0],b:P[q][1]}));
+ const best=r=>{const v=[r.a,r.b].filter(x=>x>0);return v.length?Math.min(...v):99};rows.sort((x,y)=>best(x)-best(y)||x.q.localeCompare(y.q));
+ const W=760,L=190,R=40,rh=24,H=rows.length*rh+34;const s=svg(W,H);const x=p=>L+(p-1)/(24)*(W-L-R-60);const xo=W-R-20;
+ const g=el('g',{class:'grid'},s);[1,5,10,15,20,25].forEach(p=>{el('line',{x1:x(p),x2:x(p),y1:8,y2:H-24},g);el('text',{x:x(p),y:H-8,'text-anchor':'middle'},s,p)});
+ el('text',{x:xo,y:H-8,'text-anchor':'middle'},s,'нет');
+ el('rect',{x:x(1)-6,y:8,width:x(10)-x(1)+12,height:H-32,fill:css('accent-soft'),opacity:.6,rx:6},s,null);s.insertBefore(s.lastChild,s.firstChild);
+ rows.forEach((r,i)=>{const y=20+i*rh;el('text',{x:L-10,y:y+4,'text-anchor':'end',class:'lbl'},s,r.q);
+  const pa=r.a>0?x(r.a):xo,pb=r.b>0?x(r.b):xo;el('line',{x1:pa,x2:pb,y1:y,y2:y,stroke:css('c3'),'stroke-width':2},s);
+  [[r.a,pa,'accent'],[r.b,pb,'c2']].forEach(([v,px,c])=>{const dot=el('circle',{cx:px,cy:y,r:6,fill:v>0?css(c):css('bad')},s);});
+  const hit=el('rect',{x:0,y:y-rh/2,width:W,height:rh,fill:'transparent'},s);
+  bindTip(hit,`<b>${r.q}</b><br>замер 1: ${r.a?r.a+' место, реклама':'нет в первых 25'}<br>замер 2: ${r.b?r.b+' место, реклама':'нет в первых 25'}<br>в обычной выдаче: нет`)});
+ document.getElementById('posChart').appendChild(s)})();
+
+/* 02 table */
+(function(){const tb=document.querySelector('#cmp tbody');let rows=D.cards.slice(),sortK='rc',dir=-1,filt='all';const M=D.med;
+ function draw(){const list=rows.filter(r=>filt==='all'||r.status===filt).sort((a,b)=>{let x=a[sortK],y=b[sortK];if(typeof x==='string')return dir*x.localeCompare(y);return dir*((x??-1)-(y??-1))});
+  tb.innerHTML=list.map(r=>{const w=(k,bad)=>bad?' weak':'';const cls={s:'s','Сильная':'s','Средняя':'m','Риск':'r'}[r.status];
+   return `<tr class="${r.me?'me':''}"><td>${r.t}<span class="addr">${r.a}</span></td><td><span class="pill ${cls}">${r.status}</span></td>
+   <td class="num${w('r',r.r<4.5)}">${fmt(r.r)}</td><td class="num${w('rc',r.rc<M.rc)}">${fi(r.rc)}</td><td class="num${w('rv',r.rv<M.rv)}">${fi(r.rv)}</td><td class="num${w('ph',r.ph<M.ph)}">${fi(r.ph)}</td>
+   <td class="${r.st?'':'weak'}">${r.st?'есть':'нет'}</td><td class="${r.gp?'':'weak'}">${r.gp?'2026':'нет'}</td></tr>`}).join('');
+  document.querySelectorAll('#cmp th').forEach(th=>th.setAttribute('aria-sort',th.dataset.k===sortK?(dir>0?'ascending':'descending'):'none'))}
+ document.querySelectorAll('#cmp th').forEach(th=>{const go=()=>{const k=th.dataset.k;if(sortK===k)dir=-dir;else{sortK=k;dir=k==='t'||k==='status'?1:-1}draw()};th.addEventListener('click',go);th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+ document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{filt=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()}));
+ draw()})();
+
+/* 03 checklist */
+document.getElementById('check').innerHTML=D.check.map(c=>`<div class="ci"><div class="ic ${c.s}">${c.s==='ok'?'✓':c.s==='no'?'!':'?'}</div><div><b>${c.t}</b><span>${c.d}</span></div><div class="r">${c.v}</div></div>`).join('');
+
+/* 03 scatter */
+(function(){const W=520,H=320,L=44,B=34,T=10,R=16;const s=svg(W,H);const xs=v=>L+(Math.log10(v)-1)/(Math.log10(5000)-1)*(W-L-R);const ys=v=>T+(5.05-v)/(5.05-3.95)*(H-T-B);
+ const g=el('g',{class:'grid'},s);[10,30,100,300,1000,3000].forEach(v=>{el('line',{x1:xs(v),x2:xs(v),y1:T,y2:H-B},g);el('text',{x:xs(v),y:H-B+16,'text-anchor':'middle'},s,fi(v))});
+ [4,4.5,5].forEach(v=>{el('line',{x1:L,x2:W-R,y1:ys(v),y2:ys(v)},g);el('text',{x:L-8,y:ys(v)+4,'text-anchor':'end'},s,fmt(v))});
+ el('text',{x:(W+L)/2,y:H-2,'text-anchor':'middle'},s,'оценок');
+ D.cards.slice().sort((a,b)=>a.me-b.me).forEach(c=>{const p=el('circle',{cx:xs(Math.max(c.rc,10)),cy:ys(c.r),r:c.me?9:6,fill:c.me?css('accent'):css('c3'),stroke:css('panel'),'stroke-width':2},s);
+  if(c.me)el('text',{x:xs(c.rc)+13,y:ys(c.r)+4,class:'val'},s,'Медиаль');
+  bindTip(p,`<b>${c.t}</b><br>${c.a}<br>рейтинг ${fmt(c.r)} · ${fi(c.rc)} оценок`)});
+ document.getElementById('scatter').appendChild(s)})();
+
+/* generic horizontal bars */
+function hbars(id,items,opt={}){const W=opt.w||760,L=opt.L||170,R=opt.R||70,rh=opt.rh||26;const H=items.length*rh+8;const s=svg(W,H);const mx=opt.max||Math.max(...items.map(i=>i.v));
+ items.forEach((it,i)=>{const y=4+i*rh;const w=Math.max(2,(it.v/mx)*(W-L-R));el('text',{x:L-10,y:y+rh/2+4,'text-anchor':'end',class:'lbl'},s,it.l);
+  const r=el('rect',{x:L,y:y+4,width:w,height:rh-10,rx:4,fill:css(it.c||'accent')},s);el('text',{x:L+w+8,y:y+rh/2+4,class:'val'},s,it.vl??fi(it.v));
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);bindTip(hit,it.tip||`<b>${it.l}</b><br>${it.vl??fi(it.v)}`)});
+ document.getElementById(id).appendChild(s)}
+
+hbars('aspects',D.aspects.map(a=>({l:a[0],v:a[2]/(a[2]+a[3])*100,vl:Math.round(a[2]/(a[2]+a[3])*100)+'%',c:a[2]/(a[2]+a[3])<.75?'bad':'accent',tip:`<b>${a[0]}</b><br>${a[1]} отзывов: ${a[2]} положительных, ${a[3]} отрицательных`})),{max:100,L:150});
+hbars('orgChart',D.org.map(f=>({l:f[0],v:f[1],c:f[0]==='Медиаль'?'bad':'c3',vl:String(f[1]),tip:`<b>${f[0]}</b><br>${f[1]} показов в топ-10 обычной выдачи`})),{w:600,L:250,R:70});
+hbars('adChart',D.ads.map(f=>({l:f[0],v:f[1],c:f[0]==='Медиаль'?'accent':'c3',vl:String(f[1]),tip:`<b>${f[0]}</b><br>в рекламе по ${f[1]} из 21 запроса`})),{w:600,L:250,R:40,max:21});
+/* reviews stacked */
+(function(){const R=D.rev;const W=760,H=230,L=36,B=26,T=10;const s=svg(W,H);const mx=Math.max(...R.map(r=>r[1]))*1.15;const bw=(W-L)/R.length;const ys=v=>T+(1-v/mx)*(H-T-B);const g=el('g',{class:'grid'},s);[0,5,10,15].forEach(v=>{el('line',{x1:L,x2:W,y1:ys(v),y2:ys(v)},g);el('text',{x:L-6,y:ys(v)+4,'text-anchor':'end'},s,v)});
+ R.forEach((r,i)=>{const x=L+i*bw+bw*0.18,w=bw*0.64;const a=r[1]-r[2];el('rect',{x,y:ys(a),width:w,height:Math.max(0,ys(0)-ys(a)),fill:css('accent'),rx:3},s);if(r[2])el('rect',{x,y:ys(r[1]),width:w,height:ys(a)-ys(r[1]),fill:css('bad'),rx:3},s);el('text',{x:x+w/2,y:ys(r[1])-5,'text-anchor':'middle',class:'val'},s,r[1]);el('text',{x:x+w/2,y:H-8,'text-anchor':'middle'},s,r[0]);const hit=el('rect',{x:L+i*bw,y:T,width:bw,height:H-T-B,fill:'transparent'},s);bindTip(hit,`<b>${r[3]}</b><br>отзывов: ${r[1]}<br>без ответа: ${r[2]}`)});document.getElementById('revChart').appendChild(s)})();
+
+/* median compare */
+(function(){const m=D.medCmp;const W=760,rh=58,L=110,R=60;const H=m.length*rh+6;const s=svg(W,H);
+ m.forEach((it,i)=>{const y=6+i*rh;const mx=Math.max(it.me,it.med)*1.08;const sc=v=>(v/mx)*(W-L-R);
+  el('text',{x:0,y:y+29,class:'lbl'},s,it.l);
+  const f=v=>it.dec?fmt(v):fi(v);
+  [[it.me,'accent','Медиаль',0],[it.med,'c3','медиана',22]].forEach(([v,c,n,dy])=>{const r=el('rect',{x:L,y:y+6+dy,width:Math.max(2,sc(v)),height:16,rx:4,fill:css(c)},s);el('text',{x:L+sc(v)+8,y:y+19+dy,class:'val'},s,f(v));bindTip(r,`<b>${it.l}</b><br>${n}: ${f(v)}`)});
+ });
+ document.getElementById('medChart').appendChild(s)})();
+
+hbars('brandChart',D.brands.map(b=>({l:b.t,v:b.v,vl:fi(b.v)+'  '+(b.y==null?'новый':pct(b.y)),c:b.me?'accent':'c3',tip:`<b>${b.t}</b><br>${fi(b.v)} запросов за 12 мес<br>к прошлому году: ${b.y==null?'бренд появился в 2025':pct(b.y)}`})),{R:150});
+hbars('brandIntent',D.intent.map(b=>({l:b[0],v:b[1],tip:`<b>${b[0]}</b><br>${fi(b[1])} запросов за 30 дней`})),{w:520,L:170,R:50});
+
+/* line charts */
+const MON=D.months;
+function lines(id,series,opt={}){const W=opt.w||760,H=opt.h||260,L=56,R=14,T=12,B=30;const s=svg(W,H);const all=series.flatMap(x=>x.d);const mx=Math.max(...all)*1.08,mn=opt.zero?0:Math.min(...all)*0.9;
+ const xs=i=>L+i/(MON.length-1)*(W-L-R),ys=v=>T+(mx-v)/(mx-mn)*(H-T-B);const g=el('g',{class:'grid'},s);
+ const step=niceStep((mx-mn)/4);for(let v=Math.ceil(mn/step)*step;v<=mx;v+=step){el('line',{x1:L,x2:W-R,y1:ys(v),y2:ys(v)},g);el('text',{x:L-8,y:ys(v)+4,'text-anchor':'end'},s,fi(v))}
+ MON.forEach((m,i)=>{if(i%3===0)el('text',{x:xs(i),y:H-10,'text-anchor':'middle'},s,m)});
+ series.forEach(se=>{const sc=se.scale||(v=>v);const pts=se.d.map((v,i)=>`${xs(i)},${ys(v)}`).join(' ');el('polyline',{points:pts,fill:'none',stroke:css(se.c),'stroke-width':2.4,'stroke-linejoin':'round'},s);
+  el('circle',{cx:xs(se.d.length-1),cy:ys(se.d[se.d.length-1]),r:4,fill:css(se.c)},s)});
+ const guide=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:css('muted'),'stroke-dasharray':'3 3',opacity:0},s);
+ MON.forEach((m,i)=>{const w=(W-L-R)/(MON.length-1);const hit=el('rect',{x:xs(i)-w/2,y:T,width:w,height:H-T-B,fill:'transparent'},s);
+  hit.addEventListener('mouseenter',()=>{guide.setAttribute('x1',xs(i));guide.setAttribute('x2',xs(i));guide.setAttribute('opacity',.6)});
+  bindTip(hit,`<b>${D.monthsFull[i]}</b><br>`+series.map(se=>`${se.n}: ${fi(se.raw?se.raw[i]:se.d[i])}`).join('<br>'))});
+ s.addEventListener('mouseleave',()=>guide.setAttribute('opacity',0));document.getElementById(id).appendChild(s)}
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x)));const f=x/p;return (f<1.5?1:f<3.5?2:f<7.5?5:10)*p}
+
+lines('mainLine',[{n:'Ижевск',d:D.main.c,c:'accent'},{n:'Удмуртия',d:D.main.r,c:'c2'}]);
+(function(){const box=document.getElementById('brandLines');const a=document.createElement('div'),b=document.createElement('div');a.id='bl1';b.id='bl2';box.append(a,b);
+ lines('bl1',[{n:'Медиаль',d:D.medialM,c:'accent'}],{w:520,h:170});lines('bl2',[{n:'Медицея',d:D.mediceyaM,c:'c3'}],{w:520,h:170})})();
+
+/* diverging yoy */
+(function(){const it=D.yoy;const W=760,mid=420,rh=22,H=it.length*rh+30;const s=svg(W,H);const mx=Math.max(...it.map(x=>Math.abs(x.y)));const sc=v=>v/mx*(W-mid-70);
+ const g=el('g',{class:'grid'},s);el('line',{x1:mid,x2:mid,y1:0,y2:H-24},g);
+ it.forEach((x,i)=>{const y=4+i*rh;el('text',{x:mid-(x.y<0?Math.abs(sc(x.y))+8:8),y:y+rh/2+4,'text-anchor':'end',class:'lbl'},s,x.q);
+  const w=Math.max(2,Math.abs(sc(x.y)));const r=el('rect',{x:x.y>=0?mid:mid-w,y:y+4,width:w,height:rh-8,rx:3,fill:x.y>=0?css('accent'):css('bad')},s);
+  el('text',{x:x.y>=0?mid+w+6:mid+6,y:y+rh/2+4,class:'val'},s,pct(x.y));
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);bindTip(hit,`<b>${x.q}</b><br>${fi(x.l)} за 12 мес (было ${fi(x.p)})<br>${pct(x.y)} · Удмуртия: ${fi(x.r)}`)});
+ document.getElementById('yoy').appendChild(s)})();
+
+/* heatmap */
+(function(){const H=D.heat;const M12=D.months.slice(12);const W=760,L=210,T=26,ch=30;const cw=(W-L)/12;const s=svg(W,T+H.length*ch+4);
+ M12.forEach((m,j)=>el('text',{x:L+j*cw+cw/2,y:16,'text-anchor':'middle'},s,m));
+ H.forEach((row,i)=>{const avg=row.d.reduce((a,b)=>a+b,0)/12;el('text',{x:L-10,y:T+i*ch+ch/2+4,'text-anchor':'end',class:'lbl'},s,row.q);
+  row.d.forEach((v,j)=>{const dev=v/avg-1;const a=Math.min(1,Math.abs(dev)/0.5);const c=el('rect',{x:L+j*cw+1,y:T+i*ch+1,width:cw-2,height:ch-2,rx:4,fill:dev>=0?css('accent'):css('c2'),'fill-opacity':(0.08+a*0.85).toFixed(2)},s);
+   bindTip(c,`<b>${row.q}</b> · ${D.monthsFull[12+j]}<br>${fi(v)} запросов<br>${pct(dev*100)} к среднему месяцу`)})});
+ document.getElementById('heat').appendChild(s)})();
+document.getElementById('seasonCards').innerHTML=D.season.map(c=>`<div class="panel"><div class="eyebrow">${c.h}</div><b>${c.t}</b><div class="meta" style="margin:0">${c.d}</div></div>`).join('');
+
+/* news + route */
+document.getElementById('news').innerHTML=D.news.map(n=>`<div class="panel"><div class="big">${n.big}</div><p><b>${n.t}</b></p><p>${n.d}</p><div class="meta" style="margin:0">Источник: ${n.src.map(s=>`<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>`).join(', ')}</div></div>`).join('');
+document.getElementById('newsSrc').innerHTML='Поводы для контента: '+D.news.flatMap(n=>n.src).map(s=>`<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>`).join(', ')+'.';
+document.getElementById('route').innerHTML=D.route.map(r=>`<div class="step"><div class="when">${r.when}</div><b>${r.t}</b><ul>${r.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+</script>
+
+</body>
+</html>
