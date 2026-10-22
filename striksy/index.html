@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Стрикси»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+[hidden]{display:none!important}
+
+/* ---------- shell ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+/* ---------- project view ---------- */
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+
+/* ---------- shared section look for both documents ---------- */
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+/* ---------- content plan (vc) ---------- */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+
+/* ---------- analytics (va) ---------- */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Стрикси · Курган</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>СТРИКСИ СТРИКСИ СТРИКСИ</span><span>СТРИКСИ СТРИКСИ СТРИКСИ</span><span>СТРИКСИ СТРИКСИ СТРИКСИ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Стрикси» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и рынка парикмахерских услуг Кургана, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Японская парикмахерская «Стрикси»</b></div>
+        <div><span>Адрес</span><b>Курган, Заозёрный, 4-й микрорайон, 46</b></div>
+        <div><span>Направления</span><b>Стрижки · Окрашивание</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 22.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«стрижка» на карте Заозёрного</span><span class="t-n g">1</span><span class="t-s">первое место на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«парикмахерская» по всему Кургану</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первых 25, как и по «стрижке» и «окрашиванию»</span></div>
+        <div class="tile"><span class="t-k">Отзывов в 2026 году</span><span class="t-n y">16</span><span class="t-s">с июня по декабрь 2025 — 11</span></div>
+        <div class="tile"><span class="t-k">Спрос на «стрикси» в Кургане</span><span class="t-n g">+37%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">22.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах по 8 запросам в Заозёрном и по всему Кургану, сайт в органике Яндекса по 6 запросам, спрос по Вордстату для Кургана, причины просадки, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">22.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис под стрижки и окрашивание: парикмахерская без записи в Заозёрном, окрашивание волос, мужская стрижка от 15 минут, окрашивание к праздникам.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">срок не объявлен</span><span class="st wait">ждём Яндекс</span></div><h3>Восстановление Яндекс Бизнеса</h3><p>После атак на дата-центры Яндекса кабинет открыт только для просмотра, редактирование карточек недоступно. Тексты, обложки и сторис первой недели будут готовы заранее.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после восстановления</span><span class="st next">следующий шаг</span></div><h3>Прайс, часы работы, рубрики, описание</h3><p>Полный прайс от компании, одна цена стрижки во всех полях карточки, часы работы одинаково на всех площадках, рубрика под детские стрижки, описание компании. Всё это ставим до первой новости.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 11.11 · 18.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Стрижки и окрашивание без записи — по одной новости и одной сторис в неделю. 4 ноября, в праздничный день, публикаций нет.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет поиск и что с этим делать</h3>
+          <p>Позиции по 8 запросам на Картах и 6 запросам в органике, сравнение с соседями по выдаче, спрос и сезонность в Кургане, рынок, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Парикмахерская в Заозёрном без записи</li>
+            <li>05.11 — Окрашивание волос без записи</li>
+            <li>11.11 — Мужская стрижка от 15 минут</li>
+            <li>18.11 — Окрашивание волос к праздникам</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Курган, Заозёрный · стрижки и окрашивание · замер 22.10.2026</span>
+  <h1>Где «Стрикси» теряет поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 8 запросам — на карте Заозёрного и по всему Кургану, сайт в органической выдаче Яндекса по 6 запросам, спрос по Вордстату для региона «Курган» и сравнение с карточками соседей по выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>В Заозёрном карточка в первой пятёрке</b>На карте Заозёрного «стрижка» — 1 место, «мужская стрижка» и «женская стрижка» — 2, «парикмахерская» — 3, «окрашивание волос» и «детская стрижка» — 5.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По всему Кургану карточки нет</b>Когда человек ищет без привязки к Заозёрному, по «парикмахерская», «стрижка», «окрашивание волос», «мужская», «женская» и «детская стрижка» карточки нет в первых 25. Там стоят карточки с сотнями оценок: Зарина (1 039), Мэрилин (311), Стрижка Shop (164), Стилягин (163).</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Одна рубрика и неполный прайс</b>У карточки одна рубрика — «Парикмахерская». В прайсе три позиции, обновлён 8 августа. Цена стрижки в прайсе — 600 ₽, а в особенностях карточки — «от 500 ₽».</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Внутри карточки показывается реклама других организаций</b>Над названием «Стрикси» на Яндекс Картах идёт рекламный баннер другого бизнеса.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос стабильный, бренд растёт</b>«парикмахерская» в Кургане: +1% за январь–сентябрь 2026 к 2025, «стрижка» −7%, «окрашивание волос» −1%. Запросы с названием «стрикси» выросли на 37%.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,6</div><div class="s">33 оценки, 27 отзывов</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">4,9</div><div class="s">224 оценки, 143 отзыва, «Премия 2ГИС»</div></div>
+    <div class="kpi"><div class="k">Новостей на Яндекс Картах</div><div class="n">0</div><div class="s">сторис компании — 3</div></div>
+    <div class="kpi"><div class="k">Позиций в прайсе</div><div class="n">3</div><div class="s">стрижка, окрашивание, мойка головы</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Кургану без геолокации пользователя: на карте Заозёрного вокруг 4-го микрорайона, 46, и по всему городу. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <h3 style="margin-top:0">На карте Заозёрного</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>стрижка</td><td class="r num">1 из 25</td><td>Капсула красоты 63 оц., Стиляги 90, Виола 91, Астория 98</td></tr>
+      <tr><td>мужская стрижка</td><td class="r num">2 из 16</td><td>ГараЖ 36 оц., Астория 98, Капсула красоты 63</td></tr>
+      <tr><td>женская стрижка</td><td class="r num">2 из 19</td><td>Капсула красоты 63 оц., Стиляги 90, Петровский 61</td></tr>
+      <tr><td>парикмахерская</td><td class="r num">3 из 25</td><td>Астория 98 оц., Стиляги 90, Капсула красоты 63</td></tr>
+      <tr><td>окрашивание волос</td><td class="r num">5 из 16</td><td>Капсула красоты 63 оц., Глория 113, Виола 91, Стиляги 90</td></tr>
+      <tr><td>детская стрижка</td><td class="r num">5 из 13</td><td>Стиляги 90 оц., Капсула красоты 63, Астория 98, Виола 91</td></tr>
+      <tr><td>салон красоты</td><td class="r">нет в 21</td><td>Стиляги, Капсула красоты, Глория, Виола</td></tr>
+      <tr><td>барбершоп</td><td class="r">нет в 25</td><td>ГараЖ, Основа, SilverTown 364 оц., Эгоист 223</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>По всему Кургану</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>парикмахерская</td><td class="r">нет в 25</td><td>Зарина 1 039 оц., Стилягин 163, Каре 73, Family Чик Чик 123</td></tr>
+      <tr><td>стрижка</td><td class="r">нет в 25</td><td>Зарина 1 039 оц., Стилягин 163, Стрижка Shop 164, Каре 73, Мэрилин 311</td></tr>
+      <tr><td>окрашивание волос</td><td class="r">нет в 25</td><td>Зарина 1 039 оц., Мэрилин 311, Каре 73, Стилягин 163, Каре Лофт 193</td></tr>
+      <tr><td>мужская стрижка</td><td class="r">нет в 25</td><td>SilverTown 364 оц., Основа 67, Эгоист 249, Зарина 1 039</td></tr>
+      <tr><td>женская стрижка</td><td class="r">нет в 25</td><td>Зарина 1 039 оц., Стилягин 163, Мэрилин 311, Стрижка Shop 164</td></tr>
+      <tr><td>детская стрижка</td><td class="r">нет в 25</td><td>Зарина 1 039 оц., Стилягин 163, Стрижка Shop 164, Family Чик Чик 123</td></tr>
+      <tr><td>парикмахерская заозерный</td><td class="r num">4 из 25</td><td>Капсула красоты 63 оц., Стиляги 90, Лаура 53</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточка против соседей по Заозёрному</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценок</th><th>Рубрики</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Стрикси</b> <span class="sub">4-й мкр, 46</span></td><td class="r num">4,6</td><td class="r num">33</td><td>парикмахерская</td></tr>
+      <tr><td>Капсула красоты <span class="sub">5-й мкр, 35Б</span></td><td class="r num">5,0</td><td class="r num">63</td><td>салон красоты, парикмахерская, обучение мастеров</td></tr>
+      <tr><td>Стиляги <span class="sub">4-й мкр, 24</span></td><td class="r num">4,0</td><td class="r num">90</td><td>салон красоты, парикмахерская, эпиляция</td></tr>
+      <tr><td>Виола <span class="sub">2-й мкр, 8</span></td><td class="r num">4,6</td><td class="r num">91</td><td>салон красоты, косметология, парикмахерская</td></tr>
+      <tr><td>Глория <span class="sub">3-й мкр, 31</span></td><td class="r num">4,4</td><td class="r num">113</td><td>салон красоты, косметология</td></tr>
+      <tr><td>Каприз <span class="sub">6-й мкр, 26</span></td><td class="r num">4,2</td><td class="r num">36</td><td>парикмахерская, салон красоты</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка просаживается</h2><p>Каждая причина подтверждена данными самой карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Изменения в карточке сейчас внести нельзя: Яндекс Бизнес работает с ограничениями</b><p>В октябре 2026 года беспилотники атаковали дата-центры Яндекса. С 16 октября кабинет Яндекс Бизнеса открыт только для просмотра: редактирование карточек, создание и продление кампаний недоступны, ранее запущенное продвижение продолжает работать. На 21 октября сроков полного восстановления Яндекс не называет. Всё, что ниже требует правок в кабинете, мы внесём, как только редактирование вернётся.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Мало оценок для выдачи по всему городу</h3></div>
+      <p>В Заозёрном карточка в первой пятёрке почти по всем запросам. Но как только поиск идёт по всему Кургану, Яндекс поднимает карточки с сотнями оценок: <b>Зарина — 1 039, Мэрилин — 311, Стрижка Shop — 164</b>. У «Стрикси» на Яндекс Картах 33 оценки, хотя в 2ГИС у этой же точки 224 оценки и рейтинг 4,9.</p>
+      <p>Отзывы приходят ровно: 11 с июня по декабрь 2025 года, 16 за 2026 год. Аспект «Стрижка» положительный в 69% упоминаний: среди отзывов 2026 года четыре негативных о результате стрижки, они и держат рейтинг на 4,6.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Одна рубрика — «Парикмахерская»</h3></div>
+      <p>У соседей по Заозёрному по две-три рубрики, у «Стрикси» одна. Поэтому карточки нет в выдаче «салон красоты» (21 место) и «барбершоп» (25 мест), хотя оба запроса ищут стрижку. В 2ГИС у компании отмечена детская стрижка, а на Яндекс Картах под детские стрижки рубрики нет: по «детская стрижка» в Заозёрном карточка только пятая.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточку почти не наполняет сама компания</h3></div>
+      <p><b>Новостей нет.</b> Сторис компании три: «Чисто и уютно» и две фирменные — «Все стрижки по одной цене» и «В Стрикси всегда рады маленьким гостям». В прайсе три позиции: стрижка, окрашивание в один тон, мойка головы, обновлён 8 августа. По «окрашиванию волос» соседи выигрывают за счёт рубрик и полного прайса.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Данные расходятся между площадками</h3></div>
+      <p>Цена стрижки в прайсе Яндекс Карт — 600 ₽, в особенностях карточки и в 2ГИС — «от 500 ₽». Часы работы на Яндекс Картах и в 2ГИС — ежедневно 9:00–20:00, а на странице салона на сайте сети — 9:00–21:00. Расхождения снижают доверие и Яндекса, и человека, который выбирает парикмахерскую по цене.</p>
+      <span class="ev">прайс: «Любая стрижка 600р» · особенности: «Цена женской стрижки: от 500 ₽»</span>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>Внутри карточки показывается реклама других организаций</h3></div>
+      <p>Над названием «Стрикси» на Яндекс Картах крутится рекламный баннер стороннего бизнеса. Человек, уже открывший карточку, видит предложение уйти к другим.</p>
+      <p>С июля 2026 года Яндекс переводит карточки организаций на тарифы: <b>Базовый</b>, <b>Расширенный</b> и <b>Продвинутый</b>. На Базовом внутри карточки может показываться реклама других организаций, а новости и истории скрываются. Расширенный убирает рекламу других организаций и возвращает новости и истории; Продвинутый добавляет приоритетные показы в выдаче.</p>
+      <p class="next">Когда Яндекс Бизнес заработает в штатном режиме, проверим в кабинете, какой тариф подключён у карточки, и обсудим с «Стрикси» тариф без рекламы других организаций.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион «Курган», первые 3 страницы выдачи, рекламу не считали. striksi.ru — общий сайт сети, у салона в 4-м микрорайоне там отдельная страница.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">striksi.ru</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>стрижка курган</td><td class="r num">22</td><td>Яндекс Карты, 2ГИС, Яндекс Услуги, Авито, Zoon, maki45.ru</td></tr>
+      <tr><td>парикмахерская курган</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Яндекс Услуги, Zoon, ВКонтакте, Yell, zarina45.ru</td></tr>
+      <tr><td>парикмахерская курган заозерный</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Zoon, Яндекс Услуги, ВКонтакте</td></tr>
+      <tr><td>окрашивание волос курган</td><td class="r">нет в топ-30</td><td>2ГИС, Яндекс Карты, Авито, Яндекс Услуги, Zoon, Profi</td></tr>
+      <tr><td>мужская стрижка курган</td><td class="r">нет в топ-30</td><td>Яндекс Карты, 2ГИС, Яндекс Услуги, Zoon, Авито, Profi</td></tr>
+      <tr><td>стрикси курган</td><td class="r num">4</td><td>2ГИС, Яндекс Карты, Zoon, затем striksi.ru и striksi-kurgan.clients.site</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на сайте мешает</h3><ul>
+      <li><b>Страница салона — только адрес.</b> Title и H1 — «Курган, Заозёрный, 4-й микрорайон, 46», без слов «парикмахерская» и «стрижка». Цен на странице нет, часы — 9:00–21:00.</li>
+      <li><b>Нет meta description</b> ни на одной из проверенных страниц, на главной нет H1. Title главной — «Стрикси — Японские парикмахерские», без города.</li>
+      <li><b>Изображения и разметка.</b> У всех изображений на проверенных страницах нет alt, разметки schema.org нет. WordPress 5.5.8.</li>
+    </ul></div>
+    <div class="note"><h3>Что уже в порядке</h3><ul>
+      <li>У салона своя страница с адресом, часами и телефоном, есть страница города Курган.</li>
+      <li>robots.txt со ссылкой на sitemap, sitemap отдаётся, Яндекс Метрика стоит.</li>
+      <li>По названию «стрикси курган» сайт на первой странице, рядом сайт салона на Яндекс Бизнесе.</li>
+    </ul></div>
+  </div>
+  <p class="small" style="margin-top:16px">Важно для стратегии: первые строки органики по всем коммерческим запросам занимают Яндекс Карты, 2ГИС, Яндекс Услуги, Zoon, Авито и Profi. Быстрее всего клиенты приходят через карточку на Картах и профили на этих площадках.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Кургане</h2><p>Вордстат, регион «Курган», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="a"><h3>«парикмахерская»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: +1%</div></div>
+    <div class="chart" data-chart="b"><h3>«стрикси»</h3><div class="cs">показов в месяц · янв–сен 2026 к 2025: +37%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: подъёмы в декабре, марте и с мая по август (май 2026 — 4 436 по «парикмахерская»), спады в январе–феврале и в сентябре (февраль 2026 — 2 911). Сейчас спрос выходит из сентябрьского спада, дальше — предновогодний пик. «стрижка» за тот же период −7%, «окрашивание волос» −1%, «барбершоп курган» +47%.</p>
+
+  <h3>Коммерческие и гео-запросы</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-com"></tbody>
+  </table></div>
+
+  <h3>Стрижки и окрашивание по видам</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что ищут</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-need"></tbody>
+  </table></div>
+
+  <h3>Информационный спрос — материал для новостей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-info"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Главный объём — «парикмахерская курган»</b>: 2 089 в месяц, ещё 188 — «парикмахерская курган заозерный» и 52 — «парикмахерская в заозерном». Это ровно те выдачи, где карточка сильна в Заозёрном и не видна по городу.</li>
+      <li><b>Стрижки ищут по типу</b>: женские 1 020, мужские 791, для мальчика 169. По каждому из них нужна своя публикация.</li>
+      <li><b>Окрашивание — второй по объёму спрос</b>: «мелирование» 520, «окрашивание волос» 418, «покраска волос» 174.</li>
+    </ul></div>
+    <div class="note"><h3>Узнаваемость бренда</h3><ul>
+      <li>«стрикси» — <b>173</b> запроса в месяц, из них «стрикси курган» — 110, «стрикси парикмахерская курган» — 41.</li>
+      <li>Брендовый спрос вырос на 37% за год: человек уже ищет «Стрикси» по названию и выбирает конкретную точку.</li>
+      <li>«барбершоп курган» — 418, «салон красоты курган» — 921: по этим запросам карточки «Стрикси» нет.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Оборот парикмахерских и салонов красоты, РФ</div><div class="n">321,5 млрд ₽</div><div class="s">2025, +17,9% за год, Росстат</div></div>
+    <div class="kpi"><div class="k">Реальный рост спроса</div><div class="n">+3–5%</div><div class="s">2025, оценка рынка по данным «Коммерсанта»</div></div>
+    <div class="kpi"><div class="k">Рост цен на стрижки</div><div class="n">+10–14%</div><div class="s">за 2025 год</div></div>
+    <div class="kpi"><div class="k">Средняя цена по России</div><div class="n">926 ₽</div><div class="s">женская стрижка, январь 2026; мужская — 719 ₽</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Рынок растёт за счёт цен, а не числа клиентов: выручка +17,9%, визиты +3–5%. В такой ситуации выигрывает понятная цена, видимая прямо в карточке, и формат, который экономит время клиента. У «Стрикси» есть и то и другое: одна цена на мужские, женские и детские стрижки, стрижки без записи. Задача — показать это в карточке и вывести карточку в выдачу по всему Кургану.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первые два этапа дают основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней, после восстановления Яндекс Бизнеса</span></div>
+      <ol>
+        <li><b>Полный прайс и одна цена во всех полях.</b><span>Загрузить прайс компании целиком, с ценами в формате «от N ₽» и пометкой «Не является публичной офертой». Привести цену стрижки в особенностях карточки и в 2ГИС к цене из прайса.</span></li>
+        <li><b>Одинаковые часы работы.</b><span>Ежедневно 9:00–20:00 на Яндекс Картах, в 2ГИС и на странице салона на сайте сети.</span></li>
+        <li><b>Рубрика под детские стрижки.</b><span>Детские стрижки у компании есть, а рубрики под них нет. «Парикмахерская» остаётся основной рубрикой.</span></li>
+        <li><b>Описание компании.</b><span>Японская парикмахерская: мужские, женские и детские стрижки по одной цене, стрижки и окрашивание без записи, оплата через терминал с баллами, сухая мойка головы.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить поток оценок и контента</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Просить оценку на Яндекс Картах после стрижки.</b><span>QR-код на карточку у терминала оплаты и у зеркал. Цель — ровный поток оценок каждый месяц, чтобы карточку видели по всему Кургану. Только реальные клиенты, без вознаграждения: Яндекс снимает подозрительные отзывы.</span></li>
+        <li><b>Отвечать на каждый отзыв.</b><span>Благодарить по имени, ответы на негативные отзывы — после согласования с компанией, без спора с клиентом.</span></li>
+        <li><b>Новость и сторис каждую неделю.</b><span>Темы — из запросов, где карточки не видно: парикмахерская без записи, окрашивание волос, мужская, женская и детская стрижка.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Поддержать агрегаторы из топа выдачи</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС, Яндекс Услуги, Zoon, ВКонтакте.</b><span>Они стоят на первой странице по каждому коммерческому запросу. В 2ГИС у точки уже 4,9 и «Премия 2ГИС» — сохраняем и дополняем ценами. На каждой площадке одинаковые название, адрес, часы и цены.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Страница салона на сайте сети</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Title, H1 и description со словами «парикмахерская», «стрижка», «Курган», «Заозёрный».</b><span>Например: «Парикмахерская в Заозёрном, Курган — стрижки без записи | Стрикси».</span></li>
+        <li><b>Цены и часы на странице салона.</b><span>Сейчас на странице только адрес, телефон и часы 9:00–21:00. Правки вносятся через управление сайтом сети.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапов 1–2</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса без рекламы других организаций.</b><span>Убирает баннер над карточкой и сохраняет новости и сторис. Обсудить с компанией после восстановления Яндекс Бизнеса.</span></li>
+        <li><b>Продвижение на Картах — по сезону.</b><span>Декабрь, март и май–август — месяцы подъёма спроса в Кургане. Показы по всему городу, чтобы карточка выходила не только рядом с Заозёрным.</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Позиционирование</h3>
+  <p class="small">«Стрикси» — японская парикмахерская в Заозёрном: мужские, женские и детские стрижки по одной цене, стрижки и окрашивание без записи, терминал оплаты вместо администратора и баллы на услуги. Рядом стоят салоны красоты с косметологией, эпиляцией и ногтевым сервисом. Отличие компании — быстрая и понятная парикмахерская без записи, и его стоит показывать прайсом, рубриками и новостями.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Кургану 22.10.2026 без геолокации пользователя — на карте Заозёрного вокруг 4-го микрорайона, 46, и по всему городу; рубрики, рейтинг и оценки взяты из данных выдачи и карточек.</li>
+    <li>Органика: Яндекс, регион «Курган», первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Курган», все устройства, октябрь 2024 — сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/striksi/234200032989/" target="_blank" rel="noopener">Карточка «Стрикси» на Яндекс Картах</a>
+    <a href="https://2gis.ru/kurgan/firm/70000001101238111" target="_blank" rel="noopener">Карточка «Стрикси» в 2ГИС</a>
+    <a href="https://striksi.ru/" target="_blank" rel="noopener">striksi.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://www.kommersant.ru/doc/8476333" target="_blank" rel="noopener">Коммерсантъ — оборот парикмахерских и салонов красоты в 2025 году</a>
+    <a href="https://www.sostav.ru/publication/salony-i-parikmakherskie-v-rossii-stolknulis-s-padeniem-sprosa-82043.html" target="_blank" rel="noopener">Sostav — спрос на услуги салонов и парикмахерских</a>
+    <a href="https://vc.ru/marketing/3199382-yandeks-vosstanovil-dostup-k-biznes-kabinetu" target="_blank" rel="noopener">vc.ru — Яндекс восстановил доступ к кабинету Бизнеса</a>
+    <a href="https://avo.cards/blog/sboy-yandeksa-oktyabr-2026-chto-ne-rabotaet-i-chto-delat/" target="_blank" rel="noopener">avo.cards — что работает в Яндексе на 21 октября 2026</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+  </div>
+</section>
+
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Японская парикмахерская · Курган, Заозёрный</span>
+    <h1>«Стрикси» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Стрикси» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Японская парикмахерская <small>мужские, женские и детские стрижки по одной цене</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Курган</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">4-й микрорайон, 46 <small>жилой район Заозёрный</small></div></div>
+      <div class="fact"><div class="k">Услуги</div><div class="v">Стрижки · Окрашивание <small>без записи</small></div></div>
+      <div class="fact"><div class="k">Формат</div><div class="v">Терминал оплаты <small>без администратора, баллы на услуги</small></div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Стерильность, чистота, комфорт <small>сухая мойка головы, тематические видео во время стрижки</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Каждый день 9:00–20:00</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">striksi.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Стрикси»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: белый фон, графитовый текст логотипа, красные ножницы логотипа, красные и графитовые плашки фирменных публикаций, светло-серый фон с узором ножниц.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#FF0000;color:#FFFFFF;border-color:#FF0000">
+        <div class="role">Акцентный</div><div class="name">Красный ножниц логотипа</div><div class="hex">#FF0000</div>
+      </div>
+      <div class="swatch" style="background:#E2010F;color:#FFFFFF;border-color:#E2010F">
+        <div class="role">Акцентный</div><div class="name">Красный плашек</div><div class="hex">#E2010F</div>
+      </div>
+      <div class="swatch" style="background:#3E4446;color:#FFFFFF;border-color:#3E4446">
+        <div class="role">Основной</div><div class="name">Графит плашек</div><div class="hex">#3E4446</div>
+      </div>
+      <div class="swatch" style="background:#293333;color:#FFFFFF;border-color:rgba(152,161,172,.35)">
+        <div class="role">Текстовый</div><div class="name">Графит логотипа</div><div class="hex">#293333</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#293333;border-color:#FFFFFF">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+      <div class="swatch" style="background:#EEEEEE;color:#293333;border-color:#EEEEEE">
+        <div class="role">Второстепенный</div><div class="name">Светло-серый фон</div><div class="hex">#EEEEEE</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым карточки не видно по всему Кургану: «парикмахерская», «стрижка», «окрашивание волос», «мужская стрижка». Две темы — про стрижки, две — про окрашивание. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Парикмахерская в Заозёрном без записи: мужские, женские и детские стрижки, стрижки и окрашивание в порядке очереди.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Окрашивание волос без записи: профессиональная косметика ведущих производителей, оплата через терминал.</p></div>
+      <div class="cycle-row"><div class="tag">11.11</div><p>Мужская стрижка от 15 минут: организация рабочего места мастера, сухая мойка головы, видео во время стрижки.</p></div>
+      <div class="cycle-row"><div class="tag">18.11</div><p>Окрашивание волос к праздникам: без записи, с оплатой накопленными баллами.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль, спокойно и по делу. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Тезисы — формулировки источника, указанного у каждого тезиса; в тексте их можно связывать между собой, не меняя смысла и не добавляя новых фактов. SEO-ключи вплетаются в текст органично, без повторов подряд. Без упоминания конкурентов и других направлений красоты. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами. Если в тексте есть цена или баллы — последней строкой «Не является публичной офертой».</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Парикмахерская в Заозёрном без записи: мужские, женские и детские стрижки в Кургане</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — японская парикмахерская «Стрикси» в Заозёрном. На стрижку к нам можно прийти без записи: мастера принимают в порядке очереди.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Японская парикмахерская: мужские, женские и детские стрижки по одной цене.<span class="src">бриф</span></li>
+        <li>Стрижки и окрашивание — без записи.<span class="src">бриф</span></li>
+        <li>«Технологии работы парикмахерской позволяют обслуживать клиентов в порядке очереди».<span class="src">сайт</span></li>
+        <li>Отсутствие администратора позволяет делать стрижки доступнее; оплата через терминал удобнее и позволяет накапливать баллы, которые можно потратить на услуги.<span class="src">бриф</span></li>
+        <li>Во время стрижки ребёнка можно увлечь планшетом, взрослым — подзарядить телефон и посмотреть телевизор с интересными роликами.<span class="src">сайт</span></li>
+        <li>Работаем каждый день с 9:00 до 20:00, Курган, 4-й микрорайон, 46.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Парикмахерская в Заозёрном без записи — «Стрикси», Курган</span></div>
+        <div class="meta-row"><span><b>Title · </b>Парикмахерская в Кургане без записи: мужские, женские и детские стрижки | Стрикси</span></div>
+        <div class="meta-row"><span><b>Description · </b>Японская парикмахерская «Стрикси» в Заозёрном, 4-й микрорайон, 46: мужские, женские и детские стрижки по одной цене, стрижки и окрашивание без записи. Каждый день 9:00–20:00.</span></div>
+        <div class="chips">
+          <span class="chip-kw">парикмахерская курган</span><span class="chip-kw">парикмахерская курган заозерный</span>
+          <span class="chip-kw">парикмахерская в заозерном</span><span class="chip-kw">стрижка курган</span>
+          <span class="chip-kw">парикмахерская без записи</span><span class="chip-kw">стрижка без записи курган</span>
+          <span class="chip-kw">парикмахерская рядом</span><span class="chip-kw">мужская стрижка</span>
+          <span class="chip-kw">женская стрижка</span><span class="chip-kw">детская стрижка</span>
+          <span class="chip-kw">стрижка для мальчика</span><span class="chip-kw">японская парикмахерская</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите на стрижку в любой день с 9:00 до 20:00 — без записи.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Стрижка без записи»</div>
+        <p>Композиция: зал парикмахерской — ряд кресел и рабочих мест мастеров, широкий план при дневном свете, кадр из фотографий компании; тезис на плашке в нижней трети, логотип в правом нижнем углу на белой подложке. Текст и логотип занимают не более 20% площади.</p>
+        <p>Цвета: плашка — графит #3E4446, тезис — белый #FFFFFF, короткая плашка-акцент под тезисом — красный #E2010F.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Окрашивание волос в Кургане без записи: профессиональная косметика и оплата через терминал</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Окрашивание волос в «Стрикси» — без записи: приходите в удобное время, мастер работает профессиональной косметикой.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Стрижки и окрашивание — без записи.<span class="src">бриф</span></li>
+        <li>Окрашивание: «Используем в работе профессиональную косметику от ведущих производителей».<span class="src">сайт</span></li>
+        <li>Стерильность, чистота, комфорт, доступность.<span class="src">бриф</span></li>
+        <li>Новый формат обслуживания — терминал: он «накопит баллы, выдаст чек об оплате» и принимает наличные, дебетовые и кредитные карты.<span class="src">бриф · сайт</span></li>
+        <li>Пока идёт окрашивание, можно подзарядить телефон, получить пеньюар с окошком, чтобы пользоваться телефоном, и посмотреть телевизор с интересными роликами.<span class="src">сайт</span></li>
+        <li>Курган, Заозёрный, 4-й микрорайон, 46, каждый день с 9:00 до 20:00.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Окрашивание волос в Кургане без записи — «Стрикси»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Окрашивание волос в Заозёрном, Курган: без записи, профессиональная косметика | Стрикси</span></div>
+        <div class="meta-row"><span><b>Description · </b>Окрашивание волос в японской парикмахерской «Стрикси», Курган, Заозёрный: без записи, профессиональная косметика ведущих производителей, оплата через терминал с накоплением баллов.</span></div>
+        <div class="chips">
+          <span class="chip-kw">окрашивание волос курган</span><span class="chip-kw">окрашивание волос</span>
+          <span class="chip-kw">покраска волос</span><span class="chip-kw">окрашивание волос заозерный</span>
+          <span class="chip-kw">окрашивание без записи</span><span class="chip-kw">покрасить волосы курган</span>
+          <span class="chip-kw">окрашивание волос цена курган</span><span class="chip-kw">парикмахерская курган</span>
+          <span class="chip-kw">окрашивание волос в один тон</span><span class="chip-kw">парикмахерская заозерный</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите на окрашивание без записи — каждый день с 9:00 до 20:00.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Окрашивание без записи»</div>
+        <p>Композиция: мастер за окрашиванием, крупный план рук и волос клиента, кадр из фотографий компании; фон верхней части — светло-серый с узором ножниц как в фирменных публикациях; тезис на двух плашках в нижней трети, логотип в правом нижнем углу.</p>
+        <p>Цвета: первая плашка — графит #3E4446 с белым текстом #FFFFFF, вторая плашка — красный #E2010F с белым текстом, фон с узором — светло-серый #EEEEEE.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 11 ноября</span><h3>Мужская стрижка в Кургане от 15 минут: сухая мойка головы и терминал вместо администратора</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы организовали работу так, чтобы стрижка занимала от 15 минут: специальное рабочее место мастера, сухая мойка головы и оплата через терминал.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Мы используем специальную организацию рабочего места мастера, пылесос для воздушной мойки головы, терминал оплаты вместо администратора и организацию пространства парикмахерской».<span class="src">сайт</span></li>
+        <li>Сухая мойка головы: подстриженные волосы не стряхиваются щёткой и не сдуваются феном, а собираются специальным пылесосом — так убирать волосы в три раза быстрее водяной мойки.<span class="src">бриф · сайт</span></li>
+        <li>Мужские, женские и детские стрижки по одной цене.<span class="src">бриф</span></li>
+        <li>Просмотр тематических видео во время стрижки.<span class="src">бриф</span></li>
+        <li>Стрижки — без записи.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Мужская стрижка в Кургане от 15 минут — «Стрикси»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Мужская стрижка в Заозёрном, Курган: от 15 минут, без записи | Стрикси</span></div>
+        <div class="meta-row"><span><b>Description · </b>Мужская стрижка в японской парикмахерской «Стрикси»: от 15 минут, без записи, сухая мойка головы, оплата через терминал. Курган, Заозёрный, 4-й микрорайон, 46.</span></div>
+        <div class="chips">
+          <span class="chip-kw">мужская стрижка курган</span><span class="chip-kw">мужские стрижки</span>
+          <span class="chip-kw">мужская стрижка заозерный</span><span class="chip-kw">стрижка курган</span>
+          <span class="chip-kw">быстрая стрижка</span><span class="chip-kw">стрижка без записи</span>
+          <span class="chip-kw">короткие стрижки мужские</span><span class="chip-kw">парикмахерская курган</span>
+          <span class="chip-kw">стрижка для мальчика</span><span class="chip-kw">мужская парикмахерская курган</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> заходите на стрижку без записи — мастера примут в порядке очереди.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Стрижка от 15 минут»</div>
+        <p>Композиция: мастер стрижёт мужчину в кресле, кадр из фотографий компании, средний план; цифра «15 минут» на красной плашке в нижней трети, логотип в правом нижнем углу на белой подложке.</p>
+        <p>Цвета: плашка с тезисом — красный #E2010F, текст — белый #FFFFFF, тонкая полоса над плашкой — графит #3E4446.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 18 ноября</span><h3>Окрашивание волос к праздникам в Заозёрном: без записи и с оплатой баллами</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Любой праздник может быть поводом для наведения красоты — обновить цвет волос в «Стрикси» можно без записи и с оплатой накопленными баллами.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>«Любой праздник может быть поводом, для наведения красоты, прически, стрижки».<span class="src">бриф</span></li>
+        <li>Окрашивание — без записи.<span class="src">бриф</span></li>
+        <li>Оплата через терминал позволяет накапливать баллы, которые можно потратить на услуги.<span class="src">бриф</span></li>
+        <li>«С каждой стрижки вам подарок — 60 баллов. Для этого необходимо зарегистрироваться в терминале оплаты».<span class="src">сайт</span></li>
+        <li>Перечень услуг, на которые списываются баллы, уточняйте в парикмахерской.<span class="src">сайт</span></li>
+        <li>Профессиональная косметика от ведущих производителей.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Окрашивание волос к праздникам в Кургане — «Стрикси»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Окрашивание волос в Кургане к праздникам: без записи, оплата баллами | Стрикси</span></div>
+        <div class="meta-row"><span><b>Description · </b>Окрашивание волос в «Стрикси», Курган, Заозёрный: без записи, профессиональная косметика, оплата через терминал и баллы на услуги. Не является публичной офертой.</span></div>
+        <div class="chips">
+          <span class="chip-kw">окрашивание волос курган</span><span class="chip-kw">покраска волос</span>
+          <span class="chip-kw">мелирование курган</span><span class="chip-kw">тонирование волос</span>
+          <span class="chip-kw">окрашивание волос к новому году</span><span class="chip-kw">парикмахерская курган заозерный</span>
+          <span class="chip-kw">окрашивание волос заозерный</span><span class="chip-kw">стрижка и покраска волос</span>
+          <span class="chip-kw">парикмахерская курган</span><span class="chip-kw">окрашивание без записи</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите на окрашивание без записи, а баллы за стрижки используйте для оплаты услуг. Не является публичной офертой.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Новый цвет к празднику»</div>
+        <p>Композиция: результат окрашивания — волосы клиентки после работы мастера, крупный план, кадр из фотографий компании; тезис на светлой подложке в верхней трети, логотип в правом нижнем углу.</p>
+        <p>Цвета: подложка — белый #FFFFFF, тезис — графит логотипа #293333, акцентная полоса под тезисом — красный ножниц #FF0000.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Без записи — каждый день</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Мужские стрижки</span>
+          <span class="fact-pill">Женские стрижки</span>
+          <span class="fact-pill">Детские стрижки</span>
+          <span class="fact-pill">Окрашивание</span>
+          <span class="fact-pill">9:00–20:00</span>
+          <span class="fact-pill">4-й мкр, 46</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок графитом #293333, список услуг графитом с красными маркерами-ножницами #FF0000, часы работы и адрес на плашке графита #3E4446 белым текстом. Логотип в правом нижнем углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Окрашивание без записи</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Профессиональная косметика</span>
+          <span class="fact-pill">Ведущие производители</span>
+          <span class="fact-pill">Без записи</span>
+          <span class="fact-pill">Оплата через терминал</span>
+          <span class="fact-pill">Наличные и карты</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #EEEEEE с узором ножниц, заголовок на плашке графита #3E4446 белым #FFFFFF, вторая строка на красной плашке #E2010F белым, пункты графитом #293333. Логотип в правом нижнем углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Стрижка от 15 минут</div><span class="slide-no">Сторис 3 · 11 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Рабочее место мастера</span>
+          <span class="fact-pill">Сухая мойка головы</span>
+          <span class="fact-pill">В 3 раза быстрее водяной</span>
+          <span class="fact-pill">Терминал вместо администратора</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит #3E4446, цифра «15» крупно красным #FF0000, слово «минут» и пункты белым #FFFFFF, тонкие разделители светло-серым #EEEEEE. Логотип в правом нижнем углу на белой подложке.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">60 баллов с каждой стрижки</div><span class="slide-no">Сторис 4 · 18 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Регистрация в терминале</span>
+          <span class="fact-pill">Баллы на услуги</span>
+          <span class="fact-pill">Чек об оплате</span>
+          <span class="fact-pill">Не является публичной офертой</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, «60 баллов» крупно на красной плашке #E2010F белым текстом, три шага графитом #293333 с красными номерами #FF0000, строка «Не является публичной офертой» мелко внизу графитом. Логотип в правом нижнем углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+
+    <details class="stage" open>
+      <summary>Этап 1 — парикмахерская без записи, окрашивание, мужская стрижка, окрашивание к праздникам <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Парикмахерская в Заозёрном без записи</b>28.10 · мужские, женские и детские стрижки, очередь вместо записи</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Без записи — каждый день</b>28.10 · услуги, часы, адрес</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Окрашивание волос без записи</b>05.11 · профессиональная косметика, оплата через терминал</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Окрашивание без записи</b>05.11 · косметика, терминал, наличные и карты</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Мужская стрижка от 15 минут</b>11.11 · рабочее место мастера, сухая мойка головы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Стрижка от 15 минут</b>11.11 · как экономится время</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Окрашивание волос к праздникам</b>18.11 · без записи, оплата баллами</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>60 баллов с каждой стрижки</b>18.11 · регистрация в терминале, баллы на услуги</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Бриф компании от 21.10.2026</span>
+      <a href="https://striksi.ru/" target="_blank" rel="noopener">striksi.ru</a>
+      <a href="https://striksi.ru/yaponskie_tehnologii/bonusnaya-sisitema/" target="_blank" rel="noopener">Сайт: 60 баллов с каждой стрижки</a>
+      <a href="https://striksi.ru/yaponskie_tehnologii/%d0%b1%d0%b5%d0%b7-%d0%b7%d0%b0%d0%bf%d0%b8%d1%81%d0%b8/" target="_blank" rel="noopener">Сайт: без записи</a>
+      <a href="https://yandex.ru/maps/-/CXR0UV0P" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+      <a href="https://go.2gis.com/APe52" target="_blank" rel="noopener">2ГИС — карточка компании</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={a:[3499,3238,4256,3300,3308,4107,3761,4105,4087,4197,4394,3026,3472,3337,3739,3016,2911,4280,3874,4436,4040,4251,4333,3410],
+b:[76,84,108,87,98,110,84,123,140,123,196,116,119,167,211,169,146,145,156,191,185,151,176,152]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=44,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026"><g>${g}</g><path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-120)lx-=140;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-com':[['парикмахерская курган','коммерческое, гео',2089],['салон красоты курган','коммерческое, гео',921],['барбершоп курган','коммерческое, гео',418],['телефон парикмахерской','навигационное',299],['стрижка курган','коммерческое, гео',276],['парикмахерская курган заозерный','коммерческое, гео',188],['парикмахерская рядом','коммерческое',105],['парикмахерская в заозерном','коммерческое, гео',52],['мелирование курган','коммерческое, гео',43],['окрашивание волос курган','коммерческое, гео',36]],
+ 't-need':[['стрижка','все виды стрижек',7700],['стрижки женские','женская стрижка',1020],['мужские стрижки','мужская стрижка',791],['мелирование','окрашивание прядей',520],['окрашивание волос','окрашивание',418],['стрижка для мальчика','детская стрижка',169],['покраска волос','окрашивание',174],['тонирование волос','тонирование',89],['детские стрижки','детская стрижка',47],['стрижка бороды','мужская услуга',43],['окрашивание седины','окрашивание',19]],
+ 't-info':[['стрижки 2026','модные стрижки',1294],['короткие стрижки','формы стрижек',1284],['календарь стрижек','когда стричься',707],['лунный календарь стрижек','когда стричься',464],['стрижка каре','формы стрижек',282],['стрижка с челкой','формы стрижек',278],['после окрашивания волос','уход за цветом',62],['окрашивание волос 2026','модное окрашивание',31]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
