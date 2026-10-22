@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Техно-град»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .legal{margin-top:14px;font-size:14px;color:var(--ink-2)}
+.vc .legal b{color:var(--ink)}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc footer{padding-block:32px 8px}
+.vc footer .srcs{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.vc footer a{text-decoration:none;font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Техно-град · Дзержинский</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ТЕХНО-ГРАД ТЕХНО-ГРАД</span><span>ТЕХНО-ГРАД ТЕХНО-ГРАД</span><span>ТЕХНО-ГРАД ТЕХНО-ГРАД</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Техно-град» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса на ремонт грузовых автомобилей в Дзержинском и Подмосковье, стратегия продвижения и контент-план для карточки компании. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>ООО «Техно-град»</b></div>
+        <div><span>Город</span><b>Дзержинский, Московская область</b></div>
+        <div><span>Направление</span><b>Грузовой автосервис</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 22.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«ремонт грузовиков» на Картах</span><span class="t-n g">3</span><span class="t-s">место в выдаче по Дзержинскому</span></div>
+        <div class="tile"><span class="t-k">Ремонт ТНВД и форсунок</span><span class="t-n c">19–20</span><span class="t-s">место — ниже легковых сервисов</span></div>
+        <div class="tile"><span class="t-k">Новостей и историй на карточке</span><span class="t-n c">0</span><span class="t-s">прайс помечен «Давно не обновлялось»</span></div>
+        <div class="tile"><span class="t-k">Спрос «ремонт грузовиков»</span><span class="t-n y">−20%</span><span class="t-s">январь–сентябрь 2026 к 2025, Москва и область</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">22.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции карточки на Яндекс Картах по 9 запросам, состояние карточки и сайта, спрос по Вордстату с динамикой за 2 года, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">22.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис: ТО и подготовка к зиме, замена порогов, топливная аппаратура и электроника, свой склад запчастей.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">до 28.10</span><span class="st next">следующий шаг</span></div><h3>Прайс, рубрики и акция на карточке</h3><p>Обновить прайс с ценами «от», добавить рубрики под грузовой ремонт, оформить «Замену порогов» в разделе «Акции».</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 12.11 · 19.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на карточке «Техно-град» в Яндекс Картах и 2ГИС.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточка теряет грузовой поиск и что с этим делать</h3>
+          <p>Позиции по 9 запросам на Картах, соседи по выдаче, спрос и сезонность в Москве и области, стратегия в четыре этапа.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — ТО грузовика и подготовка к зиме</li>
+            <li>05.11 — Замена порогов</li>
+            <li>12.11 — Форсунки, ТНВД, ЭБУ</li>
+            <li>19.11 — Свой склад запчастей</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Дзержинский · грузовой автосервис · замер 22.10.2026</span>
+  <h1>Где «Техно-град» теряет грузовой поиск и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 9 запросам в Дзержинском, состояние карточки и сайта, спрос по Вордстату для региона «Москва и область».</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Общие грузовые запросы — в первой пятёрке</b>«ремонт грузовиков» №3, «диагностика грузовиков» №2, «ремонт кпп грузовиков» №4, «запчасти для грузовиков» №4.</p></div>
+    <div class="v"><span class="pill crit">слабо</span><p><b>Топливная аппаратура — 19–20 место</b>«ремонт тнвд» №19, «ремонт форсунок» №20. Выше стоят легковые и дилерские сервисы. При этом «ремонт тнвд» — 3 262 запроса в месяц, больше, чем «ремонт грузовиков».</p></div>
+    <div class="v"><span class="pill warn">середина</span><p><b>«грузовой автосервис» и «кузовной ремонт грузовиков» — 12 место</b>«ремонт двигателя грузовика» — №9. По самому прямому запросу направления карточка не в первой десятке.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка не обновляется</b>Новостей и историй нет, в прайсе две позиции с пометкой «Давно не обновлялось». Рубрики — только «Автосервис, автотехцентр» и «Магазин автозапчастей и автотоваров».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос снижается второй год</b>«ремонт грузовиков» −20%, «грузовой автосервис» −14% за январь–сентябрь 2026 к 2025. В сентябре 2026 «ремонт грузовиков» вырос до 1 635 — максимум с февраля.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,7</div><div class="s">337 оценок, 126 отзывов</div></div>
+    <div class="kpi"><div class="k">Награда</div><div class="n">2026</div><div class="s">«Хорошее место 2026»</div></div>
+    <div class="kpi"><div class="k">Новости и истории</div><div class="n">0</div><div class="s">на карточке не публиковались</div></div>
+    <div class="kpi"><div class="k">Позиций в прайсе карточки</div><div class="n">2</div><div class="s">«Давно не обновлялось»</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Дзержинскому, без геолокации пользователя. По запросам со словом «грузовики» Яндекс сам включает фильтр «грузовые».</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто выше</th></tr></thead>
+    <tbody>
+      <tr><td>диагностика грузовиков</td><td class="r num">2</td><td>Автопилот 5,0 · 425 отз.</td></tr>
+      <tr><td>ремонт грузовиков</td><td class="r num">3</td><td>Автосервис ApexCar 5,0 · 236, Паритет 5,0 · 85</td></tr>
+      <tr><td>ремонт кпп грузовиков</td><td class="r num">4</td><td>Автопилот, Автосервис ApexCar, Fast Mast 4,9 · 534</td></tr>
+      <tr><td>запчасти для грузовиков</td><td class="r num">4</td><td>Нильсон Авто 5,0 · 114, Орех 4,7 · 115, АвтоТех</td></tr>
+      <tr><td>ремонт двигателя грузовика</td><td class="r num">9</td><td>Автопилот, K-Technik, Автосервис ApexCar, Авилон, Паритет</td></tr>
+      <tr><td>грузовой автосервис</td><td class="r num">12</td><td>Камцентр 4,6 · 251, АвтоМаш-МБ 5,0 · 1018, Автосервис ApexCar, Нео Трак, Паритет</td></tr>
+      <tr><td>кузовной ремонт грузовиков</td><td class="r num">12</td><td>Автопилот, Автосервис ApexCar, Технический центр Котельники, Паритет, Ремзона</td></tr>
+      <tr><td>ремонт тнвд</td><td class="r num">19</td><td>Авилон Сервис, Автопилот, Geely Авилон, Fast Mast, АвтоТехЦентр Арма</td></tr>
+      <tr><td>ремонт форсунок</td><td class="r num">20</td><td>Автопилот, Geely Авилон, АвтоТехЦентр Арма, K-Technik, Авилон BMW</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка проседает</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка не заявляет грузовой профиль рубриками</h3></div>
+      <p>У карточки две рубрики: <b>«Автосервис, автотехцентр»</b> и <b>«Магазин автозапчастей и автотоваров»</b>. Грузовой сервис указан только в особенностях. Для Яндекса «Техно-град» — один из многих автосервисов, поэтому по прямому запросу «грузовой автосервис» карточка на 12 месте, за дилерскими и легковыми центрами.</p>
+      <p class="next">Добавить рубрики, которые описывают грузовой ремонт и ремонт топливной аппаратуры, из справочника Яндекс Бизнеса.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Топливная аппаратура и электроника не раскрыты</h3></div>
+      <p>В брифе компании есть ремонт форсунок, ремонт ТНВД, ремонт и перепрограммирование блоков ЭБУ, чип тюнинг. На карточке это видно только в списке видов работ, в прайсе этих услуг нет, публикаций нет. По «ремонт тнвд» и «ремонт форсунок» выше стоят легковые сервисы с прайсом и большим числом упоминаний услуги.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточка не обновляется</h3></div>
+      <p>Новостей и историй нет. Прайс помечен «Давно не обновлялось», в нём две позиции: диагностика подвески 1 350 ₽ и компьютерная диагностика 3 000 ₽ — цена компьютерной диагностики устарела. Регулярные публикации и свежий прайс — сигнал Яндексу, что карточка живая.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Кузовное направление не подкреплено</h3></div>
+      <p>Кузовной ремонт, малярно-жестяные и сварочные работы есть в услугах компании, но в выдаче «кузовной ремонт грузовиков» карточка на 12 месте. Действующая акция «Замена порогов» на карточке не оформлена.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт</h2><p>foton-technograd.ru, проверка 22.10.2026.</p></div>
+  <div class="two">
+    <div class="note"><h3>Что работает</h3><ul>
+      <li><b>Отдельные страницы под услуги:</b> ТО, ходовая, двигатели, трансмиссия, тормоза, рулевое, компьютерная диагностика, форсунки, топливная аппаратура, кузовной ремонт, ABS, ЭБУ.</li>
+      <li><b>Title с гео:</b> «Ремонт грузовиков в Дзержинском».</li>
+      <li>Блок обслуживаемых марок и фото работ.</li>
+    </ul></div>
+    <div class="note"><h3>Что мешает</h3><ul>
+      <li><b>Остатки шаблона темы в шапке:</b> телефон «+321 123 4567», e-mail «info@test.com», ссылка «My Account».</li>
+      <li><b>Meta description главной — английский текст из шаблона WordPress</b>, а не описание компании.</li>
+      <li>Пункты меню «Стоимость», «Отзывы», «Контакты» ведут на главную.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос</h2><p>Вордстат, регион «Москва и область», все устройства. Частоты — за 08.09–07.10.2026, динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="b"><h3>«ремонт грузовиков»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −20%</div></div>
+    <div class="chart" data-chart="j"><h3>«грузовой автосервис»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −14%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">У «ремонт грузовиков» пики — февраль и июль–август 2025. В 2026 году спрос ровнее и ниже, но в сентябре поднялся до 1 635.</p>
+
+  <h3>Коммерческие запросы направления</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Позиция карточки</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-main"></tbody>
+  </table></div>
+
+  <h3>Что ищут внутри «ремонт грузовиков»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Что внутри</th><th>Запросов в месяц</th></tr></thead>
+    <tbody id="t-sub"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Топливная аппаратура — самый большой узкий спрос:</b> «ремонт тнвд» 3 262 в месяц. Здесь карточка на 19 месте — главный резерв роста.</li>
+      <li><b>«то грузовика» — 1 799 в месяц.</b> Осенью ТО и подготовка к зиме — прямой повод для публикаций.</li>
+      <li><b>Запчасти — 3 127 в месяц</b>, и по ним карточка уже №4: свой склад стоит показывать отдельно.</li>
+    </ul></div>
+    <div class="note"><h3>Где спрос узкий</h3><ul>
+      <li>«кузовной ремонт грузовика» — 33, «диагностика грузовика» — 244 в месяц.</li>
+      <li>Такие запросы приводят мало людей, но это люди с готовой задачей. Их добирают точные формулировки в новостях и прайсе.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Рубрики под грузовой профиль.</b><span>Главная остаётся «Автосервис, автотехцентр». Добавить рубрики грузового ремонта и ремонта топливной аппаратуры из справочника Яндекс Бизнеса.</span></li>
+        <li><b>Новый прайс с ценами «от».</b><span>Компьютерная диагностика — от 3 450 ₽. Добавить ТО, ремонт форсунок, ремонт ТНВД, ремонт и перепрограммирование ЭБУ, ремонт КПП и ДВС, кузовной ремонт, замену порогов. С пометкой «Не является публичной офертой».</span></li>
+        <li><b>Акция «Замена порогов» в разделе «Акции».</b><span>Анонс до 70 знаков, описание до 200 знаков, отправка на модерацию за 2–3 дня до старта.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Запустить контент</h3><span class="when">с 28.10, дальше постоянно</span></div>
+      <ol>
+        <li><b>Новость и история каждую неделю.</b><span>Темы — под запросы, где карточка ниже первой пятёрки: топливная аппаратура, грузовой автосервис, кузовной ремонт. Плюс сезон: ТО и подготовка к зиме.</span></li>
+        <li><b>Гео в каждом тексте.</b><span>Дзержинский, Дзержинское шоссе, близость к МКАД.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Поправить сайт</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>Убрать остатки шаблона.</b><span>Телефон «+321 123 4567», «info@test.com», «My Account» в шапке. Написать meta description главной на русском с услугами и городом.</span></li>
+        <li><b>Одни и те же данные на сайте и на карточке.</b><span>Телефон, часы работы, описание компании — в одной редакции на всех площадках.</span></li>
+        <li><b>Рабочие пункты меню.</b><span>«Стоимость», «Отзывы», «Контакты» должны вести на свои страницы.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Тариф Яндекс Бизнеса</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Выбрать тариф, при котором новости и истории видны на карточке.</b><span>С 2026 года Яндекс переводит карточки на тарифы: на Базовом новости и истории скрываются, а внутри карточки может показываться реклама других организаций.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Дзержинскому 22.10.2026 без геолокации пользователя; данные карточки — со страницы карточки.</li>
+    <li>Вордстат: регион «Москва и область», все устройства, частоты за 08.09–07.10.2026, динамика октябрь 2024 — сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/tekhno_grad/1397704592/" target="_blank" rel="noopener">Карточка «Техно-град» на Яндекс Картах</a>
+    <a href="https://foton-technograd.ru/" target="_blank" rel="noopener">foton-technograd.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://yandex.ru/support/business-priority/ru/manage/promotion" target="_blank" rel="noopener">Яндекс Бизнес — акции</a>
+    <a href="https://oblik.agency/baza-znani/yandeks-biznes-vvodit-novye-tarify-dlya-biznesa-na-yandeks-kartakh-chto-izmenilos-v-2026-godu/" target="_blank" rel="noopener">Oblik — тарифы Яндекс Бизнеса в Картах 2026</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Грузовой автосервис · Дзержинский</span>
+    <h1>«Техно-град» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Техно-град» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Грузовой автосервис <small>Техническое обслуживание грузовых автомобилей</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Дзержинское шоссе, 2 <small>г. Дзержинский, Московская область</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–Вс 9:00–21:00 <small>Работаем 7/0</small></div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">Более 16 лет на рынке</div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Свой склад запчастей <small>Мультибренд · близость к МКАД · гибкая система скидок</small></div></div>
+      <div class="fact"><div class="k">Действующая акция</div><div class="v">Замена порогов</div></div>
+      <div class="fact"><div class="k">Цены</div><div class="v">Компьютерная диагностика <small>от 3 450 ₽ · формат «от N ₽»</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">foton-technograd.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Техно-град»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: синий кнопок сайта, красный акцентных кнопок и иконок, графит подложек, светлый фон и тёмный цвет логотипа.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#216AC9;color:#FFFFFF;border-color:#216AC9">
+        <div class="role">Основной</div><div class="name">Синий</div><div class="hex">#216AC9</div>
+      </div>
+      <div class="swatch" style="background:#E15E60;color:#FFFFFF;border-color:#E15E60">
+        <div class="role">Акцентный</div><div class="name">Красный</div><div class="hex">#E15E60</div>
+      </div>
+      <div class="swatch" style="background:#303543;color:#FFFFFF;border-color:#303543">
+        <div class="role">Второстепенный</div><div class="name">Графит</div><div class="hex">#303543</div>
+      </div>
+      <div class="swatch" style="background:#F3F3F9;color:#262422;border-color:#DCDCE6">
+        <div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#F3F3F9</div>
+      </div>
+      <div class="swatch" style="background:#262422;color:#F3F3F9;border-color:#262422">
+        <div class="role">Текстовый</div><div class="name">Тёмный логотипа</div><div class="hex">#262422</div>
+      </div>
+    </div>
+    <p class="legal"><b>Обязательная пометка</b> на материалах с ценами: «Не является публичной офертой».</p>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым карточка ниже первой пятёрки, и на приоритетах компании: сезонное ТО и действующая акция. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>ТО грузовых автомобилей и подготовка к эксплуатации в зимний период — под запросы «грузовой автосервис» и «то грузовика».</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Замена порогов — действующая акция компании; кузовной ремонт, малярно-жестяные и сварочные работы.</p></div>
+      <div class="cycle-row"><div class="tag">12.11</div><p>Топливная аппаратура и электроника: компьютерная диагностика, ремонт форсунок и ТНВД, блоки ЭБУ.</p></div>
+      <div class="cycle-row"><div class="tag">19.11</div><p>Свой склад запчастей и подбор под грузовик, мультибренд, гибкая система скидок.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании «Техно-град» на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона, e-mail и упоминаний конкурентов. Объём — до 3 000 знаков с пробелами. В новостях с ценами — пометка «Не является публичной офертой».</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>ТО грузовых автомобилей и подготовка к зиме в Дзержинском — грузовой автосервис «Техно-град»</h3></div>
+        <span class="purpose">Сезонный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы проводим техническое обслуживание грузовых автомобилей и готовим их к эксплуатации в зимний период — в Дзержинском, рядом с МКАД.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Проведение ТО и подготовка автомобиля к эксплуатации в зимний период.<span class="src">бриф</span></li>
+        <li>В техобслуживание входят: диагностика двигателя и электронных систем; проверка ходовой части, рулевого управления и тормозной системы; обслуживание трансмиссии и сцепления; замена технических жидкостей и фильтров; компьютерная диагностика; контроль состояния топливной системы.<span class="src">сайт</span></li>
+        <li>Замена масла, регулировка тормозов, измерение суммарного люфта рулевого управления, диагностика и ремонт подвески.<span class="src">бриф</span></li>
+        <li>Обслуживаем европейские, отечественные и китайские грузовые автомобили, а также прицепы, полуприцепы и спецтехнику.<span class="src">сайт</span></li>
+        <li>Пн–Вс 9:00–21:00, Дзержинское шоссе, 2. Удобное транспортное расположение — близость к МКАД.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>ТО грузовых автомобилей и подготовка к зиме в Дзержинском</span></div>
+        <div class="meta-row"><span><b>Title · </b>ТО грузовика и подготовка к зиме в Дзержинском | Техно-град</span></div>
+        <div class="meta-row"><span><b>Description · </b>Техническое обслуживание грузовых автомобилей в Дзержинском: диагностика, ходовая, тормоза, трансмиссия, жидкости и фильтры, топливная система. Подготовка к зимнему периоду. Рядом с МКАД.</span></div>
+        <div class="chips">
+          <span class="chip-kw">то грузовых автомобилей дзержинский</span><span class="chip-kw">техобслуживание грузовых автомобилей</span>
+          <span class="chip-kw">то грузовика</span><span class="chip-kw">грузовой автосервис дзержинский</span>
+          <span class="chip-kw">подготовка грузовика к зиме</span><span class="chip-kw">замена масла грузовик</span>
+          <span class="chip-kw">регулировка тормозов грузовика</span><span class="chip-kw">люфт рулевого управления</span>
+          <span class="chip-kw">ремонт подвески грузовика</span><span class="chip-kw">обслуживание прицепов и полуприцепов</span>
+          <span class="chip-kw">грузовой сервис рядом с МКАД</span><span class="chip-kw">ремонт грузовиков люберцы</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на ТО и подготовку грузовика к зиме.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«ТО и подготовка к зиме»</div>
+        <p>Композиция: грузовой тягач в боксе сервиса, открытая кабина или капот, мастер у двигателя; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — синий #216AC9, тезис — белый #FFFFFF, тонкая полоса над плашкой — красный #E15E60.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Замена порогов грузовика в Дзержинском: кузовной ремонт, малярно-жестяные и сварочные работы</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас действует акция на замену порогов. Кузовной ремонт, малярно-жестяные и сварочные работы выполняем в своём сервисе в Дзержинском.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Действующая акция — замена порогов.<span class="src">бриф</span></li>
+        <li>Кузовной ремонт, малярно-жестяные работы, сварочные работы.<span class="src">бриф</span></li>
+        <li>Свой склад запчастей, подбор запчастей.<span class="src">бриф</span></li>
+        <li>Гибкая система скидок и индивидуальный подход к каждому клиенту.<span class="src">бриф</span></li>
+        <li>Пометка в конце текста: «Не является публичной офертой».<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Замена порогов и кузовной ремонт грузовиков в Дзержинском</span></div>
+        <div class="meta-row"><span><b>Title · </b>Замена порогов грузовика в Дзержинском | Техно-град</span></div>
+        <div class="meta-row"><span><b>Description · </b>Замена порогов грузовых автомобилей в Дзержинском. Кузовной ремонт, малярно-жестяные и сварочные работы, свой склад запчастей. Рядом с МКАД.</span></div>
+        <div class="meta-row"><span><b>Раздел «Акции» · </b>дублировать акцию отдельным блоком: анонс до 70 знаков, описание до 200 знаков, на модерацию за 2–3 дня до старта.</span></div>
+        <div class="chips">
+          <span class="chip-kw">замена порогов грузовика</span><span class="chip-kw">замена порогов кабины</span>
+          <span class="chip-kw">кузовной ремонт грузовиков дзержинский</span><span class="chip-kw">кузовной ремонт грузовика</span>
+          <span class="chip-kw">малярно-жестяные работы грузовик</span><span class="chip-kw">сварочные работы грузовик</span>
+          <span class="chip-kw">ремонт кабины грузовика</span><span class="chip-kw">покраска грузовика</span>
+          <span class="chip-kw">грузовой автосервис дзержинский</span><span class="chip-kw">кузовной ремонт рядом с МКАД</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на замену порогов.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Замена порогов»</div>
+        <p>Композиция: кабина грузовика сбоку крупным планом, в фокусе зона порога; сварка или новый порог в работе; тезис на плашке в верхней трети, логотип в верхнем левом углу. Слово «акция» на обложке не используется.</p>
+        <p>Цвета: плашка — графит #303543, тезис — белый #FFFFFF, акцентная полоса под тезисом — красный #E15E60.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 12 ноября</span><h3>Ремонт форсунок, ТНВД и блоков ЭБУ грузовиков в Дзержинском — с компьютерной диагностикой</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы ремонтируем топливную аппаратуру и электронику грузовых автомобилей: форсунки, ТНВД, блоки ЭБУ — и начинаем с компьютерной диагностики.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Компьютерная диагностика — от 3 450 ₽.<span class="src">бриф</span></li>
+        <li>Ремонт форсунок, ремонт ТНВД.<span class="src">бриф</span></li>
+        <li>Ремонт и перепрограммирование блоков ЭБУ, чип тюнинг.<span class="src">бриф</span></li>
+        <li>Направления сервиса: диагностика и ремонт форсунок, ремонт топливного дизельного оборудования, ремонт ABS, ремонт ЭБУ.<span class="src">сайт</span></li>
+        <li>Мультибренд. Свой склад запчастей.<span class="src">бриф</span></li>
+        <li>Пометка в конце текста: «Не является публичной офертой».<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Ремонт форсунок, ТНВД и ЭБУ грузовых автомобилей в Дзержинском</span></div>
+        <div class="meta-row"><span><b>Title · </b>Ремонт ТНВД и форсунок грузовиков в Дзержинском | Техно-град</span></div>
+        <div class="meta-row"><span><b>Description · </b>Компьютерная диагностика грузовиков от 3 450 ₽. Ремонт форсунок и ТНВД, ремонт и перепрограммирование блоков ЭБУ, чип тюнинг. Мультибренд, Дзержинский.</span></div>
+        <div class="chips">
+          <span class="chip-kw">ремонт тнвд дзержинский</span><span class="chip-kw">ремонт тнвд грузовика</span>
+          <span class="chip-kw">ремонт форсунок грузовиков</span><span class="chip-kw">ремонт дизельных форсунок</span>
+          <span class="chip-kw">ремонт топливной аппаратуры</span><span class="chip-kw">компьютерная диагностика грузовиков</span>
+          <span class="chip-kw">диагностика грузовика дзержинский</span><span class="chip-kw">ремонт эбу грузовика</span>
+          <span class="chip-kw">перепрограммирование эбу</span><span class="chip-kw">чип тюнинг грузовиков</span>
+          <span class="chip-kw">ремонт abs грузовика</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на компьютерную диагностику грузовика.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Форсунки, ТНВД, ЭБУ»</div>
+        <p>Композиция: дизельные форсунки и ТНВД на верстаке крупным планом, рядом сканер диагностики; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — синий #216AC9, тезис — белый #FFFFFF, рамка-уголок — графит #303543.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 19 ноября</span><h3>Свой склад запчастей для грузовиков в Дзержинском: подбор под ваш грузовик и ремонт в одном месте</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас свой склад запчастей и подбор под ваш грузовик — запчасти и ремонт в одном месте.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Свой склад запчастей. Подбор запчастей. Мультибренд.<span class="src">бриф</span></li>
+        <li>Автозапчасти для грузовых автомобилей — в наличии и под заказ: всё в одном месте, подбор под ваш грузовик.<span class="src">сайт</span></li>
+        <li>Гибкая система скидок и индивидуальный подход к каждому клиенту.<span class="src">бриф</span></li>
+        <li>Более 16 лет на рынке.<span class="src">бриф</span></li>
+        <li>Удобное транспортное расположение — близость к МКАД; Пн–Вс 9:00–21:00.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Запчасти для грузовиков в Дзержинском — свой склад «Техно-град»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Запчасти для грузовиков в Дзержинском, подбор и ремонт | Техно-град</span></div>
+        <div class="meta-row"><span><b>Description · </b>Свой склад запчастей для грузовых автомобилей в Дзержинском: в наличии и под заказ, подбор под ваш грузовик. Мультибренд, ремонт в том же сервисе, рядом с МКАД.</span></div>
+        <div class="chips">
+          <span class="chip-kw">запчасти для грузовиков дзержинский</span><span class="chip-kw">запчасти для грузовых автомобилей</span>
+          <span class="chip-kw">подбор запчастей для грузовика</span><span class="chip-kw">запчасти для грузовиков в наличии</span>
+          <span class="chip-kw">запчасти для китайских грузовиков</span><span class="chip-kw">запчасти для спецтехники</span>
+          <span class="chip-kw">ремонт грузовиков дзержинский</span><span class="chip-kw">грузовой автосервис мультибренд</span>
+          <span class="chip-kw">грузовой автосервис рядом с МКАД</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на подбор запчастей для вашего грузовика.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Свой склад запчастей»</div>
+        <p>Композиция: стеллажи склада с запчастями для грузовиков, коробки и детали в перспективу; тезис на светлой подложке в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — светлый #F3F3F9, тезис — тёмный #262422, линия под тезисом — красный #E15E60.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании «Техно-град» на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">ТО и подготовка к зиме</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Двигатель и электроника</span>
+          <span class="fact-pill">Ходовая, рулевое, тормоза</span>
+          <span class="fact-pill">Трансмиссия и сцепление</span>
+          <span class="fact-pill">Жидкости и фильтры</span>
+          <span class="fact-pill">Топливная система</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый #F3F3F9, слева вертикальная полоса синим #216AC9, логотип в верхнем левом углу. Заголовок синим #216AC9, пункты списком тёмным #262422, маркеры пунктов — красный #E15E60.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Замена порогов</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Кузовной ремонт</span>
+          <span class="fact-pill">Малярно-жестяные работы</span>
+          <span class="fact-pill">Сварочные работы</span>
+          <span class="fact-pill">Свой склад запчастей</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон графит #303543, заголовок белым #FFFFFF, под ним красная полоса #E15E60, пункты белым. Внизу мелко: «Не является публичной офертой». Слово «акция» на слайде не используется.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Компьютерная диагностика — от 3 450 ₽</div><span class="slide-no">Сторис 3 · 12 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Ремонт форсунок</span>
+          <span class="fact-pill">Ремонт ТНВД</span>
+          <span class="fact-pill">Ремонт и перепрограммирование ЭБУ</span>
+          <span class="fact-pill">Чип тюнинг</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон синий #216AC9, заголовок белым, цена «от 3 450 ₽» крупно белым на красной плашке #E15E60, услуги белыми контурными плашками. Внизу мелко: «Не является публичной офертой».</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Свой склад запчастей</div><span class="slide-no">Сторис 4 · 19 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Мультибренд</span>
+          <span class="fact-pill">Подбор запчастей</span>
+          <span class="fact-pill">В наличии и под заказ</span>
+          <span class="fact-pill">Пн–Вс 9:00–21:00</span>
+          <span class="fact-pill">Рядом с МКАД</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок тёмным #262422 с красным подчёркиванием #E15E60, пункты графитом #303543, иконки пунктов синим #216AC9. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — ТО и зима, замена порогов, топливная аппаратура, склад запчастей <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>ТО грузовых автомобилей и подготовка к зиме</b>28.10 · состав ТО, прицепы и спецтехника, рядом с МКАД</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>ТО и подготовка к зиме</b>28.10 · пять узлов, которые проверяем</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Замена порогов: кузовной ремонт, малярно-жестяные и сварочные работы</b>05.11 · действующая акция, свой склад</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Замена порогов</b>05.11 · кузовные работы списком</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Ремонт форсунок, ТНВД и блоков ЭБУ</b>12.11 · диагностика от 3 450 ₽, мультибренд</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Компьютерная диагностика — от 3 450 ₽</b>12.11 · топливная аппаратура и электроника</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Свой склад запчастей для грузовиков</b>19.11 · подбор, в наличии и под заказ, скидки</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Свой склад запчастей</b>19.11 · мультибренд, часы, МКАД</span></div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <div class="sec-num">Источники</div>
+    <div class="srcs">
+      <span>Бриф компании от 22.10.2026</span>
+      <a href="https://foton-technograd.ru/" target="_blank" rel="noopener">foton-technograd.ru</a>
+      <a href="https://foton-technograd.ru/tehobsluzhivanie-gruzovyh-avtomobilej-v-dzerzhinskom/" target="_blank" rel="noopener">Сайт: техобслуживание грузовых автомобилей</a>
+      <a href="https://yandex.ru/maps/org/tekhno_grad/1397704592/" target="_blank" rel="noopener">Яндекс Карты — карточка компании</a>
+    </div>
+  </footer>
+
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={b:[1670,1775,1843,1659,2088,1692,1817,1493,1567,2173,2105,1693,1634,1267,1238,1070,1522,1552,1515,1419,1373,1470,1423,1635],
+j:[3426,3409,3365,3323,3538,3307,2930,2433,2764,3286,2850,3452,3048,2697,2510,2505,3081,2918,2784,2586,2560,2640,2281,2491]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,2,2.5,5,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d)),x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-main':[['ремонт форсунок','№20 · в основном легковые',8074],['ремонт тнвд','№19',3262],['запчасти для грузовиков','№4',3127],['грузовой автосервис','№12',2659],['ремонт грузовых автомобилей','—',2274],['то грузовика','—',1799],['ремонт грузовиков','№3',1713],['диагностика грузовика','№2',244],['кузовной ремонт грузовика','№12',33]],
+ 't-sub':[['выездной ремонт грузовиков','выезд мастера',71],['ремонт кпп грузовиков','трансмиссия',69],['ремонт и обслуживание грузовиков и спецтехники','комплексный сервис',64],['ремонт китайских грузовиков','марки из Китая',46],['ремонт двигателей грузовиков','ДВС',33],['кузовной ремонт грузовиков','кузов',28],['ремонт кпп для китайских грузовиков','трансмиссия',15],['цены на ремонт грузовиков','цена',12],['ремонт форсунок грузовиков','топливная аппаратура',10]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub" style="display:inline">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины просадки'],['site','Сайт'],['demand','Спрос'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
