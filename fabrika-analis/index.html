@@ -1,0 +1,407 @@
+<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>«Фабрика» — Директ и ВКонтакте</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+</head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: одна колонка-отчёт 1040px, сверху сводка цифр, ниже разделы «рынок → спрос → аукцион → прогноз → калькулятор» */
+:root{
+  --bg:#F2F3F1; --surface:#FFFFFF; --ink:#1B2126; --muted:#5C656C; --line:#D8DCD7; --soft:#E8EBE7;
+  --accent:#B4441B; --accent-soft:#F6E3DA;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --good:#1F7A3E; --warn:#9A6200; --bad:#B42318;
+  --f-display:"Unbounded","Manrope",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131618; --surface:#1B1F22; --ink:#ECEDEA; --muted:#9AA2A8; --line:#2D3337; --soft:#22272A;
+  --accent:#F08A5D; --accent-soft:#3A2419;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --good:#5BC27F; --warn:#E0A43A; --bad:#F2776B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131618; --surface:#1B1F22; --ink:#ECEDEA; --muted:#9AA2A8; --line:#2D3337; --soft:#22272A;
+  --accent:#F08A5D; --accent-soft:#3A2419;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --good:#5BC27F; --warn:#E0A43A; --bad:#F2776B; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.08}
+h2{font-size:clamp(20px,2.6vw,26px);line-height:1.2}
+h3{font-family:var(--f-body);font-size:16px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+section{display:flex;flex-direction:column;gap:20px}
+.head{display:flex;flex-direction:column;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:24px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.tile{background:var(--surface);padding:18px 18px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tile .v{font-family:var(--f-display);font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.1}
+.tile .l{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+@media (max-width:760px){.facts{grid-template-columns:1fr}}
+ul.dry{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.dry li{padding-left:18px;position:relative;max-width:72ch}
+ul.dry li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:2px;background:var(--accent)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;background:var(--soft);white-space:nowrap}
+td.r,th.r{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.total td{font-weight:700;background:var(--soft)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:3px;white-space:nowrap}
+.tag.warn{color:var(--warn);border:1px solid var(--warn)}
+.tag.bad{color:var(--bad);border:1px solid var(--bad)}
+.tag.good{color:var(--good);border:1px solid var(--good)}
+.card{background:var(--surface);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:14px 16px;font-size:14px;max-width:none}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:8px 10px;border-radius:4px;white-space:nowrap;z-index:5;line-height:1.45}
+.tip[hidden]{display:none!important}
+.calc{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:24px}
+@media (max-width:820px){.calc{grid-template-columns:1fr}}
+.fields{display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:13px;font-weight:600}
+.field .row{display:flex;align-items:center;gap:10px}
+.field input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.field output{font-family:var(--f-mono);font-size:13px;min-width:86px;text-align:right}
+.res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.res > div{background:var(--surface);padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.res .h{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.res .big{font-family:var(--f-display);font-size:24px;font-weight:700}
+.res dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:13px}
+.res dt{color:var(--muted)} .res dd{margin:0;font-family:var(--f-mono);text-align:right}
+@media (max-width:560px){.res{grid-template-columns:1fr}}
+.src{font-size:13px;color:var(--muted)}
+.src ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.src a{color:inherit}
+a{color:var(--accent)}
+input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+</style>
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">HDR Group · аналитика и предложение по продвижению · 22.10.2026</div>
+  <h1>Ресторан «Фабрика»: рынок, спрос и продвижение в Яндекс Директе и ВКонтакте</h1>
+  <div class="meta">
+    <span>Ростов-на-Дону, Нахичевань, ул. Богданова, 86, 2 этаж</span>
+    <span>Средний чек <b>1 000–2 500 ₽</b></span>
+    <span>Яндекс Карты: <b>5,0</b> · 158 оценок · 124 отзыва · «Хорошее место 2026»</span>
+    <span>Сайта нет · Telegram-канал</span>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">Сводка</div>
+  <div class="tiles">
+    <div class="tile"><span class="v num">3 674</span><span class="l">заведения общепита в Ростове-на-Дону (2ГИС, август 2026)</span></div>
+    <div class="tile"><span class="v num">55 178</span><span class="l">запросов «рестораны ростова на дону» за месяц (Вордстат)</span></div>
+    <div class="tile"><span class="v num">30 000–50 000 ₽</span><span class="l">рекламный бюджет на 30 дней, два канала</span></div>
+    <div class="tile"><span class="v num">27</span><span class="l">дополнительных гостей окупают 40 000 ₽ рекламы по выручке при чеке 1 500 ₽</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">01 · Карточка ресторана</div>
+  <h2>«Фабрика» в Яндекс Картах</h2>
+  <div class="tblwrap"><table>
+    <tbody>
+      <tr><td>Категория</td><td>Ресторан, кальян-бар</td></tr>
+      <tr><td>Адрес</td><td>Ростов-на-Дону, Нахичевань, ул. Богданова, 86, 2 этаж</td></tr>
+      <tr><td>Рейтинг</td><td class="num">5,0 · 158 оценок · 124 отзыва</td></tr>
+      <tr><td>Награда</td><td>«Хорошее место 2026» (Яндекс Карты)</td></tr>
+      <tr><td>Средний чек</td><td class="num">1 000–2 500 ₽</td></tr>
+      <tr><td>Особенности</td><td>Доставка, еда навынос, парковка, Wi-Fi, оплата картой, кофе с собой, спортивные трансляции, банкеты, деловые встречи, корпоративы, семейные ужины, дни рождения</td></tr>
+      <tr><td>Оценки гостей по темам</td><td>Интерьер 100% · атмосфера 95% · кальян 94% · еда 89% · персонал 85% · ожидание 84% · напитки 82%</td></tr>
+      <tr><td>Сайт</td><td>Нет. Указан Telegram-канал</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Выдача Яндекс Карт по запросам «кальян-бар» и «ресторан с кальяном» в Ростове, первые 5 мест: Мистер Хука, Black Graphite lounge &amp; bar, Дымовье, Помпей, Лариса жарит, Ништяк 2.0. «Фабрики» в первой пятёрке нет.</p>
+</section>
+
+<section>
+  <div class="eyebrow">02 · Рынок</div>
+  <h2>Общепит Ростова-на-Дону и области</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Показатель</th><th class="r">Значение</th><th>Период / источник</th></tr></thead>
+    <tbody>
+      <tr><td>Население Ростова-на-Дону</td><td class="r">≈ 1,14 млн</td><td>Росстат, Ростовстат</td></tr>
+      <tr><td>Заведения общепита в городе (рестораны, кафе, кофейни, фастфуд)</td><td class="r">3 674</td><td>2ГИС, август 2026; +5,15% г/г</td></tr>
+      <tr><td>Из них кофеен</td><td class="r">443</td><td>2ГИС, август 2026; +47% г/г</td></tr>
+      <tr><td>Действующие предприятия общепита в Ростовской области</td><td class="r">6 155</td><td>Контур.Фокус, янв–сен 2026; 5-е место в РФ</td></tr>
+      <tr><td>Открытия / закрытия в области</td><td class="r">891 / 808</td><td>янв–сен 2026; закрытия +18,3% г/г, чистый прирост 83 (в 2025 — 261)</td></tr>
+      <tr><td>Оборот общепита области</td><td class="r">≈ 70 млрд ₽</td><td>янв–авг 2026, «Деловая газета. Юг»</td></tr>
+      <tr><td>Средний чек кафе и ресторанов, область</td><td class="r">1 300 ₽</td><td>17,1% транзакций; фастфуд — 440 ₽ (79,2%)</td></tr>
+      <tr><td>Средний чек кафе и ресторанов Ростова, новогодние каникулы</td><td class="r">1 500 ₽</td><td>1–8 янв 2025, −9% г/г, Контур.Маркет</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">03 · Спрос</div>
+  <h2>Поисковые запросы в Ростове: Яндекс Вордстат</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Запрос (все формулировки с этим словом)</th><th class="r">Сентябрь 2026</th><th class="r">Сентябрь 2025</th><th class="r">Г/г</th><th>Пик за 2 года</th></tr></thead>
+    <tbody id="demandBody"></tbody>
+  </table></div>
+  <div class="facts">
+    <div class="card">
+      <h3>Целевые формулировки, месяц</h3>
+      <div class="tblwrap" style="border:0"><table>
+        <tbody>
+          <tr><td>рестораны ростова на дону</td><td class="r">55 178</td></tr>
+          <tr><td>кафе ростов на дону</td><td class="r">17 454</td></tr>
+          <tr><td>бар ростов на дону</td><td class="r">8 428</td></tr>
+          <tr><td>доставка еды ростов</td><td class="r">3 389</td></tr>
+          <tr><td>кальянная ростов</td><td class="r">1 980</td></tr>
+          <tr><td>где поесть в ростове</td><td class="r">1 753</td></tr>
+          <tr><td>отметить день рождения в ростове</td><td class="r">1 524</td></tr>
+          <tr><td>корпоратив ростов</td><td class="r">1 335</td></tr>
+          <tr><td>банкетный зал ростов</td><td class="r">845</td></tr>
+          <tr><td>бизнес ланч ростов</td><td class="r">370</td></tr>
+          <tr><td>рестораны с детской комнатой ростов</td><td class="r">135</td></tr>
+          <tr><td>рестораны на нахичевани</td><td class="r">99</td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">Вордстат, регион Ростов-на-Дону, 08.09–07.10.2026.</p>
+    </div>
+    <div class="card">
+      <h3>Запросы с названием «Фабрика»</h3>
+      <div class="tblwrap" style="border:0"><table>
+        <tbody>
+          <tr><td>ресторан фабрика (все)</td><td class="r">579</td></tr>
+          <tr><td>фабрика ростов ресторан</td><td class="r">435</td></tr>
+          <tr><td>богданова 86</td><td class="r">156</td></tr>
+          <tr><td>фабрика богданова 86</td><td class="r">97</td></tr>
+          <tr><td>ресторан ла фабрика</td><td class="r">111</td></tr>
+          <tr><td>ресторан ля фабрика ростов</td><td class="r">103</td></tr>
+          <tr><td>фабрика ресторан красный аксай</td><td class="r">90</td></tr>
+        </tbody>
+      </table></div>
+      <p>Часть запросов «Фабрика» относится к другим заведениям: «Ла Фабрика» и «Фабрика» в Красном Аксае.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Сезонность: индекс спроса, средний месяц = 100</h3>
+    <div class="legend" id="seasonLegend"></div>
+    <div class="chart" id="seasonChart"></div>
+    <p class="src">Вордстат, Ростов-на-Дону, помесячно октябрь 2024 — сентябрь 2026.</p>
+  </div>
+  <ul class="dry">
+    <li>«Корпоратив»: декабрь 2024 — 33 373 запроса, декабрь 2025 — 23 990. Это 4,4 и 3,2 среднего месяца.</li>
+    <li>«Ресторан» и «бар»: максимум в октябре 2025 — 170 659 и 78 665 запросов.</li>
+    <li>«Кальянная»: 3 600–5 500 запросов в месяц.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">04 · Ограничения</div>
+  <h2>Требования к рекламе</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Фактор</th><th>Статус</th></tr></thead>
+    <tbody>
+      <tr><td>Реклама табака, курительных принадлежностей, в том числе кальянов (ФЗ «О рекламе», ст. 7 п. 8)</td><td><span class="tag bad">Запрет</span></td></tr>
+      <tr><td>Сайт ресторана</td><td><span class="tag warn">Нет</span></td></tr>
+      <tr><td>Маркировка интернет-рекламы (ERID)</td><td><span class="tag warn">Обязательна</span></td></tr>
+      <tr><td>НДС 22% с 01.01.2026</td><td><span class="tag warn">Действует</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">05 · Задача продвижения</div>
+  <h2>Тестовый период 30 дней</h2>
+  <p>Предлагаем провести 30-дневный рекламный тест, чтобы оценить, какие каналы помогают привлекать дополнительных гостей в ресторан, сколько стоит целевое действие и насколько реклама может быть экономически оправданной. Поскольку отдельного сайта нет, на старте можно использовать карточку ресторана в Яндекс Картах и рекламные форматы ВКонтакте, ведущие к обращению или знакомству с заведением.</p>
+</section>
+
+<section>
+  <div class="eyebrow">06 · Каналы продвижения</div>
+  <h2>Яндекс Директ и ВКонтакте</h2>
+  <div class="facts">
+    <div class="card">
+      <h3>Яндекс Директ — продвижение в Яндекс Картах</h3>
+      <p>Приоритетный канал для работы с аудиторией, которая уже ищет ресторан или заведение поблизости. Продвигаем карточку ресторана, фотографии, маршрут, звонок и возможность связаться или забронировать стол.</p>
+      <p><b>Рекомендуемый рекламный бюджет:</b> <span class="num">15 000–25 000 ₽</span> на 30 дней.</p>
+    </div>
+    <div class="card">
+      <h3>Реклама во ВКонтакте</h3>
+      <p>Канал для привлечения внимания жителей ближайших районов и формирования повода посетить ресторан. Вместо общей рекламы заведения рекомендуем тестировать конкретные предложения: меню, вечернюю программу, повод для встречи или посещение компанией. Формат и материалы необходимо предварительно проверить на соответствие требованиям законодательства к рекламе ресторанных услуг.</p>
+      <p><b>Рекомендуемый рекламный бюджет:</b> <span class="num">15 000–25 000 ₽</span> на 30 дней.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">07 · Предварительный бюджет</div>
+  <h2>Бюджет на 30 дней</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Статья</th><th class="r">Бюджет на 30 дней</th><th>Комментарий</th></tr></thead>
+    <tbody>
+      <tr><td>Яндекс Карты</td><td class="r">15 000–25 000 ₽</td><td>Тест продвижения карточки; итоговую стоимость уточнить в кабинете</td></tr>
+      <tr><td>ВКонтакте</td><td class="r">15 000–25 000 ₽</td><td>Тест аудитории и рекламных предложений</td></tr>
+      <tr class="total"><td>Итого рекламные расходы</td><td class="r">30 000–50 000 ₽</td><td>Оплата рекламным площадкам</td></tr>
+      <tr><td>Услуги агентства</td><td class="r">Оплачиваются отдельно</td><td>Стоимость услуг агентства добавляется к рекламному бюджету</td></tr>
+    </tbody>
+  </table></div>
+  <p>Для осторожного старта можно выбрать только Яндекс Карты с бюджетом 15 000–20 000 ₽. Если задача — сравнить два канала, рекомендуемый рекламный бюджет составляет 30 000–45 000 ₽ на первый месяц. Расходы на рекламу и услуги агентства оплачиваются отдельно.</p>
+</section>
+
+<section>
+  <div class="eyebrow">08 · Примерная модель отдачи</div>
+  <h2>Расчётные ориентиры по каналам</h2>
+  <p>Ниже приведены расчётные ориентиры для планирования, а не гарантированный прогноз. Реальные результаты зависят от конкуренции, настроек, рекламных материалов, спроса и качества карточки.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Показатель</th><th class="r">Яндекс Карты</th><th class="r">ВКонтакте</th><th>Как трактовать</th></tr></thead>
+    <tbody>
+      <tr><td>Примерный бюджет</td><td class="r">20 000 ₽</td><td class="r">20 000 ₽</td><td>Расчётный сценарий</td></tr>
+      <tr><td>Ориентир цены клика</td><td class="r">50–100 ₽</td><td class="r">30–70 ₽</td><td>Допущение для предварительного расчёта</td></tr>
+      <tr><td>Расчётное число кликов</td><td class="r">200–400</td><td class="r">285–665</td><td>Бюджет ÷ ориентир цены клика</td></tr>
+      <tr><td>Целевые действия</td><td>Звонки, маршруты, бронирования</td><td>Обращения, переходы, бронирования</td><td>Не каждый клик становится визитом</td></tr>
+    </tbody>
+  </table></div>
+  <p>Важно: клик не равен гостю. Часть людей изучает карточку или строит маршрут, но не приезжает; часть гостей приходит без звонка или онлайн-обращения. Поэтому результат нужно оценивать по обращениям и фактическим визитам.</p>
+</section>
+
+<section>
+  <div class="eyebrow">09 · Окупаемость</div>
+  <h2>Как выглядит окупаемость</h2>
+  <p>Для примера возьмём рекламный бюджет 40 000 ₽ и условный средний чек 1 500 ₽ на одного гостя. Это иллюстрация, а не подтверждённые показатели ресторана.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th class="r">Дополнительные гости</th><th class="r">Выручка при чеке 1 500 ₽</th><th>Сравнение с рекламными расходами 40 000 ₽</th></tr></thead>
+    <tbody>
+      <tr><td class="r">20</td><td class="r">30 000 ₽</td><td>Выручка ниже расходов на рекламу</td></tr>
+      <tr><td class="r">40</td><td class="r">60 000 ₽</td><td>Выручка выше расходов на рекламу на 20 000 ₽</td></tr>
+      <tr><td class="r">60</td><td class="r">90 000 ₽</td><td>Выручка выше расходов на рекламу на 50 000 ₽</td></tr>
+      <tr><td class="r">100</td><td class="r">150 000 ₽</td><td>Выручка выше расходов на рекламу на 110 000 ₽</td></tr>
+    </tbody>
+  </table></div>
+  <p>При среднем чеке 1 500 ₽ около 27 дополнительных гостей дают выручку, сопоставимую с рекламными расходами в 40 000 ₽. Однако выручка не равна прибыли: для оценки реальной окупаемости нужно учитывать себестоимость заказов и другие переменные расходы, а также оплату услуг агентства. Поэтому целевой показатель — не только количество гостей, но и стоимость привлечения гостя относительно маржинальной прибыли от его заказа.</p>
+</section>
+
+<section>
+  <div class="eyebrow">10 · Форматы работы</div>
+  <h2>Три варианта</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Вариант</th><th class="r">Стоимость</th><th class="r">Рекламный бюджет</th><th>Состав</th></tr></thead>
+    <tbody>
+      <tr><td><b>Вариант 1. Проверка спроса</b></td><td class="r">25 000–35 000 ₽<br>+ оплата услуг агентства</td><td class="r">15 000–20 000 ₽</td><td>Продвижение в Яндекс Картах, проверка карточки и контактных данных, анализ доступной статистики звонков и маршрутов, итоговый отчёт.</td></tr>
+      <tr><td><b>Вариант 2. Два канала</b></td><td class="r">55 000–75 000 ₽<br>+ оплата услуг агентства</td><td class="r">30 000–45 000 ₽</td><td>Яндекс Карты и тест рекламы во ВКонтакте в допустимом формате, подготовка нескольких креативов, сравнение целевых действий, оптимизация и итоговый отчёт.</td></tr>
+      <tr><td><b>Вариант 3. Продвижение с аналитикой</b></td><td class="r">75 000–100 000 ₽<br>+ оплата услуг агентства</td><td>Общий бюджет на первый месяц, без учёта стоимости услуг агентства</td><td>Два канала, расширенный комплект креативов, тестирование предложений, настройка учёта обращений и визитов, анализ стоимости привлечения гостей. Разработка посадочной страницы при необходимости оценивается отдельно.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">11 · Оценка результата</div>
+  <h2>Как будем оценивать результат</h2>
+  <ul class="dry">
+    <li>Количество звонков, построенных маршрутов и запросов на бронирование из карточки.</li>
+    <li>Количество обращений и целевых действий из ВКонтакте.</li>
+    <li>Количество фактических визитов, по возможности отмеченных персоналом.</li>
+    <li>Стоимость привлечения одного дополнительного гостя.</li>
+    <li>Выручка и, по возможности, маржинальная прибыль от привлечённых гостей.</li>
+  </ul>
+  <p>Для более точной оценки рекомендуем персоналу задавать новым гостям вопрос «Откуда вы о нас узнали?» и отмечать ответы. Статистика рекламных кабинетов сама по себе не подтверждает количество реальных визитов.</p>
+</section>
+
+<section>
+  <div class="eyebrow">12 · Перед запуском</div>
+  <h2>Что уточнить перед запуском</h2>
+  <ol class="dry" style="list-style:decimal;padding-left:20px;display:flex;flex-direction:column;gap:10px;margin:0">
+    <li style="padding-left:4px">Средний чек: на одного гостя или на компанию; ориентировочная маржинальность заказов.</li>
+    <li style="padding-left:4px">Загрузка по дням и часам: когда есть свободные места и важнее всего привлечь гостей.</li>
+    <li style="padding-left:4px">Приоритетная цель: повседневные визиты, бронирования компаний или мероприятия.</li>
+    <li style="padding-left:4px">Доступ к Яндекс Бизнесу и рекламным кабинетам, текущая статистика просмотров, звонков и маршрутов.</li>
+  </ol>
+  <p>Перед запуском необходимо проверить доступность выбранных рекламных форматов и соответствие материалов законодательным требованиям РФ, особенно с учётом кальянной составляющей заведения. Реклама не должна содержать продвижение табака, кальянов или связанных с ними товаров.</p>
+</section>
+
+<section>
+  <div class="eyebrow">13 · Рекомендация</div>
+  <h2>Рекомендация</h2>
+  <p>Если задача — начать с минимального риска, рекомендуем протестировать Яндекс Карты с бюджетом 15 000–20 000 ₽. Если ресторан готов сравнить горячий спрос и привлечение новой аудитории, можно запустить два канала с рекламным бюджетом 30 000–45 000 ₽ на 30 дней. Стоимость услуг агентства оплачивается дополнительно к рекламному бюджету. После тестового периода решение о масштабировании принимается на основе фактической стоимости привлечения гостей и экономики заказов. Гарантированное количество гостей до получения статистики не обещается.</p>
+</section>
+
+<section class="src">
+  <div class="eyebrow">Источники</div>
+  <ol>
+    <li>Предложение по продвижению ресторана «Фабрика», HDR Group (разделы 05–13)</li>
+    <li>Яндекс Вордстат, регион Ростов-на-Дону, выгрузка 22.10.2026 — wordstat.yandex.ru</li>
+    <li>Карточка «Фабрика» в Яндекс Картах — <a href="https://yandex.ru/maps/org/fabrika/178860656686/" target="_blank" rel="noopener">yandex.ru/maps/org/fabrika/178860656686</a></li>
+    <li><a href="https://south.vedomosti.ru/south/news/2026/08/20/1222629-kolichestvo-kofeen" target="_blank" rel="noopener">Ведомости. Юг — количество кофеен в Ростове выросло на 47% (2ГИС), 20.08.2026</a></li>
+    <li><a href="https://www.dg-yug.ru/news/20253450.html" target="_blank" rel="noopener">Деловая газета. Юг — число закрытий общепита выросло на 18% (Контур.Фокус), 16.09.2026</a></li>
+    <li><a href="https://www.dg-yug.ru/news/20257937.html" target="_blank" rel="noopener">Деловая газета. Юг — оборот общепита на Дону почти 70 млрд ₽, 13.10.2026</a></li>
+    <li><a href="https://rostov.rbc.ru/rostov/freenews/67972a229a79470c9abd4d51" target="_blank" rel="noopener">РБК Ростов — средний чек в кафе Ростова в новогодние каникулы, 27.01.2025</a></li>
+  </ol>
+</section>
+
+<footer>Подготовлено HDR Group.</footer>
+</div>
+
+<script>
+(function(){
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const MONTHS=["окт 24","ноя 24","дек 24","янв 25","фев 25","мар 25","апр 25","май 25","июн 25","июл 25","авг 25","сен 25","окт 25","ноя 25","дек 25","янв 26","фев 26","мар 26","апр 26","май 26","июн 26","июл 26","авг 26","сен 26"];
+const S={
+ "ресторан":[150050,161008,150752,153570,139761,154461,130373,141402,148761,158554,151242,147284,170659,164589,140806,129890,124768,138651,124590,130238,130888,141115,141949,138372],
+ "бар":[47170,53932,53609,52162,48865,52567,42836,44783,46737,48017,45423,41678,78665,61037,52438,49831,42331,46409,41655,43730,42526,44346,43763,43500],
+ "корпоратив":[10059,15929,33373,7211,4681,4151,3086,3701,4113,4073,4073,4968,9711,13106,23990,5771,3493,3341,2562,2951,3277,4014,3940,5423],
+ "где поесть":[4058,4326,2981,4121,3211,3972,3847,4759,5336,5802,5782,4582,4234,3460,2481,3645,2987,3965,4150,4920,5034,5330,5235,4637],
+ "кальянная":[4736,5324,5220,5549,4623,4606,4206,4170,4016,3976,4293,3759,4624,4290,3887,4242,3973,4051,3700,3935,3613,3819,3635,3759],
+ "отметить день рождения":[3957,3959,3129,4425,3819,4191,3624,3634,4200,4610,5380,4948,5080,4436,2370,3897,3080,3034,3130,3021,3241,3228,3305,3499],
+ "лаунж":[2236,2658,2692,2719,2707,2851,2142,2344,2343,2527,2129,2290,2471,2793,2255,2340,2311,2632,2288,2332,2256,2520,2542,2254],
+ "банкетный зал":[2190,2188,1700,2137,1638,1798,1591,1589,1790,2144,2305,2472,2544,2191,1428,1609,1587,1498,1369,1747,1634,1693,1903,2183]
+};
+const db=document.getElementById('demandBody');
+for(const [k,v] of Object.entries(S)){
+  const yoy=(v[23]/v[11]-1)*100; const mx=Math.max(...v);
+  const cls=yoy>=3?'good':(yoy<=-3?'bad':'');
+  db.insertAdjacentHTML('beforeend',`<tr><td>${k}</td><td class="r">${fmt(v[23])}</td><td class="r">${fmt(v[11])}</td><td class="r" style="color:${cls?`var(--${cls})`:'inherit'}">${yoy>0?'+':''}${yoy.toFixed(1).replace('.',',')}%</td><td>${MONTHS[v.indexOf(mx)]} — ${fmt(mx)}</td></tr>`);
+}
+const SER=[["ресторан","--s1"],["корпоратив","--s2"],["банкетный зал","--s3"],["кальянная","--s4"]];
+const lg=document.getElementById('seasonLegend');
+SER.forEach(([k,c])=>lg.insertAdjacentHTML('beforeend',`<span><i style="background:var(${c})"></i>${k}</span>`));
+const idx=SER.map(([k,c])=>{const v=S[k];const a=v.reduce((x,y)=>x+y,0)/v.length;return {k,c,v:v.map(x=>x/a*100),raw:v}});
+function seasonChart(){
+  const el=document.getElementById('seasonChart');
+  const W=Math.max(320,el.clientWidth||900),H=Math.round(Math.min(340,Math.max(240,W*.36)));
+  const m={l:40,r:14,t:12,b:30},iw=W-m.l-m.r,ih=H-m.t-m.b;
+  const ymax=500,ticks=[0,100,200,300,400,500];
+  const x=i=>m.l+i*(iw/23), y=v=>m.t+ih-(v/ymax)*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Индекс сезонности спроса">`;
+  ticks.forEach(t=>{s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1" ${t===100?'stroke-dasharray="4 3"':''}/><text x="${m.l-8}" y="${y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--f-mono)">${t}</text>`});
+  const step=W<520?4:2;
+  MONTHS.forEach((mo,i)=>{if(i%step===0)s+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--muted)">${mo}</text>`});
+  idx.forEach(o=>{s+=`<polyline fill="none" stroke="var(${o.c})" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${o.v.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`});
+  const pk=idx[1];const pi=pk.v.indexOf(Math.max(...pk.v));
+  s+=`<circle cx="${x(pi)}" cy="${y(pk.v[pi])}" r="4" fill="var(${pk.c})" stroke="var(--surface)" stroke-width="2"/><text x="${x(pi)+8}" y="${y(pk.v[pi])+4}" font-size="11" fill="var(--ink)">${Math.round(pk.v[pi])}</text>`;
+  s+=`<line id="xh" x1="0" x2="0" y1="${m.t}" y2="${m.t+ih}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/>`;
+  s+=`<rect x="${m.l}" y="${m.t}" width="${iw}" height="${ih}" fill="transparent" id="hit"/></svg><div class="tip" hidden></div>`;
+  el.innerHTML=s;
+  const hit=el.querySelector('#hit'),xh=el.querySelector('#xh'),tip=el.querySelector('.tip');
+  function move(ev){const r=el.querySelector('svg').getBoundingClientRect();const px=(ev.clientX-r.left)*(W/r.width);let i=Math.round((px-m.l)/(iw/23));i=Math.max(0,Math.min(23,i));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');
+    tip.innerHTML=`<b>${MONTHS[i]}</b><br>`+idx.map(o=>`${o.k}: ${fmt(o.raw[i])} (${Math.round(o.v[i])})`).join('<br>');
+    tip.hidden=false;const tx=(x(i)/W)*r.width;tip.style.left=Math.min(tx+12,r.width-tip.offsetWidth-4)+'px';tip.style.top='8px';}
+  hit.addEventListener('pointermove',move);hit.addEventListener('pointerleave',()=>{tip.hidden=true;xh.setAttribute('visibility','hidden')});
+}
+seasonChart();
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(seasonChart,150)});
+})();
+</script>
+</body></html>
