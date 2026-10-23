@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ОткрытиЯ: анализ присутствия</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: тетрадная сетка — узкая колонка отчёта, графики на всю ширину колонки, номера блоков как в плане урока */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --line:#dde3ea; --grid:#e9eef3;
+  --fg:#18202b; --muted:#5d6a7a;
+  --ink:#2747c9; --ink-soft:#dfe5fb; --ochre:#c7861a; --ochre-soft:#f6ead2;
+  --good:#2b8a5a; --mid:#b88a1b; --risk:#c4443a; --us:#2747c9; --comp:#9aa7b6;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10151c; --surface:#171e28; --line:#2a3441; --grid:#1f2833;
+  --fg:#e6ebf1; --muted:#97a4b4;
+  --ink:#7f98ff; --ink-soft:#243058; --ochre:#e2a542; --ochre-soft:#3a2f1b;
+  --good:#4cc08a; --mid:#d9ad45; --risk:#ef6c60; --us:#7f98ff; --comp:#5d6a7a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --line:#2a3441; --grid:#1f2833;
+  --fg:#e6ebf1; --muted:#97a4b4;
+  --ink:#7f98ff; --ink-soft:#243058; --ochre:#e2a542; --ochre-soft:#3a2f1b;
+  --good:#4cc08a; --mid:#d9ad45; --risk:#ef6c60; --us:#7f98ff; --comp:#5d6a7a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(24px,4vw,38px);line-height:1.15}
+h2{font-size:clamp(19px,2.6vw,24px);line-height:1.2}
+h3{font-family:var(--f-body);font-size:15px;font-weight:600}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sec{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;gap:14px;align-items:baseline}
+.sec-head .n{font-family:var(--f-mono);color:var(--ink);font-size:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.panel .src{font-size:12px;color:var(--muted)}
+.hero{display:flex;flex-direction:column;gap:14px}
+.hero p{max-width:70ch;color:var(--muted);margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-size:26px;line-height:1.1}
+.kpi .l{font-size:13px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.fact .big{font-family:var(--f-display);font-size:32px;color:var(--ink);line-height:1}
+.fact .t{font-weight:600}
+.fact .s{font-size:13px;color:var(--muted)}
+.nodata{border:1px dashed var(--line);border-radius:10px;padding:14px 16px;color:var(--muted);font-size:14px;background:transparent}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
+.tt{position:fixed;z-index:50;pointer-events:none;background:var(--fg);color:var(--bg);font-size:12.5px;padding:7px 9px;border-radius:6px;max-width:260px;line-height:1.35;opacity:0;transition:opacity .08s}
+.tt b{font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13.5px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:12px;cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface)}
+th:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+td.r,th.r{text-align:right}
+td.bad{color:var(--risk);font-weight:600}
+tr.us td{background:var(--ink-soft)}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600}
+.p-good{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.p-mid{background:color-mix(in srgb,var(--mid) 20%,transparent);color:var(--mid)}
+.p-risk{background:color-mix(in srgb,var(--risk) 18%,transparent);color:var(--risk)}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:inherit;font-size:13px;padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.step{border-top:3px solid var(--ink);background:var(--surface);border-radius:0 0 10px 10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.step .when{font-family:var(--f-mono);font-size:12px;color:var(--ochre)}
+.step ul{margin:0;padding-left:18px;font-size:14px;color:var(--fg)}
+.news{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
+.news .fact .big{font-size:26px}
+.news a{color:var(--ink);font-size:12.5px}
+.season-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:10px}
+footer a{color:var(--ink)}
+footer ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+body{margin:0}
+</style>
+</head>
+<body>
+
+
+<div class="wrap" id="app">
+  <header class="hero">
+    <span class="eyebrow">Ижевск · частные школы · данные на 23.10.2026</span>
+    <h1>ОткрытиЯ: анализ филиалов, спрос региона и точки роста</h1>
+    <p>Анализ построен на внешних источниках: публичные карточки Яндекс Карт и 2ГИС, Яндекс Вордстат, сайты школ. Внутренней статистики кабинета нет.</p>
+    <div class="kpis" id="kpis"></div>
+  </header>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Главное за 30 секунд</h2></div>
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">01</span><h2>Куда приходит трафик</h2></div>
+    <div class="nodata">Переходы, звонки, маршруты и конверсия берутся из кабинета Яндекс Бизнеса. Доступа к нему нет, поэтому ниже — что видит родитель в поиске Карт.</div>
+    <div class="panel">
+      <h3>Выдача Яндекс Карт по запросу «частная школа», Ижевск: число оценок у каждой карточки</h3>
+      <div id="c-serp"></div>
+      <div class="legend" id="lg-status"></div>
+      <div class="src">Порядок — как в выдаче. Источник: Яндекс Карты, 23.10.2026</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">02</span><h2>Сравнение всех карточек рынка</h2></div>
+    <div class="filters" id="flt"></div>
+    <div class="tablebox"><table id="tbl"></table></div>
+    <div class="src" style="font-size:12px;color:var(--muted)">Источник: публичные карточки Яндекс Карт, 23.10.2026. Ответы — на 3 последних отзыва.</div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">03</span><h2>Состояние карточек</h2></div>
+    <div class="grid2">
+      <div class="panel"><h3>Сколько из 16 карточек конкурентов проседает — и где ОткрытиЯ</h3><div id="c-weak"></div><div class="legend"><span><i style="background:var(--comp)"></i>Конкуренты с проблемой</span><span><i style="background:var(--good)"></i>У ОткрытиЙ в порядке</span><span><i style="background:var(--risk)"></i>У ОткрытиЙ проседает</span></div></div>
+      <div class="panel"><h3>Рейтинг × число оценок</h3><div id="c-scatter"></div><div class="legend" id="lg-scatter"></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">04</span><h2>Конкуренты</h2></div>
+    <div class="grid2">
+      <div class="panel"><h3>ОткрытиЯ против лидера рынка (Тукей, обе карточки)</h3><div id="c-pair"></div><div class="legend"><span><i style="background:var(--us)"></i>ОткрытиЯ</span><span><i style="background:var(--ochre)"></i>Тукей</span></div></div>
+      <div class="panel"><h3>ОткрытиЯ против медианы 16 конкурентов</h3><div id="c-median"></div><div class="legend"><span><i style="background:var(--us)"></i>ОткрытиЯ</span><span><i style="background:var(--comp)"></i>Медиана конкурентов</span></div></div>
+    </div>
+    <div class="panel"><h3>Брендовый спрос: запросов за 12 месяцев и изменение к прошлому году</h3><div id="c-brand"></div><div class="src">Ижевск, октябрь 2025 — сентябрь 2026 к октябрю 2024 — сентябрю 2025. Источник: Яндекс Вордстат</div></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">05</span><h2>Как клиенты находят школы</h2></div>
+    <div class="nodata">Источники визитов в карточку (геовизор) есть только в кабинете. Ниже — из чего складывается поисковый спрос.</div>
+    <div class="grid2">
+      <div class="panel"><h3>Что уточняют в запросах про частную школу</h3><div id="c-refine"></div><div class="src">Ижевск, топ запросов Вордстата со словами «частная школа», последние 30 дней</div></div>
+      <div class="panel"><h3>Брендовый спрос: ОткрытиЯ против Тукей по месяцам</h3><div id="c-brandline"></div><div class="legend"><span><i style="background:var(--us)"></i>ОткрытиЯ</span><span><i style="background:var(--ochre)"></i>Тукей</span></div><div class="src">Ижевск, Яндекс Вордстат</div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">06</span><h2>Спрос на рынке</h2></div>
+    <div class="panel"><h3>«Частная школа»: запросов в месяц</h3><div id="c-main"></div><div class="legend"><span><i style="background:var(--ink)"></i>Ижевск</span><span><i style="background:var(--ochre)"></i>Удмуртия</span></div><div class="src">Октябрь 2024 — сентябрь 2026. Источник: Яндекс Вордстат</div></div>
+    <div class="panel"><h3>Что растёт и что падает: последние 12 месяцев к предыдущим 12</h3><div id="c-div"></div><div class="src">Удмуртия, Яндекс Вордстат</div></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">07</span><h2>Сезонность</h2></div>
+    <div class="panel"><h3>Запросов в месяц по направлениям</h3><div id="c-heat" style="overflow-x:auto"></div><div class="src">Удмуртия, октябрь 2025 — сентябрь 2026. Источник: Яндекс Вордстат</div></div>
+    <div class="season-cards" id="season"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">08</span><h2>Новые правила и поводы для контента</h2></div>
+    <div class="news" id="news"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="n">09</span><h2>Маршрут роста</h2></div>
+    <div class="route" id="route"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+<div class="tt" id="tt" role="tooltip"></div>
+
+<script>
+const D={"me": {"id": "19890289525", "title": "ОткрытиЯ", "addr": "Воткинское ш., 170Е, Ижевск", "coords": [53.284791, 56.894762], "rating": 4.8, "ratings": 52, "reviews": 17, "photos": 55, "stories": true, "cats": ["Частная школа", "учебный центр"], "good": false, "aspects": [{"n": "Преподаватели", "p": 9, "ng": 1, "c": 11}, {"n": "Персонал", "p": 10, "ng": 1, "c": 11}], "ans3": 3, "n3": 3, "last": "2026-05-20", "serpPos": 5}, "cards": [{"id": "2245765422", "title": "Школа Топ", "rating": 4.9, "ratings": 27, "reviews": 19, "photos": 54, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-09-03", "coords": [53.19891, 56.849007]}, {"id": "234493639961", "title": "СОК школа органичного знания", "rating": 5, "ratings": 124, "reviews": 60, "photos": 64, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-06-03", "coords": [53.203236, 56.857768]}, {"id": "21627548154", "title": "Тукей (Красная, 79)", "rating": 4.9, "ratings": 174, "reviews": 65, "photos": 163, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-03-21", "coords": [53.202929, 56.837559]}, {"id": "83906698915", "title": "Тукей (Удмуртская, 304Б)", "rating": 4.9, "ratings": 122, "reviews": 37, "photos": 155, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2025-12-25", "coords": [53.224364, 56.85842]}, {"id": "217092765429", "title": "Центр Ребус", "rating": 4.5, "ratings": 21, "reviews": 8, "photos": 46, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-04-05", "coords": [53.217344, 56.847575]}, {"id": "172017435135", "title": "Семейный образовательный центр", "rating": 4.5, "ratings": 16, "reviews": 8, "photos": 80, "stories": true, "good": false, "ans3": 2, "n3": 3, "last": "2026-08-29", "coords": [53.193444, 56.87486]}, {"id": "29827310660", "title": "Нова", "rating": 4.5, "ratings": 37, "reviews": 16, "photos": 63, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-02-20", "coords": [53.202298, 56.865445]}, {"id": "133354241596", "title": "Алые паруса", "rating": 4.7, "ratings": 15, "reviews": 11, "photos": 16, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2026-01-31", "coords": [53.184361, 56.844811]}, {"id": "78997342775", "title": "Семейная школа", "rating": 4.2, "ratings": 4, "reviews": 2, "photos": 8, "stories": false, "good": false, "ans3": 1, "n3": 2, "last": "2025-06-01", "coords": [53.257213, 56.881335]}, {"id": "109976610062", "title": "ЛицА", "rating": 4.9, "ratings": 26, "reviews": 15, "photos": 30, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-05-05", "coords": [53.291171, 56.868703]}, {"id": "64235158252", "title": "Маленький гений", "rating": 4.9, "ratings": 48, "reviews": 24, "photos": 34, "stories": true, "good": true, "ans3": 3, "n3": 3, "last": "2026-05-28", "coords": [53.237328, 56.843966]}, {"id": "141664317014", "title": "Умней", "rating": null, "ratings": 0, "reviews": 0, "photos": 15, "stories": false, "good": false, "ans3": 0, "n3": 0, "last": null, "coords": [53.295225, 56.857697]}, {"id": "240469384569", "title": "Мир", "rating": 4.3, "ratings": 8, "reviews": 3, "photos": 42, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2023-04-17", "coords": [53.267415, 56.878364]}, {"id": "4429236018", "title": "Развитие", "rating": 4, "ratings": 4, "reviews": 3, "photos": 8, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2022-06-14", "coords": [53.234736, 56.869036]}, {"id": "33613320641", "title": "Семь пядей", "rating": 4.9, "ratings": 140, "reviews": 45, "photos": 39, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2025-11-28", "coords": [53.203728, 56.853703]}, {"id": "32037167424", "title": "ДельтаПлан", "rating": 4, "ratings": 38, "reviews": 4, "photos": 13, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2023-03-07", "coords": [53.197691, 56.854293]}], "adv": {"2245765422": [1, true], "234493639961": [2, false], "21627548154": [3, false], "83906698915": [4, false], "19890289525": [5, false], "217092765429": [6, false], "172017435135": [7, true], "29827310660": [8, false], "133354241596": [9, false], "78997342775": [10, false], "109976610062": [11, false], "64235158252": [12, false], "141664317014": [13, false], "240469384569": [14, false]}, "serp": [{"id": "2245765422", "title": "Школа Топ", "rating": 4.9, "ratings": 27, "reviews": 19, "photos": 54, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-09-03", "coords": [53.19891, 56.849007], "adv": true}, {"id": "234493639961", "title": "СОК школа органичного знания", "rating": 5, "ratings": 124, "reviews": 60, "photos": 64, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-06-03", "coords": [53.203236, 56.857768], "adv": false}, {"id": "21627548154", "title": "Тукей (Красная, 79)", "rating": 4.9, "ratings": 174, "reviews": 65, "photos": 163, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2026-03-21", "coords": [53.202929, 56.837559], "adv": false}, {"id": "83906698915", "title": "Тукей (Удмуртская, 304Б)", "rating": 4.9, "ratings": 122, "reviews": 37, "photos": 155, "stories": true, "good": false, "ans3": 3, "n3": 3, "last": "2025-12-25", "coords": [53.224364, 56.85842], "adv": false}, {"id": "19890289525", "title": "ОткрытиЯ", "addr": "Воткинское ш., 170Е, Ижевск", "coords": [53.284791, 56.894762], "rating": 4.8, "ratings": 52, "reviews": 17, "photos": 55, "stories": true, "cats": ["Частная школа", "учебный центр"], "good": false, "aspects": [{"n": "Преподаватели", "p": 9, "ng": 1, "c": 11}, {"n": "Персонал", "p": 10, "ng": 1, "c": 11}], "ans3": 3, "n3": 3, "last": "2026-05-20", "serpPos": 5, "us": true, "adv": false}, {"id": "217092765429", "title": "Центр Ребус", "rating": 4.5, "ratings": 21, "reviews": 8, "photos": 46, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-04-05", "coords": [53.217344, 56.847575], "adv": false}, {"id": "172017435135", "title": "Семейный образовательный центр", "rating": 4.5, "ratings": 16, "reviews": 8, "photos": 80, "stories": true, "good": false, "ans3": 2, "n3": 3, "last": "2026-08-29", "coords": [53.193444, 56.87486], "adv": true}, {"id": "29827310660", "title": "Нова", "rating": 4.5, "ratings": 37, "reviews": 16, "photos": 63, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-02-20", "coords": [53.202298, 56.865445], "adv": false}, {"id": "133354241596", "title": "Алые паруса", "rating": 4.7, "ratings": 15, "reviews": 11, "photos": 16, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2026-01-31", "coords": [53.184361, 56.844811], "adv": false}, {"id": "78997342775", "title": "Семейная школа", "rating": 4.2, "ratings": 4, "reviews": 2, "photos": 8, "stories": false, "good": false, "ans3": 1, "n3": 2, "last": "2025-06-01", "coords": [53.257213, 56.881335], "adv": false}, {"id": "109976610062", "title": "ЛицА", "rating": 4.9, "ratings": 26, "reviews": 15, "photos": 30, "stories": false, "good": false, "ans3": 3, "n3": 3, "last": "2026-05-05", "coords": [53.291171, 56.868703], "adv": false}, {"id": "64235158252", "title": "Маленький гений", "rating": 4.9, "ratings": 48, "reviews": 24, "photos": 34, "stories": true, "good": true, "ans3": 3, "n3": 3, "last": "2026-05-28", "coords": [53.237328, 56.843966], "adv": false}, {"id": "141664317014", "title": "Умней", "rating": null, "ratings": 0, "reviews": 0, "photos": 15, "stories": false, "good": false, "ans3": 0, "n3": 0, "last": null, "coords": [53.295225, 56.857697], "adv": false}, {"id": "240469384569", "title": "Мир", "rating": 4.3, "ratings": 8, "reviews": 3, "photos": 42, "stories": false, "good": false, "ans3": 0, "n3": 3, "last": "2023-04-17", "coords": [53.267415, 56.878364], "adv": false}], "serpTotal": 14, "months": ["окт 24", "ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "pairLeader": [["Оценки", 52, 296], ["Отзывы", 17, 102], ["Фото", 55, 318], ["Рейтинг", 4.8, 4.9]], "pairMedian": [["Оценки", 52, 26.5], ["Отзывы", 17, 13.0], ["Фото", 55, 40.5], ["Рейтинг", 4.8, 4.7]], "ws": {"main": {"city": [1399, 1166, 953, 1212, 1209, 1298, 1457, 1192, 1084, 1013, 1530, 1591, 1517, 1242, 1087, 996, 1252, 980, 1157, 961, 885, 940, 1267, 1708], "reg": [1713, 1582, 1310, 1617, 1508, 1693, 1843, 1619, 1559, 1327, 2055, 2143, 2102, 1649, 1451, 1424, 1580, 1352, 1558, 1265, 1202, 1260, 1842, 2294]}, "brandLine": {"us": [97, 73, 69, 81, 115, 247, 135, 130, 81, 53, 130, 174, 98, 99, 73, 62, 63, 67, 53, 76, 64, 69, 67, 122], "leader": [590, 609, 541, 588, 588, 522, 457, 392, 367, 315, 477, 769, 803, 817, 726, 452, 620, 832, 580, 501, 429, 444, 502, 671]}}, "brand": [{"name": "Тукей", "q": "тукей ижевск", "y12": 7377, "p12": 6215, "us": false}, {"name": "Кодология", "q": "кодология ижевск", "y12": 1266, "p12": 982, "us": false}, {"name": "Маленький гений", "q": "маленький гений ижевск", "y12": 1213, "p12": 1273, "us": false}, {"name": "ОткрытиЯ", "q": "открытия ижевск школа", "y12": 913, "p12": 1385, "us": true}, {"name": "СОК", "q": "сок школа ижевск", "y12": 867, "p12": 763, "us": false}, {"name": "Семь пядей", "q": "семь пядей ижевск", "y12": 631, "p12": 712, "us": false}, {"name": "Дельтаплан", "q": "дельтаплан ижевск", "y12": 505, "p12": 671, "us": false}, {"name": "Top IT School", "q": "top it school", "y12": 474, "p12": 492, "us": false}, {"name": "Знатоки", "q": "знатоки ижевск", "y12": 288, "p12": 173, "us": false}, {"name": "Алые паруса", "q": "алые паруса школа ижевск", "y12": 260, "p12": 185, "us": false}, {"name": "ЛицА", "q": "лица школа ижевск", "y12": 222, "p12": 47, "us": false}, {"name": "Центр Ребус", "q": "ребус ижевск центр", "y12": 82, "p12": 22, "us": false}], "yoy": [{"q": "материнский капитал на обучение", "y12": 282, "p12": 182, "ch": 0.5494505494505495}, {"q": "аттестация семейное обучение", "y12": 336, "p12": 242, "ch": 0.3884297520661157}, {"q": "домашнее обучение", "y12": 11431, "p12": 9397, "ch": 0.2164520591678195}, {"q": "семейное обучение", "y12": 5537, "p12": 4624, "ch": 0.19744809688581316}, {"q": "запись в 1 класс", "y12": 2738, "p12": 2305, "ch": 0.1878524945770065}, {"q": "логопед", "y12": 85392, "p12": 76198, "ch": 0.12065933489067955}, {"q": "онлайн школа", "y12": 78480, "p12": 70097, "ch": 0.11959142331340857}, {"q": "впр", "y12": 1691435, "p12": 1511329, "ch": 0.11917061076707984}, {"q": "перевод в другую школу", "y12": 1732, "p12": 1554, "ch": 0.11454311454311454}, {"q": "подготовка к огэ", "y12": 25448, "p12": 23419, "ch": 0.08663905375976771}, {"q": "налоговый вычет за обучение", "y12": 5227, "p12": 4859, "ch": 0.07573574809631611}, {"q": "репетитор", "y12": 94327, "p12": 90911, "ch": 0.037575210920570666}, {"q": "подготовка к егэ", "y12": 24944, "p12": 24073, "ch": 0.03618161425663607}, {"q": "тьютор", "y12": 11260, "p12": 10986, "ch": 0.024940833788458038}, {"q": "летний лагерь", "y12": 27744, "p12": 27101, "ch": 0.023726061768938416}, {"q": "семейное образование", "y12": 4449, "p12": 4362, "ch": 0.019944979367262722}, {"q": "подготовка к школе", "y12": 20976, "p12": 20708, "ch": 0.012941858219045779}, {"q": "робототехника", "y12": 34997, "p12": 34629, "ch": 0.010626931184845072}, {"q": "продленка", "y12": 3609, "p12": 3697, "ch": -0.023803083581282122}, {"q": "детский психолог", "y12": 10528, "p12": 10939, "ch": -0.037571990127068286}, {"q": "городской лагерь", "y12": 962, "p12": 1007, "ch": -0.044687189672293945}, {"q": "профориентация", "y12": 28879, "p12": 33510, "ch": -0.1381975529692629}, {"q": "частная школа цена", "y12": 399, "p12": 487, "ch": -0.1806981519507187}, {"q": "репетитор по математике", "y12": 8093, "p12": 10145, "ch": -0.20226712666338098}, {"q": "частная начальная школа", "y12": 162, "p12": 209, "ch": -0.22488038277511962}, {"q": "школа полного дня", "y12": 306, "p12": 523, "ch": -0.4149139579349904}, {"q": "репетитор по русскому языку", "y12": 2870, "p12": 7254, "ch": -0.6043562172594431}], "refine": [{"n": "Бренды школ", "v": 279, "ex": ["частная школа сок", "частная школа тукей", "ребус ижевск частная школа"]}, {"n": "Цена и стоимость", "v": 179, "ex": ["частная школа цена", "частная школа ижевск цена", "сколько стоит частная школа"]}, {"n": "Вакансии", "v": 151, "ex": ["частная школа вакансии", "частные школы ижевск вакансии", "частная школа открытия вакансии ижевск"]}, {"n": "Выбор: список, рейтинг, отзывы", "v": 79, "ex": ["частные школы ижевска список", "лучшие частные школы", "частная или государственная школа"]}, {"n": "Уровень: начальная, средняя", "v": 54, "ex": ["частные средние школы", "частная общеобразовательная школа", "частная начальная школа"]}, {"n": "Район или адрес", "v": 38, "ex": ["частная школа октябрьский", "частная школа ижевск горького", "частная школа в центре"]}, {"n": "Семейное, онлайн, полный день", "v": 29, "ex": ["частная семейная школа", "частная онлайн школа", "семейное обучение в частной школе"]}], "heat": {"labels": ["окт", "ноя", "дек", "янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен"], "rows": [{"n": "Частная школа", "v": [2102, 1649, 1451, 1424, 1580, 1352, 1558, 1265, 1202, 1260, 1842, 2294]}, {"n": "Подготовка к школе", "v": [2311, 1664, 1338, 1426, 1560, 1496, 1722, 1135, 1461, 1395, 2522, 2946]}, {"n": "Запись в 1 класс", "v": [145, 201, 169, 234, 323, 684, 425, 206, 56, 88, 28, 179]}, {"n": "Семейное обучение", "v": [712, 518, 490, 332, 377, 363, 431, 335, 355, 256, 530, 838]}, {"n": "Подготовка к ЕГЭ", "v": [3189, 2426, 1993, 1782, 1834, 1715, 1851, 1582, 1743, 1324, 1671, 3834]}, {"n": "Подготовка к ОГЭ", "v": [3118, 2788, 2370, 1872, 1950, 2110, 2101, 1896, 1852, 791, 1328, 3272]}, {"n": "Репетитор", "v": [9782, 7943, 6270, 6649, 6145, 6643, 6770, 9152, 7244, 6190, 8133, 13406]}, {"n": "Летний лагерь", "v": [1095, 1066, 915, 1386, 1474, 2429, 3180, 4941, 5821, 2653, 1465, 1319]}]}, "season": [{"k": "На пике сейчас", "t": "«Частная школа» — 2 294 в сентябре 2026", "s": "Запросов в месяц — максимум за два года в Удмуртии; семейное обучение — тоже пик, 838"}, {"k": "Набирает обороты", "t": "Запись в 1 класс: с 145 в октябре до 684 в марте", "s": "Рост в 4,7 раза к весне — время для дней открытых дверей"}, {"k": "Сезонный спад", "t": "Подготовка к ЕГЭ: 4 145 в сентябре 2025 → 3 189 в октябре", "s": "После сентябрьского пика спрос снижается; удерживать его акцией на пробную неделю"}], "kpi": {"gapLeader": 3.3461538461538463, "demand12": 13992}, "facts": [{"big": "5 из 14", "t": "место в поиске Карт «частная школа»", "s": "Выше — Школа Топ (реклама), СОК и две карточки Тукей"}, {"big": "52 vs 174", "t": "оценок у ОткрытиЙ и у лидера", "s": "Тукей на двух адресах собрал 296 оценок, в 5,7 раза больше"}, {"big": "−34%", "t": "брендовый спрос на ОткрытиЯ за год", "s": "У Тукей +19%: 7 377 запросов против 913"}, {"big": "5 мес", "t": "без новых отзывов на Яндексе", "s": "Последний — 20.05.2026; у Школы Топ — 03.09.2026"}, {"big": "4,0", "t": "рейтинг в 2ГИС при 6 оценках", "s": "Карточка не обновлялась, рубрика «Репетиторы»"}, {"big": "+55%", "t": "самый быстрый рост: «материнский капитал на обучение»", "s": "Удмуртия, запросов за 12 мес: 282; семейное обучение +20%"}], "news": [{"big": "1 июня", "t": "ЕГЭ-2026 стартовал позже, сочинение короче 150 слов — 0 баллов", "s": "Повод для поста о подготовке к ЕГЭ в малых группах", "src": "360.ru, 17.04.2026", "url": "https://360.ru/tekst/obrazovanie/ege-2026-novye-trebovanija-i-perenos-srokov-chto-objazatelno-nuzhno-znat-vypusknikam/"}, {"big": "728,9 тыс. ₽", "t": "маткапитал на первого ребёнка с 01.02.2026 можно направить на частную школу с лицензией", "s": "На сайте ОткрытиЙ есть выписка из реестра лицензий — это аргумент для карточки", "src": "РБК, 10.04.2026", "url": "https://www.rbc.ru/life/news/69d8bfdf9a794706f0c87602"}, {"big": "14 300 ₽", "t": "можно вернуть налоговым вычетом за обучение ребёнка (лимит 110 000 ₽)", "s": "Готовая тема: «сколько на самом деле стоит год в ОткрытиЯх»", "src": "Газета.Ru, 23.02.2026", "url": "https://www.gazeta.ru/business/news/2026/02/23/27913201.shtml"}, {"big": "1 362 / 825", "t": "учеников в школе №20 Ижевска при проектной вместимости, вторая смена 4 года", "s": "Локальный повод: малые классы и одна смена", "src": "Сусанин / Рамблер, 05.06.2025", "url": "https://news.rambler.ru/community/54774474-shkolnyy-bardak/"}], "route": [{"when": "Ноябрь", "t": "Навести порядок в карточках", "items": ["Забрать и заполнить карточку 2ГИС: рубрика «Частная школа», фото, цены", "Свести часы работы на сайте, в Яндексе и 2ГИС", "Добавить в Яндекс цены пакетов и лицензию"]}, {"when": "Каждый месяц", "t": "Контент и отзывы", "items": ["2–4 публикации и сторис в месяц", "Просьба об отзыве после каждой пробной недели", "Ответ на каждый отзыв в течение суток"]}, {"when": "Декабрь — апрель", "t": "Зимний сезон: запись в 1 класс и ЕГЭ", "items": ["Акция на пробную неделю", "Посты про маткапитал и налоговый вычет", "Дни открытых дверей в карточке как события"]}, {"when": "Май — август", "t": "Летний сезон: выбор школы на сентябрь", "items": ["Летний лагерь и подготовка к школе", "Отзывы выпускников и результаты экзаменов", "Цель — 100+ оценок к сентябрю"]}], "sources": [{"n": "ОткрытиЯ — Яндекс Карты", "u": "https://yandex.ru/maps/org/otkrytiya/19890289525/"}, {"n": "Поиск «частная школа» Ижевск — Яндекс Карты", "u": "https://yandex.ru/maps/44/izhevsk/search/частная%20школа/"}, {"n": "ОткрытиЯ — 2ГИС", "u": "https://2gis.ru/izhevsk/firm/70000001067992313"}, {"n": "Сайт оцоткрытия.рф", "u": "https://xn--h1adlalkc1a3c2b.xn--p1ai/"}, {"n": "Тукей", "u": "https://tukey.ru/"}, {"n": "Школа Топ Ижевск", "u": "https://topitschool.ru/izhevsk"}, {"n": "Яндекс Вордстат", "u": "https://wordstat.yandex.ru/"}, {"n": "360.ru, 17.04.2026", "u": "https://360.ru/tekst/obrazovanie/ege-2026-novye-trebovanija-i-perenos-srokov-chto-objazatelno-nuzhno-znat-vypusknikam/"}, {"n": "РБК, 10.04.2026", "u": "https://www.rbc.ru/life/news/69d8bfdf9a794706f0c87602"}, {"n": "Газета.Ru, 23.02.2026", "u": "https://www.gazeta.ru/business/news/2026/02/23/27913201.shtml"}, {"n": "Сусанин / Рамблер, 05.06.2025", "u": "https://news.rambler.ru/community/54774474-shkolnyy-bardak/"}], "limits": ["Доступа к кабинету Яндекс Бизнеса нет: переходы, действия, конверсия, доли в зонах конкурентов, геовизор и публикации не показаны.", "Сеть — одна карточка с адресом (Воткинское шоссе, 170Е); онлайн-карточек нет.", "Конкуренты — 14 карточек из поиска Карт «частная школа» и 3 похожих места из карточки ОткрытиЙ, данные на 23.10.2026.", "Вордстат: октябрь 2024 — сентябрь 2026, Ижевск (регион 44) и Удмуртия (11148)."]};
+const $=s=>document.querySelector(s);
+const nf=(v,d=0)=>v==null||isNaN(v)?'нет данных':Number(v).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=v=>(v>0?'+':'')+nf(v*100,0)+'%';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tt=$('#tt');
+function tip(el,html){el.addEventListener('mousemove',e=>{tt.innerHTML=html;tt.style.opacity=1;const w=tt.offsetWidth,h=tt.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;tt.style.left=x+'px';tt.style.top=y+'px'});el.addEventListener('mouseleave',()=>tt.style.opacity=0);el.addEventListener('touchstart',e=>{tt.innerHTML=html;tt.style.opacity=1;const t=e.touches[0];tt.style.left=Math.min(t.clientX,innerWidth-270)+'px';tt.style.top=(t.clientY-60)+'px'},{passive:true})}
+const NS='http://www.w3.org/2000/svg';
+function S(tag,a,p){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+const cw=h=>Math.max(320,Math.round($(h).clientWidth||520));const tr=(t,px)=>t.length*6.4>px?t.slice(0,Math.max(4,Math.floor(px/6.4)-1))+'…':t;
+function svg(host,w,h){const s=S('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'});$(host).appendChild(s);return s}
+const stColor=s=>css(s==='Сильная'?'--good':s==='Риск'?'--risk':'--mid');
+const status=c=>c.rating==null||c.rating<4?'Риск':(c.rating>=4.5&&c.ratings>=30?'Сильная':'Средняя');
+const ALL=[{...D.me,us:true},...D.cards];ALL.forEach(c=>c.status=status(c));D.serp.forEach(c=>c.status=status(c));
+const MON=D.months; // 24 labels
+const last12=a=>a.slice(12).reduce((x,y)=>x+y,0), prev12=a=>a.slice(0,12).reduce((x,y)=>x+y,0);
+
+/* KPI */
+(()=>{const k=D.kpi;const items=[[nf(1),'карточка с адресом в Ижевске'],[nf(D.me.rating,1),'рейтинг на Яндексе, '+nf(D.me.ratings)+' оценки'],[D.me.serpPos+' из '+D.serpTotal,'место в поиске Карт «частная школа»'],[nf(k.demand12),'запросов «частная школа» в Ижевске за 12 мес'],['×'+nf(k.gapLeader,1),'меньше оценок, чем у лидера рынка']];$('#kpis').innerHTML=items.map(([v,l])=>`<div class="kpi"><span class="v num">${v}</span><span class="l">${l}</span></div>`).join('')})();
+
+/* FACTS */
+$('#facts').innerHTML=D.facts.map(f=>`<div class="fact"><span class="big num">${f.big}</span><span class="t">${f.t}</span><span class="s">${f.s}</span></div>`).join('');
+
+/* legend status */
+$('#lg-status').innerHTML=['Сильная','Средняя','Риск'].map(s=>`<span><i style="background:${stColor(s)}"></i>${s}</span>`).join('')+'<span><i style="background:var(--ink);outline:2px solid var(--ink);outline-offset:1px"></i>ОткрытиЯ</span>';
+
+/* 1. SERP bars (horizontal) */
+(()=>{const L=D.serp;const W=cw('#c-serp'),rh=26,H=L.length*rh+24,lx=Math.min(300,W*.46),mx=Math.max(...L.map(c=>c.ratings));const s=svg('#c-serp',W,H);
+const sc=v=>lx+(W-lx-60)*v/mx;
+[0,50,100,150].filter(t=>t<=mx).forEach(t=>{S('line',{x1:sc(t),x2:sc(t),y1:0,y2:H-20,stroke:css('--grid')},s);const tx=S('text',{x:sc(t),y:H-6,'text-anchor':'middle'},s);tx.textContent=nf(t)});
+L.forEach((c,i)=>{const y=i*rh;const g=S('g',{},s);const lab=S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:c.us?'fill:var(--ink);font-weight:600;font-size:12px':'font-size:12px'},g);lab.textContent=tr((i+1)+'. '+c.title+(c.adv?' · реклама':''),lx-12);
+const w=Math.max(2,sc(c.ratings)-lx);S('rect',{x:lx,y:y+5,width:w,height:rh-10,rx:3,fill:stColor(c.status),opacity:c.us?1:.75,stroke:c.us?css('--ink'):'none','stroke-width':c.us?2:0},g);
+const v=S('text',{x:lx+w+6,y:y+rh/2+4,class:'num',style:'fill:var(--fg)'},g);v.textContent=nf(c.ratings);
+S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>${c.title}</b><br>Место в выдаче: ${i+1}${c.adv?' (реклама)':''}<br>Рейтинг: ${nf(c.rating,1)} · оценок: ${nf(c.ratings)}<br>Статус: ${c.status}`)})})();
+
+/* 2. table */
+(()=>{const cols=[['title','Школа',0],['status','Статус',0],['rating','Рейтинг',1],['ratings','Оценок',1],['reviews','Отзывов',1],['photos','Фото',1],['stories','Сторис',0],['serp','Место в Картах',1],['last','Последний отзыв',0],['ans','Ответы',1]];
+const rows=ALL.map(c=>({...c,serp:D.adv[c.id]?D.adv[c.id][0]:null,ans:c.n3?c.ans3+' из '+c.n3:'—'}));
+let key='ratings',dir=-1,flt='Все';const t=$('#tbl');
+const bad={rating:v=>v==null||v<4.5,ratings:v=>v<30,reviews:v=>v<10,photos:v=>v<20,stories:v=>!v,last:v=>!v||v<'2026-01-01'};
+function cell(c,k){const v=c[k];if(k==='status')return`<span class="pill ${v==='Сильная'?'p-good':v==='Риск'?'p-risk':'p-mid'}">${v}</span>`;if(k==='rating')return v==null?'нет':nf(v,1);if(k==='stories')return v?'есть':'нет';if(k==='last')return v?v.split('-').reverse().join('.'):'нет';if(k==='serp')return v==null?'вне топа':v;if(k==='title')return c.title+(c.us?' ★':'');return typeof v==='number'?nf(v):v}
+function draw(){const r=rows.filter(c=>flt==='Все'||c.status===flt).sort((a,b)=>{let x=a[key],y=b[key];if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*dir});
+t.innerHTML='<thead><tr>'+cols.map(([k,n,r])=>`<th class="${r?'r':''}" tabindex="0" data-k="${k}" aria-sort="${k===key?(dir>0?'ascending':'descending'):'none'}">${n}${k===key?(dir>0?' ↑':' ↓'):''}</th>`).join('')+'</tr></thead><tbody>'+r.map(c=>`<tr class="${c.us?'us':''}">`+cols.map(([k,n,ri])=>`<td class="${ri?'r num':''} ${bad[k]&&bad[k](c[k])?'bad':''}">${cell(c,k)}</td>`).join('')+'</tr>').join('')+'</tbody>';
+t.querySelectorAll('th').forEach(th=>{const go=()=>{const k=th.dataset.k;if(k===key)dir*=-1;else{key=k;dir=-1}draw()};th.onclick=go;th.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
+$('#flt').innerHTML=['Все','Сильная','Средняя','Риск'].map(s=>`<button type="button" id="f-${s}" aria-pressed="${s==='Все'}">${s} · ${s==='Все'?rows.length:rows.filter(c=>c.status===s).length}</button>`).join('');
+$('#flt').querySelectorAll('button').forEach(b=>b.onclick=()=>{flt=b.id.slice(2);$('#flt').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()});draw()})();
+
+/* 3a weak bars */
+(()=>{const C=D.cards,me=D.me;const T=[['Нет сторис',c=>!c.stories],['Нет новых отзывов с 01.01.2026',c=>!c.last||c.last<'2026-01-01'],['Меньше 10 оценок',c=>c.ratings<10],['Меньше 30 оценок',c=>c.ratings<30],['Меньше 20 фото',c=>c.photos<20],['Рейтинг ниже 4,5 или нет',c=>c.rating==null||c.rating<4.5],['Нет ответов на последние отзывы',c=>c.n3&&c.ans3===0],['Нет награды «Хорошее место»',c=>!c.good]];
+const W=cw('#c-weak'),rh=30,lx=Math.min(200,W*.5),H=T.length*rh+40,s=svg('#c-weak',W,H),N=C.length,sc=v=>lx+(W-lx-90)*v/N;
+S('text',{x:W-14,y:10,'text-anchor':'middle',style:'font-size:10px;fill:var(--ink)'},s).textContent='Мы';const g0=S('g',{transform:'translate(0,16)'},s);[0,4,8,12,16].forEach(t=>{S('line',{x1:sc(t),x2:sc(t),y1:0,y2:H-34,stroke:css('--grid')},s);S('text',{x:sc(t),y:H-20,'text-anchor':'middle'},g0).textContent=t});
+T.forEach(([n,f],i)=>{const y=i*rh,k=C.filter(f).length,mine=!!f(me);const g=S('g',{},g0);S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:'font-size:12px'},g).textContent=tr(n,lx-10);S('rect',{x:lx,y:y+7,width:Math.max(2,sc(k)-lx),height:rh-14,rx:3,fill:css('--comp')},g);S('text',{x:sc(k)+6,y:y+rh/2+4,class:'num',style:'fill:var(--fg)'},g).textContent=k+' из '+N;S('circle',{cx:W-14,cy:y+rh/2,r:6,fill:mine?css('--risk'):css('--good')},g);S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>${n}</b><br>Конкурентов: ${k} из ${N}<br>ОткрытиЯ: ${mine?'проседает':'в порядке'}`)})})();
+
+/* 3b scatter log x */
+(()=>{const P=ALL.filter(c=>c.rating!=null&&c.ratings>0);const W=cw('#c-scatter'),H=300,l=40,r=16,t=12,b=34,s=svg('#c-scatter',W,H);const lx=v=>l+(W-l-r)*Math.log10(v)/Math.log10(300),y0=3.8,y1=5.05,ly=v=>t+(H-t-b)*(1-(v-y0)/(y1-y0));
+[1,3,10,30,100,300].forEach(v=>{S('line',{x1:lx(v),x2:lx(v),y1:t,y2:H-b,stroke:css('--grid')},s);S('text',{x:lx(v),y:H-b+16,'text-anchor':'middle',class:'num'},s).textContent=nf(v)});
+[4,4.5,5].forEach(v=>{S('line',{x1:l,x2:W-r,y1:ly(v),y2:ly(v),stroke:css('--grid')},s);S('text',{x:l-6,y:ly(v)+4,'text-anchor':'end',class:'num'},s).textContent=nf(v,1)});
+S('text',{x:(W+l)/2,y:H-2,'text-anchor':'middle'},s).textContent='Число оценок';
+P.sort((a,b)=>a.us-b.us).forEach(c=>{const g=S('g',{},s);S('circle',{cx:lx(c.ratings),cy:ly(c.rating),r:c.us?8:6,fill:c.us?css('--us'):stColor(c.status),'fill-opacity':c.us?1:.6,stroke:c.us?css('--surface'):'none','stroke-width':2},g);if(c.us)S('text',{x:lx(c.ratings)+11,y:ly(c.rating)+4,style:'fill:var(--ink);font-weight:600;font-size:12px'},g).textContent='ОткрытиЯ';tip(g,`<b>${c.title}</b><br>Рейтинг ${nf(c.rating,1)} · ${nf(c.ratings)} оценок`)});
+$('#lg-scatter').innerHTML=['Сильная','Средняя','Риск'].map(s=>`<span><i style="background:${stColor(s)}"></i>${s}</span>`).join('')+'<span><i style="background:var(--us)"></i>ОткрытиЯ</span>'})();
+
+/* paired bars generic */
+function pair(host,rows,colA,colB,nameA,nameB){const W=cw(host),rh=46,lx=110,H=rows.length*rh+6,s=svg(host,W,H);rows.forEach(([n,a,b],i)=>{const y=i*rh,mx=Math.max(a,b)||1,sc=v=>(W-lx-60)*v/mx;const g=S('g',{},s);S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:'font-size:12px'},g).textContent=n;S('rect',{x:lx,y:y+6,width:Math.max(2,sc(a)),height:15,rx:3,fill:colA},g);S('text',{x:lx+sc(a)+6,y:y+18,class:'num',style:'fill:var(--fg)'},g).textContent=nf(a,a%1?1:0);S('rect',{x:lx,y:y+24,width:Math.max(2,sc(b)),height:15,rx:3,fill:colB},g);S('text',{x:lx+sc(b)+6,y:y+36,class:'num',style:'fill:var(--fg)'},g).textContent=nf(b,b%1?1:0);S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>${n}</b><br>${nameA}: ${nf(a,a%1?1:0)}<br>${nameB}: ${nf(b,b%1?1:0)}`)})}
+pair('#c-pair',D.pairLeader,css('--us'),css('--ochre'),'ОткрытиЯ','Тукей');
+pair('#c-median',D.pairMedian,css('--us'),css('--comp'),'ОткрытиЯ','Медиана конкурентов');
+
+/* brand bars */
+(()=>{const B=D.brand;if(!B||!B.length){$('#c-brand').innerHTML='<div class="nodata">нет данных</div>';return}const W=cw('#c-brand'),rh=28,lx=Math.min(170,W*.34),H=B.length*rh+4,s=svg('#c-brand',W,H),mx=Math.max(...B.map(b=>b.y12)),sc=v=>(W-lx-Math.min(150,W*.25))*v/mx;
+B.forEach((b,i)=>{const y=i*rh,g=S('g',{},s);S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:b.us?'fill:var(--ink);font-weight:600;font-size:12px':'font-size:12px'},g).textContent=tr(b.name,lx-10);S('rect',{x:lx,y:y+6,width:Math.max(2,sc(b.y12)),height:rh-12,rx:3,fill:b.us?css('--us'):css('--comp')},g);S('text',{x:lx+sc(b.y12)+6,y:y+rh/2+4,class:'num',style:'fill:var(--fg)'},g).textContent=nf(b.y12);const ch=b.p12?(b.y12-b.p12)/b.p12:null;S('text',{x:W-4,y:y+rh/2+4,'text-anchor':'end',class:'num',style:`fill:${ch==null?'var(--muted)':ch>=0?'var(--good)':'var(--risk)'}`},g).textContent=ch==null?'нет базы':pct(ch);S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>${b.name}</b><br>Запрос: «${b.q}»<br>12 мес: ${nf(b.y12)}<br>Год назад: ${nf(b.p12)}`)})})();
+
+/* line chart */
+function line(host,series,labels,H=260){const W=cw(host);const l=46,r=14,t=12,b=30,s=svg(host,W,H);const mx=Math.max(1,...series.flatMap(x=>x.v));const step=Math.pow(10,Math.floor(Math.log10(mx)));const niceMax=Math.ceil(mx/step)*step;const X=i=>l+(W-l-r)*i/(labels.length-1),Y=v=>t+(H-t-b)*(1-v/niceMax);
+for(let k=0;k<=4;k++){const v=niceMax*k/4;S('line',{x1:l,x2:W-r,y1:Y(v),y2:Y(v),stroke:css('--grid')},s);S('text',{x:l-6,y:Y(v)+4,'text-anchor':'end',class:'num'},s).textContent=nf(v)}
+const ev=W<500?6:3;labels.forEach((m,i)=>{if(i%ev===0||i===labels.length-1)S('text',{x:X(i),y:H-8,'text-anchor':'middle'},s).textContent=m});
+series.forEach(se=>{S('path',{d:se.v.map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join(''),fill:'none',stroke:se.c,'stroke-width':2.2,'stroke-linejoin':'round'},s);const li=se.v.length-1;S('circle',{cx:X(li),cy:Y(se.v[li]),r:3.5,fill:se.c},s)});
+labels.forEach((m,i)=>{const g=S('rect',{x:X(i)-(W-l-r)/(labels.length-1)/2,y:t,width:(W-l-r)/(labels.length-1),height:H-t-b,fill:'transparent'},s);tip(g,`<b>${m}</b><br>`+series.map(se=>`${se.n}: ${nf(se.v[i])}`).join('<br>'))})}
+if(D.ws&&D.ws.main){line('#c-main',[{n:'Ижевск',v:D.ws.main.city,c:css('--ink')},{n:'Удмуртия',v:D.ws.main.reg,c:css('--ochre')}],MON)}else $('#c-main').innerHTML='<div class="nodata">нет данных</div>';
+if(D.ws&&D.ws.brandLine){line('#c-brandline',[{n:'ОткрытиЯ',v:D.ws.brandLine.us,c:css('--us')},{n:'Тукей',v:D.ws.brandLine.leader,c:css('--ochre')}],MON,260)}else $('#c-brandline').innerHTML='<div class="nodata">нет данных</div>';
+
+/* refine bars */
+(()=>{const R=D.refine;if(!R||!R.length){$('#c-refine').innerHTML='<div class="nodata">нет данных</div>';return}const W=cw('#c-refine'),rh=28,lx=Math.min(210,W*.48),H=R.length*rh+4,s=svg('#c-refine',W,H),mx=Math.max(...R.map(r=>r.v)),sc=v=>(W-lx-60)*v/mx;R.forEach((r,i)=>{const y=i*rh,g=S('g',{},s);S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:'font-size:12px'},g).textContent=tr(r.n,lx-10);S('rect',{x:lx,y:y+6,width:Math.max(2,sc(r.v)),height:rh-12,rx:3,fill:css('--ink')},g);S('text',{x:lx+sc(r.v)+6,y:y+rh/2+4,class:'num',style:'fill:var(--fg)'},g).textContent=nf(r.v);S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>${r.n}</b><br>${nf(r.v)} запросов<br>${r.ex.map(e=>'«'+e+'»').join('<br>')}`)})})();
+
+/* diverging */
+(()=>{const Q=D.yoy;if(!Q||!Q.length){$('#c-div').innerHTML='<div class="nodata">нет данных</div>';return}const W=cw('#c-div'),rh=22,lx=Math.min(240,W*.42),H=Q.length*rh+26,s=svg('#c-div',W,H);const m=Math.max(...Q.map(q=>Math.abs(q.ch)));const lim=Math.min(m,2)*1.2;const cx=lx+(W-lx-50)/2,sc=v=>(W-lx-50)/2*Math.max(-1,Math.min(1,v/lim));
+S('line',{x1:cx,x2:cx,y1:0,y2:H-22,stroke:css('--line')},s);(W<500?[-0.6,0,0.6]:[-0.6,-0.3,0,0.3,0.6]).filter(v=>Math.abs(v)<=lim).forEach(v=>S('text',{x:cx+sc(v),y:H-6,'text-anchor':'middle',class:'num'},s).textContent=pct(v));
+Q.forEach((q,i)=>{const y=i*rh,g=S('g',{},s);S('text',{x:lx-8,y:y+rh/2+4,'text-anchor':'end',style:'font-size:12px'},g).textContent=tr(q.q,lx-10);const w=sc(q.ch);S('rect',{x:w>=0?cx:cx+w,y:y+4,width:Math.max(2,Math.abs(w)),height:rh-8,rx:2,fill:q.ch>=0?css('--good'):css('--risk')},g);const inside=w<-44;S('text',{x:w>=0?cx+w+5:inside?cx+w+5:cx+w-5,y:y+rh/2+4,'text-anchor':w>=0||inside?'start':'end',class:'num',style:'fill:'+(inside?'var(--bg)':'var(--fg)')+';font-size:11px;font-weight:600'},g).textContent=pct(q.ch);S('rect',{x:0,y,width:W,height:rh,fill:'transparent'},g);tip(g,`<b>«${q.q}»</b><br>Последние 12 мес: ${nf(q.y12)}<br>Предыдущие 12 мес: ${nf(q.p12)}<br>Изменение: ${pct(q.ch)}`)})})();
+
+/* heatmap */
+(()=>{const Hm=D.heat;if(!Hm||!Hm.rows.length){$('#c-heat').innerHTML='<div class="nodata">нет данных</div>';return}const lx=170,cw=44,rh=30,W=lx+cw*12+4,H=Hm.rows.length*rh+26,s=svg('#c-heat',W,H);s.style.minWidth=W+'px';s.style.width=W+'px';
+Hm.labels.forEach((m,j)=>S('text',{x:lx+j*cw+cw/2,y:14,'text-anchor':'middle'},s).textContent=m);
+Hm.rows.forEach((r,i)=>{const mx=Math.max(...r.v),mn=Math.min(...r.v);S('text',{x:lx-8,y:22+i*rh+rh/2+4,'text-anchor':'end',style:'font-size:12px'},s).textContent=r.n;r.v.forEach((v,j)=>{const k=mx>mn?(v-mn)/(mx-mn):0.5;const c=S('rect',{x:lx+j*cw+1,y:22+i*rh+1,width:cw-2,height:rh-2,rx:3,fill:css('--ink'),'fill-opacity':0.08+0.85*k},s);tip(c,`<b>${r.n}</b><br>${Hm.labels[j]}: ${nf(v)} запросов<br>${v===mx?'пик года':v===mn?'минимум года':''}`)})})})();
+$('#season').innerHTML=(D.season||[]).map(c=>`<div class="fact"><span class="eyebrow">${c.k}</span><span class="t">${c.t}</span><span class="s">${c.s}</span></div>`).join('');
+
+/* news, route, footer */
+$('#news').innerHTML=D.news.map(n=>`<div class="fact"><span class="big num">${n.big}</span><span class="t">${n.t}</span><span class="s">${n.s}</span><a href="${n.url}" target="_blank" rel="noopener">${n.src}</a></div>`).join('');
+$('#route').innerHTML=D.route.map(r=>`<div class="step"><span class="when">${r.when}</span><h3>${r.t}</h3><ul>${r.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+$('#foot').innerHTML=`<strong style="color:var(--fg)">Источники и ограничения</strong><ul>${D.sources.map(s=>`<li><a href="${s.u}" target="_blank" rel="noopener">${s.n}</a></li>`).join('')}</ul><ul>${D.limits.map(l=>`<li>${l}</li>`).join('')}</ul>`;
+</script>
+
+</body>
+</html>
