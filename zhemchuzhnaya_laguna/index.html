@@ -73,7 +73,6 @@
   a{color:inherit;}
   [hidden]{display:none!important;}
 
-  /* ---- top bar ---- */
   .topbar{
     position:sticky;
     top:env(safe-area-inset-top,0px);
@@ -128,7 +127,6 @@
   h2{font-size:clamp(24px,4vw,30px);font-weight:700;margin-bottom:6px;}
   .lead{color:var(--ink-soft);font-size:17px;max-width:62ch;margin-top:14px;}
 
-  /* facts grid */
   .facts{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -150,15 +148,19 @@
   }
   .fact .v{font-size:15px;font-weight:600;}
 
-  /* swatches */
-  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:26px;}
-  .swatch{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);}
-  .swatch .chip{height:74px;}
-  .swatch .label{padding:10px 12px;}
-  .swatch .role{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;color:var(--ink-soft);letter-spacing:.05em;}
+  /* swatches — label lives on the color itself, contrast-aware */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:26px;}
+  .swatch{
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    min-height:104px;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:12px 14px;
+  }
+  .swatch .role{font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.85;}
   .swatch .hex{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:14px;margin-top:2px;}
+  .swatch.on-dark{background:#1C1C1C;color:#FFFFFF;}
+  .swatch.on-gold{background:#BB9D7B;color:#1A1A1A;}
+  .swatch.on-light{background:#FFFFFF;color:#1A1A1A;border:1px solid var(--line);}
 
-  /* логика цикла */
   .cycle{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;align-items:center;}
   .cycle .node{
     display:flex;align-items:center;gap:10px;
@@ -169,7 +171,6 @@
   .cycle .txt{font-size:14px;font-weight:600;}
   .cycle .arrow{color:var(--ink-soft);font-size:18px;}
 
-  /* theme cards (news) */
   .card{
     background:var(--card);
     border:1px solid var(--line);
@@ -187,6 +188,10 @@
     border:1px solid color-mix(in srgb, var(--teal) 35%, transparent);
   }
   .card h3{font-size:20px;font-weight:700;line-height:1.3;}
+  .voice{
+    margin-top:14px;font-size:15px;font-style:italic;color:var(--ink-soft);
+    border-left:3px solid var(--roe);padding-left:12px;
+  }
   .card .thesis-list{margin:14px 0 0;padding-left:20px;}
   .card .thesis-list li{margin-bottom:7px;font-size:15px;}
   .cover-thesis{
@@ -220,7 +225,6 @@
   .cover-tz .dots{margin-top:8px;display:flex;gap:8px;}
   .cover-tz .dot{width:16px;height:16px;border-radius:4px;border:1px solid var(--line);}
 
-  /* stories */
   .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:22px;}
   .story{
     background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
@@ -233,7 +237,6 @@
   }
   .story .design-note b{color:var(--ink);}
 
-  /* timeline */
   details.stage{
     border:1px solid var(--line);border-radius:12px;
     padding:14px 18px;margin-top:14px;background:var(--card);
@@ -245,7 +248,14 @@
     background:var(--roe);color:#fff;border-radius:999px;padding:2px 9px;
   }
   .stage-body{margin-top:10px;font-size:14px;color:var(--ink-soft);}
-  .stage-body ul{margin:8px 0 0;padding-left:18px;}
+  .roadmap{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .roadmap li{display:flex;gap:10px;align-items:baseline;}
+  .roadmap .fmt{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;
+    color:var(--teal);flex:0 0 auto;min-width:64px;
+  }
+  .roadmap .t{color:var(--ink);}
+  .roadmap .t b{font-weight:600;}
 
   footer.sources{padding-block:40px 60px;}
   footer.sources ul{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
@@ -275,9 +285,9 @@
 <div class="wrap">
 
   <section id="company">
-    <span class="eyebrow mono">ТЗ · Этап 01</span>
+    <span class="eyebrow mono">ТЗ · Этап 02</span>
     <h1>Гостиница «Жемчужная Лагуна» — контент для Яндекс Карт и 2ГИС</h1>
-    <p class="lead">Гостиница в Воронеже на левом берегу, в двух шагах от Воронежского водохранилища. Материал ниже — 2 новости с обложками и 2 сторис в формате презентации (1 слайд) для карточки компании на Яндекс Картах и в 2ГИС.</p>
+    <p class="lead">Гостиница в Воронеже на левом берегу, в двух шагах от Воронежского водохранилища. Второй этап продолжает рассказ о компании: 2 новости с обложками и 2 сторис в формате презентации (1 слайд) для карточки на Яндекс Картах и в 2ГИС.</p>
 
     <div class="facts">
       <div class="fact"><div class="k">Адрес</div><div class="v">Воронеж, ул. Набережная, 15 (левый берег)</div></div>
@@ -289,9 +299,9 @@
       <div class="fact"><div class="k">Номера</div><div class="v">«Комфорт» 2-местный 12 м², «Полулюкс» до 4 гостей 24 м², семейные номера</div></div>
       <div class="fact"><div class="k">Оснащение номеров</div><div class="v">Wi-Fi, СВЧ, стиральная машина, ТВ, холодильник, чайник, душ</div></div>
       <div class="fact"><div class="k">Территория и сервис</div><div class="v">Зелёный двор, прокат велосипедов, парковка, трансфер (платно)</div></div>
+      <div class="fact"><div class="k">Для гостей</div><div class="v">Бесплатные чай и кофе, маршруты для пеших прогулок, регистрация для иностранных граждан</div></div>
       <div class="fact"><div class="k">Особенность</div><div class="v">Размещение с животными без доплаты</div></div>
       <div class="fact"><div class="k">Аудитория</div><div class="v">Туристы, семьи, командировочные, туристические группы, спортивные команды</div></div>
-      <div class="fact"><div class="k">Публикация</div><div class="v">Карточка компании на Яндекс Картах и в 2ГИС</div></div>
     </div>
   </section>
 
@@ -300,108 +310,95 @@
     <h2>Фирменные цвета «Жемчужной Лагуны»</h2>
     <p class="lead">После анализа сайта, обложек сторис и презентационных слайдов компании определена фирменная палитра — контрастное сочетание графитово-чёрного, белого и тёплого золота.</p>
     <div class="swatches">
-      <div class="swatch">
-        <div class="chip" style="background:#1C1C1C;"></div>
-        <div class="label"><div class="role">Основной / тёмный фон</div><div class="hex">#1C1C1C</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#BB9D7B;"></div>
-        <div class="label"><div class="role">Акцентный / золото</div><div class="hex">#BB9D7B</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line);"></div>
-        <div class="label"><div class="role">Фоновый / светлый</div><div class="hex">#FFFFFF</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#1A1A1A;"></div>
-        <div class="label"><div class="role">Текст на светлом фоне</div><div class="hex">#1A1A1A</div></div>
-      </div>
-      <div class="swatch">
-        <div class="chip" style="background:#1C1C1C;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;">Aa</div>
-        <div class="label"><div class="role">Текст на тёмном фоне</div><div class="hex">#FFFFFF</div></div>
-      </div>
+      <div class="swatch on-dark"><div class="role">Основной / тёмный фон</div><div class="hex">#1C1C1C</div></div>
+      <div class="swatch on-gold"><div class="role">Акцентный / золото</div><div class="hex">#BB9D7B</div></div>
+      <div class="swatch on-light"><div class="role">Фоновый / светлый</div><div class="hex">#FFFFFF</div></div>
+      <div class="swatch on-light"><div class="role">Текст на светлом фоне</div><div class="hex">#1A1A1A</div></div>
+      <div class="swatch on-dark"><div class="role">Текст на тёмном фоне</div><div class="hex">#FFFFFF</div></div>
     </div>
   </section>
 
   <section id="cycle">
     <span class="eyebrow mono">03 · Логика цикла</span>
-    <h2>Как связаны темы этапа</h2>
-    <p class="lead">Этап открывает новую аудиторию — группы и команды — и сразу закрепляет её ценностным предложением по цене и условиям заезда. Сторис дают конкретные визуальные детали территории и заселения.</p>
+    <h2>Как связаны темы этапа 02</h2>
+    <p class="lead">Первый этап открыл новую аудиторию (группы и команды) и закрепил бюджетное позиционирование. Второй этап продолжает заботу о госте практическими сервисами — помощь с формальностями для иностранных гостей и размещение для семей. Сторис закрепляют тему конкретными деталями комфорта и территории.</p>
     <div class="cycle">
-      <div class="node"><span class="num mono">01</span><span class="txt">Групповое размещение</span></div>
+      <div class="node"><span class="num mono">01</span><span class="txt">Регистрация для иностранных граждан</span></div>
       <span class="arrow">→</span>
-      <div class="node"><span class="num mono">02</span><span class="txt">Комфорт по бюджету</span></div>
+      <div class="node"><span class="num mono">02</span><span class="txt">Семейные номера</span></div>
     </div>
   </section>
 
   <section id="news">
     <span class="eyebrow mono">04 · Новости</span>
-    <h2>Темы новостных постов (2)</h2>
+    <h2>Темы новостей этапа 02</h2>
 
     <div class="card">
       <div class="card-head">
-        <span class="tag">Вовлекающая / продающая</span>
+        <span class="tag">Практическая / сервисная</span>
       </div>
-      <h3>Гостиница «Жемчужная Лагуна» для туристических групп и спортивных команд в Воронеже</h3>
+      <h3>Регистрация для иностранных граждан в «Жемчужной Лагуне»</h3>
+      <p class="voice">Мы часто принимаем гостей, которым на время проживания нужна официальная регистрация, — рассказываем, как это устроено у нас.</p>
       <ul class="thesis-list">
-        <li>Компактное размещение группы в одном месте — рядом с Воронежским водохранилищем, в 3,5 км от центра Воронежа</li>
-        <li>Трансфер по городу (платно) — группе не нужно самостоятельно искать транспорт</li>
-        <li>Общая кухня с плитой, СВЧ и холодильником — команда готовит самостоятельно и экономит на питании</li>
-        <li>Зелёный двор — место сбора и отдыха группы между поездками, тренировками, экскурсиями</li>
-        <li>Круглосуточная стойка регистрации — заезд большой группой в любое время суток</li>
+        <li>Оформляем регистрацию для иностранных граждан на весь срок проживания</li>
+        <li>Услуга доступна прямо на стойке регистрации, которая работает круглосуточно</li>
+        <li>Подходит гостям, которым нужна постановка на миграционный учёт по месту пребывания в Воронеже</li>
+        <li>Экономит время — не нужно отдельно обращаться в миграционные службы</li>
+        <li>Доступна при заселении в любой тип номера — от эконом до семейного</li>
       </ul>
-      <div class="cover-thesis">Тезис обложки: <b>«Гостиница для команд»</b></div>
+      <div class="cover-thesis">Тезис обложки: <b>«Регистрация для гостей»</b></div>
       <div class="seo">
-        <span>гостиница для группы Воронеж</span>
-        <span>размещение спортивной команды Воронеж</span>
-        <span>гостиница для туристической группы</span>
-        <span>бронирование гостиницы группой</span>
-        <span>трансфер для группы Воронеж</span>
-        <span>гостиница у водохранилища для команды</span>
-        <span>недорогая гостиница для большой компании</span>
-        <span>гостиница на Набережной для группы</span>
-        <span>размещение сборной Воронеж</span>
-        <span>гостиница для делегации Воронеж</span>
+        <span>регистрация иностранных граждан Воронеж</span>
+        <span>миграционный учёт гостиница Воронеж</span>
+        <span>постановка на учёт мигрантов Воронеж</span>
+        <span>оформление регистрации для иностранцев Воронеж</span>
+        <span>гостиница с регистрацией для иностранных граждан</span>
+        <span>временная регистрация Воронеж гостиница</span>
+        <span>гостиница на Набережной регистрация иностранцев</span>
+        <span>услуги миграционного учёта Воронеж</span>
+        <span>где зарегистрироваться иностранному гражданину Воронеж</span>
+        <span>гостиница для трудовых мигрантов Воронеж</span>
       </div>
-      <div class="meta">Мета-описание: Гостиница «Жемчужная Лагуна» в Воронеже принимает туристические группы и спортивные команды — компактное размещение у водохранилища, трансфер по городу, общая кухня и зелёный двор для отдыха.</div>
-      <div class="cta">CTA: Забронируйте номера для группы в «Жемчужной Лагуне» — уточните условия по телефону +7 (473) 205-99-83</div>
+      <div class="meta">Мета-описание: В «Жемчужной Лагуне» в Воронеже можно оформить регистрацию для иностранных граждан прямо на стойке круглосуточного заселения — без отдельных походов в миграционную службу.</div>
+      <div class="cta">CTA: Уточняйте оформление регистрации на стойке «Жемчужной Лагуны» при заезде</div>
       <div class="cover-tz">
         <div class="h mono">ТЗ на обложку</div>
-        <p>Тёмный фон #1C1C1C, заголовок белым крупным начертанием, золотой акцент #BB9D7B в эйбрау-метке «Групповое размещение» и разделительной линии. Фото: зелёный двор гостиницы или групповой кадр у входа/велосипедов. Без логотипа поверх фото.</p>
+        <p>Тёмный фон #1C1C1C, заголовок белым крупным начертанием, золотой акцент #BB9D7B в эйбрау-метке «Для иностранных гостей» и разделительной линии. Фото: стойка регистрации гостиницы (без личных данных в кадре). Без логотипа поверх фото.</p>
         <div class="dots"><span class="dot" style="background:#1C1C1C;"></span><span class="dot" style="background:#BB9D7B;"></span><span class="dot" style="background:#FFFFFF;"></span></div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-head">
-        <span class="tag">Продающая / практическая</span>
+        <span class="tag">Продающая / аудиторная</span>
       </div>
-      <h3>Номера от 1000 рублей без предоплаты: бюджетное размещение в «Жемчужной Лагуне»</h3>
+      <h3>Семейные номера в «Жемчужной Лагуне»: просторно для всей семьи</h3>
+      <p class="voice">У нас останавливаются семьи с детьми, и мы подбираем номер так, чтобы места хватило всем, — показываем, какой вариант подойдёт для семейного заезда.</p>
       <ul class="thesis-list">
-        <li>Цены на номера — от 800 до 3300 ₽ за сутки, есть эконом-вариант от 1000 ₽</li>
-        <li>Бронирование без предоплаты — оплата по факту заезда</li>
-        <li>Круглосуточное заселение — заехать можно в любое время суток</li>
-        <li>В номерах есть всё для самостоятельного проживания: Wi-Fi, стиральная машина, СВЧ, холодильник, чайник — экономия на кафе и прачечной</li>
-        <li>Рядом магазины «Пятёрочка» и «Магнит» — удобно для повседневных покупок</li>
+        <li>Семейный номер «Полулюкс» — 24 м², двуспальная кровать и диван-кровать, подходит для семьи до 4 человек</li>
+        <li>В номере есть кресло и шкаф — удобно разместить вещи всей семьи</li>
+        <li>На кухне можно готовить самостоятельно — подойдёт для привычного рациона и детского питания</li>
+        <li>Стиральная машина в номере избавляет от необходимости брать с собой запасной комплект одежды для ребёнка</li>
+        <li>Зелёный двор на территории — место, где можно погулять с детьми рядом с номером</li>
       </ul>
-      <div class="cover-thesis">Тезис обложки: <b>«Комфорт по бюджету»</b></div>
+      <div class="cover-thesis">Тезис обложки: <b>«Просторно всей семьёй»</b></div>
       <div class="seo">
-        <span>недорогая гостиница Воронеж</span>
-        <span>номер от 1000 рублей Воронеж</span>
-        <span>бюджетная гостиница на Набережной</span>
-        <span>бронирование без предоплаты Воронеж</span>
-        <span>гостиница эконом класса Воронеж</span>
-        <span>дешёвый номер посуточно Воронеж</span>
-        <span>гостиница круглосуточное заселение</span>
-        <span>гостиница рядом с магазинами Воронеж</span>
-        <span>снять номер недорого Воронеж</span>
-        <span>гостиница на левом берегу Воронеж</span>
+        <span>семейный номер Воронеж гостиница</span>
+        <span>гостиница для семьи с детьми Воронеж</span>
+        <span>номер на 4 человека Воронеж</span>
+        <span>семейное размещение Набережная Воронеж</span>
+        <span>гостиница с кухней для семьи Воронеж</span>
+        <span>где остановиться с ребёнком Воронеж</span>
+        <span>просторный номер для семьи Воронеж</span>
+        <span>гостиница левый берег для семьи</span>
+        <span>номер с диваном-кроватью Воронеж</span>
+        <span>семейный отдых у водохранилища Воронеж</span>
       </div>
-      <div class="meta">Мета-описание: В «Жемчужной Лагуне» в Воронеже номера от 1000 ₽ без предоплаты и круглосуточное заселение — комфортное бюджетное размещение с Wi-Fi, кухней и стиральной машиной в номере.</div>
-      <div class="cta">CTA: Забронируйте номер в «Жемчужной Лагуне» без предоплаты — уточните цены по телефону +7 (473) 205-99-83</div>
+      <div class="meta">Мета-описание: Семейный номер «Полулюкс» в «Жемчужной Лагуне» — 24 м², двуспальная кровать и диван-кровать, кухня и стиральная машина для комфортного проживания с детьми в Воронеже.</div>
+      <div class="cta">CTA: Бронируйте семейный номер в «Жемчужной Лагуне» на нужные даты</div>
       <div class="cover-tz">
         <div class="h mono">ТЗ на обложку</div>
-        <p>Светлый фон #FFFFFF, заголовок тёмным #1A1A1A крупным начертанием, золотой акцент #BB9D7B на цифре «от 1000 ₽» и разделительной линии. Фото: уютный интерьер номера. Без логотипа поверх фото.</p>
+        <p>Светлый фон #FFFFFF, заголовок тёмным #1A1A1A крупным начертанием, золотой акцент #BB9D7B на подписи «До 4 человек» и разделительной линии. Фото: интерьер семейного номера (кровать и диван-кровать в кадре). Без логотипа поверх фото.</p>
         <div class="dots"><span class="dot" style="background:#FFFFFF;"></span><span class="dot" style="background:#BB9D7B;"></span><span class="dot" style="background:#1A1A1A;"></span></div>
       </div>
     </div>
@@ -409,17 +406,17 @@
 
   <section id="stories">
     <span class="eyebrow mono">05 · Сторис</span>
-    <h2>Темы сторис (2, формат презентации — 1 слайд)</h2>
+    <h2>Темы сторис этапа 02 (формат презентации — 1 слайд)</h2>
     <div class="story-grid">
       <div class="story">
-        <h3>Зелёный двор и прокат велосипедов</h3>
-        <p>На территории гостиницы — благоустроенный зелёный двор и прокат велосипедов: до Воронежского водохранилища можно доехать за пару минут.</p>
-        <div class="design-note"><b>Дизайн слайда:</b> тёмный фон #1C1C1C, фото двора и велосипедов на всю ширину, заголовок белым, короткая подпись золотым #BB9D7B внизу слайда.</div>
+        <h3>Бесплатные чай и кофе</h3>
+        <p>В «Жемчужной Лагуне» для гостей всегда доступны чай и кофе — бесплатно и в любое время суток.</p>
+        <div class="design-note"><b>Дизайн слайда:</b> тёмный фон #1C1C1C, фото чайной зоны или кружки с чаем, заголовок белым, золотой акцент #BB9D7B на слове «бесплатно».</div>
       </div>
       <div class="story">
-        <h3>Заселение круглосуточно, без предоплаты</h3>
-        <p>Заехать в «Жемчужную Лагуну» можно в любое время суток — стойка регистрации работает круглосуточно, предоплата не требуется.</p>
-        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #FFFFFF, тёмный текст #1A1A1A, золотой акцент #BB9D7B на иконке часов/цифре «24», фото стойки регистрации или входа в гостиницу.</div>
+        <h3>Маршруты для пеших прогулок у водохранилища</h3>
+        <p>От «Жемчужной Лагуны» есть готовые маршруты для пеших прогулок вдоль Воронежского водохранилища.</p>
+        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #FFFFFF, тёмный текст #1A1A1A, золотой акцент #BB9D7B на линии маршрута, фото набережной или тропы у воды.</div>
       </div>
     </div>
   </section>
@@ -427,15 +424,27 @@
   <section id="map">
     <span class="eyebrow mono">06 · Карта тем</span>
     <h2>Хронология этапов</h2>
-    <details class="stage" open>
-      <summary>Этап 01 — групповое размещение и бюджет <span class="badge-active mono">актуальный</span></summary>
+
+    <details class="stage">
+      <summary>Этап 01 — групповое размещение и бюджет</summary>
       <div class="stage-body">
-        <p>Первая поставка для этой карточки: 2 новости с обложками + 2 сторис.</p>
-        <ul>
-          <li>Новость — Гостиница для туристических групп и спортивных команд</li>
-          <li>Новость — Номера от 1000 рублей без предоплаты</li>
-          <li>Сторис — Зелёный двор и прокат велосипедов</li>
-          <li>Сторис — Заселение круглосуточно, без предоплаты</li>
+        <ul class="roadmap">
+          <li><span class="fmt mono">Новость</span><span class="t">Гостиница для туристических групп и спортивных команд — <b>«Гостиница для команд»</b></span></li>
+          <li><span class="fmt mono">Сторис</span><span class="t">Зелёный двор и прокат велосипедов</span></li>
+          <li><span class="fmt mono">Новость</span><span class="t">Номера от 1000 рублей без предоплаты — <b>«Комфорт по бюджету»</b></span></li>
+          <li><span class="fmt mono">Сторис</span><span class="t">Заселение круглосуточно, без предоплаты</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary>Этап 02 — сервис для гостя и семейное размещение <span class="badge-active mono">актуальный</span></summary>
+      <div class="stage-body">
+        <ul class="roadmap">
+          <li><span class="fmt mono">Новость</span><span class="t">Регистрация для иностранных граждан — <b>«Регистрация для гостей»</b></span></li>
+          <li><span class="fmt mono">Сторис</span><span class="t">Бесплатные чай и кофе</span></li>
+          <li><span class="fmt mono">Новость</span><span class="t">Семейные номера: просторно для всей семьи — <b>«Просторно всей семьёй»</b></span></li>
+          <li><span class="fmt mono">Сторис</span><span class="t">Маршруты для пеших прогулок у водохранилища</span></li>
         </ul>
       </div>
     </details>
