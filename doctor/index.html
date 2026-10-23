@@ -3,391 +3,946 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>«Доктор» — ТЗ</title>
+<title>Проект «Доктор»</title>
 
-<style>
-  /* Layout: sticky single top bar, one content column; agency chrome (ocean/roe), client colors only in swatches and design notes */
-  :root {
-    --ocean-deep: #0e3b47;
-    --ocean: #1b6b78;
-    --ocean-soft: #4c97a0;
-    --ice: #eef6f5;
-    --paper: #f7faf9;
-    --surface: #ffffff;
-    --roe: #c4572b;
-    --ink: #0f2429;
-    --ink-soft: #4a6167;
-    --ink-faint: #7c9296;
-    --line: #cfe1de;
-    --line-soft: #e2eeec;
-    --radius: 14px;
-    --shadow: 0 1px 2px rgba(15, 36, 41, 0.06), 0 8px 24px -12px rgba(15, 36, 41, 0.18);
-    --f-display: "Bricolage Grotesque", "Public Sans", -apple-system, sans-serif;
-    --f-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22;
-      --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97;
-      --line: #24444b; --line-soft: #1b3338;
-      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.5);
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --ocean-deep: #bfe3e6; --ocean: #7fc4c9; --ocean-soft: #5aa5ab; --ice: #12292d; --paper: #0b1d22;
-    --surface: #102529; --roe: #f0895a; --ink: #e9f3f1; --ink-soft: #b6cbc8; --ink-faint: #7f9a97;
-    --line: #24444b; --line-soft: #1b3338;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.5);
-    color-scheme: dark;
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
-  a { color: var(--ocean); }
-  a:focus-visible, summary:focus-visible { outline: 2px solid var(--roe); outline-offset: 2px; }
-
-  header.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
-  .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
-  .topbar .brand { font-family: var(--f-display); font-weight: 700; font-size: 0.98rem; color: var(--ocean-deep); white-space: nowrap; }
-  .topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
-  .topbar nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.84rem; padding: 7px 11px; border-radius: 8px; white-space: nowrap; }
-  .topbar nav a:hover { background: var(--ice); color: var(--ink); }
-
-  main { max-width: 1080px; margin: 0 auto; padding: 44px 32px 80px; }
-  @media (max-width: 720px) { .topbar-inner { padding: 12px 16px; } main { padding: 32px 16px 64px; } }
-
-  header.hero { margin-bottom: 40px; }
-  .eyebrow { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; color: var(--ocean); margin-bottom: 14px; }
-  h1.title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 700; color: var(--ocean-deep); }
-  .lede { max-width: 64ch; color: var(--ink-soft); font-size: 1.05rem; margin-top: 14px; }
-  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 22px; font-size: 0.86rem; color: var(--ink-faint); }
-  .meta-row b { color: var(--ink-soft); font-weight: 600; }
-
-  section { margin-bottom: 64px; scroll-margin-top: 96px; }
-  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
-  .section-head .num { font-family: var(--f-mono); color: var(--ocean-soft); font-size: 0.9rem; }
-  .section-head h2 { font-size: 1.5rem; color: var(--ocean-deep); }
-  .section-sub { color: var(--ink-faint); font-size: 0.9rem; margin: -12px 0 22px; max-width: 68ch; }
-
-  .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
-  .fact-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); min-width: 0; }
-  .fact-card .k { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 8px; }
-  .fact-card .v { font-size: 0.92rem; line-height: 1.5; }
-  .fact-card .v small { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 4px; }
-
-  .swatch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-  .swatch { border-radius: 10px; height: 96px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.06); color: #ffffff; }
-  .swatch.on-light { color: #1d2a28; }
-  .swatch .role { font-family: var(--f-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
-  .swatch .name { font-family: var(--f-mono); font-size: 0.7rem; font-weight: 500; }
-
-  .stage-acc { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); margin-bottom: 12px; overflow: hidden; }
-  .stage-acc summary { list-style: none; cursor: pointer; padding: 14px 22px; display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--ink-faint); }
-  .stage-acc summary::-webkit-details-marker { display: none; }
-  .stage-acc summary::before { content: "›"; font-size: 1.05rem; line-height: 1; transition: transform .15s ease; }
-  .stage-acc[open] summary::before { transform: rotate(90deg); }
-  .stage-acc[open] > summary { background: var(--ice); color: var(--ink); }
-  .stage-acc summary .cur { color: var(--roe); }
-
-  .sequence { display: flex; flex-wrap: wrap; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
-  .stage-acc .sequence { border: none; border-top: 1px solid var(--line-soft); border-radius: 0; box-shadow: none; }
-  .sequence .step { flex: 1 1 150px; padding: 16px; border-right: 1px solid var(--line-soft); min-width: 0; }
-  .sequence .step:last-child { border-right: none; }
-  .sequence .step.new { background: var(--ice); }
-  .sequence .step .n { font-family: var(--f-mono); color: var(--roe); font-size: 0.75rem; margin-bottom: 6px; }
-  .sequence .step .t { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-  .sequence .step .d { font-size: 0.8rem; color: var(--ink-faint); }
-
-  .tone-banner { background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 22px; }
-  .tone-banner b { color: var(--ocean-deep); }
-
-  .theme-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
-  @media (max-width: 520px) { .theme-card { padding: 20px 18px; } }
-  .theme-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 6px; }
-  .theme-head h3 { font-size: 1.2rem; min-width: 0; flex: 1 1 320px; }
-  .theme-tag { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
-  .theme-idx { font-family: var(--f-mono); color: var(--ink-faint); font-size: 0.78rem; margin-bottom: 4px; }
-  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin-top: 18px; }
-  @media (max-width: 720px) { .field-grid { grid-template-columns: 1fr; } }
-  .field { min-width: 0; }
-  .field.full { grid-column: 1 / -1; }
-  .label { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ocean); margin-bottom: 6px; }
-  .field .body { font-size: 0.92rem; color: var(--ink-soft); }
-  .field.voice .body { font-style: italic; color: var(--ink); }
-  .field ul, .slide-block ul { margin: 4px 0 0; padding-left: 18px; }
-  .field li { margin-bottom: 5px; }
-  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
-  .chip { font-family: var(--f-mono); font-size: 0.74rem; background: var(--ice); color: var(--ocean-deep); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
-  .cover-brief { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 16px; font-size: 0.92rem; color: var(--ink-soft); }
-  .cover-brief .label { color: var(--roe); }
-  .cover-brief b { color: var(--ink); }
-
-  .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-  .story-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); min-width: 0; }
-  .story-card .idx { font-family: var(--f-mono); font-size: 0.72rem; color: var(--ocean-soft); margin-bottom: 8px; }
-  .story-card h3 { font-size: 1.08rem; margin-bottom: 14px; }
-  .slide-block { margin-bottom: 14px; }
-  .slide-block .label { font-size: 0.68rem; }
-  .slide-block .body { font-size: 0.88rem; color: var(--ink-soft); }
-  .slide-block li { margin-bottom: 3px; }
-  .slide-block.design .label { color: var(--roe); }
-
-  .map-accordion { border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
-  .map-accordion .stage-acc { border: none; border-bottom: 1px solid var(--line-soft); border-radius: 0; margin: 0; }
-  .map-accordion .stage-acc:last-child { border-bottom: none; }
-  .roadmap { display: flex; flex-direction: column; border-left: 2px dashed var(--line); margin: 24px 28px 26px 36px; padding-left: 24px; }
-  .roadmap-item { position: relative; padding-bottom: 20px; }
-  .roadmap-item:last-child { padding-bottom: 0; }
-  .roadmap-item::before { content: ""; position: absolute; left: -30px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--roe); }
-  .roadmap-item .kind { font-family: var(--f-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean); margin-bottom: 3px; }
-  .roadmap-item h4 { font-size: 0.96rem; margin-bottom: 4px; }
-  .roadmap-item p { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
-  @media (max-width: 520px) { .roadmap { margin: 20px 16px 20px 22px; padding-left: 20px; } .roadmap-item::before { left: -26px; } }
-</style>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .cycle-past{display:grid;gap:8px;padding:6px 20px 18px}
+.vc .cycle-past p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.vc .cycle-past p b{color:var(--ink);font-weight:600}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .why{margin-top:14px;font-size:14px;color:var(--ink-2)}
+.vc .why b{color:var(--gold-2);font-weight:600}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border:0}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .badge.past{background:var(--line);color:var(--ink-2)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;gap:0;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.r{font-variant-numeric:tabular-nums;white-space:nowrap}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .up{color:var(--good)} .va .dn{color:var(--crit)} .va .eq{color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .notice{background:var(--warn-soft);border:1px solid rgba(232,182,95,.45);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:grid;gap:6px}
+.va .notice b{color:var(--warn)}
+.va .notice p{margin:0;color:var(--ink-2);max-width:80ch}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ln2{fill:none;stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:4 4;stroke-linejoin:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .chart .lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-top:4px}
+.va .chart .lg i{display:inline-block;width:14px;height:2px;background:var(--gold);vertical-align:middle;margin-right:6px}
+.va .chart .lg i.d{background:none;border-top:2px dashed var(--ink-3);height:0}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+.va .fn{font-size:13px;color:var(--ink-3);margin-top:10px;max-width:80ch}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
 
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <span class="brand">«Доктор»</span>
-    <nav>
-      <a href="#company">Компания</a>
-      <a href="#brandbook">Брендбук</a>
-      <a href="#sequence">Логика цикла</a>
-      <a href="#news">Новости</a>
-      <a href="#stories">Сторис</a>
-      <a href="#map">Карта тем</a>
-    </nav>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Доктор · Калининград</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
   </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+
+<!-- ============ ПРОЕКТ ============ -->
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ДОКТОР ДОКТОР ДОКТОР</span><span>ДОКТОР ДОКТОР ДОКТОР</span><span>ДОКТОР ДОКТОР ДОКТОР</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>Стоматология «Доктор» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Статистика карточки, позиции в выдаче, спрос в Калининградской области и контент-план для карточки клиники. Все материалы проекта собраны здесь и обновляются от периода к периоду.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Стоматологическая клиника «Доктор»</b></div>
+        <div><span>Город</span><b>Калининград</b></div>
+        <div><span>Направления</span><b>Имплантация · Ортопедия · Ортодонтия</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 23.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Переходы в карточку за 12 месяцев</span><span class="t-n g">96 007</span><span class="t-s">+51% к предыдущим 12 месяцам (63 433)</span></div>
+        <div class="tile"><span class="t-k">Звонки из карточки за 12 месяцев</span><span class="t-n g">972</span><span class="t-s">+42% к предыдущим 12 месяцам (685)</span></div>
+        <div class="tile"><span class="t-k">Бесплатная часть выдачи на Картах</span><span class="t-n c">0 из 13</span><span class="t-s">запросов, где карточка есть на первой странице; видна на рекламных местах</span></div>
+        <div class="tile"><span class="t-k">Спрос на имплантацию в ноябре</span><span class="t-n y">+37%</span><span class="t-s">ноябрь 2025 к среднему месяцу 2026 — новый этап выходит в пик</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">24.06–02.07.2026</span><span class="st done">готово</span></div><h3>Этап 1 — имплантация, ортодонтия, диагностика</h3><p>Протезирование на имплантах, одномоментная имплантация, аппаратная ортодонтия, диагностика, реставрация зубов. Новости и сторис на карточке.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">20–21.07.2026</span><span class="st done">готово</span></div><h3>Этап 2 — имплантация за 1 день и профгигиена</h3><p>Две новости и две сторис: как проходит имплантация за 1 день, зачем профессиональная гигиена, первая консультация.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">19.08 · 31.08.2026</span><span class="st done">готово</span></div><h3>Этап 3 — хирургия</h3><p>Зуб мудрости: когда удалять. Имплантация сразу после удаления зуба.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">06.10 · 23.10.2026</span><span class="st done">готово</span></div><h3>Этап 4 — ортодонтия и имплантация</h3><p>Брекет-системы, имплантационные системы Straumann, Neodent и Osstem, сторис со стоимостью основных услуг. Вторая новость отправлена на модерацию 23.10.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">23.10.2026</span><span class="st done">готово</span></div><h3>Новый замер — первая аналитика проекта</h3><p>Статистика карточки за 24 месяца, позиции по 13 запросам на Яндекс Картах, сайт, спрос по Вордстату для Калининградской области, рынок.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">23.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 5 — по итогам аналитики</h3><p>Синус-лифтинг в имплантации и виниры в ортопедии: направления клиники, которые на карточке ещё не раскрывались, со спросом, который растёт к ноябрю.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">с 07.10.2026</span><span class="st wait">ограничения Яндекса</span></div><h3>Яндекс Бизнес работает частично</h3><p>После атак на дата-центры Яндекса редактирование данных карточки ограничено. Публикации принимаются: новость этапа 4 ушла на модерацию 23.10.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">06.11 · 20.11.2026</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 5</h3><p>Синус-лифтинг — 6 ноября, после праздника 4 ноября. Виниры — 20 ноября. В день новости выходит парная сторис.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика · замер 23.10.2026</span>
+          <h3>Что изменилось и где карточка не видна</h3>
+          <p>Статистика карточки было → стало, позиции по 13 запросам, соседи по выдаче, спрос и сезонность в Калининградской области, рынок, план дальше.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 5</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>06.11 — Синус-лифтинг при имплантации верхних зубов</li>
+            <li>20.11 — Виниры в клинике «Доктор»</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ АНАЛИТИКА ============ -->
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Калининград · стоматология · замер 23.10.2026</span>
+  <h1>Что изменилось за период и где карточка «Доктора» не видна</h1>
+  <p>Статистика карточки из кабинета Яндекс Бизнеса за 24 месяца, позиции на Яндекс Картах по 13 запросам, состояние сайта и спрос по Вордстату для Калининградской области. Это первая аналитика проекта: прошлые этапы делались без замера, поэтому было → стало считаем по статистике кабинета, а позиции на сегодня — стартовая точка для следующих замеров.</p>
 </header>
 
-<main>
-  <header class="hero">
-    <div class="eyebrow">Контент-ТЗ · Этап 4 · Стоматологическая клиника</div>
-    <h1 class="title">Стоматологическая клиника «Доктор»</h1>
-    <p class="lede">Клиника в Калининграде на улице Генерала Челнокова, 56. Этапы 1–3 раскрыли имплантацию, протезирование, ортодонтию, диагностику, гигиену и хирургию. Этап 4 посвящён основным направлениям работы клиники — ортодонтии, имплантации и ортопедии: 2 темы новостей с обложками и 2 темы сторис для карточки компании на Яндекс Картах и 2ГИС.</p>
-    <div class="meta-row">
-      <span><b>Город:</b> Калининград</span>
-      <span><b>Категория:</b> стоматологическая клиника</span>
-      <span><b>Публикация:</b> карточка на Яндекс Картах и 2ГИС</span>
-      <span><b>Этап:</b> 4</span>
-    </div>
-  </header>
+<section id="changes">
+  <div class="sh"><h2>Что изменилось за период</h2><p>Кабинет Яндекс Бизнеса: переходы в карточку, звонки, маршруты и переходы на сайт. Публикации на карточке начались 24 июня 2026 года.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Метрика</th><th class="r">10.08–10.09.2026</th><th class="r">Месяц до · 09.07–09.08</th><th class="r">Изм.</th><th class="r">Год назад · 10.08–10.09.2025</th><th class="r">Изм.</th></tr></thead>
+    <tbody>
+      <tr><td>Переходы в карточку</td><td class="r">9 640</td><td class="r">9 385</td><td class="r up">+2,7%</td><td class="r">7 593</td><td class="r up">+27,0%</td></tr>
+      <tr><td>Нажатия «Позвонить»</td><td class="r">79</td><td class="r">117</td><td class="r dn">−32,5%</td><td class="r">77</td><td class="r up">+2,6%</td></tr>
+      <tr><td>Маршруты</td><td class="r">59</td><td class="r">79</td><td class="r dn">−25,3%</td><td class="r">65</td><td class="r dn">−9,2%</td></tr>
+      <tr><td>Переходы на сайт</td><td class="r">94</td><td class="r">75</td><td class="r up">+25,3%</td><td class="r">81</td><td class="r up">+16,0%</td></tr>
+    </tbody>
+  </table></div>
 
-  <section id="company">
-    <div class="section-head"><span class="num">01</span><h2>Компания — факты</h2></div>
-    <div class="fact-grid">
-      <div class="fact-card"><div class="k">Адрес и график</div><div class="v">Калининград, Генерала Челнокова, 56<small>Пн–Сб 09:00–20:00 · Вс — выходной</small></div></div>
-      <div class="fact-card"><div class="k">Главный врач и основатель</div><div class="v">Шабалин Анатолий Викторович<small>Ортопед, терапевт, хирург-имплантолог высшей категории</small></div></div>
-      <div class="fact-card"><div class="k">Основные направления</div><div class="v">Имплантация, ортопедия и ортодонтия<small>Также: лечение зубов, профессиональная гигиена, хирургическая стоматология</small></div></div>
-      <div class="fact-card"><div class="k">Имплантация</div><div class="v">Официальные представители Osstem и Straumann<small>Системы на сайте: Straumann, Neodent, Osstem · одни из первых привезли метод All-on-4 в Калининград</small></div></div>
-      <div class="fact-card"><div class="k">Стоимость</div><div class="v">Имплантация — 26 000 ₽ · курс лечения на брекетах — 210 000 ₽<small>Лечение — от 5 000 ₽ · удаление — от 4 500 ₽</small></div></div>
-      <div class="fact-card"><div class="k">Условия</div><div class="v">Стоимость фиксируется в договоре и не меняется после начала лечения<small>Каждая операция застрахована · беспроцентная рассрочка · гарантия на импланты от производителя</small></div></div>
-      <div class="fact-card"><div class="k">Опыт</div><div class="v">Опыт более 19 лет<small>Работа на имплантатах с 2011 года</small></div></div>
-      <div class="fact-card"><div class="k">Оснащение</div><div class="v">Оборудование из Израиля, Германии, Венгрии, Южной Кореи, США<small>Лицензия № Л041-01157-39/00631040, ООО «Ортис»</small></div></div>
+  <h3>Квартал публикаций против весны и прошлого года</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Метрика</th><th class="r">Июль–сентябрь 2026</th><th class="r">Апрель–июнь 2026</th><th class="r">Изм.</th><th class="r">Июль–сентябрь 2025</th><th class="r">Изм.</th></tr></thead>
+    <tbody>
+      <tr><td>Переходы в карточку</td><td class="r">27 351</td><td class="r">28 087</td><td class="r dn">−2,6%</td><td class="r">21 705</td><td class="r up">+26,0%</td></tr>
+      <tr><td>Нажатия «Позвонить»</td><td class="r">276</td><td class="r">295</td><td class="r dn">−6,4%</td><td class="r">199</td><td class="r up">+38,7%</td></tr>
+      <tr><td>Маршруты</td><td class="r">203</td><td class="r">205</td><td class="r eq">−1,0%</td><td class="r">183</td><td class="r up">+10,9%</td></tr>
+      <tr><td>Переходы на сайт</td><td class="r">247</td><td class="r">269</td><td class="r dn">−8,2%</td><td class="r">218</td><td class="r up">+13,3%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="k">Последние 30 дней · переходы</div><div class="n">8 693</div><div class="s">22.09–21.10, +27,9% к году назад (6 796)</div></div>
+    <div class="kpi"><div class="k">Последние 30 дней · звонки</div><div class="n">120</div><div class="s">+37,9% к году назад (87)</div></div>
+    <div class="kpi"><div class="k">Последние 30 дней · маршруты</div><div class="n">89</div><div class="s">+58,9% к году назад (56)</div></div>
+    <div class="kpi"><div class="k">Отзывов на Яндексе в 2026</div><div class="n">6</div><div class="s">3 из них — после старта публикаций, последний 21.10</div></div>
+  </div>
+
+  <div class="verdicts" style="margin-top:20px">
+    <div class="v"><span class="pill good">год к году</span><p><b>Карточка растёт к прошлому году по всем действиям</b>За 12 месяцев переходы +51%, звонки +42%, маршруты +56%, переходы на сайт +53%. Рост начался в марте 2025 года, до старта нашей работы, поэтому приписывать его публикациям нельзя.</p></div>
+    <div class="v"><span class="pill warn">к весне</span><p><b>К весне 2026 года роста нет, прирост к прошлому году замедлился</b>Июль–сентябрь на 1–8% ниже апреля–июня по всем четырём действиям. В 2025 году лето было выше весны на 17%. Прирост переходов к прошлому году — +51% во втором квартале и +26% в третьем.</p></div>
+    <div class="v"><span class="pill info">последние 30 дней</span><p><b>Последние 30 дней — выше прошлого года</b>Звонки и маршруты за последние 30 дней выше прошлого года на 38% и 59%, переходы на сайт — на уровне прошлого года.</p></div>
+  </div>
+</section>
+
+<section id="cabinet">
+  <div class="sh"><h2>Статистика карточки по месяцам</h2><p>Кабинет Яндекс Бизнеса, все сервисы Яндекса: Поиск, Карты, Навигатор. Сплошная линия — последние 12 месяцев, пунктир — тот же месяц годом раньше.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="show" data-cmp="1"><h3>Переходы в карточку</h3><div class="cs">в месяц · 12 месяцев к предыдущим 12: +51%</div></div>
+    <div class="chart" data-chart="call" data-cmp="1"><h3>Нажатия «Позвонить»</h3><div class="cs">в месяц · 12 месяцев к предыдущим 12: +42%</div></div>
+  </div>
+  <div class="tbl" style="margin-top:16px"><table>
+    <thead><tr><th>Месяц</th><th class="r">Переходы</th><th class="r">Год назад</th><th class="r">Звонки</th><th class="r">Маршруты</th><th class="r">На сайт</th></tr></thead>
+    <tbody id="t-month"></tbody>
+  </table></div>
+  <p class="fn">Источники переходов за последние 30 дней: Яндекс Поиск — 6 670, Яндекс Карты — 1 893, Навигатор — 180. Октябрь 2026 в таблице не показан: месяц неполный (1–22 октября — 6 113 переходов, 83 звонка). С 7 октября Яндекс Бизнес работает с ограничениями после атак на дата-центры, кабинет предупреждает, что данные могут быть неполными. Просмотры фото кабинет за этот период не отдаёт.</p>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Калининграду 23.10.2026, карта по центру города. Первая страница выдачи — 25 карточек, из них 12–17 — рекламные места. Стартовая точка: дальше сравниваем с этим замером.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Карточек</th><th class="r">Реклама в первых 25</th><th>«Доктор»</th><th>Первые бесплатные места</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология</td><td class="r">45</td><td class="r">13</td><td>нет среди всех 31 бесплатных</td><td>Областная стоматологическая поликлиника, Первый, Ортодонт Люкс</td></tr>
+      <tr><td>стоматологическая клиника</td><td class="r">93</td><td class="r">14</td><td>нет на первой странице</td><td>Первый, Айдентекс, Ортодонт Люкс</td></tr>
+      <tr><td>стоматолог</td><td class="r">91</td><td class="r">14</td><td>нет на первой странице</td><td>Областная стоматологическая поликлиника, Дантист, Первый</td></tr>
+      <tr><td>стоматология калининград</td><td class="r">45</td><td class="r">13–14</td><td>нет на первой странице · есть в подборке «Хорошее место 2026»</td><td>Подборка «Хорошее место 2026», Областная, Городская стоматологическая поликлиника</td></tr>
+      <tr><td>частная стоматология</td><td class="r">50</td><td class="r">14</td><td>нет на первой странице</td><td>Айдентекс, Центродент, Дантист</td></tr>
+      <tr><td>имплантация зубов</td><td class="r">100</td><td class="r">13–15</td><td>реклама, в ротации · нет среди 68 бесплатных</td><td>Атлант, Стоматологический центр на Литовском валу, Эргодент</td></tr>
+      <tr><td>установка имплантов</td><td class="r">99</td><td class="r">15</td><td>реклама, 4 место — в ротации</td><td>Атлант, Эргодент, Стоматологический центр на Литовском валу</td></tr>
+      <tr><td>протезирование зубов</td><td class="r">38–50</td><td class="r">13–14</td><td>нет на первой странице</td><td>Эргодент, Городская стоматологическая поликлиника, Айдентекс</td></tr>
+      <tr><td>коронки на зубы</td><td class="r">49</td><td class="r">16</td><td>реклама, 3 место — в ротации</td><td>Городская стоматологическая поликлиника, Эргодент, Атлант</td></tr>
+      <tr><td>брекеты</td><td class="r">94–105</td><td class="r">13–17</td><td>нет на первой странице</td><td>Ортодонт Люкс, Эргодент, Атлант</td></tr>
+      <tr><td>ортодонт</td><td class="r">46</td><td class="r">15–16</td><td>нет на первой странице</td><td>Ортодонт Люкс, Атлант, Центродент</td></tr>
+      <tr><td>исправление прикуса</td><td class="r">39–42</td><td class="r">16</td><td>реклама, 3 место — в ротации</td><td>Ортодонт Люкс, Дантист, Центродент</td></tr>
+      <tr><td>удаление зуба мудрости</td><td class="r">94</td><td class="r">15–16</td><td>нет на первой странице</td><td>Центродент, Айдентекс, Ортодонт Люкс</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">Если открыть карту у самой клиники (район Сельма, приближение 14–15), «Доктор» стоит на рекламных местах 2–7 по запросам «стоматология», «имплантация зубов», «брекеты», «протезирование зубов». Рекламные показы оплачены ООО «Ортис» — юрлицом клиники, в кабинете подключён тариф «Продвинутый». Карточка не появляется в выдаче дважды: когда она стоит на рекламном месте, в бесплатной части её нет.</p>
+
+  <h3>Карточка на сегодня</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Показатель</th><th class="r">Яндекс Карты</th><th class="r">2ГИС</th></tr></thead>
+    <tbody>
+      <tr><td>Рейтинг</td><td class="r">5,0</td><td class="r">5,0</td></tr>
+      <tr><td>Оценки / отзывы</td><td class="r">143 / 81</td><td class="r">47 / 35</td></tr>
+      <tr><td>Фото</td><td class="r">62</td><td class="r">42</td></tr>
+      <tr><td>Новости</td><td class="r">10 в кабинете · 1 на модерации</td><td class="r">—</td></tr>
+      <tr><td>Сторис</td><td class="r">16</td><td class="r">—</td></tr>
+      <tr><td>Рубрики</td><td class="r">1 · стоматологическая клиника</td><td class="r">частные стоматологии</td></tr>
+      <tr><td>Награды</td><td class="r">Хорошее место 2026</td><td class="r">—</td></tr>
+      <tr><td>Реклама в выдаче</td><td class="r">есть, тариф «Продвинутый»</td><td class="r">есть</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fn">23.10.2026 блок «Новости» на публичной карточке пустой: 9 опубликованных новостей видны в кабинете, но не показываются посетителям.</p>
+
+  <h3>Карточка против соседей по выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Где выше «Доктора»</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Доктор</b></td><td class="r">5,0</td><td class="r">143</td><td>рекламные места, подборка «Хорошее место 2026»</td></tr>
+      <tr><td>Первый</td><td class="r">4,9</td><td class="r">505</td><td>стоматология, стоматологическая клиника, стоматолог</td></tr>
+      <tr><td>Айдентекс</td><td class="r">5,0</td><td class="r">586</td><td>стоматологическая клиника, частная стоматология, протезирование</td></tr>
+      <tr><td>Атлант</td><td class="r">4,9</td><td class="r">344</td><td>имплантация, установка имплантов, брекеты, коронки</td></tr>
+      <tr><td>Эргодент</td><td class="r">4,9</td><td class="r">320</td><td>имплантация, протезирование, коронки, брекеты</td></tr>
+      <tr><td>Ортодонт Люкс</td><td class="r">5,0</td><td class="r">189</td><td>брекеты, ортодонт, исправление прикуса</td></tr>
+      <tr><td>Центродент</td><td class="r">4,7</td><td class="r">476</td><td>ортодонт, удаление зуба мудрости, частная стоматология</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточки нет в бесплатной части выдачи</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="notice"><b>Яндекс Бизнес работает с ограничениями</b><p>7–11 октября 2026 года были атакованы дата-центры Яндекса в Сасове, Калуге и Владимире. С 16 октября кабинет открыт для просмотра, редактирование карточки и управление тарифами ограничены, сроков полного восстановления Яндекс не называет. Публикации принимаются: новость этапа 4 ушла на модерацию 23.10. Правки карточки из списка ниже вносим, как только редактирование заработает.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Первую страницу занимает реклама</h3></div>
+      <p>На каждом из 13 запросов в первых 25 карточках — от 12 до 17 рекламных мест. На бесплатную часть остаётся около 10 мест, и их забирают карточки с <b>300–2 000 оценками</b>. «Доктор» в эту часть не попадает ни по одному запросу и виден за счёт собственного рекламного размещения.</p>
+      <span class="ev">«стоматология»: 45 карточек, 13 рекламных · «имплантация зубов»: 100 карточек, «Доктора» нет среди 68 бесплатных</span>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Оценок втрое меньше, чем у лидеров бесплатной части</h3></div>
+      <p>У «Доктора» 143 оценки и 81 отзыв. Первые бесплатные места занимают карточки с 189–2 039 оценками. Отзывов в 2026 году — 6, из них 3 после старта публикаций. Рейтинг 5,0 держится, но поток новых отзывов редкий.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточка заявлена одной рубрикой</h3></div>
+      <p>На Яндекс Картах у клиники одна рубрика — «Стоматологическая клиника». Имплантация, ортопедия и ортодонтия представлены в витрине двумя позициями: «Имплантация Osstem» и «Установка брекет-системы». По запросам про протезирование, коронки и брекеты Яндексу не на что опереться, кроме новостей.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Новости не видны посетителям карточки</h3></div>
+      <p>В кабинете 9 опубликованных новостей с июня, на публичной карточке 23.10 блок новостей пустой. Сторис отображаются. Пока новости не показываются, их работа на выдачу и на доверие ограничена.</p>
+      <p class="next">Проверяем блок новостей после восстановления Яндекс Бизнеса. Если новости не вернутся, пишем в поддержку Яндекс Бизнеса.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Сайт не поддерживает карточку</h3></div>
+      <p>Сайт — одна страница, без страниц под услуги. По запросам с названием услуги у Яндекса нет страницы клиники, которую можно связать с карточкой. Подробнее — в разделе «Сайт».</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт doc39.ru</h2><p>Технический осмотр 23.10.2026.</p></div>
+  <div class="two">
+    <div class="note"><h3>Что на сайте мешает поиску</h3><ul>
+      <li><b>Одна страница на всё.</b> В карте сайта один адрес — главная. Имплантация, All-on-4/6, синус-лифтинг, протезирование, ортодонтия — блоки одной страницы, отдельных страниц нет.</li>
+      <li><b>Заголовок страницы «Главная стр».</b> Нет описания страницы, в заголовке нет ни услуги, ни города.</li>
+      <li><b>У 49 изображений нет подписей alt</b>, нет разметки организации для поисковиков.</li>
+      <li><b>Цены на сайте расходятся с прайсом клиники.</b> На сайте имплантация «24 900 руб.», клиника называет 26 000 ₽.</li>
+    </ul></div>
+    <div class="note"><h3>Что уже есть</h3><ul>
+      <li>Счётчик Яндекс Метрики и подтверждение в Яндекс Вебмастере стоят.</li>
+      <li>robots.txt и карта сайта настроены, служебные страницы Tilda закрыты от индексации.</li>
+      <li>Переходов на сайт из карточки — 1 056 за 12 месяцев, +53% к предыдущим 12. Сайт получает людей из карточки, но не держит свои позиции.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Калининградской области</h2><p>Вордстат, регион «Калининградская область», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года, изменение — январь–сентябрь 2026 к тому же периоду 2025.</p></div>
+
+  <div class="charts">
+    <div class="chart" data-chart="impl"><h3>«имплантация зубов»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +3% · пик — октябрь–ноябрь</div></div>
+    <div class="chart" data-chart="sinus"><h3>«синус лифтинг»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: +18%</div></div>
+    <div class="chart" data-chart="vin"><h3>«виниры»</h3><div class="cs">запросов в месяц · июль–сентябрь 2026 к 2025: +8%</div></div>
+    <div class="chart" data-chart="brek"><h3>«брекеты»</h3><div class="cs">запросов в месяц · янв–сен 2026 к 2025: −1%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: имплантация и протезирование растут в октябре–ноябре (ноябрь 2025 — 1 495 запросов «имплантация зубов», на 37% выше среднего месяца 2026). Брекеты и ортодонт в пике летом, к ноябрю спрос снижается. Налоговый вычет за лечение зубов ищут в январе–марте.</p>
+
+  <h3>Имплантация и ортопедия</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th class="r">За 30 дней</th><th class="r">Янв–сен, год к году</th></tr></thead>
+    <tbody id="t-impl"></tbody>
+  </table></div>
+
+  <h3>Ортодонтия</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th class="r">За 30 дней</th><th class="r">Янв–сен, год к году</th></tr></thead>
+    <tbody id="t-orto"></tbody>
+  </table></div>
+
+  <h3>Общие запросы и другие услуги</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th class="r">За 30 дней</th><th class="r">Янв–сен, год к году</th></tr></thead>
+    <tbody id="t-gen"></tbody>
+  </table></div>
+
+  <h3>Спрос на бренд: клиника и конкуренты</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">За 30 дней</th><th class="r">Янв–сен 2025</th><th class="r">Янв–сен 2026</th><th class="r">Изм.</th></tr></thead>
+    <tbody id="t-brand"></tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Имплантация стоит на месте, растут её части.</b> «имплантация зубов» +3% за год, но «синус лифтинг» +18%, «костная пластика» растёт с июля (436 в сентябре против 30 годом раньше), «osstem» +25%, «all on 4» +39%.</li>
+      <li><b>В ортопедии растут коронки и виниры летом-осенью.</b> «циркониевые коронки» +11%, «коронки на зубы» +4%, «виниры» +8% за июль–сентябрь.</li>
+      <li><b>Ортодонтия ровная.</b> «брекеты» −1%, «ортодонт» −1%, «элайнеры» +12% — но элайнеры в услугах клиники не заявлены.</li>
+      <li><b>Общий спрос растёт быстрее направлений:</b> «стоматология» +9%, «стоматолог» +15%. Люди чаще ищут клинику целиком и выбирают на Картах.</li>
+    </ul></div>
+    <div class="note"><h3>Бренд</h3><ul>
+      <li>«стоматология доктор калининград» — <b>115</b> запросов в месяц, +7% за год. В запрос попадают и другие клиники со словом «доктор» в названии.</li>
+      <li>Новые сильные бренды за год: «Айдентекс» (524 в месяц, бренда год назад не было), «Команда Мечты» (257).</li>
+      <li>«Центродент» — 3 856 запросов в месяц, крупнейший частный бренд области.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Рынок стоматологии РФ, 2025</div><div class="n">+18%</div><div class="s">630 млрд ₽ по данным Росстата</div></div>
+    <div class="kpi"><div class="k">Рост цен на стоматологию, 2025</div><div class="n">+17%</div><div class="s">в среднем по России</div></div>
+    <div class="kpi"><div class="k">Оборот рынка 2021–2025</div><div class="n">+52%</div><div class="s">735 → 1 120 млрд ₽, рост за счёт среднего чека</div></div>
+    <div class="kpi"><div class="k">Население Калининградской области</div><div class="n">1 032 900</div><div class="s">на начало 2025 года, Калининград — 488,7 тыс.</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Рынок растёт в деньгах в основном за счёт цены, а не числа пациентов. Человек сравнивает клиники дольше и внимательнее смотрит на цену, рассрочку и опыт врача — то, что «Доктор» может показать в новостях и сторис без обещаний и превосходных степеней.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Что сделано и что дальше</h2><p>По пяти направлениям: карточка, отзывы и контент, агрегаторы, сайт, платное продвижение.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>Сделано за этапы 1–4</h3><span class="when">24.06–23.10.2026</span></div>
+      <ol>
+        <li><b>Новости на карточке.</b><span>9 опубликованных новостей и 1 на модерации: имплантация (за 1 день, одномоментная, системы Straumann, Neodent, Osstem), ортодонтия, диагностика, гигиена, зуб мудрости, брекеты.</span></li>
+        <li><b>Сторис.</b><span>10 сторис по ТЗ этапов 1–4, включая стоимость основных услуг.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>1. Карточка</h3><span class="when">как только заработает редактирование</span></div>
+      <ol>
+        <li><b>Вернуть новости на публичную карточку.</b><span>Проверить блок новостей после восстановления Яндекс Бизнеса, при необходимости — обращение в поддержку.</span></li>
+        <li><b>Расширить «Товары и услуги».</b><span>Сейчас в витрине две позиции. Добавить имплантацию, All-on-4/6, синус-лифтинг, коронки, виниры, брекеты и аппараты с ценами, которые называет клиника: имплантация — 26 000 ₽, лечение — от 5 000 ₽, удаление — от 4 500 ₽, курс лечения на брекетах — 210 000 ₽.</span></li>
+        <li><b>Одна цена везде.</b><span>Привести цены на сайте и в карточке к прайсу клиники.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Отзывы и контент</h3><span class="when">постоянно</span></div>
+      <ol>
+        <li><b>Ровный поток отзывов.</b><span>Ссылка на карточку после завершённого лечения. Только реальные пациенты, без вознаграждения.</span></li>
+        <li><b>Контент под сезон.</b><span>Этап 5 — синус-лифтинг и виниры, ноябрь — пик имплантации и протезирования. В январе–марте — материалы под спрос на налоговый вычет за лечение.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Агрегаторы</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС.</b><span>47 оценок и 35 отзывов против 143 оценок на Яндексе. Публиковать новости и сторис этапов и на 2ГИС, обновить 11 позиций прайса под цены клиники.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Страницы под услуги.</b><span>Имплантация, All-on-4/6, синус-лифтинг, протезирование (коронки, виниры), ортодонтия. В заголовке и H1 — услуга и «Калининград».</span></li>
+        <li><b>Техническая база.</b><span>Заголовок и описание страницы вместо «Главная стр», подписи alt, разметка организации.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Тариф «Продвинутый» уже работает.</b><span>Карточка показывается на рекламных местах 2–7 рядом с клиникой и в ротации по городу. В ноябре, в пик спроса на имплантацию, проверить охват по запросам «имплантация зубов» и «протезирование зубов» после восстановления управления тарифами.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Статистика карточки: кабинет Яндекс Бизнеса, раздел «Статистика», выгрузка по месяцам и по дням 23.10.2026.</li>
+    <li>Яндекс Карты: поиск по Калининграду 23.10.2026, карта по центру города (приближение 12) и у клиники (14–15), по 2–3 загрузки на запрос; для «стоматология» и «имплантация зубов» просмотрена вся выдача.</li>
+    <li>Вордстат: регион «Калининградская область», все устройства, по месяцам с октября 2024 по сентябрь 2026.</li>
+    <li>2ГИС: карточка клиники и выдача «стоматология» по Калининграду 23.10.2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/doktor/176957971131/" target="_blank" rel="noopener">Карточка «Доктор» на Яндекс Картах</a>
+    <a href="https://go.2gis.com/p0px5" target="_blank" rel="noopener">Карточка «Доктор» в 2ГИС</a>
+    <a href="http://doc39.ru/" target="_blank" rel="noopener">doc39.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://marketing.rbc.ru/articles/16573/" target="_blank" rel="noopener">РБК Исследования — стоматологический рынок в 2025 году вырос на 18%</a>
+    <a href="https://businesstat.ru/news/dental_services/" target="_blank" rel="noopener">BusinesStat — оборот стоматологического рынка 2021–2025</a>
+    <a href="https://strana39.ru/news/2026-01-11/375920-kaliningrad-rastyot-malye-goroda-pusteyut-chto-proishodit-s-naseleniem-oblasti" target="_blank" rel="noopener">Strana39 — население Калининградской области по данным Калининградстата</a>
+    <a href="https://avo.cards/blog/sboy-yandeksa-oktyabr-2026-chto-ne-rabotaet-i-chto-delat/" target="_blank" rel="noopener">Сбой Яндекса: что заработало к 21 октября 2026</a>
+    <a href="https://adindex.ru/news/digital/2026/10/16/350059.phtml" target="_blank" rel="noopener">AdIndex — Яндекс частично восстановил Бизнес</a>
+  </div>
+</section>
+
+</div></div>
+
+<!-- ============ КОНТЕНТ-ПЛАН ============ -->
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Стоматологическая клиника · Калининград</span>
+    <h1>«Доктор» — ТЗ на контент, этап 5</h1>
+    <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация 6 и 20 ноября 2026 года — карточка клиники «Доктор» на Яндекс Картах и 2ГИС.</p>
+
+    <div class="factgrid">
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Генерала Челнокова, 56 <small>Калининград, вход с южной стороны</small></div></div>
+      <div class="fact"><div class="k">Часы работы</div><div class="v">Пн–Сб 09:00–20:00 <small>Вс — выходной</small></div></div>
+      <div class="fact"><div class="k">Основные направления</div><div class="v">Имплантация, ортопедия, ортодонтия</div></div>
+      <div class="fact"><div class="k">Главный врач и основатель</div><div class="v">Шабалин Анатолий Викторович <small>ортопед, терапевт, хирург-имплантолог высшей категории</small></div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">Более 19 лет <small>работа на имплантатах с 2011 года</small></div></div>
+      <div class="fact"><div class="k">Имплантация</div><div class="v">Официальные представители Osstem и Straumann <small>All-on-4/6 · синус-лифтинг</small></div></div>
+      <div class="fact"><div class="k">Стоимость</div><div class="v">Имплантация — 26 000 ₽ <small>курс лечения на брекетах — 210 000 ₽ · лечение от 5 000 ₽ · удаление от 4 500 ₽</small></div></div>
+      <div class="fact"><div class="k">Условия</div><div class="v">Цена фиксируется в договоре <small>беспроцентная рассрочка · гарантия на импланты от производителя</small></div></div>
     </div>
   </section>
 
   <section id="brandbook">
-    <div class="section-head"><span class="num">02</span><h2>Мини-брендбук</h2></div>
-    <p class="section-sub">После анализа логотипа, сайта и опубликованных материалов клиники определены фирменные цвета «Доктора».</p>
-    <div class="swatch-row">
-      <div class="swatch on-light" style="background:#54B8B0"><span class="role">Акцентный</span><span class="name">Бирюзовый · #54B8B0</span></div>
-      <div class="swatch on-light" style="background:#78C8D4"><span class="role">Основной</span><span class="name">Голубой логотипа · #78C8D4</span></div>
-      <div class="swatch on-light" style="background:#6CBC94"><span class="role">Второстепенный</span><span class="name">Зелёный логотипа · #6CBC94</span></div>
-      <div class="swatch" style="background:#386050"><span class="role">Заголовки</span><span class="name">Тёмно-зелёный · #386050</span></div>
-      <div class="swatch on-light" style="background:#E4F8F4"><span class="role">Фоновый</span><span class="name">Мятный · #E4F8F4</span></div>
-      <div class="swatch on-light" style="background:#D8D8D8"><span class="role">Плашки</span><span class="name">Светло-серый · #D8D8D8</span></div>
-      <div class="swatch" style="background:#303C3C"><span class="role">Текстовый</span><span class="name">Графит · #303C3C</span></div>
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Доктора»</h2>
+      <p>После анализа логотипа, сайта и опубликованных материалов клиники определены фирменные цвета для обложек новостей и слайдов сторис.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#54B8B0;color:#16302C;border-color:#54B8B0"><div class="role">Акцентный</div><div class="name">Бирюзовый</div><div class="hex">#54B8B0</div></div>
+      <div class="swatch" style="background:#78C8D4;color:#16302C;border-color:#78C8D4"><div class="role">Основной</div><div class="name">Голубой логотипа</div><div class="hex">#78C8D4</div></div>
+      <div class="swatch" style="background:#6CBC94;color:#16302C;border-color:#6CBC94"><div class="role">Второстепенный</div><div class="name">Зелёный логотипа</div><div class="hex">#6CBC94</div></div>
+      <div class="swatch" style="background:#386050;color:#F2FAF7;border-color:#386050"><div class="role">Заголовки</div><div class="name">Тёмно-зелёный</div><div class="hex">#386050</div></div>
+      <div class="swatch" style="background:#E4F8F4;color:#1D2A28;border-color:#E4F8F4"><div class="role">Фоновый</div><div class="name">Мятный</div><div class="hex">#E4F8F4</div></div>
+      <div class="swatch" style="background:#D8D8D8;color:#1D2A28;border-color:#D8D8D8"><div class="role">Плашки</div><div class="name">Светло-серый</div><div class="hex">#D8D8D8</div></div>
+      <div class="swatch" style="background:#303C3C;color:#F2FAF7;border-color:#303C3C"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#303C3C</div></div>
     </div>
   </section>
 
-  <section id="sequence">
-    <div class="section-head"><span class="num">03</span><h2>Логика цикла</h2></div>
-    <p class="section-sub">Этапы 1–3 показали, какие задачи решает клиника: от диагностики и гигиены до имплантации и протезирования. Этап 4 сосредоточен на основных направлениях «Доктора»: брекет-системы в ортодонтии и связка имплантации с ортопедией, плюс стоимость ключевых услуг.</p>
-    <details class="stage-acc">
-      <summary><span>Этапы 1–3 · пройдены</span></summary>
-      <div class="sequence">
-        <div class="step"><div class="n">01</div><div class="t">Возможности клиники</div><div class="d">протезирование на имплантах, ортодонтия, диагностика, реставрация</div></div>
-        <div class="step"><div class="n">02</div><div class="t">Ключевые услуги</div><div class="d">имплантация за 1 день, профгигиена</div></div>
-        <div class="step"><div class="n">03</div><div class="t">Хирургия</div><div class="d">зуб мудрости, одномоментная имплантация</div></div>
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этапы 1–4 раскрыли имплантацию, ортодонтию, диагностику и хирургию. Этап 5 открывает то, чего на карточке ещё не было: синус-лифтинг в имплантации и виниры в ортопедии. Обе темы — в ноябрь, когда растёт спрос на имплантацию и протезирование.</p>
+    </div>
+    <details class="stage">
+      <summary>Этапы 1–4 <span class="badge past">пройдены</span></summary>
+      <div class="cycle-past">
+        <p><b>Этап 1 ·</b> протезирование на имплантах, одномоментная имплантация, аппаратная ортодонтия, диагностика, реставрация зубов.</p>
+        <p><b>Этап 2 ·</b> имплантация за 1 день, профессиональная гигиена, первая консультация.</p>
+        <p><b>Этап 3 ·</b> зуб мудрости, имплантация сразу после удаления зуба.</p>
+        <p><b>Этап 4 ·</b> брекет-системы, имплантационные системы Straumann, Neodent и Osstem, стоимость основных услуг.</p>
       </div>
     </details>
-    <div class="sequence">
-      <div class="step new"><div class="n">04</div><div class="t">Ортодонтия</div><div class="d">брекет-системы, исправление прикуса в любом возрасте</div></div>
-      <div class="step new"><div class="n">04</div><div class="t">Имплантация и ортопедия</div><div class="d">Straumann, Neodent, Osstem и протез под случай</div></div>
-      <div class="step new"><div class="n">04</div><div class="t">Стоимость</div><div class="d">цены основных направлений</div></div>
+    <div class="cycle" style="margin-top:14px">
+      <div class="cycle-row"><div class="tag">06.11</div><p>Синус-лифтинг: имплантация в верхней челюсти, когда не хватает костной ткани. Направление «Имплантация», спрос на синус-лифтинг +18% за год.</p></div>
+      <div class="cycle-row"><div class="tag">20.11</div><p>Виниры: ортопедия в клинике «Доктор». Направление «Протезирование», спрос на виниры +8% за июль–сентябрь.</p></div>
     </div>
   </section>
 
   <section id="news">
-    <div class="section-head"><span class="num">04</span><h2>Новости — этап 4, 2 темы + обложка</h2></div>
-    <div class="tone-banner"><b>Тон:</b> от первого лица команды клиники «Доктор» — спокойно и по-человечески, без перечисления всех услуг клиники в каждом тексте. Медицинская тематика: без обещаний «безопасно / безболезненно / эффективно», без превосходных степеней, в конце текста — строка «Имеются противопоказания. Необходима консультация специалиста». CTA — только словами, без телефона и e-mail в тексте. Публикация — в карточке клиники на Яндекс Картах и 2ГИС.</div>
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>2 темы с обложкой. Публикация — карточка клиники на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> от лица клиники, спокойно и по-человечески, на «вы». Каждая новость начинается с вступления, дальше факты по теме; факты в тезисах приведены по источнику, указанному у каждого тезиса. Медицинская тема: без обещаний «безопасно / безболезненно / эффективно» и без превосходных степеней. В конце текста — строка «Имеются противопоказания. Необходима консультация специалиста». SEO-ключи вплетаются в текст органично, без повторов подряд. Телефона и e-mail в тексте нет. Объём — до 3 000 знаков с пробелами.</div>
 
-    <article class="theme-card">
-      <div class="theme-idx">Тема 1 / 2</div>
-      <div class="theme-head"><h3>Брекет-системы в клинике «Доктор»: исправление прикуса в любом возрасте</h3><span class="theme-tag">продающий · ортодонтия</span></div>
-      <div class="field-grid">
-        <div class="field full"><div class="label">Почему актуально</div><div class="body">Ортодонтия — одно из трёх основных направлений клиники. На этапе 1 раскрыли аппаратную ортодонтию; брекет-системы отдельной темой ещё не подавались.</div></div>
-        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Ортодонтия — одно из основных направлений нашей клиники. Мы исправляем прикус в любом возрасте».</div></div>
-        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
-          <li>Ортодонтия — одно из основных направлений клиники «Доктор» в Калининграде наряду с имплантацией и ортопедией</li>
-          <li>Исправление прикуса в любом возрасте</li>
-          <li>Брекет-системы, а также съёмные и несъёмные ортодонтические аппараты</li>
-          <li>Стоимость курса лечения на брекетах — 210 000 ₽</li>
-          <li>Беспроцентная рассрочка; стоимость фиксируется в договоре и не меняется после начала лечения</li>
-          <li>На консультации стоматолог проводит осмотр и ориентирует по стоимости и срокам лечения</li>
-        </ul></div></div>
-        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
-          <span class="chip">брекеты калининград</span>
-          <span class="chip">брекет-системы</span>
-          <span class="chip">исправление прикуса калининград</span>
-          <span class="chip">ортодонт калининград</span>
-          <span class="chip">ортодонтия калининград</span>
-          <span class="chip">брекеты для взрослых</span>
-          <span class="chip">установка брекетов цена</span>
-          <span class="chip">стоматология калининград</span>
-        </div></div>
-        <div class="field"><div class="label">CTA</div><div class="body">Записывайтесь на консультацию — расскажем о курсе лечения на брекетах под вашу ситуацию</div></div>
-      </div>
-      <div class="cover-brief">
-        <div class="label">ТЗ на обложку</div>
-        <b>Заголовок:</b> Брекет-системы<br>
-        <b>Подзаголовок:</b> Исправление прикуса в любом возрасте<br><br>
-        Мятный фон #E4F8F4 с мягкими полупрозрачными сферами, как на опубликованных обложках клиники. Логотип по центру сверху, заголовок графитом #303C3C разреженными прописными, подзаголовок бирюзовым #54B8B0. Фото: улыбка с брекет-системой крупным планом. Без цены на изображении. Текст и логотип — не более 20% площади.
-      </div>
-    </article>
+    <div class="period"><h3>Этап 5</h3><span class="pmeta">2 новости · актуальный</span></div>
 
-    <article class="theme-card">
-      <div class="theme-idx">Тема 2 / 2</div>
-      <div class="theme-head"><h3>Имплантация и протезирование: системы Straumann, Neodent и Osstem в клинике «Доктор»</h3><span class="theme-tag">экспертный · имплантация и ортопедия</span></div>
-      <div class="field-grid">
-        <div class="field full"><div class="label">Почему актуально</div><div class="body">Имплантация и ортопедия — основные направления клиники. Прошлые этапы раскрыли методики (за 1 день, одномоментная, протезирование на имплантах); сами имплантационные системы, статус официального представителя и подбор импланта вместе с протезом отдельной темой ещё не подавались.</div></div>
-        <div class="field full voice"><div class="label">Вступление (тон и голос)</div><div class="body">«Имплантация и ортопедия — основа нашей работы. Мы официальные представители Osstem и Straumann и подбираем импланты и протез под ваш случай».</div></div>
-        <div class="field full"><div class="label">Тезисы</div><div class="body"><ul>
-          <li>Клиника «Доктор» — официальный представитель Osstem и Straumann</li>
-          <li>В клинике работают с тремя имплантационными системами: Straumann (Швейцария), Osstem (Южная Корея) и Neodent</li>
-          <li>Главный врач Шабалин Анатолий Викторович — ортопед и хирург-имплантолог высшей категории; импланты и протез подбирают под конкретный случай</li>
-          <li>На модели пациент видит, какими будут новые зубы</li>
-          <li>Стоимость имплантации — 26 000 ₽; гарантия на импланты от производителя</li>
-          <li>Опыт более 19 лет, работа на имплантатах — с 2011 года; клиника одной из первых привезла метод All-on-4 в Калининград</li>
-        </ul></div></div>
-        <div class="field"><div class="label">SEO-ключи</div><div class="chip-row">
-          <span class="chip">имплантация зубов калининград</span>
-          <span class="chip">импланты straumann калининград</span>
-          <span class="chip">импланты osstem</span>
-          <span class="chip">импланты neodent</span>
-          <span class="chip">установка импланта калининград</span>
-          <span class="chip">какой имплант выбрать</span>
-          <span class="chip">стоматолог-имплантолог калининград</span>
-          <span class="chip">протезирование на имплантах калининград</span>
-          <span class="chip">стоматолог-ортопед калининград</span>
-        </div></div>
-        <div class="field"><div class="label">CTA</div><div class="body">Приходите на консультацию — подберём имплант и протез под вашу ситуацию</div></div>
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 6 ноября</span><h3>Синус-лифтинг в Калининграде: имплантация верхних зубов при недостатке костной ткани</h3></div>
+        <span class="purpose">Экспертный</span>
       </div>
-      <div class="cover-brief">
-        <div class="label">ТЗ на обложку</div>
-        <b>Заголовок:</b> Импланты и протез под ваш случай<br>
-        <b>Подзаголовок:</b> Straumann · Neodent · Osstem<br><br>
-        Мятный фон #E4F8F4 со сферами, заголовок графитом #303C3C разреженными прописными, подзаголовок голубым #78C8D4. Визуал: 3D-модель зуба на импланте, как на опубликованных сторис клиники. Логотип сверху, без цен на изображении. Текст и логотип — не более 20% площади.
+      <p class="why"><b>Почему эта тема:</b> имплантация — основное направление клиники, а синус-лифтинг ещё не раскрывался ни в одном этапе. Спрос «синус лифтинг» +18% за январь–сентябрь, «костная пластика» резко выросла с июля, ноябрь — пик имплантации. По запросам про имплантацию карточки нет в бесплатной части выдачи.</p>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Имплантация — одно из основных направлений нашей клиники. В него входит и синус-лифтинг — операция, которая нужна, когда для импланта в верхней челюсти не хватает костной ткани.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Основные направления клиники «Доктор» — имплантация, ортопедия и ортодонтия.<span class="src">клиника</span></li>
+        <li>В направление «Имплантация» входят имплантация All-on-4/6 и синус-лифтинг.<span class="src">сайт</span></li>
+        <li>Синус-лифтинг — наращивание костной ткани в области верхнечелюстной (гайморовой) пазухи, чтобы в боковом отделе верхней челюсти хватило объёма кости для установки импланта.<span class="src">справочно</span></li>
+        <li>Нужен ли синус-лифтинг, определяет врач после осмотра и диагностики. «Подберём индивидуальный метод лечения. Начните с диагностики».<span class="src">сайт</span></li>
+        <li>Главный врач Шабалин Анатолий Викторович — ортопед, терапевт, хирург-имплантолог высшей категории.<span class="src">сайт</span></li>
+        <li>Опыт более 19 лет, работа на имплантатах с 2011 года.<span class="src">клиника</span></li>
+        <li>Стоимость фиксируется в договоре и не меняется после начала лечения.<span class="src">сайт</span></li>
+        <li>Имеются противопоказания. Необходима консультация специалиста.<span class="src">обязательно</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Синус-лифтинг в Калининграде — имплантация верхних зубов в клинике «Доктор»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Синус-лифтинг при имплантации зубов в Калининграде | Стоматология «Доктор»</span></div>
+        <div class="meta-row"><span><b>Description · </b>Синус-лифтинг в Калининграде: наращивание костной ткани для имплантации зубов верхней челюсти. Хирург-имплантолог высшей категории, работа на имплантатах с 2011 года. Цена фиксируется в договоре.</span></div>
+        <div class="chips">
+          <span class="chip-kw">синус лифтинг калининград</span><span class="chip-kw">синус-лифтинг</span>
+          <span class="chip-kw">синус лифтинг костной ткани</span><span class="chip-kw">костная пластика при имплантации</span>
+          <span class="chip-kw">наращивание костной ткани для имплантации</span><span class="chip-kw">имплантация верхних зубов</span>
+          <span class="chip-kw">имплантация зубов верхней челюсти</span><span class="chip-kw">синус при имплантации зубов</span>
+          <span class="chip-kw">имплантация зубов калининград</span><span class="chip-kw">стоматолог-имплантолог калининград</span>
+          <span class="chip-kw">хирург-имплантолог калининград</span><span class="chip-kw">стоматология калининград</span>
+        </div>
       </div>
-    </article>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на консультацию — врач проведёт осмотр и подберёт план имплантации.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Синус-лифтинг»</div>
+        <p>Композиция: как на опубликованных обложках клиники — мятный фон с мягкими полупрозрачными сферами, логотип по центру сверху, тезис разреженными прописными в нижней трети. Визуал: 3D-модель верхней челюсти с имплантом в боковом отделе. Без цен, без фото «до/после».</p>
+        <p>Цвета: фон — мятный #E4F8F4, тезис — графит #303C3C, тонкая линия под тезисом — бирюзовый #54B8B0. Текст и логотип — не больше 20% площади.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 20 ноября</span><h3>Виниры в Калининграде: ортопедия в клинике «Доктор»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <p class="why"><b>Почему эта тема:</b> ортопедия — основное направление клиники, виниры есть в услугах сайта, но ни в одном этапе не раскрывались. «виниры» — около 1 050 запросов в месяц, +8% за июль–сентябрь, в ноябре 2025 спрос вырос к октябрю на 22%. По запросам про протезирование карточки нет на первой странице.</p>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Ортопедия — одно из основных направлений нашей клиники. В неё входят виниры: вместе с коронками они составляют направление «Протезирование».</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Основные направления клиники «Доктор» — имплантация, ортопедия и ортодонтия.<span class="src">клиника</span></li>
+        <li>Направление «Протезирование»: виниры и коронки.<span class="src">сайт</span></li>
+        <li>Виниры — тонкие накладки на переднюю поверхность зуба, которые меняют его цвет и форму.<span class="src">справочно</span></li>
+        <li>Главный врач Шабалин Анатолий Викторович — ортопед высшей категории, опыт более 19 лет.<span class="src">сайт · клиника</span></li>
+        <li>На консультации стоматолог сделает детальный осмотр и сориентирует по точной стоимости и срокам лечения.<span class="src">сайт</span></li>
+        <li>Кабинеты оснащены оборудованием из Израиля, Германии, Венгрии, Южной Кореи, США.<span class="src">сайт</span></li>
+        <li>Беспроцентная рассрочка; стоимость фиксируется в договоре и не меняется после начала лечения.<span class="src">сайт</span></li>
+        <li>Имеются противопоказания. Необходима консультация специалиста.<span class="src">обязательно</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Виниры в Калининграде — стоматология «Доктор»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Виниры на зубы в Калининграде: ортопедия и протезирование | Стоматология «Доктор»</span></div>
+        <div class="meta-row"><span><b>Description · </b>Виниры в Калининграде в клинике «Доктор»: ортопед высшей категории, опыт более 19 лет. Беспроцентная рассрочка, стоимость фиксируется в договоре.</span></div>
+        <div class="chips">
+          <span class="chip-kw">виниры калининград</span><span class="chip-kw">виниры на зубы</span>
+          <span class="chip-kw">виниры цена</span><span class="chip-kw">сколько стоят виниры</span>
+          <span class="chip-kw">виниры для зубов что это</span><span class="chip-kw">установка виниров калининград</span>
+          <span class="chip-kw">протезирование зубов калининград</span><span class="chip-kw">стоматолог-ортопед калининград</span>
+          <span class="chip-kw">ортопедия стоматология калининград</span><span class="chip-kw">стоматология калининград</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите на консультацию ортопеда — расскажем о стоимости и сроках.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Виниры»</div>
+        <p>Композиция: мятный фон со сферами, логотип по центру сверху, тезис разреженными прописными в нижней трети. Визуал: 3D-модель зубного ряда с винирами на передних зубах. Без цен, без фото «до/после».</p>
+        <p>Цвета: фон — мятный #E4F8F4, тезис — графит #303C3C, акцентная линия — голубой логотипа #78C8D4. Текст и логотип — не больше 20% площади.</p>
+      </div>
+    </div>
   </section>
 
   <section id="stories">
-    <div class="section-head"><span class="num">05</span><h2>Сторис — этап 4, 2 темы</h2></div>
-    <p class="section-sub">Формат презентации: один слайд — одна тема, тезисно, только факты. Публикация — в карточке клиники на Яндекс Картах и 2ГИС.</p>
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>2 темы, формат презентации. Один слайд: тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка клиники на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+
+    <div class="period"><h3>Этап 5</h3><span class="pmeta">2 сторис · актуальный</span></div>
     <div class="story-grid">
       <div class="story-card">
-        <div class="idx">01 · Ортодонтия</div>
-        <h3>Брекеты в клинике «Доктор»</h3>
-        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
-          <li>Исправление прикуса в любом возрасте</li>
-          <li>Брекет-системы</li>
-          <li>Курс лечения на брекетах — 210 000 ₽</li>
-          <li>Беспроцентная рассрочка</li>
-        </ul></div></div>
-        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
-          <span class="chip">брекеты калининград</span>
-          <span class="chip">исправление прикуса</span>
-        </div></div>
-        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Как опубликованные сторис клиники: мятный градиентный фон #E4F8F4 со сферами, логотип слева сверху, заголовок тёмно-зелёным #386050 разреженными прописными, тезисы в светло-серых плашках #D8D8D8 с текстом графитом #303C3C. Строка с ценой — в плашке бирюзового цвета #54B8B0.</div></div>
-        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Записаться на консультацию»</div></div>
+        <div class="story-top"><div class="story-thesis">Синус-лифтинг</div><span class="slide-no">Сторис 1 · 6 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Наращивание кости в верхней челюсти</span>
+          <span class="fact-pill">Для установки импланта</span>
+          <span class="fact-pill">Решение — после осмотра и диагностики</span>
+          <span class="fact-pill">Хирург-имплантолог высшей категории</span>
+          <span class="fact-pill">Импланты с 2011 года</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> как опубликованные сторис клиники — мятный градиентный фон #E4F8F4 со сферами, логотип слева сверху, заголовок тёмно-зелёным #386050 разреженными прописными, факты в светло-серых плашках #D8D8D8 с текстом графитом #303C3C. Внизу справа — 3D-модель импланта.</div>
       </div>
       <div class="story-card">
-        <div class="idx">02 · Стоимость</div>
-        <h3>Стоимость основных услуг</h3>
-        <div class="slide-block"><div class="label">Тезисы</div><div class="body"><ul>
-          <li>Имплантация — 26 000 ₽</li>
-          <li>Курс лечения на брекетах — 210 000 ₽</li>
-          <li>Лечение — от 5 000 ₽</li>
-          <li>Удаление — от 4 500 ₽</li>
-        </ul></div></div>
-        <div class="slide-block"><div class="label">SEO-ключи</div><div class="chip-row">
-          <span class="chip">имплантация зубов цена калининград</span>
-          <span class="chip">стоматология калининград цены</span>
-        </div></div>
-        <div class="slide-block design"><div class="label">Дизайн слайда</div><div class="body">Мятный фон #E4F8F4, логотип сверху, заголовок тёмно-зелёным #386050. Четыре строки в плашках #D8D8D8: название услуги графитом #303C3C, цена справа бирюзовым #54B8B0. Внизу справа — 3D-модель зуба на импланте.</div></div>
-        <div class="slide-block"><div class="label">CTA</div><div class="body">Кнопка «Получить консультацию»</div></div>
+        <div class="story-top"><div class="story-thesis">Виниры</div><span class="slide-no">Сторис 2 · 20 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Направление «Протезирование»</span>
+          <span class="fact-pill">Меняют цвет и форму зуба</span>
+          <span class="fact-pill">Ортопед высшей категории</span>
+          <span class="fact-pill">Беспроцентная рассрочка</span>
+          <span class="fact-pill">Цена фиксируется в договоре</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> мятный фон #E4F8F4 со сферами, логотип слева сверху, заголовок тёмно-зелёным #386050. Факты в плашках #D8D8D8, слева от каждой — маркер-круг бирюзовым #54B8B0. Внизу справа — 3D-модель зуба.</div>
       </div>
     </div>
   </section>
 
   <section id="map">
-    <div class="section-head"><span class="num">06</span><h2>Карта тем</h2></div>
-    <div class="map-accordion">
-      <details class="stage-acc">
-        <summary><span>Этап 1</span></summary>
-        <div class="roadmap">
-          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Протезирование на имплантах: современное решение для восстановления зубного ряда</h4><p>Один, несколько или все зубы; фиксация, жевательная функция, эстетика</p></div>
-          <div class="roadmap-item"><div class="kind">История 1</div><h4>Как работает протезирование на имплантах</h4><p>Диагностика, установка, приживление, изготовление и фиксация протеза</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Одномоментная имплантация после удаления зуба: сокращение сроков лечения</h4><p>Удаление и установка импланта за одно посещение, временное протезирование</p></div>
-          <div class="roadmap-item"><div class="kind">История 2</div><h4>Одномоментная имплантация по этапам</h4><p>Удаление, установка импланта, временное протезирование</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 3</div><h4>Аппаратная ортодонтия: возможности коррекции прикуса без хирургического вмешательства</h4><p>Показания, лечение детей и подростков, профилактика осложнений</p></div>
-          <div class="roadmap-item"><div class="kind">История 3</div><h4>Виды аппаратов для коррекции прикуса</h4><p>Функциональные, расширяющие, ортодонтические системы</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 4</div><h4>Современная диагностика в стоматологии: что позволяет выявить снимок</h4><p>Скрытый кариес, воспаление корней, дёсны, прикус, костная ткань</p></div>
-          <div class="roadmap-item"><div class="kind">История 4</div><h4>Когда требуется аппаратная ортодонтия</h4><p>Скученность, нарушение прикуса, сужение челюсти</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 5</div><h4>Восстановление зубов: чем отличаются вкладки, коронки и пломбы</h4><p>Сравнение методов реставрации по долговечности и функциональности</p></div>
-          <div class="roadmap-item"><div class="kind">История 5</div><h4>Признаки, которые указывают на необходимость диагностики зубов</h4><p>Чувствительность, запах, кровоточивость, цвет эмали, дискомфорт</p></div>
-        </div>
-      </details>
-      <details class="stage-acc">
-        <summary><span>Этап 2</span></summary>
-        <div class="roadmap">
-          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Имплантация зубов за 1 день — как проходит лечение</h4><p>Кому подходит методика, этапы, технологии, консультация</p></div>
-          <div class="roadmap-item"><div class="kind">История 1</div><h4>5 признаков, что пора записаться к стоматологу</h4><p>Чувствительность, дёсны, запах, боль при жевании, давно не было осмотра</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Почему профессиональная гигиена — обязательная процедура даже при здоровых зубах</h4><p>Зубной камень, профилактика кариеса и болезней дёсен, периодичность</p></div>
-          <div class="roadmap-item"><div class="kind">История 2</div><h4>Что происходит на первой консультации</h4><p>Осмотр, диагностика, план, расчёт стоимости, ответы на вопросы</p></div>
-        </div>
-      </details>
-      <details class="stage-acc">
-        <summary><span>Этап 3</span></summary>
-        <div class="roadmap">
-          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Зуб мудрости: когда его действительно необходимо удалять?</h4><p>Показания к удалению, роль диагностики, хирургическая стоматология</p></div>
-          <div class="roadmap-item"><div class="kind">История 1</div><h4>Зуб мудрости: удалять или оставить?</h4><p>Когда требуется удаление; решение после осмотра</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Имплантация сразу после удаления зуба: когда можно установить имплант одномоментно?</h4><p>Принцип процедуры, условия, преимущества методики</p></div>
-          <div class="roadmap-item"><div class="kind">История 2</div><h4>Имплант сразу после удаления зуба — возможно?</h4><p>Условия, при которых методика возможна</p></div>
-        </div>
-      </details>
-      <details class="stage-acc" open>
-        <summary><span>Этап 4</span> <span class="cur">· актуальный</span></summary>
-        <div class="roadmap">
-          <div class="roadmap-item"><div class="kind">Новость 1</div><h4>Брекет-системы в клинике «Доктор»: исправление прикуса в любом возрасте</h4><p>Ортодонтия как основное направление, брекеты и аппараты, курс 210 000 ₽</p></div>
-          <div class="roadmap-item"><div class="kind">История 1</div><h4>Брекеты в клинике «Доктор»</h4><p>Прикус в любом возрасте, курс лечения, рассрочка</p></div>
-          <div class="roadmap-item"><div class="kind">Новость 2</div><h4>Имплантация и протезирование: системы Straumann, Neodent и Osstem в клинике «Доктор»</h4><p>Официальный представитель Osstem и Straumann, имплант и протез под случай, 26 000 ₽</p></div>
-          <div class="roadmap-item"><div class="kind">История 2</div><h4>Стоимость основных услуг</h4><p>Имплантация, брекеты, лечение, удаление</p></div>
-        </div>
-      </details>
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
     </div>
+
+    <details class="stage">
+      <summary>Этап 1 — имплантация, ортодонтия, диагностика</summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Протезирование на имплантах: современное решение для восстановления зубного ряда</b>один, несколько или все зубы; фиксация, жевательная функция, эстетика</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Как работает протезирование на имплантах</b>диагностика, установка, приживление, протез</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Одномоментная имплантация после удаления зуба: сокращение сроков лечения</b>удаление и установка импланта за одно посещение</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Одномоментная имплантация по этапам</b>удаление, имплант, временное протезирование</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Аппаратная ортодонтия: коррекция прикуса без хирургического вмешательства</b>показания, дети и подростки</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Виды аппаратов для коррекции прикуса</b>функциональные, расширяющие, ортодонтические системы</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Современная диагностика в стоматологии: что позволяет выявить снимок</b>скрытый кариес, корни, дёсны, прикус, кость</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Когда требуется аппаратная ортодонтия</b>скученность, прикус, сужение челюсти</span></div>
+        <div class="stage-item"><span class="fmt">Новость 5</span><span class="txt"><b>Восстановление зубов: чем отличаются вкладки, коронки и пломбы</b>сравнение методов реставрации</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 5</span><span class="txt"><b>Признаки, которые указывают на необходимость диагностики зубов</b>чувствительность, запах, дёсны, эмаль</span></div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 2 — имплантация за 1 день и профгигиена</summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Имплантация зубов за 1 день — как проходит лечение</b>кому подходит, этапы, консультация</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>5 признаков, что пора записаться к стоматологу</b>чувствительность, дёсны, запах, боль, давно не было осмотра</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Почему профессиональная гигиена — обязательная процедура даже при здоровых зубах</b>камень, кариес, дёсны, периодичность</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Что происходит на первой консультации</b>осмотр, диагностика, план, расчёт стоимости</span></div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 3 — хирургия</summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Зуб мудрости: когда его действительно необходимо удалять?</b>показания, роль диагностики</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Зуб мудрости: удалять или оставить?</b>когда требуется удаление</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Имплантация сразу после удаления зуба: когда можно установить имплант одномоментно?</b>условия и принцип процедуры</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Имплант сразу после удаления зуба — возможно?</b>условия методики</span></div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>Этап 4 — ортодонтия и имплантация</summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Брекет-системы в клинике «Доктор»: исправление прикуса в любом возрасте</b>брекеты и аппараты, курс 210 000 ₽, рассрочка</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Брекеты в клинике «Доктор»</b>прикус в любом возрасте, курс, рассрочка</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Имплантация и протезирование: системы Straumann, Neodent и Osstem в клинике «Доктор»</b>официальный представитель Osstem и Straumann, 26 000 ₽</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Стоимость основных услуг</b>имплантация, брекеты, лечение, удаление</span></div>
+      </div>
+    </details>
+
+    <details class="stage" open>
+      <summary>Этап 5 — синус-лифтинг и виниры <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Синус-лифтинг в Калининграде: имплантация верхних зубов при недостатке костной ткани</b>06.11 · направление «Имплантация», решение после диагностики</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Синус-лифтинг</b>06.11 · наращивание кости для импланта в верхней челюсти</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Виниры в Калининграде: ортопедия в клинике «Доктор»</b>20.11 · направление «Протезирование», ортопед высшей категории, рассрочка</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Виниры</b>20.11 · цвет и форма зуба, условия</span></div>
+      </div>
+    </details>
   </section>
+
+</div></div>
 </main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={
+ show:[3154,3075,2688,3110,4167,6980,6984,6176,5394,8261,6487,6957,6556,5321,6560,6895,6763,8474,8278,9470,10339,9417,8602,9332],
+ call:[43,38,36,63,59,64,82,56,45,71,63,65,77,48,61,83,63,69,113,91,91,101,89,86],
+ route:[27,12,30,14,23,60,39,35,41,45,63,75,57,47,67,54,37,55,67,67,71,80,59,64],
+ site:[34,30,34,50,58,69,83,60,52,78,74,66,150,76,68,97,70,79,104,72,93,84,79,84],
+ impl:[1016,1039,869,1067,1104,1179,1088,894,1016,1004,1125,1071,1351,1495,1048,1220,1034,1119,1186,980,1043,1125,1082,1019],
+ sinus:[279,421,173,147,198,258,188,152,231,246,284,255,285,215,250,291,232,268,240,202,180,287,298,307],
+ vin:[1034,1302,1221,1379,1236,1236,1098,1130,1202,1295,1284,1232,1021,1247,1060,1178,1059,1026,1181,969,1086,1519,1364,1244],
+ brek:[3126,3480,2960,3497,3860,3790,3705,3591,4014,4584,4504,4236,4272,3844,3705,4083,3707,3728,3826,3304,3757,4547,4477,4042]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const s=[1,1.2,1.6,2,2.4,3,4,5,6,8,10].find(k=>k*p>=v);return s*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const full=D[box.dataset.chart],cmp=box.dataset.cmp==='1';
+  const d=cmp?full.slice(12):full, prev=cmp?full.slice(0,12):null, lab=cmp?M.slice(12):M;
+  const W=520,H=200,L=44,R=10,T=10,B=24;
+  const mx=niceMax(Math.max(...d,...(prev||[0]))),last=d.length-1,x=i=>L+i*(W-L-R)/last,y=v=>T+(H-T-B)*(1-v/mx);
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(Math.round(v))}</text>`}
+  (cmp?[0,3,6,9,11]:[0,6,12,18,23]).forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${lab[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(last)},${y(0)} Z`;
+  const p2=prev?`<polyline class="ln2" points="${prev.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/>`:'';
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно">${g}<path class="ar" d="${area}"/>${p2}<polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg>${cmp?'<div class="lg"><span><i></i>окт 2025 – сен 2026</span><span><i class="d"></i>годом раньше</span></div>':''}<div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=lab[i]+' · '+fmt(d[i])+(prev?' · год назад '+fmt(prev[i]):'');const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-190)lx-=210;tip.style.left=Math.max(4,lx)+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+/* monthly table */
+(function(){const rows=[];for(let i=23;i>=12;i--){const ch=Math.round((D.show[i]/D.show[i-12]-1)*100);rows.push(`<tr><td>${M[i]}</td><td class="r">${fmt(D.show[i])}</td><td class="r">${fmt(D.show[i-12])} <span class="sub ${ch>=0?'up':'dn'}">${ch>=0?'+':'−'}${Math.abs(ch)}%</span></td><td class="r">${D.call[i]}</td><td class="r">${D.route[i]}</td><td class="r">${D.site[i]}</td></tr>`)}document.getElementById('t-month').innerHTML=rows.join('')})();
+/* wordstat tables: [query, intent, last30, yoy%] */
+const T={
+ 't-impl':[['имплантация зубов','имплантация',1072,3],['импланты зубов','имплантация',998,-4],['имплантация зубов калининград','имплантация, гео',252,1],['osstem','имплантация, бренд системы',233,25],['all on 4','имплантация',213,39],['синус лифтинг','имплантация',327,18],['костная пластика','имплантация',557,157],['протезирование зубов','ортопедия',783,-4],['коронки на зубы','ортопедия',739,4],['циркониевые коронки','ортопедия',239,11],['виниры','ортопедия',1055,-4],['съемные протезы','ортопедия',973,8]],
+ 't-orto':[['брекеты','ортодонтия',3680,-1],['брекеты калининград','ортодонтия, гео',739,-1],['ортодонт','ортодонтия',2745,-1],['элайнеры','ортодонтия',805,12],['исправление прикуса','ортодонтия',68,-6]],
+ 't-gen':[['стоматология','общий',35023,9],['стоматолог','общий',26254,15],['стоматология калининград','общий, гео',16754,10],['чистка зубов','гигиена',2060,12],['удаление зуба мудрости','хирургия',1058,0],['кт зубов','диагностика',500,48],['лечение кариеса','лечение',300,2],['налоговый вычет за лечение зубов','информационный',94,-18]],
+ 't-brand':[['стоматология доктор калининград',115,939,1008],['центродент',3856,35761,34992],['эргодент',594,5042,5152],['айдентекс',524,0,3791],['дельта стоматология',389,3429,3356],['атлант стоматология',353,3358,3236],['команда мечты стоматология',257,21,2265],['ортодонт люкс',135,1759,1403]]};
+['t-impl','t-orto','t-gen'].forEach(id=>{const rows=T[id];const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*140))}px"></i><span>${fmt(r[2])}</span></div></td><td class="r ${r[3]>0?'up':r[3]<0?'dn':'eq'}">${r[3]>0?'+':r[3]<0?'−':''}${Math.abs(r[3])}%</td></tr>`).join('')});
+document.getElementById('t-brand').innerHTML=T['t-brand'].map(r=>{const me=r[0].includes('доктор');const ch=r[2]?Math.round((r[3]/r[2]-1)*100):null;return `<tr${me?' class="me"':''}><td>${me?'<b>'+r[0]+'</b>':r[0]}</td><td class="r">${fmt(r[1])}</td><td class="r">${fmt(r[2])}</td><td class="r">${fmt(r[3])}</td><td class="r ${ch===null||r[2]<100?'eq':ch>0?'up':ch<0?'dn':'eq'}">${ch===null||r[2]<100?'новый бренд':(ch>0?'+':ch<0?'−':'')+Math.abs(ch)+'%'}</td></tr>`}).join('');
+
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['changes','Что изменилось'],['cabinet','Статистика'],['maps','Позиции на Картах'],['why','Причины'],['site','Сайт'],['demand','Спрос'],['market','Рынок'],['strategy','Что дальше'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
 
 </body>
 </html>
