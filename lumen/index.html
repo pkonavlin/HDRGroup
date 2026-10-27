@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Люмен»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Люмен · Самара</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ЛЮМЕН ЛЮМЕН ЛЮМЕН ЛЮМЕН</span><span>ЛЮМЕН ЛЮМЕН ЛЮМЕН ЛЮМЕН</span><span>ЛЮМЕН ЛЮМЕН ЛЮМЕН ЛЮМЕН</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Люмен» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса в Самаре, стратегия продвижения и контент-план для карточки обучающего центра практической психологии. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Обучающий центр практической психологии ЛЮМЕН</b></div>
+        <div><span>Город</span><b>Самара</b></div>
+        <div><span>Направления</span><b>Консультации · Группы · Обучение психологов</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 27.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«психологическая консультация»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первых 30 на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«обучение психологов»</span><span class="t-n y">3</span><span class="t-s">место из 4 карточек в выдаче</span></div>
+        <div class="tile"><span class="t-k">Оценок на карточке</span><span class="t-n c">3</span><span class="t-s">рейтинг 4,2 · у соседей по выдаче 22–193</span></div>
+        <div class="tile"><span class="t-k">Спрос «психолог» в Самаре</span><span class="t-n g">+12%</span><span class="t-s">сентябрь 2026 к сентябрю 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">26.10.2026</span><span class="st done">готово</span></div><h3>Анкета компании</h3><p>Направления, преимущества, приоритеты, цены и фирменные цвета от «Люмен».</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">27.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции на Яндекс Картах по 6 запросам, спрос по Вордстату в Самаре, причины, по которым карточку не видно, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">27.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис под два приоритета компании: набор в психологическую группу и набор на обучение психологов.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 28.10</span><span class="st wait">срочно</span></div><h3>Согласование первой новости</h3><p>Группа «Гнев: от вспышки к ресурсу» стартует 1 ноября, а модерация новости на Яндекс Картах занимает до нескольких дней. Первую публикацию согласуем и отправляем в первую очередь.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">28.10 · 05.11 · 12.11 · 19.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Группа «Гнев», формат коротких тематических групп, курс «Новая идентичность: Психолог», подход к обучению психологов — по одной новости и одной сторис в неделю.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">следующий шаг</span></div><h3>Карточка в 2ГИС и прайс на Яндекс Картах</h3><p>Создать карточку «Люмен» в 2ГИС и дополнить прайс на Яндекс Картах группами и курсом для психологов.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточку не видно и что с этим делать</h3>
+          <p>Позиции по 6 запросам на Яндекс Картах, соседи по выдаче, спрос и сезонность в Самаре, стратегия в четыре этапа.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>28.10 — Группа «Гнев: от вспышки к ресурсу»</li>
+            <li>05.11 — Короткие тематические группы</li>
+            <li>12.11 — Курс «Новая идентичность: Психолог»</li>
+            <li>19.11 — Обучение психологов в «Люмен»</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Самара · психологическое консультирование, группы, обучение психологов · замер 27.10.2026</span>
+  <h1>Где «Люмен» не видно в поиске и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 6 запросам и рубрике «Психологическое консультирование», спрос по Вордстату для региона «Самара» и сравнение с карточками, которые стоят выше.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«обучение психологов» — 3 место</b>Запрос узкий, в выдаче всего 4 карточки. Это направление, по которому «Люмен» уже находят.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Общие запросы — карточки нет</b>«психологическая консультация», «психологический центр», «семейный психолог», «групповая терапия» и рубрика «Психологическое консультирование» — «Люмен» не показывается ни разу.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка молодая: 3 оценки, 2 отзыва</b>Рейтинг 4,2. У карточек, которые стоят выше, от 12 до 193 оценок, у большинства 5,0.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос большой и снова растёт</b>«психолог» в Самаре — 33 267 запросов в сентябре 2026, на 12% больше, чем в сентябре 2025. Летом 2026 спрос просел до 21–23 тысяч, осенью вернулся.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,2</div><div class="s">3 оценки · 2 отзыва</div></div>
+    <div class="kpi"><div class="k">«психолог самара»</div><div class="n">6 492</div><div class="s">запросов в месяц</div></div>
+    <div class="kpi"><div class="k">Фото на карточке</div><div class="n">5</div><div class="s">кабинеты дорабатываются</div></div>
+    <div class="kpi"><div class="k">Карточка в 2ГИС</div><div class="n">нет</div><div class="s">вторая площадка пустует</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Самаре, без геолокации пользователя. Порядок первых мест немного меняется между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в топе</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>обучение психологов</td><td class="r num">3 из 4</td><td>Нейро-Пси, Чувство жизни, <b>Люмен</b>, Помощь (3,8 · 37 оценок)</td></tr>
+      <tr><td>психологическая консультация</td><td class="r">нет в 30</td><td>Первая неврология, Наркологический центр, Праксис, Клинический психолог Emdr терапевт, Гарантия</td></tr>
+      <tr><td>рубрика «Психологическое консультирование»</td><td class="r">нет в 14</td><td>Семейный психолог Стерликов Д. (4,4 · 12), Дочки-сыночки (5,0 · 52), Фрейм 4 (5,0 · 193), Поле (5,0 · 70), Точка Опоры (5,0 · 95)</td></tr>
+      <tr><td>психологический центр</td><td class="r">нет в 5</td><td>Наркологический центр (5,0 · 90), Когито (4,7 · 22), Дочки-сыночки, София (4,3 · 25), Про тебя (4,9 · 27)</td></tr>
+      <tr><td>семейный психолог</td><td class="r">нет в 4</td><td>Нейро-Пси, Чувство жизни, Стерликов Д., Со-бытие (5,0 · 94)</td></tr>
+      <tr><td>групповая терапия</td><td class="r">нет в 7</td><td>Психолог Екатерина Бернштейн (4,8 · 17), Психолог Венера Авдошина, Мы будем жить, Кабинет психолога</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — рейтинг и число оценок карточки. По общим запросам вверху стоят медицинские и наркологические центры: Яндекс подмешивает их к психологическим запросам.</p>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Мало оценок и отзывов</h3></div>
+      <p>У «Люмен» <b>3 оценки и 2 отзыва</b>, оба за октябрь 2026. У карточек из топа рубрики — 52, 70, 95 и 193 оценки. Число и свежесть отзывов — один из главных факторов ранжирования на Картах, и по нему карточка пока проигрывает.</p>
+      <p>Рейтинг 4,2 при двух положительных отзывах — так Яндекс сглаживает рейтинг при малом числе оценок. С ростом числа оценок он поднимется сам.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка почти не рассказывает о группах и обучении</h3></div>
+      <p>Новостей и сторис на карточке нет. В прайсе три позиции: консультация психолога, консультация сексолога, семейная работа в паре. <b>Групп и курса для психологов в прайсе нет</b>, хотя это два приоритета компании. Яндексу не с чем связать карточку с запросами про группы и обучение.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Разный адрес на сайте и на карточке</h3></div>
+      <p>На сайте и в анкете — ул. Максима Горького, 103, на карточке — ул. Венцека, 2. Это один угловой дом, но для Яндекса это расхождение. Человек с сайта может не найти вход.</p>
+      <p class="next">В описании карточки и в публикациях указываем оба ориентира: «ул. Максима Горького, 103 / Венцека, 2».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Общие запросы заняты медицинскими центрами</h3></div>
+      <p>По запросам «психологическая консультация» и «психологический центр» первые места занимают Первая неврология и наркологические центры. Бороться за эти запросы новой карточке долго. Узкие запросы — группа, обучение, работа в паре — дают результат быстрее.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Нет карточки в 2ГИС</h3></div>
+      <p>Часть Самары ищет психолога через 2ГИС. Без карточки «Люмен» эта аудитория не видит центр совсем.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Самаре</h2><p>Вордстат, регион «Самара», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="p"><h3>«психолог»</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: +12%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: пик октябрь–ноябрь, просадка в декабре и с мая по август. Это совпадает со спадом, который «Люмен» видит сам: с середины декабря до февраля и с июля до второй половины сентября. Ноябрь — лучший месяц для набора в группы.</p>
+
+  <h3>Консультации и группы</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-com"></tbody></table></div>
+
+  <h3>Обучение психологов</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-edu"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Спрос с городом большой</b>: «психолог самара» — 6 492, «психотерапевт самара» — 1 923, «семейный психолог самара» — 250.</li>
+      <li><b>Групповой формат почти не ищут словами</b>: «групповая терапия» — 72 запроса. Людей на группу приводит тема, а не формат, поэтому новости строятся вокруг темы группы.</li>
+      <li><b>Обучение ищут стабильно</b>: «курсы психолога» 294, «обучение на психолога» 291, «переподготовка на психолога» 117, «обучение на психолога самара» 109.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «психолог» и «Самара» в первом абзаце.</li>
+      <li>Тема группы раскрывается через то, что человек чувствует, а формат группы — вторым планом.</li>
+      <li>Для обучения — «курсы для психологов», «повышение квалификации», «обучение психологов в Самаре».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого и дешёвого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Дополнить карточку</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Прайс: группы и курс.</b><span>Добавить «Психологическая группа — 3 000 ₽ за встречу», цикл из 3 встреч — 8 000 ₽ вместо 9 000 ₽, курс «Новая идентичность: Психолог» — 11 500 ₽, консультацию по методу EMDR и подростковую консультацию.</span></li>
+        <li><b>Описание с обоими адресными ориентирами.</b><span>Два направления центра, очно в Самаре и онлайн, ул. Максима Горького, 103 / Венцека, 2.</span></li>
+        <li><b>Скидку на цикл — отдельным блоком акции.</b><span>«8 000 ₽ вместо 9 000 ₽ при оплате всех встреч группы» появится плашкой в выдаче.</span></li>
+        <li><b>Фото кабинетов.</b><span>Как только помещение будет готово — 8–10 фото кабинетов и специалистов.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Новости, сторис и отзывы</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю.</b><span>Темы — набор в группы и обучение психологов, как просит компания. Каждая новость привязана к Самаре.</span></li>
+        <li><b>Просить отзыв после консультации и после группы.</b><span>Ссылка или QR на карточку. Цель — ровный поток каждый месяц. Только реальные отзывы и без вознаграждения: подозрительные отзывы Яндекс снимает.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Карточка в 2ГИС</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Создать и заполнить так же, как на Яндекс Картах.</b><span>Одинаковые название, адрес, телефон, часы и прайс. Новости и сторис из этого контент-плана публикуем и там.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Город в заголовках.</b><span>Сейчас title главной — «ЛЮМЕН». Нужны «Психолог в Самаре», «Психологические группы в Самаре», «Обучение психологов в Самаре».</span></li>
+        <li><b>Отдельная страница под каждую группу и курс.</b><span>С датами, ценой и формой записи — на них будут вести новости.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Самаре 27.10.2026 без геолокации пользователя, рейтинги и число оценок — из выдачи.</li>
+    <li>Вордстат: регион «Самара», все устройства, частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/obuchayushchiy_tsentr_prakticheskoy_psikhologii_lyumen/24337863718/" target="_blank" rel="noopener">Карточка «Люмен» на Яндекс Картах</a>
+    <a href="https://lumen-samara.ru/" target="_blank" rel="noopener">lumen-samara.ru</a>
+    <a href="https://t.me/psy_lumen" target="_blank" rel="noopener">Telegram-канал «Люмен»</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Психологическое консультирование · обучение психологов · Самара</span>
+    <h1>«Люмен» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 28 октября 2026 года — карточка компании «Люмен» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Обучающий центр практической психологии ЛЮМЕН</div></div>
+      <div class="fact"><div class="k">Направления</div><div class="v">Психологическое консультирование <small>групповая работа, работа с парами, консультации подростков и сексолога, обучение психологов</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Самара, ул. Максима Горького, 103 / Венцека, 2 <small>исторический центр, берег Волги</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–вс, 9:00–22:00</div></div>
+      <div class="fact"><div class="k">Формат</div><div class="v">Очно в Самаре <small>онлайн — по всему миру</small></div></div>
+      <div class="fact"><div class="k">Опыт специалистов</div><div class="v">Непрерывный опыт консультирования от 4 лет <small>личная терапия, интервизия и супервизия</small></div></div>
+      <div class="fact"><div class="k">Работа</div><div class="v">Официально, по договору <small>оплата на счёт юрлица, можно кредитной картой</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">lumen-samara.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Люмен»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: тёмно-синий и сине-бирюзовый силуэтов логотипа, голубой профиля, бежевый надписи «ЛЮМЕН» и перламутровый фон.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#192850;color:#F0E6D2;border-color:#192850">
+        <div class="role">Основной</div><div class="name">Тёмно-синий</div><div class="hex">#192850</div>
+      </div>
+      <div class="swatch" style="background:#527F8E;color:#FFFFFF;border-color:#527F8E">
+        <div class="role">Акцентный</div><div class="name">Сине-бирюзовый</div><div class="hex">#527F8E</div>
+      </div>
+      <div class="swatch" style="background:#96B2BB;color:#192850;border-color:#96B2BB">
+        <div class="role">Второстепенный</div><div class="name">Голубой</div><div class="hex">#96B2BB</div>
+      </div>
+      <div class="swatch" style="background:#C2B69C;color:#192850;border-color:#C2B69C">
+        <div class="role">Текстовый</div><div class="name">Бежевый</div><div class="hex">#C2B69C</div>
+      </div>
+      <div class="swatch" style="background:#F0E6D2;color:#192850;border-color:#F0E6D2">
+        <div class="role">Фоновый</div><div class="name">Перламутровый</div><div class="hex">#F0E6D2</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап отдан двум приоритетам компании: набору в психологическую группу и набору на обучение психологов. Одна новость и одна сторис в неделю, с 28 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">28.10</div><p>Группа «Гнев: от вспышки к ресурсу»: 3 встречи 1, 8 и 15 ноября, до 6 человек, очно в Самаре.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Формат коротких тематических групп «Люмен»: одна тема за 3–6 встреч, до 6 человек, и для чего идти на группу.</p></div>
+      <div class="cycle-row"><div class="tag">12.11</div><p>Курс для психологов «Новая идентичность: Психолог»: 5 встреч, онлайн или очно, старт в январе 2027 года.</p></div>
+      <div class="cycle-row"><div class="tag">19.11</div><p>Обучение психологов в «Люмен»: полимодальный подход, доказательная опора и преподаватели психологии.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», бережно и спокойно, без сложной терминологии. Каждая новость начинается со вступления от лица центра, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет слов «терапия», «лечение», «психотерапия» и «психотерапевт»: формат называем «психологическая группа», «консультация», «работа в паре». Нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 28 октября</span><h3>Психологическая группа «Гнев: от вспышки к ресурсу» в Самаре — старт 1 ноября</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы открываем набор в камерную группу о гневе: три очные встречи в Самаре, на которых учимся замечать свою злость и выражать её, не разрушая отношения.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Гнев: от вспышки к ресурсу. 1, 8, 15 ноября, 12:00–15:00.<span class="src">сайт</span></li>
+        <li>Закрытая группа до 6 человек, 3 встречи по 3 часа.<span class="src">сайт</span></li>
+        <li>Цена: 3000 ₽ за встречу, при оплате всего цикла (3 встречи) — 8000 ₽ (вместо 9000 ₽).<span class="src">Telegram</span></li>
+        <li>Ведущие: Тамара Елканова, Ольга Айвазян.<span class="src">сайт</span></li>
+        <li>Кому подойдёт: тем, кто срывается на близких, а потом проваливается в вину и стыд; тем, кто боится собственной агрессии и устал быть удобным для всех.<span class="src">сайт</span></li>
+        <li>Участники научатся замечать первые сигналы гнева в теле ещё до того, как произойдёт взрыв, и защищать личные границы без страха разрушить отношения.<span class="src">Telegram</span></li>
+        <li>Перед группой проводим короткий созвон с участниками, чтобы убедиться, что группа станет безопасным и полезным пространством.<span class="src">сайт</span></li>
+        <li>Очно в Самаре, ул. Максима Горького, 103 / Венцека, 2.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Психологическая группа «Гнев: от вспышки к ресурсу» в Самаре</span></div>
+        <div class="meta-row"><span><b>Title · </b>Группа по работе с гневом в Самаре, старт 1 ноября | Люмен</span></div>
+        <div class="meta-row"><span><b>Description · </b>Психологическая группа в Самаре о гневе и личных границах: 3 очные встречи 1, 8 и 15 ноября, до 6 человек, 3000 ₽ за встречу или 8000 ₽ за цикл.</span></div>
+        <div class="chips">
+          <span class="chip-kw">психологическая группа самара</span><span class="chip-kw">психолог самара</span>
+          <span class="chip-kw">управление гневом</span><span class="chip-kw">как справиться с гневом</span>
+          <span class="chip-kw">агрессия психолог самара</span><span class="chip-kw">личные границы психолог</span>
+          <span class="chip-kw">групповые занятия с психологом</span><span class="chip-kw">психологический центр самара</span>
+          <span class="chip-kw">группа поддержки самара</span><span class="chip-kw">помощь психолога самара</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь в группу — мест всего 6.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Гнев: от вспышки к ресурсу»</div>
+        <p>Композиция: в духе фирменного изображения — два профиля-силуэта в разрезе бумаги на градиенте от светлого к синему; справа на плашке тезис и даты «1 · 8 · 15 ноября», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: фон — перламутровый #F0E6D2 с переходом в тёмно-синий #192850, плашка — тёмно-синий #192850, тезис — перламутровый #F0E6D2, даты — голубой #96B2BB.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Короткие тематические психологические группы в Самаре: одна тема за 3–6 встреч</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы создали формат коротких тематических групп, чтобы глубокая психологическая работа стала доступной и понятной — без годов еженедельных встреч.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Формат мини-групп до 6 человек длительностью от 3 до 6 встреч. Каждая группа посвящена работе с определённой темой.<span class="src">анкета</span></li>
+        <li>Берём одну конкретную, наболевшую тему — тревога, гнев, стыд — и разбираем её за 3–6 встреч.<span class="src">сайт</span></li>
+        <li>Только очно в Самаре. Конфиденциально. Безоценочно.<span class="src">сайт</span></li>
+        <li>Для чего идти на группу: чтобы получить поддержку и обратную связь, безопасно пробовать новое, сдвинуться с мёртвой точки. Можно и просто помолчать и послушать.<span class="src">сайт</span></li>
+        <li>Группа и индивидуальные консультации хорошо сочетаются и дополняют друг друга.<span class="src">сайт</span></li>
+        <li>Группа — 3000 ₽ за встречу. Скидка 1000 ₽ при оплате группы сразу за все встречи.<span class="src">анкета</span></li>
+        <li>Ближайшая тема — «Гнев: от вспышки к ресурсу», 1, 8, 15 ноября; следующая — «Тревога как компас», предварительно январь.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Короткие тематические психологические группы в Самаре — «Люмен»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Психологические группы в Самаре: до 6 человек, 3–6 встреч | Люмен</span></div>
+        <div class="meta-row"><span><b>Description · </b>Тематические психологические группы в Самаре: одна тема за 3–6 встреч, до 6 человек, очно и конфиденциально. 3000 ₽ за встречу, скидка 1000 ₽ при оплате цикла.</span></div>
+        <div class="chips">
+          <span class="chip-kw">психологические группы самара</span><span class="chip-kw">групповые занятия с психологом</span>
+          <span class="chip-kw">психолог самара</span><span class="chip-kw">группа психологической поддержки</span>
+          <span class="chip-kw">психолог тревога самара</span><span class="chip-kw">психологический центр самара</span>
+          <span class="chip-kw">психолог консультация самара</span><span class="chip-kw">помощь психолога</span>
+          <span class="chip-kw">психолог взрослый самара</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте тему, которая актуальна сейчас, и записывайтесь в группу.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Одна тема — 3–6 встреч»</div>
+        <p>Композиция: светлый кабинет, круг из 6 кресел, без людей в кадре; тезис крупно в верхней трети на перламутровой подложке, под ним строка «до 6 человек», логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — перламутровый #F0E6D2, тезис — тёмно-синий #192850, строка «до 6 человек» — сине-бирюзовый #527F8E, тонкая линия под тезисом — бежевый #C2B69C.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 12 ноября</span><h3>Курс для психологов «Новая идентичность: Психолог» в Самаре — набор на январь 2027</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы открыли набор на курс для психологов, которые уже получили диплом и переходят от роли ученика к роли профессионала.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Новая идентичность: Психолог. Переход от роли ученика к роли профессионала.<span class="src">сайт</span></li>
+        <li>Формат: 5 встреч раз в неделю. Онлайн/Очно. Начало: январь 2027 г.<span class="src">сайт</span></li>
+        <li>Цена за весь курс: 11 500 рублей (возможна оплата частями).<span class="src">сайт</span></li>
+        <li>Кому подойдёт: тем, у кого уже есть диплом психолога — если вы только начинаете свою практику или давно в профессии, но хотите углубить свои знания.<span class="src">сайт</span></li>
+        <li>Обучение психологов — тематические курсы для повышения квалификации психологов, у которых уже есть основной диплом.<span class="src">анкета</span></li>
+        <li>Онлайн-занятия идут не в записи, а в живом подключении; записи занятий остаются с участниками.<span class="src">Telegram</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Курс для психологов «Новая идентичность: Психолог» в Самаре</span></div>
+        <div class="meta-row"><span><b>Title · </b>Курс для психологов в Самаре и онлайн, старт в январе 2027 | Люмен</span></div>
+        <div class="meta-row"><span><b>Description · </b>Курс «Новая идентичность: Психолог» для психологов с дипломом: 5 встреч раз в неделю, онлайн или очно в Самаре, старт в январе 2027, 11 500 ₽ с оплатой частями.</span></div>
+        <div class="chips">
+          <span class="chip-kw">курсы для психологов самара</span><span class="chip-kw">обучение психологов самара</span>
+          <span class="chip-kw">повышение квалификации психологов</span><span class="chip-kw">курсы психолога</span>
+          <span class="chip-kw">обучение на психолога самара</span><span class="chip-kw">курсы для психологов онлайн</span>
+          <span class="chip-kw">начинающий психолог</span><span class="chip-kw">дпо для психологов</span>
+          <span class="chip-kw">обучающий центр психологии самара</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на курс, в комментарии укажите «обучение».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Новая идентичность: Психолог»</div>
+        <p>Композиция: рабочий стол психолога — раскрытая тетрадь с записями, ручка, чашка; тезис на плашке в нижней трети, строка «старт — январь 2027», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — сине-бирюзовый #527F8E, тезис — перламутровый #F0E6D2, строка с датой — бежевый #C2B69C.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 19 ноября</span><h3>Обучение психологов в Самаре: полимодальный подход и опора на индивидуальность специалиста</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Люмен» мы не только помогаем людям разобраться в себе, но и обучаем этому психологов — и учим опираться на собственный стиль в работе.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Тут мы совмещаем две задачи: помогаем людям разобраться в себе и обучаем этому психологов. Все методы центра основаны на доказательном подходе.<span class="src">сайт</span></li>
+        <li>Наш центр полимодален: учим видеть человека объёмно — через призму гештальт-подхода, нейробиологию травмы, телесные реакции.<span class="src">сайт</span></li>
+        <li>Специалисты центра имеют педагогическое образование в сфере психологии, преподают психологию в государственном институте.<span class="src">анкета</span></li>
+        <li>В обучении специалистов учим опираться на свои индивидуальные особенности.<span class="src">анкета</span></li>
+        <li>Большую программу профпереподготовки мы разбили на маленькие тематические блоки и организовали обучение уже сейчас.<span class="src">сайт</span></li>
+        <li>Базовые ступени курсов, практикумы и интервизорские группы проходят очно, в кабинете; для коллег из других городов — онлайн в живом подключении.<span class="src">Telegram</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Обучение психологов в Самаре — обучающий центр «Люмен»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Обучение психологов в Самаре: полимодальный подход | Люмен</span></div>
+        <div class="meta-row"><span><b>Description · </b>Обучающий центр практической психологии «Люмен» в Самаре: тематические курсы для психологов с дипломом, гештальт-подход, нейробиология травмы, практикумы очно и онлайн.</span></div>
+        <div class="chips">
+          <span class="chip-kw">обучение психологов самара</span><span class="chip-kw">обучающий центр психологии</span>
+          <span class="chip-kw">курсы для психологов</span><span class="chip-kw">повышение квалификации психологов самара</span>
+          <span class="chip-kw">практикум для психологов</span><span class="chip-kw">интервизия для психологов</span>
+          <span class="chip-kw">гештальт подход обучение</span><span class="chip-kw">переподготовка на психолога</span>
+          <span class="chip-kw">центр практической психологии самара</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на обучение — расскажем о программах центра.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Обучение психологов в Самаре»</div>
+        <p>Композиция: фото преподавателя центра у флипчарта в кабинете, мягкий тёплый свет; тезис в верхней трети на полупрозрачной подложке, логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — тёмно-синий #192850, тезис — перламутровый #F0E6D2, тонкая рамка-уголок — бежевый #C2B69C.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Гнев: от вспышки к ресурсу</div><span class="slide-no">Сторис 1 · 28 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">1 · 8 · 15 ноября</span>
+          <span class="fact-pill">12:00–15:00</span>
+          <span class="fact-pill">До 6 человек</span>
+          <span class="fact-pill">8 000 ₽ за цикл</span>
+          <span class="fact-pill">Очно в Самаре</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон — градиент от перламутрового #F0E6D2 к тёмно-синему #192850, заголовок тёмно-синим #192850 в верхней части, даты крупно перламутровым #F0E6D2 в нижней, цена на плашке сине-бирюзового #527F8E. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Одна тема — 3–6 встреч</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">До 6 человек</span>
+          <span class="fact-pill">Конфиденциально</span>
+          <span class="fact-pill">Безоценочно</span>
+          <span class="fact-pill">3 000 ₽ за встречу</span>
+          <span class="fact-pill">−1 000 ₽ за цикл</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон перламутровый #F0E6D2, заголовок тёмно-синим #192850, факты списком с тонкими разделителями бежевого #C2B69C, цена жирным сине-бирюзовым #527F8E. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Курс «Новая идентичность: Психолог»</div><span class="slide-no">Сторис 3 · 12 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">5 встреч раз в неделю</span>
+          <span class="fact-pill">Онлайн / очно</span>
+          <span class="fact-pill">Старт — январь 2027</span>
+          <span class="fact-pill">11 500 ₽</span>
+          <span class="fact-pill">Оплата частями</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #192850, название курса перламутровым #F0E6D2, факты голубым #96B2BB, цена «11 500 ₽» крупно бежевым #C2B69C. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Как учат психологов в «Люмен»</div><span class="slide-no">Сторис 4 · 19 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Полимодальный подход</span>
+          <span class="fact-pill">Гештальт-подход</span>
+          <span class="fact-pill">Нейробиология травмы</span>
+          <span class="fact-pill">Практикумы и интервизии</span>
+          <span class="fact-pill">Очно и онлайн</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон голубой #96B2BB, заголовок тёмно-синим #192850, пять пунктов в столбик на перламутровых плашках #F0E6D2 с текстом тёмно-синего #192850. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — набор в группу и обучение психологов <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Психологическая группа «Гнев: от вспышки к ресурсу» — старт 1 ноября</b>28.10 · 3 встречи, до 6 человек, 8 000 ₽ за цикл</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Гнев: от вспышки к ресурсу</b>28.10 · даты, время, цена</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Короткие тематические психологические группы: одна тема за 3–6 встреч</b>05.11 · формат, зачем идти на группу, ближайшие темы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Одна тема — 3–6 встреч</b>05.11 · до 6 человек, цена и скидка за цикл</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Курс для психологов «Новая идентичность: Психолог»</b>12.11 · 5 встреч, онлайн или очно, январь 2027, 11 500 ₽</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Курс «Новая идентичность: Психолог»</b>12.11 · формат, старт, цена</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Обучение психологов в Самаре: полимодальный подход</b>19.11 · доказательность, преподаватели, практикумы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Как учат психологов в «Люмен»</b>19.11 · пять опор обучения</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={p:[31717,35263,29748,33193,30636,30118,27344,24534,25510,24493,25770,29671,32670,33260,24626,25186,23276,26053,24520,21986,22089,21265,23408,33267]};
+const fmt=n=>n.toLocaleString('ru-RU');
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=44,R=10,T=10,B=24,mn=0,mx=40000;
+  const x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-com':[['психолог','смешанное',32323],['психолог самара','коммерческое, гео',6492],['психотерапевт самара','коммерческое, гео',1923],['детский психолог','смешанное',1284],['клинический психолог','смешанное',974],['психолог онлайн','коммерческое',690],['семейный психолог','коммерческое',576],['консультация психолога','коммерческое',402],['управление гневом','в основном фильм',282],['семейный психолог самара','коммерческое, гео',250],['психолог для подростка','коммерческое',171],['сексолог самара','коммерческое, гео',144],['психолог сексолог','коммерческое',110],['групповая терапия','смешанное',72]],
+ 't-edu':[['курсы психолога','обучение',294],['обучение на психолога','обучение',291],['переподготовка на психолога','обучение',117],['обучение на психолога самара','обучение, гео',109],['клинический психолог обучение','обучение',94],['дпо для психологов и психотерапевтов','обучение',34]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['demand','Спрос'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
