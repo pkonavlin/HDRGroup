@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Эко-Спарта ТЗ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -55,6 +59,7 @@
   }
 
   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{
     margin:0;
     background:var(--bg);
@@ -62,7 +67,6 @@
     font-family:var(--body);
     font-size:15px;
     line-height:1.55;
-    padding-inline:0;
   }
   a{color:var(--accent-strong);}
   h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;color:var(--text);}
@@ -72,7 +76,7 @@
   /* ---------- Sticky top nav ---------- */
   .topbar{
     position:sticky;
-    top:env(safe-area-inset-top,0px);
+    top:0;
     z-index:50;
     display:flex;
     align-items:center;
@@ -109,7 +113,7 @@
 
   /* ---------- Layout ---------- */
   .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
-  section{padding-block:44px;border-bottom:1px solid var(--border);}
+  section{padding-block:44px;border-bottom:1px solid var(--border);scroll-margin-top:60px;}
   section:last-of-type{border-bottom:none;}
   .eyebrow{
     font-family:var(--mono);
@@ -122,18 +126,13 @@
     display:block;
   }
   .section-title{font-size:26px;font-weight:700;margin-bottom:6px;}
-  .section-sub{color:var(--text-muted);font-size:14px;max-width:56ch;margin-top:6px;}
+  .section-sub{color:var(--text-muted);font-size:14px;max-width:62ch;margin-top:6px;}
 
   /* ---------- Hero ---------- */
   .hero{padding-top:40px;}
   .hero-title{font-size:clamp(30px,5vw,42px);font-weight:900;line-height:1.08;}
   .hero-title .accent{color:var(--accent-strong);}
-  .hero-meta{
-    margin-top:20px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-  }
+  .hero-meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;}
   .pill{
     font-family:var(--mono);
     font-size:12px;
@@ -143,6 +142,7 @@
     border:1px solid var(--border);
     color:var(--text-muted);
   }
+
   /* ---------- Facts grid ---------- */
   .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:18px;}
   .fact-card{
@@ -155,41 +155,35 @@
   .fact-card .v{margin-top:6px;font-weight:600;font-size:14.5px;}
   .fact-card .v small{display:block;font-weight:400;color:var(--text-muted);font-size:12.5px;margin-top:2px;}
 
-  /* ---------- Brandbook swatches ---------- */
+  /* ---------- Brandbook swatches (подпись прямо на цвете) ---------- */
   .swatches{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px;}
   .swatch{
     width:150px;
+    min-height:132px;
     border-radius:var(--radius);
-    overflow:hidden;
     border:1px solid var(--border);
-    background:var(--surface);
+    padding:14px 14px 12px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:2px;
   }
-  .swatch .chip{height:84px;}
-  .swatch .label{padding:10px 12px;}
-  .swatch .name{font-size:12.5px;font-weight:700;}
-  .swatch .hex{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);margin-top:2px;}
-  .swatch .src{font-family:var(--mono);font-size:9.5px;color:var(--accent-strong);margin-top:4px;text-transform:uppercase;letter-spacing:.04em;}
+  .swatch .role{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;opacity:.85;}
+  .swatch .name{font-size:13px;font-weight:700;}
+  .swatch .hex{font-family:var(--mono);font-size:12px;}
+  .swatch.on-dark{color:#FFFFFF;}
+  .swatch.on-light{color:#0B1220;}
 
-  /* ---------- Roadmap ---------- */
-  .roadmap{position:relative;margin-top:28px;padding-left:26px;}
-  .roadmap::before{
-    content:"";
-    position:absolute;left:6px;top:6px;bottom:6px;
-    width:2px;background:var(--border);
+  /* ---------- Tone banner ---------- */
+  .tone-banner{
+    margin-top:18px;
+    padding:14px 18px;
+    background:var(--accent-soft);
+    border:1px solid var(--accent);
+    border-radius:var(--radius);
+    font-size:13.5px;
+    max-width:70ch;
   }
-  .rm-item{position:relative;padding-bottom:26px;}
-  .rm-item:last-child{padding-bottom:0;}
-  .rm-item::before{
-    content:"";
-    position:absolute;left:-26px;top:4px;
-    width:12px;height:12px;border-radius:50%;
-    background:var(--surface);border:2px solid var(--accent);
-  }
-  .rm-item.is-story::before{background:var(--accent);border-color:var(--accent);}
-  .rm-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);}
-  .rm-title{font-weight:700;font-size:15.5px;margin-top:2px;}
-  .rm-thesis{color:var(--text-muted);font-size:13px;margin-top:2px;}
-  .rm-item a{text-decoration:none;color:inherit;}
 
   /* ---------- Theme cards ---------- */
   .theme{
@@ -203,10 +197,7 @@
   .theme-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
   .theme-num{font-family:var(--mono);font-size:12px;color:var(--accent-strong);font-weight:600;}
   .theme-title{font-size:19px;font-weight:700;margin-top:4px;max-width:44ch;}
-  .cover-thesis{
-    flex:none;
-    text-align:right;
-  }
+  .cover-thesis{flex:none;text-align:right;}
   .cover-thesis .lbl{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
   .cover-thesis .val{
     margin-top:4px;
@@ -221,18 +212,21 @@
   }
   .theme-block{margin-top:18px;}
   .theme-block .h{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:8px;display:block;}
-  .reveal-list li{
-    position:relative;
-    padding-left:18px;
-    margin-top:7px;
-    font-size:14px;
+  .intro-voice{
+    font-size:14.5px;
+    padding:12px 16px;
+    border-left:3px solid var(--accent);
+    background:var(--surface-2);
+    border-radius:0 10px 10px 0;
   }
+  .reveal-list li{position:relative;padding-left:18px;margin-top:7px;font-size:14px;}
   .reveal-list li::before{
     content:"";
     position:absolute;left:0;top:8px;
     width:6px;height:6px;border-radius:1px;
     background:var(--accent);
   }
+  .cta-line{font-size:14px;}
   .kw-wrap{display:flex;flex-wrap:wrap;gap:7px;}
   .kw{
     font-family:var(--mono);
@@ -281,13 +275,7 @@
     padding:6px 0;
     margin-top:18px;
   }
-  .ex-row{
-    display:flex;
-    gap:14px;
-    padding:12px 20px;
-    border-bottom:1px solid var(--border);
-    font-size:13.5px;
-  }
+  .ex-row{display:flex;gap:14px;padding:12px 20px;border-bottom:1px solid var(--border);font-size:13.5px;}
   .ex-row:last-child{border-bottom:none;}
   .ex-row .tag{
     flex:none;
@@ -299,13 +287,76 @@
   }
   .ex-row .t{font-weight:600;}
 
-  footer{padding:28px 20px 40px;text-align:center;color:var(--text-muted);font-size:12px;font-family:var(--mono);}
+  /* ---------- Roadmap accordion ---------- */
+  .stage{
+    margin-top:18px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .stage summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 20px;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .stage summary::-webkit-details-marker{display:none;}
+  .stage summary::after{
+    content:"+";
+    font-family:var(--mono);
+    font-size:18px;
+    color:var(--accent-strong);
+    flex:none;
+  }
+  .stage[open] summary::after{content:"–";}
+  .stage .badge{
+    font-family:var(--mono);
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    padding:3px 9px;
+    border-radius:999px;
+    margin-left:10px;
+    white-space:nowrap;
+  }
+  .stage-body{padding:0 20px 22px;}
+  .roadmap{position:relative;margin-top:14px;padding-left:26px;}
+  .roadmap::before{
+    content:"";
+    position:absolute;left:6px;top:6px;bottom:6px;
+    width:2px;background:var(--border);
+  }
+  .rm-item{position:relative;padding-bottom:26px;}
+  .rm-item:last-child{padding-bottom:0;}
+  .rm-item::before{
+    content:"";
+    position:absolute;left:-26px;top:4px;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--surface);border:2px solid var(--accent);
+  }
+  .rm-item.is-story::before{background:var(--accent);border-color:var(--accent);}
+  .rm-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);}
+  .rm-title{font-weight:700;font-size:15.5px;margin-top:2px;}
+  .rm-thesis{color:var(--text-muted);font-size:13px;margin-top:2px;}
+  .rm-item a{text-decoration:none;color:inherit;}
 
   @media (max-width:600px){
     .theme-head{flex-direction:column;}
     .cover-thesis{text-align:left;}
   }
 </style>
+</head>
+<body>
 
 <div class="topbar">
   <div class="brand"><span class="dot"></span>Эко-Спарта</div>
@@ -322,7 +373,7 @@
 <div class="wrap">
 
   <section class="hero" id="facts">
-    <span class="eyebrow">ТЗ · контент-план · Яндекс Карты / 2ГИС</span>
+    <span class="eyebrow">ТЗ · контент-план · Яндекс Карты / 2ГИС · Этап 2</span>
     <h1 class="hero-title">Эко-Спарта — <span class="accent">мягкие окна</span>, Воронеж</h1>
 
     <div class="hero-meta">
@@ -334,21 +385,21 @@
 
     <div class="facts">
       <div class="fact-card">
-        <span class="k">Фактические услуги на карточке</span>
+        <span class="k">Услуги на карточке</span>
         <div class="v">Мягкие ПВХ-окна <small>от 1 740 ₽</small></div>
         <div class="v">Москитные сетки <small>от 1 830 ₽ — отдельная услуга</small></div>
         <div class="v">Выезд на замер <small>от 1 000 ₽</small></div>
       </div>
       <div class="fact-card">
-        <span class="k">Категории карточки vs факт. услуги</span>
-        <div class="v">Заявлено: окна, фасады и фасадные системы, оборудование для производства окон
-          <small>В прайсе и в истории тем реально раскрыта только линия мягких окон и москитных сеток — фасадные системы и продажа оборудования на карточке фактами не подтверждены, поэтому в темы не включаем, чтобы не придумывать несуществующие услуги</small>
-        </div>
+        <span class="k">Из материалов компании</span>
+        <div class="v">Собственное производство <small>на оборудовании Leister</small></div>
+        <div class="v">Реальный монтаж объекта <small>г. Воронеж</small></div>
       </div>
       <div class="fact-card">
-        <span class="k">Соцсети и оценка</span>
-        <div class="v">ВК: vk.ru/mygkieoknapvh <small>группа открывается пусто через автоматический доступ — доп. фактов не добавлено</small></div>
-        <div class="v">Яндекс Карты: 4,1 <small>из 3 оценок, 1 текстовый отзыв — довольны сроками и качеством</small></div>
+        <span class="k">Условия заказа (атрибуты карточки)</span>
+        <div class="v">Доставка и самовывоз</div>
+        <div class="v">Оплата <small>картой, по QR-коду, по ссылке, онлайн, наличными, безналичным переводом, через СБП</small></div>
+        <div class="v">Парковка и доступность <small>парковка, в том числе для людей с инвалидностью; полная доступность для инвалидных колясок; можно с животными</small></div>
       </div>
     </div>
   </section>
@@ -356,48 +407,32 @@
   <section id="brand">
     <span class="eyebrow">Мини-брендбук</span>
     <h2 class="section-title">Цветовая палитра проекта</h2>
-    <p class="section-sub">Снята пиксель-семплингом (PIL) из 3 присланных скриншотов реализованного дизайна — сэмплы по конкретным элементам (акцентный текст, бейджи, фон), не «на глаз». Найдено 4 подтверждённых цвета — по правилу добавлен 5-й, дополняющий, так как исходных ≤ 5.</p>
 
     <div class="swatches">
-      <div class="swatch">
-        <div class="chip" style="background:#080B15"></div>
-        <div class="label">
-          <div class="name">Тёмный графит</div>
-          <div class="hex">#080B15</div>
-          <div class="src">со скринов · фон</div>
-        </div>
+      <div class="swatch on-dark" style="background:#080B15">
+        <span class="role">Фон</span>
+        <span class="name">Тёмный графит</span>
+        <span class="hex">#080B15</span>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#1C3442"></div>
-        <div class="label">
-          <div class="name">Тёмная бирюза</div>
-          <div class="hex">#1C3442</div>
-          <div class="src">со скринов · градиент</div>
-        </div>
+      <div class="swatch on-dark" style="background:#1C3442">
+        <span class="role">Градиент фона</span>
+        <span class="name">Тёмная бирюза</span>
+        <span class="hex">#1C3442</span>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#86E8FC"></div>
-        <div class="label">
-          <div class="name">Бирюзовый акцент</div>
-          <div class="hex">#86E8FC</div>
-          <div class="src">со скринов · заголовки</div>
-        </div>
+      <div class="swatch on-light" style="background:#86E8FC">
+        <span class="role">Акцент</span>
+        <span class="name">Бирюзовый</span>
+        <span class="hex">#86E8FC</span>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#FFFFFF;border-bottom:1px solid #eee"></div>
-        <div class="label">
-          <div class="name">Белый</div>
-          <div class="hex">#FFFFFF</div>
-          <div class="src">со скринов · текст</div>
-        </div>
+      <div class="swatch on-light" style="background:#FFFFFF">
+        <span class="role">Текст</span>
+        <span class="name">Белый</span>
+        <span class="hex">#FFFFFF</span>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#B98A5D"></div>
-        <div class="label">
-          <div class="name">Тёплое дерево</div>
-          <div class="hex">#B98A5D</div>
-          <div class="src">добавлено · для 5 цветов</div>
-        </div>
+      <div class="swatch on-light" style="background:#B98A5D">
+        <span class="role">Дополнительный</span>
+        <span class="name">Тёплое дерево</span>
+        <span class="hex">#B98A5D</span>
       </div>
     </div>
   </section>
@@ -405,43 +440,55 @@
   <section id="news-1">
     <span class="eyebrow">Новости — полное ТЗ</span>
     <h2 class="section-title">2 темы + обложка</h2>
+    <p class="section-sub">Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
+
+    <div class="tone-banner">
+      <b>Тон текстов.</b> Тёплый, от первого лица компании («мы»). Каждая новость рассказывает свою историю, а не повторяет один и тот же список услуг. Все факты — только из материалов компании и карточки.
+    </div>
 
     <div class="theme" id="news-1-card">
       <div class="theme-head">
         <div>
           <div class="theme-num">Новость 1</div>
-          <div class="theme-title">Москитные сетки — отдельная защита открытых пространств</div>
+          <div class="theme-title">Мягкие окна от собственного производства: изготовление на оборудовании Leister</div>
         </div>
         <div class="cover-thesis">
           <div class="lbl">Обложка</div>
-          <div class="val">Защита от насекомых</div>
+          <div class="val">Своё производство</div>
         </div>
       </div>
 
       <div class="theme-block">
-        <span class="h">Что раскрыть</span>
+        <span class="h">Вступление (тон и голос)</span>
+        <p class="intro-voice">Мягкие окна мы изготавливаем на собственном производстве — на оборудовании Leister.</p>
+      </div>
+
+      <div class="theme-block">
+        <span class="h">Тезисы</span>
         <ul class="reveal-list">
-          <li>Москитная сетка — отдельная услуга компании, не входит в стоимость мягкого окна</li>
-          <li>Защита от насекомых, пыли и цветочной пыльцы</li>
-          <li>Устанавливается на дверные и оконные проёмы, в беседках и на верандах</li>
-          <li>Лёгкая по весу и простая в установке конструкция</li>
-          <li>Быстрый монтаж и демонтаж по сезону</li>
-          <li>Сочетается с мягкими окнами для комплексной защиты открытого пространства</li>
-          <li>Сохраняет свободный доступ свежего воздуха — в отличие от закрытого остекления</li>
+          <li>Мягкие окна изготавливаются на собственном производстве компании</li>
+          <li>Производство оснащено оборудованием Leister</li>
+          <li>Реальный монтаж объекта в Воронеже — фото из материалов компании</li>
+          <li>Примеры работ: мягкие окна на деревянной беседке и на веранде дома</li>
         </ul>
+      </div>
+
+      <div class="theme-block">
+        <span class="h">CTA</span>
+        <p class="cta-line">Оставляйте заявку на мягкие окна от собственного производства.</p>
       </div>
 
       <div class="theme-block">
         <span class="h">SEO</span>
         <div class="kw-wrap">
-          <span class="kw">москитные сетки</span>
-          <span class="kw">москитная сетка на заказ</span>
-          <span class="kw">изготовление москитных сеток</span>
-          <span class="kw">установка москитной сетки</span>
-          <span class="kw">москитная сетка для беседки</span>
-          <span class="kw">сетка от комаров на веранду</span>
-          <span class="kw">защита от насекомых терраса</span>
-          <span class="kw">москитные сетки Воронеж</span>
+          <span class="kw">производство мягких окон</span>
+          <span class="kw">мягкие окна от производителя</span>
+          <span class="kw">изготовление мягких окон Воронеж</span>
+          <span class="kw">мягкие окна на заказ</span>
+          <span class="kw">гибкие окна Воронеж</span>
+          <span class="kw">мягкие окна для беседки</span>
+          <span class="kw">мягкие окна для веранды</span>
+          <span class="kw">мягкие ПВХ-окна Воронеж</span>
         </div>
       </div>
     </div>
@@ -450,37 +497,46 @@
       <div class="theme-head">
         <div>
           <div class="theme-num">Новость 2</div>
-          <div class="theme-title">Как проходит заказ мягких окон — от замера до монтажа</div>
+          <div class="theme-title">Заказ мягких окон в Воронеже: доставка, самовывоз и способы оплаты</div>
         </div>
         <div class="cover-thesis">
           <div class="lbl">Обложка</div>
-          <div class="val">Замер и монтаж</div>
+          <div class="val">Доставка и оплата</div>
         </div>
       </div>
 
       <div class="theme-block">
-        <span class="h">Что раскрыть</span>
+        <span class="h">Вступление (тон и голос)</span>
+        <p class="intro-voice">Мы сделали заказ мягких окон удобным: готовое изделие можно получить доставкой или забрать самим, а оплатить — тем способом, который подходит вам.</p>
+      </div>
+
+      <div class="theme-block">
+        <span class="h">Тезисы</span>
         <ul class="reveal-list">
-          <li>Выезд специалиста на объект для замера проёмов и оценки конструкции</li>
-          <li>Индивидуальный расчёт стоимости под конкретный объект</li>
-          <li>Согласование формы, окантовки и типа крепления перед изготовлением</li>
-          <li>Изготовление мягких окон на собственном производстве компании</li>
-          <li>Монтаж мягких окон на объекте силами специалистов компании</li>
-          <li>Итог — готовое закрытое пространство под ключ, без стороннего подрядчика на любом из этапов</li>
+          <li>Доставка и самовывоз — два варианта получения заказа</li>
+          <li>Способы оплаты: банковская карта, QR-код, ссылка, онлайн, наличные, безналичный перевод, СБП</li>
+          <li>У компании есть парковка, в том числе для людей с инвалидностью</li>
+          <li>Полная доступность для инвалидных колясок</li>
+          <li>Можно прийти с животными</li>
         </ul>
+      </div>
+
+      <div class="theme-block">
+        <span class="h">CTA</span>
+        <p class="cta-line">Оставляйте заявку — подскажем, как удобнее получить и оплатить заказ.</p>
       </div>
 
       <div class="theme-block">
         <span class="h">SEO</span>
         <div class="kw-wrap">
-          <span class="kw">порядок изготовления мягких окон</span>
-          <span class="kw">замер мягких окон</span>
-          <span class="kw">выезд на замер мягких окон</span>
-          <span class="kw">монтаж мягких окон</span>
-          <span class="kw">этапы изготовления окон</span>
-          <span class="kw">установка мягких окон под ключ</span>
           <span class="kw">заказать мягкие окна Воронеж</span>
-          <span class="kw">мягкие окна на заказ Воронеж</span>
+          <span class="kw">мягкие окна с доставкой</span>
+          <span class="kw">мягкие окна самовывоз</span>
+          <span class="kw">мягкие окна оплата картой</span>
+          <span class="kw">оплата по QR-коду</span>
+          <span class="kw">мягкие окна для террасы</span>
+          <span class="kw">мягкие окна для кафе</span>
+          <span class="kw">мягкие окна Воронеж</span>
         </div>
       </div>
     </div>
@@ -489,32 +545,31 @@
   <section id="story-1">
     <span class="eyebrow">Сторис — полное ТЗ</span>
     <h2 class="section-title">2 темы, формат презентации</h2>
-    <p class="section-sub">Один слайд — один факт. Только тезисы, без раскрутки на несколько слайдов.</p>
+    <p class="section-sub">Один слайд — один факт. Публикация — в карточке компании на Яндекс Картах и 2ГИС.</p>
 
     <div class="story" id="story-1-card">
       <div class="theme-num">История 1</div>
-      <div class="story-topic">Тема: москитные сетки</div>
-      <div class="slide-heading">Ещё один способ <span class="hl">защиты</span></div>
+      <div class="story-topic">Тема: собственное производство</div>
+      <div class="slide-heading">Мягкие окна — <span class="hl">своё производство</span></div>
       <ul class="theses">
-        <li>москитные сетки</li>
-        <li>защита от насекомых</li>
-        <li>защита от пыли и пыльцы</li>
-        <li>для дверных и оконных проёмов</li>
-        <li>лёгкий монтаж и демонтаж</li>
+        <li>собственное производство</li>
+        <li>оборудование Leister</li>
+        <li>реальный монтаж в Воронеже</li>
+        <li>беседки и веранды</li>
       </ul>
       <div class="fmt-note">1 слайд</div>
     </div>
 
     <div class="story" id="story-2">
       <div class="theme-num">История 2</div>
-      <div class="story-topic">Тема: путь заказа</div>
-      <div class="slide-heading">От замера до <span class="hl">готового результата</span></div>
+      <div class="story-topic">Тема: удобство заказа</div>
+      <div class="slide-heading">Удобный <span class="hl">заказ</span></div>
       <ul class="theses">
-        <li>выезд на замер</li>
-        <li>точный расчёт под объект</li>
-        <li>изготовление на своём производстве</li>
-        <li>монтаж на месте</li>
-        <li>готовое пространство под ключ</li>
+        <li>доставка и самовывоз</li>
+        <li>оплата картой, по QR-коду, через СБП</li>
+        <li>наличные и безналичный перевод</li>
+        <li>парковка у компании</li>
+        <li>доступно для инвалидных колясок</li>
       </ul>
       <div class="fmt-note">1 слайд</div>
     </div>
@@ -523,7 +578,7 @@
   <section id="published">
     <span class="eyebrow">Справочно</span>
     <h2 class="section-title">Уже реализовано (не дублировать)</h2>
-    <p class="section-sub">Из присланного гугл-документа — предыдущий рабочий период. Новые темы выше намеренно раскрывают другие углы: отдельный продукт (сетки) и процесс заказа, а не повторную защиту от погоды или повторное «индивидуальное изготовление».</p>
+    <p class="section-sub">Из присланного гугл-документа — период до Этапа 1. Темы Этапов 1 и 2 — в «Карте тем» ниже.</p>
     <div class="existing">
       <div class="ex-row"><span class="tag">Новость 1</span><span class="t">Мягкие окна как альтернатива классическому остеклению</span></div>
       <div class="ex-row"><span class="tag">Новость 2</span><span class="t">Индивидуальное изготовление — почему готовых решений не существует</span></div>
@@ -538,41 +593,76 @@
 
   <section id="map">
     <span class="eyebrow">Карта тем</span>
-    <h2 class="section-title">Этап 1 — актуальный</h2>
-    <p class="section-sub">Первая проработка карточки продолжается — новые темы логично развивают историю уже реализованных 4 новостей и 4 сторис (см. блок «Уже реализовано» выше), не повторяя их.</p>
+    <h2 class="section-title">Этапы работы</h2>
 
-    <div class="roadmap">
-      <div class="rm-item">
-        <a href="#news-1-card">
-          <span class="rm-tag">Новость 1</span>
-          <div class="rm-title">Москитные сетки — отдельная защита открытых пространств</div>
-          <div class="rm-thesis">Продукт, который ни разу не раскрывался отдельно</div>
-        </a>
+    <details class="stage">
+      <summary><span>Этап 1</span></summary>
+      <div class="stage-body">
+        <p class="section-sub">Новые углы после периода «мягкие окна»: отдельный продукт и путь заказа.</p>
+        <div class="roadmap">
+          <div class="rm-item">
+            <span class="rm-tag">Новость 1</span>
+            <div class="rm-title">Москитные сетки — отдельная защита открытых пространств</div>
+            <div class="rm-thesis">Продукт, который ни разу не раскрывался отдельно</div>
+          </div>
+          <div class="rm-item is-story">
+            <span class="rm-tag">История 1</span>
+            <div class="rm-title">Москитные сетки</div>
+            <div class="rm-thesis">Ещё один способ защиты — визуальный факт-лист</div>
+          </div>
+          <div class="rm-item">
+            <span class="rm-tag">Новость 2</span>
+            <div class="rm-title">Как проходит заказ мягких окон — от замера до монтажа</div>
+            <div class="rm-thesis">Весь путь клиента, а не отдельные плюсы изготовления</div>
+          </div>
+          <div class="rm-item is-story">
+            <span class="rm-tag">История 2</span>
+            <div class="rm-title">Как проходит заказ</div>
+            <div class="rm-thesis">5 шагов от замера до результата</div>
+          </div>
+        </div>
       </div>
-      <div class="rm-item is-story">
-        <a href="#story-1-card">
-          <span class="rm-tag">История 1</span>
-          <div class="rm-title">Москитные сетки</div>
-          <div class="rm-thesis">Ещё один способ защиты — визуальный факт-лист</div>
-        </a>
+    </details>
+
+    <details class="stage" open>
+      <summary><span>Этап 2<span class="badge">актуальный</span></span></summary>
+      <div class="stage-body">
+        <p class="section-sub">Продолжение цикла: после защиты (сетки) и пути заказа — где и как изготавливается изделие и насколько удобно его получить и оплатить.</p>
+        <div class="roadmap">
+          <div class="rm-item">
+            <a href="#news-1-card">
+              <span class="rm-tag">Новость 1</span>
+              <div class="rm-title">Мягкие окна от собственного производства: изготовление на оборудовании Leister</div>
+              <div class="rm-thesis">Производство и оборудование — то, что стоит за изделием</div>
+            </a>
+          </div>
+          <div class="rm-item is-story">
+            <a href="#story-1-card">
+              <span class="rm-tag">История 1</span>
+              <div class="rm-title">Мягкие окна — своё производство</div>
+              <div class="rm-thesis">Производство, оборудование Leister, реальный монтаж</div>
+            </a>
+          </div>
+          <div class="rm-item">
+            <a href="#news-2">
+              <span class="rm-tag">Новость 2</span>
+              <div class="rm-title">Заказ мягких окон в Воронеже: доставка, самовывоз и способы оплаты</div>
+              <div class="rm-thesis">Удобство получения и оплаты заказа</div>
+            </a>
+          </div>
+          <div class="rm-item is-story">
+            <a href="#story-2">
+              <span class="rm-tag">История 2</span>
+              <div class="rm-title">Удобный заказ</div>
+              <div class="rm-thesis">Доставка, самовывоз, оплата, доступность</div>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="rm-item">
-        <a href="#news-2">
-          <span class="rm-tag">Новость 2</span>
-          <div class="rm-title">Как проходит заказ мягких окон — от замера до монтажа</div>
-          <div class="rm-thesis">Весь путь клиента, а не отдельные плюсы изготовления</div>
-        </a>
-      </div>
-      <div class="rm-item is-story">
-        <a href="#story-2">
-          <span class="rm-tag">История 2</span>
-          <div class="rm-title">Как проходит заказ</div>
-          <div class="rm-thesis">5 шагов от замера до результата</div>
-        </a>
-      </div>
-    </div>
+    </details>
   </section>
 
 </div>
 
-</body></html>
+</body>
+</html>
