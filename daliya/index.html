@@ -1,0 +1,839 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Далия» Архыз</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Далия · Архыз</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ДАЛИЯ ДАЛИЯ ДАЛИЯ ДАЛИЯ</span><span>ДАЛИЯ ДАЛИЯ ДАЛИЯ ДАЛИЯ</span><span>ДАЛИЯ ДАЛИЯ ДАЛИЯ ДАЛИЯ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Далия» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса на отдых в Архызе, стратегия продвижения и контент-план для карточки базы отдыха. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>База отдыха «Далия»</b></div>
+        <div><span>Город</span><b>Село Архыз</b></div>
+        <div><span>Направления</span><b>Коттеджи до 6 гостей · Отдых круглый год · Новый год</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 28.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«база отдыха архыз»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первых 15 результатах на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«снять домик в архызе»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первой выдаче</span></div>
+        <div class="tile"><span class="t-k">Рейтинг на Картах</span><span class="t-n g">5,0</span><span class="t-s">57 оценок · 45 отзывов</span></div>
+        <div class="tile"><span class="t-k">Спрос «база отдыха архыз»</span><span class="t-n g">+13%</span><span class="t-s">сентябрь 2026 к сентябрю 2025, Россия</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции на Яндекс Картах по 6 запросам, сайт в органике Яндекса, спрос по Вордстату, причины, по которым карточку не видно, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис: база в селе Архыз, коттедж для семьи, Новый год 2026–2027, условия бронирования.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 30.10</span><span class="st wait">согласование</span></div><h3>Согласование тем этапа 1</h3><p>Темы, тезисы и обложки утверждаются до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">30.10 · 06.11 · 13.11 · 20.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на карточке базы отдыха в Яндекс Картах и 2ГИС.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">следующий шаг</span></div><h3>Прайс и рубрики</h3><p>Заменить позицию за 1 ₽ реальными ценами по сезонам, добавить рубрики под запросы «гостевой дом» и «коттеджи», в 2ГИС — рубрику «База отдыха».</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточку не видно и что с этим делать</h3>
+          <p>Позиции по 6 запросам на Яндекс Картах, соседи по выдаче, спрос и сезонность, сайт в органике, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>30.10 — База отдыха в селе Архыз: пять коттеджей в лесистой местности</li>
+            <li>06.11 — Домик в Архызе для семьи до 6 гостей</li>
+            <li>13.11 — Новый год 2026–2027 в Архызе</li>
+            <li>20.11 — Как забронировать коттедж</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Село Архыз · база отдыха, коттеджи · замер 28.10.2026</span>
+  <h1>Где «Далию» не видно в поиске и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 6 запросам, сайт в органике Яндекса, спрос по Вордстату и сравнение с карточками, которые стоят первыми в выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>По названию — 1 место</b>По запросу «база далия архыз» Яндекс Карты сразу открывают карточку «Далии». Но по названию ищут мало: 11 запросов в месяц.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«база отдыха архыз», «коттеджи архыз», «снять домик в архызе», «гостевой дом архыз», «дом отдыха архыз» — карточки нет</b>По главным запросам о жилье в Архызе первые места занимают карточки со 150–830 оценками. «Далии» нет ни в одном из этих списков.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>В прайсе одна позиция за 1 ₽, сайт не в топ-30</b>Цена на Яндекс Картах не указана по-настоящему. Сайт daliya-arkhyz.ru не попадает в первые 30 результатов Яндекса ни по одному коммерческому запросу.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос на базы отдыха растёт, сезон Нового года впереди</b>«база отдыха архыз» — 13 907 запросов в сентябре 2026, на 13% больше, чем в сентябре 2025. «новый год в архызе» — 1 447 запросов в месяц.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">57 оценок · 45 отзывов</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">5</div><div class="s">26 оценок · 14 отзывов</div></div>
+    <div class="kpi"><div class="k">Ищут по названию</div><div class="n">11</div><div class="s">«далия архыз» в месяц, Россия</div></div>
+    <div class="kpi"><div class="k">Новости на карточке</div><div class="n">2</div><div class="s">9 августа и 26 октября 2026</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Карачаево-Черкесской Республике, без геолокации и истории пользователя.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в выдаче</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>база далия архыз</td><td class="r num">1</td><td>Яндекс сразу открывает карточку <b>Далия</b> (5,0 · 57)</td></tr>
+      <tr><td>база отдыха архыз</td><td class="r">нет в 15</td><td>Архыз Эль (5,0 · 260), Arkhyz-Park (5,0 · 192), Монте Виера парк Архыз (5,0 · 271), The Heart Of Arkhyz (5,0 · 417), Camp site Arkhyz (4,8 · 217)</td></tr>
+      <tr><td>коттеджи архыз</td><td class="r">нет в 5</td><td>Дом Мечты (5,0 · 264), Elki (5,0 · 479), Архызские вершины (5,0 · 177), Таулу Архыз (4,9 · 831), Уютный Архыз (5,0 · 410)</td></tr>
+      <tr><td>снять домик в архызе</td><td class="r">нет в 5</td><td>Уютный Архыз (5,0 · 410), Wood (5,0 · 336), Хижина (5,0 · 589), Elki (5,0 · 479), Дом Мечты (5,0 · 264)</td></tr>
+      <tr><td>гостевой дом архыз</td><td class="r">нет в 5</td><td>Hayat Haus (5,0 · 560), Гостевой дом Архыз (4,3 · 63), Arhiz hotel park (5,0 · 168), Arkhyz.ru (5,0 · 126), Arkhyz09rus (5,0 · 170)</td></tr>
+      <tr><td>дом отдыха архыз</td><td class="r">нет в 5</td><td>Архыз (4,9 · 36), Eko Otdih Arhiz (5,0 · 154), Accommodation in Arkhyz (4,9 · 146), Дом Мечты (5,0 · 264), Таулу Архыз (4,9 · 831)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — рейтинг и число оценок карточки. У трёх карточек первой выдачи по запросам «коттеджи» и «снять домик» есть акции «Скидка в день рождения».</p>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Мало оценок рядом с соседями по выдаче</h3></div>
+      <p>У «Далии» <b>57 оценок</b>. У карточек, которые стоят первыми по запросам «база отдыха архыз», «коттеджи архыз» и «снять домик в архызе», — от 154 до 831 оценки при том же рейтинге 5,0. Рейтинг одинаковый, поэтому выше оказываются карточки с большим числом оценок.</p>
+      <p class="next">Просить оценку на Яндекс Картах и в 2ГИС после выезда: ссылка или QR-код в коттедже. Только реальные отзывы и без вознаграждения.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Одна рубрика на Яндекс Картах, в 2ГИС нет рубрики «База отдыха»</h3></div>
+      <p>На Яндекс Картах у карточки одна рубрика — «База, дом отдыха». По запросу «гостевой дом архыз» Яндекс показывает карточки с рубрикой «Гостевой дом» и «Гостиница». В 2ГИС «Далия» стоит в рубриках «Аренда коттеджей / гостевых домов» и «Коттеджи и загородные дома», <b>рубрики «База отдыха» нет</b>, хотя компания называет себя базой отдыха.</p>
+      <p class="next">Добавить на Яндекс Картах дополнительные рубрики, которые соответствуют формату пяти коттеджей, а в 2ГИС — рубрику «База отдыха».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Прайс не отвечает на вопрос о цене</h3></div>
+      <p>В «Товарах и услугах» одна позиция — «Коттедж с красивым видом на горы и лес» за <b>1 ₽</b>, обновлено 9 августа. На сайте цены есть только в модуле бронирования. В 2ГИС при этом стоит «Цена от 9000 ₽». Запросы с ценой и словом «недорого» — «архыз жилье недорого» (568), «архыз снять жилье недорого» (311) — карточка без реальной цены не закрывает.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Публикации не покрывают главные запросы</h3></div>
+      <p>На карточке две новости: 9 августа — о коттедже и его оснащении, 26 октября — о зиме в коттеджах в лесной зоне. Истории: «Осень», «Коттедж», «Вид», «Территория». Публикаций о бронировании и посуточной аренде, о Новом годе и об отдыхе с детьми нет, хотя по ним ищут: «архыз снять посуточно» — 3 171, «новый год в архызе» — 1 447, «архыз с детьми» — 1 532 запроса в месяц.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Органику Яндекса занимают агрегаторы</h3></div>
+      <p>По запросам «база отдыха архыз», «снять домик в архызе», «коттеджи в архызе», «архыз домики посуточно» первые места у Авито, Суточно.ру, 101Hotels, Tvil, Ozon Travel, Циан и сайтов отдельных баз. Сайт daliya-arkhyz.ru в первые 30 результатов не входит, поэтому карточка на Картах — главный канал, через который базу находят в поиске.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос на отдых в Архызе</h2><p>Вордстат, регион «Россия», все устройства: базу отдыха в Архызе ищут из других регионов. Частоты — за последние 30 дней (07.09–06.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="a"><h3>«база отдыха архыз»</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: +13%</div></div>
+    <div class="chart" data-chart="b"><h3>«архыз домики»</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: −16%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: главный пик — июль и август, второй подъём — с октября по январь, когда выбирают жильё на зиму и Новый год. Минимум — с февраля по апрель. В октябре 2025 «база отдыха архыз» дала 13 192 запроса против 10 198 в октябре 2024, поэтому публикации конца октября и ноября попадают на рост спроса перед зимним сезоном.</p>
+
+  <h3>Базы отдыха, коттеджи и домики</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-b"></tbody></table></div>
+
+  <h3>Сезон и формат отдыха</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-s"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Ищут базу и домики с названием курорта</b>: «база архыз» — 18 000, «база отдыха архыз» — 14 149, «архыз домики» — 12 295.</li>
+      <li><b>Посуточная аренда — отдельный большой спрос</b>: «архыз снять посуточно» — 3 171, «снять домик в архызе» — 2 154, «домики архыз посуточно» — 1 303.</li>
+      <li><b>Новый год ищут заранее</b>: «новый год в архызе» — 1 447, «новый год в архызе 2027» — 392 уже в сентябре.</li>
+      <li><b>«Далию» по названию почти не ищут</b>: 11 запросов в месяц. Гостей приводят общие запросы.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «база отдыха», «Архыз» и формат «коттедж» или «домик» в первом абзаце.</li>
+      <li>Отдельные новости под семью до 6 гостей, Новый год и условия бронирования посуточно.</li>
+      <li>Слова «в лесу» и «в горах» — частые уточнения: «архыз домики в лесу» — 1 000, «домик в горах архыз» — 572.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок и сайт</h2><p>Рынок растёт, а поиск в органике забирают агрегаторы. Это главный довод за работу с карточкой и прямым бронированием.</p></div>
+  <div class="two">
+    <div class="note"><h3>Рынок</h3><ul>
+      <li><b>Курорты Карачаево-Черкесии</b> приняли более 1,7 млн туристов за первое полугодие, на 14% больше, чем годом ранее; к концу 2026 года турпоток прогнозируют выше 2,5 млн (Минтуризма КЧР, Интерфакс).</li>
+      <li><b>Всесезонный курорт «Архыз»</b> в прошлом сезоне принял свыше 346 тысяч гостей, на 25% больше, чем годом ранее (ТАСС, Яндекс Путешествия).</li>
+      <li><b>Спрос в Вордстате</b> по «база отдыха архыз» за 12 месяцев (окт 2025 — сен 2026) — 116 793 запроса против 109 568 годом ранее, +7%.</li>
+    </ul></div>
+    <div class="note"><h3>Сайт daliya-arkhyz.ru</h3><ul>
+      <li><b>Органика:</b> нет в топ-30 Яндекса по «база отдыха архыз», «снять домик в архызе», «коттеджи в архызе», «архыз домики посуточно».</li>
+      <li><b>В индексе 3 страницы</b>: главная, бронирование, выписка из реестра; в sitemap — 2 адреса.</li>
+      <li><b>У 28 из 28 изображений нет alt</b>, у страницы бронирования нет H1 и meta description, у документа не указан язык.</li>
+      <li><b>Есть</b> HTTPS, разметка LodgingBusiness, Яндекс Метрика, Title и Description на главной; загрузка главной — около 3,7 с.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первые два этапа дают основной эффект на Картах до зимнего сезона.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Прайс с реальными ценами.</b><span>Вместо позиции за 1 ₽ — коттедж 45 м² до 6 гостей с ценами по сезонам и условием «от 2 суток», «от 3 суток с 28 декабря по 10 января». Те же цены — в 2ГИС.</span></li>
+        <li><b>Рубрики.</b><span>Дополнительные рубрики на Яндекс Картах под форматы, которые ищут: коттеджи и гостевой дом; в 2ГИС — «База отдыха».</span></li>
+        <li><b>Описание и особенности.</b><span>Пять коттеджей, кухня-гостиная и спальня, тёплый пол, мангальные зоны и беседки, бесплатная парковка, Банковская улица, 19. Выровнять способы оплаты: на сайте и в 2ГИС — наличные и перевод, на Яндекс Картах — «Оплата картой».</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Отзывы и контент</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю.</b><span>Темы этапа 1 — база в селе Архыз, коттедж для семьи, Новый год, условия бронирования. Каждая новость привязана к Архызу и к формату «база отдыха».</span></li>
+        <li><b>Просить оценку после выезда.</b><span>QR-код на карточку в Яндекс Картах и 2ГИС в каждом коттедже. Только реальные отзывы и без вознаграждения: подозрительные отзывы площадки снимают.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Агрегаторы</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Одинаковые данные на площадках, которые занимают органику.</b><span>Авито, Суточно.ру, 101Hotels, Tvil, Ozon Travel, Яндекс Путешествия: те же фото, описание, вместимость, правила заезда и отмены, что на сайте и в карточке.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>Технические правки.</b><span>Alt у изображений, H1 и meta description на странице бронирования, язык документа, все страницы в sitemap.</span></li>
+        <li><b>Страницы под запросы.</b><span>Отдельные страницы «Коттеджи», «Новый год 2026–2027», «Правила бронирования» с ценами и ключами «база отдыха архыз», «снять домик в архызе», «новый год в архызе».</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение</h3><span class="when">декабрь–январь, июнь–август</span></div>
+      <ol>
+        <li><b>Продвижение карточки в Яндекс Бизнесе на пики сезона.</b><span>После правок прайса и рубрик. С 22 октября 2026 года кабинет Яндекс Бизнеса работает в ограниченном режиме после сбоя: кампании снова можно запускать, статистика отображается не полностью.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Карачаево-Черкесской Республике 28.10.2026 без геолокации и истории пользователя, первые 5 результатов (по «база отдыха архыз» — первые 15); рейтинги и число оценок — из выдачи.</li>
+    <li>Вордстат: регион «Россия», все устройства, частоты за 07.09–06.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+    <li>Органика Яндекса: регион «Москва», первые три страницы выдачи без рекламы, 28.10.2026.</li>
+    <li>Состояние Яндекс Бизнеса — по новостям Яндекса от 22.10.2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/daliya/134160035731/" target="_blank" rel="noopener">Карточка «Далия» на Яндекс Картах</a>
+    <a href="https://2gis.ru/cherkessk/firm/70000001091426778" target="_blank" rel="noopener">Карточка «Далия» в 2ГИС</a>
+    <a href="https://daliya-arkhyz.ru/" target="_blank" rel="noopener">daliya-arkhyz.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://b2b.yandex.ru/adv/news/v-yandex-biznese-snova-mozhno-zapuskat-prodvizhenie-i-rabotat-s-kartochkoy-organizatsii" target="_blank" rel="noopener">Яндекс: Яндекс Бизнес снова работает, 22.10.2026</a>
+    <a href="https://www.tourdom.ru/news/kurorty-karachaevo-cherkesii-prinyali-1-7-milliona-turistov-za-polgoda.html" target="_blank" rel="noopener">Турпоток Карачаево-Черкесии за полугодие — Tourdom.ru</a>
+    <a href="https://travel.yandex.ru/journal/v-arhyze-zafiksirovali-150procentnyy-rost-gornogo-turizma-za-pyat-let/" target="_blank" rel="noopener">Рост горного туризма в Архызе — Яндекс Путешествия</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">База отдыха · коттеджи · село Архыз</span>
+    <h1>«Далия» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 30 октября 2026 года — карточка компании «Далия» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">База отдыха «Далия»</div></div>
+      <div class="fact"><div class="k">Размещение</div><div class="v">Пять коттеджей по 45 м² <small>кухня-гостиная и спальня, до 6 человек</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Село Архыз, ул. Банковская, д. 19 <small>в лесистой местности</small></div></div>
+      <div class="fact"><div class="k">Заезд и выезд</div><div class="v">Заезд с 14:00 <small>выезд до 12:00</small></div></div>
+      <div class="fact"><div class="k">Территория</div><div class="v">Мангальные зоны и беседки <small>бесплатная парковка</small></div></div>
+      <div class="fact"><div class="k">Минимальный срок</div><div class="v">От 2 суток <small>с 28 декабря по 10 января — от 3 суток</small></div></div>
+      <div class="fact"><div class="k">Реестр</div><div class="v">Номер реестровой записи С092025005557 <small>Единый реестр объектов классификации в сфере туристской индустрии</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">daliya-arkhyz.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Далии»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета логотипа для обложек новостей и слайдов сторис: тёмно-зелёный надписи «ДАЛИЯ», терракотовый подписи «БАЗА ОТДЫХА», жёлтый солнца, бирюзово-зелёный гор, голубой озера и светлый сливочный фон.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#105538;color:#FFFFFF;border-color:#105538">
+        <div class="role">Основной</div><div class="name">Тёмно-зелёный</div><div class="hex">#105538</div>
+      </div>
+      <div class="swatch" style="background:#BF6945;color:#FFFFFF;border-color:#BF6945">
+        <div class="role">Акцентный</div><div class="name">Терракотовый</div><div class="hex">#BF6945</div>
+      </div>
+      <div class="swatch" style="background:#F8C94C;color:#105538;border-color:#F8C94C">
+        <div class="role">Акцентный</div><div class="name">Солнечный жёлтый</div><div class="hex">#F8C94C</div>
+      </div>
+      <div class="swatch" style="background:#609B94;color:#FFFFFF;border-color:#609B94">
+        <div class="role">Второстепенный</div><div class="name">Бирюзово-зелёный</div><div class="hex">#609B94</div>
+      </div>
+      <div class="swatch" style="background:#7AC3D0;color:#105538;border-color:#7AC3D0">
+        <div class="role">Второстепенный</div><div class="name">Голубой</div><div class="hex">#7AC3D0</div>
+      </div>
+      <div class="swatch" style="background:#FBF9EC;color:#105538;border-color:#FBF9EC">
+        <div class="role">Фоновый</div><div class="name">Сливочный</div><div class="hex">#FBF9EC</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап начинается с самой базы и её расположения, дальше коттедж для семьи, Новый год 2026–2027 и условия бронирования. Одна новость и одна сторис в неделю, с 30 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">30.10</div><p>База отдыха в селе Архыз: пять коттеджей в лесистой местности на Банковской улице, рядом магазины, кафе, аптеки и прокат горнолыжного инвентаря.</p></div>
+      <div class="cycle-row"><div class="tag">06.11</div><p>Домик для семьи: отдельный коттедж до шести гостей с собственной кухней и тёплым полом.</p></div>
+      <div class="cycle-row"><div class="tag">13.11</div><p>Новый год 2026–2027: бронирование открыто, срок проживания с 28 декабря по 10 января — от 3 суток.</p></div>
+      <div class="cycle-row"><div class="tag">20.11</div><p>Как забронировать коттедж: даты и состав гостей на сайте, предоплата первых суток, заезд с 14:00, выезд до 12:00.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и тепло, без давления. Каждая новость начинается со вступления от лица базы отдыха, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, слов «лучший», «самый уютный», «№1» и сравнений с другими базами. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 30 октября</span><h3>База отдыха в Архызе: пять коттеджей в лесистой местности на Банковской улице</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Наша база отдыха «Далия» расположена в селе Архыз, в лесистой местности: пять комфортных коттеджей, мангальные зоны, беседки и бесплатная парковка для автомобилей.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>База отдыха ДАЛИЯ расположена в селе Архыз, в лесистой местности.<span class="src">сайт</span></li>
+        <li>Наша база включает в себя пять комфортных коттеджей, рассчитанных на проживание до 6 человек.<span class="src">сайт</span></li>
+        <li>На территории базы оборудованы мангальные зоны и беседки, а так же расположена бесплатная парковка для автомобилей.<span class="src">сайт</span></li>
+        <li>Поблизости расположены магазины и кафе, аптеки и пункты проката горнолыжного инвентаря.<span class="src">сайт</span></li>
+        <li>До горнолыжного комплекса «Романтик» добираются на автомобиле; время в пути зависит от дороги и погоды.<span class="src">сайт</span></li>
+        <li>Номер реестровой записи в Едином реестре объектов классификации в сфере туристской индустрии: С092025005557.<span class="src">сайт</span></li>
+        <li>Адрес: с. Архыз, ул. Банковская, д. 19.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>База отдыха в Архызе: пять коттеджей «Далии» в лесистой местности</span></div>
+        <div class="meta-row"><span><b>Title · </b>База отдыха в Архызе — коттеджи до 6 человек | Далия</span></div>
+        <div class="meta-row"><span><b>Description · </b>База отдыха «Далия» в селе Архыз: пять коттеджей до 6 человек в лесистой местности, мангальные зоны, беседки и бесплатная парковка. Рядом магазины, кафе и прокат горнолыжного инвентаря.</span></div>
+        <div class="chips">
+          <span class="chip-kw">база отдыха архыз</span><span class="chip-kw">база архыз</span>
+          <span class="chip-kw">дом отдыха архыз</span><span class="chip-kw">базы архыза с домиками</span>
+          <span class="chip-kw">архыз домики в лесу</span><span class="chip-kw">коттеджи в архызе</span>
+          <span class="chip-kw">село архыз</span><span class="chip-kw">отдых в архызе</span>
+          <span class="chip-kw">база отдыха далия архыз</span><span class="chip-kw">архыз жилье</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте даты и бронируйте коттедж на базе отдыха «Далия».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Пять коттеджей в лесу»</div>
+        <p>Композиция: коттеджи базы среди хвойного леса на фоне гор, дневной свет; тезис крупно на плашке в нижней трети, под ним строка «село Архыз · Банковская, 19», логотип в верхнем левом углу. Текст и логотип не больше 20% площади.</p>
+        <p>Цвета: плашка — тёмно-зелёный #105538, тезис — сливочный #FBF9EC, строка — солнечный жёлтый #F8C94C, тонкая линия под тезисом — терракотовый #BF6945.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 6 ноября</span><h3>Снять домик в Архызе для семьи: отдельный коттедж до шести гостей с кухней и тёплым полом</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Семья может разместиться у нас в отдельном домике с собственной кухней и тёплым полом — вместимость одного коттеджа до шести гостей.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Семья может разместиться в отдельном домике с собственной кухней и тёплым полом.<span class="src">сайт</span></li>
+        <li>На территории пять отдельных коттеджей площадью 45 м². В каждом — одна спальня, кухня-гостиная и спальные места для размещения до шести гостей. Это вариант для семьи или небольшой компании.<span class="src">сайт</span></li>
+        <li>Спальные места: двуспальная кровать, диван-кровать, 2 кресла-кровати.<span class="src">сайт</span></li>
+        <li>Полотенца, постельное бельё, собственная кухня, фен, парковка, мангал, Wi-Fi.<span class="src">сайт</span></li>
+        <li>В санузле полотенца и туалетные принадлежности для гостей.<span class="src">сайт</span></li>
+        <li>При бронировании укажите число взрослых, количество и возраст детей.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Домик в Архызе для семьи до шести гостей — база отдыха «Далия»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Снять домик в Архызе для семьи: коттедж 45 м² до 6 гостей | Далия</span></div>
+        <div class="meta-row"><span><b>Description · </b>Отдельный коттедж 45 м² в Архызе: спальня, кухня-гостиная, тёплый пол, двуспальная кровать, диван-кровать и 2 кресла-кровати. До шести гостей, Wi-Fi, парковка, мангал.</span></div>
+        <div class="chips">
+          <span class="chip-kw">снять домик в архызе</span><span class="chip-kw">архыз домики</span>
+          <span class="chip-kw">архыз с детьми</span><span class="chip-kw">отдых в архызе с детьми</span>
+          <span class="chip-kw">где остановиться с детьми в архызе</span><span class="chip-kw">снять дом в архызе</span>
+          <span class="chip-kw">архыз домики для отдыха</span><span class="chip-kw">коттедж архыз</span>
+          <span class="chip-kw">домик в горах архыз</span><span class="chip-kw">база отдыха архыз</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте коттедж для всей семьи — при бронировании укажите состав гостей.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Домик для семьи»</div>
+        <p>Композиция: кухня-гостиная коттеджа с большими окнами на лес и горы; тезис на плашке в верхней трети, строка «до 6 гостей · 45 м²», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — сливочный #FBF9EC, тезис — тёмно-зелёный #105538, строка — терракотовый #BF6945.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 13 ноября</span><h3>Новый год 2026–2027 в Архызе: бронирование коттеджей на базе отдыха «Далия» открыто</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Новогодняя сказка 2026–2027 уже ждёт вас — мы открываем бронирование коттеджей на самые волшебные дни в году.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Новогодняя сказка 2026–2027 уже ждёт вас! Открываем бронирование на самые волшебные дни в году.<span class="src">сайт</span></li>
+        <li>Тишина зимнего леса, укрытого пушистым снегом; уютный треск поленьев и согревающие моменты у живого костра.<span class="src">сайт</span></li>
+        <li>Захватывающие дух виды на величественные заснеженные горы прямо из вашего окна.<span class="src">сайт</span></li>
+        <li>Просторный и тёплый коттедж, где есть всё для идеального отдыха с семьёй или друзьями. И, конечно, приятный презент от нас к Новому году.<span class="src">сайт</span></li>
+        <li>Минимальное количество суток проживания в период с 28 декабря по 10 января — от 3-х суток.<span class="src">сайт</span></li>
+        <li>Для подтверждения бронирования необходимо внести предоплату. Оплачивается стоимость в размере первых суток проживания.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Новый год 2026–2027 в Архызе: коттеджи базы отдыха «Далия»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Новый год в Архызе 2027: коттеджи до 6 человек | Далия</span></div>
+        <div class="meta-row"><span><b>Description · </b>Бронирование коттеджей на Новый год 2026–2027 в Архызе открыто: зимний лес, виды на горы из окна, презент к Новому году. С 28 декабря по 10 января — от 3 суток.</span></div>
+        <div class="chips">
+          <span class="chip-kw">новый год в архызе</span><span class="chip-kw">новый год в архызе 2027</span>
+          <span class="chip-kw">отдых в архызе на новый год</span><span class="chip-kw">дома в архызе на новый год</span>
+          <span class="chip-kw">снять домик в архызе на новый год</span><span class="chip-kw">архыз жилье на новый год</span>
+          <span class="chip-kw">новый год в горах архыза</span><span class="chip-kw">архыз зимой</span>
+          <span class="chip-kw">отдых в архызе зимой</span><span class="chip-kw">база отдыха архыз</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> бронируйте коттедж на новогодние даты заранее.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Новый год в Архызе»</div>
+        <p>Композиция: заснеженный хвойный лес и коттеджи базы, вечерняя подсветка; тезис на плашке в нижней трети, строка «2026–2027 · бронирование открыто», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёмно-зелёный #105538, тезис — сливочный #FBF9EC, строка — солнечный жёлтый #F8C94C, уголок-акцент — терракотовый #BF6945.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 20 ноября</span><h3>Как снять коттедж в Архызе посуточно: бронирование, заезд, оплата и отмена на базе «Далия»</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы собрали условия бронирования в одном месте: выберите даты и состав гостей в модуле бронирования на сайте — там показаны доступные варианты и актуальные тарифы.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Выберите даты и состав гостей в модуле бронирования на сайте. Там показаны доступные варианты и актуальные тарифы.<span class="src">сайт</span></li>
+        <li>Регистрация и заезд производится с 14:00. Ранний заезд может быть возможен, но подлежит предварительной договоренности и наличию свободных номеров.<span class="src">сайт</span></li>
+        <li>Выезд из номера до 12:00. Поздний выезд также может быть предоставлен по запросу и наличию возможности.<span class="src">сайт</span></li>
+        <li>Минимальное количество суток проживания: в период с 11 января по 27 декабря — от 2-х суток, в период с 28 декабря по 10 января — от 3-х суток.<span class="src">сайт</span></li>
+        <li>Для подтверждения бронирования необходимо внести предоплату. Оплачивается стоимость в размере первых суток проживания. Остальное — при заселении (наличные, перевод).<span class="src">сайт</span></li>
+        <li>При отмене бронирования взимается штраф в размере первых суток проживания.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Как снять коттедж в Архызе посуточно на базе отдыха «Далия»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Архыз: снять коттедж посуточно — условия бронирования | Далия</span></div>
+        <div class="meta-row"><span><b>Description · </b>Бронирование коттеджа на базе отдыха «Далия» в Архызе: заезд с 14:00, выезд до 12:00, от 2 суток, предоплата первых суток, остаток при заселении наличными или переводом.</span></div>
+        <div class="chips">
+          <span class="chip-kw">архыз снять посуточно</span><span class="chip-kw">домики архыз посуточно</span>
+          <span class="chip-kw">архыз снять домик посуточно</span><span class="chip-kw">архыз жилье посуточно</span>
+          <span class="chip-kw">снять жилье в архызе</span><span class="chip-kw">снять коттедж в архызе</span>
+          <span class="chip-kw">коттедж архыз снять посуточно</span><span class="chip-kw">снять дом в архызе посуточно</span>
+          <span class="chip-kw">база отдыха архыз</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте даты в модуле бронирования на сайте и бронируйте коттедж.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Бронирование в 3 шага»</div>
+        <p>Композиция: вход в коттедж базы с крыльцом, хвойный лес за ним; тезис на плашке в верхней трети, под ним три коротких пункта «даты · предоплата · заезд с 14:00» в строку, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — бирюзово-зелёный #609B94, тезис — сливочный #FBF9EC, пункты — солнечный жёлтый #F8C94C, разделители — тёмно-зелёный #105538.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">База в селе Архыз</div><span class="slide-no">Сторис 1 · 30 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">5 коттеджей</span>
+          <span class="fact-pill">Лесистая местность</span>
+          <span class="fact-pill">Мангальные зоны и беседки</span>
+          <span class="fact-pill">Бесплатная парковка</span>
+          <span class="fact-pill">Ул. Банковская, 19</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-зелёный #105538, заголовок сливочным #FBF9EC в верхней части, факты на сливочных плашках #FBF9EC тёмно-зелёным текстом #105538, адрес строкой солнечного жёлтого #F8C94C внизу. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Коттедж для семьи</div><span class="slide-no">Сторис 2 · 6 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">45 м²</span>
+          <span class="fact-pill">Спальня + кухня-гостиная</span>
+          <span class="fact-pill">До 6 гостей</span>
+          <span class="fact-pill">Тёплый пол</span>
+          <span class="fact-pill">Собственная кухня</span>
+          <span class="fact-pill">Wi-Fi</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон сливочный #FBF9EC, фото кухни-гостиной в верхней половине, заголовок тёмно-зелёным #105538, факты на плашках бирюзово-зелёного #609B94 белым текстом, «до 6 гостей» крупно терракотовым #BF6945. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Новый год 2026–2027</div><span class="slide-no">Сторис 3 · 13 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Бронирование открыто</span>
+          <span class="fact-pill">28.12–10.01 — от 3 суток</span>
+          <span class="fact-pill">Виды на горы из окна</span>
+          <span class="fact-pill">Презент к Новому году</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-зелёный #105538, заголовок солнечным жёлтым #F8C94C, факты столбиком сливочным #FBF9EC, отметка «от 3 суток» на терракотовой плашке #BF6945. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Заезд с 14:00, выезд до 12:00</div><span class="slide-no">Сторис 4 · 20 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">От 2 суток</span>
+          <span class="fact-pill">Предоплата — первые сутки</span>
+          <span class="fact-pill">Остальное при заселении</span>
+          <span class="fact-pill">Наличные, перевод</span>
+          <span class="fact-pill">Бронирование на сайте</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон бирюзово-зелёный #609B94, время заезда и выезда крупно сливочным #FBF9EC, условия на сливочных плашках #FBF9EC тёмно-зелёным текстом #105538, тонкие разделители голубым #7AC3D0. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — база в Архызе, коттедж для семьи, Новый год, бронирование <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>База отдыха в Архызе: пять коттеджей в лесистой местности</b>30.10 · расположение, территория, что рядом, номер в реестре</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>База в селе Архыз</b>30.10 · коттеджи, территория, адрес</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Снять домик в Архызе для семьи</b>06.11 · коттедж 45 м² до шести гостей, кухня, тёплый пол</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Коттедж для семьи</b>06.11 · площадь, комнаты, вместимость</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Новый год 2026–2027 в Архызе</b>13.11 · бронирование открыто, от 3 суток, презент</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Новый год 2026–2027</b>13.11 · даты и условия</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Как снять коттедж в Архызе посуточно</b>20.11 · заезд, выезд, минимальный срок, предоплата, отмена</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Заезд с 14:00, выезд до 12:00</b>20.11 · условия бронирования</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={a:[10198,7459,6548,10269,6277,4732,5089,6391,9635,15603,15047,12320,13192,9659,5753,7956,4919,5020,5717,6954,10175,15067,18474,13907],
+         b:[15550,13074,11822,15393,8169,6246,6492,8150,12078,18641,19041,14092,15794,12893,9317,10802,5395,5283,5463,6581,9178,11992,16271,11846]};
+const fmt=n=>n.toLocaleString('ru-RU');
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=44,R=10,T=10,B=24,mn=0,mx=20000;
+  const x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-b':[['база архыз','смешанное',18000],['база отдыха архыз','коммерческое',14149],['архыз домики','коммерческое',12295],['архыз снять','коммерческое',10589],['архыз жилье','коммерческое',6384],['гостевой дом архыз','коммерческое',3620],['архыз снять посуточно','коммерческое',3171],['снять домик в архызе','коммерческое',2154],['домики архыз посуточно','коммерческое',1303],['архыз домики в лесу','коммерческое',1000],['архыз домики для отдыха','коммерческое',837],['домик в горах архыз','коммерческое',572],['архыз жилье недорого','коммерческое',568],['коттеджи в архызе','коммерческое',272],['снять коттедж в архызе','коммерческое',100],['базы архыза с домиками','коммерческое',72],['база отдыха далия архыз','по названию',5]],
+ 't-s':[['архыз зимой','информационное',3391],['архыз с детьми','смешанное',1532],['новый год в архызе','смешанное',1447],['новый год в архызе 2027','смешанное',392],['отдых в архызе зимой','смешанное',172],['отдых в архызе с детьми','смешанное',126],['отдых в архызе на новый год','коммерческое',94],['дома в архызе на новый год','коммерческое',73],['архыз с детьми зимой','информационное',69],['снять дом в архызе на новый год','коммерческое',48],['снять домик в архызе на новый год','коммерческое',32],['где остановиться с детьми в архызе','информационное',16]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['demand','Спрос'],['market','Рынок и сайт'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
