@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Старт» Тверь</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Старт · Тверь</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>СТАРТ СТАРТ СТАРТ СТАРТ</span><span>СТАРТ СТАРТ СТАРТ СТАРТ</span><span>СТАРТ СТАРТ СТАРТ СТАРТ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Старт» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса в Твери, стратегия продвижения и контент-план для карточки автошколы. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Автошкола «СТАРТ»</b></div>
+        <div><span>Город</span><b>Тверь</b></div>
+        <div><span>Направления</span><b>Категория B · Категории ГосТехНадзора · Профессии</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 28.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«автошкола»</span><span class="t-n y">4</span><span class="t-s">место из 23 карточек на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«права категории B»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в первой выдаче</span></div>
+        <div class="tile"><span class="t-k">Рейтинг на Картах</span><span class="t-n g">5,0</span><span class="t-s">215 оценок · «Хорошее место 2026»</span></div>
+        <div class="tile"><span class="t-k">Спрос «автошкола» в Твери</span><span class="t-n g">+19%</span><span class="t-s">сентябрь 2026 к сентябрю 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции на Яндекс Картах по 7 запросам, спрос по Вордстату в Твери, причины, по которым карточку не видно, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис: категория B без доплат, обучение на электромобиле, порядок обучения, категории ГосТехНадзора.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 30.10</span><span class="st wait">согласование</span></div><h3>Согласование тем этапа 1</h3><p>Темы, тезисы и обложки утверждаются до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">30.10 · 06.11 · 13.11 · 20.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на карточке автошколы в Яндекс Картах и 2ГИС.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">следующий шаг</span></div><h3>Прайс и особенности на Яндекс Картах</h3><p>Разделить в прайсе категории ГИБДД и ГосТехНадзора, обновить диапазон стоимости и список категорий в блоке «Особенности».</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточку не видно и что с этим делать</h3>
+          <p>Позиции по 7 запросам на Яндекс Картах, соседи по выдаче, спрос и сезонность в Твери, стратегия в три этапа.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>30.10 — Права категории B без доплат</li>
+            <li>06.11 — Категория B на электромобиле</li>
+            <li>13.11 — Шесть шагов до прав</li>
+            <li>20.11 — Права на квадроцикл, трактор и погрузчик</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Тверь · автошкола, категории ГосТехНадзора · замер 28.10.2026</span>
+  <h1>Где «Старт» не видно в поиске и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 7 запросам, спрос по Вордстату для региона «Тверь» и сравнение с карточками, которые стоят рядом в выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«автошкола» — 4 место, «на автомате» — 2, «обучение вождению» — 3</b>По главным запросам карточка в верхней пятёрке. Рейтинг 5,0 и 215 оценок держат её рядом с лидерами.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«права категории B» и спецтехника — карточки нет</b>По запросам «права категории B», «права на квадроцикл», «обучение на тракториста», «обучение на погрузчик» «Старт» не показывается, хотя обучает всему этому.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>На карточке нет новостей, истории скрыты</b>Раздел «Новости» пуст. Истории на Яндекс Картах сейчас не отображаются: для показа нужен тариф.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос растёт</b>«автошкола» в Твери — 9 981 запрос в сентябре 2026, на 19% больше, чем в сентябре 2025. Спад только в декабре.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">215 оценок · 159 отзывов</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">5,0</div><div class="s">46 оценок · 41 отзыв</div></div>
+    <div class="kpi"><div class="k">Ищут по названию</div><div class="n">527</div><div class="s">«автошкола старт» + «… тверь» в месяц</div></div>
+    <div class="kpi"><div class="k">Новости на карточке</div><div class="n">0</div><div class="s">публикаций пока нет</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Твери, без геолокации пользователя. Порядок первых мест немного меняется между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в выдаче</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>автошкола на автомате</td><td class="r num">2 из 5</td><td>Автолидер (4,6 · 24), <b>Старт</b>, Автолидер (4,5 · 98), Престиж 69 (5,0 · 448), ЧПОУ Автошкола ВДВ (5,0 · 208)</td></tr>
+      <tr class="me"><td>обучение вождению</td><td class="r num">3 из 5</td><td>Автолидер, Автолидер, <b>Старт</b>, Лидер-авто (5,0 · 136), ЧПОУ Автошкола ВДВ</td></tr>
+      <tr class="me"><td>автошкола</td><td class="r num">4 из 23</td><td>Автолидер, Автошкола Тверь (4,9 · 127), Автолидер, <b>Старт</b>, Престиж 69</td></tr>
+      <tr><td>права категории B</td><td class="r">нет в 5</td><td>Автолидер, Автолидер, Престиж 69, Автошкола-К (4,9 · 372), Штурман (5,0 · 165)</td></tr>
+      <tr><td>права на квадроцикл</td><td class="r">нет в 3</td><td>Автолидер, Верста (4,9 · 245), Перекресток (5,0 · 289)</td></tr>
+      <tr><td>обучение на тракториста</td><td class="r">нет</td><td>Яндекс сразу открывает одну карточку — «Безопасность труда»</td></tr>
+      <tr><td>обучение на погрузчик</td><td class="r">нет</td><td>Яндекс сразу открывает одну карточку — «Безопасность труда»</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — рейтинг и число оценок карточки.</p>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Категории ГИБДД и ГосТехНадзора смешаны в прайсе</h3></div>
+      <p>В прайсе рядом стоят «Подготовка водителей категории "B" МКПП» и «Обучение трактористов (категория В)». По запросу «автошкола» Яндекс показывает в сниппете «Старт» <b>тракторную позицию за 14 000 ₽</b>, а не права категории B. Для запроса «права категории B» карточка выглядит менее точным ответом, чем карточки, у которых в сниппете стоит «Обучение на категорию В».</p>
+      <p class="next">Назвать позиции так, чтобы их нельзя было спутать: «Права категории B (ГИБДД), МКПП — тариф «Стандарт»» и «Тракторная категория B (ГосТехНадзор)». Убрать приписку «| Московский» из названий.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка почти не рассказывает о спецтехнике и электромобиле</h3></div>
+      <p>Новостей нет, истории скрыты. В блоке «Особенности» указаны только «Категория: B» и стоимость обучения 10 000–57 000 ₽ — <b>это не совпадает с прайсом</b>: категория B стоит 53 000–70 000 ₽, категории ГосТехНадзора — 14 000–20 000 ₽. Квадроцикл, трактор, погрузчик, экскаватор и электромобили Changan QIYUAN Q05 упоминаются только в прайсе, поэтому по этим запросам карточку не находят.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>По спецтехнике в Твери почти никто не отвечает на Картах</h3></div>
+      <p>По «права на квадроцикл» в выдаче всего 3 карточки, по «обучение на тракториста» и «обучение на погрузчик» — одна. Спрос при этом есть: «права на квадроцикл» — 196 запросов в месяц, «права тракториста» — 153, «права на погрузчик» — 76. Это ниша, где карточка может занять первые места быстрее, чем по общим запросам.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>2ГИС отстаёт от Яндекс Карт</h3></div>
+      <p>В 2ГИС 46 оценок против 215 на Яндекс Картах. У профессий тракториста, водителя погрузчика и экскаваторщика в прайсе 2ГИС стоит «Цена не указана», хотя на сайте и на Яндекс Картах цены есть.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Твери</h2><p>Вордстат, регион «Тверь», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="a"><h3>«автошкола»</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: +19%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: спад в декабре, затем рост с января. Пики — март и сентябрь, с апреля по август спрос держится высоким. Ноябрь 2025 был ниже октября на 13%, поэтому ноябрьские публикации работают на декабрьский спад и январский старт групп.</p>
+
+  <h3>Категория B и автошкола</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-b"></tbody></table></div>
+
+  <h3>Спецтехника и профессии</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-t"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Автошколу ищут с городом</b>: «автошкола тверь» — 5 652, «автошкола тверь цены» — 192.</li>
+      <li><b>«Старт» ищут по названию</b>: «автошкола старт» — 314, «автошкола старт тверь» — 213. Карточка должна отвечать на этот запрос свежими новостями.</li>
+      <li><b>Цена — частый вопрос</b>: «автошкола цена», «сколько стоит автошкола», «автошкола тверь цены» — вместе больше 550 запросов.</li>
+      <li><b>Спецтехника — отдельный спрос</b>: «тракторист» — 1 072, «права на квадроцикл» — 196, «права тракториста» — 153.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «автошкола», «Тверь» и цена в первом абзаце.</li>
+      <li>Категорию B называем «права категории B», тракторные — «тракторная категория» и «ГосТехНадзор», чтобы их не путали.</li>
+      <li>Отдельная новость под квадроцикл, трактор и погрузчик.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Разделить категории в прайсе.</b><span>«Права категории B (ГИБДД)» — МКПП «Стандарт» 53 000 ₽, МКПП «Комфорт» 64 000 ₽, АКПП на электромобиле 70 000 ₽; отдельной группой — «Категории ГосТехНадзора»: A1 15 000 ₽, тракторные B и C по 14 000 ₽, профессии 14 000–20 000 ₽.</span></li>
+        <li><b>Обновить «Особенности».</b><span>Стоимость обучения 14 000–70 000 ₽, категории A1, B, C, обучение на АКПП.</span></li>
+        <li><b>Описание карточки.</b><span>Права категории B на МКПП и на электромобиле с АКПП, экзамен в ГИБДД на площадке автошколы, категории ГосТехНадзора и профессии, Волоколамский проспект, 27к1.</span></li>
+        <li><b>Включить показ историй на Яндекс Картах.</b><span>Пока истории скрыты, сторис этапа публикуем в 2ГИС.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Новости и сторис</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю.</b><span>Темы этапа 1 — категория B, электромобиль, порядок обучения, спецтехника. Каждая новость привязана к Твери и к цене.</span></li>
+        <li><b>Просить отзыв после экзамена.</b><span>Ссылка или QR на карточку в Яндекс Картах и 2ГИС. Только реальные отзывы и без вознаграждения: подозрительные отзывы площадки снимают.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Выровнять 2ГИС</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Цены у профессий и тот же прайс, что на Яндекс Картах.</b><span>Одинаковые названия позиций, цены и описание. Новости и сторис из этого контент-плана публикуем и там.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Твери 28.10.2026 без геолокации пользователя, рейтинги и число оценок — из выдачи.</li>
+    <li>Вордстат: регион «Тверь», все устройства, частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/start/142469386329/" target="_blank" rel="noopener">Карточка «Старт» на Яндекс Картах</a>
+    <a href="https://2gis.ru/tver/firm/70000001060168752" target="_blank" rel="noopener">Карточка «Старт» в 2ГИС</a>
+    <a href="https://старттверь.рф/" target="_blank" rel="noopener">старттверь.рф</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Автошкола · категории ГосТехНадзора · Тверь</span>
+    <h1>«Старт» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 30 октября 2026 года — карточка компании «Старт» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Автошкола «СТАРТ»</div></div>
+      <div class="fact"><div class="k">Обучение</div><div class="v">Права категории B <small>МКПП и АКПП; тракторные категории A1, B, C; водитель погрузчика, машинист экскаватора, тракторист</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Тверь, Волоколамский проспект, 27к1 <small>Московский район</small></div></div>
+      <div class="fact"><div class="k">Время работы</div><div class="v">Пн–пт 10:00–19:00 <small>сб 9:30–15:30, вс — выходной</small></div></div>
+      <div class="fact"><div class="k">Возраст</div><div class="v">Обучение с 16 лет <small>экзамен в ГИБДД с 17 лет, права с 18 лет</small></div></div>
+      <div class="fact"><div class="k">Оплата</div><div class="v">Рассрочка <small>теория и практика входят в стоимость</small></div></div>
+      <div class="fact"><div class="k">Экзамен</div><div class="v">В ГИБДД на площадке автошколы</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">старттверь.рф</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Старт»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: ультрамарин и глубокий синий круга логотипа, голубой внешнего кольца, красный знака «У», жёлтый разметки и белый надписи «СТАРТ».</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#0000DA;color:#FFFFFF;border-color:#0000DA">
+        <div class="role">Основной</div><div class="name">Ультрамарин</div><div class="hex">#0000DA</div>
+      </div>
+      <div class="swatch" style="background:#011F84;color:#FFFFFF;border-color:#011F84">
+        <div class="role">Текстовый</div><div class="name">Глубокий синий</div><div class="hex">#011F84</div>
+      </div>
+      <div class="swatch" style="background:#0C7CBC;color:#FFFFFF;border-color:#0C7CBC">
+        <div class="role">Второстепенный</div><div class="name">Голубой</div><div class="hex">#0C7CBC</div>
+      </div>
+      <div class="swatch" style="background:#F60404;color:#FFFFFF;border-color:#F60404">
+        <div class="role">Акцентный</div><div class="name">Красный</div><div class="hex">#F60404</div>
+      </div>
+      <div class="swatch" style="background:#EFB80D;color:#011F84;border-color:#EFB80D">
+        <div class="role">Акцентный</div><div class="name">Жёлтый</div><div class="hex">#EFB80D</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#011F84;border-color:#FFFFFF">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап начинается с главного направления — прав категории B, дальше обучение на автомате, порядок обучения и категории ГосТехНадзора. Одна новость и одна сторис в неделю, с 30 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">30.10</div><p>Права категории B в Твери: бензин, время инструктора и лекции входят в стоимость, тарифы «Стандарт» и «Комфорт», рассрочка.</p></div>
+      <div class="cycle-row"><div class="tag">06.11</div><p>Категория B на АКПП: обучение на новых электромобилях Changan QIYUAN Q05 2026 года выпуска.</p></div>
+      <div class="cycle-row"><div class="tag">13.11</div><p>Как проходит обучение: теория в классе или дистанционно, выбор инструктора, пробный экзамен и экзамен в ГИБДД на площадке автошколы.</p></div>
+      <div class="cycle-row"><div class="tag">20.11</div><p>Категории ГосТехНадзора и профессии: квадроцикл и снегоход, трактор, погрузчик, экскаватор.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и уверенно, без давления. Каждая новость начинается со вступления от лица автошколы, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, слов «лучший», «самый выгодный», «№1» и сравнений с другими автошколами. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 30 октября</span><h3>Права категории B в Твери без доплат: бензин и время инструктора уже в стоимости обучения</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в автошколе «СТАРТ» включаем в стоимость обучения и теорию, и практику — за бензин и время инструктора вам доплачивать не придётся.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Категория «B» — это права на любые авто весом до 3 500 кг, в которых меньше 8 пассажирских мест: седаны, внедорожники, минивэны.<span class="src">сайт</span></li>
+        <li>Срок обучения: 2,5 месяца.<span class="src">сайт</span></li>
+        <li>Тариф «Стандарт»: 53 000 ₽. Тариф «Комфорт»: 64 000 ₽. С тарифом «Комфорт» можно брать уроки вождения по выходным.<span class="src">сайт</span></li>
+        <li>В «СТАРТ» не нужно доплачивать ни за бензин, ни за время инструктора, ни за лекции. Всё включено.<span class="src">сайт</span></li>
+        <li>Скрытых платежей нет. Пересдача внутреннего экзамена бесплатно.<span class="src">сайт</span></li>
+        <li>Чтобы записаться, нужно принести паспорт и внести предоплату. Оплачивать обучение можно в рассрочку.<span class="src">сайт</span></li>
+        <li>Обучаем на авто с механической коробкой передач. Все машины новые, меняем каждые 3 года.<span class="src">сайт</span></li>
+        <li>Обучаться в автошколе можно с 16 лет, сдача экзамена в ГИБДД с 17 лет, выдача прав с 18 лет.<span class="src">сайт</span></li>
+        <li>Тверь, Волоколамский проспект, 27к1.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Права категории B в Твери: обучение в автошколе «СТАРТ» без доплат</span></div>
+        <div class="meta-row"><span><b>Title · </b>Автошкола в Твери: права категории B от 53 000 ₽ | СТАРТ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Обучение на права категории B в Твери за 2,5 месяца: бензин, время инструктора и лекции входят в стоимость. Тарифы «Стандарт» 53 000 ₽ и «Комфорт» 64 000 ₽, рассрочка.</span></div>
+        <div class="chips">
+          <span class="chip-kw">автошкола тверь</span><span class="chip-kw">автошкола тверь цены</span>
+          <span class="chip-kw">права категории b тверь</span><span class="chip-kw">обучение в автошколе тверь</span>
+          <span class="chip-kw">автошкола старт тверь</span><span class="chip-kw">сколько стоит автошкола</span>
+          <span class="chip-kw">получить права категории в</span><span class="chip-kw">автошкола в рассрочку</span>
+          <span class="chip-kw">автошкола на механике</span><span class="chip-kw">автошкола московский район тверь</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь в автошколу «СТАРТ» — для договора нужен только паспорт.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Права B без доплат»</div>
+        <p>Композиция: учебный автомобиль автошколы в фирменной оклейке — белый кузов, синяя полоса, красный знак «У» — на площадке; тезис крупно на плашке в верхней трети, под ним строка «бензин и время инструктора — в стоимости», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — ультрамарин #0000DA, тезис — белый #FFFFFF, строка — жёлтый #EFB80D, тонкая линия под тезисом — красный #F60404.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 6 ноября</span><h3>Обучение вождению на автомате в Твери: категория B на электромобилях Changan QIYUAN Q05</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Категорию B на автоматической коробке передач мы преподаём на новых электромобилях Changan QIYUAN Q05 2026 года выпуска.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Обучаем на новых электромобилях Changan QIYUAN Q05 2026 года выпуска с автоматической (АКПП) коробкой передач.<span class="src">сайт</span></li>
+        <li>Обучение на новом электромобиле повышенной комфортности.<span class="src">Яндекс Карты</span></li>
+        <li>Гибкий график обучения: будни и выходные, дневное и вечернее время.<span class="src">Яндекс Карты</span></li>
+        <li>Тариф «Комфорт»: 70 000 ₽.<span class="src">сайт</span></li>
+        <li>Бесплатный доступ на онлайн-платформу с теоретическими материалами и билетами ПДД.<span class="src">сайт</span></li>
+        <li>Срок обучения: 2,5 месяца.<span class="src">сайт</span></li>
+        <li>Не нужно доплачивать ни за бензин, ни за время инструктора, ни за лекции.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Обучение вождению на автомате в Твери на электромобиле — автошкола «СТАРТ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Права категории B на АКПП в Твери: электромобиль Changan QIYUAN Q05 | СТАРТ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Категория B на автомате в Твери: обучение на новых электромобилях Changan QIYUAN Q05 2026 года, будни и выходные, онлайн-платформа с билетами ПДД, 70 000 ₽.</span></div>
+        <div class="chips">
+          <span class="chip-kw">автошкола на автомате тверь</span><span class="chip-kw">автошкола автомат</span>
+          <span class="chip-kw">обучение вождению на автомате</span><span class="chip-kw">права на акпп тверь</span>
+          <span class="chip-kw">категория b акпп</span><span class="chip-kw">автошкола электромобиль</span>
+          <span class="chip-kw">обучение вождению тверь</span><span class="chip-kw">автошкола тверь</span>
+          <span class="chip-kw">changan qiyuan q05</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на обучение на автомате в удобное для вас время.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Категория B на электромобиле»</div>
+        <p>Композиция: учебный Changan QIYUAN Q05 автошколы в три четверти на площадке, дневной свет; тезис на плашке в нижней трети, строка «АКПП · 2026 года выпуска», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — глубокий синий #011F84, тезис — белый #FFFFFF, строка — голубой #0C7CBC.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 13 ноября</span><h3>Как проходит обучение в автошколе «СТАРТ» в Твери: от договора до экзамена в ГИБДД на площадке автошколы</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выстроили обучение по шагам: вы сами выбираете дни теории, время вождения и инструктора, а перед экзаменом ГИБДД сдаёте пробный экзамен у нас.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Теория — в классе или дистанционно. Две группы буднего дня: по вторникам и четвергам или по средам и пятницам, с 18:00 до 20:00; по субботам — с 10:00 до 14:00 или с 14:00 до 18:00.<span class="src">сайт</span></li>
+        <li>Вождение: вы сами выбираете, в какое время и с каким инструктором водить.<span class="src">сайт</span></li>
+        <li>Обучение оказанию первой медицинской помощи; лекция психолога по борьбе с тревогой перед экзаменом ГАИ и реальным вождением.<span class="src">сайт</span></li>
+        <li>Прохождение тестов ПДД, полностью соответствующих реальным; экзаменационные билеты как в ГИБДД.<span class="src">сайт</span></li>
+        <li>После завершения обучения — пробный экзамен по теории и вождению, чтобы проверить готовность к экзамену ГИБДД.<span class="src">сайт</span></li>
+        <li>Экзамен в ГИБДД на площадке автошколы.<span class="src">сайт</span></li>
+        <li>Перед экзаменом ГИБДД нужно завести личный кабинет на портале Госуслуги и записаться на выдачу водительского удостоверения; государственная пошлина в этом случае 1 400 рублей.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Как проходит обучение в автошколе «СТАРТ» в Твери</span></div>
+        <div class="meta-row"><span><b>Title · </b>Обучение в автошколе в Твери: теория, вождение, экзамен в ГИБДД | СТАРТ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Теория в классе или дистанционно, выбор инструктора и времени вождения, пробный экзамен и экзамен в ГИБДД на площадке автошколы «СТАРТ» в Твери.</span></div>
+        <div class="chips">
+          <span class="chip-kw">обучение в автошколе тверь</span><span class="chip-kw">экзамен в гибдд</span>
+          <span class="chip-kw">экзамен в автошколе</span><span class="chip-kw">сколько учиться в автошколе</span>
+          <span class="chip-kw">теория автошкола</span><span class="chip-kw">автошкола онлайн тверь</span>
+          <span class="chip-kw">инструктор по вождению тверь</span><span class="chip-kw">внутренний экзамен в автошколе</span>
+          <span class="chip-kw">площадка автошколы</span><span class="chip-kw">автошкола тверь</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> выбирайте группу, удобную по дням, и записывайтесь.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Шесть шагов до прав»</div>
+        <p>Композиция: площадка автошколы, учебный автомобиль у дорожного знака; тезис на плашке в верхней трети, ниже тонкая жёлтая разметка-пунктир в духе логотипа, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — ультрамарин #0000DA, тезис — белый #FFFFFF, разметка — жёлтый #EFB80D.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 20 ноября</span><h3>Права на квадроцикл, трактор и погрузчик в Твери: категории ГосТехНадзора в автошколе «СТАРТ»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кроме категории B, мы обучаем на тракторные категории ГосТехНадзора и рабочие профессии — от квадроцикла и снегохода до трактора, погрузчика и экскаватора.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Обучение в Твери на квадроцикл и снегоход и сдача экзаменов инспектору ГосТехНадзора в автошколе возможны с 16 лет.<span class="src">сайт</span></li>
+        <li>Для категории A1 потребуется 1 день занятий: теоретический двухчасовой курс и одно двухчасовое практическое занятие. Стоимость обучения: 15 000 ₽.<span class="src">сайт</span></li>
+        <li>Тракторная категория B — техника с мотором мощностью не более 25,7 кВт с колёсным и гусеничным ходом: малые погрузчики, газонокосилки, миниэкскаваторы, коммунальная и хозяйственная техника. Выдача прав с 17 лет. 14 000 ₽.<span class="src">сайт</span></li>
+        <li>Тракторная категория C — колёсная и гусеничная техника с мотором мощностью от 25,7 до 110,3 кВт: трактора, экскаваторы, погрузчики. 14 000 ₽.<span class="src">сайт</span></li>
+        <li>Обучение профессиям: водитель погрузчика 3–4 разряда и машинист экскаватора 4–6 разряда — 14 000 ₽, тракторист сельскохозяйственного производства 3–4 разряда — 20 000 ₽.<span class="src">сайт</span></li>
+        <li>Экзамены на право управления принимает Гостехнадзор Тверской области.<span class="src">сайт</span></li>
+        <li>Также работаем с организациями.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Права на квадроцикл, трактор и погрузчик в Твери — автошкола «СТАРТ»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Права на квадроцикл, трактор, погрузчик в Твери от 14 000 ₽ | СТАРТ</span></div>
+        <div class="meta-row"><span><b>Description · </b>Категории ГосТехНадзора в Твери: квадроцикл и снегоход A1 за 1 день занятий, тракторные категории B и C, водитель погрузчика, машинист экскаватора, тракторист.</span></div>
+        <div class="chips">
+          <span class="chip-kw">права на квадроцикл тверь</span><span class="chip-kw">права на квадроцикл</span>
+          <span class="chip-kw">права на снегоход</span><span class="chip-kw">права тракториста</span>
+          <span class="chip-kw">обучение на тракториста тверь</span><span class="chip-kw">удостоверение тракториста машиниста</span>
+          <span class="chip-kw">обучение на погрузчик</span><span class="chip-kw">права на погрузчик</span>
+          <span class="chip-kw">обучение на экскаваторщика тверь</span><span class="chip-kw">гостехнадзор тверь</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на обучение — для компаний тоже.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Квадроцикл, трактор, погрузчик»</div>
+        <p>Композиция: синий учебный трактор автошколы и квадроцикл на площадке, дневной свет; тезис на плашке в верхней трети, строка «категории ГосТехНадзора», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — глубокий синий #011F84, тезис — белый #FFFFFF, строка — жёлтый #EFB80D, уголок-акцент — красный #F60404.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Права B без доплат</div><span class="slide-no">Сторис 1 · 30 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">«Стандарт» — 53 000 ₽</span>
+          <span class="fact-pill">«Комфорт» — 64 000 ₽</span>
+          <span class="fact-pill">Бензин включён</span>
+          <span class="fact-pill">Время инструктора включено</span>
+          <span class="fact-pill">Рассрочка</span>
+          <span class="fact-pill">2,5 месяца</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон ультрамарин #0000DA, заголовок белым #FFFFFF в верхней части, два тарифа на белых плашках #FFFFFF с ценой глубоким синим #011F84, строки «бензин» и «время инструктора» жёлтым #EFB80D. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Категория B на электромобиле</div><span class="slide-no">Сторис 2 · 6 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Changan QIYUAN Q05</span>
+          <span class="fact-pill">2026 года выпуска</span>
+          <span class="fact-pill">АКПП</span>
+          <span class="fact-pill">Будни и выходные</span>
+          <span class="fact-pill">Онлайн-платформа</span>
+          <span class="fact-pill">70 000 ₽</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, фото электромобиля в центре, заголовок глубоким синим #011F84 сверху, факты на голубых плашках #0C7CBC белым текстом, цена крупно ультрамарином #0000DA. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Шесть шагов до прав</div><span class="slide-no">Сторис 3 · 13 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Договор</span>
+          <span class="fact-pill">Теория</span>
+          <span class="fact-pill">Вождение</span>
+          <span class="fact-pill">Пробный экзамен</span>
+          <span class="fact-pill">Экзамен ГИБДД на площадке</span>
+          <span class="fact-pill">Права</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон глубокий синий #011F84, шесть шагов столбиком, номера в жёлтых кругах #EFB80D, текст белым #FFFFFF, линия-разметка между шагами пунктиром жёлтого #EFB80D. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Права на спецтехнику</div><span class="slide-no">Сторис 4 · 20 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Квадроцикл, снегоход A1 — 15 000 ₽</span>
+          <span class="fact-pill">1 день занятий</span>
+          <span class="fact-pill">Тракторные B и C — 14 000 ₽</span>
+          <span class="fact-pill">Погрузчик, экскаватор — 14 000 ₽</span>
+          <span class="fact-pill">Тракторист — 20 000 ₽</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон голубой #0C7CBC, заголовок белым #FFFFFF, позиции списком на белых плашках #FFFFFF с ценой глубоким синим #011F84, отметка «1 день занятий» на красной плашке #F60404. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — категория B, электромобиль, обучение, спецтехника <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Права категории B в Твери без доплат</b>30.10 · тарифы 53 000 и 64 000 ₽, бензин и инструктор в стоимости, рассрочка</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Права B без доплат</b>30.10 · тарифы, что включено, срок</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Категория B на электромобилях Changan QIYUAN Q05</b>06.11 · АКПП, 2026 года выпуска, 70 000 ₽</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Категория B на электромобиле</b>06.11 · модель, график, цена</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Как проходит обучение: от договора до экзамена в ГИБДД</b>13.11 · группы теории, выбор инструктора, пробный экзамен</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Шесть шагов до прав</b>13.11 · порядок обучения</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Права на квадроцикл, трактор и погрузчик</b>20.11 · категории ГосТехНадзора и профессии, 14 000–20 000 ₽</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Права на спецтехнику</b>20.11 · категории и цены</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={a:[6458,6305,5159,7088,7096,7865,7103,7455,8924,8719,8721,8394,7803,6791,6254,7480,7301,9595,8999,8959,8703,9168,8548,9981]};
+const fmt=n=>n.toLocaleString('ru-RU');
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=44,R=10,T=10,B=24,mn=0,mx=12000;
+  const x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-b':[['автошкола','смешанное',9823],['автошкола тверь','коммерческое, гео',5652],['автошкола старт','по названию',314],['автошкола цена','коммерческое',278],['обучение в автошколе','коммерческое',270],['инструктор по вождению','смешанное',253],['автошкола старт тверь','по названию, гео',213],['автошкола тверь цены','коммерческое, гео',192],['обучение вождению','коммерческое',151],['инструктор по вождению тверь','коммерческое, гео',85],['сколько стоит автошкола','коммерческое',81],['автошкола онлайн','коммерческое',54],['сдать на права категории в','коммерческое',50],['внутренний экзамен в автошколе','информационное',42],['автошкола на механике','коммерческое',25],['автошкола автомат','коммерческое',21]],
+ 't-t':[['тракторист','смешанное',1072],['права на квадроцикл','смешанное',196],['права тракториста','коммерческое',153],['удостоверение тракториста','коммерческое',88],['права на погрузчик','коммерческое',76],['обучение на погрузчик','коммерческое',69],['обучение на тракториста','коммерческое',34],['права на квадроцикл тверь','коммерческое, гео',18],['обучение на экскаваторщика тверь','коммерческое, гео',5]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['demand','Спрос'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
