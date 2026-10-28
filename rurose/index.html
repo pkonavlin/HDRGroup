@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Rurose»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right;white-space:nowrap}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:62px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Rurose · Москва и Подмосковье</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>RUROSE RUROSE RUROSE RUROSE</span><span>RUROSE RUROSE RUROSE RUROSE</span><span>RUROSE RUROSE RUROSE RUROSE</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>Rurose на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса в Москве и Подмосковье, стратегия продвижения и контент-план для шести карточек сети цветочных супермаркетов и оптово-розничных складов. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Rurose · ООО «РУРОУЗ»</b></div>
+        <div><span>Точки</span><b>4 цветочных супермаркета · 2 оптово-розничных склада</b></div>
+        <div><span>География</span><b>Москва · Островцы · Быково · Раменское</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 28.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Оценки на 6 карточках</span><span class="t-n g">2 719</span><span class="t-s">рейтинг 5,0 на каждой · 1 765 отзывов</span></div>
+        <div class="tile"><span class="t-k">«цветы» в Раменском</span><span class="t-n g">2</span><span class="t-s">место из 19, Десантная, 44В</span></div>
+        <div class="tile"><span class="t-k">«цветочный магазин» в Жуковском</span><span class="t-n c">9</span><span class="t-s">место из 19, Шоссейная, 295/2</span></div>
+        <div class="tile"><span class="t-k">Новости на карточках</span><span class="t-n c">0</span><span class="t-s">на всех шести одна и та же акция</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">27.10.2026</span><span class="st done">готово</span></div><h3>Анкета компании</h3><p>Ассортимент, преимущества, приоритетные темы, праздники и порядок согласования от Rurose.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции шести карточек на Яндекс Картах по 11 запросам в Москве, Островцах, Раменском и Жуковском, спрос по Вордстату, причины просадки, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">28.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис по ответам компании в анкете: российские розы, ассортимент, цены и акции, День матери.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 29.10</span><span class="st wait">согласование</span></div><h3>Согласование тем и актуальных акций</h3><p>Темы этапа и действующие акции недели согласуем с Rurose до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">29.10 · 05.11 · 12.11 · 19.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на всех шести карточках. Новость ко Дню матери выходит за 10 дней до праздника.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">еженедельно</span><span class="st next">следующий шаг</span></div><h3>Запрос новостей у компании</h3><p>Раз в неделю уточняем у Rurose изменения и продление акций, поступление нового товара и сезонного цветка.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточки видно и где их теряют</h3>
+          <p>Шесть карточек сети, позиции по 11 запросам, соседи по выдаче, спрос и сезонность в Москве и области, стратегия в три этапа.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточек</h3>
+          <ul>
+            <li>29.10 — Российские розы от тепличных комбинатов</li>
+            <li>05.11 — Ассортимент магазинов Rurose</li>
+            <li>12.11 — Цены и акции</li>
+            <li>19.11 — Букеты на День матери</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Москва и Московская область · цветы, букеты, опт · замер 28.10.2026</span>
+  <h1>Где Rurose видно в поиске и где карточки теряют покупателей</h1>
+  <p>Шесть карточек сети на Яндекс Картах: позиции по 11 запросам в зонах каждой точки, спрос по Вордстату для региона «Москва и Московская область» и сравнение с карточками, которые стоят рядом.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">сильно</span><p><b>Раменское и Островцы — 2–3 место</b>В Раменском карточка на Десантной стоит 2-й по запросам «цветы», «цветочный магазин» и «доставка цветов». В Островцах обе карточки в первой пятёрке.</p></div>
+    <div class="v"><span class="pill crit">слабо</span><p><b>Жуковский — карточку почти не видно</b>По «цветочному магазину» Шоссейная, 295/2 стоит 9-й, по «доставке цветов» в Жуковском её нет в первых 27. Выше стоят местные магазины Жуковского.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточки не рассказывают о себе</b>Новостей и сторис нет ни на одной из шести карточек. На всех висит одна и та же акция «Розы от 70 руб.».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос огромный и сезонный</b>«доставка цветов» — 120 681 запрос за 30 дней по Москве и области. Пики — март, февраль, ноябрь и конец августа.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">5,0</div><div class="s">на каждой из 6 карточек</div></div>
+    <div class="kpi"><div class="k">Оценок всего</div><div class="n">2 719</div><div class="s">1 765 отзывов</div></div>
+    <div class="kpi"><div class="k">«доставка цветов»</div><div class="n">120 681</div><div class="s">запросов за 30 дней</div></div>
+    <div class="kpi"><div class="k">Новостей на карточках</div><div class="n">0</div><div class="s">одна общая акция</div></div>
+  </div>
+</section>
+
+<section id="cards">
+  <div class="sh"><h2>Карточки сети</h2><p>Все шесть карточек Rurose на Яндекс Картах, данные из карточек на 28.10.2026.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Точка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th class="r">Отзывы</th><th class="r">Фото</th><th>Режим</th></tr></thead>
+    <tbody>
+      <tr><td>Цветочный супермаркет №1<br><span class="sub">Москва, Энергетическая, 20</span></td><td class="r num">5,0</td><td class="r num">561</td><td class="r num">381</td><td class="r num">134</td><td>08:00–21:00</td></tr>
+      <tr><td>Цветочный супермаркет №2<br><span class="sub">Островцы, Баулинская, 3Б</span></td><td class="r num">5,0</td><td class="r num">631</td><td class="r num">350</td><td class="r num">126</td><td>круглосуточно</td></tr>
+      <tr><td>Цветочный супермаркет №3<br><span class="sub">с. Быково, Шоссейная, 295/2</span></td><td class="r num">5,0</td><td class="r num">553</td><td class="r num">412</td><td class="r num">122</td><td>круглосуточно</td></tr>
+      <tr><td>Цветочный супермаркет №4<br><span class="sub">Раменское, Десантная, 44В</span></td><td class="r num">5,0</td><td class="r num">141</td><td class="r num">128</td><td class="r num">235</td><td>08:00–21:00</td></tr>
+      <tr><td>Оптово-розничный склад<br><span class="sub">Москва, 5-я Кожуховская, 22к1</span></td><td class="r num">5,0</td><td class="r num">395</td><td class="r num">291</td><td class="r num">128</td><td>08:00–20:00</td></tr>
+      <tr><td>Оптово-розничный склад<br><span class="sub">Островцы, Подмосковная, 24/13</span></td><td class="r num">5,0</td><td class="r num">438</td><td class="r num">203</td><td class="r num">63</td><td>08:00–22:00</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск в зоне каждой точки, без геолокации пользователя. Порядок первых мест немного меняется между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос · где искали</th><th class="r">Rurose</th><th>Кто выше</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>цветы · Раменское<br><span class="sub">Десантная, 44В</span></td><td class="r num">2 из 19</td><td>Цветы (Октябрьская, 1Д)</td></tr>
+      <tr class="me"><td>цветочный магазин · Раменское<br><span class="sub">Десантная, 44В</span></td><td class="r num">2</td><td>Цветы (Октябрьская, 1Д)</td></tr>
+      <tr class="me"><td>доставка цветов · Раменское<br><span class="sub">Десантная, 44В</span></td><td class="r num">2</td><td>Цветы (Октябрьская, 1Д)</td></tr>
+      <tr class="me"><td>цветы · Островцы<br><span class="sub">Баулинская, 3Б · Подмосковная, 24/13</span></td><td class="r num">3 и 5 из 16</td><td>Цветы (Баулинская, 3А), Цветков55</td></tr>
+      <tr class="me"><td>цветы оптом · Островцы<br><span class="sub">Подмосковная, 24/13 · Баулинская, 3Б</span></td><td class="r num">3 и 5 из 17</td><td>Цветы (Баулинская, 3А), Цветочная компания Харченко Р. В. (3 797 оценок)</td></tr>
+      <tr><td>доставка цветов · у м. Авиамоторная<br><span class="sub">Энергетическая, 20</span></td><td class="r num">4 из 14</td><td>Аристократ, две точки Fmart by flowwow</td></tr>
+      <tr><td>цветы · у м. Авиамоторная<br><span class="sub">Энергетическая, 20</span></td><td class="r num">5 из 15</td><td>Аристократ, две точки Fmart by flowwow</td></tr>
+      <tr><td>цветы оптом · у м. Кожуховская<br><span class="sub">5-я Кожуховская, 22к1</span></td><td class="r num">5 из 14</td><td>Цветник, Блумикс, Fmart by flowwow</td></tr>
+      <tr><td>цветы оптом · Москва целиком</td><td class="r">нет в 15</td><td>Цветочный склад (Пятницкая, Тверская), СоюзЦветТорг</td></tr>
+      <tr><td>цветочный магазин · Жуковский<br><span class="sub">Шоссейная, 295/2</span></td><td class="r num">9 из 19</td><td>Амели (71 оценка), Лучшие цветы, Fmart by flowwow</td></tr>
+      <tr><td>доставка цветов · Жуковский<br><span class="sub">Шоссейная, 295/2 — нет в 27</span></td><td class="r num">14 и 18 из 27</td><td>Амели, MyBloom.ru, Цветы (Раменское)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В строке «доставка цветов · Жуковский» в выдаче оказались карточки Раменского и Островцов, а точка в Быково, ближайшая к Жуковскому, не попала в первые 27.</p>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточки теряют позиции</h2><p>Каждая причина подтверждена данными карточек или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>На карточках нет публикаций</h3></div>
+      <p>Новостей и сторис нет ни на одной из шести карточек. Единственная публикация — акция <b>«Розы от 70 руб.»</b>, одна и та же везде. Регулярные новости — сигнал Яндексу, что карточка живая, и повод показать её по запросам про розы, сезонный цветок и праздники.</p>
+      <p class="next">Новость и сторис раз в неделю на всех шести карточках, в каждой — город или район точки.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Точка у Жуковского привязана к Быково</h3></div>
+      <p>На сайте магазин называется <b>«Цветочный супермаркет №3 (г. Жуковский)»</b>, на карточке — село Быково, Шоссейная, 295/2. По запросам из Жуковского Яндекс ставит выше магазины самого Жуковского: Амели, Лучшие цветы, MyBloom.ru.</p>
+      <p class="next">В описании карточки и в публикациях указываем «Быково, рядом с Жуковским» и условия доставки в Жуковский — 590 ₽.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Опт в Москве не виден за пределами района</h3></div>
+      <p>По «цветы оптом» у Кожуховской склад стоит 5-м, а по Москве целиком его нет в первых 15. В Островцах рядом работает Цветочная компания Харченко Р. В. с 3 797 оценками. При этом «цветы оптом» ищут 8 477 раз в месяц.</p>
+      <p class="next">Одна новость этапа про российскую розу говорит и об опте: склады, сорта, условия регулярной закупки.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Разный логотип на карточках сети</h3></div>
+      <p>На пяти карточках логотип красный, на карточке в Раменском — бордовый, на сайте — графитовый. Для покупателя, который видит соседние точки на карте, это выглядит как разные магазины.</p>
+      <p class="next">Один логотип на всех шести карточках.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>В Москве выше стоят маркетплейсы</h3></div>
+      <p>У Авиамоторной первые места занимают Аристократ и две точки Fmart by flowwow. У Rurose здесь 561 оценка — больше, чем у соседей сверху, поэтому позиция поднимется за счёт активности карточки.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Москве и области</h2><p>Вордстат, регион «Москва и Московская область», все устройства. Частоты — за 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="d"><h3>«доставка цветов»</h3><div class="cs">запросов в месяц · ноябрь 2025 к октябрю 2025: +18%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: главный пик — март (8 Марта), затем февраль, ноябрь и конец августа к 1 сентября. В ноябре спрос растёт к Дню матери, в декабре–январе проседает. В 2026 году спрос ниже, чем в 2025: сентябрь — на 15%.</p>
+
+  <h3>Розница и доставка</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов за 30 дней</th></tr></thead><tbody id="t-ret"></tbody></table></div>
+
+  <h3>Опт, сезон и география точек</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов за 30 дней</th></tr></thead><tbody id="t-geo"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Доставка — главный запрос</b>: «доставка цветов» 120 681, «букет цветов» 80 249, «букет роз» 49 658.</li>
+      <li><b>Розы ищут отдельно</b>: «купить розы» 37 398, «кустовые розы» 25 473, «101 роза» 11 649.</li>
+      <li><b>Опт — заметная ниша</b>: «цветы оптом» 8 477, «цветочный склад» 1 624, «розы оптом» 1 328.</li>
+      <li><b>Город точки в запросе</b>: «цветы раменское» 2 327, «цветы люберцы» 2 012, «цветы жуковский» 1 336.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «доставка цветов» и география: Москва, Раменское, Жуковский, Островцы.</li>
+      <li>Розы называем с сортом и происхождением: «российские розы», «кустовые розы».</li>
+      <li>Тема ноября — День матери: «букет маме», «цветы на день матери».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточки к одному виду</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Один логотип на всех шести карточках.</b><span>Сейчас на карточке в Раменском он бордовый, на остальных — красный.</span></li>
+        <li><b>Быково и Жуковский в описании.</b><span>Для карточки на Шоссейной, 295/2 — «рядом с Жуковским», круглосуточно, доставка по Жуковскому.</span></li>
+        <li><b>Актуальная акция на каждой карточке.</b><span>Вместо одной общей — акция недели от компании, обновление раз в неделю.</span></li>
+        <li><b>Описание складов как оптовых.</b><span>Для Кожуховской и Подмосковной — «оптово-розничный склад», российская роза, условия регулярной закупки.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Новости, сторис и ответы на отзывы</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю на всех карточках.</b><span>Темы — акции, сезонный цветок, новый ассортимент и цветочные праздники, как просит компания.</span></li>
+        <li><b>Праздники заранее.</b><span>Новость к празднику — за 7–10 дней: День матери, Новый год, День Татьяны, 14 февраля, 8 Марта.</span></li>
+        <li><b>Ответы на отзывы от имени компании.</b><span>Благодарим за обратную связь по имени. Негативный отзыв сначала отправляем компании для разбирательства, просим автора связаться с компанией и никогда не спорим публично.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Карточки в 2ГИС</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Те же публикации и данные.</b><span>Одинаковые название, адреса, часы и логотип. Новости и сторис из этого контент-плана публикуем и там.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск 28.10.2026 в зоне каждой точки без геолокации пользователя, рейтинги и число оценок — из карточек и выдачи.</li>
+    <li>Вордстат: регион «Москва и Московская область», все устройства, частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/rurose/147616532625/" target="_blank" rel="noopener">Rurose, Энергетическая, 20 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/rurose/1724839618/" target="_blank" rel="noopener">Rurose, Баулинская, 3Б — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/rurose/116195274162/" target="_blank" rel="noopener">Rurose, Шоссейная, 295/2 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/rurose/170564781109/" target="_blank" rel="noopener">Rurose, Десантная, 44В — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/rurose/237489472935/" target="_blank" rel="noopener">Rurose, 5-я Кожуховская, 22к1 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/rurose/1383668150/" target="_blank" rel="noopener">Rurose, Подмосковная, 24/13 — Яндекс Карты</a>
+    <a href="https://rurose.ru/" target="_blank" rel="noopener">rurose.ru</a>
+    <a href="https://t.me/ruroseru" target="_blank" rel="noopener">Telegram-канал Rurose</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Цветы и букеты · опт и розница · Москва и Подмосковье</span>
+    <h1>Rurose — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 29 октября 2026 года — карточки компании Rurose на Яндекс Картах и 2ГИС, все шесть точек.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Rurose <small>ООО «РУРОУЗ», на рынке цветочной продукции с 2015 года</small></div></div>
+      <div class="fact"><div class="k">Сфера</div><div class="v">Оптово-розничная продажа срезанных цветов и букетов и аксессуаров <small>букеты на заказ, свадебные букеты</small></div></div>
+      <div class="fact"><div class="k">Ассортимент</div><div class="v">Свежесрезанные цветы преимущественно розы российского производства <small>сухоцветы, мягкие игрушки, ремесленный шоколад, воздушные шары, вазы, кашпо, грунты для комнатных растений, комнатные растения, открытки, конверты для денег, подарочные пакеты, аксессуары для праздника</small></div></div>
+      <div class="fact"><div class="k">Цветочные супермаркеты</div><div class="v">Москва, Энергетическая, 20 <small>Островцы, Баулинская, 3Б · Быково, Шоссейная, 295/2 · Раменское, Десантная, 44В</small></div></div>
+      <div class="fact"><div class="k">Оптово-розничные склады</div><div class="v">Москва, 5-я Кожуховская, 22к1 <small>Островцы, Подмосковная, 24/13</small></div></div>
+      <div class="fact"><div class="k">Режим</div><div class="v">Островцы и Быково — круглосуточно <small>Энергетическая и Раменское 08:00–21:00, склады до 20:00 и 22:00</small></div></div>
+      <div class="fact"><div class="k">Доставка</div><div class="v">По Москве и области <small>заказ от 2500 ₽, ежедневно 9:00–21:00</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">rurose.ru</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль Rurose</h2>
+      <p>После анализа ресурсов компании определены цвета для обложек новостей и слайдов сторис по сайту rurose.ru: зелёный кнопок и меню, тёмно-синий текста и меток, графитовый логотип, светло-зелёная подложка разделов и светлый фон страниц.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#4AA800;color:#FFFFFF;border-color:#4AA800">
+        <div class="role">Акцентный</div><div class="name">Зелёный</div><div class="hex">#4AA800</div>
+      </div>
+      <div class="swatch" style="background:#001330;color:#FFFFFF;border-color:#001330">
+        <div class="role">Основной</div><div class="name">Тёмно-синий</div><div class="hex">#001330</div>
+      </div>
+      <div class="swatch" style="background:#EDF6E6;color:#001330;border-color:#EDF6E6">
+        <div class="role">Второстепенный</div><div class="name">Светло-зелёный</div><div class="hex">#EDF6E6</div>
+      </div>
+      <div class="swatch" style="background:#2C2928;color:#FFFFFF;border-color:#2C2928">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#2C2928</div>
+      </div>
+      <div class="swatch" style="background:#FAFAFA;color:#001330;border-color:#FAFAFA">
+        <div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#FAFAFA</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап построен на ответах компании в анкете: преимущества, ассортимент, акции и цветочные праздники. Одна новость и одна сторис в неделю, с 29 октября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">29.10</div><p>Цветы: розы российского производства, прямые поставки от производителей, розница и опт.</p></div>
+      <div class="cycle-row"><div class="tag">05.11</div><p>Ассортимент магазинов: цветы, сезонный цветок, товары к букету и для праздника.</p></div>
+      <div class="cycle-row"><div class="tag">12.11</div><p>Цены и акции: низкие, конкурентные цены и еженедельные акции компании.</p></div>
+      <div class="cycle-row"><div class="tag">19.11</div><p>Праздник: букеты на День матери 29 ноября и доставка по Москве и области.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточки компании на Яндекс Картах и 2ГИС, все шесть точек.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль, спокойно и по делу. Каждая новость начинается со вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Без превосходных степеней, без телефона и e-mail в тексте. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 29 октября</span><h3>Российские розы в Москве и Подмосковье: прямые поставки с тепличных комбинатов в розницу и оптом</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы получаем цветы напрямую от производителей. В наших магазинах и на складах — преимущественно розы российского производства.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Оптово-розничная продажа срезанных цветов и букетов и аксессуаров.<span class="src">анкета</span></li>
+        <li>Свежесрезанные цветы преимущественно розы российского производства.<span class="src">анкета</span></li>
+        <li>Прямые и регулярные поставки цветов напрямую от производителей гарантируют свежесть и качество цветка.<span class="src">анкета</span></li>
+        <li>Широкий ассортимент российской розы тепличных комбинатов: Зеленый дом (Адыгея), МОСРОЗА (Ступино), Роуз Хилл (Калуга), Флорентика (Калуга).<span class="src">сайт</span></li>
+        <li>Широкий ассортимент: более 40 сортов одноголовой розы и 25 сортов кустовой.<span class="src">сайт</span></li>
+        <li>Свежий цветок благодаря ежедневным поставкам напрямую с тепличных комбинатов.<span class="src">сайт</span></li>
+        <li>ООО «РУРОУЗ» работает на рынке цветочной продукции с 2015 года.<span class="src">сайт</span></li>
+        <li>Оптово-розничные склады: Москва, ул. 5-ая Кожуховская, д. 22, к. 1 и Московская область, деревня Островцы, ул. Подмосковная, д. 24/13.<span class="src">сайт</span></li>
+        <li>Критерий оптовой закупки — регулярная (не реже 1 раза в неделю) закупка цветка.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Российские розы в Москве и Подмосковье — Rurose</span></div>
+        <div class="meta-row"><span><b>Title · </b>Российские розы от тепличных комбинатов: розница и опт | Rurose</span></div>
+        <div class="meta-row"><span><b>Description · </b>Розы российского производства в Москве и Подмосковье: прямые поставки с четырёх тепличных комбинатов, более 40 сортов одноголовой и 25 сортов кустовой розы, оптово-розничные склады.</span></div>
+        <div class="chips">
+          <span class="chip-kw">российские розы</span><span class="chip-kw">купить розы москва</span>
+          <span class="chip-kw">розы оптом</span><span class="chip-kw">цветы оптом москва</span>
+          <span class="chip-kw">кустовые розы</span><span class="chip-kw">букет роз</span>
+          <span class="chip-kw">цветочный склад</span><span class="chip-kw">цветы оптом раменское</span>
+          <span class="chip-kw">свежие розы</span><span class="chip-kw">магазин цветов москва</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите за розами в магазины и на склады Rurose или оформляйте доставку на сайте.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Розы России»</div>
+        <p>Композиция: охапка свежих роз разных сортов в холодильной витрине склада, крупно бутоны; тезис на плашке в нижней трети, под ним строка «40+ сортов», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — тёмно-синий #001330, тезис — светлый #FAFAFA, строка «40+ сортов» — белым #FFFFFF на плашке зелёного #4AA800.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 5 ноября</span><h3>Цветы, букеты и товары к празднику: ассортимент магазинов Rurose в Москве и Подмосковье</h3></div>
+        <span class="purpose">Информационный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кроме свежесрезанных цветов, в магазинах Rurose продаются сезонный цветок, товары к букету и аксессуары для праздника.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Букеты на заказ, свадебные букеты.<span class="src">анкета</span></li>
+        <li>Свежесрезанные цветы преимущественно розы российского производства, сухоцветы, мягкие игрушки, ремесленный шоколад, воздушные шары, вазы, кашпо, грунты для комнатных растений, комнатные растения, открытки, конверты для денег, подарочные пакеты, аксессуары для праздника.<span class="src">анкета</span></li>
+        <li>Продажа сезонного цветка (тюльпаны, пионы, ромашки, георгины, гладиолусы, хризантемы).<span class="src">анкета</span></li>
+        <li>Каталог: цветы в коробке, монобукеты, букеты, розы, композиции из цветов, букеты по событию.<span class="src">сайт</span></li>
+        <li>Профессиональные флористы с радостью проконсультируют вас.<span class="src">сайт</span></li>
+        <li>Цветочные супермаркеты: Москва, ул. Энергетическая, д. 20; Островцы, ул. Баулинская, д. 3Б; Быково, ул. Шоссейная, 295/2; Раменское, ул. Десантная, д. 44В.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Магазины цветов Rurose в Москве и Подмосковье: цветы, букеты, подарки</span></div>
+        <div class="meta-row"><span><b>Title · </b>Цветы, букеты на заказ и товары к празднику | Rurose</span></div>
+        <div class="meta-row"><span><b>Description · </b>Магазины цветов Rurose в Москве, Островцах, Быково и Раменском: розы российского производства, сезонный цветок, букеты на заказ, свадебные букеты, сухоцветы, комнатные растения и товары к букету.</span></div>
+        <div class="chips">
+          <span class="chip-kw">магазин цветов москва</span><span class="chip-kw">цветочный магазин</span>
+          <span class="chip-kw">букеты на заказ</span><span class="chip-kw">свадебный букет</span>
+          <span class="chip-kw">сухоцветы</span><span class="chip-kw">комнатные растения</span>
+          <span class="chip-kw">воздушные шары к букету</span><span class="chip-kw">цветы раменское</span>
+          <span class="chip-kw">цветы жуковский</span><span class="chip-kw">цветы островцы</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите в ближайший магазин Rurose или выбирайте букет в каталоге на сайте.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Цветы и подарки»</div>
+        <p>Композиция: фото торгового зала магазина Rurose — витрина с букетами, рядом стойка с открытками и воздушными шарами; тезис в верхней трети на светлой подложке, логотип в верхнем левом углу. Фото — из архива компании.</p>
+        <p>Цвета: подложка — светлый #FAFAFA, тезис — тёмно-синий #001330, тонкая линия под тезисом — зелёный #4AA800.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 12 ноября</span><h3>Цены и акции в магазинах Rurose: цветы в Москве и Подмосковье по точным ценам</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы держим низкие, конкурентные цены на цветы и каждую неделю проводим акции для наших клиентов.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Низкие, конкурентные цены, регулярные акции и спецпредложения для наших клиентов.<span class="src">анкета</span></li>
+        <li>Еженедельные и кастомные акции компании.<span class="src">анкета</span></li>
+        <li>Мы за честные и прозрачные цены без скрытых наценок.<span class="src">сайт</span></li>
+        <li>Раздел «Акции» на сайте: букеты, корзины, коробки и композиции со скидкой.<span class="src">сайт</span></li>
+        <li>Оплата долями.<span class="src">сайт</span></li>
+        <li>Акция недели — конкретное предложение, срок и цена по данным раздела «Акции» на сайте или по сообщению компании на дату публикации.<span class="src">анкета</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Цены и акции на цветы в магазинах Rurose</span></div>
+        <div class="meta-row"><span><b>Title · </b>Цветы недорого в Москве и Подмосковье: акции недели | Rurose</span></div>
+        <div class="meta-row"><span><b>Description · </b>Низкие, конкурентные цены на цветы и букеты в магазинах Rurose в Москве и Подмосковье, еженедельные акции и спецпредложения, точные цены и оплата долями на сайте.</span></div>
+        <div class="chips">
+          <span class="chip-kw">цветы недорого</span><span class="chip-kw">акции на цветы</span>
+          <span class="chip-kw">недорогие букеты</span><span class="chip-kw">розы недорого москва</span>
+          <span class="chip-kw">цветы со скидкой</span><span class="chip-kw">магазин цветов</span>
+          <span class="chip-kw">цветочный магазин раменское</span><span class="chip-kw">цветы круглосуточно</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> смотрите акции недели в разделе «Акции» на сайте Rurose.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Цены без наценок»</div>
+        <p>Композиция: охапка роз на витрине магазина с ценником без цифр; тезис крупно справа на плашке, логотип в верхнем левом углу. Слова «акция», «купить» на обложке не используем.</p>
+        <p>Цвета: плашка — зелёный #4AA800, тезис — белый #FFFFFF, подпись «Rurose» — тёмно-синий #001330 на светло-зелёной подложке #EDF6E6.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 19 ноября</span><h3>Букеты на День матери 29 ноября: доставка цветов по Москве, Раменскому и Жуковскому</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>29 ноября — День матери. Мы доставляем букеты по Москве и Московской области.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Все цветочные праздники: день мамы, новый год и другие.<span class="src">анкета</span></li>
+        <li>В каталоге: букеты и цветы в коробке на День матери, букеты маме.<span class="src">сайт</span></li>
+        <li>Доставка при заказе от 2500 руб. ежедневно с 9:00 до 21:00. Доставка после 21:00 по согласованию с оператором.<span class="src">сайт</span></li>
+        <li>Стоимость доставки: по Москве в пределах МКАД — 590 руб., пос. Новые Островцы — 490 руб., гор. Жуковский — 590 руб., гор. Раменское — 750 руб.<span class="src">сайт</span></li>
+        <li>Мягкие игрушки, ремесленный шоколад, воздушные шары, открытки, конверты для денег, подарочные пакеты.<span class="src">анкета</span></li>
+        <li>Цветочный супермаркет №2 (дер. Островцы) и №3 (Быково) — круглосуточно.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Букеты на День матери с доставкой по Москве и Подмосковью</span></div>
+        <div class="meta-row"><span><b>Title · </b>Цветы на День матери 29 ноября с доставкой | Rurose</span></div>
+        <div class="meta-row"><span><b>Description · </b>Букеты маме на День матери 29 ноября: доставка по Москве, Раменскому, Жуковскому и Островцам от 590 руб., заказ от 2500 руб., дополнения к букету.</span></div>
+        <div class="chips">
+          <span class="chip-kw">цветы на день матери</span><span class="chip-kw">букет для мамы</span>
+          <span class="chip-kw">доставка цветов</span><span class="chip-kw">доставка цветов москва</span>
+          <span class="chip-kw">доставка цветов раменское</span><span class="chip-kw">доставка цветов жуковский</span>
+          <span class="chip-kw">букет цветов с доставкой</span><span class="chip-kw">цветы в коробке</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оформляйте доставку букета к 29 ноября на сайте Rurose заранее.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Букет для мамы»</div>
+        <p>Композиция: букет в коробке на столе у окна, рядом открытка; тезис в верхней трети, под ним строка «29 ноября», логотип в верхнем левом углу.</p>
+        <p>Цвета: фон надписи — светлый #FAFAFA, тезис — тёмно-синий #001330, дата — белым #FFFFFF на плашке зелёного #4AA800.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточки компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Розы России</div><span class="slide-no">Сторис 1 · 29 октября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">4 тепличных комбината</span>
+          <span class="fact-pill">40+ сортов одноголовой</span>
+          <span class="fact-pill">25 сортов кустовой</span>
+          <span class="fact-pill">Ежедневные поставки</span>
+          <span class="fact-pill">Розница и опт</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #001330, заголовок светлым #FAFAFA, факты списком с маркерами зелёного #4AA800, строка «Розница и опт» на плашке зелёного #4AA800 белым текстом. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Ассортимент Rurose</div><span class="slide-no">Сторис 2 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Розы российского производства</span>
+          <span class="fact-pill">Сезонный цветок</span>
+          <span class="fact-pill">Букеты на заказ</span>
+          <span class="fact-pill">Свадебные букеты</span>
+          <span class="fact-pill">Сухоцветы</span>
+          <span class="fact-pill">Комнатные растения</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FAFAFA, заголовок тёмно-синим #001330, позиции на плашках зелёного #4AA800 с белым текстом, нижняя строка графитом #2C2928. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Цены и акции</div><span class="slide-no">Сторис 3 · 12 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Низкие, конкурентные цены</span>
+          <span class="fact-pill">Еженедельные акции</span>
+          <span class="fact-pill">Без скрытых наценок</span>
+          <span class="fact-pill">Оплата долями</span>
+          <span class="fact-pill">Акции — на rurose.ru</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #4AA800, заголовок крупно белым #FFFFFF, факты на светлой плашке #FAFAFA текстом тёмно-синего #001330. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">День матери · 29 ноября</div><span class="slide-no">Сторис 4 · 19 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Москва в МКАД — 590 ₽</span>
+          <span class="fact-pill">Жуковский — 590 ₽</span>
+          <span class="fact-pill">Раменское — 750 ₽</span>
+          <span class="fact-pill">Заказ от 2500 ₽</span>
+          <span class="fact-pill">9:00–21:00</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FAFAFA, заголовок тёмно-синим #001330, дата «29 ноября» на плашке светло-зелёного #EDF6E6 тёмно-синим #001330, цены доставки в столбик графитом #2C2928 с тонкими разделителями зелёного #4AA800. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — цветы, ассортимент, цены и День матери <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Российские розы: прямые поставки с тепличных комбинатов в розницу и оптом</b>29.10 · поставки от производителей, 4 комбината, 40+ и 25 сортов, склады</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Розы России</b>29.10 · комбинаты, сорта, поставки</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Цветы, букеты и товары к празднику: ассортимент магазинов</b>05.11 · ассортимент из анкеты, сезонный цветок, каталог</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Ассортимент Rurose</b>05.11 · цветы, букеты, сухоцветы, растения</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Цены и акции: цветы по точным ценам</b>12.11 · низкие цены, еженедельные акции, без скрытых наценок</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Цены и акции</b>12.11 · цены, акции недели, оплата долями</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Букеты на День матери 29 ноября</b>19.11 · доставка по Москве и области, дополнения</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>День матери · 29 ноября</b>19.11 · стоимость доставки по зонам</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={d:[170974,256886,221085,249043,273102,361682,171740,163810,163009,196513,215829,182632,180770,213158,119789,105241,143680,253309,107471,121697,104910,140087,203474,155647]};
+const fmt=n=>n.toLocaleString('ru-RU');
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=50,R=10,T=10,B=24,mn=0,mx=400000;
+  const x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,5,11,17,23].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-130)lx-=150;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-ret':[['доставка цветов','коммерческое',120681],['цветы купить','коммерческое',85173],['букет цветов','смешанное',80249],['букет роз','смешанное',49658],['цветочный магазин','коммерческое',42846],['магазин цветов','коммерческое',39646],['купить розы','коммерческое',37398],['кустовые розы','смешанное',25473],['купить букет','коммерческое',23094],['101 роза','коммерческое',11649],['цветы недорого','коммерческое',9906],['цветы круглосуточно','коммерческое',5368],['цветы в коробке','коммерческое',4107]],
+ 't-geo':[['цветы оптом','опт',8477],['хризантемы купить','сезон',7778],['цветы раменское','коммерческое, гео',2327],['цветы люберцы','коммерческое, гео',2012],['цветочный склад','опт',1624],['цветы жуковский','коммерческое, гео',1336],['розы оптом','опт',1328],['букет для мамы','праздник',731],['доставка цветов раменское','коммерческое, гео',576],['российская роза','ассортимент',416],['доставка цветов жуковский','коммерческое, гео',283],['цветы островцы','коммерческое, гео',206],['цветы на день матери','праздник',134]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['cards','Карточки'],['maps','Позиции на Картах'],['why','Причины'],['demand','Спрос'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
