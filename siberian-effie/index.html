@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIBERIAN EFFIE на Авито</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: аудиторский отчёт сервисного инженера — узкая колонка текста, строки-«акты» с маркером тяжести, медная нить как акцент (бойлер/термоблок) */
+:root{
+  --bg:#F2F4F3;
+  --surface:#FFFFFF;
+  --ink:#16201D;
+  --muted:#5A6762;
+  --line:#D7DDDA;
+  --spruce:#2C5A4E;
+  --spruce-soft:#E1ECE8;
+  --copper:#A9551E;
+  --copper-soft:#F6E7DC;
+  --crit:#B3261E; --crit-soft:#FBE4E2;
+  --warn:#9A6A00; --warn-soft:#FBF0D3;
+  --ok:#23704A;  --ok-soft:#DFF1E7;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1513;--surface:#17201D;--ink:#E7EDEA;--muted:#9AA8A2;--line:#2B3733;
+  --spruce:#7FC1AE;--spruce-soft:#1C2E29;--copper:#E39462;--copper-soft:#33231A;
+  --crit:#FF8A80;--crit-soft:#3A1D1B;--warn:#F2C155;--warn-soft:#352A12;--ok:#7DD3A4;--ok-soft:#163023;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1513;--surface:#17201D;--ink:#E7EDEA;--muted:#9AA8A2;--line:#2B3733;
+  --spruce:#7FC1AE;--spruce-soft:#1C2E29;--copper:#E39462;--copper-soft:#33231A;
+  --crit:#FF8A80;--crit-soft:#3A1D1B;--warn:#F2C155;--warn-soft:#352A12;--ok:#7DD3A4;--ok-soft:#163023;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--spruce)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+nav.top .brand{font-family:var(--f-display);font-weight:700;font-size:13px;letter-spacing:.06em;white-space:nowrap;color:var(--ink)}
+nav.top a{font-size:14px;color:var(--muted);text-decoration:none;white-space:nowrap}
+nav.top a:hover,nav.top a:focus-visible{color:var(--copper)}
+:focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,5vw,46px);line-height:1.1;letter-spacing:-.01em}
+h2{font-family:var(--f-display);font-weight:500;font-size:clamp(22px,3.2vw,30px);line-height:1.2}
+h3{font-size:19px;font-weight:700;line-height:1.3}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--copper);font-weight:700}
+section{padding-block:56px;border-top:1px solid var(--line)}
+section > .wrap{display:grid;gap:24px}
+.lead{font-size:18px;color:var(--muted)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* hero */
+header.hero{padding-block:48px 40px}
+header.hero .wrap{display:grid;gap:28px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--muted);font-size:14px}
+.meta span b{color:var(--ink);font-weight:600}
+.verdict{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:stretch}
+.score{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:grid;gap:16px}
+.score .big{font-family:var(--f-display);font-size:64px;font-weight:700;line-height:1;color:var(--crit)}
+.score .big small{font-size:22px;color:var(--muted);font-weight:500}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr) 44px;gap:12px;align-items:center;font-size:14px}
+.bar .track{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;border-radius:4px}
+.bar .v{text-align:right;font-family:var(--f-mono);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.kpi{background:var(--surface);padding:18px;display:grid;gap:4px;align-content:start}
+.kpi .n{font-family:var(--f-mono);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:13px;color:var(--muted);line-height:1.4}
+
+/* findings list */
+.findings{display:grid;gap:12px;list-style:none;padding:0;margin:0}
+.finding{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.finding p{color:var(--ink)}
+.finding .d{color:var(--muted);font-size:15px;margin-top:4px}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:6px;align-self:start;text-align:center}
+.crit{background:var(--crit-soft);color:var(--crit)}
+.warn{background:var(--warn-soft);color:var(--warn)}
+.ok{background:var(--ok-soft);color:var(--ok)}
+.info{background:var(--spruce-soft);color:var(--spruce)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:640px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td .pill{white-space:nowrap}
+
+/* ad cards */
+.ads{display:grid;gap:16px}
+.ad{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px}
+.ad-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:baseline}
+.ad-head .stats{display:flex;gap:16px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.ad-head .stats b{color:var(--ink);font-family:var(--f-mono)}
+.ad ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.ad li{max-width:72ch}
+.quote{font-family:var(--f-mono);font-size:13px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 12px;overflow-wrap:anywhere}
+.quote mark{background:var(--crit-soft);color:var(--crit);border-radius:3px;padding:0 2px}
+
+/* serp ladder */
+.serp{display:grid;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.serp-row{display:grid;gap:6px}
+.serp-row .q{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:15px}
+.serp-row .q span{color:var(--muted);font-size:13px}
+.ladder{position:relative;height:22px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.ladder .first{position:absolute;left:0;top:0;bottom:0;background:var(--ok-soft);border-right:2px solid var(--ok);border-radius:5px 0 0 5px}
+.ladder .dot{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--crit);border:2px solid var(--surface)}
+.ladder .dot.sec{background:var(--muted)}
+.scale{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+
+/* two-col */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:10px;align-content:start}
+.card ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.card .tag{font-family:var(--f-mono);font-size:12px;color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+
+/* strategy */
+.dir{display:grid;gap:18px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:14px;padding:24px}
+.dir .why{background:var(--copper-soft);border-radius:10px;padding:14px 16px}
+.titles{display:grid;gap:8px}
+.titles div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+.titles div span{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:10px;align-content:start}
+.step .when{font-family:var(--f-mono);font-size:12px;font-weight:700;color:var(--spruce);letter-spacing:.08em;text-transform:uppercase}
+.step ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}
+
+/* seasonality */
+.season{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:12px;min-width:0}
+.season-head{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;align-items:baseline}
+.season-head span{font-size:13px;color:var(--muted)}
+.chart{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px}
+.yax{position:relative;height:160px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.yax span{position:absolute;right:0;transform:translateY(50%)}
+.plot{position:relative;height:160px;border-bottom:1px solid var(--line)}
+.plot .grid{position:absolute;left:0;right:0;border-top:1px dashed var(--line)}
+.plot .cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:3px;align-items:end}
+.plot .b{background:var(--spruce);opacity:.55;border-radius:2px 2px 0 0;min-height:2px}
+.plot .b.y26{opacity:1}
+.plot .b.peak{background:var(--copper);opacity:1}
+.xax{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:3px;margin-left:48px;font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.xax span{white-space:nowrap;overflow:visible}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.kw{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.kw table{min-width:0;font-size:14px}
+.kw td,.kw th{padding:6px 0;border-bottom:1px dashed var(--line)}
+.kw td.num,.kw th.num{text-align:right;padding-left:12px}
+.kw .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.kw .total b{font-family:var(--f-mono);font-size:26px}
+.kw p.d{font-size:14px;color:var(--muted)}
+.ratio{display:inline-block;min-width:52px;text-align:center;font-family:var(--f-mono);font-weight:700;padding:2px 8px;border-radius:6px}
+.sources{font-size:14px;color:var(--muted)}
+.sources ol{margin:0;padding-left:20px;display:grid;gap:4px}
+footer{padding-block:32px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+
+@media (max-width:860px){
+  .verdict,.cols,.road{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .finding{grid-template-columns:minmax(0,1fr);gap:8px}
+  .finding .pill{justify-self:start}
+  .bar{grid-template-columns:110px minmax(0,1fr) 40px}
+  .titles div{grid-template-columns:minmax(0,1fr)}
+  section{padding-block:40px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Разделы отчёта">
+  <div class="wrap">
+    <span class="brand">SIBERIAN EFFIE</span>
+    <a href="#summary">Вывод</a>
+    <a href="#profile">Профиль</a>
+    <a href="#ads">Объявления</a>
+    <a href="#search">Выдача</a>
+    <a href="#demand">Спрос</a>
+    <a href="#balance">Спрос и предложение</a>
+    <a href="#market">Рынок</a>
+    <a href="#needs">Потребности</a>
+    <a href="#rivals">Конкуренты</a>
+    <a href="#strategy">Стратегия</a>
+    <a href="#plan">План</a>
+    <a href="#method">Методика</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Аудит профиля на Авито · Красноярск</div>
+    <h1>SIBERIAN EFFIE продаёт кофе, сервис и чистку. На Авито видно только две услуги ремонта.</h1>
+    <div class="meta">
+      <span>Профиль: <b>avito.ru/brands/siberian-effie</b></span>
+      <span>Дата среза: <b>29.10.2026</b></span>
+      <span>Подготовил: <b>HDR Group</b></span>
+    </div>
+    <div class="verdict">
+      <div class="score">
+        <div class="eyebrow">Общая оценка профиля</div>
+        <div class="big num">34<small> / 100</small></div>
+        <div class="bars">
+          <div class="bar"><span>Репутация</span><div class="track"><div class="fill" style="width:90%;background:var(--ok)"></div></div><span class="v">9/10</span></div>
+          <div class="bar"><span>Оформление профиля</span><div class="track"><div class="fill" style="width:50%;background:var(--warn)"></div></div><span class="v">5/10</span></div>
+          <div class="bar"><span>Качество объявлений</span><div class="track"><div class="fill" style="width:30%;background:var(--crit)"></div></div><span class="v">3/10</span></div>
+          <div class="bar"><span>Ассортимент</span><div class="track"><div class="fill" style="width:15%;background:var(--crit)"></div></div><span class="v">1.5/10</span></div>
+          <div class="bar"><span>Видимость в поиске</span><div class="track"><div class="fill" style="width:20%;background:var(--crit)"></div></div><span class="v">2/10</span></div>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><span class="n">5</span><span class="l">активных объявлений, из них одно вакансия и одно б/у кофемашина</span></div>
+        <div class="kpi"><span class="n">0</span><span class="l">объявлений о зерновом кофе при 1 551 запросе «кофе в зернах» в месяц по Красноярску</span></div>
+        <div class="kpi"><span class="n">5,0</span><span class="l">рейтинг по 42 отзывам, на Авито с августа 2015, 118 подписчиков</span></div>
+        <div class="kpi"><span class="n">№30</span><span class="l">лучшая позиция в выдаче по услугам. Первый экран занимают частные мастера</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="summary">
+  <div class="wrap">
+    <div class="eyebrow">Главное</div>
+    <h2>Пять проблем, из‑за которых профиль не приносит заявок</h2>
+    <ol class="findings">
+      <li class="finding"><span class="pill crit">Критично</span><div><p><b>Тексты объявлений набраны вперемешку латинскими и русскими буквами.</b></p><p class="d">Слова «ремонт», «кофемашина», «продаётся» в описаниях содержат латинские a, e, o, p, c. Поиск Авито не узнаёт такие слова, поэтому объявления не находятся по ключевым запросам, а модерация считает это обходом правил.</p></div></li>
+      <li class="finding"><span class="pill crit">Критично</span><div><p><b>Компании «всё для кофейного бизнеса» нет в категории кофе.</b></p><p class="d">В Красноярске по запросу «кофе в зёрнах» 298 объявлений: перекупщики супермаркетных марок и обжарщики из Хабаровска и Москвы с доставкой. Своей обжарки из Красноярска в выдаче почти нет, а SIBERIAN EFFIE там не представлена совсем.</p></div></li>
+      <li class="finding"><span class="pill crit">Критично</span><div><p><b>Услуги проигрывают частным мастерам в выдаче.</b></p><p class="d">По «ремонт кофемашин» 336 объявлений, лучшее объявление компании стоит на 42‑м месте. Конкуренты показывают в карточке цену выезда 50–490 ₽, прайс по работам и метку «Может сегодня», у SIBERIAN EFFIE в карточке только «от 3 690 ₽».</p></div></li>
+      <li class="finding"><span class="pill warn">Важно</span><div><p><b>Объявления противоречат друг другу.</b></p><p class="d">Опыт 5 лет и 10 лет, график 8:00 и 9:00, будни и семь дней в неделю, диагностика бесплатно и от 5 000 ₽. В одном объявлении остался черновой текст «(допишите, что ещё отдаёте…)», в другом блок «Ключевые слова», который правила Авито запрещают.</p></div></li>
+      <li class="finding"><span class="pill warn">Важно</span><div><p><b>Профиль без логотипа.</b></p><p class="d">Вместо логотипа стоит стандартная заглушка Авито. При 42 отзывах на пятёрку и девяти годах на площадке компания выглядит как частное лицо.</p></div></li>
+    </ol>
+    <p class="lead">Сильная сторона, на которой строится стратегия: собственная сеть из 30+ кофеен самообслуживания, своя обжарка, склад запчастей, сервис и клининг под одной крышей. Ни один конкурент на Авито в Красноярске не может сказать о себе то же самое.</p>
+  </div>
+</section>
+
+<section id="profile">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 1</div>
+    <h2>Оформление профиля</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Элемент</th><th>Статус</th><th>Что сейчас</th><th>Что сделать</th></tr></thead>
+        <tbody>
+          <tr><td>Логотип</td><td><span class="pill crit">Нет</span></td><td>Серая заглушка Авито</td><td>Загрузить логотип 1024×1024 px, знак на однотонном фоне, без мелкого текста</td></tr>
+          <tr><td>Название</td><td><span class="pill ok">Есть</span></td><td>SIBERIAN EFFIE</td><td>Оставить, добавить подпись в баннер: «кофе своей обжарки · сервис кофемашин»</td></tr>
+          <tr><td>Адрес страницы</td><td><span class="pill ok">Есть</span></td><td>avito.ru/brands/siberian-effie</td><td>Использовать в визитках, на кофейных автоматах и в QR на упаковке кофе</td></tr>
+          <tr><td>Баннеры</td><td><span class="pill warn">Проверить</span></td><td>Карусель есть, но не работает на три направления</td><td>Три баннера: кофе своей обжарки, сервис и ремонт, обслуживание вендинга. Размеры 1304×480 и 1420×947</td></tr>
+          <tr><td>Описание «О компании»</td><td><span class="pill ok">Хорошо</span></td><td>Подробно, 7 направлений, условия для бизнеса</td><td>Сократить первый абзац до сути, вынести цифры: 30+ точек, 10+ лет, своя обжарка. Убрать обещания по направлениям, которых нет в объявлениях, или добавить объявления</td></tr>
+          <tr><td>Группы объявлений</td><td><span class="pill warn">Частично</span></td><td>Одна группа «SIBERIAN EFFIE ‑ Service» (3 объявления)</td><td>Три группы по направлениям: «Кофе своей обжарки», «Обслуживание и клининг», «Ремонт кофемашин»</td></tr>
+          <tr><td>Витрина</td><td><span class="pill warn">Пусто по кофе</span></td><td>В витрине нечего показать, кроме сервиса</td><td>Собрать витрину из 6–9 лучших объявлений: 3 кофе, 3 сервис, 3 ремонт</td></tr>
+          <tr><td>Отзывы</td><td><span class="pill ok">Сильно</span></td><td>42 отзыва, средняя 5,0</td><td>Отвечать на каждый отзыв, запрашивать отзыв после каждого ремонта ссылкой из чата</td></tr>
+          <tr><td>Вакансия в общем списке</td><td><span class="pill info">Нейтрально</span></td><td>Менеджер по оптовым продажам, 800 просмотров</td><td>Оставить, но вынести за пределы витрины. 800 просмотров вакансии против 12–72 у услуг показывают, насколько слабо работают сервисные объявления</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="ads">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 2</div>
+    <h2>Разбор каждого объявления</h2>
+    <p class="lead">Просмотры указаны на 29.10.2026. Для услуг это общий счётчик с момента публикации.</p>
+    <div class="ads">
+
+      <article class="ad">
+        <div class="ad-head"><h3>Техническое обслуживание кофейного оборудования</h3><div class="stats"><span>Цена <b>от 490 ₽</b></span><span>Просмотры <b>21</b></span><span>Обновлено <b>27.10</b></span></div></div>
+        <div class="quote">Техничecкоe oбслуживание кофeйных aвтомaтoв и кoфемашин в Kpacнoяpcкe <mark>← латиница в 14 местах первой строки</mark></div>
+        <ul>
+          <li><b>Плюс:</b> лучший текст профиля по содержанию. Понятные пакеты: еженедельная чистка, квартальное ТО, годовое ТО, у каждого цена.</li>
+          <li><b>Минус:</b> первые строки, которые видны в выдаче, набраны с латиницей. Слово «Красноярск» поиск не распознаёт.</li>
+          <li><b>Минус:</b> в параметрах график «пн–вс», в тексте «Пн–Пт с 8:00 до 18:00».</li>
+          <li><b>Минус:</b> в одном объявлении смешаны вендинг, офисы, кофейни и АЗС. Владелец автомата и офис‑менеджер ищут разными словами.</li>
+          <li><b>Сделать:</b> переписать кириллицей, разделить на «обслуживание вендинга по договору» и «обслуживание кофемашин в офисе», включить прайс в карточке.</li>
+        </ul>
+      </article>
+
+      <article class="ad">
+        <div class="ad-head"><h3>Ремонт кофейного оборудования</h3><div class="stats"><span>Цена <b>от 3 690 ₽</b></span><span>Просмотры <b>12</b></span><span>Обновлено <b>27.10</b></span></div></div>
+        <div class="quote">Рeмонт кофемaшин и кoфейного обоpудовaния в Крaснояpcке — cepвиcный цeнтp SIВЕRIАN ЕFFIЕ‑Service</div>
+        <ul>
+          <li><b>Плюс:</b> полный список типовых поломок («не наливает», «течёт снизу», «не греет»). Это ровно те слова, которыми люди ищут ремонт.</li>
+          <li><b>Минус:</b> все эти слова написаны с латинскими буквами и не участвуют в поиске. Списки брендов тоже: в «Uniсum», «Sаесо» перемешаны алфавиты.</li>
+          <li><b>Минус:</b> цена «от 3 690 ₽» в карточке выглядит в 5–7 раз дороже соседей, у которых в карточке цена выезда или диагностики.</li>
+          <li><b>Минус:</b> по смыслу дублирует «Ремонт автоматических кофемашин». Авито показывает в выдаче только одно из похожих объявлений, второе теряет показы.</li>
+          <li><b>Сделать:</b> оставить это объявление как ремонт профессионального и вендингового оборудования (B2B), а бытовой ремонт вынести в отдельное.</li>
+        </ul>
+      </article>
+
+      <article class="ad">
+        <div class="ad-head"><h3>Ремонт автоматических кофемашин</h3><div class="stats"><span>Цена <b>от 1 490 ₽</b></span><span>Просмотры <b>68</b></span><span>Обновлено <b>13.10</b></span></div></div>
+        <div class="quote"><mark>Ключевые слова:</mark> ремонт кофемашин, чистка кофемашин, обслуживание кофемашин, удаление накипи…</div>
+        <ul>
+          <li><b>Нарушение правил:</b> блок ключевых слов в описании запрещён. Такие объявления понижают в выдаче или отклоняют.</li>
+          <li><b>Противоречие:</b> «Опыт 5 лет» в параметрах при «10 лет и больше» в двух других объявлениях.</li>
+          <li><b>Противоречие:</b> «Диагностика бесплатно», и тут же «диагностика плат от 5 000 ₽»; выезд 1 490 ₽ или 1 890 ₽ в зависимости от того, клиент ли вы.</li>
+          <li><b>Ошибка:</b> «Если вы являетесь нашим клиентов».</li>
+          <li><b>Сделать:</b> превратить в главное B2C‑объявление «Ремонт кофемашин на дому», цена в карточке — выезд, в прайсе — типовые работы.</li>
+        </ul>
+      </article>
+
+      <article class="ad">
+        <div class="ad-head"><h3>Кофемашина Saeco GranAroma SM6582/10</h3><div class="stats"><span>Цена <b>27 990 ₽</b></span><span>Просмотры <b>72</b></span><span>Обновлено <b>26.10</b></span></div></div>
+        <div class="quote">Комплект: кофемашина, кабель питания, молочная система. <mark>(допишите, что ещё отдаёте: фильтр, инструкцию, мерную ложку)</mark></div>
+        <ul>
+          <li><b>Плюс:</b> честно описан дефект и его причина, предложен ремонт с гарантией. Это сильный ход.</li>
+          <li><b>Минус:</b> в тексте осталась подсказка из шаблона. Покупатель видит, что объявление не дописано.</li>
+          <li><b>Минус:</b> снова латиница в первых строках («Пpодaётcя зeрнoвaя кофемашина Saеcо»).</li>
+          <li><b>Идея:</b> превратить продажу машин после сервиса в постоянную рубрику «Кофемашины с проверкой сервиса и гарантией». Это мост между ремонтом и продажами.</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="search">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 3</div>
+    <h2>Где компания стоит в выдаче Авито</h2>
+    <p class="lead">Срез 29.10.2026, Красноярск, категория «Предложения услуг». Показаны позиции всех трёх сервисных объявлений компании относительно первых десяти мест.</p>
+    <div class="serp">
+      <div class="serp-row">
+        <div class="q"><b>ремонт кофемашин</b><span class="num">лучшее место 42 из 336</span></div>
+        <div class="ladder"><div class="first" style="width:2.98%"></div><div class="dot" style="left:12.5%"></div><div class="dot sec" style="left:40.5%"></div><div class="dot sec" style="left:50%"></div></div>
+      </div>
+      <div class="serp-row">
+        <div class="q"><b>обслуживание кофемашин</b><span class="num">лучшее место 30 из 278</span></div>
+        <div class="ladder"><div class="first" style="width:3.6%"></div><div class="dot" style="left:10.8%"></div><div class="dot sec" style="left:49.3%"></div><div class="dot sec" style="left:52.5%"></div></div>
+      </div>
+      <div class="serp-row">
+        <div class="q"><b>ремонт кофейных автоматов</b><span class="num">лучшее место 50 из 186</span></div>
+        <div class="ladder"><div class="first" style="width:5.4%"></div><div class="dot" style="left:26.9%"></div><div class="dot sec" style="left:42.5%"></div><div class="dot sec" style="left:82.8%"></div></div>
+      </div>
+      <div class="serp-row">
+        <div class="q"><b>кофе в зёрнах</b><span class="num">объявлений нет · 298 у конкурентов</span></div>
+        <div class="ladder"><div class="first" style="width:3.4%"></div></div>
+      </div>
+      <div class="scale"><span>1‑е место</span><span>последнее место</span></div>
+    </div>
+    <p>Даже по запросу про кофейные автоматы, где у компании настоящая экспертиза, первые места занимают мастера по бытовой технике. Причина не в бюджете, а в том, что поиск не читает тексты SIBERIAN EFFIE и не видит в карточке понятной цены выезда. Выдача персонализирована, у отдельного пользователя места могут отличаться на несколько позиций.</p>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 4 · Вордстат</div>
+    <h2>Сколько людей ищут эти услуги и товары в Красноярске</h2>
+    <p class="lead">Яндекс Вордстат, регион Красноярск, период 08.09–07.10.2026. Это поисковый спрос в целом по городу: те же люди потом выбирают исполнителя на Авито и в картах. Внутренняя статистика запросов Авито доступна только в кабинете самого клиента.</p>
+
+    <div class="keys">
+      <div class="kw">
+        <span class="tag" style="font-family:var(--f-mono);font-size:12px;color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-weight:700">Ремонт</span>
+        <div class="total"><span>«ремонт кофемашин»</span><b>312</b></div>
+        <table>
+          <tbody>
+            <tr><td>ремонт кофемашин красноярск</td><td class="num">161</td></tr>
+            <tr><td>ремонт DeLonghi (все написания)</td><td class="num">≈47</td></tr>
+            <tr><td>ремонт Krups</td><td class="num">≈13</td></tr>
+            <tr><td>ремонт Philips</td><td class="num">≈10</td></tr>
+            <tr><td>ремонт Polaris</td><td class="num">≈5</td></tr>
+            <tr><td>«своими руками»</td><td class="num">8</td></tr>
+            <tr><td>ремонт капсульной кофемашины</td><td class="num">7</td></tr>
+            <tr><td>на дому / вызов мастера</td><td class="num">7</td></tr>
+          </tbody>
+        </table>
+        <p class="d">Каждый второй запрос с названием города: люди ищут местный сервис. Почти каждый шестой — с маркой DeLonghi. В Красноярском крае в целом 521 запрос, то есть 40% спроса приходится на города вне Красноярска.</p>
+      </div>
+
+      <div class="kw">
+        <span class="tag" style="font-family:var(--f-mono);font-size:12px;color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-weight:700">Чистка и ТО</span>
+        <div class="total"><span>«чистка кофемашины»</span><b>190</b></div>
+        <table>
+          <tbody>
+            <tr><td>чистка от накипи</td><td class="num">30</td></tr>
+            <tr><td>чистка DeLonghi (Magnifica и др.)</td><td class="num">≈47</td></tr>
+            <tr><td>чистка Philips, в том числе таблетками</td><td class="num">≈25</td></tr>
+            <tr><td>от кофейных масел</td><td class="num">13</td></tr>
+            <tr><td>заварочный блок / капучинатор</td><td class="num">≈17</td></tr>
+          </tbody>
+        </table>
+        <div class="total"><span>«обслуживание кофемашин»</span><b>74</b></div>
+        <table>
+          <tbody>
+            <tr><td>обслуживание кофемашины красноярск</td><td class="num">38</td></tr>
+            <tr><td>техническое обслуживание кофемашины</td><td class="num">16</td></tr>
+            <tr><td>сколько стоит обслуживание</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+        <p class="d">Большинство пытается почистить машину само: средства, таблетки, инструкции. Это аудитория для связки «продаём средства для чистки + делаем чистку за вас».</p>
+      </div>
+
+      <div class="kw">
+        <span class="tag" style="font-family:var(--f-mono);font-size:12px;color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-weight:700">Зерновой кофе</span>
+        <div class="total"><span>«кофе в зернах»</span><b>1 551</b></div>
+        <table>
+          <tbody>
+            <tr><td>купить кофе в зернах</td><td class="num">218</td></tr>
+            <tr><td>1 кг (все формулировки)</td><td class="num">≈175</td></tr>
+            <tr><td>лучший / какой / рейтинг / вкусный</td><td class="num">≈325</td></tr>
+            <tr><td>для кофемашины</td><td class="num">64</td></tr>
+            <tr><td>купить в Красноярске</td><td class="num">80</td></tr>
+            <tr><td>Egoiste, Bushido, Poetti, Jardin</td><td class="num">≈170</td></tr>
+            <tr><td>обжарка кофе (в т.ч. «красноярск» 15)</td><td class="num">138</td></tr>
+            <tr><td>кофе оптом</td><td class="num">32</td></tr>
+          </tbody>
+        </table>
+        <p class="d">Самый большой спрос из трёх направлений. Каждый пятый запрос — сомнение «какой выбрать». Люди знают только супермаркетные марки: продаёт тот, кто объяснит вкус и подберёт зерно под машину.</p>
+      </div>
+
+      <div class="kw">
+        <span class="tag" style="font-family:var(--f-mono);font-size:12px;color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-weight:700">Вендинг и бизнес</span>
+        <div class="total"><span>«кофейный автомат»</span><b>128</b></div>
+        <table>
+          <tbody>
+            <tr><td>купить / для бизнеса / самообслуживания</td><td class="num">≈35</td></tr>
+            <tr><td>место / аренда под кофейный автомат</td><td class="num">≈10</td></tr>
+            <tr><td>Jetinno, Unicum, Saeco</td><td class="num">≈10</td></tr>
+          </tbody>
+        </table>
+        <div class="total"><span>«вендинг»</span><b>328</b></div>
+        <table>
+          <tbody>
+            <tr><td>«вендинг сибирь» (местный конкурент)</td><td class="num">30</td></tr>
+            <tr><td>сухие сливки для вендинга</td><td class="num">3</td></tr>
+          </tbody>
+        </table>
+        <p class="d">Запрос «ремонт кофейных автоматов» в Красноярске почти не ищут: операторы вендинга не гуглят мастера, им нужен подрядчик по договору. Зато заметен поток людей, которые хотят открыть свой кофейный автомат.</p>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="season">
+        <div class="season-head"><h3>«ремонт кофемашин» по месяцам</h3><span>окт 2024 – сен 2026</span></div>
+        <div class="chart"><div class="yax" data-max="700"></div><div class="plot" id="s-remont" data-max="700"></div></div>
+        <div class="xax" data-for="s-remont"></div>
+        <p class="d" style="font-size:14px;color:var(--muted)">Пик в январе и декабре: после праздников машины ломаются чаще всего. За январь–сентябрь 2026 запросов в Яндексе на 30% меньше, чем год назад, при этом объявлений на Авито много. Часть спроса уходит из поиска прямо на Авито и в карты.</p>
+      </div>
+      <div class="season">
+        <div class="season-head"><h3>«кофе в зернах» по месяцам</h3><span>окт 2024 – сен 2026</span></div>
+        <div class="chart"><div class="yax" data-max="2100"></div><div class="plot" id="s-zerno" data-max="2100"></div></div>
+        <div class="xax" data-for="s-zerno"></div>
+        <p class="d" style="font-size:14px;color:var(--muted)">Спрос стабилен около 1 500 запросов в месяц, рост с ноября по февраль. Объявления по кофе нужно запустить сейчас, до декабрьского пика.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="balance">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 5 · Спрос и предложение</div>
+    <h2>Где на Авито тесно, а где пусто</h2>
+    <p class="lead">Сопоставили месячный спрос в Яндексе с числом объявлений на Авито в Красноярске на 29.10.2026. Цены — медиана по первым 50 объявлениям выдачи.</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Запрос</th><th class="num">Запросов в месяц</th><th class="num">Объявлений на Авито</th><th class="num">Запросов на 1 объявление</th><th class="num">Медиана цены</th><th>Вывод</th></tr></thead>
+        <tbody>
+          <tr><td><b>кофе в зернах</b></td><td class="num">1 551</td><td class="num">298</td><td class="num"><span class="ratio ok">5,2</span></td><td class="num">1 512 ₽</td><td>Высокий спрос, местных продавцов мало: из первых 50 только 11 из Красноярска, остальные с доставкой из других городов</td></tr>
+          <tr><td><b>кофе свежей обжарки</b></td><td class="num">≈30</td><td class="num">44</td><td class="num"><span class="ratio warn">0,7</span></td><td class="num">1 023 ₽</td><td>Ниша почти пустая. Своя обжарка в городе — сильнейший аргумент</td></tr>
+          <tr><td><b>ремонт кофемашин</b></td><td class="num">312</td><td class="num">336</td><td class="num"><span class="ratio warn">0,9</span></td><td class="num">490 ₽</td><td>Тесно. Выигрывает понятная цена выезда, прайс и метка срочности</td></tr>
+          <tr><td><b>чистка кофемашины</b></td><td class="num">190</td><td class="num">278</td><td class="num"><span class="ratio warn">0,7</span></td><td class="num">400 ₽</td><td>Тесно, конкуренты — те же мастера по ремонту</td></tr>
+          <tr><td><b>обслуживание кофемашин</b></td><td class="num">74</td><td class="num">278</td><td class="num"><span class="ratio crit">0,3</span></td><td class="num">450 ₽</td><td>Много объявлений, но все про разовый ремонт на дому. Договорного ТО для бизнеса нет ни у кого</td></tr>
+          <tr><td><b>кофе в зернах оптом</b></td><td class="num">10</td><td class="num">170</td><td class="num"><span class="ratio crit">0,06</span></td><td class="num">1 020 ₽</td><td>Через поиск опт почти не ищут. Опт продаётся отдельным B2B‑объявлением и прямыми продажами</td></tr>
+          <tr><td><b>кофемашина б/у</b></td><td class="num">16</td><td class="num">3 350*</td><td class="num">—</td><td class="num">8 000 ₽</td><td>Огромное предложение. Выделиться можно только гарантией сервиса</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="d" style="font-size:14px;color:var(--muted)">* все объявления «кофемашина» в Красноярске. Запросов на 1 объявление — грубый ориентир: Вордстат показывает поиск Яндекса, а не самого Авито.</p>
+
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Как выглядит выдача по услугам</span>
+        <ul>
+          <li>44–62% объявлений из первых 50 показывают метку «Может сегодня» или «Может сейчас».</li>
+          <li>34–48% выводят прайс из нескольких работ прямо в карточке.</li>
+          <li>Медианная цена в карточке 400–490 ₽: это цена выезда или диагностики, а не ремонта.</li>
+          <li>По «ремонт кофейных автоматов» Авито выдаёт тех же мастеров по бытовой технике: специалиста по вендингу в выдаче нет.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">География</span>
+        <ul>
+          <li>Красноярский край даёт 521 запрос «ремонт кофемашин» против 312 по городу: 40% спроса вне Красноярска (Ачинск и др.).</li>
+          <li>У компании есть точки в Абакане. Правила Авито разрешают одинаковые объявления услуг в разных городах.</li>
+          <li>Вывод: опубликовать сервисные объявления в Абакане и крупных городах края, с выездом мастера или приёмом техники через транспортную компанию.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 6</div>
+    <h2>Рынок: почему сейчас удачный момент</h2>
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Бытовые кофемашины</span>
+        <h3>Парк домашних машин растёт, а значит растёт и ремонт</h3>
+        <p>За первый квартал 2026 года россияне купили около 760 тыс. кофемашин и кофеварок, год назад было 668 тыс. [1] Через 2–4 года эти машины приходят в ремонт и на декальцинацию: это массовый поток B2C‑заявок.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Самообслуживание</span>
+        <h3>Вендинг и кофе без бариста становятся основным форматом</h3>
+        <p>Отраслевые обзоры на 2026 год называют переход покупателей к кофе‑точкам самообслуживания одним из главных трендов: напиток там в 1,5–2 раза дешевле, чем в классической кофейне, а франчайзинг в вендинге растёт. [2][3] Каждому новому автомату нужны регулярная чистка, ТО, ингредиенты и стаканчики.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Красноярск</span>
+        <h3>Город с плотной кофейной культурой</h3>
+        <p>В Красноярске много автокофеен и сетевых кофеен, у части сетей своя обжарка в городе. [4] Для оптовых продаж зерна это сотни потенциальных точек: кофейни, автокофейни, офисы, вендинг.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Себестоимость</span>
+        <h3>Цены на кофе растут, бизнес ищет поставщика ближе и дешевле</h3>
+        <p>Прогноз на первую половину 2026 года предполагал рост цен на кофе ещё на 5–10%, вместе с повышением налоговой нагрузки на кофейни. [2][3] Местный обжарщик с ценой ниже рынка, отсрочкой и хранением на складе закрывает именно эту боль.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="needs">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 7</div>
+    <h2>Кто ищет и почему выберет именно SIBERIAN EFFIE</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Кто клиент</th><th>Что он ищет на Авито</th><th>Чего боится</th><th>Аргумент SIBERIAN EFFIE</th></tr></thead>
+        <tbody>
+          <tr><td><b>Владелец домашней кофемашины</b></td><td>«ремонт кофемашин красноярск», марка в запросе (DeLonghi, Krups, Philips), «чистка от накипи»</td><td>Мастер‑однодневка, навязанные запчасти, цена после разборки</td><td>Свой сервисный центр с мастерской, гарантия, 42 отзыва на 5,0, склад запчастей, цена согласуется до работ</td></tr>
+          <tr><td><b>Офис на 10–100 человек</b></td><td>«обслуживание кофемашины в офисе», «кофе для офиса»</td><td>Машина встала, некому звонить, закрывающие документы</td><td>Договор, безнал, акты; кофе, ТО и ремонт у одного подрядчика; подменная логика через свой склад</td></tr>
+          <tr><td><b>Оператор вендинга (1–50 автоматов)</b></td><td>«ремонт кофейных автоматов», «Unicum», «Necta», «сухое молоко для вендинга»</td><td>Простой точки = потерянная выручка; мастера не знают вендинг</td><td>Сами держат 30+ точек самообслуживания: знают модели, ингредиенты и график чистки изнутри</td></tr>
+          <tr><td><b>Кофейня и автокофейня</b></td><td>«кофе в зёрнах оптом», «обжарка кофе Красноярск», «ремонт рожковой кофемашины»</td><td>Нестабильное зерно, срыв поставки, дорогой ремонт эспрессо‑машины</td><td>Своя обжарка в Красноярске, цены от завода, отсрочка и ответственное хранение в своей ячейке</td></tr>
+          <tr><td><b>Домашний покупатель зерна</b></td><td>«кофе в зернах 1 кг», «какой кофе в зернах лучше», «для кофемашины», привычные марки Egoiste, Bushido, Poetti</td><td>Старое зерно, долгая доставка</td><td>Обжарка в городе, самовывоз с Полигонной, Авито Доставка, дата обжарки на пачке</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="rivals">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 8</div>
+    <h2>Конкуренты на Авито в Красноярске</h2>
+    <h3>Ремонт и обслуживание кофемашин: первый экран выдачи</h3>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Объявление конкурента</th><th>Цена в карточке</th><th>Что делает лучше</th></tr></thead>
+        <tbody>
+          <tr><td>Ремонт и чистка кофемашин с выездом на дом</td><td class="num">от 800 ₽</td><td>Прайс прямо в карточке: диагностика, ремонт кофемолки от 1 300 ₽ и ещё 5 работ</td></tr>
+          <tr><td>Ремонт кофемашин с выездом на дом, Крск +50 км</td><td class="num">диагностика 1 500 ₽</td><td>География в заголовке, метка «Может сейчас»</td></tr>
+          <tr><td>Ремонт и обслуживание кофемашин</td><td class="num">250 ₽</td><td>Низкая цена‑вход, метка «Может сегодня»</td></tr>
+          <tr><td>Мастер по ремонту кофемашин</td><td class="num">50 ₽</td><td>Цена‑приманка за диагностику</td></tr>
+          <tr><td>Ремонт кофемашин. Частные мастера</td><td class="num">1 000 ₽</td><td>Портфолио, честная фиксированная диагностика</td></tr>
+          <tr><td>Ремонт кофемашин с проверкой приготовления напитков</td><td class="num">630 ₽</td><td>Конкретная выгода прямо в заголовке</td></tr>
+          <tr><td>Ремонт кофемашин. Приеду сегодня</td><td class="num">290 ₽</td><td>Срочность в заголовке</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Слабость конкурентов</span>
+        <ul>
+          <li>Минимум 4 объявления в топе начинаются одним и тем же шаблонным текстом: это сеть клонов под разными именами.</li>
+          <li>Почти все работают с бытовой техникой «на дому». Обслуживание вендинга и договоров с бизнесом никто явно не предлагает.</li>
+          <li>Нет своего склада, обжарки, клининга. Ни у кого нет 42 отзывов компании на 5,0 при 9 годах на площадке.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Чему у них научиться</span>
+        <ul>
+          <li>Цена в карточке = цена первого шага (выезд или диагностика), а не самой дорогой работы.</li>
+          <li>Прайс‑лист услуг Авито: 5–10 типовых работ с ценами видны прямо в выдаче.</li>
+          <li>Метка срочного выезда и район в объявлении.</li>
+          <li>Конкретика в заголовке: «на дому», «с гарантией», «приеду сегодня».</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Зерновой кофе: кто продаёт в Красноярске</h3>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Тип продавца</th><th>Примеры из выдачи</th><th>Цена за 1 кг</th><th>Слабое место</th></tr></thead>
+        <tbody>
+          <tr><td>Местные перекупщики супермаркетных марок</td><td>Ambassador, Poetti, Inspirato, Egoiste, Alta Roma</td><td class="num">930–1 500 ₽</td><td>Нет свежести и истории, остатки партий</td></tr>
+          <tr><td>Федеральные бренды через маркетплейс‑продавцов</td><td>norr, San Giusto, Gasian</td><td class="num">1 510–2 600 ₽</td><td>Доставка от 2–6 дней, зерно со склада</td></tr>
+          <tr><td>Обжарщики из других городов</td><td>Хабаровск, Бердск, Москва</td><td class="num">2 150–3 190 ₽</td><td>Свежая обжарка, но доставка 6+ дней</td></tr>
+          <tr><td><b>Свежая обжарка из Красноярска</b></td><td>В первой полусотне выдачи практически нет</td><td class="num">—</td><td><b>Свободная ниша для SIBERIAN EFFIE</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 9</div>
+    <h2>Стратегия развития профиля по трём направлениям</h2>
+    <p class="lead">Принцип: одно объявление = одна потребность одного типа клиента. Так объявления не конкурируют друг с другом в выдаче и каждое отвечает на свой запрос.</p>
+
+    <div class="dir">
+      <div class="eyebrow">Направление 1</div>
+      <h3>Зерновой кофе: опт и розница</h3>
+      <div class="why"><p><b>Позиционирование:</b> «Кофе, который мы сами варим в 30 кофейнях Красноярска. Обжарка в городе, дата обжарки на пачке».</p></div>
+      <div class="titles">
+        <div>Кофе в зёрнах свежей обжарки, Бразилия, 1 кг<span>розница · 1 551 запрос/мес</span></div>
+        <div>Кофе в зёрнах для кофемашины, эспрессо‑смесь 1 кг<span>розница · «для кофемашины» 64/мес</span></div>
+        <div>Кофе в зёрнах для кофейни и вендинга оптом от 10 кг<span>опт · B2B, договор, отсрочка</span></div>
+        <div>Сухое молоко и шоколад для кофейных автоматов<span>ингредиенты · отдельные позиции</span></div>
+        <div>Стаканчики, крышки, сахар в стиках для кофейни<span>расходники · отдельные позиции</span></div>
+      </div>
+      <ul>
+        <li>Каждый сорт и смесь — отдельное объявление. Повторять одно и то же зерно нельзя, правила Авито блокируют дубли.</li>
+        <li>Товары размещаются в одном городе с доставкой: Красноярск + Авито Доставка + транспортные компании.</li>
+        <li>Фото: пачка на нейтральном фоне первым кадром, затем зерно крупным планом, ростер, этикетка с датой обжарки. Без рамок, контактов и крупных надписей.</li>
+        <li>В описании первые 3–4 предложения: страна, обработка, вкус, обжарка, для какого способа заваривания. Затем «почему мы» и условия опта.</li>
+        <li>Цены держать в коридоре федеральных брендов (1 500–2 000 ₽/кг за смесь), выигрывая свежестью и самовывозом в день заказа.</li>
+      </ul>
+    </div>
+
+    <div class="dir">
+      <div class="eyebrow">Направление 2</div>
+      <h3>Техобслуживание и клининг кофемашин</h3>
+      <div class="why"><p><b>Позиционирование:</b> «Обслуживаем свои 30+ автоматов каждую неделю. Так же обслужим ваши». Ставка на регулярный договор, а не разовый выезд.</p></div>
+      <div class="titles">
+        <div>Обслуживание кофейных автоматов по договору<span>вендинг · конкурентов нет</span></div>
+        <div>Кофейный автомат под ключ: установка, ТО, ингредиенты<span>для тех, кто открывает вендинг · ≈35/мес</span></div>
+        <div>Обслуживание кофемашины в офисе, абонемент<span>офисы · ежемесячно</span></div>
+        <div>Чистка кофемашины от накипи и масел на дому<span>B2C · 190 запросов/мес</span></div>
+      </div>
+      <ul>
+        <li>Цена в карточке: стоимость еженедельного выезда (от 490 ₽) для вендинга, разовой чистки для дома.</li>
+        <li>Прайс‑лист услуг: еженедельная санобработка, квартальное ТО, годовое ТО, декальцинация, чистка заварочного блока.</li>
+        <li>Фото «до/после» узлов: миксер, заварочный блок, поддон. Это лучшее доказательство в нише, где все пишут одинаковые тексты.</li>
+        <li>Раздел «Частые вопросы» в объявлении: как часто чистить, что входит, как оформить договор.</li>
+      </ul>
+    </div>
+
+    <div class="dir">
+      <div class="eyebrow">Направление 3</div>
+      <h3>Сервисный ремонт кофемашин</h3>
+      <div class="why"><p><b>Позиционирование:</b> «Сервисный центр с мастерской и складом запчастей, а не мастер с отвёрткой. Гарантия на работу, цена до начала ремонта».</p></div>
+      <div class="titles">
+        <div>Ремонт кофемашин DeLonghi, Philips, Krups на дому с гарантией<span>B2C · 312 запросов/мес</span></div>
+        <div>Ремонт кофейных автоматов самообслуживания<span>B2B · Unicum, Necta, Jetinno</span></div>
+        <div>Ремонт профессиональных кофемашин для кофеен<span>B2B · рожковые, суперавтоматы</span></div>
+        <div>Кофемашины после ремонта с гарантией сервиса<span>товары · рубрика б/у</span></div>
+      </div>
+      <ul>
+        <li>Три объявления на три разные аудитории вместо двух дублей. Тексты не пересекаются ни по заголовку, ни по фото.</li>
+        <li>Цена в карточке — выезд мастера (1 490 ₽) или диагностика в мастерской. Ремонт «от 3 690 ₽» уходит в прайс.</li>
+        <li>Прайс‑лист: замена помпы, ремонт заварочного блока, ремонт кофемолки, замена уплотнителей, декальцинация.</li>
+        <li>Единые факты во всех объявлениях: опыт 10+ лет, график Пн–Пт 8:00–18:00, одно правило по диагностике.</li>
+        <li>Продажа восстановленных машин закрывает клиента, которому ремонт невыгоден: он покупает машину у вас же.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="eyebrow">Раздел 10</div>
+    <h2>План работ</h2>
+    <div class="road">
+      <div class="step">
+        <span class="when">Неделя 1 · исправить</span>
+        <h3>Убрать то, что топит объявления</h3>
+        <ul>
+          <li>Переписать все тексты чистой кириллицей</li>
+          <li>Удалить блок «Ключевые слова» и черновую подсказку</li>
+          <li>Свести опыт, график и цены к одной версии</li>
+          <li>Загрузить логотип, обновить баннеры</li>
+          <li>Подключить прайс‑листы в услугах</li>
+        </ul>
+      </div>
+      <div class="step">
+        <span class="when">Недели 2–4 · расширить</span>
+        <h3>Новая матрица объявлений</h3>
+        <ul>
+          <li>5–8 объявлений по зерновому кофе и ингредиентам</li>
+          <li>3 объявления по обслуживанию, 3 по ремонту</li>
+          <li>Фотосессия: обжарка, мастерская, «до/после»</li>
+          <li>Три группы объявлений и витрина</li>
+          <li>Сервисные объявления в Абакане и городах края</li>
+          <li>Частые вопросы в каждом объявлении</li>
+        </ul>
+      </div>
+      <div class="step">
+        <span class="when">Месяц 2 и далее · расти</span>
+        <h3>Продвижение и удержание</h3>
+        <ul>
+          <li>Цена за целевое действие на группы объявлений</li>
+          <li>А/Б‑тест главного фото в услугах</li>
+          <li>Рассылка спецпредложений тем, кто добавил в избранное</li>
+          <li>Запрос отзыва после каждого ремонта и поставки</li>
+          <li>Ежемесячный отчёт: позиции, просмотры, контакты, Вордстат</li>
+          <li>Подключить статистику спроса в кабинете Авито клиента</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <span class="tag">Цели на 60 дней</span>
+      <ul>
+        <li>Первый экран выдачи (места 1–10) по запросам «ремонт кофемашин», «обслуживание кофемашин», «ремонт кофейных автоматов».</li>
+        <li>Не меньше 15 активных объявлений во всех трёх направлениях.</li>
+        <li>Присутствие в первой полусотне выдачи по «кофе в зёрнах» в Красноярске.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="eyebrow">Методика</div>
+    <h2>Как проводился анализ</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Что проверяли</th><th>Источник</th><th>Что получили</th></tr></thead>
+        <tbody>
+          <tr><td>Профиль и объявления</td><td>Страница профиля и 5 объявлений на Авито</td><td>Тексты, параметры, цены, даты, счётчики просмотров</td></tr>
+          <tr><td>Позиции в выдаче</td><td>Поиск Авито, Красноярск, 3 запроса по 6 страниц</td><td>Место каждого объявления клиента среди 186–336 конкурентов</td></tr>
+          <tr><td>Предложение и цены</td><td>Поиск Авито, Красноярск, 10 запросов, первые 50 объявлений</td><td>Число объявлений, медиана цены, доля «Может сегодня» и прайсов, доля местных продавцов</td></tr>
+          <tr><td>Спрос</td><td>Яндекс Вордстат, Красноярск и Красноярский край, 15 запросов</td><td>Частотность за месяц, хвосты запросов, помесячная динамика за 2 года</td></tr>
+          <tr><td>Рынок</td><td>Отраслевые обзоры 2026 года</td><td>Продажи кофемашин, тренд на самообслуживание, цены на кофе</td></tr>
+          <tr><td>Правила площадки</td><td>Справка Авито</td><td>Требования к текстам, фото, дублям, оформлению профиля</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="tag">Чего нет в отчёте</span>
+        <ul>
+          <li>Статистики самого профиля: просмотры по дням, контакты, конверсия. Она видна только в кабинете Авито клиента.</li>
+          <li>Аналитики спроса Авито (поисковые запросы внутри площадки), доступна в кабинете с тарифом.</li>
+          <li>Яндекс Метрики сайта клиента: нужен гостевой доступ к счётчику.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Что запросить у клиента</span>
+        <ul>
+          <li>Доступ сотрудника в кабинет Авито (раздел «Сотрудники») или выгрузку статистики за 3 месяца.</li>
+          <li>Гостевой доступ к Яндекс Метрике сайта.</li>
+          <li>Прайс на зерно, опт и ингредиенты, фото обжарки и мастерской.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap sources">
+    <div class="eyebrow">Источники</div>
+    <ol>
+      <li><a href="https://www.retail.ru/news/m-video-prodazhi-kofemashin-v-rossii-vyrosli-na-14-v-pervom-kvartale-2026-goda-5-iyunya-2026-278570/">Retail.ru: продажи кофемашин в I квартале 2026, данные «М.Видео‑Эльдорадо»</a></li>
+      <li><a href="https://secrets.tbank.ru/blogi-kompanij/rossiyskiy-kofeynyy-biznes-v-2026/">Т‑Банк Секрет фирмы: российский кофейный бизнес в 2026</a></li>
+      <li><a href="https://kontur.ru/articles/2346">Контур: рынок кофеен в России в 2026 году</a></li>
+      <li><a href="https://experience.tripster.ru/articles/gde-poest-v-krasnoyarske/">Tripster: кофейная культура Красноярска</a></li>
+      <li><a href="https://wordstat.yandex.ru/">Яндекс Вордстат</a>: Красноярск и Красноярский край, 08.09–07.10.2026 и помесячно окт 2024 – сен 2026.</li>
+      <li>Собственный срез выдачи Авито, Красноярск, 29.10.2026; объявления и страница профиля SIBERIAN EFFIE; справка Авито (правила объявлений, фото, тарифов и продвижения).</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">HDR Group · Аудит подготовлен 29 октября 2026 года для SIBERIAN EFFIE</div>
+</footer>
+<script>
+(function(){
+  var data={
+    "s-remont":[453,326,410,603,425,423,421,513,496,438,435,382,479,351,524,355,218,322,318,248,312,369,420,314],
+    "s-zerno":[1416,1516,1840,1889,1819,1840,1495,1372,1241,1261,1417,1321,1583,1805,1840,1425,1252,1402,1547,1305,1051,1552,2056,1618]
+  };
+  var m=["окт","ноя","дек","янв","фев","мар","апр","май","июн","июл","авг","сен"];
+  Object.keys(data).forEach(function(id){
+    var plot=document.getElementById(id); if(!plot) return;
+    var max=+plot.dataset.max, vals=data[id], peak=Math.max.apply(null,vals);
+    var yax=plot.parentNode.querySelector('.yax');
+    [0,0.5,1].forEach(function(f){
+      var g=document.createElement('div'); g.className='grid'; g.style.bottom=(f*100)+'%'; plot.appendChild(g);
+      var t=document.createElement('span'); t.style.bottom=(f*100)+'%'; t.textContent=Math.round(max*f).toLocaleString('ru-RU'); yax.appendChild(t);
+    });
+    var cols=document.createElement('div'); cols.className='cols';
+    vals.forEach(function(v,i){
+      var b=document.createElement('div');
+      b.className='b'+(i>=15?' y26':'')+(v===peak?' peak':'');
+      b.style.height=(v/max*100)+'%';
+      b.title=m[i%12]+' '+(i<3?'2024':i<15?'2025':'2026')+': '+v.toLocaleString('ru-RU');
+      cols.appendChild(b);
+    });
+    plot.appendChild(cols);
+    var x=document.querySelector('.xax[data-for="'+id+'"]');
+    vals.forEach(function(v,i){var s=document.createElement('span'); s.textContent=(i%6===0)?(m[i%12]+' '+(i<3?'24':i<15?'25':'26')):''; x.appendChild(s);});
+  });
+})();
+</script>
+</body>
+</html>
