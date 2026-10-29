@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yo! Hostel — ТЗ на контент</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F5F8F8;
+    --card:#FFFFFF;
+    --card-2:#EDF3F3;
+    --ink:#0E3B47;
+    --ink-soft:#4C6B72;
+    --line:#DCE7E7;
+    --accent:#C4572B;
+    --accent-2:#1B6B78;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1E22; --card:#12282C; --card-2:#163035;
+      --ink:#EAF3F2; --ink-soft:#AFC6C6; --line:#1F3B40;
+      --accent:#E07248; --accent-2:#4FA3AE;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1E22; --card:#12282C; --card-2:#163035;
+    --ink:#EAF3F2; --ink-soft:#AFC6C6; --line:#1F3B40;
+    --accent:#E07248; --accent-2:#4FA3AE;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Public Sans',Arial,sans-serif;line-height:1.55;}
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque',Arial,sans-serif;color:var(--ink);margin:0 0 .4em;}
+  a{color:var(--accent-2);}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  nav.topbar{position:sticky;top:0;z-index:50;background:#0E3B47;border-bottom:1px solid rgba(255,255,255,.08);}
+  nav.topbar .wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px 20px;max-width:1100px;}
+  nav.topbar .brand{font-family:'Bricolage Grotesque',Arial,sans-serif;font-weight:800;color:#fff;font-size:1.05rem;white-space:nowrap;}
+  nav.topbar .links{display:flex;gap:18px;flex-wrap:wrap;}
+  nav.topbar .links a{color:#AFC9CC;text-decoration:none;font-size:.86rem;font-weight:500;padding:4px 2px;border-bottom:2px solid transparent;transition:.15s;}
+  nav.topbar .links a:hover{color:#fff;border-bottom-color:var(--accent);}
+
+  header.hero{padding:52px 0 28px;}
+  header.hero .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--accent-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+  header.hero h1{font-size:2rem;max-width:760px;}
+  header.hero p{color:var(--ink-soft);max-width:640px;font-size:1rem;}
+
+  section{padding:40px 0;border-top:1px solid var(--line);}
+  section:first-of-type{border-top:none;}
+  section h2{font-size:1.4rem;display:flex;align-items:baseline;gap:10px;}
+  section h2 .num{font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:.9rem;font-weight:500;}
+  section > .lede{color:var(--ink-soft);max-width:680px;margin-bottom:24px;}
+
+  .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+  .fact{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .fact .k{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .fact .v{font-size:.95rem;}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;}
+  .swatch{border-radius:12px;padding:18px 16px;min-height:96px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .swatch .role{font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;opacity:.85;margin-bottom:4px;}
+  .swatch .name{font-weight:700;font-size:.92rem;}
+  .swatch .hex{font-family:'IBM Plex Mono',monospace;font-size:.76rem;opacity:.85;}
+
+  .cycle-current{display:flex;flex-wrap:wrap;gap:10px;}
+  .cycle-step{background:var(--card);border:1px solid var(--accent);border-radius:999px;padding:8px 14px;font-size:.85rem;color:var(--ink);}
+
+  .tone-banner{background:var(--card-2);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:.86rem;color:var(--ink-soft);margin-bottom:22px;}
+  .theme-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px;}
+  .theme-card .meta-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .theme-card .pubdate{font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-soft);}
+  .theme-card .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--accent);border-radius:999px;padding:5px 12px;}
+  .theme-card h3{font-size:1.2rem;margin-bottom:14px;}
+  .theme-card .block-label{font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-2);margin:16px 0 6px;}
+  .theme-card .block-label:first-of-type{margin-top:0;}
+  .theme-card .voice{font-size:.94rem;font-style:italic;color:var(--ink);margin:0;}
+  .theme-card ul{margin:0;padding-left:18px;}
+  .theme-card li{margin-bottom:5px;font-size:.92rem;}
+  .theme-card li .src{color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:.72rem;margin-left:6px;}
+  .seo-block{background:var(--card-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:6px;}
+  .seo-block .row{margin-bottom:8px;font-size:.88rem;}
+  .seo-block .row:last-child{margin-bottom:0;}
+  .seo-block .row b{font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-2);display:block;margin-bottom:2px;}
+  .seo-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .seo-chips span{font-family:'IBM Plex Mono',monospace;font-size:.72rem;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--ink-soft);}
+  .cta{margin-top:14px;font-weight:700;color:#fff;background:var(--accent);display:inline-block;border-radius:8px;padding:9px 16px;font-size:.9rem;}
+  .cover-box{margin-top:18px;border:1px dashed var(--accent);border-radius:10px;padding:16px 18px;background:var(--card-2);}
+  .cover-box .block-label{color:var(--accent);}
+
+  .story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px;}
+  .story-card h3{font-size:1.15rem;margin-bottom:12px;}
+  .story-card ul{margin:0;padding-left:18px;}
+  .story-card li{font-size:.92rem;margin-bottom:5px;}
+  .design-note{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;}
+  .design-note .block-label{font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-2);margin-bottom:6px;}
+  .mini-swatch-row{display:flex;gap:8px;margin:6px 0 6px;}
+  .mini-swatch{width:20px;height:20px;border-radius:6px;border:1px solid rgba(0,0,0,.12);}
+
+  .roadmap-stage{border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--card);}
+  .roadmap-stage summary{cursor:pointer;list-style:none;padding:14px 18px;font-family:'Bricolage Grotesque',Arial,sans-serif;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:10px;}
+  .roadmap-stage summary::-webkit-details-marker{display:none;}
+  .roadmap-stage summary::before{content:"▸";color:var(--accent-2);}
+  .roadmap-stage[open] summary::before{content:"▾";}
+  .roadmap-stage summary .current-flag{font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;background:var(--accent);color:#fff;border-radius:999px;padding:2px 9px;}
+  .roadmap-list{padding:4px 18px 18px;display:flex;flex-direction:column;gap:10px;}
+  .roadmap-item{display:flex;gap:12px;align-items:baseline;padding:10px 12px;background:var(--card-2);border-radius:8px;}
+  .roadmap-item .fmt{font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-2);white-space:nowrap;min-width:64px;}
+  .roadmap-item .txt strong{font-size:.9rem;}
+  .roadmap-item .txt span{display:block;font-size:.82rem;color:var(--ink-soft);}
+
+  .sources-wrap{padding:24px 0 60px;}
+  .sources-note{color:var(--ink-soft);font-size:.82rem;margin:0;}
+  .sources-note a{color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+
+<nav class="topbar">
+  <div class="wrap">
+    <div class="brand">Yo! Hostel</div>
+    <div class="links">
+      <a href="#company">Компания</a>
+      <a href="#brand">Мини-брендбук</a>
+      <a href="#cycle">Логика цикла</a>
+      <a href="#news">Новости</a>
+      <a href="#stories">Сторис</a>
+      <a href="#map">Карта тем</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">ТЗ на контент · этап 4</div>
+    <h1>Yo! Hostel — новости и сторис для карточки компании</h1>
+    <p>Материалы этого раздела готовятся для карточки компании Yo! Hostel на Яндекс Картах и 2ГИС: 2 темы для новостей с ТЗ на обложку и 2 темы для сторис. Темы продолжают уже опубликованную серию материалов и постепенно углубляются в особенности компании.</p>
+  </div>
+</header>
+
+<section id="company">
+  <div class="wrap">
+    <h2><span class="num">01</span> Компания</h2>
+    <div class="fact-grid">
+      <div class="fact"><div class="k">Формат</div><div class="v">Art Boutique Hostel — семейное дело, с 2018 года в формате арт-бутик</div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Самара, ул. Молодогвардейская, 57 — в начале Ленинградской улицы, исторический центр</div></div>
+      <div class="fact"><div class="k">Тематические номера</div><div class="v">6 стран: Япония, Франция, Англия, Египет, Греция, Бразилия</div></div>
+      <div class="fact"><div class="k">Регистрация</div><div class="v">Круглосуточно</div></div>
+      <div class="fact"><div class="k">Удобства</div><div class="v">Общая кухня, стиральная машина, Wi-Fi, кондиционер, шкафчики на замке, фен и утюг, ТВ, горячий душ</div></div>
+      <div class="fact"><div class="k">Скидки</div><div class="v">5% студентам и пенсионерам, 5% за подписку в сообществе ВКонтакте, спецусловия для групп и длительного проживания</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <div class="wrap">
+    <h2><span class="num">02</span> Мини-брендбук</h2>
+    <p class="lede">После анализа ресурсов компании определена фирменная палитра Yo! Hostel — придерживаемся её при подготовке макетов для новостей и сторис.</p>
+    <div class="swatches">
+      <div class="swatch" style="background:#D9663B;color:#fff;">
+        <div class="role">Акцентный</div><div class="name">Терракотовый</div><div class="hex">#D9663B</div>
+      </div>
+      <div class="swatch" style="background:#24405A;color:#fff;">
+        <div class="role">Основной</div><div class="name">Тёмный индиго</div><div class="hex">#24405A</div>
+      </div>
+      <div class="swatch" style="background:#D9A441;color:#262220;">
+        <div class="role">Второстепенный</div><div class="name">Горчичный</div><div class="hex">#D9A441</div>
+      </div>
+      <div class="swatch" style="background:#F6EEE0;color:#262220;">
+        <div class="role">Фоновый</div><div class="name">Кремовый песочный</div><div class="hex">#F6EEE0</div>
+      </div>
+      <div class="swatch" style="background:#262220;color:#fff;">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#262220</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <h2><span class="num">03</span> Логика цикла</h2>
+    <p class="lede">Материалы выстраиваются последовательно: от общего знакомства с Yo! Hostel — к отдельному раскрытию каждого тематического номера. Этап 3 раскрыл «Японию» и «Францию», этап 4 продолжает ряд.</p>
+    <div class="cycle-current">
+      <div class="cycle-step">Номер «Англия» — классическая атмосфера</div>
+      <div class="cycle-step">Номер «Египет» — яркие впечатления</div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <h2><span class="num">04</span> Новости</h2>
+    <p class="lede">2 темы, каждая — с ТЗ на обложку и SEO-блоком для текста.</p>
+    <div class="tone-banner">Тон текстов — тёплый, от первого лица компании: короткое вступление задаёт настроение до перечисления фактов, тезисы не повторяют один и тот же список услуг из карточки в карточку. Факты — только из уже подтверждённых источников (бриф компании, сайт).</div>
+
+    <div class="theme-card">
+      <div class="meta-row">
+        <span class="pubdate">Новость 1 · предложение даты 05.11</span>
+        <span class="tag">Вовлекающий · номер компании</span>
+      </div>
+      <h3>Номер «Англия» в Yo! Hostel: классическая атмосфера в историческом центре Самары</h3>
+
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Каждый номер Yo! Hostel — своя атмосфера страны: сегодня рассказываем про «Англию».</p>
+
+      <div class="block-label">Тезисы для копирайтера</div>
+      <ul>
+        <li>Номер «Англия» — один из 6 тематических номеров Yo! Hostel, наравне с «Японией», «Францией», «Египтом», «Грецией» и «Бразилией»<span class="src">бриф</span></li>
+        <li>Атмосфера номера построена на классическом стиле<span class="src">бриф</span></li>
+        <li>Расположен в историческом центре Самары — ул. Молодогвардейская, 57<span class="src">сайт</span></li>
+        <li>Регистрация круглосуточно, как и во всех номерах хостела<span class="src">сайт</span></li>
+      </ul>
+
+      <div class="block-label">SEO-блок</div>
+      <div class="seo-block">
+        <div class="row"><b>H1</b>Номер «Англия» в Yo! Hostel — классическая атмосфера в центре Самары</div>
+        <div class="row"><b>Title</b>Номер «Англия» | Yo! Hostel — тематический номер в центре Самары</div>
+        <div class="row"><b>Description</b>Тематический номер «Англия» в Yo! Hostel: классическая атмосфера, исторический центр Самары, круглосуточная регистрация. Бронируйте онлайн.</div>
+        <div class="row"><b>Ключи</b>
+          <div class="seo-chips">
+            <span>номер Англия хостел Самара</span><span>классический номер Самара</span><span>тематический номер хостел Самара</span>
+            <span>хостел в английском стиле Самара</span><span>где остановиться в центре Самары</span><span>арт хостел Самара</span>
+            <span>номер в историческом центре Самары</span><span>бутик хостел Самара</span><span>уютный номер Самара</span><span>бронирование хостела Самара</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta">CTA: «Забронируйте номер «Англия»»</div>
+
+      <div class="cover-box">
+        <div class="block-label">ТЗ на обложку</div>
+        <p style="margin:0;font-size:.9rem;">Композиция в индиго и горчичном, сдержанная и строгая — под стать классическому стилю номера. Название номера крупным шрифтом.</p>
+      </div>
+    </div>
+
+    <div class="theme-card">
+      <div class="meta-row">
+        <span class="pubdate">Новость 2 · предложение даты 12.11</span>
+        <span class="tag">Вовлекающий · номер компании</span>
+      </div>
+      <h3>Номер «Египет» в Yo! Hostel: яркие впечатления в самом центре Самары</h3>
+
+      <div class="block-label">Вступление (тон и голос)</div>
+      <p class="voice">Каждый номер Yo! Hostel — своя атмосфера страны: сегодня рассказываем про «Египет».</p>
+
+      <div class="block-label">Тезисы для копирайтера</div>
+      <ul>
+        <li>Номер «Египет» — один из 6 тематических номеров Yo! Hostel<span class="src">бриф</span></li>
+        <li>Атмосфера номера построена на ярких впечатлениях<span class="src">бриф</span></li>
+        <li>Расположен в историческом центре Самары — ул. Молодогвардейская, 57<span class="src">сайт</span></li>
+        <li>Регистрация круглосуточно, как и во всех номерах хостела<span class="src">сайт</span></li>
+      </ul>
+
+      <div class="block-label">SEO-блок</div>
+      <div class="seo-block">
+        <div class="row"><b>H1</b>Номер «Египет» в Yo! Hostel — яркие впечатления в центре Самары</div>
+        <div class="row"><b>Title</b>Номер «Египет» | Yo! Hostel — тематический номер в центре Самары</div>
+        <div class="row"><b>Description</b>Тематический номер «Египет» в Yo! Hostel: яркие впечатления, исторический центр Самары, круглосуточная регистрация. Бронируйте онлайн.</div>
+        <div class="row"><b>Ключи</b>
+          <div class="seo-chips">
+            <span>номер Египет хостел Самара</span><span>яркий номер Самара</span><span>тематический номер хостел Самара</span>
+            <span>хостел в египетском стиле Самара</span><span>где остановиться в центре Самары</span><span>арт хостел Самара</span>
+            <span>номер в историческом центре Самары</span><span>бутик хостел Самара</span><span>необычный номер Самара</span><span>бронирование хостела Самара</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta">CTA: «Забронируйте номер «Египет»»</div>
+
+      <div class="cover-box">
+        <div class="block-label">ТЗ на обложку</div>
+        <p style="margin:0;font-size:.9rem;">Композиция в терракотовом и горчичном, яркая и контрастная — под стать впечатлениям номера. Название номера крупным шрифтом.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <h2><span class="num">05</span> Сторис</h2>
+    <p class="lede">Один слайд — один факт.</p>
+
+    <div class="story-card">
+      <h3>Номер «Англия»</h3>
+      <ul>
+        <li>Один из 6 тематических номеров Yo! Hostel</li>
+        <li>Атмосфера — классический стиль</li>
+        <li>В историческом центре Самары</li>
+        <li>Регистрация круглосуточно</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>CTA:</strong> «Забронируйте номер»</p>
+      <div class="design-note">
+        <div class="block-label">Дизайн слайда</div>
+        <div class="mini-swatch-row">
+          <div class="mini-swatch" style="background:#24405A"></div>
+          <div class="mini-swatch" style="background:#D9A441"></div>
+        </div>
+        <p style="margin:0;font-size:.86rem;color:var(--ink-soft);">Индиго и горчичный, сдержанный кадр номера, минимум текста на слайде.</p>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <h3>Номер «Египет»</h3>
+      <ul>
+        <li>Один из 6 тематических номеров Yo! Hostel</li>
+        <li>Атмосфера — яркие впечатления</li>
+        <li>В историческом центре Самары</li>
+        <li>Регистрация круглосуточно</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>CTA:</strong> «Забронируйте номер»</p>
+      <div class="design-note">
+        <div class="block-label">Дизайн слайда</div>
+        <div class="mini-swatch-row">
+          <div class="mini-swatch" style="background:#D9663B"></div>
+          <div class="mini-swatch" style="background:#D9A441"></div>
+        </div>
+        <p style="margin:0;font-size:.86rem;color:var(--ink-soft);">Терракотовый и горчичный, контрастный яркий кадр номера.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2><span class="num">06</span> Карта тем</h2>
+
+    <details class="roadmap-stage">
+      <summary>Этап 1</summary>
+      <div class="roadmap-list">
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Yo! Hostel — арт-пространство для путешествий в центре Самары</strong><span>Знакомство: история, семейный формат, переход к Art Boutique Hostel</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Не просто хостел — путешествие начинается здесь</strong><span>Знакомство с концепцией</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>6 стран за одну поездку: тематические номера Yo! Hostel</strong><span>Концепция номеров: Япония, Франция, Англия, Египет, Греция, Бразилия</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Какой номер подойдёт именно вам?</strong><span>Разнообразие форматов размещения</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Почему расположение хостела важно: живите в центре событий Самары</strong><span>Исторический центр, рядом достопримечательности и кафе</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>6 стран. Один хостел</strong><span>Сильное УТП — тематические номера</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Хостел без стереотипов: что входит в комфортное проживание</strong><span>Уют, чистота, инфраструктура, регистрация 24/7</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Почему гости выбирают Yo! Hostel</strong><span>Преимущества компании</span></div></div>
+      </div>
+    </details>
+
+    <details class="roadmap-stage">
+      <summary>Этап 2</summary>
+      <div class="roadmap-list">
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Что говорят гости Yo! Hostel: рейтинг 4,3 и 179 отзывов</strong><span>Рейтинг на Яндекс Картах, Booking.com, Ostrovok.ru</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Гостям нравится возвращаться</strong><span>Рейтинг и отзывы</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Скидки и бонусы Yo! Hostel: как выгодно остановиться в Самаре</strong><span>Скидки студентам/пенсионерам, за подписку в ВК, группам и на долгий срок</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Скидка для своих</strong><span>Условия скидок</span></div></div>
+      </div>
+    </details>
+
+    <details class="roadmap-stage">
+      <summary>Этап 3</summary>
+      <div class="roadmap-list">
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Номер «Япония» в Yo! Hostel: минимализм в самом центре Самары</strong><span>Атмосфера спокойствия и минимализма</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Номер «Япония»</strong><span>Зеркалит тему новости</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Номер «Франция» в Yo! Hostel: романтическая атмосфера для двоих</strong><span>Романтическая атмосфера номера</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Номер «Франция»</strong><span>Зеркалит тему новости</span></div></div>
+      </div>
+    </details>
+
+    <details class="roadmap-stage" open>
+      <summary>Этап 4 <span class="current-flag">актуальный</span></summary>
+      <div class="roadmap-list">
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Номер «Англия» в Yo! Hostel: классическая атмосфера в историческом центре Самары</strong><span>Атмосфера классического стиля</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Номер «Англия»</strong><span>Зеркалит тему новости</span></div></div>
+        <div class="roadmap-item"><span class="fmt">Новость</span><div class="txt"><strong>Номер «Египет» в Yo! Hostel: яркие впечатления в самом центре Самары</strong><span>Яркие впечатления номера</span></div></div>
+        <div class="roadmap-item"><span class="fmt">История</span><div class="txt"><strong>Номер «Египет»</strong><span>Зеркалит тему новости</span></div></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div class="sources-wrap">
+  <div class="wrap">
+    <p class="sources-note">Источники: <a href="https://yohostelsamara.ru/" target="_blank" rel="noopener">yohostelsamara.ru</a> · <a href="https://yandex.ru/maps/-/CTTI4W6j" target="_blank" rel="noopener">карточка компании на Яндекс Картах</a> · бриф компании (этап 1)</p>
+  </div>
+</div>
+
+</body>
+</html>
