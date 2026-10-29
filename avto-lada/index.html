@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Авто-Лада» Екатеринбург</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; views Проект / Контент-план */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .badge.past{background:var(--line);color:var(--ink-2)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+.vc details.cyc{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.vc details.cyc summary{cursor:pointer;padding:14px 18px;font:600 14.5px var(--f-display);color:var(--ink-2);list-style:none}
+.vc details.cyc summary::-webkit-details-marker{display:none}
+.vc details.cyc .cycle{padding:0 14px 14px}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Авто-Лада · Екатеринбург</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>АВТО-ЛАДА АВТО-ЛАДА АВТО-ЛАДА</span><span>АВТО-ЛАДА АВТО-ЛАДА АВТО-ЛАДА</span><span>АВТО-ЛАДА АВТО-ЛАДА АВТО-ЛАДА</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Авто-Лада» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Контент-план для карточек сети автошкол «Авто-Лада» в Екатеринбурге и Свердловской области. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Автошкола «Авто-Лада»</b></div>
+        <div><span>Город</span><b>Екатеринбург и Свердловская область</b></div>
+        <div><span>Направления</span><b>Категории A1, A, B, BE, C, D · Допобразование</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>на 29.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Учебные классы</span><span class="t-n y">31</span><span class="t-s">во всех районах Екатеринбурга и в других городах</span></div>
+        <div class="tile"><span class="t-k">Автодромы</span><span class="t-n y">5</span><span class="t-s">оборудованных площадок для практики</span></div>
+        <div class="tile"><span class="t-k">Этап 1</span><span class="t-n g">4 + 4</span><span class="t-s">новости и сторис опубликованы 13–28 августа</span></div>
+        <div class="tile"><span class="t-k">Этап 2</span><span class="t-n y">2 + 2</span><span class="t-s">новости и сторис, публикации с 5 ноября</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">август 2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости и 4 сторис: права любой категории, 31 учебный класс и 5 автодромов, удобный график и подготовка к экзамену, новые профессии.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">13.08 · 17.08 · 21.08 · 28.08</span><span class="st done">готово</span></div><h3>Публикации этапа 1</h3><p>Новости вышли на карточках сети на Яндекс Картах.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">29.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 2</h3><p>2 новости и 2 сторис: права на снегоход и квадроцикл, медицинско-транспортная комиссия на 8 Марта, 4.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 04.11</span><span class="st wait">согласование</span></div><h3>Согласование тем этапа 2</h3><p>Темы, тезисы и обложки утверждаются до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">05.11 · 12.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 2</h3><p>По одной новости и одной сторис в неделю на карточках сети в Яндекс Картах и 2ГИС.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Контент-план · этап 2</span>
+          <h3>Новости и сторис для карточек сети</h3>
+          <ul>
+            <li>05.11 — Права на снегоход и квадроцикл</li>
+            <li>12.11 — Медкомиссия для прав на 8 Марта, 4</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+  <section class="hero" id="company">
+    <span class="eyebrow">Автошкола · Екатеринбург и Свердловская область</span>
+    <h1>«Авто-Лада» — ТЗ на контент, этап 2</h1>
+    <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация раз в неделю с 5 ноября 2026 года — карточки компании «Авто-Лада» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Автошкола «Авто-Лада»</div></div>
+      <div class="fact"><div class="k">Обучение</div><div class="v">Категории A1, A, B, BE, C, D <small>очно и дистанционно</small></div></div>
+      <div class="fact"><div class="k">Учебные классы</div><div class="v">31 класс <small>во всех районах Екатеринбурга и в других городах</small></div></div>
+      <div class="fact"><div class="k">Практика</div><div class="v">5 оборудованных автодромов</div></div>
+      <div class="fact"><div class="k">Вождение</div><div class="v">С 7 утра до 10 вечера</div></div>
+      <div class="fact"><div class="k">Допобразование</div><div class="v">Операторы БПЛА <small>тракторные специальности, контраварийная подготовка, крановые профессии</small></div></div>
+      <div class="fact"><div class="k">Медкомиссия</div><div class="v">ул. 8 Марта, 4</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">avto-lada.com</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Авто-Лада»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: красный знака логотипа, яркий красный кнопок сайта, графитовый заголовков, светло-серый фон блоков и белый.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#E31E24;color:#FFFFFF;border-color:#E31E24">
+        <div class="role">Основной</div><div class="name">Красный логотипа</div><div class="hex">#E31E24</div>
+      </div>
+      <div class="swatch" style="background:#FE1A10;color:#FFFFFF;border-color:#FE1A10">
+        <div class="role">Акцентный</div><div class="name">Яркий красный</div><div class="hex">#FE1A10</div>
+      </div>
+      <div class="swatch" style="background:#222731;color:#FFFFFF;border-color:#3A404C">
+        <div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#222731</div>
+      </div>
+      <div class="swatch" style="background:#EFEFF0;color:#222731;border-color:#EFEFF0">
+        <div class="role">Второстепенный</div><div class="name">Светло-серый</div><div class="hex">#EFEFF0</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#222731;border-color:#FFFFFF">
+        <div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап 1 рассказал о сети в целом: категории, классы и автодромы, график и подготовка, допобразование. Этап 2 раскрывает два направления, о которых на карточках ещё не писали: права на снегоход и квадроцикл перед зимним спросом и медицинско-транспортную комиссию, с которой начинается получение прав.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">05.11</div><p>Права на снегоход и квадроцикл: категория A1 для внедорожной мототехники и акция для тех, кто учится на категорию A.</p></div>
+      <div class="cycle-row"><div class="tag">12.11</div><p>Медицинско-транспортная комиссия на ул. 8 Марта, 4: стоимость по категориям, врачи, документы, время прохождения.</p></div>
+    </div>
+    <details class="cyc">
+      <summary>Этап 1 · август 2026</summary>
+      <div class="cycle">
+        <div class="cycle-row"><div class="tag">13.08</div><p>Права любой категории: A1, A, B, BE, C, D, CE, сроки, дистанционная теория.</p></div>
+        <div class="cycle-row"><div class="tag">17.08</div><p>31 учебный класс и 5 автодромов в Екатеринбурге и области.</p></div>
+        <div class="cycle-row"><div class="tag">21.08</div><p>Вождение с 7 до 22, современные автомобили, практика на экзаменационных маршрутах.</p></div>
+        <div class="cycle-row"><div class="tag">28.08</div><p>Новые профессии: БПЛА, спецтехника, программы для людей с ограниченными возможностями.</p></div>
+      </div>
+    </details>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>2 темы с обложкой. Публикация — карточки компании «Авто-Лада» на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и уверенно, без давления. Каждая новость начинается со вступления от лица автошколы, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, слов «лучший», «самый выгодный», «№1» и сравнений с другими автошколами. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 2</h3><span class="pmeta">2 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 5 ноября</span><h3>Права на снегоход и квадроцикл в Екатеринбурге: категория A1 в автошколе «Авто-Лада»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Авто-Лада» готовим водителей квадроциклов и снегоходов, а тем, кто учится у нас на категорию A, права на снегоход и квадроцикл даём по акции.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Автошкола готовит водителей внедорожных мототранспортных средств категории A1 — квадроциклов и снегоходов.<span class="src">сайт · услуги и цены</span></li>
+        <li>Акция: обучись на категорию А и получи права на снегоход и квадроцикл.<span class="src">сайт</span></li>
+        <li>Категория A — мотоциклы. Срок обучения: от 1 месяца. Стоимость: от 21 000 ₽; цены уточняются в учебном подразделении, в котором планируется обучение.<span class="src">сайт</span></li>
+        <li>Обучение на категорию A идёт на мотоциклах и мопедах и включает управление равновесием, управление на поворотах, торможение и ускорение.<span class="src">сайт</span></li>
+        <li>Теорию по категории A можно пройти онлайн.<span class="src">сайт</span></li>
+        <li>Тракторные специальности — все категории самоходных машин.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Права на снегоход и квадроцикл в Екатеринбурге — автошкола «Авто-Лада»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Права на снегоход и квадроцикл в Екатеринбурге, категория A1 | Авто-Лада</span></div>
+        <div class="meta-row"><span><b>Description · </b>Обучение на права категории A1 на снегоход и квадроцикл в Екатеринбурге. Акция для категории A: права на снегоход и квадроцикл. Категория A от 21 000 ₽, от 1 месяца.</span></div>
+        <div class="chips">
+          <span class="chip-kw">права на снегоход екатеринбург</span><span class="chip-kw">права на квадроцикл екатеринбург</span>
+          <span class="chip-kw">права на снегоход</span><span class="chip-kw">права на квадроцикл</span>
+          <span class="chip-kw">обучение на снегоход</span><span class="chip-kw">категория a1 снегоход</span>
+          <span class="chip-kw">права категории a екатеринбург</span><span class="chip-kw">права на мотоцикл екатеринбург</span>
+          <span class="chip-kw">самоходные машины обучение</span><span class="chip-kw">автошкола екатеринбург</span>
+          <span class="chip-kw">автошкола авто-лада</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> оставляйте заявку на обучение в удобном учебном подразделении «Авто-Лада».</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Права на снегоход и квадроцикл»</div>
+        <p>Композиция: снегоход и квадроцикл на заснеженной площадке, дневной свет; тезис на плашке в верхней трети, под ним строка «категория A1», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — красный #E31E24, тезис — белый #FFFFFF, строка — светло-серый #EFEFF0, тонкая линия под тезисом — графит #222731.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 12 ноября</span><h3>Медкомиссия на права в Екатеринбурге: медицинско-транспортная комиссия «Авто-Лада» на ул. 8 Марта, 4</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Медицинско-транспортную комиссию для водительских прав можно пройти у нас, на ул. 8 Марта, 4: нужен только паспорт, а прохождение занимает 25–35 минут.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Медицинско-транспортная комиссия: г. Екатеринбург, ул. 8 Марта, 4.<span class="src">сайт</span></li>
+        <li>Комиссия нужна при первичном получении водительских прав, при замене прав после истечения 10-летнего срока и при добавлении новой категории.<span class="src">сайт</span></li>
+        <li>Стоимость: категории А и В — 2 400 ₽; категории ВЕ, С и СЕ — 2 600 ₽; категории D и DE — 2 600 ₽.<span class="src">сайт</span></li>
+        <li>Категории А, А1, В, ВЕ, В1 и М: терапевт, офтальмолог, психиатр и нарколог. Категории С, СЕ, С1, С1Е, D, D1, D1E, Tm и Tb: дополнительно отоларинголог, невролог и электроэнцефалограмма.<span class="src">сайт</span></li>
+        <li>Нужен только паспорт, фотография для справки не требуется.<span class="src">сайт</span></li>
+        <li>Прохождение занимает 25–35 минут. По итогам выдаётся справка о прохождении транспортной комиссии.<span class="src">сайт</span></li>
+        <li>График: понедельник–четверг с 10:00 до 18:00, пятница с 10:00 до 17:00, суббота и воскресенье — выходной.<span class="src">сайт</span></li>
+        <li>Порядок определён приказом Минздрава РФ № 344н «О проведении обязательного медицинского освидетельствования водителей транспортных средств (кандидатов в водители транспортных средств)».<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Медкомиссия на права в Екатеринбурге — медицинско-транспортная комиссия «Авто-Лада»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Медкомиссия на права в Екатеринбурге от 2 400 ₽, ул. 8 Марта, 4 | Авто-Лада</span></div>
+        <div class="meta-row"><span><b>Description · </b>Медицинско-транспортная комиссия для водительских прав в Екатеринбурге: категории А и В — 2 400 ₽, С, D — 2 600 ₽. Только паспорт, без фото, 25–35 минут, ул. 8 Марта, 4.</span></div>
+        <div class="chips">
+          <span class="chip-kw">медкомиссия на права екатеринбург</span><span class="chip-kw">медкомиссия на права</span>
+          <span class="chip-kw">медицинская комиссия для водительских прав</span><span class="chip-kw">медсправка для водительских прав</span>
+          <span class="chip-kw">водительская медкомиссия екатеринбург</span><span class="chip-kw">медкомиссия для замены прав</span>
+          <span class="chip-kw">медкомиссия на категорию c</span><span class="chip-kw">медкомиссия 8 марта</span>
+          <span class="chip-kw">справка для автошколы</span><span class="chip-kw">автошкола екатеринбург</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите на медкомиссию с паспортом в часы работы.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Медкомиссия по паспорту»</div>
+        <p>Композиция: светлый кабинет медицинской комиссии, на переднем плане паспорт и бланк справки на столе; тезис на плашке в нижней трети, строка «ул. 8 Марта, 4 · только паспорт», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — графит #222731, тезис — белый #FFFFFF, строка — светло-серый #EFEFF0, акцентная линия — красный #E31E24.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>2 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточки компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 2</h3><span class="pmeta">2 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Права на снегоход и квадроцикл</div><span class="slide-no">Сторис 1 · 5 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Категория A1</span>
+          <span class="fact-pill">Квадроциклы</span>
+          <span class="fact-pill">Снегоходы</span>
+          <span class="fact-pill">Акция с категорией A</span>
+          <span class="fact-pill">A — от 1 месяца</span>
+          <span class="fact-pill">A — от 21 000 ₽</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон красный #E31E24, заголовок белым #FFFFFF в верхней части, фото снегохода и квадроцикла по центру, факты на белых плашках #FFFFFF текстом графит #222731, строка акции на плашке графит #222731 белым текстом. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Медкомиссия за 25–35 минут</div><span class="slide-no">Сторис 2 · 12 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">ул. 8 Марта, 4</span>
+          <span class="fact-pill">Только паспорт</span>
+          <span class="fact-pill">Без фото</span>
+          <span class="fact-pill">A и B — 2 400 ₽</span>
+          <span class="fact-pill">BE, C, CE, D, DE — 2 600 ₽</span>
+          <span class="fact-pill">Пн–чт 10:00–18:00 · пт 10:00–17:00</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #EFEFF0, заголовок графит #222731 сверху, цены крупно на белых плашках #FFFFFF, «только паспорт» и «без фото» на красных плашках #E31E24 белым текстом, адрес внизу графитом #222731. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage">
+      <summary>Этап 1 — категории, сеть классов, график, новые профессии <span class="badge past">август 2026</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Обучение на права всех категорий</b>13.08 · A1, A, B, BE, C, D, CE, сроки, дистанционная теория, лицензии</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Все категории прав</b>категории обучения и запись на консультацию</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>31 учебный класс и 5 автодромов</b>17.08 · районы Екатеринбурга, города области, автодромы</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>31 филиал и 5 автодромов</b>филиал в любом районе и в соседних городах</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Удобный график и подготовка к экзамену</b>21.08 · вождение с 7 до 22, 40 автомобилей, экзаменационные маршруты</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Вождение с 7 до 22</b>до работы, после неё или вечером</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Новые профессии и особые программы</b>28.08 · БПЛА, спецтехника, крановые профессии, обучение людей с ОВЗ</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Новые профессии</b>БПЛА, спецтехника, повышение квалификации</span></div>
+      </div>
+    </details>
+    <details class="stage" open>
+      <summary>Этап 2 — снегоход и квадроцикл, медкомиссия <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Права на снегоход и квадроцикл: категория A1</b>05.11 · внедорожная мототехника, акция для категории A</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Права на снегоход и квадроцикл</b>05.11 · A1, акция, срок и цена категории A</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Медкомиссия на права на ул. 8 Марта, 4</b>12.11 · когда нужна, стоимость, врачи, документы, 25–35 минут</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Медкомиссия за 25–35 минут</b>12.11 · адрес, паспорт без фото, цены, график</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
