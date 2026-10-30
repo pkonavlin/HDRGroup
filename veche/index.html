@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Вече» Сергиев Посад</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+@media(max-width:400px){.va .charts{grid-template-columns:1fr}}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;position:relative}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto;overflow:visible}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:10px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.va .chart .ar{fill:var(--gold-soft)}
+.va .chart .xh{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.va .chart .dot{fill:var(--gold);stroke:var(--panel);stroke-width:2}
+.va .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Вече · Сергиев Посад</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ</span><span>ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ</span><span>ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ ВЕЧЕ</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Вече» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска и спроса в Сергиевом Посаде, стратегия продвижения и контент-план для карточки компьютерного клуба. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Компьютерный клуб «Вече»</b></div>
+        <div><span>Город</span><b>Сергиев Посад</b></div>
+        <div><span>Направления</span><b>51 ПК · 6 PlayStation · Бар</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 30.10.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«компьютерный клуб»</span><span class="t-n y">5</span><span class="t-s">место из 5 карточек на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«пк клуб», «playstation»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в выдаче</span></div>
+        <div class="tile"><span class="t-k">Рейтинг на Картах</span><span class="t-n y">4,2</span><span class="t-s">13 оценок · у соседей 115–311</span></div>
+        <div class="tile"><span class="t-k">Спрос «пк клуб» в городе</span><span class="t-n g">+42%</span><span class="t-s">январь–сентябрь 2026 к 2025</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">30.10.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и спроса</h3><p>Позиции на Яндекс Картах по 7 запросам, соседи по выдаче, спрос по Вордстату в Сергиевом Посаде, причины, по которым карточку не видно, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">30.10.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис: клуб на 51 ПК и 6 PlayStation, зона PlayStation, бар клуба, час игры в подарок новым гостям.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 02.11</span><span class="st wait">согласование</span></div><h3>Согласование тем этапа 1</h3><p>Темы, тезисы и обложки утверждаются до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">03.11 · 10.11 · 17.11 · 24.11</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на карточке «Вече» в Яндекс Картах и 2ГИС.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">следующий шаг</span></div><h3>Прайс, рубрики и акция на Яндекс Картах, карточка в 2ГИС</h3><p>Тарифы в прайс, рубрика «Игровой клуб», акция «час игры в подарок» отдельным блоком, описание клуба. Создать карточку «Вече» в 2ГИС.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточку не видно и что с этим делать</h3>
+          <p>Позиции по 7 запросам на Яндекс Картах, сравнение с соседями, спрос и сезонность в Сергиевом Посаде, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>03.11 — ПК-клуб на 51 компьютер, круглосуточно</li>
+            <li>10.11 — 6 PlayStation в «Вече»</li>
+            <li>17.11 — Бар клуба: чай, лимонады, пицца</li>
+            <li>24.11 — Час игры в подарок новым гостям</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Сергиев Посад · компьютерный клуб · замер 30.10.2026</span>
+  <h1>Где «Вече» не видно в поиске и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 7 запросам, спрос по Вордстату для региона «Сергиев Посад», органическая выдача Яндекса и сравнение с клубами, которые стоят рядом в выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill warn">низко</span><p><b>«компьютерный клуб» — 5 место из 5, «круглосуточно» и «киберспорт» — 3 из 3</b>Карточка есть в выдаче, но стоит последней. Выше клубы со 115–311 оценками, ценами в карточке и наградой «Хорошее место 2026».</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«пк клуб», «playstation», «игровой клуб», «антикафе» — карточки нет</b>По «пк клуб» в городе ищут 106 раз в месяц, и этот запрос растёт. «Вече» по нему не показывается, хотя в клубе 51 ПК и 6 PlayStation.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка почти пустая</b>Нет прайса, новостей и историй, в особенностях два пункта. Первые отзывы появились 23 октября: 13 оценок и рейтинг 4,2.</p></div>
+    <div class="v"><span class="pill crit">нет в 2ГИС</span><p><b>Карточки «Вече» в 2ГИС нет</b>2ГИС стоит вторым в органической выдаче Яндекса по «компьютерный клуб сергиев посад».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос в городе перетекает с «компьютерного клуба» на «пк клуб»</b>«пк клуб»: +42% за январь–сентябрь 2026 к 2025, «компьютерный клуб»: −17%. Вместе спрос почти не изменился, но слова в карточке и текстах нужны оба.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,2</div><div class="s">13 оценок · 14 отзывов</div></div>
+    <div class="kpi"><div class="k">ПК и PlayStation</div><div class="n">51 · 6</div><div class="s">у соседей 25–35 ПК (LANGAME)</div></div>
+    <div class="kpi"><div class="k">Спрос «компьютерный клуб» + «пк клуб»</div><div class="n">218</div><div class="s">запросов в сентябре 2026</div></div>
+    <div class="kpi"><div class="k">Новости и истории на карточке</div><div class="n">0</div><div class="s">публикаций пока нет</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Сергиеву Посаду, без геолокации пользователя. Порядок первых мест немного меняется между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Кто в выдаче</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>компьютерный клуб</td><td class="r num">5 из 5</td><td>Colizeum (5,0 · 311, реклама), CyberX Community (5,0 · 115), Шторм (5,0 · 159), Первый (4,0 · 8), <b>Вече</b></td></tr>
+      <tr class="me"><td>компьютерный клуб круглосуточно</td><td class="r num">3 из 3</td><td>Colizeum, CyberX Community, <b>Вече</b></td></tr>
+      <tr class="me"><td>киберспорт</td><td class="r num">3 из 3</td><td>Colizeum, CyberX Community, <b>Вече</b></td></tr>
+      <tr><td>пк клуб</td><td class="r">нет</td><td>Colizeum, Первый</td></tr>
+      <tr><td>playstation</td><td class="r">нет</td><td>Colizeum, Шторм, CyberX Community, Эльдорадо</td></tr>
+      <tr><td>игровой клуб</td><td class="r">нет</td><td>Zaga-Game (5,0 · 296), Космик (4,9 · 2 776), Первый, Центурион</td></tr>
+      <tr><td>антикафе</td><td class="r">нет</td><td>Черный клевер (4,9 · 24), OutsideSmoke (5,0 · 143)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — рейтинг и число оценок карточки.</p>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Цены в карточке</th><th>Истории и акции</th><th>Рубрики</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Вече</b></td><td class="r num">4,2</td><td class="r num">13</td><td>нет</td><td>нет</td><td>компьютерный клуб, киберспорт</td></tr>
+      <tr><td>Colizeum</td><td class="r num">5,0</td><td class="r num">311</td><td>час от 140 ₽, пакеты 3/5/12 часов</td><td>истории «Турниры», «Цены», «Железо»; «Дарим 500₽ новым гостям»; онлайн-бронь</td><td>компьютерный клуб, киберспорт</td></tr>
+      <tr><td>Шторм</td><td class="r num">5,0</td><td class="r num">159</td><td>пакеты 3 и 5 часов, 400–690 ₽</td><td>акции в особенностях</td><td>компьютерный клуб, интернет-кафе</td></tr>
+      <tr><td>CyberX Community</td><td class="r num">5,0</td><td class="r num">115</td><td>час от 180 ₽, пакеты 3/5 часов</td><td>истории «Турниры Октябрь», «Прайс»; 1 новость; онлайн-бронь</td><td>киберспорт</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка не рассказывает, что есть в клубе</h3></div>
+      <p>На карточке «Вече» нет прайса, описания, новостей и историй. В особенностях только «Компьютерный клуб» и «Киберспорт». Слов <b>«PlayStation»</b>, <b>«пк клуб»</b>, <b>«бар»</b> на карточке нет вообще, поэтому по этим запросам Яндексу нечего показать. У Colizeum и CyberX в карточке прайс, истории про турниры и цены, онлайн-бронь.</p>
+      <p class="next">Заполнить прайс тарифами клуба, описание («ПК-клуб на 51 компьютер и 6 PlayStation, круглосуточно, бар»), особенности и публиковать новости и сторис раз в неделю.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка молодая: мало оценок</h3></div>
+      <p>Первые отзывы появились 23 октября. Сейчас <b>13 оценок и рейтинг 4,2</b> при положительных текстах отзывов: при малом числе оценок Яндекс сглаживает рейтинг. У соседей 115–311 оценок и у двоих награда «Хорошее место 2026». Число и свежесть оценок — один из факторов порядка в выдаче.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Нет рубрики «Игровой клуб»</h3></div>
+      <p>По «игровой клуб» Яндекс показывает карточки с этой рубрикой: Zaga-Game, Космик, Первый. У «Вече» рубрик две, и по запросам про приставки и игровые клубы карточка не участвует.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Акцию «час игры в подарок» не видно в выдаче</h3></div>
+      <p>У Colizeum в сниппете выдачи стоит плашка «Дарим 500₽ новым гостям», и карточка куплена в рекламу на первое место. У «Вече» есть сопоставимое предложение — <b>час игры в подарок для новых гостей</b>, но на карточке его нет.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Новости и истории на Картах зависят от тарифа</h3></div>
+      <p>С лета 2026 года Яндекс переводит карточки на тарифы: на Базовом новости и истории скрываются, а внутри карточки может показываться реклама других заведений. После сбоев в дата-центрах Яндекса в октябре кабинет Яндекс Бизнеса работает с ограничениями. До подключения тарифа публикации этапа выходят в 2ГИС.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт и органическая выдача</h2><p>Яндекс, регион «Сергиев Посад», запрос «компьютерный клуб сергиев посад», реклама не учитывалась.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th class="r">Место</th><th>Кто в выдаче</th></tr></thead>
+    <tbody>
+      <tr><td class="r num">1</td><td>Яндекс Карты — подборка компьютерных клубов Сергиева Посада</td></tr>
+      <tr><td class="r num">2</td><td>2ГИС — интернет-кафе и компьютерные клубы</td></tr>
+      <tr><td class="r num">3</td><td>Сайт Colizeum, страница клуба в Сергиевом Посаде</td></tr>
+      <tr class="me"><td class="r num">4</td><td>LANGAME — все компьютерные клубы Сергиева Посада, <b>«Вече» в списке есть</b>: 51 ПК, 6 PlayStation, бронь по звонку</td></tr>
+      <tr><td class="r num">5–10</td><td>группа Colizeum ВКонтакте, Zoon, сайт CyberX, Tripadvisor, Telegram Colizeum, Warpoint</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">Своего сайта у «Вече» нет. Первые места органики занимают агрегаторы и каналы конкурентов, поэтому быстрее всего гости приходят через карточку на Картах, 2ГИС, LANGAME и Zoon.</p>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Сергиевом Посаде</h2><p>Вордстат, регион «Сергиев Посад», все устройства. Частоты — за последние 30 дней (08.09–07.10.2026), динамика — по месяцам за 2 года.</p></div>
+  <div class="charts">
+    <div class="chart" data-chart="a"><h3>«компьютерный клуб»</h3><div class="cs">запросов в месяц · январь–сентябрь 2026 к 2025: −17%</div></div>
+    <div class="chart" data-chart="b"><h3>«пк клуб»</h3><div class="cs">запросов в месяц · январь–сентябрь 2026 к 2025: +42%</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">Сезонность: пик в ноябре–декабре (в 2025 году «компьютерный клуб» — 250 и 227 запросов), высокий январь, спад в феврале и в мае–июне. Ноябрьские публикации попадают в начало сезона.</p>
+
+  <h3>Клуб, ПК и PlayStation</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-c"></tbody></table></div>
+
+  <h3>Соседние запросы</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Намерение</th><th>Запросов в месяц</th></tr></thead><tbody id="t-n"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Клуб ищут с городом</b>: «пк клуб сергиев посад» — 50, «компьютерный клуб сергиев посад» — 47.</li>
+      <li><b>«пк клуб» растёт</b>: в сентябре 2026 года 93 запроса против 55 годом раньше.</li>
+      <li><b>Ночью тоже ищут</b>: «ночные пк клубы» — 8, из них 5 с «сергиев посад».</li>
+      <li><b>По названию «Вече» клуб пока не ищут</b>: запросов «вече клуб» и «вече сергиев посад» нет. Узнаваемость строится карточкой.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «пк клуб», «компьютерный клуб» и «Сергиев Посад» в первом абзаце.</li>
+      <li>PlayStation — отдельная новость: у соседей в карточках приставки не описаны.</li>
+      <li>«Круглосуточно» и «ночью» — в текстах о клубе.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Компьютерных клубов в России</div><div class="n">4 695</div><div class="s">точек по итогам 2025, СберАналитика</div></div>
+    <div class="kpi"><div class="k">Выручка клубов, I квартал 2026</div><div class="n">+26%</div><div class="s">к I кварталу 2025, АРКИ</div></div>
+    <div class="kpi"><div class="k">Посетителей в месяц</div><div class="n">1,25 млн</div><div class="s">средний чек гостя 1 500 ₽, АРКИ</div></div>
+    <div class="kpi"><div class="k">Клубов в Сергиевом Посаде на LANGAME</div><div class="n">8</div><div class="s">из них компьютерных — 5</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Клубов в стране становится больше быстрее, чем растёт спрос, и конкуренция смещается в сервис: по данным АРКИ, растёт доля дохода от бара и закусок. В Сергиевом Посаде у соседей по выдаче 25–35 ПК, в «Вече» — 51 ПК и 6 PlayStation. Это и есть то, что карточке нужно показать.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первый этап даёт основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Заполнить карточку</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Прайс.</b><span>Тарифы клуба по зонам и пакетам часов, как у соседей по выдаче, чтобы цена появилась в сниппете.</span></li>
+        <li><b>Описание и особенности.</b><span>ПК-клуб на 51 компьютер и 6 PlayStation, круглосуточно, бар. В особенностях — всё, что действительно есть в клубе: Wi-Fi, способы оплаты, бронирование.</span></li>
+        <li><b>Рубрика «Игровой клуб».</b><span>Добавить к «Компьютерному клубу» и «Киберспорту», чтобы карточка участвовала в запросах про игровые клубы и приставки.</span></li>
+        <li><b>Акция «Час игры в подарок для новых гостей».</b><span>Отдельным блоком акции: анонс до 70 знаков, описание до 200. Тогда она выводится плашкой в выдаче.</span></li>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Проверить, на каком тарифе карточка: на Базовом новости и истории скрыты.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Новости, сторис и оценки</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю.</b><span>Темы этапа 1 — клуб на 51 ПК, PlayStation, бар, акция для новых гостей. Дальше — турниры и нововведения клуба.</span></li>
+        <li><b>Просить оценку после визита.</b><span>QR на карточку у стойки администратора. Только реальные гости и без вознаграждения: подозрительные отзывы площадка снимает.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Агрегаторы</h3><span class="when">ноябрь</span></div>
+      <ol>
+        <li><b>Создать карточку в 2ГИС.</b><span>Те же название, адрес, часы, прайс и описание, что на Яндекс Картах. Новости и сторис этапа публикуем и там.</span></li>
+        <li><b>LANGAME и Zoon.</b><span>На LANGAME клуб уже есть с бронью по звонку — дополнить фото и акцию. Zoon стоит в органике Яндекса по запросу с городом.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Свой канал</h3><span class="when">1–3 месяца</span></div>
+      <ol>
+        <li><b>Сообщество ВКонтакте или Telegram-канал клуба.</b><span>У Colizeum группа ВК и канал Telegram стоят в первой десятке органики. Для «Вече» это площадка под расписание турниров и новости клуба.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение — точечно</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Приоритетное размещение на Картах.</b><span>Соседи покупают показ на первом месте. Общий спрос в городе около 220–250 запросов в месяц, поэтому реклама на Картах эффективнее широкой кампании в Директе. Усиливать в ноябре–январе.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Сергиеву Посаду 30.10.2026 без геолокации пользователя, рейтинги, цены и рубрики — из карточек.</li>
+    <li>Органика: Яндекс, регион «Сергиев Посад», первая страница, рекламные блоки исключены.</li>
+    <li>Вордстат: регион «Сергиев Посад», все устройства, частоты за 08.09–07.10.2026, динамика с октября 2024 по сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/veche/40532710353/" target="_blank" rel="noopener">Карточка «Вече» на Яндекс Картах</a>
+    <a href="https://langame.ru/computerniy_club_sergiev_posad" target="_blank" rel="noopener">LANGAME — компьютерные клубы Сергиева Посада</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://strategy.ru/rnd/files/130/download" target="_blank" rel="noopener">Strategy Partners и СберАналитика — рынок компьютерных клубов, март 2026</a>
+    <a href="https://kod.ru/comp-club-rost-2026" target="_blank" rel="noopener">Код — выручка компьютерных клубов в I квартале 2026 (АРКИ)</a>
+    <a href="https://adindex.ru/news/digital/2026/10/16/350059.phtml" target="_blank" rel="noopener">AdIndex — Яндекс частично восстановил Бизнес</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Компьютерный клуб · Сергиев Посад</span>
+    <h1>«Вече» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 3 ноября 2026 года — карточка компании «Вече» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Компьютерный клуб «Вече»</div></div>
+      <div class="fact"><div class="k">Оснащение</div><div class="v">51 ПК · 6 PS</div></div>
+      <div class="fact"><div class="k">Бар</div><div class="v">Чай и лимонады <small>чай китайский/фруктовый, домашние лимонады, пицца, фритюр, закуски</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">Сергиев Посад, Новоугличское шоссе 40А <small>этаж -1</small></div></div>
+      <div class="fact"><div class="k">Акция</div><div class="v">Час игры в подарок <small>для новых гостей</small></div></div>
+      <div class="fact"><div class="k">Преимущества</div><div class="v">Ремонт и бар <small>хороший качественный ремонт, большой выбор доп услуг (бара)</small></div></div>
+      <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>возможно неформальное общение</small></div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Вече»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: тёмно-коричневое дерево стеновых панелей, тёплое золото света в зале, светлое золото подсветки, серый стен и тёплый коричневый текста.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#28180D;color:#F7E7BB;border-color:#28180D">
+        <div class="role">Основной</div><div class="name">Тёмное дерево</div><div class="hex">#28180D</div>
+      </div>
+      <div class="swatch" style="background:#D27C1F;color:#FFFFFF;border-color:#D27C1F">
+        <div class="role">Акцентный</div><div class="name">Тёплое золото</div><div class="hex">#D27C1F</div>
+      </div>
+      <div class="swatch" style="background:#5D5958;color:#FFFFFF;border-color:#5D5958">
+        <div class="role">Второстепенный</div><div class="name">Серый</div><div class="hex">#5D5958</div>
+      </div>
+      <div class="swatch" style="background:#F7E7BB;color:#28180D;border-color:#F7E7BB">
+        <div class="role">Фоновый</div><div class="name">Светлое золото</div><div class="hex">#F7E7BB</div>
+      </div>
+      <div class="swatch" style="background:#392111;color:#F7E7BB;border-color:#392111">
+        <div class="role">Текстовый</div><div class="name">Орех</div><div class="hex">#392111</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап знакомит Сергиев Посад с новым клубом: сначала сам клуб и его оснащение, затем PlayStation, бар и предложение для новых гостей. Одна новость и одна сторис в неделю, с 3 ноября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">03.11</div><p>ПК-клуб «Вече» в Сергиевом Посаде: 51 компьютер, 6 PlayStation, работает круглосуточно.</p></div>
+      <div class="cycle-row"><div class="tag">10.11</div><p>Шесть PlayStation в клубе — игры на приставке в компании.</p></div>
+      <div class="cycle-row"><div class="tag">17.11</div><p>Бар клуба: чай китайский и фруктовый, домашние лимонады, пицца, фритюр и закуски.</p></div>
+      <div class="cycle-row"><div class="tag">24.11</div><p>Для новых гостей — час игры в подарок.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании «Вече» на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», живо и дружелюбно, допускается неформальный тон. Каждая новость начинается со вступления от лица клуба, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Бар описываем через чай, лимонады и кухню, без названий алкогольных напитков и табачных изделий. В тексте нет телефона и e-mail, слов «лучший», «самый», «№1» и сравнений с другими клубами. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 3 ноября</span><h3>ПК-клуб «Вече» в Сергиевом Посаде: 51 компьютер, 6 PlayStation, круглосуточно</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы открыли в Сергиевом Посаде компьютерный клуб «Вече»: 51 ПК, 6 PlayStation, хороший качественный ремонт — и работаем круглосуточно.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Компьютерный клуб, 51 пк, 6 PS.<span class="src">бриф</span></li>
+        <li>Хороший качественный ремонт.<span class="src">бриф</span></li>
+        <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+        <li>Большой выбор доп услуг (бара).<span class="src">бриф</span></li>
+        <li>Адрес: Сергиев Посад, Новоугличское шоссе 40А, этаж -1.<span class="src">бриф · Яндекс Карты</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>ПК-клуб «Вече» в Сергиевом Посаде: 51 компьютер и 6 PlayStation круглосуточно</span></div>
+        <div class="meta-row"><span><b>Title · </b>Компьютерный клуб в Сергиевом Посаде круглосуточно — 51 ПК | Вече</span></div>
+        <div class="meta-row"><span><b>Description · </b>Новый ПК-клуб «Вече» в Сергиевом Посаде на Новоугличском шоссе: 51 компьютер, 6 PlayStation, бар, работаем круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">пк клуб сергиев посад</span><span class="chip-kw">компьютерный клуб сергиев посад</span>
+          <span class="chip-kw">пк клуб</span><span class="chip-kw">компьютерный клуб</span>
+          <span class="chip-kw">ночные пк клубы сергиев посад</span><span class="chip-kw">компьютерный клуб круглосуточно</span>
+          <span class="chip-kw">игровой компьютерный клуб</span><span class="chip-kw">киберспорт</span>
+          <span class="chip-kw">компьютерный клуб новоугличское шоссе</span><span class="chip-kw">клуб вече</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите в «Вече» — клуб открыт в любое время суток.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«51 ПК · круглосуточно»</div>
+        <p>Композиция: игровой зал клуба — ряд мониторов и игровых кресел на фоне стеновых панелей из тёмного дерева с тёплой подсветкой; тезис крупно на плашке в нижней трети, под ним строка «6 PlayStation», название клуба в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — тёмное дерево #28180D, тезис — светлое золото #F7E7BB, строка — тёплое золото #D27C1F.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 10 ноября</span><h3>PlayStation в Сергиевом Посаде: 6 приставок в компьютерном клубе «Вече»</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Не только компьютеры: в «Вече» стоят 6 PlayStation, и играть на них можно в любое время — клуб работает круглосуточно.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Компьютерный клуб, 51 пк, 6 PS.<span class="src">бриф</span></li>
+        <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+        <li>Чай китайский/фруктовый, домашние лимонады, пицца, фритюр, закуски.<span class="src">бриф</span></li>
+        <li>Хороший качественный ремонт.<span class="src">бриф</span></li>
+        <li>Сергиев Посад, Новоугличское шоссе 40А.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>PlayStation в Сергиевом Посаде: 6 приставок в клубе «Вече»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Поиграть в PlayStation в Сергиевом Посаде круглосуточно | Вече</span></div>
+        <div class="meta-row"><span><b>Description · </b>Компьютерный клуб «Вече» в Сергиевом Посаде: 6 PlayStation и 51 ПК, бар с чаем, лимонадами и пиццей, работаем круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">playstation сергиев посад</span><span class="chip-kw">плейстейшен клуб</span>
+          <span class="chip-kw">компьютерный клуб с плейстейшен</span><span class="chip-kw">пк клуб с плейстейшен</span>
+          <span class="chip-kw">поиграть в плейстейшен</span><span class="chip-kw">поиграть в приставку</span>
+          <span class="chip-kw">игровой клуб сергиев посад</span><span class="chip-kw">приставки playstation</span>
+          <span class="chip-kw">пк клуб сергиев посад</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> собирайте компанию и приходите играть на PlayStation.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«6 PlayStation в клубе»</div>
+        <p>Композиция: зона PlayStation клуба — экран и геймпады на переднем плане, тёплый свет; тезис на плашке в верхней трети, строка «круглосуточно», название клуба в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёплое золото #D27C1F, тезис — белый на плашке, строка — светлое золото #F7E7BB на тёмном дереве #28180D.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 17 ноября</span><h3>Бар компьютерного клуба «Вече»: китайский чай, домашние лимонады, пицца и закуски</h3></div>
+        <span class="purpose">Вовлекающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Вече» можно не только играть: у нас большой выбор в баре — от китайского чая и домашних лимонадов до пиццы и закусок.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Чай китайский/фруктовый, домашние лимонады.<span class="src">бриф</span></li>
+        <li>Пицца, фритюр, закуски.<span class="src">бриф</span></li>
+        <li>Большой выбор доп услуг (бара).<span class="src">бриф</span></li>
+        <li>Компьютерный клуб, 51 пк, 6 PS.<span class="src">бриф</span></li>
+        <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Бар компьютерного клуба «Вече» в Сергиевом Посаде</span></div>
+        <div class="meta-row"><span><b>Title · </b>Компьютерный клуб с баром в Сергиевом Посаде: чай, лимонады, пицца | Вече</span></div>
+        <div class="meta-row"><span><b>Description · </b>ПК-клуб «Вече» в Сергиевом Посаде: китайский и фруктовый чай, домашние лимонады, пицца, фритюр и закуски. 51 ПК, 6 PlayStation, круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">компьютерный клуб с баром</span><span class="chip-kw">пк клуб сергиев посад</span>
+          <span class="chip-kw">китайский чай сергиев посад</span>
+          <span class="chip-kw">домашний лимонад</span><span class="chip-kw">пицца сергиев посад</span>
+          <span class="chip-kw">где посидеть сергиев посад</span><span class="chip-kw">компьютерный клуб сергиев посад</span>
+          <span class="chip-kw">пк клуб круглосуточно</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> заходите поиграть и попробовать бар клуба.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Бар клуба»</div>
+        <p>Композиция: стол в зоне отдыха клуба — чайник с китайским чаем, стакан домашнего лимонада и пицца, на заднем плане тёплый свет лампы и тёмное дерево; в кадре нет алкогольных напитков и кальяна. Тезис на плашке в нижней трети, строка «чай · лимонады · пицца», название клуба в верхнем левом углу.</p>
+        <p>Цвета: плашка — орех #392111, тезис — светлое золото #F7E7BB, строка — тёплое золото #D27C1F.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 24 ноября</span><h3>Час игры в подарок: акция для новых гостей ПК-клуба «Вече» в Сергиевом Посаде</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если вы ещё не были в «Вече» — первый час игры за наш счёт: дарим его всем новым гостям.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Час игры в подарок для новых гостей.<span class="src">бриф</span></li>
+        <li>Компьютерный клуб, 51 пк, 6 PS.<span class="src">бриф</span></li>
+                <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+        <li>Сергиев Посад, Новоугличское шоссе 40А.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Час игры в подарок новым гостям ПК-клуба «Вече» в Сергиевом Посаде</span></div>
+        <div class="meta-row"><span><b>Title · </b>Акция компьютерного клуба в Сергиевом Посаде: час игры в подарок | Вече</span></div>
+        <div class="meta-row"><span><b>Description · </b>Новым гостям ПК-клуба «Вече» в Сергиевом Посаде — час игры в подарок. 51 ПК, 6 PlayStation, круглосуточно.</span></div>
+        <div class="chips">
+          <span class="chip-kw">компьютерный клуб акция</span><span class="chip-kw">пк клуб сергиев посад</span>
+          <span class="chip-kw">компьютерный клуб сергиев посад</span><span class="chip-kw">пк клуб цены</span>
+          <span class="chip-kw">час в подарок</span><span class="chip-kw">компьютерный клуб для новых гостей</span>
+          <span class="chip-kw">ночные пк клубы</span><span class="chip-kw">компьютерный клуб круглосуточно</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> приходите в первый раз — час игры подарим.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Час игры в подарок»</div>
+        <p>Композиция: игровое место клуба — монитор, клавиатура с подсветкой, кресло, тёплая подсветка панелей; тезис крупно по центру на плашке, строка «для новых гостей», название клуба в верхнем левом углу. Слово «акция» на обложке не используется.</p>
+        <p>Цвета: плашка — тёплое золото #D27C1F, тезис — тёмное дерево #28180D, строка — серый #5D5958 на светлом золоте #F7E7BB.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании «Вече» на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">51 ПК · 6 PlayStation</div><span class="slide-no">Сторис 1 · 3 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">51 ПК</span>
+          <span class="fact-pill">6 PlayStation</span>
+          <span class="fact-pill">Круглосуточно</span>
+          <span class="fact-pill">Бар</span>
+          <span class="fact-pill">Новоугличское ш., 40А</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёмное дерево #28180D, цифры «51» и «6» крупно тёплым золотым #D27C1F, подписи светлым золотом #F7E7BB, адрес серым #5D5958 внизу. Название клуба в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">PlayStation в «Вече»</div><span class="slide-no">Сторис 2 · 10 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">6 PlayStation</span>
+          <span class="fact-pill">Круглосуточно</span>
+          <span class="fact-pill">Чай и лимонады</span>
+          <span class="fact-pill">Пицца и закуски</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото геймпада на столе клуба, снизу плашка орех #392111, заголовок светлым золотом #F7E7BB, факты на плашках тёплого золота #D27C1F белым текстом. Название клуба в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Бар клуба</div><span class="slide-no">Сторис 3 · 17 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Чай китайский</span>
+          <span class="fact-pill">Чай фруктовый</span>
+          <span class="fact-pill">Домашние лимонады</span>
+          <span class="fact-pill">Пицца</span>
+          <span class="fact-pill">Фритюр</span>
+          <span class="fact-pill">Закуски</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлое золото #F7E7BB, заголовок тёмным деревом #28180D, позиции бара столбиком орехом #392111, разделители тёплым золотом #D27C1F. Без алкогольных напитков и кальяна в кадре. Название клуба в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Час игры в подарок</div><span class="slide-no">Сторис 4 · 24 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Для новых гостей</span>
+          <span class="fact-pill">51 ПК</span>
+          <span class="fact-pill">6 PlayStation</span>
+          <span class="fact-pill">Круглосуточно</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон тёплое золото #D27C1F, «1 час» крупно тёмным деревом #28180D, строка «в подарок для новых гостей» белым, факты внизу на плашках серого #5D5958. Название клуба в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — клуб, PlayStation, бар, час в подарок <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>ПК-клуб «Вече»: 51 компьютер, 6 PlayStation, круглосуточно</b>03.11 · оснащение, ремонт, адрес</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>51 ПК · 6 PlayStation</b>03.11 · клуб в цифрах</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>PlayStation в Сергиевом Посаде: 6 приставок в «Вече»</b>10.11 · приставки, круглосуточно, бар</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>PlayStation в «Вече»</b>10.11 · 6 приставок</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Бар клуба: китайский чай, домашние лимонады, пицца и закуски</b>17.11 · меню бара</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Бар клуба</b>17.11 · позиции бара</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Час игры в подарок новым гостям</b>24.11 · предложение для первого визита</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Час игры в подарок</b>24.11 · для новых гостей</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const M=['окт 24','ноя 24','дек 24','янв 25','фев 25','мар 25','апр 25','май 25','июн 25','июл 25','авг 25','сен 25','окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={a:[129,134,136,188,160,195,172,155,170,206,126,153,155,250,227,173,129,171,167,118,121,125,132,125],
+b:[46,64,25,59,52,48,43,32,65,61,56,55,78,51,55,81,55,66,57,83,48,97,88,93]};
+const fmt=n=>n.toLocaleString('ru-RU');
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=200,L=40,R=10,T=10,B=24,mn=0,mx=box.dataset.chart==='a'?300:100;
+  const x=i=>L+i*(W-L-R)/(d.length-1),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${fmt(v)}</text>`}
+  [0,3,9,15,21].forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  const pts=d.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area=`M${x(0)},${y(0)} L${pts.replace(/ /g,' L')} L${x(d.length-1)},${y(0)} Z`;
+  const last=d.length-1;
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}: помесячно с октября 2024 по сентябрь 2026">${g}<path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/><circle class="dot" cx="${x(last)}" cy="${y(d[last])}" r="4"/><line class="xh" y1="${T}" y2="${H-B}" x1="-10" x2="-10" visibility="hidden"/><circle class="dot hv" r="4" cx="-10" cy="-10" visibility="hidden"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip" hidden></div>`);
+  const svg=box.querySelector('svg'),tip=box.querySelector('.tip'),xh=svg.querySelector('.xh'),hv=svg.querySelector('.hv');
+  const move=e=>{const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*W/r.width;const i=Math.max(0,Math.min(last,Math.round((sx-L)/((W-L-R)/last))));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('visibility','visible');hv.setAttribute('cx',x(i));hv.setAttribute('cy',y(d[i]));hv.setAttribute('visibility','visible');
+    tip.hidden=false;tip.textContent=M[i]+' · '+fmt(d[i]);const br=box.getBoundingClientRect();let lx=r.left-br.left+x(i)*r.width/W+10;if(lx>br.width-110)lx-=130;tip.style.left=lx+'px';tip.style.top=(r.top-br.top+y(d[i])*r.height/H-34)+'px'};
+  const out=()=>{tip.hidden=true;xh.setAttribute('visibility','hidden');hv.setAttribute('visibility','hidden')};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerleave',out);
+});
+const T={
+ 't-c':[['компьютерный клуб','смешанное',130],['пк клуб','коммерческое',106],['пк клуб сергиев посад','коммерческое, гео',50],['компьютерный клуб сергиев посад','коммерческое, гео',47],['ночные пк клубы','коммерческое',8],['пк клуб цены','коммерческое',6],['ночные пк клубы сергиев посад','коммерческое, гео',5],['плейстейшен клуб','коммерческое',3],['компьютерный клуб с плейстейшен','коммерческое',2],['игровой клуб','смешанное',20],['киберспорт','информационное',130]],
+ 't-n':[['кальянная сергиев посад','коммерческое, гео',157],['где отметить день рождения в сергиевом посаде','коммерческое, гео',66],['антикафе','смешанное',68],['антикафе сергиев посад','коммерческое, гео',24],['турниры по кс','информационное',17],['киберспортивные турниры','информационное',12],['колизеум сергиев посад','по названию конкурента',34]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['site','Органика'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
