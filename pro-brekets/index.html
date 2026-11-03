@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Pro Brekets» Нижний Новгород</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.doors{grid-template-columns:1fr}}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .story-top{flex-direction:column;gap:4px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.r{white-space:nowrap}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Pro Brekets · Нижний Новгород</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>PRO BREKETS PRO BREKETS</span><span>PRO BREKETS PRO BREKETS</span><span>PRO BREKETS PRO BREKETS</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>Pro Brekets на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Аналитика поиска в Нижнем Новгороде, стратегия продвижения и контент-план для карточки стоматологической клиники. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Стоматологическая клиника Pro Brekets</b></div>
+        <div><span>Город</span><b>Нижний Новгород</b></div>
+        <div><span>Направления</span><b>Ортодонтия · Терапия · Ортопедия · Хирургия</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 03.11.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">«брекеты»</span><span class="t-n y">9</span><span class="t-s">место из 23 карточек на Яндекс Картах</span></div>
+        <div class="tile"><span class="t-k">«ортодонт», «исправление прикуса»</span><span class="t-n c">нет</span><span class="t-s">карточки нет в выдаче</span></div>
+        <div class="tile"><span class="t-k">Последняя новость на карточке</span><span class="t-n c">15 мес.</span><span class="t-s">опубликована 25 июля 2025</span></div>
+        <div class="tile"><span class="t-k">Рейтинг на Яндекс Картах</span><span class="t-n g">5,0</span><span class="t-s">151 оценка · 102 отзыва</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">03.11.2026</span><span class="st done">готово</span></div><h3>Аналитика поиска и рынка</h3><p>Позиции на Яндекс Картах по 7 запросам, сайт в органике Яндекса, соседи по выдаче, рынок, причины, по которым карточку не видно, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">03.11.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1</h3><p>4 новости с обложками и 4 сторис под запросы, по которым клиники нет в выдаче: стоматология у метро Ленинская, ортодонт, имплантация, лечение зубов и дёсен.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="tl-date">до 09.11</span><span class="st wait">согласование</span></div><h3>Согласование тем этапа 1</h3><p>Темы, тезисы и обложки утверждаются до первой публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">10.11 · 17.11 · 24.11 · 01.12</span><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>По одной новости и одной сторис в неделю на карточке клиники в Яндекс Картах и 2ГИС.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">ноябрь</span><span class="st next">следующий шаг</span></div><h3>Прайс и единое название</h3><p>Обновить прайс на Яндекс Картах и выровнять цены с опубликованными новостями. Привести название к «Pro Brekets» в 2ГИС и ВКонтакте.</p></div>
+        <div class="tl"><div class="tl-top"><span class="tl-date">после этапа 1</span><span class="st next">обсудить</span></div><h3>Тариф Яндекс Бизнеса</h3><p>Выбор тарифа, который сохраняет публикации на карточке, и решение о продвижении в Картах.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Где карточку не видно и что с этим делать</h3>
+          <p>Позиции по 7 запросам на Яндекс Картах, сайт в органике, соседи по выдаче, рынок стоматологии, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>10.11 — Стоматология у метро Ленинская</li>
+            <li>17.11 — Ортодонт для взрослых и детей</li>
+            <li>24.11 — Имплантация зубов в одной клинике</li>
+            <li>01.12 — Лечение зубов и дёсен</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Нижний Новгород · стоматологическая клиника · замер 03.11.2026</span>
+  <h1>Где Pro Brekets не видно в поиске и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 7 запросам, сайт в органической выдаче Яндекса по 7 запросам, сравнение с карточками, которые стоят выше, и данные рынка стоматологии.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«брекеты» — 9 место из 23, «стоматология метро Ленинская» — 9 из 15</b>Карточка в выдаче только по запросам, где помогает название клиники и адрес у метро. Рейтинг 5,0 при 151 оценке.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«стоматология», «ортодонт», «исправление прикуса», «элайнеры», «имплантация зубов» — карточки нет</b>Всё это услуги клиники, о брекетах и элайнерах на карточке выходило несколько новостей, но в первых местах по этим запросам Pro Brekets не показывается.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка не обновляется с лета 2025 года</b>Из 14 новостей последняя вышла 25 июля 2025. Прайс помечен «Давно не обновлялось», цены в нём расходятся с ценами в опубликованных новостях.</p></div>
+    <div class="v"><span class="pill warn">утечка</span><p><b>На карточке показывается реклама других клиник</b>В блоке «Похожие места» крутятся рекламные карточки Айсберг, Улыбка и Дамиан. Эти же клиники стоят выше Pro Brekets по запросу «стоматология метро Ленинская».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Клиник становится больше</b>Число стоматологических клиник в России за год выросло на 14%, оборот — на 24% (I квартал 2026). В Нижнем Новгороде 2ГИС показывает 537 частных стоматологий.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">151 оценка · 102 отзыва</div></div>
+    <div class="kpi"><div class="k">Рейтинг в 2ГИС</div><div class="n">4,9</div><div class="s">76 оценок · 70 отзывов</div></div>
+    <div class="kpi"><div class="k">Новости на карточке</div><div class="n">14</div><div class="s">последняя — 25.07.2025</div></div>
+    <div class="kpi"><div class="k">Сторис на карточке</div><div class="n">7</div><div class="s">последняя — 02.11.2026</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Нижнему Новгороду, без геолокации пользователя. Порядок первых мест немного меняется между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Позиция</th><th>Первые места</th></tr></thead>
+    <tbody>
+      <tr class="me"><td>брекеты</td><td class="r num">9 из 23</td><td>Олл Дент (5,0 · 1491), Тонус (4,7 · 218), Strong Dent (5,0 · 394), Персона (5,0 · 102), Денталия (5,0 · 195)</td></tr>
+      <tr class="me"><td>стоматология метро Ленинская</td><td class="r num">9 из 15</td><td>Улыбка (4,9 · 92), Стоматология Дамиан (4,9 · 59), Лана-Дент (5,0 · 174), Айсберг (5,0 · 204), ВитаДент (4,2 · 16)</td></tr>
+      <tr><td>стоматология</td><td class="r">нет в 22</td><td>Strong Dent, Персона, Олл Дент, Брекет Клаб (4,9 · 213), Денталия</td></tr>
+      <tr><td>ортодонт</td><td class="r">нет в 18</td><td>Олл Дент, Персона, Strong Dent, Все свои (5,0 · 863), Денталия</td></tr>
+      <tr><td>исправление прикуса</td><td class="r">нет в 16</td><td>Тонус, Персона, Все свои, Олл Дент, Респект Медикал (5,0 · 473)</td></tr>
+      <tr><td>имплантация зубов</td><td class="r">нет в 10</td><td>Strong Dent, Демократ (5,0 · 469), Тонус Премиум (5,0 · 328), Брекет Клаб, Все свои</td></tr>
+      <tr><td>элайнеры</td><td class="r">нет в 5</td><td>Демократ, Олл Дент, Центр Функциональной Стоматологии (4,9 · 55), Персона, Тонус</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">В скобках — рейтинг и число оценок карточки.</p>
+
+  <h3>Карточка против соседей по выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>«Хорошее место 2026»</th><th>Акция в сниппете</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Pro Brekets</b></td><td class="r num">5,0</td><td class="r num">151</td><td>нет</td><td>только по «стоматология метро Ленинская»</td></tr>
+      <tr><td>Олл Дент</td><td class="r num">5,0</td><td class="r num">1491</td><td>нет</td><td>есть</td></tr>
+      <tr><td>Strong Dent</td><td class="r num">5,0</td><td class="r num">394</td><td>есть</td><td>есть</td></tr>
+      <tr><td>Персона</td><td class="r num">5,0</td><td class="r num">102</td><td>есть</td><td>есть</td></tr>
+      <tr><td>Денталия</td><td class="r num">5,0</td><td class="r num">195</td><td>есть</td><td>есть</td></tr>
+      <tr><td>Тонус</td><td class="r num">4,7</td><td class="r num">218</td><td>есть</td><td>есть</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка 15 месяцев не обновлялась</h3></div>
+      <p>На карточке 14 новостей, <b>последняя — 25 июля 2025</b>. Прайс помечен «Давно не обновлялось». Цены в прайсе и в опубликованных новостях не совпадают: консультация ведущего врача-ортодонта — 3 000 ₽ в новости от 29 мая 2025 и 3 500 ₽ в прайсе; полный курс элайнеров Star Smile IQ — 350 000 ₽ в новости от 6 июня 2025 и 390 000 ₽ в прайсе.</p>
+      <p class="next">Обновить прайс и снять расхождения с новостями. Публиковать одну новость и одну сторис в неделю — темы этапа 1 готовы в контент-плане.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Верх выдачи занят карточками с акцией в сниппете и наградой «Хорошее место 2026»</h3></div>
+      <p>По запросу «стоматология» у всех пяти первых карточек в сниппете стоит акция, у четырёх из пяти — награда «Хорошее место 2026». Персона со 102 оценками стоит второй, выше клиник с тысячей оценок: <b>места определяет не число отзывов</b>. У Pro Brekets по общим запросам акции в сниппете нет, награды 2026 года в сниппете нет.</p>
+      <p class="next">Держать на карточке действующую акцию (сейчас — профессиональная гигиена до конца ноября) и поток свежих отзывов. Вопрос о продвижении в Картах — на этапе 5 стратегии.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>На карточке показывается реклама других клиник</h3></div>
+      <p>Вверху карточки выходит рекламный баннер другой стоматологии, в блоке «Похожие места» — рекламные карточки Айсберг, Улыбка и Дамиан. Это те же клиники, что стоят выше Pro Brekets по «стоматология метро Ленинская», хотя Pro Brekets в 73 метрах от метро. Человек, который уже открыл карточку, видит предложение уйти к соседям.</p>
+      <p>По справке Яндекс Бизнеса (актуальна на 5 октября 2026) у карточек три тарифа: <b>Базовый</b> бесплатный, <b>Расширенный</b> добавляет публикации и истории, фото к товарам и услугам, <b>Продвинутый</b> включает ещё и рекламу в Картах. Стоимость зависит от вида деятельности, местоположения и срока: 90, 180 или 360 дней.</p>
+      <p class="next">Обсудить с Pro Brekets тариф после этапа 1, когда будет видна динамика по публикациям.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Название пишется по-разному, 2ГИС отстаёт</h3></div>
+      <p>«Pro Brekets» на Яндекс Картах, «ProBrekets» в 2ГИС, «Probrekets» во ВКонтакте. В 2ГИС 76 оценок против 151 на Яндекс Картах. В 2ГИС уже идёт реклама карточки с общим текстом «Все виды стоматологических услуг!».</p>
+      <p class="next">Привести название на всех площадках к «Pro Brekets». В рекламе 2ГИС заменить общий текст на конкретное предложение клиники.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт в органической выдаче</h2><p>Яндекс, регион Нижний Новгород, первые 3 страницы выдачи, рекламу не считали.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">pro-brekets.clients.site</th><th>Кто в первых строках</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология нижний новгород</td><td class="r">нет в топ-30</td><td>Яндекс, 2ГИС, ПроДокторов, DocDoc, НаПоправку, Zoon</td></tr>
+      <tr><td>брекеты нижний новгород</td><td class="r">нет в топ-30</td><td>DocDoc, ilab-ortodontia.ru, ПроДокторов, 2ГИС, НаПоправку, dentalia52.ru</td></tr>
+      <tr><td>ортодонт нижний новгород</td><td class="r">нет в топ-30</td><td>НаПоправку, Яндекс, ПроДокторов, DocDoc, 2ГИС, Красота и медицина</td></tr>
+      <tr><td>исправление прикуса нижний новгород</td><td class="r">нет в топ-30</td><td>Яндекс, academy-vip.com, vse-svoi.ru, respectmedical.ru, dentalia52.ru</td></tr>
+      <tr><td>элайнеры нижний новгород</td><td class="r">нет в топ-30</td><td>Яндекс, diamond-stom.ru, leto-dental.ru, dentalia52.ru, dentalroom.me</td></tr>
+      <tr><td>имплантация зубов нижний новгород</td><td class="r">нет в топ-30</td><td>Яндекс, DocDoc, ciscifra.ru, dentalroom.me, dentalia52.ru, 2ГИС</td></tr>
+      <tr><td>pro brekets</td><td class="r num">5</td><td>Яндекс, ПроДокторов, 2ГИС, ВКонтакте, затем сайт клиники</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что на сайте мешает</h3><ul>
+      <li><b>Это сайт-визитка из конструктора Яндекс Бизнеса.</b> Одна страница: блоки «О нас», каталог, отзывы, фото, контакты. Каталог повторяет прайс карточки.</li>
+      <li><b>Title — «Pro Brekets»</b>, без услуги и города. Meta description нет.</li>
+      <li>У 50 из 60 изображений нет alt, разметки schema.org нет.</li>
+    </ul></div>
+    <div class="note"><h3>Кто забирает органику</h3><ul>
+      <li>По всем коммерческим запросам первые строки занимают Яндекс и медицинские агрегаторы: ПроДокторов, DocDoc, НаПоправку, Zoon, 2ГИС.</li>
+      <li>Ниже — сайты клиник с отдельными страницами под услугу: брекеты, элайнеры, имплантация.</li>
+      <li>По названию клинику находят: «pro brekets» — сайт на 5 месте после агрегаторов и группы ВКонтакте.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Стоматологических клиник в России</div><div class="n">27 153</div><div class="s">I кв. 2026, +14% за год</div></div>
+    <div class="kpi"><div class="k">Оборот стоматологических услуг</div><div class="n">151 млрд ₽</div><div class="s">I кв. 2026, +24% за год</div></div>
+    <div class="kpi"><div class="k">Средний чек в городах-миллионниках</div><div class="n">9 508 ₽</div><div class="s">I кв. 2026, +19,5%</div></div>
+    <div class="kpi"><div class="k">Частных стоматологий в Нижнем Новгороде</div><div class="n">537</div><div class="s">выдача 2ГИС, 03.11.2026</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Клиник за год стало на 14% больше, оборот вырос на 24%, средний чек — на 19,5%. Конкуренция за пациента растёт быстрее, чем сам рынок: выигрывают карточки, которые видны в выдаче, показывают цену и акцию и регулярно обновляются.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первые два этапа дают основной эффект на Картах.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Обновить прайс.</b><span>Снять пометку «Давно не обновлялось», выровнять цены с опубликованными новостями: консультация ортодонта, курсы элайнеров.</span></li>
+        <li><b>Описание клиники.</b><span>Ортодонтия для взрослых и детей, элайнеры, имплантация, терапия и пародонтология, 3 минуты пешком от метро Ленинская, ежедневно 09:00–20:00, лицензия № ЛО-52-01-007118.</span></li>
+        <li><b>Одно название на всех площадках.</b><span>«Pro Brekets» на Яндекс Картах, в 2ГИС и ВКонтакте.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Новости, сторис и отзывы</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Одна новость и одна сторис в неделю.</b><span>Темы этапа 1 — стоматология у метро Ленинская, ортодонт для взрослых и детей, имплантация, лечение зубов и дёсен. Каждая новость привязана к Нижнему Новгороду и к запросу, по которому клиники нет в выдаче.</span></li>
+        <li><b>Акция на карточке без перерывов.</b><span>Сейчас идёт акция на профессиональную гигиену до конца ноября. Следующую оформить заранее: акцию Яндекс проверяет до 48 часов.</span></li>
+        <li><b>Просить отзыв после приёма.</b><span>Ссылка или QR на карточку в Яндекс Картах и 2ГИС. Только реальные отзывы и без вознаграждения: подозрительные отзывы площадки снимают.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. 2ГИС и медицинские агрегаторы</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС — тот же прайс и публикации.</b><span>Одинаковые название, цены и описание. В рекламе 2ГИС — конкретное предложение вместо общего текста.</span></li>
+        <li><b>ПроДокторов, DocDoc, НаПоправку, Zoon.</b><span>Они стоят в первых строках органики по всем запросам. Профиль клиники и врачей с теми же данными — самый быстрый путь в органическую выдачу.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Отдельный сайт со страницами услуг.</b><span>Сайт-визитка из конструктора не выйдет в топ. Нужны страницы: ортодонтия, детская ортодонтия, элайнеры, имплантация, терапия и пародонтология, врачи.</span></li>
+        <li><b>Техническая база.</b><span>Title и H1 с услугой и городом, описания страниц, alt у изображений, разметка клиники, лицензия и врачи на сайте, Яндекс Вебмастер и цели в Метрике.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Расширенный сохраняет публикации и истории на карточке. Продвинутый добавляет рекламу в Картах — так выглядят карточки первой пятёрки по общим запросам. Обсудить с Pro Brekets по итогам первого месяца публикаций.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Нижнему Новгороду 03.11.2026 без геолокации пользователя; рейтинги, число оценок, награды и акции — из выдачи; данные карточки Pro Brekets — со страницы карточки.</li>
+    <li>Органика: Яндекс, регион Нижний Новгород, первые 3 страницы, рекламные блоки исключены.</li>
+    <li>Рынок: данные Сбер2В Аналитики за январь–март 2026 к тому же периоду 2025 года; число частных стоматологий — выдача 2ГИС по рубрике.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/pro_brekets/157438952229/" target="_blank" rel="noopener">Карточка Pro Brekets на Яндекс Картах</a>
+    <a href="https://2gis.ru/n_novgorod/firm/70000001056931728" target="_blank" rel="noopener">Карточка ProBrekets в 2ГИС</a>
+    <a href="https://pro-brekets.clients.site/" target="_blank" rel="noopener">pro-brekets.clients.site</a>
+    <a href="https://vk.ru/probrekets" target="_blank" rel="noopener">Группа клиники ВКонтакте</a>
+    <a href="https://finance.mail.ru/article/sber-chislo-stomatologicheskih-klinik-v-rf-vyiroslo-v-i-kvartale-na-14-69208498/" target="_blank" rel="noopener">Сбер: число стоматологических клиник выросло на 14%</a>
+    <a href="https://workspace.ru/blog/tarify-yandeks-biznesa-v-2026-godu-chto-besplatno-i-za-chto-platit/" target="_blank" rel="noopener">Workspace — тарифы Яндекс Бизнеса в 2026 году</a>
+    <a href="https://profile.ru/?p=1917785" target="_blank" rel="noopener">Профиль — Яндекс восстановил сервисы после атак на дата-центры</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Стоматологическая клиника · Нижний Новгород</span>
+    <h1>Pro Brekets — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация раз в неделю с 10 ноября 2026 года — карточка компании Pro Brekets на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Компания</div><div class="v">Pro Brekets <small>стоматологическая клиника, ООО «Пробрекеты»</small></div></div>
+      <div class="fact"><div class="k">Направления</div><div class="v">Ортодонтия · Терапия <small>ортопедия, хирургия и имплантация</small></div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Мичурина, 1к1, 2 этаж <small>3 минуты пешком от метро Ленинская</small></div></div>
+      <div class="fact"><div class="k">Время работы</div><div class="v">Ежедневно 09:00–20:00</div></div>
+      <div class="fact"><div class="k">Лицензия</div><div class="v">№ ЛО-52-01-007118 <small>выдана Министерством здравоохранения Нижегородской области</small></div></div>
+      <div class="fact"><div class="k">Главный врач</div><div class="v">Гахович Валерия Дмитриевна <small>врач стоматолог-ортодонт</small></div></div>
+      <div class="fact"><div class="k">Удобства</div><div class="v">Детский кабинет · рассрочка <small>оплата картой и по СБП, подарочный сертификат</small></div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">pro-brekets.clients.site</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль Pro Brekets</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: золото логотипа и плашек, тёмное золото заголовков и телефонов, кремовый и белый фон, тёплый серый основного текста.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#D7B374;color:#2E2416;border-color:#D7B374">
+        <div class="role">Основной</div><div class="name">Золото логотипа</div><div class="hex">#D7B374</div>
+      </div>
+      <div class="swatch" style="background:#B48941;color:#2E2416;border-color:#B48941">
+        <div class="role">Акцентный</div><div class="name">Тёмное золото</div><div class="hex">#B48941</div>
+      </div>
+      <div class="swatch" style="background:#FAF6F1;color:#2E2416;border-color:#FAF6F1">
+        <div class="role">Фоновый</div><div class="name">Кремовый</div><div class="hex">#FAF6F1</div>
+      </div>
+      <div class="swatch" style="background:#FFFFFF;color:#2E2416;border-color:#FFFFFF">
+        <div class="role">Второстепенный</div><div class="name">Белый</div><div class="hex">#FFFFFF</div>
+      </div>
+      <div class="swatch" style="background:#827A73;color:#FFFFFF;border-color:#827A73">
+        <div class="role">Текстовый</div><div class="name">Тёплый серый</div><div class="hex">#827A73</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Этап начинается с клиники целиком — направления, адрес у метро, график. Дальше по одному направлению в неделю: ортодонтия, имплантация, терапия. Каждая тема закрывает запрос, по которому карточки сейчас нет в выдаче. Одна новость и одна сторис в неделю, с 10 ноября.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">10.11</div><p>Стоматология у метро Ленинская: четыре направления клиники, ежедневный график, детский кабинет, рассрочка, лицензия.</p></div>
+      <div class="cycle-row"><div class="tag">17.11</div><p>Ортодонт для взрослых и детей: брекет-системы, элайнеры, пластиночные и расширяющие аппараты, план лечения для каждого пациента.</p></div>
+      <div class="cycle-row"><div class="tag">24.11</div><p>Имплантация в одной клинике: хирург-имплантолог и стоматолог-ортопед, костная пластика, коронки на имплантах Straumann и OSSTEM.</p></div>
+      <div class="cycle-row"><div class="tag">01.12</div><p>Лечение зубов и дёсен: терапевт-эндодонтист и пародонтолог, лечение кариеса, каналов, реставрация зубов.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойно и бережно, с заботой о пациенте. Каждая новость начинается со вступления от лица клиники, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, «Нижний Новгород» и главный ключ — в первом абзаце. В тексте нет телефона и e-mail, слов «лучший», «№1», «самый» и сравнений с другими клиниками. Медицинская сфера: не писать, что лечение «безопасно», «безболезненно» или «эффективно». Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1 · 10 ноября</span><h3>Стоматология у метро Ленинская в Нижнем Новгороде: ортодонтия, терапия, ортопедия и хирургия в клинике Pro Brekets</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — стоматологическая клиника Pro Brekets на улице Мичурина, в трёх минутах пешком от метро Ленинская. Принимаем каждый день с 9:00 до 20:00.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Стоматология Pro Brekets — это полный спектр стоматологических услуг в одном месте.<span class="src">ВКонтакте</span></li>
+        <li>Ортодонтия: брекеты, элайнеры. Терапия: профессиональная гигиена и лечение зубов. Ортопедия: протезирование зубов коронками и протезами. Хирургия: удаление и имплантация.<span class="src">ВКонтакте · сторис карточки</span></li>
+        <li>Высококвалифицированные доктора и командный подход к работе.<span class="src">ВКонтакте</span></li>
+        <li>Работаем для вас каждый день без выходных с 9.00 до 20.00.<span class="src">ВКонтакте · Яндекс Карты</span></li>
+        <li>3 минуты пешком от метро Ленинская. Нижний Новгород, ул. Мичурина, 1к1, 2 этаж.<span class="src">сторис карточки · 2ГИС</span></li>
+        <li>Есть детский кабинет. Лечение зубов в рассрочку, оплата картой и по СБП, подарочный сертификат.<span class="src">сайт · Яндекс Карты</span></li>
+        <li>ООО «Пробрекеты», лицензия № ЛО-52-01-007118, выдана Министерством здравоохранения Нижегородской области.<span class="src">ВКонтакте</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Стоматология у метро Ленинская в Нижнем Новгороде — клиника Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Title · </b>Стоматология в Нижнем Новгороде у метро Ленинская | Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Description · </b>Ортодонтия, терапия, ортопедия и хирургия в одной клинике в Ленинском районе Нижнего Новгорода. Ежедневно 09:00–20:00, детский кабинет, лечение в рассрочку.</span></div>
+        <div class="chips">
+          <span class="chip-kw">стоматология нижний новгород</span><span class="chip-kw">стоматология метро ленинская</span>
+          <span class="chip-kw">стоматология ленинский район</span><span class="chip-kw">стоматологическая клиника нижний новгород</span>
+          <span class="chip-kw">частная стоматология нижний новгород</span><span class="chip-kw">стоматология улица мичурина</span>
+          <span class="chip-kw">стоматология без выходных</span><span class="chip-kw">лечение зубов в рассрочку</span>
+          <span class="chip-kw">детский стоматолог нижний новгород</span><span class="chip-kw">стоматология рядом с метро</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на приём — клиника открыта каждый день.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Стоматология у метро Ленинская»</div>
+        <p>Композиция: фасад клиники с вывеской Pro Brekets при дневном свете; тезис на плашке в нижней трети, под ним строка «ежедневно 09:00–20:00», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+        <p>Цвета: плашка — золото логотипа #D7B374, тезис — белый #FFFFFF, строка — кремовый #FAF6F1, тонкая линия под тезисом — тёмное золото #B48941.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2 · 17 ноября</span><h3>Ортодонт в Нижнем Новгороде: исправление прикуса у взрослых и детей в Pro Brekets</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В Pro Brekets прикус исправляют и взрослым, и детям. Главный врач нашей клиники — врач стоматолог-ортодонт.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Гахович Валерия Дмитриевна — главный врач, врач стоматолог-ортодонт. Основная деятельность: исправление прикуса, лечение других зубочелюстных аномалий как во взрослом, так и в детском возрасте.<span class="src">ВКонтакте</span></li>
+        <li>Проводит лечение на брекет-системах, элайнерах (прозрачных каппах), ортодонтических аппаратах.<span class="src">ВКонтакте</span></li>
+        <li>Дети: съемные пластиночные аппараты различного дизайна, несъемные расширяющие аппараты, частичные брекет-системы 2х4.<span class="src">ВКонтакте</span></li>
+        <li>Лечение на лигатурных и безлигатурных брекет-системах.<span class="src">ВКонтакте</span></li>
+        <li>Для каждого пациента — презентация с фотографиями и планом лечения.<span class="src">ВКонтакте</span></li>
+        <li>Есть детский кабинет.<span class="src">сайт</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Ортодонт в Нижнем Новгороде: исправление прикуса у взрослых и детей</span></div>
+        <div class="meta-row"><span><b>Title · </b>Ортодонт в Нижнем Новгороде — брекеты, элайнеры, детская ортодонтия | Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Description · </b>Исправление прикуса у взрослых и детей в Нижнем Новгороде: брекет-системы, элайнеры, пластиночные и расширяющие аппараты. Клиника Pro Brekets у метро Ленинская.</span></div>
+        <div class="chips">
+          <span class="chip-kw">ортодонт нижний новгород</span><span class="chip-kw">исправление прикуса нижний новгород</span>
+          <span class="chip-kw">детский ортодонт нижний новгород</span><span class="chip-kw">брекеты нижний новгород</span>
+          <span class="chip-kw">элайнеры нижний новгород</span><span class="chip-kw">исправление прикуса у взрослых</span>
+          <span class="chip-kw">пластинки для выравнивания зубов детям</span><span class="chip-kw">безлигатурные брекеты</span>
+          <span class="chip-kw">ортодонтия нижний новгород</span><span class="chip-kw">консультация ортодонта</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на консультацию ортодонта для себя или для ребёнка.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Ортодонт для взрослых и детей»</div>
+        <p>Композиция: кабинет клиники, врач-ортодонт держит модель челюсти с брекетами; тезис в верхней трети на светлом фоне, тонкая линия под ним, логотип в верхнем левом углу. Без фото «до/после».</p>
+        <p>Цвета: подложка — кремовый #FAF6F1, тезис — тёмное золото #B48941, линия — золото логотипа #D7B374.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3 · 24 ноября</span><h3>Имплантация зубов в Нижнем Новгороде: хирург-имплантолог и стоматолог-ортопед в одной клинике</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В Pro Brekets имплантацию ведут хирург-имплантолог и стоматолог-ортопед одной клиники — от удаления зуба до коронки на импланте.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Урядников Сергей Александрович — врач стоматолог-ортопед, хирург, имплантолог.<span class="src">ВКонтакте</span></li>
+        <li>Удаление зубов и кист, имплантация зубов, костная пластика (остеопластика), гингивопластика, подготовка под протезирование.<span class="src">ВКонтакте</span></li>
+        <li>Архангельская Екатерина Петровна — врач стоматолог-ортопед, кандидат медицинских наук: протезирование на имплантах, коронки на основе диоксида циркония, цельнокерамические и металлокерамические коронки.<span class="src">ВКонтакте</span></li>
+        <li>Импланты Straumann (Швейцария) и OSSTEM (Южная Корея).<span class="src">новости карточки</span></li>
+        <li>Хирургия: удаление и имплантация. Ортопедия: протезирование зубов коронками и протезами.<span class="src">сторис карточки</span></li>
+        <li>Лечение зубов в рассрочку.<span class="src">Яндекс Карты</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Имплантация зубов в Нижнем Новгороде — клиника Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Title · </b>Имплантация зубов в Нижнем Новгороде: Straumann и OSSTEM | Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Description · </b>Имплантация у метро Ленинская: хирург-имплантолог, костная пластика, коронки на имплантах от стоматолога-ортопеда. Импланты Straumann и OSSTEM, лечение в рассрочку.</span></div>
+        <div class="chips">
+          <span class="chip-kw">имплантация зубов нижний новгород</span><span class="chip-kw">импланты зубов нижний новгород</span>
+          <span class="chip-kw">имплантолог нижний новгород</span><span class="chip-kw">костная пластика зубов</span>
+          <span class="chip-kw">коронка на имплант</span><span class="chip-kw">импланты straumann</span>
+          <span class="chip-kw">импланты osstem</span><span class="chip-kw">удаление зуба нижний новгород</span>
+          <span class="chip-kw">стоматолог-хирург нижний новгород</span><span class="chip-kw">имплантация в рассрочку</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на консультацию хирурга-имплантолога.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Имплантация в одной клинике»</div>
+        <p>Композиция: хирургический кабинет клиники, крупный план рабочего места врача; тезис на плашке в нижней трети, строка «хирург · имплантолог · ортопед», логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — тёмное золото #B48941, тезис — белый #FFFFFF, строка — кремовый #FAF6F1.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4 · 1 декабря</span><h3>Лечение зубов и дёсен в Нижнем Новгороде: терапевт-эндодонтист и пародонтолог в Pro Brekets</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В Pro Brekets лечение зубов и дёсен ведут врачи-терапевты с разными направлениями: эндодонтия, реставрации, пародонтология.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Сорокина Екатерина Андреевна — врач стоматолог-терапевт, эндодонтист: лечение кариеса и его осложнений, эстетические художественные реставрации, отбеливание, диагностика и профилактика заболевания десен.<span class="src">ВКонтакте</span></li>
+        <li>Самсонова Александра Алексеевна — врач стоматолог-терапевт, пародонтолог: эндодонтическое лечение каналов зубов, эстетическая реставрация зубов, диагностика и лечение пародонтологических заболеваний, закрытый кюретаж пародонтальных карманов.<span class="src">ВКонтакте</span></li>
+        <li>Терапия: профессиональная гигиена и лечение зубов.<span class="src">сторис карточки</span></li>
+        <li>Лечение кариеса, лечение каналов, лечение дёсен, лечение периодонтита, лечение кисты зуба, реставрация зубов.<span class="src">Яндекс Карты</span></li>
+        <li>Ежедневно 09:00–20:00, 3 минуты пешком от метро Ленинская.<span class="src">Яндекс Карты · сторис карточки</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Лечение зубов и дёсен в Нижнем Новгороде — клиника Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Title · </b>Лечение кариеса, каналов и дёсен в Нижнем Новгороде | Pro Brekets</span></div>
+        <div class="meta-row"><span><b>Description · </b>Стоматолог-терапевт, эндодонтист и пародонтолог в клинике у метро Ленинская: лечение кариеса и каналов, реставрация зубов, лечение дёсен.</span></div>
+        <div class="chips">
+          <span class="chip-kw">лечение зубов нижний новгород</span><span class="chip-kw">лечение кариеса нижний новгород</span>
+          <span class="chip-kw">лечение каналов зуба</span><span class="chip-kw">пародонтолог нижний новгород</span>
+          <span class="chip-kw">лечение десен нижний новгород</span><span class="chip-kw">стоматолог-терапевт нижний новгород</span>
+          <span class="chip-kw">эндодонтист нижний новгород</span><span class="chip-kw">реставрация зубов</span>
+          <span class="chip-kw">лечение кисты зуба</span><span class="chip-kw">лечение периодонтита</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на приём к стоматологу-терапевту в удобный день.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Лечение зубов и дёсен»</div>
+        <p>Композиция: терапевтический кабинет клиники, кресло и рабочее место врача при дневном свете; тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — золото логотипа #D7B374, тезис — белый #FFFFFF, уголок-акцент — тёмное золото #B48941.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Открыты каждый день</div><span class="slide-no">Сторис 1 · 10 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Ежедневно 09:00–20:00</span>
+          <span class="fact-pill">Детский кабинет</span>
+          <span class="fact-pill">Лечение в рассрочку</span>
+          <span class="fact-pill">Оплата картой и по СБП</span>
+          <span class="fact-pill">Подарочный сертификат</span>
+          <span class="fact-pill">Лицензия № ЛО-52-01-007118</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон кремовый #FAF6F1, заголовок тёмным золотом #B48941 в верхней части, факты столбиком на плашках золота логотипа #D7B374 белым текстом #FFFFFF, номер лицензии мелко тёплым серым #827A73 внизу. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Ортодонт для взрослых и детей</div><span class="slide-no">Сторис 2 · 17 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Брекет-системы</span>
+          <span class="fact-pill">Элайнеры</span>
+          <span class="fact-pill">Лигатурные и безлигатурные брекеты</span>
+          <span class="fact-pill">Пластиночные аппараты для детей</span>
+          <span class="fact-pill">Расширяющие аппараты</span>
+          <span class="fact-pill">План лечения для каждого пациента</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок тёмным золотом #B48941, слева колонка «Взрослым», справа «Детям» — подзаголовки на плашках золота логотипа #D7B374, пункты тёплым серым #827A73. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Имплантация: от удаления до коронки</div><span class="slide-no">Сторис 3 · 24 ноября</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Удаление зубов и кист</span>
+          <span class="fact-pill">Костная пластика</span>
+          <span class="fact-pill">Имплантация</span>
+          <span class="fact-pill">Коронка на импланте</span>
+          <span class="fact-pill">Straumann · OSSTEM</span>
+          <span class="fact-pill">Рассрочка</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон кремовый #FAF6F1, четыре этапа вертикальной лентой, номера в кругах тёмного золота #B48941 белыми цифрами #FFFFFF, названия этапов тёплым серым #827A73, строка «Straumann · OSSTEM» на плашке золота логотипа #D7B374. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Лечение зубов и дёсен</div><span class="slide-no">Сторис 4 · 1 декабря</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Кариес</span>
+          <span class="fact-pill">Каналы</span>
+          <span class="fact-pill">Реставрация зубов</span>
+          <span class="fact-pill">Пародонтология</span>
+          <span class="fact-pill">Лечение кисты зуба</span>
+          <span class="fact-pill">Ежедневно 09:00–20:00</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон золото логотипа #D7B374, заголовок белым #FFFFFF, направления на белых плашках #FFFFFF текстом тёмного золота #B48941, график внизу кремовым #FAF6F1. Логотип в верхнем левом углу.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — клиника у метро Ленинская, ортодонтия, имплантация, терапия <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматология у метро Ленинская: четыре направления клиники</b>10.11 · ежедневно 09:00–20:00, детский кабинет, рассрочка, лицензия</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Открыты каждый день</b>10.11 · график, удобства, лицензия</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Ортодонт для взрослых и детей</b>17.11 · брекеты, элайнеры, аппараты для детей, план лечения</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Ортодонт для взрослых и детей</b>17.11 · системы и аппараты</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Имплантация: хирург-имплантолог и ортопед в одной клинике</b>24.11 · костная пластика, Straumann и OSSTEM, коронки на имплантах</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Имплантация: от удаления до коронки</b>24.11 · этапы лечения</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Лечение зубов и дёсен: эндодонтист и пародонтолог</b>01.12 · кариес, каналы, реставрация, дёсны</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Лечение зубов и дёсен</b>01.12 · направления терапии</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['site','Сайт'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
