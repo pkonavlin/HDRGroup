@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Шерсти.net»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; three views (Проект / Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top,main .hero,main .p-sec{scroll-margin-top:128px}
+.p-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--gold-line)}
+.wm{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;pointer-events:none;user-select:none}
+.wm span{font:800 clamp(64px,13vw,190px)/0.92 var(--f-display);color:var(--gold);opacity:.045;white-space:nowrap;letter-spacing:-.02em}
+.p-hero .wrap{position:relative;padding-block:64px 52px}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
+.p-hero h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin-top:14px;max-width:16ch}
+.p-hero h1 em{font-style:normal;color:var(--gold)}
+.p-hero p{color:var(--ink-2);max-width:60ch;margin:18px 0 0;font-size:17px}
+.p-facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px}
+.p-facts div{display:grid;gap:2px;min-width:0}
+.p-facts span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.p-facts b{font-weight:600;font-size:15px}
+.p-sec{padding-block:48px;border-bottom:1px solid var(--line)}
+.p-sec:last-child{border-bottom:0}
+.p-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.p-h h2{font-size:clamp(20px,2.6vw,26px)}
+.p-h span{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden}
+.tile{background:var(--panel);padding:20px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile .t-k{font-size:13px;color:var(--ink-3)}
+.tile .t-n{font:700 30px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .t-n.c{color:var(--crit)} .tile .t-n.g{color:var(--good)} .tile .t-n.y{color:var(--gold)}
+.tile .t-s{font-size:13.5px;color:var(--ink-2)}
+.timeline{display:grid;border-left:1px solid var(--gold-line);margin-left:7px}
+.tl{position:relative;padding:0 0 24px 26px;display:grid;gap:4px}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--ink-3)}
+.tl.done::before{background:var(--gold);border-color:var(--gold)}
+.tl.wait::before{border-color:var(--warn)}
+.tl-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tl-date{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.tl h3{font-size:16px;font-weight:700}
+.tl p{margin:0;color:var(--ink-2);max-width:68ch}
+.st{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.st.done{color:var(--good);background:var(--good-soft)} .st.wait{color:var(--warn);background:var(--warn-soft)} .st.next{color:var(--ink-2);background:var(--line)}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.door{background:var(--panel);border:1px solid var(--gold-line);border-radius:14px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.door .kicker{font-size:11px}
+.door h3{font:700 21px/1.2 var(--f-display)}
+.door p{margin:0;color:var(--ink-2)}
+.door ul{margin:0;padding-left:18px;color:var(--ink-2);display:grid;gap:4px;font-size:15px}
+.door button{justify-self:start;margin-top:6px;font:600 14px var(--f-body);color:#16263E;background:var(--gold);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.door button:hover{background:var(--gold-2)}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:78px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .ev{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .season{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.va .season div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;min-width:0}
+.va .season b{font:700 15px var(--f-display);color:var(--gold)}
+.va .season span{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.va .season p{margin:0;color:var(--ink-2);font-size:14.5px}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Шерсти.net · Челябинск</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-project" data-go="project">Проект</button>
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view" id="v-project" data-view="project">
+  <div class="p-hero">
+    <div class="wm" aria-hidden="true"><span>ШЕРСТИ.NET ШЕРСТИ.NET</span><span>ШЕРСТИ.NET ШЕРСТИ.NET</span><span>ШЕРСТИ.NET ШЕРСТИ.NET</span></div>
+    <div class="wrap">
+      <span class="kicker">HDR Group · проект продвижения</span>
+      <h1>«Шерсти.net» на <em>Яндекс Картах</em> и 2ГИС</h1>
+      <p>Позиции карточки в выдаче Челябинска, соседи по выдаче, состояние сайта, стратегия продвижения и контент-план для карточки студии груминга. Все материалы проекта собраны здесь и обновляются по ходу работы.</p>
+      <div class="p-facts">
+        <div><span>Компания</span><b>Студия груминга «Шерсти.net»</b></div>
+        <div><span>Город</span><b>Челябинск, Северо-Запад</b></div>
+        <div><span>Направления</span><b>Груминг собак · Груминг кошек · Экспресс-линька · Гигиена</b></div>
+        <div><span>Площадки</span><b>Яндекс Карты · 2ГИС</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="p-sec" id="p-now">
+      <div class="p-h"><h2>Ситуация на сегодня</h2><span>замер 03.11.2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="t-k">Рейтинг на Яндекс Картах</span><span class="t-n y">4,8</span><span class="t-s">198 оценок, 108 отзывов, «Хорошее место 2026»</span></div>
+        <div class="tile"><span class="t-k">Позиции по 9 целевым запросам</span><span class="t-n c">0 из 9</span><span class="t-s">карточки нет в первой пятёрке ни по одному</span></div>
+        <div class="tile"><span class="t-k">Рейтинг в 2ГИС</span><span class="t-n g">5,0</span><span class="t-s">373 оценки, 295 отзывов</span></div>
+        <div class="tile"><span class="t-k">Прайс на Яндекс Картах</span><span class="t-n c">устарел</span><span class="t-s">пометка «Давно не обновлялось»</span></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-road">
+      <div class="p-h"><h2>Ход проекта</h2></div>
+      <div class="timeline">
+        <div class="tl done"><div class="tl-top"><span class="tl-date">03.11.2026</span><span class="st done">готово</span></div><h3>Аналитика выдачи и рынка</h3><p>Позиции карточки по 9 запросам на Яндекс Картах, соседи по выдаче, состояние сайта, сезонность спроса, стратегия по этапам.</p></div>
+        <div class="tl done"><div class="tl-top"><span class="tl-date">03.11.2026</span><span class="st done">готово</span></div><h3>Контент-план, этап 1 — по итогам аналитики</h3><p>4 новости с обложками и 4 сторис под запросы, по которым карточки сейчас нет в выдаче: экспресс-линька, груминг кошек, онлайн-наблюдение за стрижкой, гигиенический уход.</p></div>
+        <div class="tl wait"><div class="tl-top"><span class="st wait">на согласовании</span></div><h3>Согласование тем с руководителем студии</h3><p>Темы, тексты и обложки этапа 1 проходят согласование до публикации.</p></div>
+        <div class="tl"><div class="tl-top"><span class="st next">следующий шаг</span></div><h3>Прайс и акция на карточке</h3><p>Обновляем прайс на Яндекс Картах и выносим действующие скидки отдельным блоком акции, чтобы цена и предложение появились в выдаче.</p></div>
+        <div class="tl"><div class="tl-top"><span class="st next">публикации</span></div><h3>Новости и сторис этапа 1</h3><p>Экспресс-линька, груминг кошек, онлайн-наблюдение EZVIZ, гигиенический уход — новость и парная сторис по каждой теме.</p></div>
+      </div>
+    </div>
+
+    <div class="p-sec" id="p-docs">
+      <div class="p-h"><h2>Материалы проекта</h2></div>
+      <div class="doors">
+        <div class="door">
+          <span class="kicker">Аналитика</span>
+          <h3>Почему сильную карточку не видно в общей выдаче</h3>
+          <p>Позиции по 9 запросам, сравнение с соседями, сайт, сезонность и рынок, стратегия в пять этапов.</p>
+          <button type="button" data-go="analytics">Открыть аналитику</button>
+        </div>
+        <div class="door">
+          <span class="kicker">Контент-план · этап 1</span>
+          <h3>Новости и сторис для карточки</h3>
+          <ul>
+            <li>Экспресс-линька собак и кошек</li>
+            <li>Груминг кошек</li>
+            <li>Онлайн-наблюдение за стрижкой</li>
+            <li>Гигиенический уход и когти</li>
+          </ul>
+          <button type="button" data-go="content">Открыть контент-план</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top">
+  <span class="eyebrow">Челябинск · студия груминга · замер 03.11.2026</span>
+  <h1>Почему «Шерсти.net» не видно в общей выдаче и что с этим делать</h1>
+  <p>Позиции карточки на Яндекс Картах по 9 целевым запросам, сравнение с карточками, которые стоят выше, состояние сайта, сезонность спроса и рынок.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">сильная база</span><p><b>Одна из самых «наполненных» карточек в нише</b>4,8 на Яндекс Картах при 198 оценках и 108 отзывах, награда «Хорошее место 2026». В 2ГИС — 5,0 и 373 оценки. По числу оценок карточка обгоняет почти всех, кто стоит выше неё.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из 9 запросов карточки нет в первой пятёрке</b>«груминг», «груминг собак», «стрижка собак», «стрижка кошек», «груминг кошек», «зоосалон», «экспресс линька», «стрижка когтей собаке», «мытье собак». Выше стоят карточки с 5–101 оценкой.</p></div>
+    <div class="v"><span class="pill warn">причина</span><p><b>Выдачу выигрывают цена, акция и реклама в сниппете</b>У карточек из топа в выдаче видна цена услуги или плашка акции, «Пёс Пижон» покупает рекламу. У «Шерсти.net» прайс на Яндекс Картах помечен «Давно не обновлялось», плашки акции в выдаче нет.</p></div>
+    <div class="v"><span class="pill warn">соседство</span><p><b>Ближайший конкурент — через дом</b>Lapki Groom (Университетская Набережная, 56) входит в топ по 4 запросам из 9: «груминг», «стрижка кошек», «экспресс линька», «стрижка когтей собаке». В сниппете — цена и скидка 10% новым гостям.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Рынок растёт двузначными темпами</b>Платные ветеринарные услуги вместе с грумингом и передержкой: около 60 млрд ₽ в 2025 году (+19,1%), в I квартале 2026 года +24,4% к прошлому году.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,8</div><div class="s">198 оценок</div></div>
+    <div class="kpi"><div class="k">Отзывов на Картах</div><div class="n">108</div><div class="s">85 фото на карточке</div></div>
+    <div class="kpi"><div class="k">Запросов с карточкой в топ-5</div><div class="n">0 / 9</div><div class="s">поиск по Челябинску</div></div>
+    <div class="kpi"><div class="k">2ГИС</div><div class="n">5,0</div><div class="s">373 оценки, 295 отзывов</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Челябинску без геолокации пользователя, первая страница выдачи. Порядок первых мест немного плавает между загрузками, общая картина стабильна.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Шерсти.net</th><th>Кто в первой пятёрке</th></tr></thead>
+    <tbody>
+      <tr><td>груминг</td><td class="r">нет в топ-5</td><td>Пёс Пижон (реклама), Lapki Groom 5,0 · 179, Emily 4,5 · 57, Grooming house 5,0 · 101, Easy Groom 4,9 · 57</td></tr>
+      <tr><td>груминг собак</td><td class="r">нет в топ-5</td><td>Лапки в порядке 4,3 · 5 (акция), Пёс Пижон (реклама), Grooming house, LadyMur 5,0 · 81, Emily</td></tr>
+      <tr><td>стрижка собак</td><td class="r">нет в топ-5</td><td>LadyMur (Свердловский пр.), Grooming house, Emily, LadyMur (Бр. Кашириных), Академия груминга 4,9 · 79</td></tr>
+      <tr><td>стрижка кошек</td><td class="r">нет в топ-5</td><td>Lapki Groom, LadyMur, Vash Groomer 4,6 · 171, Grooming house, Emily</td></tr>
+      <tr><td>груминг кошек</td><td class="r">нет в топ-5</td><td>Лапки в порядке, Grooming house, Пёс Пижон (реклама), Emily, Vash Groomer</td></tr>
+      <tr><td>зоосалон</td><td class="r">нет в топ-5</td><td>Пёс Пижон (реклама), LadyMur ×2, Академия груминга, Groom 5,0 · 312</td></tr>
+      <tr><td>экспресс линька</td><td class="r">нет в топ-5</td><td>LadyMur, Lapki Groom, Groom, Koltun.off 4,5 · 47, Mr. Dog 4,3 · 31</td></tr>
+      <tr><td>стрижка когтей собаке</td><td class="r">нет в топ-5</td><td>Лапки в порядке, LadyMur ×2, Lapki Groom, Vash Groomer</td></tr>
+      <tr><td>мытье собак</td><td class="r">нет в топ-5</td><td>Лапки в порядке, Котёнок Гав (зоогостиница), Оптивет (ветклиника), Petty Pet 5,0 · 57, Groom</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточка против соседей</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценок</th><th>«Хорошее место 2026»</th><th>Что видно в сниппете</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Шерсти.net</b></td><td class="r num">4,8</td><td class="r num">198</td><td>есть</td><td>цена не выводится, прайс «Давно не обновлялось», плашки акции нет</td></tr>
+      <tr><td>Lapki Groom</td><td class="r num">5,0</td><td class="r num">179</td><td>есть</td><td>стрижка кошки 1 950 ₽, креативный груминг 1 650 ₽, скидка 10% новым гостям</td></tr>
+      <tr><td>Groom</td><td class="r num">5,0</td><td class="r num">312</td><td>есть</td><td>выезд грумера на дом 400 ₽</td></tr>
+      <tr><td>LadyMur</td><td class="r num">5,0</td><td class="r num">81</td><td>нет</td><td>стрижка кошки 1 500 ₽, стрижка + купание кошки 1 700 ₽</td></tr>
+      <tr><td>Grooming house</td><td class="r num">5,0</td><td class="r num">101</td><td>нет</td><td>стрижка «лев» 2 100 ₽, стрижка когтей 300 ₽</td></tr>
+      <tr><td>Пёс Пижон</td><td class="r num">5,0</td><td class="r num">28</td><td>нет</td><td>рекламное объявление в 4 запросах из 9</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Почему карточка не попадает в топ</h2><p>Каждая причина подтверждена данными карточки или выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Прайс на карточке устарел — цены в выдаче нет</h3></div>
+      <p>Блок «Товары и услуги» на Яндекс Картах помечен <b>«Давно не обновлялось»</b>. У конкурентов из топа по услуговым запросам («стрижка кошек», «стрижка собак») в сниппете показывается конкретная услуга с ценой: так Яндекс сопоставляет карточку с запросом. На сайте «Шерсти.net» прайс подробный — по каждой породе, — но на карточку он не перенесён.</p>
+      <p class="next">Переносим актуальный прайс на карточку: экспресс-линька, стрижки кошек, комплексы по породам, гигиена, стрижка когтей.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Скидки есть, но в выдаче их не видно</h3></div>
+      <p>У студии действуют скидки: <b>10% на первое посещение</b>, <b>30% на комплекс «по породе» для щенков до 6 месяцев</b>, 10% «приведи друга», 7% при регулярном посещении. В 2ГИС предложение для новых гостей и щенков уже выведено. На Яндекс Картах плашки акции в выдаче нет, а у Lapki Groom и «Лапки в порядке» она есть.</p>
+      <p class="next">Оформляем скидку для новых гостей и скидку для щенков отдельными блоками акций на карточке.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточка не связана с узкими услугами</h3></div>
+      <p>По запросам «экспресс линька», «стрижка когтей собаке», «мытье собак» в топе стоят карточки с 5–80 оценками. Значит, решает не рейтинг, а то, насколько карточка «говорит» про эту услугу: позиции прайса, тексты публикаций, подписи к фото. У «Шерсти.net» эти услуги есть, но на карточке они не раскрыты.</p>
+      <p class="next">Новости и сторис этапа 1 построены ровно под эти запросы.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">утечка</span><h3>Конкуренты покупают рекламу на Картах</h3></div>
+      <p>«Пёс Пижон» с 28 оценками стоит первым по «груминг» и «зоосалон» за счёт рекламного размещения. С июля 2026 года Яндекс переводит карточки на тарифы: на Базовом внутри карточки может показываться реклама других организаций, Расширенный тариф её убирает, Продвинутый даёт приоритетные показы в выдаче.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Разное написание названия</h3></div>
+      <p>На сайте студия называется и «Шерсти.net», и «Шерсти.нет». На всех площадках и во всех текстах используем одно название — <b>«Шерсти.net»</b>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="site">
+  <div class="sh"><h2>Сайт</h2><p>шерсти.net — WordPress, онлайн-запись через YCLIENTS.</p></div>
+  <div class="two">
+    <div class="note"><h3>Что работает</h3><ul>
+      <li><b>Подробный прайс по породам</b> — кошки, мейн-куны, сфинксы, более 40 пород собак.</li>
+      <li><b>Отдельные страницы услуг:</b> стрижка собак, стрижка кошек, чистка зубов собакам, SPA, приучение к грумингу, зоогостиница.</li>
+      <li>Meta description с адресом и районом, title с городом.</li>
+    </ul></div>
+    <div class="note"><h3>Что исправить</h3><ul>
+      <li><b>Нет страниц под экспресс-линьку и гигиену</b> — услуги есть в прайсе, но отдельной посадочной страницы нет.</li>
+      <li><b>Ошибка в прайсе:</b> «Шетландская овчарка — подготовка к выставке — 34000 руб».</li>
+      <li><b>Опечатки на главной:</b> «Оставте ваши данные», «Современное обрудование», «Удобное местоположние».</li>
+      <li>Название в тексте «О нас» — «Шерсти.нет», в остальных местах — «Шерсти.net».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Сезонность спроса</h2><p>Сезонные поводы студии на год. На них строятся темы публикаций.</p></div>
+  <div class="season">
+    <div><span>сентябрь–ноябрь · март–май</span><b>Сезон линьки</b><p>Экспресс-линька, вычёсывание подшёрстка, разбор колтунов.</p></div>
+    <div><span>декабрь–февраль</span><b>Холода и реагенты</b><p>Уход за лапами, стрижка шерсти между подушечками, увлажнение шерсти.</p></div>
+    <div><span>июнь–август</span><b>Жара и дачи</b><p>Гигиенические стрижки, мытьё лап, вычёсывание после прогулок.</p></div>
+    <div><span>даты студии</span><b>1 марта и 16 сентября</b><p>День грумера и день рождения студии, а также 8 августа, 26 августа и 4 октября — дни кошек, собак и защиты животных.</p></div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Платные ветуслуги, включая груминг</div><div class="n">≈60 млрд ₽</div><div class="s">2025 год, +19,1% к 2024</div></div>
+    <div class="kpi"><div class="k">Рост в I квартале 2026</div><div class="n">+24,4%</div><div class="s">16,5 млрд ₽ за квартал</div></div>
+    <div class="kpi"><div class="k">Рынок зоотоваров РФ</div><div class="n">590 млрд ₽</div><div class="s">оценка за 2025 год</div></div>
+    <div class="kpi"><div class="k">Подорожание груминга</div><div class="n">+30%</div><div class="s">за год, оценка эксперта</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Владельцы животных тратят на уход больше с каждым годом, цены на груминг растут. В таких условиях выбор между салонами на Картах всё сильнее зависит от того, видна ли цена и предложение прямо в выдаче.</p>
+</section>
+
+<section id="strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому. Первый этап даёт основной эффект на Картах и почти ничего не стоит.</p></div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-h"><h3>1. Привести карточку в порядок</h3><span class="when">0–30 дней</span></div>
+      <ol>
+        <li><b>Обновить прайс на Яндекс Картах.</b><span>Перенести с сайта ключевые позиции: экспресс-линька, стрижки кошек «лев» и «кот в сапогах», комплексы по популярным породам, гигиена, стрижка когтей, стрижка когтей морским свинкам и кроликам. К позициям — фото работ.</span></li>
+        <li><b>Оформить акции.</b><span>Скидка 10% на первое посещение и 30% на комплекс «по породе» для щенков до 6 месяцев — отдельными блоками акций, чтобы плашка появилась в выдаче.</span></li>
+        <li><b>Привести название к одному виду.</b><span>«Шерсти.net» на Яндекс Картах, в 2ГИС, на сайте и во всех публикациях.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>2. Контент и отзывы</h3><span class="when">1–3 месяца, дальше постоянно</span></div>
+      <ol>
+        <li><b>Новости и сторис под запросы, где карточки нет.</b><span>Экспресс-линька, груминг кошек, гигиена и когти, мытьё и комплексный уход. Темы этапа 1 — в контент-плане.</span></li>
+        <li><b>Фото в карточку.</b><span>Администраторы присылают фото работ каждый день — их стоит регулярно добавлять в карточку с подписями услуг.</span></li>
+        <li><b>Ровный поток отзывов.</b><span>Просить отзыв после визита. Скидку за отзыв не привязывать к Яндекс Картам: правила Яндекса не допускают вознаграждение за отзывы.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>3. Агрегаторы</h3><span class="when">1–2 месяца</span></div>
+      <ol>
+        <li><b>2ГИС — держать уровень.</b><span>Карточка в 2ГИС уже сильная: 5,0 и 373 оценки. Обновлять прайс и публикации синхронно с Яндекс Картами.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>4. Сайт под поиск</h3><span class="when">2–6 месяцев</span></div>
+      <ol>
+        <li><b>Новые страницы услуг.</b><span>Экспресс-линька собак и кошек, гигиенический уход, стрижка когтей — с ценами «от» и записью через YCLIENTS.</span></li>
+        <li><b>Исправления.</b><span>Цена подготовки шелти к выставке, опечатки на главной, единое название.</span></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-h"><h3>5. Платное продвижение</h3><span class="when">после этапа 1</span></div>
+      <ol>
+        <li><b>Тариф Яндекс Бизнеса.</b><span>Расширенный убирает рекламу конкурентов с карточки, Продвинутый даёт приоритетные показы по запросам «груминг» и «зоосалон», где сейчас первым стоит рекламодатель.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Челябинску 03.11.2026 без геолокации пользователя, первая страница выдачи, 9 запросов.</li>
+    <li>Данные карточек — рейтинг, оценки, награды, цены и акции в сниппетах — со страниц выдачи и карточек.</li>
+    <li>Сезонность — по сезонным поводам студии.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/shersti_net/102224722323/" target="_blank" rel="noopener">Карточка «Шерсти.net» на Яндекс Картах</a>
+    <a href="https://2gis.ru/chelyabinsk/firm/70000001033597216" target="_blank" rel="noopener">Карточка «Шерсти.net» в 2ГИС</a>
+    <a href="https://xn--e1agxef6a.net/" target="_blank" rel="noopener">шерсти.net</a>
+    <a href="https://xn--e1agxef6a.net/price/" target="_blank" rel="noopener">шерсти.net — цены</a>
+    <a href="https://en.rncph.ru/blog/250526/" target="_blank" rel="noopener">РНЦФ — рынок платных ветеринарных услуг, I квартал 2026</a>
+    <a href="https://zooinform.ru/russias-pet-market-reaches-%E2%82%BD590-billion/" target="_blank" rel="noopener">Zooinform — рынок зоотоваров 590 млрд ₽</a>
+    <a href="https://finance.rambler.ru/money/55401353-ekspert-lebedinskaya-gruming-podorozhal-na-30-za-god-v-rf/" target="_blank" rel="noopener">Рамблер — груминг подорожал на 30% за год</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+    <span class="eyebrow">Студия груминга · Челябинск</span>
+    <h1>«Шерсти.net» — ТЗ на контент, этап 1</h1>
+    <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Шерсти.net» на Яндекс Картах и 2ГИС.</p>
+    <div class="factgrid">
+      <div class="fact"><div class="k">Сфера</div><div class="v">Студия груминга <small>Уход за животными</small></div></div>
+      <div class="fact"><div class="k">Город</div><div class="v">Челябинск</div></div>
+      <div class="fact"><div class="k">Адрес</div><div class="v">ул. Университетская Набережная, 64 <small>ЖК ACADEM Riverside, Калининский район, справа от Ozon</small></div></div>
+      <div class="fact"><div class="k">Режим работы</div><div class="v">С 10:00 до 20:00 <small>каждый день без выходных</small></div></div>
+      <div class="fact"><div class="k">Опыт</div><div class="v">Более 8 лет <small>с 2018 года</small></div></div>
+      <div class="fact"><div class="k">Особенность</div><div class="v">Онлайн-наблюдение EZVIZ <small>весь процесс в реальном времени</small></div></div>
+      <div class="fact"><div class="k">Косметика</div><div class="v">Премиальная</div></div>
+      <div class="fact"><div class="k">Сайт</div><div class="v mono">шерсти.net</div></div>
+    </div>
+  </section>
+
+  <section id="brandbook">
+    <div class="sec-head">
+      <span class="sec-num">01 · Мини-брендбук</span>
+      <h2>Фирменный стиль «Шерсти.net»</h2>
+      <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: бирюзовый градиент шапки сайта, бирюзовый иконок и заголовков, оранжевый кнопок, светлый фон и графитовый текст.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:#4FA3B4;color:#FFFFFF;border-color:#4FA3B4"><div class="role">Основной</div><div class="name">Бирюзовый</div><div class="hex">#4FA3B4</div></div>
+      <div class="swatch" style="background:#F19E42;color:#FFFFFF;border-color:#F19E42"><div class="role">Акцентный</div><div class="name">Оранжевый кнопок</div><div class="hex">#F19E42</div></div>
+      <div class="swatch" style="background:linear-gradient(115deg,#4B8793,#5EC6DE);color:#FFFFFF;border-color:#4B8793"><div class="role">Второстепенный</div><div class="name">Градиент шапки</div><div class="hex">#4B8793 → #5EC6DE</div></div>
+      <div class="swatch" style="background:#FAFAFA;color:#4B4B4B;border-color:#E5E5E5"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#FAFAFA</div></div>
+      <div class="swatch" style="background:#4B4B4B;color:#FAFAFA;border-color:#4B4B4B"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#4B4B4B</div></div>
+    </div>
+  </section>
+
+  <section id="cycle">
+    <div class="sec-head">
+      <span class="sec-num">02 · Логика цикла</span>
+      <h2>Последовательность тем этапа</h2>
+      <p>Темы этапа построены на запросах, по которым карточки «Шерсти.net» сейчас нет в первой пятёрке Яндекс Карт, и на сезоне: осень — пик линьки, впереди холода.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-row"><div class="tag">Тема 1</div><p>Экспресс-линька собак и кошек: удаление отмершей шерсти в сезон активной линьки.</p></div>
+      <div class="cycle-row"><div class="tag">Тема 2</div><p>Груминг кошек: бережная стрижка, вычёсывание и гигиена с учётом поведения кошек.</p></div>
+      <div class="cycle-row"><div class="tag">Тема 3</div><p>Онлайн-наблюдение EZVIZ: весь процесс стрижки виден в реальном времени.</p></div>
+      <div class="cycle-row"><div class="tag">Тема 4</div><p>Гигиенический уход: уши, когти, гигиенические зоны и шерсть между подушечками лап перед холодами.</p></div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="sec-head">
+      <span class="sec-num">03 · Новости</span>
+      <h2>Темы для новостных публикаций</h2>
+      <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    </div>
+    <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», умеренно-деловой стиль, дружелюбно. Каждая новость начинается с вступления от лица студии, дальше факты по теме. Факты в тезисах приведены по источнику, указанному у каждого тезиса. Эмодзи — 1–2 на текст. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail, нет диагнозов и рекомендаций по лечению. Объём — до 3 000 знаков с пробелами.</div>
+
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 1</span><h3>Экспресс-линька собак и кошек в Челябинске: убираем отмершую шерсть в сезон линьки</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Осень — сезон активной линьки. Мы бережно убираем отмершую шерсть, чтобы питомцу было легче, а дома шерсти стало меньше.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Экспресс-линька — быстрое и эффективное удаление отмершей шерсти.<span class="src">бриф</span></li>
+        <li>Подходит для лабрадоров, хаски, корги и других линяющих пород, а также для кошек.<span class="src">бриф</span></li>
+        <li>Весна и осень (март–май, сентябрь–ноябрь) — сезон активной линьки: вычёсывание подшёрстка, уборка колтунов.<span class="src">бриф</span></li>
+        <li>В прайсе экспресс-линька есть для короткошёрстных и длинношёрстных кошек, мейн-кунов, корги, хаски, лабрадоров, самоедов, шпицев и других пород.<span class="src">сайт</span></li>
+        <li>Используем премиальную косметику, уход подбираем под породу.<span class="src">бриф</span></li>
+        <li>Студия на ул. Университетская Набережная, 64, каждый день с 10:00 до 20:00.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Экспресс-линька собак и кошек в Челябинске — студия груминга «Шерсти.net»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Экспресс-линька собак и кошек в Челябинске | Шерсти.net</span></div>
+        <div class="meta-row"><span><b>Description · </b>Экспресс-линька в Челябинске: быстрое удаление отмершей шерсти для лабрадоров, хаски, корги, шпицев и кошек. Премиальная косметика, уход по породе. Университетская Набережная, 64.</span></div>
+        <div class="chips">
+          <span class="chip-kw">экспресс линька челябинск</span><span class="chip-kw">экспресс линька собак</span>
+          <span class="chip-kw">экспресс линька кошек</span><span class="chip-kw">линька у собак что делать</span>
+          <span class="chip-kw">вычесывание подшерстка</span><span class="chip-kw">груминг хаски челябинск</span>
+          <span class="chip-kw">груминг корги</span><span class="chip-kw">груминг шпица челябинск</span>
+          <span class="chip-kw">груминг челябинск</span><span class="chip-kw">груминг северо-запад челябинск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на экспресс-линьку онлайн — подберём уход под породу вашего питомца.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Экспресс-линька»</div>
+        <p>Композиция: фото пушистой собаки линяющей породы (корги или хаски) в процессе вычёсывания из архива студии; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — градиент #4B8793 → #5EC6DE, тезис — белый #FFFFFF, акцентная линия под тезисом — оранжевый #F19E42.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 2</span><h3>Груминг кошек в Челябинске: стрижка, вычёсывание и гигиена без лишнего стресса</h3></div>
+        <span class="purpose">Продающий</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кошки — особые гости. Мы работаем с учётом их характера и поведения и делаем всё, чтобы процедура прошла спокойно.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Груминг кошек: бережная стрижка, вычёсывание и гигиена.<span class="src">бриф</span></li>
+        <li>Работаем с учётом особенностей поведения кошек, минимизируем стресс.<span class="src">бриф</span></li>
+        <li>Стрижки «лев» и «кот в сапогах» машинкой 2 мм, в том числе с элементами креатива.<span class="src">сайт</span></li>
+        <li>Отдельный уход для мейн-кунов и сфинксов, подготовка к выставке, экспресс-линька, антицарапки.<span class="src">сайт</span></li>
+        <li>Онлайн-наблюдение через камеры EZVIZ — весь процесс виден в реальном времени.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Груминг и стрижка кошек в Челябинске — «Шерсти.net»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Стрижка кошек «лев» и груминг кошек в Челябинске | Шерсти.net</span></div>
+        <div class="meta-row"><span><b>Description · </b>Груминг кошек в Челябинске: стрижка «лев» и «кот в сапогах», вычёсывание, гигиена, уход для мейн-кунов и сфинксов. Работаем с учётом поведения кошек, онлайн-наблюдение EZVIZ.</span></div>
+        <div class="chips">
+          <span class="chip-kw">стрижка кошек челябинск</span><span class="chip-kw">груминг кошек челябинск</span>
+          <span class="chip-kw">стрижка кота лев</span><span class="chip-kw">стрижка кота в сапогах</span>
+          <span class="chip-kw">груминг мейн куна</span><span class="chip-kw">вычесывание кошки</span>
+          <span class="chip-kw">антицарапки для кошек</span><span class="chip-kw">подготовка кошки к выставке</span>
+          <span class="chip-kw">зоосалон для кошек челябинск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайте кошку на груминг онлайн — подберём стрижку и уход.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Груминг кошек»</div>
+        <p>Композиция: фото кошки после стрижки «лев» из архива студии на светлом фоне; тезис в верхней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: фон — светлый #FAFAFA, тезис — бирюзовый #4FA3B4, подчёркивание тезиса — оранжевый #F19E42, подпись услуги — графит #4B4B4B.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 3</span><h3>Онлайн-наблюдение за стрижкой: видите, как проходит груминг вашего питомца</h3></div>
+        <span class="purpose">Имиджевый</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Нам нечего скрывать: весь процесс стрижки вы можете видеть сами — из зоны ожидания или со смартфона.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Онлайн-наблюдение за процедурой через камеры EZVIZ — весь процесс в реальном времени.<span class="src">бриф</span></li>
+        <li>Наблюдать можно с зоны ожидания в салоне либо со смартфона в приложении Ezviz.<span class="src">сайт</span></li>
+        <li>Более 8 лет опыта, постоянное повышение квалификации мастеров и участие в конкурсах.<span class="src">бриф</span></li>
+        <li>Все мастера имеют сертификаты государственного образца.<span class="src">сайт</span></li>
+        <li>Премиальная косметика, бережный и индивидуальный подход к каждому питомцу.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Груминг собак и кошек в Челябинске с онлайн-наблюдением — «Шерсти.net»</span></div>
+        <div class="meta-row"><span><b>Title · </b>Груминг с онлайн-наблюдением EZVIZ в Челябинске | Шерсти.net</span></div>
+        <div class="meta-row"><span><b>Description · </b>Студия груминга «Шерсти.net» в Челябинске: наблюдайте за стрижкой питомца онлайн через камеры EZVIZ. Более 8 лет опыта, сертифицированные мастера, премиальная косметика.</span></div>
+        <div class="chips">
+          <span class="chip-kw">груминг собак челябинск</span><span class="chip-kw">зоосалон челябинск</span>
+          <span class="chip-kw">груминг салон челябинск</span><span class="chip-kw">стрижка собак челябинск</span>
+          <span class="chip-kw">грумер челябинск</span><span class="chip-kw">груминг с видеонаблюдением</span>
+          <span class="chip-kw">студия груминга</span><span class="chip-kw">груминг университетская набережная</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь онлайн и наблюдайте за стрижкой в приложении Ezviz.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Видно весь процесс»</div>
+        <p>Композиция: мастер за грумерским столом с собакой, в углу кадра — экран смартфона с трансляцией; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+        <p>Цвета: плашка — бирюзовый #4FA3B4, тезис — белый #FFFFFF, значок камеры — оранжевый #F19E42.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div><span class="num">Новость 4</span><h3>Гигиенический уход для собак и кошек: уши, когти и лапы перед холодами</h3></div>
+        <span class="purpose">Экспертный</span>
+      </div>
+      <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Впереди холода и реагенты на улицах. Мы приводим в порядок лапы, когти и уши, чтобы питомцу было комфортно на зимних прогулках.</div>
+      <span class="thesis-lbl">Тезисы</span>
+      <ul class="thesis">
+        <li>Гигиенический уход: чистка ушей, стрижка когтей, подстригание шерсти в гигиенических зонах и между подушечками лап.<span class="src">бриф</span></li>
+        <li>Зима (декабрь–февраль) — холода и реагенты: уход за лапами, стрижка шерсти между пальцами, увлажнение шерсти.<span class="src">бриф</span></li>
+        <li>Стрижка когтей морским свинкам и кроликам.<span class="src">бриф</span></li>
+        <li>SPA-процедуры: маски и уход за кожей и шерстью с использованием премиальной косметики.<span class="src">бриф</span></li>
+        <li>Каждый день с 10:00 до 20:00 без выходных.<span class="src">бриф</span></li>
+      </ul>
+      <div class="seo-box">
+        <span class="lbl">SEO-блок</span>
+        <div class="meta-row"><span><b>H1 · </b>Гигиенический уход и стрижка когтей собакам и кошкам в Челябинске</span></div>
+        <div class="meta-row"><span><b>Title · </b>Стрижка когтей и гигиена для собак и кошек в Челябинске | Шерсти.net</span></div>
+        <div class="meta-row"><span><b>Description · </b>Гигиенический уход в «Шерсти.net»: чистка ушей, стрижка когтей, гигиенические зоны, шерсть между подушечками лап. Стрижка когтей морским свинкам и кроликам. Челябинск, Университетская Набережная, 64.</span></div>
+        <div class="chips">
+          <span class="chip-kw">стрижка когтей собаке челябинск</span><span class="chip-kw">стрижка когтей кошке</span>
+          <span class="chip-kw">гигиенический груминг</span><span class="chip-kw">чистка ушей собаке</span>
+          <span class="chip-kw">стрижка шерсти между пальцами собаки</span><span class="chip-kw">уход за лапами зимой</span>
+          <span class="chip-kw">стрижка когтей морской свинке</span><span class="chip-kw">стрижка когтей кролику</span>
+          <span class="chip-kw">мытье собак челябинск</span>
+        </div>
+      </div>
+      <p class="cta-line"><b>CTA:</b> записывайтесь на гигиенический уход онлайн — подготовим лапы к зиме.</p>
+      <div class="cover-box">
+        <span class="lbl">ТЗ на обложку</span>
+        <div class="thesis-cover">«Лапы к зиме»</div>
+        <p>Композиция: крупный план — мастер подстригает шерсть между подушечками лапы собаки; тезис в верхней трети на светлой подложке, логотип в верхнем левом углу.</p>
+        <p>Цвета: подложка — светлый #FAFAFA, тезис — бирюзовый #4FA3B4, акцент — оранжевый #F19E42.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="sec-head">
+      <span class="sec-num">04 · Сторис</span>
+      <h2>Темы для сторис</h2>
+      <p>4 темы, формат презентации. Один слайд — один факт: тезис, сухие данные и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+    </div>
+    <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Сезон линьки</div><span class="slide-no">Сторис 1</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Экспресс-линька</span>
+          <span class="fact-pill">Лабрадоры · хаски · корги</span>
+          <span class="fact-pill">Кошки</span>
+          <span class="fact-pill">Сентябрь–ноябрь</span>
+          <span class="fact-pill">Премиальная косметика</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон — градиент #4B8793 → #5EC6DE, заголовок белым #FFFFFF, породы списком белым, кнопка-плашка «Записаться» оранжевым #F19E42. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Груминг кошек</div><span class="slide-no">Сторис 2</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">«Лев» · «кот в сапогах»</span>
+          <span class="fact-pill">Машинкой 2 мм</span>
+          <span class="fact-pill">Вычёсывание</span>
+          <span class="fact-pill">Гигиена</span>
+          <span class="fact-pill">С учётом поведения кошек</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FAFAFA, заголовок бирюзовым #4FA3B4, пункты списком графитом #4B4B4B, маркеры пунктов оранжевым #F19E42. Логотип в верхнем левом углу.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Стрижка онлайн</div><span class="slide-no">Сторис 3</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Камеры EZVIZ</span>
+          <span class="fact-pill">Из зоны ожидания</span>
+          <span class="fact-pill">Со смартфона</span>
+          <span class="fact-pill">С 2018 года</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон бирюзовый #4FA3B4, заголовок белым #FFFFFF, три способа наблюдения — белые карточки с текстом графитом #4B4B4B, значок камеры оранжевым #F19E42.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-top"><div class="story-thesis">Гигиена за один визит</div><span class="slide-no">Сторис 4</span></div>
+        <div class="facts-line">
+          <span class="fact-pill">Уши</span>
+          <span class="fact-pill">Когти</span>
+          <span class="fact-pill">Гигиенические зоны</span>
+          <span class="fact-pill">Шерсть между подушечками</span>
+          <span class="fact-pill">Когти морским свинкам и кроликам</span>
+        </div>
+        <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FAFAFA, заголовок графитом #4B4B4B, пункты в бирюзовых #4FA3B4 плашках с белым текстом, нижняя полоса «Каждый день 10:00–20:00» оранжевым #F19E42.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sec-head">
+      <span class="sec-num">05 · Карта тем</span>
+      <h2>Дорожная карта этапов</h2>
+    </div>
+    <details class="stage" open>
+      <summary>Этап 1 — экспресс-линька, груминг кошек, онлайн-наблюдение, гигиена <span class="badge actual">Актуальный</span></summary>
+      <div class="stage-body">
+        <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Экспресс-линька собак и кошек в Челябинске</b>сезон линьки, линяющие породы и кошки, уход по породе</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Сезон линьки</b>породы и сезон</span></div>
+        <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Груминг кошек без лишнего стресса</b>стрижки «лев» и «кот в сапогах», вычёсывание, гигиена</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Груминг кошек</b>виды стрижек и ухода</span></div>
+        <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Онлайн-наблюдение за стрижкой</b>EZVIZ, 8 лет опыта, сертифицированные мастера</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Стрижка онлайн</b>способы наблюдения</span></div>
+        <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Гигиенический уход перед холодами</b>уши, когти, лапы, когти грызунам и кроликам</span></div>
+        <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Гигиена за один визит</b>что входит в гигиенический уход</span></div>
+      </div>
+    </details>
+  </section>
+</div></div>
+</main>
+<script>
+const NAV={
+ project:[['p-now','Ситуация'],['p-road','Ход проекта'],['p-docs','Материалы']],
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['site','Сайт'],['demand','Сезонность'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='project';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
