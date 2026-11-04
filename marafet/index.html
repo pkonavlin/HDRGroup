@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Марафет+»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+main section,main header.top{scroll-margin-top:128px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+
+/* analytics */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:22ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.pill.crit{color:var(--crit);background:var(--crit-soft)} .pill.warn{color:var(--warn);background:var(--warn-soft)} .pill.good{color:var(--good);background:var(--good-soft)} .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.va td.r.c{color:var(--crit)} .va td.r.g{color:var(--good)}
+.va tr.me td{background:var(--gold-soft)}
+.va tr.me td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.va td .sub{display:block;font-size:12.5px;color:var(--ink-3)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+
+/* content plan */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:84px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;color:var(--ink-3)}
+.vc .intro .lbl,.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-lbl{margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .meta-row{margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Марафет+ · Барнаул</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+
+<div class="view va" id="v-analytics" data-view="analytics"><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Барнаул · клининг · замер 04.11.2026</span>
+  <h1>Где «Марафет+» теряет поиск на Яндекс Картах</h1>
+  <p>Позиции карточки на Яндекс Картах по 9 целевым запросам, спрос по Вордстату для региона «Барнаул» и сравнение с карточками, которые стоят выше.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держится</span><p><b>Общие запросы — в первой пятёрке</b>«уборка квартир» — 2 место, «генеральная уборка» и «уборка офиса» — 4, «клининг» — 5.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По отдельным услугам карточки нет в топ-5</b>«химчистка дивана на дому» (635 запросов в месяц), «химчистка ковров» (234), «мойка окон» (155), «услуги клининга» (145), «уборка после ремонта». Все эти услуги у компании есть.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка не обновляется</b>Одна новость — от 12 октября 2020 года. Сторис нет. Блок «Товары и услуги» из трёх позиций помечен «Давно не обновлялось».</p></div>
+    <div class="v"><span class="pill info">конкуренты</span><p><b>New Cleaning стоит первым в 7 запросах из 9</b>При 26 оценках — меньше, чем у «Марафет+» (29). Выдачу по услугам выигрывают не рейтингом и отзывами.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Картах</div><div class="n">4,8</div><div class="s">29 оценок, 25 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов в топ-5</div><div class="n">4 из 9</div><div class="s">только общие запросы</div></div>
+    <div class="kpi"><div class="k">«клининг барнаул»</div><div class="n">562</div><div class="s">запроса в месяц</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">1</div><div class="s">последняя — 2020 год</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах и спрос</h2><p>Поиск по Барнаулу, первые 5 карточек списка. Частота — Вордстат, регион «Барнаул», все устройства.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Запросов в месяц</th><th class="r">Позиция</th><th>Кто в топе</th></tr></thead>
+    <tbody>
+      <tr><td>уборка квартир</td><td class="r">354</td><td class="r g">2</td><td>New Cleaning</td></tr>
+      <tr><td>генеральная уборка<span class="sub">большая часть частоты — медицинские и инфо-запросы</span></td><td class="r">703</td><td class="r g">4</td><td>New Cleaning, Vors (реклама), Азимут Клининг</td></tr>
+      <tr><td>уборка офиса</td><td class="r">25</td><td class="r g">4</td><td>New Cleaning, МоемГород, Азимут Клининг</td></tr>
+      <tr><td>клининг<span class="sub">частота по «клининг барнаул»</span></td><td class="r">562</td><td class="r g">5</td><td>New Cleaning, Vors (реклама), Clean Service, Губка&amp;Мыло</td></tr>
+      <tr><td>химчистка дивана на дому</td><td class="r">635</td><td class="r c">нет</td><td>New Cleaning, Vors (реклама), Коврочист (реклама), АриЭль, Азимут Клининг</td></tr>
+      <tr><td>химчистка ковров</td><td class="r">234</td><td class="r c">нет</td><td>Диана (реклама), Фабрика Стирки Ковров, Фабрика новость, Чистка мебели на дому (реклама), Кожамехсервис</td></tr>
+      <tr><td>мойка окон</td><td class="r">155</td><td class="r c">нет</td><td>New Cleaning, МоемГород, Чисто-начисто, Губка&amp;Мыло, Waxx</td></tr>
+      <tr><td>услуги клининга</td><td class="r">145</td><td class="r c">нет</td><td>New Cleaning, Vors (реклама), Губка&amp;Мыло, Клинингмастер, МоемГород</td></tr>
+      <tr><td>уборка после ремонта<span class="sub">частота по «клининг после ремонта»</span></td><td class="r">36</td><td class="r c">нет</td><td>New Cleaning, Азимут Клининг, Губка&amp;Мыло, Vors (реклама), Чистота без забот (реклама)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточка против соседей по выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценок</th><th class="r">В топ-5 из 9</th><th>Реклама на Картах</th></tr></thead>
+    <tbody>
+      <tr class="me"><td><b>Марафет+</b></td><td class="r">4,8</td><td class="r">29</td><td class="r">4</td><td>нет</td></tr>
+      <tr><td>New Cleaning</td><td class="r">4,9</td><td class="r">26</td><td class="r">8</td><td>нет</td></tr>
+      <tr><td>Губка&amp;Мыло</td><td class="r">4,5</td><td class="r">44</td><td class="r">6</td><td>нет</td></tr>
+      <tr><td>Vors</td><td class="r">5,0</td><td class="r">99</td><td class="r">5</td><td>да</td></tr>
+      <tr><td>Азимут Клининг</td><td class="r">4,7</td><td class="r">16</td><td class="r">4</td><td>нет</td></tr>
+      <tr><td>МоемГород</td><td class="r">4,4</td><td class="r">10</td><td class="r">4</td><td>нет</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="why">
+  <div class="sh"><h2>Что это значит</h2></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Карточка не связана с конкретными услугами</h3></div>
+      <p>На карточке нет ни одной публикации про химчистку мебели и ковров, уборку после ремонта или уборку офисов. Единственная новость — 2020 года, сторис нет, прайс старый. Поэтому карточка показывается только по общим запросам, где ей хватает рубрики «Клининговые услуги».</p>
+      <p class="next">Контент-план ведёт карточку в эти запросы: каждая новость и сторис посвящена одной услуге, где карточки сейчас нет в выдаче.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Самый большой незакрытый спрос — химчистка на дому</h3></div>
+      <p>«химчистка дивана на дому» — <b>635</b> запросов в месяц, «химчистка ковров» — <b>234</b>. Это больше, чем «уборка квартир» (354), где «Марафет+» уже на 2 месте. По химчистке в топе Vors, Коврочист и Диана, которые покупают рекламу на Картах.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">рынок</span><h3>Ищут с ценой</h3></div>
+      <p>«клининг цены» и «цена клининга» — по 125 запросов, «клининг барнаул цена» — 104, «уборка квартиры цена» — 65. Цена «от … ₽ за м²» в каждой новости и сторис отвечает на этот спрос.</p>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Барнаулу 04.11.2026, первые 5 карточек списка, реклама отмечена по метке в выдаче.</li>
+    <li>Вордстат: регион «Барнаул», все устройства, период 08.09–07.10.2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/marafet_/163364585382/" target="_blank" rel="noopener">Карточка «Марафет+» на Яндекс Картах</a>
+    <a href="https://marafet22.ru/" target="_blank" rel="noopener">marafet22.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Клининговые услуги · Барнаул</span>
+  <h1>«Марафет+» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Марафет+» на Яндекс Картах и 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Сфера</div><div class="v">Клининг <small>генеральная, после ремонта, поддерживающая уборка</small></div></div>
+    <div class="fact"><div class="k">Ещё услуги</div><div class="v">Химчистка <small>мягкой мебели, ковров и ковровых покрытий · мойка окон и фасадов</small></div></div>
+    <div class="fact"><div class="k">Для бизнеса</div><div class="v">Уборка помещений <small>коммерческих и производственных</small></div></div>
+    <div class="fact"><div class="k">Город</div><div class="v">Барнаул <small>ул. Матросова, 7Б</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно <small>с 7:00 до 22:00</small></div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Опыт более 10 лет <small>опытные сотрудники, современное оборудование и качественная химия</small></div></div>
+    <div class="fact"><div class="k">Акция</div><div class="v">−10% <small>за первое обращение</small></div></div>
+    <div class="fact"><div class="k">Приоритет</div><div class="v">Запись перед Новым годом</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Марафет+»</h2>
+    <p>Цвета сняты с логотипа и сайта компании: синий логотипа, тёмно-синий заголовков, графит надписи логотипа, светлый фон блоков и белый.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#3A6FA1;color:#FFFFFF;border-color:#3A6FA1"><div class="role">Основной</div><div class="name">Синий логотипа</div><div class="hex">#3A6FA1</div></div>
+    <div class="swatch" style="background:#093C79;color:#FFFFFF;border-color:#093C79"><div class="role">Акцентный</div><div class="name">Тёмно-синий</div><div class="hex">#093C79</div></div>
+    <div class="swatch" style="background:#303030;color:#EDF1F5;border-color:#303030"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#303030</div></div>
+    <div class="swatch" style="background:#EDF1F5;color:#303030;border-color:#D5DEE8"><div class="role">Второстепенный</div><div class="name">Светло-серый</div><div class="hex">#EDF1F5</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#303030;border-color:#D5DEE8"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Все темы этапа работают на запись перед Новым годом. Каждая ведёт карточку в запрос, где её сейчас нет или она слабая. Одна новость и одна сторис в неделю.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Неделя 1</div><p>Генеральная уборка перед Новым годом — открываем запись, скидка 10% за первое обращение.</p></div>
+    <div class="cycle-row"><div class="tag">Неделя 2</div><p>Химчистка мягкой мебели и ковров на дому — самый большой спрос, по которому карточки нет в выдаче.</p></div>
+    <div class="cycle-row"><div class="tag">Неделя 3</div><p>Уборка после ремонта — для тех, кто заканчивает ремонт к праздникам.</p></div>
+    <div class="cycle-row"><div class="tag">Неделя 4</div><p>Уборка офисов и коммерческих помещений — работа с организациями по договору.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», допустим неформальный тон. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Генеральная уборка перед Новым годом в Барнауле: открыта запись</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы открыли запись на генеральную уборку перед Новым годом. Наша задача — чтобы вы не тратили выходные на уборку, а встретили праздник в чистоте.</div>
+    <span class="lbl thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Генеральная уборка — от 120 ₽ за м².<span class="src">сайт</span></li>
+      <li>Чистка раковины, унитаза, ванны; обезжиривание кухонной зоны; мытьё полов; протирка дверей; удаление пыли со всех поверхностей; чистка зеркал, люстр, светильников; вынос мусора.<span class="src">сайт</span></li>
+      <li>Мойка окон считается отдельно.<span class="src">сайт</span></li>
+      <li>Скидка 10% за первое обращение.<span class="src">бриф</span></li>
+      <li>Опыт более 10 лет, опытные сотрудники, современное оборудование и качественная химия.<span class="src">бриф</span></li>
+      <li>Работаем ежедневно с 7:00 до 22:00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>H1 · </b>Генеральная уборка перед Новым годом в Барнауле — «Марафет+»</div>
+      <div class="meta-row"><b>Title · </b>Генеральная уборка квартиры в Барнауле от 120 ₽/м² | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Генеральная уборка в Барнауле перед Новым годом: кухня, санузел, пыль, люстры и зеркала — от 120 ₽ за м². Скидка 10% за первое обращение.</div>
+      <div class="chips">
+        <span class="chip-kw">генеральная уборка барнаул</span><span class="chip-kw">генеральная уборка квартиры</span><span class="chip-kw">уборка перед новым годом</span><span class="chip-kw">клининг барнаул</span><span class="chip-kw">уборка квартир в барнауле</span><span class="chip-kw">клининг уборка квартиры цена</span><span class="chip-kw">клининг барнаул цена</span><span class="chip-kw">заказать клининг</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на уборку перед Новым годом — скидка 10% за первое обращение.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Уборка к Новому году»</div>
+      <p>Композиция: чистая светлая кухня или гостиная, на переднем плане клинер в униформе протирает поверхность; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — синий #3A6FA1, тезис — белый #FFFFFF, тонкая линия над тезисом — тёмно-синий #093C79.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Химчистка дивана, матраса и ковра на дому в Барнауле</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Диваны, матрасы и ковры мы чистим у вас дома — везти никуда не нужно. Стоимость можем рассчитать по фото.</div>
+    <span class="lbl thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Химчистка — от 150 ₽ за м².<span class="src">сайт</span></li>
+      <li>Чистим кресла и диваны, матрасы, ковры и паласы, кухонные уголки, подушки.<span class="src">сайт</span></li>
+      <li>Гипоаллергенная химия не вызывает аллергию и безопасна для детей и домашних животных.<span class="src">сайт</span></li>
+      <li>Расчёт стоимости по фото.<span class="src">сайт</span></li>
+      <li>Химчистка мягкой мебели, ковров и ковровых покрытий.<span class="src">бриф</span></li>
+      <li>Скидка 10% за первое обращение.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>H1 · </b>Химчистка мягкой мебели и ковров на дому в Барнауле</div>
+      <div class="meta-row"><b>Title · </b>Химчистка дивана на дому в Барнауле от 150 ₽/м² | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Химчистка диванов, матрасов, ковров и кухонных уголков на дому в Барнауле — от 150 ₽ за м². Гипоаллергенная химия, расчёт по фото.</div>
+      <div class="chips">
+        <span class="chip-kw">химчистка дивана на дому барнаул</span><span class="chip-kw">химчистка дивана барнаул</span><span class="chip-kw">химчистка мягкой мебели барнаул</span><span class="chip-kw">химчистка ковров барнаул</span><span class="chip-kw">химчистка ковров на дому</span><span class="chip-kw">химчистка матраса на дому</span><span class="chip-kw">химчистка мебели и ковров</span><span class="chip-kw">сколько стоит химчистка дивана в барнауле</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> пришлите фото дивана или ковра — рассчитаем стоимость химчистки.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Химчистка на дому»</div>
+      <p>Композиция: светлый диван крупным планом, половина обивки после чистки, половина до; тезис на светлой подложке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: подложка — светло-серый #EDF1F5, тезис — тёмно-синий #093C79, линия под тезисом — синий #3A6FA1.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Уборка после ремонта в Барнауле: строительная пыль, цемент, затирка и пена</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>После ремонта остаются строительная пыль и следы материалов. Их мы и убираем — со стен, мебели, сантехники и пола.</div>
+    <span class="lbl thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Уборка после ремонта — от 140 ₽ за м².<span class="src">сайт</span></li>
+      <li>Обеспыливание стен и потолков, батарей, осветительных приборов; протирка мебели от строительной пыли и опилок внутри и снаружи.<span class="src">сайт</span></li>
+      <li>Ванная и туалет: чистка кафеля, сантехники, санфаянса, труб.<span class="src">сайт</span></li>
+      <li>Очистка пола от строительных материалов: цемент, герметик, грунтовка, затирка, пена.<span class="src">сайт</span></li>
+      <li>Мойка дверей, откосов, выключателей, розеток, плинтусов, пола. Мойка окон считается отдельно.<span class="src">сайт</span></li>
+      <li>Скидка 10% за первое обращение.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>H1 · </b>Уборка после ремонта в Барнауле — «Марафет+»</div>
+      <div class="meta-row"><b>Title · </b>Уборка квартиры после ремонта в Барнауле от 140 ₽/м² | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Послестроительная уборка в Барнауле: пыль со стен и потолков, цемент, затирка и пена с пола, сантехника — от 140 ₽ за м².</div>
+      <div class="chips">
+        <span class="chip-kw">уборка после ремонта барнаул</span><span class="chip-kw">клининг после ремонта</span><span class="chip-kw">послестроительная уборка барнаул</span><span class="chip-kw">уборка квартиры после ремонта цена</span><span class="chip-kw">уборка после строительства и ремонта</span><span class="chip-kw">клининг барнаул</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставляйте заявку — уберём после ремонта к праздникам.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Уборка после ремонта»</div>
+      <p>Композиция: свежеотремонтированная комната, клинер моет пол; тезис на плашке в нижней трети, слева вертикальная полоса, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — тёмно-синий #093C79, тезис — белый #FFFFFF, вертикальная полоса — синий #3A6FA1.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Уборка офисов, коммерческих и производственных помещений в Барнауле</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы убираем не только квартиры: офисы, коммерческие и производственные помещения — тоже наша работа. С организациями работаем по договору.</div>
+    <span class="lbl thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Уборка коммерческих и производственных помещений, поддерживающая уборка на регулярной основе, мойка окон и фасадов.<span class="src">бриф</span></li>
+      <li>Оказываем услуги частным лицам и организациям, предоставляем все документы для отчётности.<span class="src">сайт</span></li>
+      <li>Оплата по факту выполненных работ, наличный и безналичный расчёт.<span class="src">сайт</span></li>
+      <li>Отработка заказа в день обращения.<span class="src">сайт</span></li>
+      <li>Работаем ежедневно с 7:00 до 22:00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>H1 · </b>Уборка офисов и коммерческих помещений в Барнауле</div>
+      <div class="meta-row"><b>Title · </b>Уборка офиса в Барнауле по договору | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Уборка офисов, коммерческих и производственных помещений в Барнауле: работаем по договору, документы для отчётности, безналичный расчёт.</div>
+      <div class="chips">
+        <span class="chip-kw">уборка офиса барнаул</span><span class="chip-kw">уборка офисов</span><span class="chip-kw">клининг офиса</span><span class="chip-kw">уборка коммерческих помещений барнаул</span><span class="chip-kw">уборка производственных помещений барнаул</span><span class="chip-kw">поддерживающая уборка офиса</span><span class="chip-kw">коммерческий клининг</span><span class="chip-kw">услуги клининга в барнауле</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставляйте заявку — подготовим договор на уборку.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Уборка офисов»</div>
+      <p>Композиция: светлый офис с рабочими столами, клинер протирает стол; тезис в верхней трети на светлой подложке, логотип в верхнем левом углу.</p>
+      <p>Цвета: подложка — белый #FFFFFF, тезис — синий #3A6FA1, рамка-уголок — графит #303030.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие данные и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">Генеральная уборка — от 120 ₽/м²</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Кухня и санузел</span><span class="fact-pill">Пыль со всех поверхностей</span><span class="fact-pill">Зеркала, люстры, светильники</span><span class="fact-pill">Вынос мусора</span><span class="fact-pill">−10% за первое обращение</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, логотип в верхнем левом углу. Заголовок синим #3A6FA1, цена крупно тёмно-синим #093C79, пункты списком графитом #303030.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">Химчистка на дому — от 150 ₽/м²</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Кресла и диваны</span><span class="fact-pill">Матрасы</span><span class="fact-pill">Ковры и паласы</span><span class="fact-pill">Кухонные уголки</span><span class="fact-pill">Подушки</span><span class="fact-pill">Расчёт по фото</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #EDF1F5, заголовок тёмно-синим #093C79, предметы списком графитом #303030, цена на плашке синим #3A6FA1 с белым текстом.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">После ремонта — от 140 ₽/м²</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Стены, потолки, батареи</span><span class="fact-pill">Мебель внутри и снаружи</span><span class="fact-pill">Кафель и сантехника</span><span class="fact-pill">Цемент, затирка, пена с пола</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #093C79, заголовок белым #FFFFFF, цена синим #3A6FA1 на белой плашке, пункты белым.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">Уборка для организаций</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Работаем по договору</span><span class="fact-pill">Документы для отчётности</span><span class="fact-pill">Безналичный расчёт</span><span class="fact-pill">Выезд в день обращения</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, слева вертикальная полоса синим #3A6FA1. Заголовок тёмно-синим #093C79, пункты графитом #303030 с синими маркерами.</div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — запись перед Новым годом <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Генеральная уборка перед Новым годом: открыта запись</b>от 120 ₽/м², состав уборки, −10% за первое обращение</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Генеральная уборка — от 120 ₽/м²</b>что входит в уборку</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Химчистка дивана, матраса и ковра на дому</b>от 150 ₽/м², гипоаллергенная химия, расчёт по фото</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Химчистка на дому — от 150 ₽/м²</b>пять видов мебели и покрытий</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Уборка после ремонта</b>от 140 ₽/м², строительная пыль и следы материалов</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>После ремонта — от 140 ₽/м²</b>четыре зоны работ</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Уборка офисов, коммерческих и производственных помещений</b>договор, документы, безналичный расчёт</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Уборка для организаций</b>условия работы с бизнесом</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['maps','Позиции и спрос'],['why','Что это значит'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){
+  if(!NAV[v])v='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+  sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
