@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Нейроникс»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company switch + view tabs + section chips; two views (Аналитика / Контент-план) per company */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.cos{display:flex;gap:4px}
+.cos button{font:600 14px var(--f-display);color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.cos button:hover{color:var(--ink)}
+.cos button[aria-pressed="true"]{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va td.nw{white-space:nowrap}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)} .va .down{color:var(--crit)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:11.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .col{fill:var(--gold)}
+.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span>
+      <div class="cos" role="group" aria-label="Компания"><button type="button" data-co-go="nx" aria-pressed="true">Нейроникс</button></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-nx-analytics" data-co="nx" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="nx-top">
+  <span class="eyebrow">Екатеринбург · медцентр · Шарташский рынок · замер 04.11.2026</span>
+  <h1>Где «Нейроникс» не видно на Картах и что с этим делать</h1>
+  <p>Карточка медицинского центра «Нейроникс», ул. Куйбышева, 84, корп. 2. Позиции на Яндекс Картах по 6 целевым запросам, соседи в выдаче, спрос по Вордстату для региона «Екатеринбург» по 10 направлениям.</p>
+</header>
+
+<section id="nx-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из 6 запросов карточки нет в первой пятёрке</b>«психотерапевт», «психиатр», «психолог», «детский невролог», «детский массаж», «лечебный массаж».</p></div>
+    <div class="v"><span class="pill good">видно</span><p><b>Рядом с центром карточка показывается</b>По запросу «психотерапевт массаж медцентр» у Куйбышева, 84 «Нейроникс» на 3-м месте.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Последняя новость — 9 октября 2025, прайс «давно не обновлялось»</b>На карточке 3 новости за октябрь 2025. Товары и услуги помечены Яндексом «Давно не обновлялось».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос на психотерапевта растёт с осени</b>«психотерапевт» в Екатеринбурге: 7 798 запросов в июне, 9 917 в сентябре 2026.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,6</div><div class="s">11 оценок · 10 отзывов</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">3</div><div class="s">последняя — 9 октября 2025</div></div>
+    <div class="kpi"><div class="k">Запросов в топ-5 по городу</div><div class="n">0 из 6</div><div class="s">поиск по Екатеринбургу</div></div>
+    <div class="kpi"><div class="k">«психотерапевт»</div><div class="n">9 917</div><div class="s">запросов, сентябрь 2026</div></div>
+  </div>
+</section>
+
+<section id="nx-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Екатеринбургу без геолокации, 04.11.2026. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Карточка</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>психотерапевт</td><td class="r">нет</td><td>МедЛайт, Вертеброцентр (2 карточки), Медрегион, Ск-Мед</td></tr>
+      <tr><td>психиатр</td><td class="r">нет</td><td>Вертеброцентр (2 карточки), Формула души, Ясная, Ск-Мед</td></tr>
+      <tr><td>психолог</td><td class="r">нет</td><td>Центр Эко, Вертеброцентр, Детство, Формула души, Ясная</td></tr>
+      <tr><td>детский невролог</td><td class="r">нет</td><td>Вертеброцентр, Жизнь-Опора, Ск-Мед, Детский доктор, Здоровье 365</td></tr>
+      <tr><td>детский массаж</td><td class="r">нет</td><td>Вертеброцентр, Детство, Доктор Цзянь, Жизнь-Опора, Суфле</td></tr>
+      <tr><td>лечебный массаж</td><td class="r">нет</td><td>Вертеброцентр, Beautech, Emla, Суфле, Ск-Мед</td></tr>
+      <tr><td>психотерапевт массаж медцентр (у Куйбышева, 84)</td><td class="r me">3</td><td>Ск-Мед, Здоровье 365, Нейроникс, Нейро-Пси, ММЦ Здоровье</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи в выдаче у Куйбышева, 84</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Нейроникс</b></td><td class="r num me">4,6</td><td class="r num me">11</td><td>ул. Куйбышева, 84, корп. 2</td></tr>
+      <tr><td>ММЦ Здоровье</td><td class="r num">4,2</td><td class="r num">1 232</td><td>Первомайская ул., 104/1</td></tr>
+      <tr><td>Ск-Мед</td><td class="r num">4,9</td><td class="r num">—</td><td>ул. Розы Люксембург, 67Б</td></tr>
+      <tr><td>Здоровье 365</td><td class="r num">4,7</td><td class="r num">—</td><td>Кузнечная ул., 83</td></tr>
+      <tr><td>Нейро-Пси</td><td class="r num">5,0</td><td class="r num">—</td><td>ул. Народной Воли, 69</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">По городу выше стоят сети с несколькими карточками (Вертеброцентр, Ск-Мед) и центры с сотнями оценок (Жизнь-Опора — 711, Центр Эко — 156). У «Нейроникса» 11 оценок и год без новостей, поэтому карточка видна только рядом с собственным адресом.</p>
+</section>
+
+<section id="nx-demand">
+  <div class="sh"><h2>Спрос в Екатеринбурге</h2><p>Вордстат, регион «Екатеринбург», все устройства, апрель — сентябрь 2026.</p></div>
+  <div class="chart" data-chart="nx"><h3>«психотерапевт», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц</div></div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">Запросов</th><th class="r">К прошлому месяцу</th></tr></thead><tbody id="nx-mom"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Летом спрос ниже (7 798 в июне), с августа растёт и в сентябре выходит на максимум полугодия. Так же ведут себя «психолог» (56 904 в сентябре) и «детский психолог» (2 069).</p>
+
+  <h3>Запросы по направлениям (сентябрь 2026)</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-nx"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Врача ищут чаще, чем процедуру</b>: «психиатр» — 24 696, «психотерапевт» — 9 917.</li>
+      <li><b>Детское направление заметно</b>: «детский психолог» — 2 069, «детский невролог» — 2 005, «детский психиатр» — 1 736.</li>
+      <li><b>«массаж» — общий запрос</b> (140 547), коммерческие уточнения меньше: «лечебный массаж» — 761, «детский массаж» — 925.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — специальность врача, «Екатеринбург» и «по записи» в первом абзаце.</li>
+      <li>Две новости под психиатра-психотерапевта и детский приём, две — под лечебный и детский массаж.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="nx-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Екатеринбургу 04.11.2026 без геолокации; соседи — поиск у ул. Куйбышева, 84; рейтинги и оценки — из выдачи.</li>
+    <li>Вордстат: регион «Екатеринбург», все устройства, помесячно за апрель — сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/neyroniks/94221762620/" target="_blank" rel="noopener">«Нейроникс», ул. Куйбышева, 84, корп. 2 — Яндекс Карты</a>
+    <a href="https://бебенин-аа.рф/" target="_blank" rel="noopener">бебенин-аа.рф</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-nx-content" data-co="nx" data-view="content" hidden><div class="wrap">
+<section class="hero" id="nx-company">
+  <span class="eyebrow">Медцентр · Екатеринбург · ул. Куйбышева</span>
+  <h1>«Нейроникс» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Нейроникс» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">МЦ Нейроникс</div></div>
+    <div class="fact"><div class="k">Направления</div><div class="v">Лечебный массаж <small>взрослый и детский</small></div></div>
+    <div class="fact"><div class="k">Специалисты</div><div class="v">Психолог, психиатр, психотерапевт <small>детский невролог</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">ул. Куйбышева, 84, корп. 2 <small>Екатеринбург</small></div></div>
+    <div class="fact"><div class="k">Приём</div><div class="v">По записи <small>с 15 до 20, все рабочие дни</small></div></div>
+    <div class="fact"><div class="k">Консультация врача</div><div class="v">Психиатр, психотерапевт — 5000</div></div>
+    <div class="fact"><div class="k">Формат</div><div class="v">Очно и онлайн <small>55 минут</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">бебенин-аа.рф</div></div>
+  </div>
+</section>
+
+<section id="nx-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Нейроникса»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: синий и тёмно-синий логотипа, светло-голубой, белый фон и почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#4E8BB4;color:#FEFEFE;border-color:#4E8BB4"><div class="role">Основной</div><div class="name">Синий</div><div class="hex">#4E8BB4</div></div>
+    <div class="swatch" style="background:#385289;color:#FEFEFE;border-color:#385289"><div class="role">Акцентный</div><div class="name">Тёмно-синий</div><div class="hex">#385289</div></div>
+    <div class="swatch" style="background:#E8FAFF;color:#040505;border-color:#E8FAFF"><div class="role">Второстепенный</div><div class="name">Светло-голубой</div><div class="hex">#E8FAFF</div></div>
+    <div class="swatch" style="background:#FEFEFE;color:#040505;border-color:#FEFEFE"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FEFEFE</div></div>
+    <div class="swatch" style="background:#040505;color:#FEFEFE;border-color:#3a3d3d"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#040505</div></div>
+  </div>
+</section>
+
+<section id="nx-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Все темы — о приоритетах из брифа: консультации психотерапевта и массаж. Сначала взрослый приём врача, затем детский; потом лечебный массаж для взрослых и для детей.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Консультация врача-психиатра и психотерапевта: очно и онлайн, 55 минут.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Приём детей и подростков: детская психотерапия, консультации родителей, детский невролог.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Лечебный массаж для взрослых по записи.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Детский массаж.</p></div>
+  </div>
+</section>
+
+<section id="nx-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Нейроникс» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль — так указано в брифе. Название везде одно: «Нейроникс». Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона, e-mail, превосходных степеней, обещаний результата, слов «безопасно» и «эффективно», упоминаний лекарств и лечения зависимостей. В конце каждой новости — строка «Имеются противопоказания. Необходима консультация специалиста». Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Психиатр и психотерапевт в Екатеринбурге: консультация очно и онлайн в «Нейрониксе»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Нейрониксе» принимает врач-психиатр и психотерапевт — очно на Куйбышева, 84, корп. 2 или онлайн.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Консультация врача психиатра, консультация врача психотерапевта, консультация психолога.<span class="src">бриф</span></li>
+      <li>Цена врача психиатра и врача психотерапевта 5000.<span class="src">бриф</span></li>
+      <li>Консультативный приём оффлайн: 55 минут, по предварительной записи. Консультативный приём онлайн: 55 минут.<span class="src">сайт</span></li>
+      <li>Бебенин Александр Алексеевич — врач высшей квалификационной категории, психиатр-психотерапевт, психолог.<span class="src">сайт</span></li>
+      <li>Онлайн: через WhatsApp, Zoom или видеозвонок.<span class="src">сайт</span></li>
+      <li>Работаю по записи, собственный график. Точно с 15 до 20. Все рабочие дни.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Психиатр и психотерапевт в Екатеринбурге — консультация в «Нейрониксе»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Консультация психиатра и психотерапевта в Екатеринбурге, очно и онлайн | Нейроникс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Консультация врача-психиатра и психотерапевта в Екатеринбурге: 55 минут, очно на ул. Куйбышева, 84, корп. 2 или онлайн, по предварительной записи.</span></div>
+      <div class="chips"><span class="chip-kw">психотерапевт</span><span class="chip-kw">психотерапевт екатеринбург</span><span class="chip-kw">психиатр</span><span class="chip-kw">психиатр екатеринбург</span><span class="chip-kw">консультация психотерапевта</span><span class="chip-kw">консультация психиатра</span><span class="chip-kw">психотерапевт онлайн</span><span class="chip-kw">врач психотерапевт</span><span class="chip-kw">прием психиатра</span><span class="chip-kw">психолог екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию — очно или онлайн.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Консультация врача, 55 минут»</div>
+      <p>Композиция: светлый кабинет — два кресла у окна, стол, без людей и без медицинских инструментов в кадре. Тезис на плашке в нижней трети, строка «очно · онлайн · по записи». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — синий #4E8BB4, тезис — белый #FEFEFE, строка — тёмно-синий #385289 на светло-голубой подложке #E8FAFF.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Детский психотерапевт и детский невролог в Екатеринбурге: приём детей и подростков</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Нейрониксе» работают с детьми и взрослыми — в том числе принимают детского невролога и проводят детскую психотерапию.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Второе направление более важное это психическая сфера, дети и взрослые. психолог, психиатр и психотерапевт. детский невролог.<span class="src">бриф</span></li>
+      <li>Консультация детского невролога.<span class="src">бриф</span></li>
+      <li>Направления работы: детская психотерапия, консультации родителей по воспитанию, семейная психотерапия.<span class="src">сайт</span></li>
+      <li>Первые встречи с детьми и подростками проводятся совместно с родителями.<span class="src">сайт</span></li>
+      <li>Особенности: для детей; специализация клиники: неврология, психология и психотерапия, психиатрия.<span class="src">Яндекс Карты</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Детский психотерапевт и невролог в Екатеринбурге — «Нейроникс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Детский невролог и детская психотерапия в Екатеринбурге | Нейроникс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Приём детей и подростков в медцентре «Нейроникс»: детский невролог, детская психотерапия, консультации родителей. Ул. Куйбышева, 84, корп. 2, по записи.</span></div>
+      <div class="chips"><span class="chip-kw">детский невролог</span><span class="chip-kw">детский невролог екатеринбург</span><span class="chip-kw">детский психолог</span><span class="chip-kw">детский психиатр</span><span class="chip-kw">детский психотерапевт</span><span class="chip-kw">психолог для подростка</span><span class="chip-kw">консультация детского невролога</span><span class="chip-kw">семейный психолог</span><span class="chip-kw">консультация родителей</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишите ребёнка на консультацию.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Приём детей и подростков»</div>
+      <p>Композиция: детский уголок в кабинете — маленький стол, карандаши, мягкие игрушки, без лиц детей в кадре. Тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — светло-голубой #E8FAFF, тезис — тёмно-синий #385289, линия под тезисом — синий #4E8BB4.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Лечебный массаж для взрослых в Екатеринбурге по записи</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Лечебный массаж — одно из двух направлений медицинского центра «Нейроникс».</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Медицинский центр специализирующийся на двух направлениях. Лечебный массаж - взрослый и детский.<span class="src">бриф</span></li>
+      <li>Ну и полный спектр массажа.<span class="src">бриф</span></li>
+      <li>Конкурентоспособные ценны на массаж.<span class="src">бриф</span></li>
+      <li>Особенности: массаж, медцентр, клиника, оплата картой, подарочный сертификат.<span class="src">Яндекс Карты</span></li>
+      <li>Работаю по записи. Точно с 15 до 20. Все рабочие дни.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Лечебный массаж в Екатеринбурге — медцентр «Нейроникс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Лечебный массаж для взрослых в медцентре, Екатеринбург | Нейроникс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Лечебный массаж для взрослых в медицинском центре «Нейроникс»: полный спектр массажа по записи, ул. Куйбышева, 84, корп. 2, Екатеринбург.</span></div>
+      <div class="chips"><span class="chip-kw">лечебный массаж</span><span class="chip-kw">лечебный массаж екатеринбург</span><span class="chip-kw">массаж екатеринбург</span><span class="chip-kw">медицинский массаж</span><span class="chip-kw">массаж шейно воротниковой зоны</span><span class="chip-kw">массаж спины</span><span class="chip-kw">массаж в медцентре</span><span class="chip-kw">массаж по записи</span><span class="chip-kw">подарочный сертификат на массаж</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на массаж в удобное время.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Лечебный массаж»</div>
+      <p>Композиция: массажный стол с белой простынёй и сложенными полотенцами в светлом кабинете, без людей. Тезис на плашке справа, строка «для взрослых · по записи».</p>
+      <p>Цвета: плашка — тёмно-синий #385289, тезис — белый #FEFEFE, строка — белый #FEFEFE на синем #4E8BB4.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Детский массаж в Екатеринбурге: медцентр «Нейроникс»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Нейрониксе» лечебный массаж делают не только взрослым, но и детям.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Лечебный массаж - взрослый и детский.<span class="src">бриф</span></li>
+      <li>Особенности: массаж, для детей.<span class="src">Яндекс Карты</span></li>
+      <li>Детский невролог.<span class="src">бриф</span></li>
+      <li>Работаю по записи. Точно с 15 до 20. Все рабочие дни.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Детский массаж в Екатеринбурге — «Нейроникс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Детский лечебный массаж в медцентре, Екатеринбург | Нейроникс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Детский лечебный массаж в медицинском центре «Нейроникс» по записи. В центре также принимает детский невролог. Ул. Куйбышева, 84, корп. 2.</span></div>
+      <div class="chips"><span class="chip-kw">детский массаж</span><span class="chip-kw">детский массаж екатеринбург</span><span class="chip-kw">массаж для детей</span><span class="chip-kw">детский лечебный массаж</span><span class="chip-kw">массаж ребенку</span><span class="chip-kw">массаж для подростков</span><span class="chip-kw">детский невролог</span><span class="chip-kw">лечебный массаж</span><span class="chip-kw">массаж екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишите ребёнка на массаж.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Массаж для детей»</div>
+      <p>Композиция: детская массажная кушетка с мягким пледом и игрушкой, светлый кабинет, без лиц детей в кадре. Тезис на плашке в нижней трети.</p>
+      <p>Цвета: плашка — синий #4E8BB4, тезис — белый #FEFEFE, подложка строки — светло-голубой #E8FAFF.</p>
+    </div>
+  </div>
+</section>
+
+<section id="nx-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Приём врача — 55 минут</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Психиатр · психотерапевт</span><span class="fact-pill">Очно и онлайн</span><span class="fact-pill">По записи</span><span class="fact-pill">Ул. Куйбышева, 84, корп. 2</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #4E8BB4, заголовок белым #FEFEFE сверху, факты на светло-голубых плашках #E8FAFF текстом #040505. Логотип в верхнем левом углу, внизу мелко «Имеются противопоказания».</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Дети и подростки</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Детский невролог</span><span class="fact-pill">Детская психотерапия</span><span class="fact-pill">Консультации родителей</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-голубой #E8FAFF, заголовок тёмно-синим #385289, факты списком на белых плашках #FEFEFE.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Лечебный массаж</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Для взрослых</span><span class="fact-pill">Полный спектр массажа</span><span class="fact-pill">По записи</span><span class="fact-pill">Подарочный сертификат</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото массажного кабинета, нижняя половина — плашка тёмно-синего #385289, факты белым #FEFEFE.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Массаж для детей</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Детский массаж</span><span class="fact-pill">Детский невролог в центре</span><span class="fact-pill">По записи</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FEFEFE, заголовок синим #4E8BB4, факты на синих плашках #4E8BB4 белым #FEFEFE.</div></div>
+  </div>
+</section>
+
+<section id="nx-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — психиатр и психотерапевт, детский приём, лечебный и детский массаж <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Психиатр и психотерапевт: очно и онлайн</b>55 минут, по записи</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Приём врача — 55 минут</b>форматы приёма</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Детский психотерапевт и детский невролог</b>дети, подростки, родители</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Дети и подростки</b>направления детского приёма</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Лечебный массаж для взрослых</b>направление брифа</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Лечебный массаж</b>главные факты</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Детский массаж</b>второе массажное направление</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Массаж для детей</b>главные факты</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={nx:[9067,7924,7798,7971,9074,9917]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const k=box.dataset.chart,d=D[k],W=520,H=210,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.2,w=bw*.6;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+  document.getElementById(k+'-mom').innerHTML=d.map((v,i)=>{const c=i?Math.round((v/d[i-1]-1)*100):null;return `<tr><td>${M[i]}</td><td class="r num">${fmt(v)}</td><td class="r num ${c===null?'':c>=0?'up':'down'}">${c===null?'—':(c>0?'+':'')+c+'%'}</td></tr>`}).join('');
+});
+const T={'t-nx':[['массаж','коммерческое',140547],['психолог','коммерческое',56904],['психиатр','коммерческое',24696],['психотерапевт','коммерческое',9917],['детский психолог','коммерческое',2069],['детский невролог','коммерческое',2005],['детский психиатр','коммерческое',1736],['детский массаж','коммерческое',925],['лечебный массаж','коммерческое',761],['массаж шейно воротниковой зоны','коммерческое',311]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['demand','Спрос'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let st={co:'nx',view:'analytics'};
+function show(co,view,scroll){
+  if(!['nx'].includes(co))co='nx'; if(!NAV[view])view='analytics'; st={co,view};
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=!(el.dataset.co===co&&el.dataset.view===view)});
+  document.querySelectorAll('[data-co-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.coGo===co?'true':'false'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${co}-${id}">${t}</button>`).join('');
+  const h=co+'-'+view; if(location.hash.slice(1)!==h){try{history.replaceState(null,'','#'+h)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-co-go]');if(c){show(c.dataset.coGo,st.view,true);return}
+  const g=e.target.closest('[data-go]');if(g){show(st.co,g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+function fromHash(s){const [co,view]=location.hash.slice(1).split('-');show(co,view,s)}
+window.addEventListener('hashchange',()=>fromHash(true));
+fromHash(false);
+</script>
+</body>
+</html>
