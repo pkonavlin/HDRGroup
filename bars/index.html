@@ -1,0 +1,542 @@
+```<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Барс»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company switch + view tabs + section chips; two views (Аналитика / Контент-план) per company */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.cos{display:flex;gap:4px}
+.cos button{font:600 14px var(--f-display);color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.cos button:hover{color:var(--ink)}
+.cos button[aria-pressed="true"]{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va td.nw{white-space:nowrap}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)} .va .down{color:var(--crit)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:11.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .col{fill:var(--gold)}
+.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span>
+      <div class="cos" role="group" aria-label="Компания"><button type="button" data-co-go="gs" aria-pressed="true">Барс</button></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-gs-analytics" data-co="gs" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="gs-top">
+  <span class="eyebrow">Челябинск · остекление балконов и лоджий · замер 04.11.2026</span>
+  <h1>Где «Барс» не видно на Картах и что с этим делать</h1>
+  <p>Карточка «Барса» на Свердловском проспекте, 28. Позиции на Яндекс Картах по 8 целевым запросам, соседи в радиусе 2 км, спрос по Вордстату для региона «Челябинск» по 10 направлениям.</p>
+</header>
+
+<section id="gs-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из 8 запросов карточки нет в первой пятёрке</b>«остекление балконов», «перегородки для зонирования», «межкомнатные», «стеклянные», «алюминиевые перегородки», «алюминиевые окна», «алюминиевые двери», «противопожарные двери».</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>На карточке нет ни одной новости</b>Вкладки новостей нет, перегородки упомянуты только в особенностях и витрине. Рядом Balkon74 (Свердловский пр., 32) — 121 оценка, у карточки — 5.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Спрос на перегородки вырос летом</b>«перегородки для зонирования» в Челябинске: 308 запросов в апреле, 681 в августе, 538 в сентябре 2026.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,3</div><div class="s">5 оценок · 6 отзывов</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">вкладка новостей отсутствует</div></div>
+    <div class="kpi"><div class="k">Запросов в топ-5</div><div class="n">0 из 8</div><div class="s">поиск по Челябинску</div></div>
+    <div class="kpi"><div class="k">Спрос на перегородки</div><div class="n">1 546</div><div class="s">5 запросов о перегородках, сентябрь 2026</div></div>
+  </div>
+</section>
+
+<section id="gs-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Челябинску без геолокации, 04.11.2026. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Карточка</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>остекление балконов</td><td class="r">нет</td><td>Balkon74, ОкноМания, Алькор, Ваш Балкон, Корпорация Окон</td></tr>
+      <tr><td>перегородки для зонирования</td><td class="r">нет</td><td>Makler Group, ДиАлСтрой, ДНК-стекло, Алга, Инэкс</td></tr>
+      <tr><td>межкомнатные перегородки</td><td class="r">нет</td><td>Русдверь (4 карточки), ДиАлСтрой</td></tr>
+      <tr><td>стеклянные перегородки</td><td class="r">нет</td><td>Steklo House, Дверь Эксперт, Партнер, Челябстеклопром, ДНК-стекло</td></tr>
+      <tr><td>алюминиевые перегородки</td><td class="r">нет</td><td>Партнер, Steklo House, ДиАлСтрой, Система, Гефест</td></tr>
+      <tr><td>алюминиевые окна</td><td class="r">нет</td><td>Идеал, Как своим, ОкнаПроф, Балконы Мечта, Ваш Балкон</td></tr>
+      <tr><td>алюминиевые двери</td><td class="r">нет</td><td>Русдверь (4 карточки), ОкноМания</td></tr>
+      <tr><td>противопожарные двери</td><td class="r">нет</td><td>Русдверь (4 карточки), Челябинская фабрика Дверей</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи в радиусе 2 км</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Барс</b></td><td class="r num me">4,3</td><td class="r num me">5</td><td>Свердловский просп., 28</td></tr>
+      <tr><td>Balkon74</td><td class="r num">5,0</td><td class="r num">121</td><td>Свердловский просп., 32</td></tr>
+      <tr><td>ОкноМания</td><td class="r num">5,0</td><td class="r num">69</td><td>ул. Кирова, 104, корп. 2</td></tr>
+      <tr><td>ОкнаПроф</td><td class="r num">5,0</td><td class="r num">65</td><td>просп. Победы, 160</td></tr>
+      <tr><td>Дверной Комфорт</td><td class="r num">4,7</td><td class="r num">54</td><td>Каслинская ул., 25</td></tr>
+      <tr><td>Челябинская фабрика Дверей</td><td class="r num">4,7</td><td class="r num">48</td><td>Свердловский просп., 9</td></tr>
+      <tr><td>Вектор</td><td class="r num">4,5</td><td class="r num">15</td><td>просп. Победы, 160</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">У соседей от 15 до 121 оценки и регулярно заполненные карточки. У «Барса» 5 оценок и нет публикаций, поэтому по балконам, перегородкам и алюминию Яндексу не на что опереться, кроме особенностей карточки.</p>
+</section>
+
+<section id="gs-demand">
+  <div class="sh"><h2>Спрос в Челябинске</h2><p>Вордстат, регион «Челябинск», все устройства, апрель — сентябрь 2026.</p></div>
+  <div class="chart" data-chart="gs"><h3>«перегородки для зонирования», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц</div></div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">Запросов</th><th class="r">К прошлому месяцу</th></tr></thead><tbody id="gs-mom"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Пик в августе (681), в сентябре спрос остаётся выше весеннего на 75%.</p>
+
+  <h3>Запросы по направлениям (сентябрь 2026)</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-gs"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Перегородки ищут по материалу и задаче</b>: «стеклянные» — 374, «межкомнатные» — 257, «раздвижные» — 245, «алюминиевые» — 132.</li>
+      <li><b>Зонирование — главный уточнитель</b>: «перегородки для зонирования» — 538, у раздвижных и алюминиевых пик тоже в августе.</li>
+      <li><b>Алюминий ищут стабильно</b>: «алюминиевые двери» — 902, «алюминиевые окна» — 552.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «перегородки», «Челябинск» и задача (зонирование, кабинет, офис) в первом абзаце.</li>
+      <li>«остекление балконов» — 900 запросов: две новости под балконы, две — под перегородки из приоритета брифа.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="gs-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Челябинску 04.11.2026 без геолокации; соседи — поиск у Свердловского проспекта, 28; рейтинги и оценки — из выдачи.</li>
+    <li>Вордстат: регион «Челябинск», все устройства, помесячно за апрель — сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/bars/190678581777/" target="_blank" rel="noopener">Свердловский просп., 28 — Яндекс Карты</a>
+    <a href="https://bars-pro.clients.site/" target="_blank" rel="noopener">bars-pro.clients.site</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-gs-content" data-co="gs" data-view="content" hidden><div class="wrap">
+<section class="hero" id="gs-company">
+  <span class="eyebrow">Остекление балконов и лоджий · Челябинск</span>
+  <h1>«Барс» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Барс</div></div>
+    <div class="fact"><div class="k">Рубрика</div><div class="v">Остекление балконов и лоджий <small>окна, двери, витражи, перегородки</small></div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Алюминиевые светопрозрачные решения <small>пластиковые окна, двери, металлические и противопожарные двери, перегородки</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Свердловский проспект, 28 <small>остановка «Проспект Победы» — 165 м</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">9–18 пн–пт</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Сроки минимальные</div></div>
+    <div class="fact"><div class="k">Приоритет</div><div class="v">Зонирование пространства <small>интерьерные перегородки</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Индивидуальный расчёт</div></div>
+  </div>
+</section>
+
+<section id="gs-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Барса»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: глубокий синий логотипа, светло-голубой и белый фон и серый для второстепенных надписей.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#0C2080;color:#FEFEFE;border-color:#0C2080"><div class="role">Основной</div><div class="name">Синий</div><div class="hex">#0C2080</div></div>
+    <div class="swatch" style="background:#717986;color:#FEFEFE;border-color:#717986"><div class="role">Акцентный</div><div class="name">Серый</div><div class="hex">#717986</div></div>
+    <div class="swatch" style="background:#EEF6FF;color:#0C2080;border-color:#EEF6FF"><div class="role">Второстепенный</div><div class="name">Светло-голубой</div><div class="hex">#EEF6FF</div></div>
+    <div class="swatch" style="background:#FEFEFE;color:#0C2080;border-color:#FEFEFE"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FEFEFE</div></div>
+  </div>
+</section>
+
+<section id="gs-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с основной рубрики карточки — остекления балконов и лоджий, затем переходит к приоритету из брифа — перегородкам для зонирования.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Остекление балконов и лоджий в Челябинске: производство, бесплатный замер, монтаж.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Безрамное остекление и утепление балкона ППУ.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Перегородки для зонирования пространства в квартире, доме и офисе.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Стеклянные, алюминиевые и раздвижные перегородки.</p></div>
+  </div>
+</section>
+
+<section id="gs-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Барс» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», лёгкий и понятный юмор допустим — так указано в брифе. Название везде одно: «Барс». Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона, e-mail, цен и превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Остекление балконов и лоджий в Челябинске: производство, бесплатный замер и монтаж</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Барс» остекляет балконы и лоджии в Челябинске — от замера до установки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Рубрика карточки: остекление балконов и лоджий, окна, двери.<span class="src">Яндекс Карты</span></li>
+      <li>Алюминиевые светопрозрачныее решения, пластиковые окна, двери, металлические двери, противопожарные двери, перегородки.<span class="src">бриф</span></li>
+      <li>Бесплатный замер, быстрое изготовление, качественный монтаж.<span class="src">сайт</span></li>
+      <li>Особенности: производство, замер, установка, предварительная запись.<span class="src">Яндекс Карты</span></li>
+      <li>Сроки минимальные.<span class="src">бриф</span></li>
+      <li>Челябинск, Свердловский проспект, 28; режим работы 9–18 пн–пт.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Остекление балконов и лоджий в Челябинске — «Барс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Остекление балконов и лоджий в Челябинске, бесплатный замер | Барс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Остекление балконов и лоджий в Челябинске: алюминиевые и пластиковые решения, собственное производство, бесплатный замер и монтаж. Свердловский проспект, 28.</span></div>
+      <div class="chips"><span class="chip-kw">остекление балконов</span><span class="chip-kw">остекление балконов челябинск</span><span class="chip-kw">остекление лоджий</span><span class="chip-kw">остекление балкона под ключ</span><span class="chip-kw">алюминиевое остекление балкона</span><span class="chip-kw">пластиковое остекление балкона</span><span class="chip-kw">замер остекления балкона</span><span class="chip-kw">алюминиевые окна</span><span class="chip-kw">пластиковые окна</span><span class="chip-kw">установка окон на балкон</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на бесплатный замер балкона.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Балкон под стеклом»</div>
+      <p>Композиция: остеклённый балкон многоэтажного дома снаружи, дневной свет, створки закрыты. Тезис на плашке в нижней трети, строка «замер · производство · монтаж». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — синий #0C2080, тезис — белый #FEFEFE, строка — серый #717986 на светло-голубой подложке #EEF6FF.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Безрамное остекление и утепление балкона ППУ в Челябинске</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Безрамное остекление и утепление ППУ — две услуги «Барса» для балкона, на котором можно находиться и в ноябре.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Особенности: безрамное остекление, утепление ППУ.<span class="src">Яндекс Карты</span></li>
+      <li>Аксессуары: жалюзи, карнизы, ставни, рулонные шторы, решётки, рольставни.<span class="src">Яндекс Карты</span></li>
+      <li>Алюминиевые светопрозрачныее решения.<span class="src">бриф</span></li>
+      <li>Бесплатный замер, быстрое изготовление, качественный монтаж.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Безрамное остекление и утепление балкона в Челябинске — «Барс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Безрамное остекление балкона и утепление ППУ в Челябинске | Барс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Безрамное остекление балконов и лоджий и утепление ППУ в Челябинске: жалюзи, рулонные шторы и рольставни, бесплатный замер и монтаж. Свердловский проспект, 28.</span></div>
+      <div class="chips"><span class="chip-kw">безрамное остекление</span><span class="chip-kw">безрамное остекление балкона</span><span class="chip-kw">безрамное остекление челябинск</span><span class="chip-kw">утепление балкона</span><span class="chip-kw">утепление ппу</span><span class="chip-kw">утепление лоджии</span><span class="chip-kw">теплое остекление балкона</span><span class="chip-kw">остекление балконов</span><span class="chip-kw">рулонные шторы на балкон</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> закажите замер и выберите вариант остекления.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Безрамное и тёплое»</div>
+      <p>Композиция: балкон с безрамным остеклением изнутри, вид на город сквозь сплошное стекло без вертикальных рам. Тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — белый #FEFEFE, тезис — синий #0C2080, тонкая линия под тезисом — серый #717986.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Перегородки для зонирования пространства в Челябинске: квартира, дом и офис</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кроме балконов, «Барс» делает интерьерные перегородки — чтобы разделить комнату, не возводя стену.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Актуальные темы: зонирование пространства, интерьерные перегородки.<span class="src">бриф</span></li>
+      <li>Окна, двери и перегородки. Надёжные решения для вашего дома и бизнеса.<span class="src">сайт</span></li>
+      <li>Особенности: межкомнатные перегородки, производство, замер, установка.<span class="src">Яндекс Карты</span></li>
+      <li>Сроки минимальные.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Перегородки для зонирования в Челябинске — «Барс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Перегородки для зонирования комнаты и офиса в Челябинске | Барс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Интерьерные перегородки для зонирования квартиры, дома и офиса в Челябинске: производство, бесплатный замер и установка. Свердловский проспект, 28.</span></div>
+      <div class="chips"><span class="chip-kw">перегородки для зонирования</span><span class="chip-kw">перегородки для зонирования челябинск</span><span class="chip-kw">перегородка для зонирования комнаты</span><span class="chip-kw">перегородка для комнаты</span><span class="chip-kw">интерьерные перегородки</span><span class="chip-kw">межкомнатные перегородки</span><span class="chip-kw">перегородки офисные</span><span class="chip-kw">перегородка в квартире</span><span class="chip-kw">монтаж перегородок</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на замер — подберём перегородку под ваше пространство.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Зонирование без стен»</div>
+      <p>Композиция: светлая комната, разделённая перегородкой на две зоны (гостиная и рабочее место), вид под углом. Тезис на плашке в нижней трети, строка «интерьерные перегородки · Челябинск».</p>
+      <p>Цвета: плашка — синий #0C2080, тезис — белый #FEFEFE, строка — белый #FEFEFE на сером #717986.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Стеклянные, алюминиевые и раздвижные перегородки в Челябинске</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Перегородка из стекла и алюминия делит комнату, а свет остаётся — такие решения «Барс» делает на заказ.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Окна, двери, витражи, перегородки.<span class="src">бриф</span></li>
+      <li>Двери: купе, стеклянные, алюминиевые, раздвижные.<span class="src">Яндекс Карты</span></li>
+      <li>Особенности: безрамное остекление, межкомнатные перегородки.<span class="src">Яндекс Карты</span></li>
+      <li>Бесплатный замер, быстрое изготовление, качественный монтаж.<span class="src">сайт</span></li>
+      <li>Стоимость: индивидуальный расчёт.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Стеклянные и раздвижные перегородки в Челябинске — «Барс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Стеклянные, алюминиевые и раздвижные перегородки в Челябинске | Барс</span></div>
+      <div class="meta-row"><span><b>Description · </b>Стеклянные перегородки на алюминиевом профиле, раздвижные системы и двери-купе в Челябинске: бесплатный замер, изготовление и монтаж. Свердловский проспект, 28.</span></div>
+      <div class="chips"><span class="chip-kw">стеклянные перегородки</span><span class="chip-kw">стеклянные перегородки челябинск</span><span class="chip-kw">алюминиевые перегородки</span><span class="chip-kw">раздвижные перегородки</span><span class="chip-kw">перегородки межкомнатные раздвижные</span><span class="chip-kw">перегородка купе</span><span class="chip-kw">перегородки из стекла</span><span class="chip-kw">алюминиевые двери</span><span class="chip-kw">дверь перегородка раздвижная</span><span class="chip-kw">профиль для перегородок</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> обсудите с нами проект перегородки и получите расчёт.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стекло, алюминий, купе»</div>
+      <p>Композиция: раздвижная стеклянная перегородка в тонком тёмном профиле, наполовину открыта между кухней и гостиной. Тезис на плашке справа, без людей в кадре.</p>
+      <p>Цвета: плашка — светло-голубой #EEF6FF, тезис — синий #0C2080, подпись — серый #717986.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gs-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Балкон под стеклом</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Остекление балконов и лоджий</span><span class="fact-pill">Бесплатный замер</span><span class="fact-pill">Своё производство</span><span class="fact-pill">Свердловский пр., 28</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #0C2080, заголовок белым #FEFEFE сверху, факты на светло-голубых плашках #EEF6FF текстом #0C2080. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Безрамное и тёплое</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Безрамное остекление</span><span class="fact-pill">Утепление ППУ</span><span class="fact-pill">Жалюзи и рольставни</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото балкона с безрамным остеклением, нижняя половина — плашка синего #0C2080, факты белым #FEFEFE.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Зонирование без стен</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Интерьерные перегородки</span><span class="fact-pill">Для дома и бизнеса</span><span class="fact-pill">Замер и установка</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FEFEFE, заголовок синим #0C2080, факты списком с тонкими разделителями серого #717986.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Стекло, алюминий, купе</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Стеклянные двери</span><span class="fact-pill">Алюминиевые двери</span><span class="fact-pill">Раздвижные и купе</span><span class="fact-pill">Индивидуальный расчёт</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-голубой #EEF6FF, заголовок синим #0C2080, факты на синих плашках #0C2080 белым #FEFEFE.</div></div>
+  </div>
+</section>
+
+<section id="gs-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — остекление балконов, безрамное и утепление, перегородки для зонирования, стеклянные и раздвижные <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Остекление балконов и лоджий</b>рубрика карточки, замер и монтаж</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Балкон под стеклом</b>главные факты</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Безрамное остекление и утепление ППУ</b>особенности карточки</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Безрамное и тёплое</b>виды работ</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Перегородки для зонирования</b>приоритет брифа</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Зонирование без стен</b>дом и бизнес</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Стеклянные, алюминиевые и раздвижные перегородки</b>материалы и типы открывания</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Стекло, алюминий, купе</b>виды дверей</span></div>
+    </div>
+  </details>
+</section>
+
+</div></div>
+</main>
+<script>
+const M=['апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={gs:[308,286,301,408,681,538]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const k=box.dataset.chart,d=D[k],W=520,H=210,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.2,w=bw*.6;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+  document.getElementById(k+'-mom').innerHTML=d.map((v,i)=>{const c=i?Math.round((v/d[i-1]-1)*100):null;return `<tr><td>${M[i]}</td><td class="r num">${fmt(v)}</td><td class="r num ${c===null?'':c>=0?'up':'down'}">${c===null?'—':(c>0?'+':'')+c+'%'}</td></tr>`}).join('');
+});
+const T={'t-gs':[['пластиковые окна','коммерческое',12411],['остекление балконов','коммерческое',900],['алюминиевые двери','коммерческое',902],['противопожарные двери','коммерческое',837],['алюминиевые окна','коммерческое',552],['перегородки для зонирования','коммерческое',538],['стеклянные перегородки','коммерческое',374],['межкомнатные перегородки','коммерческое',257],['раздвижные перегородки','коммерческое',245],['алюминиевые перегородки','коммерческое',132]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['demand','Спрос'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let st={co:'gs',view:'analytics'};
+function show(co,view,scroll){
+  if(!['gs'].includes(co))co='gs'; if(!NAV[view])view='analytics'; st={co,view};
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=!(el.dataset.co===co&&el.dataset.view===view)});
+  document.querySelectorAll('[data-co-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.coGo===co?'true':'false'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${co}-${id}">${t}</button>`).join('');
+  const h=co+'-'+view; if(location.hash.slice(1)!==h){try{history.replaceState(null,'','#'+h)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-co-go]');if(c){show(c.dataset.coGo,st.view,true);return}
+  const g=e.target.closest('[data-go]');if(g){show(st.co,g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+function fromHash(s){const [co,view]=location.hash.slice(1).split('-');show(co,view,s)}
+window.addEventListener('hashchange',()=>fromHash(true));
+fromHash(false);
+</script>
+</body>
+</html>
