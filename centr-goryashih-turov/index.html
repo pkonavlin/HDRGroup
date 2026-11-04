@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Центр Горящих Туров — ТЗ на контент, Этап 2</title>
-<meta name="description" content="ТЗ на контент — Этап 2: 2 новости + обложка, 2 сторис — Центр Горящих Туров, Москва">
+<title>Центр Горящих Туров — ТЗ на контент, Этап 3</title>
+<meta name="description" content="ТЗ на контент — Этап 3: 2 новости + обложка, 2 сторис — Центр Горящих Туров, Москва">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -316,6 +316,18 @@
   .cycle-group-label:first-child{margin-top:0;}
   .cycle.two-col{grid-template-columns:repeat(2,1fr); max-width:620px;}
 
+  /* вступление (тон и голос) */
+  .tone-banner{
+    background:var(--ice);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 20px;
+    margin-top:20px;
+    font-size:0.92rem;
+    color:var(--ink);
+  }
+  .tone-banner b{color:var(--coral);}
+
   /* theme cards (news + stories share this component) */
   .theme-card{
     background:var(--card);
@@ -452,21 +464,33 @@
     gap:20px;
     margin-top:28px;
   }
-  .map-cycle{
+  details.map-cycle{
     background:var(--card);
     border:1px solid var(--line);
     border-radius:16px;
     padding:26px 28px;
   }
-  .map-cycle.past{opacity:0.68;}
-  .map-cycle-head{
+  details.map-cycle.past{opacity:0.68;}
+  details.map-cycle > summary.map-cycle-head{
     display:flex;
     align-items:center;
     gap:12px;
     flex-wrap:wrap;
-    margin-bottom:18px;
+    cursor:pointer;
+    list-style:none;
   }
+  details.map-cycle[open] > summary.map-cycle-head{margin-bottom:18px;}
+  details.map-cycle > summary.map-cycle-head::-webkit-details-marker{display:none;}
+  details.map-cycle > summary.map-cycle-head::marker{display:none;}
   .map-cycle-head h4{font-size:1.05rem;}
+  .map-cycle-head .chevron{
+    margin-left:auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--muted);
+    transition:transform .15s ease;
+  }
+  details.map-cycle[open] .chevron{transform:rotate(90deg);}
   .badge-current{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.66rem;
@@ -517,7 +541,7 @@
 
 
 <div class="topbar">
-  <div class="brand"><span class="mono">ТЗ · Этап 2</span>Центр Горящих Туров</div>
+  <div class="brand"><span class="mono">ТЗ · Этап 3</span>Центр Горящих Туров</div>
   <nav>
     <a href="#company"><span class="mono">01</span> Компания</a>
     <a href="#brandbook"><span class="mono">02</span> Брендбук</a>
@@ -530,9 +554,9 @@
 
 <main>
   <header class="hero">
-    <span class="eyebrow">Техническое задание · Этап 2 (продление)</span>
+    <span class="eyebrow">Техническое задание · Этап 3 (продление)</span>
     <h1>Центр Горящих Туров</h1>
-    <p>Темы нового этапа продолжают цикл: после знакомства, услуг, географии и доверия — сезон поездки и забота о тех, кто планирует её не только готовым туром. Публикация — карточка компании в Яндекс Картах и 2ГИС.</p>
+    <p>Темы нового этапа продолжают цикл: после знакомства, услуг, географии, доверия, сезона и заботы — формат отдыха и подготовка к поездке. Публикация — карточка компании в Яндекс Картах и 2ГИС.</p>
     <div class="hero-meta">
       <span>2 новости + ТЗ на обложку</span>
       <span>2 сторис · по 1 слайду, без обложки</span>
@@ -559,58 +583,24 @@
   <section id="brandbook">
     <span class="eyebrow">02 · Мини-брендбук</span>
     <h2>Визуальное и тональное направление</h2>
-    <p class="section-sub">Переносится без изменений с прошлого этапа: цвета, типографика и стиль фотографии сняты с фирменных материалов компании.</p>
+    <p class="section-sub">Цвета сняты с фирменных материалов компании, переносятся без изменений между этапами.</p>
 
-    <div class="brand-grid">
-      <div>
-        <div class="brand-card">
-          <h4>Палитра</h4>
-          <div class="swatches">
-            <div class="swatch"><span class="role">Основной</span><div class="chip" style="background:#C1272D"></div><div class="name">Красный (лого, навигация)</div><div class="hex">#C1272D</div></div>
-            <div class="swatch"><span class="role">Акцентный</span><div class="chip" style="background:#A6362C"></div><div class="name">Бордовый (кнопки CTA)</div><div class="hex">#A6362C</div></div>
-            <div class="swatch"><span class="role">Второстепенный</span><div class="chip" style="background:#E2953F"></div><div class="name">Оранжевый (подзаголовки)</div><div class="hex">#E2953F</div></div>
-            <div class="swatch"><span class="role">Фоновый</span><div class="chip" style="background:#E7EAFB"></div><div class="name">Лавандовый (фон секций)</div><div class="hex">#E7EAFB</div></div>
-            <div class="swatch"><span class="role">Текстовый</span><div class="chip" style="background:#241F1F; border-color:#241F1F"></div><div class="name">Тёмный текст</div><div class="hex">#241F1F</div></div>
-          </div>
-        </div>
-        <div class="brand-card">
-          <h4>Типографика</h4>
-          <div class="type-sample">Заголовки</div>
-          <div class="type-label">Плотный слаб-серif с засечками, как в логотипе — крупно, заглавными, в красном</div>
-          <div class="type-sample body">Текст постов и подписи набираются нейтральным читаемым гротеском.</div>
-          <div class="type-label">Основной текст</div>
-          <div class="type-sample mono">ЦЕНА · ДАТЫ · –30%</div>
-          <div class="type-label" style="margin-bottom:0;">Цифры, цены, даты — моноширинным или капслоком для акцента</div>
-        </div>
-      </div>
-
-      <div>
-        <div class="brand-card">
-          <h4>Фото и графика</h4>
-          <ul>
-            <li>Реальные кадры направлений и путешествий — тёплые, живые сцены (воздушные шары, пляж, достопримечательности), как на сайте компании</li>
-            <li>Фото-плитка в 3 колонки: чередование фото и текстового блока с CTA-кнопкой — по образцу блока услуг на сайте</li>
-            <li>Кнопки CTA — закруглённые, бордового цвета, белый текст, как на сайте</li>
-            <li>Акцентные подзаголовки блоков — оранжевым цветом, крупным кеглем</li>
-          </ul>
-        </div>
-        <div class="brand-card">
-          <h4>Тон коммуникации</h4>
-          <ul>
-            <li>Спокойный, фактологический тон travel-эксперта — без «лучший», «топовый», «№1»</li>
-            <li>Аргумент — через конкретику (страны, годы, сроки), а не превосходные степени</li>
-            <li>Срочность горящих туров и сезонных предложений передаётся датами и ценами, а не восклицательными знаками</li>
-            <li>Прямое обращение на «вы», короткие предложения, понятные CTA</li>
-          </ul>
-        </div>
+    <div class="brand-card">
+      <h4>Палитра</h4>
+      <div class="swatches">
+        <div class="swatch"><span class="role">Основной</span><div class="chip" style="background:#C1272D"></div><div class="name">Красный (лого, навигация)</div><div class="hex">#C1272D</div></div>
+        <div class="swatch"><span class="role">Акцентный</span><div class="chip" style="background:#A6362C"></div><div class="name">Бордовый (кнопки CTA)</div><div class="hex">#A6362C</div></div>
+        <div class="swatch"><span class="role">Второстепенный</span><div class="chip" style="background:#E2953F"></div><div class="name">Оранжевый (подзаголовки)</div><div class="hex">#E2953F</div></div>
+        <div class="swatch"><span class="role">Фоновый</span><div class="chip" style="background:#E7EAFB"></div><div class="name">Лавандовый (фон секций)</div><div class="hex">#E7EAFB</div></div>
+        <div class="swatch"><span class="role">Текстовый</span><div class="chip" style="background:#241F1F; border-color:#241F1F"></div><div class="name">Тёмный текст</div><div class="hex">#241F1F</div></div>
       </div>
     </div>
   </section>
 
   <section id="cycle">
     <span class="eyebrow">03 · Логика цикла</span>
-    <h2>Этап 1 пройден → этап 2 в работе</h2>
-    <p class="section-sub">Новые темы продолжают рассказ о компании: после знакомства, услуг, географии и доверия — когда планировать поездку и что доступно отдельно от готового тура.</p>
+    <h2>Этапы 1–2 пройдены → этап 3 в работе</h2>
+    <p class="section-sub">Новые темы продолжают рассказ о компании: после знакомства, услуг, географии, доверия, сезона и заботы — формат отдыха и подготовка к поездке.</p>
 
     <span class="cycle-group-label">Этап 1 · пройден</span>
     <div class="cycle">
@@ -636,169 +626,193 @@
       </div>
     </div>
 
-    <span class="cycle-group-label">Этап 2 · текущий</span>
+    <span class="cycle-group-label">Этап 2 · пройден</span>
     <div class="cycle two-col">
-      <div class="cycle-step active">
+      <div class="cycle-step done">
         <span class="num">05</span>
         <h4>Сезон</h4>
         <p>Когда планировать и бронировать поездку на зимний период</p>
       </div>
-      <div class="cycle-step active">
+      <div class="cycle-step done">
         <span class="num">06</span>
         <h4>Забота</h4>
         <p>Что доступно отдельно от готового тура: страховка, жильё, экскурсии</p>
       </div>
     </div>
+
+    <span class="cycle-group-label">Этап 3 · текущий</span>
+    <div class="cycle two-col">
+      <div class="cycle-step active">
+        <span class="num">07</span>
+        <h4>Формат</h4>
+        <p>Пляж, экскурсии или комбинированный тур — подбор под запрос, не только по направлению</p>
+      </div>
+      <div class="cycle-step active">
+        <span class="num">08</span>
+        <h4>Подготовка</h4>
+        <p>Что проверить и получить на руки перед вылетом</p>
+      </div>
+    </div>
   </section>
 
   <section id="news">
-    <span class="eyebrow">04 · Новости · Этап 2</span>
+    <span class="eyebrow">04 · Новости · Этап 3</span>
     <h2>2 темы + ТЗ на обложку</h2>
-    <p class="section-sub">Для карточки компании на Яндекс Картах и 2ГИС. Каждая карточка — заголовок, цель публикации, тезисы для копирайтера, SEO-ключи, CTA и отдельное ТЗ на обложку.</p>
+    <p class="section-sub">Для карточки компании на Яндекс Картах и 2ГИС. Каждая карточка — заголовок, вступление (тон и голос), тезисы для копирайтера, SEO-ключи, CTA и отдельное ТЗ на обложку.</p>
 
-    <!-- NEWS 9 -->
+    <div class="tone-banner">Тон раздела: короткое <b>вступление от первого лица компании</b> перед тезисами — не каталог услуг, а тёплая фраза, задающая эмоцию текста. Факты только из анкеты и сайта, без придуманных деталей.</div>
+
+    <!-- NEWS 13 -->
     <article class="theme-card">
       <div class="theme-head">
         <div>
-          <span class="theme-num">Новость 09 · Сезон</span>
-          <h3>Когда бронировать зимний тур 2027, чтобы успеть на горящие цены ОАЭ, Таиланда и Египта</h3>
+          <span class="theme-num">Новость 13 · Формат</span>
+          <h3>Пляж или культура: как в Центре Горящих Туров подбирают формат тура, а не только направление</h3>
         </div>
-        <span class="tag">Сезонный</span>
+        <span class="tag">Экспертный</span>
       </div>
       <div class="theme-body">
         <div class="theme-block">
           <h5>Почему актуально</h5>
-          <p>Конец октября — начало сезона планирования новогодних и зимних каникул. Аудитория ищет ответ на конкретный вопрос «когда бронировать», а не абстрактную «горящую» скидку — пост закрывает это напрямую.</p>
+          <p>Интерес к экскурсионным турам в 2026 году растёт — об этом пишут отраслевые источники. Аудитория агентства обычно выбирает по стране, а не по формату отдыха — пост даёт новый взгляд на уже известные направления, без расширения географии.</p>
+        </div>
+        <div class="theme-block full-row">
+          <h5>Вступление (тон и голос)</h5>
+          <p>Мы в Центре Горящих Туров каждый раз отвечаем на один и тот же вопрос по-новому: пляж или впечатления? Делимся, как подбираем формат под конкретный запрос.</p>
         </div>
         <div class="theme-block">
           <h5>Тезисы для копирайтера</h5>
           <ul>
-            <li>Зимний сезон 2026/2027: спрос по направлениям агентства выше на ОАЭ, Таиланд, Египет, Мальдивы</li>
-            <li>Чем ближе к датам вылета, тем меньше вариантов по цене, отелю и рейсу — особенно на новогодние и школьные зимние каникулы</li>
-            <li>Раннее бронирование расширяет выбор, а не гарантирует фиксированную скидку — формулировка без обещаний цены</li>
-            <li>Подбор идёт по бюджету и датам клиента, как и в остальных турах агентства</li>
+            <li>Среди направлений агентства есть пляжные (Турция, Египет, ОАЭ, Таиланд, Мальдивы) и больше про экскурсии и культуру (Вьетнам, Шри-Ланка, Занзибар)</li>
+            <li>Формат тура — пляжный, экскурсионный или комбинированный — подбирается вместе с направлением, а не отдельно</li>
+            <li>Экскурсии можно включить в тур или оформить отдельно, как доп. услугу агентства</li>
+            <li>Запрос обсуждается с менеджером, без готового шаблона на все случаи</li>
           </ul>
         </div>
         <div class="theme-block full-row">
           <h5>SEO-ключи</h5>
           <div class="chips">
-            <span class="chip-tag">зимние туры 2027</span>
-            <span class="chip-tag">новогодние туры из москвы</span>
-            <span class="chip-tag">туры в оаэ на новый год</span>
-            <span class="chip-tag">горящие туры на зиму</span>
-            <span class="chip-tag">туры в таиланд зима</span>
+            <span class="chip-tag">экскурсионные туры из москвы</span>
+            <span class="chip-tag">пляжный отдых туры</span>
+            <span class="chip-tag">комбинированный тур купить</span>
+            <span class="chip-tag">туры с экскурсиями</span>
+            <span class="chip-tag">подбор тура по формату отдыха</span>
           </div>
         </div>
         <div class="theme-block full-row">
-          <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Оставьте даты поездки — подберём варианты на зимний сезон</span></div>
+          <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Опишите, что вам ближе — пляж или впечатления — подберём направление и формат</span></div>
         </div>
       </div>
       <div class="cover-block">
         <h5>ТЗ на обложку</h5>
-        <p>Зимняя тема в фирменных красных тонах: контраст снега и направления (пальмы/пляж), подпись «Зимний сезон 2027». Без снежинок-клише — сдержанная графика в стиле сайта.</p>
+        <p>Разделённая композиция: пляж слева, культурный объект/достопримечательность справа, в фирменных красных тонах. Подпись — «Пляж или культура».</p>
       </div>
     </article>
 
-    <!-- NEWS 10 -->
+    <!-- NEWS 14 -->
     <article class="theme-card">
       <div class="theme-head">
         <div>
-          <span class="theme-num">Новость 10 · Забота</span>
-          <h3>Едете самостоятельно? Как Центр Горящих Туров оформляет страховку, жильё и экскурсии без покупки готового тура</h3>
+          <span class="theme-num">Новость 14 · Подготовка</span>
+          <h3>Что подготовить перед поездкой: от выбора дат до документов на руках</h3>
         </div>
-        <span class="tag">Продающий</span>
+        <span class="tag">Экспертный</span>
       </div>
       <div class="theme-body">
         <div class="theme-block">
           <h5>Почему актуально</h5>
-          <p>Часть аудитории планирует поездку самостоятельно и не ищет готовый тур — и ошибочно считает, что агентство ей не подходит. Пост показывает отдельные услуги для такого случая и открывает новый повод для обращения.</p>
+          <p>Перед зимним сезоном растёт число вопросов о подготовке к вылету — сроки, документы, что получить на руки. Пост закрывает практическую часть, которая обычно вызывает тревогу у туристов, и логично продолжает тему сезона из прошлого этапа.</p>
+        </div>
+        <div class="theme-block full-row">
+          <h5>Вступление (тон и голос)</h5>
+          <p>Для нас подготовка к поездке — часть работы агентства, а не только продажа тура. Рассказываем, что стоит проверить заранее, чтобы вылет прошёл без сюрпризов.</p>
         </div>
         <div class="theme-block">
           <h5>Тезисы для копирайтера</h5>
           <ul>
-            <li>Турстраховку можно оформить отдельно, без покупки тура</li>
-            <li>Бронирование жилья — отеля или апартаментов — под самостоятельный маршрут</li>
-            <li>Экскурсии по направлению подключаются отдельно от тура</li>
-            <li>Все три услуги оформляются в одном агентстве, с личной консультацией менеджера</li>
+            <li>Перед поездкой стоит проверить срок действия загранпаспорта — у части направлений есть требование к минимальному остаточному сроку на момент вылета</li>
+            <li>Билеты, туристический ваучер и страховой полис турист получает на руки до вылета</li>
+            <li>Вопросы по маршруту и документам можно уточнить у менеджера на любом этапе — от заявки до возвращения</li>
+            <li>Эта подготовка — часть сопровождения тура, а не отдельная платная услуга</li>
           </ul>
         </div>
         <div class="theme-block full-row">
           <h5>SEO-ключи</h5>
           <div class="chips">
-            <span class="chip-tag">страховка для путешествий москва</span>
-            <span class="chip-tag">бронирование апартаментов онлайн</span>
-            <span class="chip-tag">экскурсии купить москва</span>
-            <span class="chip-tag">страховка для поездки без тура</span>
-            <span class="chip-tag">турагентство дополнительные услуги</span>
+            <span class="chip-tag">что нужно для поездки за границу</span>
+            <span class="chip-tag">срок действия загранпаспорта для тура</span>
+            <span class="chip-tag">документы для тура список</span>
+            <span class="chip-tag">подготовка к поездке чеклист</span>
+            <span class="chip-tag">ваучер на тур</span>
           </div>
         </div>
         <div class="theme-block full-row">
-          <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Расскажите о маршруте — подберём страховку, жильё и экскурсии под ваш план</span></div>
+          <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Уточните детали поездки у менеджера — проверим, что нужно подготовить</span></div>
         </div>
       </div>
       <div class="cover-block">
         <h5>ТЗ на обложку</h5>
-        <p>Три иконки на белом фоне в фирменном красном: страховой полис, ключ от апартаментов, гид/экскурсия. Заголовок обложки — «Не только тур».</p>
+        <p>Иконки-чеклист (паспорт / билет / страховой полис) на белом фоне в фирменном красном. Подпись — «Готовимся к поездке».</p>
       </div>
     </article>
   </section>
 
   <section id="stories">
-    <span class="eyebrow">05 · Сторис · Этап 2</span>
+    <span class="eyebrow">05 · Сторис · Этап 3</span>
     <h2>2 темы — по одному слайду</h2>
     <p class="section-sub">Для карточки компании на Яндекс Картах и 2ГИС. Один экран на тему: тема, тезис слайда и дизайн-заметка для этого экрана.</p>
 
     <div class="stories-grid">
-      <!-- STORY 11 -->
+      <!-- STORY 15 -->
       <article class="theme-card compact">
         <div class="theme-head">
           <div>
-            <span class="theme-num">Сторис 11 · Сезон</span>
-            <h3>Когда лучше бронировать зимний тур</h3>
+            <span class="theme-num">Сторис 15 · Формат</span>
+            <h3>Пляж или впечатления</h3>
           </div>
         </div>
         <div class="theme-body">
           <div class="theme-block full-row">
             <h5>Тезис слайда</h5>
             <ul>
-              <li>Пик спроса — новогодние и зимние каникулы</li>
-              <li>Раньше бронируешь — больше выбора по цене и датам</li>
-              <li>Топ зимних направлений: ОАЭ, Таиланд, Египет, Мальдивы</li>
+              <li>Турция, Египет, ОАЭ, Таиланд, Мальдивы — пляжный отдых</li>
+              <li>Вьетнам, Шри-Ланка, Занзибар — больше про экскурсии и культуру</li>
+              <li>Формат подбирается вместе с направлением</li>
             </ul>
           </div>
           <div class="theme-block full-row">
             <h5>Дизайн слайда</h5>
-            <p>Белый фон, заголовок фирменным красным, фото зимнего направления (пляж/пальмы). Акцент «ДЕКАБРЬ–ЯНВАРЬ» моноширинным шрифтом.</p>
+            <p>Разделённый кадр: пляж слева, достопримечательность справа. Заголовок фирменным красным сверху.</p>
           </div>
           <div class="theme-block full-row">
-            <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Узнать варианты →</span></div>
+            <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Выбрать формат →</span></div>
           </div>
         </div>
       </article>
 
-      <!-- STORY 12 -->
+      <!-- STORY 16 -->
       <article class="theme-card compact">
         <div class="theme-head">
           <div>
-            <span class="theme-num">Сторис 12 · Забота</span>
-            <h3>Едете сами? Поможем с остальным</h3>
+            <span class="theme-num">Сторис 16 · Подготовка</span>
+            <h3>Перед вылетом — проверьте это</h3>
           </div>
         </div>
         <div class="theme-body">
           <div class="theme-block full-row">
             <h5>Тезис слайда</h5>
             <ul>
-              <li>Страховка — без покупки тура</li>
-              <li>Жильё под самостоятельный маршрут</li>
-              <li>Экскурсии отдельно от тура</li>
+              <li>Срок действия загранпаспорта</li>
+              <li>Билеты, ваучер и страховка — на руках до вылета</li>
+              <li>Менеджер на связи на каждом шаге</li>
             </ul>
           </div>
           <div class="theme-block full-row">
             <h5>Дизайн слайда</h5>
-            <p>Три иконки (полис / ключ / гид) в красном на белом фоне, заголовок «Не только тур» крупным шрифтом сверху.</p>
+            <p>Иконка чек-листа (паспорт/билет/полис) в красном на белом фоне, короткий заголовок сверху.</p>
           </div>
           <div class="theme-block full-row">
-            <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Написать в директ →</span></div>
+            <div class="cta-line"><span class="lbl">CTA</span><span class="cta-pill">Задать вопрос →</span></div>
           </div>
         </div>
       </article>
@@ -814,6 +828,7 @@
       <li><a href="https://msk.centrturov.ru/reviews/" target="_blank" rel="noopener">msk.centrturov.ru/reviews — отзывы</a></li>
       <li>Скриншоты главной страницы и блока услуг сайта — 03.09.2026</li>
       <li>Факты об услугах страхования, бронирования жилья и экскурсий — анкета компании, этап 1</li>
+      <li>Актуальность тем этапа 3 на текущий месяц проверена поисковым запросом по 5 формулировкам (сезон/раннее бронирование, экскурсионные туры, ОАЭ на Новый год, загранпаспорт перед поездкой) — прямого доступа к кабинету Вордстат/Яндекс Бизнеса в рамках этого ТЗ не было, проверка качественная, не по цифрам показов</li>
     </ul>
   </footer>
 
@@ -823,11 +838,12 @@
     <p class="section-sub">Темы по этапам — полный реестр ведётся отдельно и пополняется с каждым новым этапом.</p>
 
     <div class="map-timeline">
-      <div class="map-cycle past">
-        <div class="map-cycle-head">
+      <details class="map-cycle past">
+        <summary class="map-cycle-head">
           <h4>Этап 1</h4>
           <span class="badge-done">Пройден</span>
-        </div>
+          <span class="chevron">›</span>
+        </summary>
         <div class="map-cols">
           <div>
             <h5>Новости</h5>
@@ -848,13 +864,14 @@
             </ul>
           </div>
         </div>
-      </div>
+      </details>
 
-      <div class="map-cycle">
-        <div class="map-cycle-head">
+      <details class="map-cycle past">
+        <summary class="map-cycle-head">
           <h4>Этап 2</h4>
-          <span class="badge-current">Актуальный</span>
-        </div>
+          <span class="badge-done">Пройден</span>
+          <span class="chevron">›</span>
+        </summary>
         <div class="map-cols">
           <div>
             <h5>Новости</h5>
@@ -871,7 +888,31 @@
             </ul>
           </div>
         </div>
-      </div>
+      </details>
+
+      <details class="map-cycle" open>
+        <summary class="map-cycle-head">
+          <h4>Этап 3</h4>
+          <span class="badge-current">Актуальный</span>
+          <span class="chevron">›</span>
+        </summary>
+        <div class="map-cols">
+          <div>
+            <h5>Новости</h5>
+            <ul>
+              <li><b>Пляж или культура</b><span>Формат тура</span></li>
+              <li><b>Что подготовить перед поездкой</b><span>Подготовка к вылету</span></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Сторис</h5>
+            <ul>
+              <li><b>Пляж или впечатления</b><span>Формат</span></li>
+              <li><b>Перед вылетом — проверьте это</b><span>Подготовка</span></li>
+            </ul>
+          </div>
+        </div>
+      </details>
     </div>
   </section>
 </main>
