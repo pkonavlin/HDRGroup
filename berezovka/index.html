@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Берёзовка» Трясь</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6; --muted:#8794A6; --ink2:#B8C2CF;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --accent:#E3C08A; --accent-soft:rgba(227,192,138,.14); --forest:#7FCBA4; --good:#7FCBA4; --warn:#E8B65F; --bad:#F08A7E; --bad-soft:rgba(240,138,126,.13); --c3:#5D6B80; --c4:#8FB3E8;
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.hero{padding-block:40px 8px}
+.eyebrow{font:600 12px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.va h1{font:700 clamp(28px,4.6vw,46px)/1.1 var(--f-display);letter-spacing:-.01em;margin:12px 0 10px;text-wrap:balance}
+h1 span{color:var(--accent)}
+.sub{color:var(--muted);max-width:68ch;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:26px}
+.kpi{background:var(--panel);padding:16px 16px 14px;min-width:0}
+.kpi .v{font:600 28px/1.1 var(--f-mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi .l{font-size:13px;color:var(--muted);margin-top:6px}
+.kpi .n{font:12px/1.3 var(--f-mono);color:var(--forest);margin-top:4px}
+.va section{padding-block:34px 6px;scroll-margin-top:128px}
+.va h2{font:700 25px/1.2 var(--f-display);margin:0 0 6px;text-wrap:balance}
+.lead{color:var(--muted);margin:0 0 16px;max-width:72ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.panel h3{font:600 15px/1.3 var(--f-body);margin:0 0 2px}
+.panel .meta{font:12px var(--f-mono);color:var(--muted);margin-bottom:10px}
+.mt{margin-top:16px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.fact .big{font:600 32px/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--forest);letter-spacing:-.03em}
+.fact.risk .big{color:var(--bad)}
+.fact .t{font-weight:600}
+.fact .d{font-size:13px;color:var(--muted)}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--muted);font:11px var(--f-mono)}
+svg .lbl{fill:var(--ink);font:12px var(--f-body)}
+svg .val{fill:var(--ink);font:600 11px var(--f-mono)}
+.grid line{stroke:var(--line)}
+.chart{overflow-x:auto}
+.chart>svg{min-width:540px}
+.chart.sm>svg{min-width:380px}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:940px;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font:600 12px var(--f-body);color:var(--muted);cursor:pointer;user-select:none;background:var(--panel)}
+th:first-child,td:first-child{text-align:left}
+th[aria-sort="ascending"]::after{content:" ↑"}th[aria-sort="descending"]::after{content:" ↓"}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+td.weak{color:var(--bad);font-weight:600}
+tr.me td{background:var(--accent-soft)}
+tr.me td:first-child{font-weight:700}
+.addr{display:block;color:var(--muted);font-size:12px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font:600 11px var(--f-body)}
+.pill.s{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.m{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.r{background:var(--bad-soft);color:var(--bad)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{font:500 13px var(--f-body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.filters button:focus-visible,th:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{display:grid;gap:10px}
+.ci{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ci:last-child{border-bottom:0;padding-bottom:0}
+.ci .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--f-mono)}
+.ic.ok{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.ic.no{background:var(--bad-soft);color:var(--bad)}
+.ic.na{background:var(--line);color:var(--muted)}
+.ci b{display:block;font-weight:600}
+.ci span{font-size:13px;color:var(--muted)}
+.ci .r{font:600 13px var(--f-mono);white-space:nowrap}
+.season{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.season .panel b{font:600 18px var(--f-display);display:block;margin:4px 0}
+.news{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.news .panel .big{font:600 30px/1.05 var(--f-mono);color:var(--accent);letter-spacing:-.02em}
+.news .panel p{margin:8px 0;font-size:14px}
+.news a,footer a{color:var(--accent)}
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+.step{background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:6px}
+.step .when{font:600 12px var(--f-mono);color:var(--forest);text-transform:uppercase;letter-spacing:.06em}
+.step b{font:600 17px/1.3 var(--f-display)}
+.step ul{margin:4px 0 0;padding-left:18px;font-size:13px;color:var(--ink2)}
+.step li+li{margin-top:4px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{margin-top:40px;padding-block:24px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer h4{font:600 13px var(--f-body);color:var(--ink);margin:16px 0 6px}
+footer ul{margin:0;padding-left:18px}
+#tip{position:fixed;pointer-events:none;z-index:20;background:var(--ink);color:var(--panel);font:12px/1.4 var(--f-mono);padding:7px 9px;border-radius:8px;max-width:260px;opacity:0;transition:opacity .12s}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis .kpi:last-child{grid-column:1/-1}.facts,.season{grid-template-columns:repeat(2,minmax(0,1fr))}.route{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.grid2,.facts,.season,.news,.route{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.id b{font-family:var(--f-display);font-weight:600;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs button:focus-visible,.subnav button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep,.id b{display:none}}
+.vc section{padding-block:48px;border-bottom:1px solid var(--line);scroll-margin-top:128px}
+.vc section:last-of-type{border-bottom:0}
+.vc h1,.vc h2,.vc h3{margin:0;text-wrap:balance}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font:700 clamp(26px,4vw,40px)/1.12 var(--f-display);max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .ff{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .ff .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .ff .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .ff .v.mono{font-family:var(--f-mono)}
+.vc .ff .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font:700 clamp(22px,3vw,28px)/1.2 var(--f-display)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:900px){.vc .factgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.vc .factgrid{grid-template-columns:1fr}}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><b>Берёзовка · д. Трясь</b></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" id="tab-analytics" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" id="tab-content" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics">
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Глэмпинг · д. Трясь, Жуковский округ, Калужская область · данные на 04.11.2026</div>
+  <h1>Берёзовка: анализ филиалов, <span>спрос региона</span> и точки роста</h1>
+  <p class="sub">У компании одна карточка на Яндекс Картах. Гости её любят: 5,0 и «Хорошее место 2026». Трафик за год вырос на 75%, но в зоне конкурентов карточка девятая из одиннадцати, а за последние 12 месяцев в ней не вышло ни одной публикации.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<section id="top">
+  <h2>Главное за 30 секунд</h2>
+  <div class="facts" id="facts"></div>
+</section>
+
+<section id="s1">
+  <h2>Куда приходит трафик</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Переходы в карточку по месяцам</h3><div class="meta">кабинет Яндекс Бизнеса · ноя 2025 — окт 2026</div><div class="chart sm" id="transLine"></div></div>
+    <div class="panel"><h3>Откуда открывают карточку</h3><div class="meta">переходы за 12 мес по сервисам Яндекса</div><div class="chart sm" id="srcBars"></div></div>
+  </div>
+  <div class="panel mt"><h3>Целевые действия по месяцам</h3><div class="meta">кабинет Яндекс Бизнеса · ноя 2025 — окт 2026</div><div class="legend"><span><i style="background:var(--accent)"></i>переход на сайт</span><span><i style="background:var(--forest)"></i>маршрут</span><span><i style="background:var(--c4)"></i>звонок</span></div><div class="chart" id="actLine"></div></div>
+</section>
+
+<section id="s2">
+  <h2>Берёзовка и 10 карточек её зоны</h2>
+  <p class="lead">Карточки, между которыми Яндекс делит переходы в зоне «Берёзовки»: Обнинск и окрестности.</p>
+  <div class="filters" role="group" aria-label="Статус карточки">
+    <button type="button" id="f-all" data-f="all" aria-pressed="true">Все</button>
+    <button type="button" id="f-s" data-f="Сильная" aria-pressed="false">Сильная</button>
+    <button type="button" id="f-m" data-f="Средняя" aria-pressed="false">Средняя</button>
+    <button type="button" id="f-r" data-f="Риск" aria-pressed="false">Риск</button>
+  </div>
+  <div class="tscroll"><table id="cmp"><thead><tr>
+    <th data-k="t" tabindex="0">Карточка</th><th data-k="status" tabindex="0">Статус</th><th data-k="place" tabindex="0">Место в зоне</th><th data-k="sh" tabindex="0">Доля в зоне</th><th data-k="r" tabindex="0">Рейтинг</th><th data-k="rc" tabindex="0">Оценки</th><th data-k="rv" tabindex="0">Отзывы</th><th data-k="ph" tabindex="0">Фото</th><th data-k="g" tabindex="0">Товары и услуги</th><th data-k="pr" tabindex="0">Продвижение</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="s3">
+  <h2>Состояние карточки</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Чек-лист карточки «Берёзовка»</h3><div class="meta">публичная карточка и кабинет · 04.11.2026</div><div class="check" id="check"></div></div>
+    <div class="panel"><h3>Рейтинг × число оценок</h3><div class="meta">11 карточек зоны · 04.11.2026</div><div class="chart sm" id="scatter"></div></div>
+  </div>
+  <div class="panel mt"><h3>За что хвалят в отзывах</h3><div class="meta">аспекты отзывов Яндекс Карт · доля положительных упоминаний</div><div class="chart" id="aspects"></div></div>
+</section>
+
+<section id="s4">
+  <h2>Конкуренты</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Доля переходов в зоне</h3><div class="meta">кабинет · неделя 28.09–04.10.2026</div><div class="chart sm" id="shareChart"></div></div>
+    <div class="panel"><h3>Переходы из поиска по рубрике за неделю</h3><div class="meta">рубрика «База, дом отдыха» · 24 карточки в радиусе 20 км</div><div class="chart sm" id="discChart"></div>
+      <h3 class="mt">Берёзовка против медианы зоны</h3><div class="meta">10 карточек конкурентов</div><div class="legend"><span><i style="background:var(--accent)"></i>Берёзовка</span><span><i style="background:var(--c3)"></i>медиана</span></div><div class="chart sm" id="medChart"></div></div>
+  </div>
+  <div class="panel mt"><h3>Брендовый спрос: Берёзовка и конкуренты</h3><div class="meta">Вордстат · Россия · ноя 2025 — сен 2026 к ноя 2024 — сен 2025</div><div class="chart" id="brandChart"></div></div>
+</section>
+
+<section id="s5">
+  <h2>Как гости находят карточку</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Источники визитов</h3><div class="meta">геовизор · последние 50 визитов · 30.10–01.11.2026</div><div class="chart sm" id="geoChart"></div></div>
+    <div class="panel"><h3>Что уточняют в общих запросах</h3><div class="meta">геовизор · 23 общих запроса из 50 визитов</div><div class="chart sm" id="geoQ"></div></div>
+  </div>
+  <div class="grid2 mt">
+    <div class="panel"><h3>«Берёзовка глэмпинг» по месяцам</h3><div class="meta">Вордстат · Россия · ноя 2024 — сен 2026</div><div class="chart sm" id="bzLine"></div></div>
+    <div class="panel"><h3>Pine River по месяцам</h3><div class="meta">Вордстат · Россия · ноя 2024 — сен 2026</div><div class="chart sm" id="pineLine"></div></div>
+  </div>
+</section>
+
+<section id="s6">
+  <h2>Спрос на рынке</h2>
+  <div class="panel"><h3>«База отдыха» по месяцам</h3><div class="meta">Вордстат · ноя 2024 — сен 2026</div><div class="legend"><span><i style="background:var(--forest)"></i>Калужская область</span><span><i style="background:var(--accent)"></i>Обнинск</span></div><div class="grid2"><div class="chart sm" id="mainR"></div><div class="chart sm" id="mainO"></div></div></div>
+  <div class="panel mt"><h3>Что растёт и что падает</h3><div class="meta">Вордстат · Калужская область · ноя 2025 — сен 2026 к ноя 2024 — сен 2025</div><div class="chart" id="yoy"></div></div>
+</section>
+
+<section id="s7">
+  <h2>Сезонность направлений</h2>
+  <div class="panel"><h3>Запросы по месяцам</h3><div class="meta">Вордстат · Калужская область · окт 2025 — сен 2026</div><div class="chart"><div id="heat" style="min-width:640px"></div></div></div>
+  <div class="season" id="seasonCards"></div>
+</section>
+
+<section id="s8">
+  <h2>Готовые поводы для контента</h2>
+  <div class="news" id="news"></div>
+</section>
+
+<section id="s9">
+  <h2>Маршрут роста</h2>
+  <p class="lead">Шаги идут по сезонам спроса из блока «Сезонность».</p>
+  <div class="route" id="route"></div>
+</section>
+
+<footer>
+  <h4>Источники</h4>
+  <ul>
+    <li>Карточка «Берёзовка» на Яндекс Картах: <a href="https://yandex.ru/maps/org/beryozovka/237294297206/" target="_blank" rel="noopener">yandex.ru/maps/org/beryozovka/237294297206</a>, 04.11.2026.</li>
+    <li>Кабинет Яндекс Бизнеса: статистика карточки ноя 2025 — окт 2026; конкуренты за неделю 28.09–04.10.2026 (последняя обработка 07.10.2026); геовизор — 50 визитов 30.10–01.11.2026; публикации и истории — 04.11.2026.</li>
+    <li>Яндекс Вордстат: <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">wordstat.yandex.ru</a>, Обнинск, Калужская область, Москва и область, Россия; ноя 2024 — сен 2026.</li>
+    <li>Сайт: <a href="https://berezovka-glamp.ru/" target="_blank" rel="noopener">berezovka-glamp.ru</a>; анкета компании от 02.11.2026.</li>
+    <li id="newsSrc"></li>
+  </ul>
+  <h4>Ограничения</h4>
+  <ul>
+    <li>У компании одна карточка, поэтому показатели «сети» здесь — это показатели этой карточки.</li>
+    <li>Переходы — все открытия карточки в Поиске, Картах и Навигаторе. Разбивка на переходы из поиска по рубрике и прямые за 12 месяцев в кабинете недоступна; недельные переходы по рубрике взяты из блока «Конкуренты».</li>
+    <li>Вордстат на момент сбора работал в режиме «некоторые данные могут быть временно недоступны»; октябрь 2026 ещё не опубликован, поэтому год к году сравниваются 11 месяцев ноябрь — сентябрь.</li>
+    <li>Брендовый спрос посчитан по точной связке «берёзовка глэмпинг»: запрос «берёзовка» без уточнения совпадает с десятками населённых пунктов и баз в других регионах.</li>
+    <li>Геовизор показывает последние 50 визитов; у 9 из них Яндекс не передал текст запроса.</li>
+  </ul>
+</footer>
+</div>
+</div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Гостевые дома посуточно · д. Трясь, Калужская область</span>
+  <h1>«Берёзовка» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Берёзовка» на Яндекс Картах и 2ГИС.</p>
+  <div class="factgrid">
+    <div class="ff"><div class="k">Компания</div><div class="v">«Берёзовка» <small>атмосферные гостевые дома посуточно, уютная баня, детская площадка</small></div></div>
+    <div class="ff"><div class="k">Дома</div><div class="v">Барнхаус, Треугольник, Бохо, Зелёный дом <small>и баня</small></div></div>
+    <div class="ff"><div class="k">Цены за ночь</div><div class="v">7 000 ₽ за 2 гостей · 9 000 ₽ на 4 гостей <small>баня — 3 000 ₽ за 2 часа</small></div></div>
+    <div class="ff"><div class="k">У каждого дома</div><div class="v">Своя парковка рядом с домом <small>внутри территории; мангал, костровая зона</small></div></div>
+    <div class="ff"><div class="k">Адрес</div><div class="v">Калужская область, Жуковский округ, СП д. Верховье, д. Трясь, д. 163 А</div></div>
+    <div class="ff"><div class="k">Расположение</div><div class="v">15 минут от Обнинска <small>100 км от Москвы</small></div></div>
+    <div class="ff"><div class="k">Предложения</div><div class="v">Будни в ноябре — скидка 20% <small>с воскресенья по четверг включительно</small></div></div>
+    <div class="ff"><div class="k">Сайт</div><div class="v mono">berezovka-glamp.ru</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Берёзовки»</h2>
+    <p>После анализа ресурсов компании определены фирменные цвета для обложек новостей и слайдов сторис: коричневый надписи «БЕРЁЗОВКА», берёзовая зелень листвы, сливочный фон и графит тёмных штрихов логотипа.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#A56948;color:#FFFFFF;border-color:#A56948"><div class="role">Основной</div><div class="name">Коричневый</div><div class="hex">#A56948</div></div>
+    <div class="swatch" style="background:#96AC55;color:#2B2A26;border-color:#96AC55"><div class="role">Акцентный</div><div class="name">Берёзовая зелень</div><div class="hex">#96AC55</div></div>
+    <div class="swatch" style="background:#F2EEE9;color:#48453F;border-color:#F2EEE9"><div class="role">Фоновый</div><div class="name">Сливочный</div><div class="hex">#F2EEE9</div></div>
+    <div class="swatch" style="background:#48453F;color:#F2EEE9;border-color:#48453F"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#48453F</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с предложения на будни ноября, дальше две темы про новогодние праздники — главный приоритет компании — и рассказ о четырёх домах. Темы построены под запросы, по которым карточка проигрывает конкурентам зоны: «отдых на новый год», «база отдыха зимой», «база отдыха с баней», «снять домик».</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Будни ноября: скидка 20% с воскресенья по четверг, дома и цены за ночь.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Новый год в «Берёзовке»: два свободных домика, бронирование по прошлогодним ценам.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Зимние праздники в деревне: баня, костровая зона у дома, прогулки на лошадях и в санях.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Четыре дома «Берёзовки»: Барнхаус, Треугольник, Бохо и Зелёный дом, площадь, вместимость и цена.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Берёзовка» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой и спокойный. Каждая новость начинается со вступления от лица «Берёзовки», дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней вроде «лучший» и «№1» и сравнений с другими базами. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Будни в «Берёзовке» дешевле: скидка 20% на гостевые дома с воскресенья по четверг в ноябре</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В ноябре мы снизили цены на будние ночи: с воскресенья по четверг включительно проживание в «Берёзовке» дешевле на 20%.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Будни в ноябре — 20% скидка, с воскресенья по четверг включительно.<span class="src">анкета</span></li>
+      <li>Барнхаус — 9 000 ₽ ночь на 4 гостей. Бохо — 9 000 ₽ ночь на 4 гостей.<span class="src">анкета</span></li>
+      <li>Треугольник — 7 000 ₽ ночь за 2 гостя. Зелёный дом — 7 000 ₽ ночь за 2 гостя.<span class="src">анкета</span></li>
+      <li>Каждый дом индивидуален, с душой. Конкурентная ценовая категория.<span class="src">анкета</span></li>
+      <li>Гости отдыхают в тихой деревне, костёр и тишина.<span class="src">анкета</span></li>
+      <li>Всего 100 км от Москвы, 15 минут от Обнинска.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гостевые дома под Обнинском: скидка 20% на будни ноября в «Берёзовке»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Снять домик в Калужской области в будни ноября −20% | Берёзовка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Гостевые дома «Берёзовка» в деревне Трясь, 15 минут от Обнинска: с воскресенья по четверг в ноябре скидка 20%. Дома на 2 и на 4 гостей от 7 000 ₽ за ночь.</span></div>
+      <div class="chips">
+        <span class="chip-kw">снять домик калужская область</span><span class="chip-kw">гостевой дом калужская область</span>
+        <span class="chip-kw">база отдыха обнинск</span><span class="chip-kw">база отдыха калужская область</span>
+        <span class="chip-kw">гостевые дома посуточно</span><span class="chip-kw">глэмпинг калужская область</span>
+        <span class="chip-kw">отдых в будни за городом</span><span class="chip-kw">домик посуточно обнинск</span>
+        <span class="chip-kw">загородный отдых обнинск</span><span class="chip-kw">отдых 100 км от москвы</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируйте будние даты ноября.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Будни ноября −20%»</div>
+      <p>Композиция: один из домов «Берёзовки» среди берёз в осеннем свете; тезис крупно на плашке в нижней трети, под ним строка «воскресенье — четверг», логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — коричневый #A56948, тезис — сливочный #F2EEE9, строка — берёзовая зелень #96AC55.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Новый год в гостевых домах «Берёзовки»: два свободных домика по прошлогодним ценам</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>На новогодние праздники у нас осталось два свободных домика, и их можно забронировать по прошлогодним ценам.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>На Новый год осталось 2 домика. Успейте забронировать по прошлогодним ценам.<span class="src">анкета</span></li>
+      <li>Позвоните для бронирования — и получите скидку.<span class="src">анкета</span></li>
+      <li>Новогодние каникулы — с 31 декабря 2026 по 10 января 2027 года, 11 дней.<span class="src">календарь 2027</span></li>
+      <li>Атмосферные гостевые дома посуточно, уютная баня, детская площадка. Гости отдыхают в тихой деревне, костёр и тишина.<span class="src">анкета</span></li>
+      <li>У каждого дома своя парковка рядом с домом внутри территории, мангал, костровая зона для душевных вечерних посиделок под треск дров.<span class="src">анкета</span></li>
+      <li>Баня — 3 000 ₽ за 2 часа.<span class="src">анкета</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Новый год за городом в Калужской области: гостевые дома «Берёзовка»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Отдых на Новый год под Обнинском: 2 свободных домика | Берёзовка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Новогодние праздники в гостевых домах «Берёзовка», деревня Трясь: осталось два домика, бронирование по прошлогодним ценам, баня, мангал и костровая зона у каждого дома.</span></div>
+      <div class="chips">
+        <span class="chip-kw">отдых на новый год</span><span class="chip-kw">база отдыха новый год</span>
+        <span class="chip-kw">новый год за городом</span><span class="chip-kw">снять дом на новый год</span>
+        <span class="chip-kw">новый год в домике</span><span class="chip-kw">новогодние каникулы калужская область</span>
+        <span class="chip-kw">база отдыха калужская область</span><span class="chip-kw">гостевой дом калужская область</span>
+        <span class="chip-kw">база отдыха обнинск</span><span class="chip-kw">глэмпинг калужская область</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируйте домик на Новый год по телефону в карточке компании — при бронировании по телефону действует скидка.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«На Новый год — 2 дома»</div>
+      <p>Композиция: дом «Берёзовки» вечером, свет в окнах, костровая зона на переднем плане; тезис на плашке в верхней трети, строка «по прошлогодним ценам», логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — графит #48453F, тезис — сливочный #F2EEE9, строка — берёзовая зелень #96AC55, тонкая линия под тезисом — коричневый #A56948.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Зимний отдых в деревне под Обнинском: баня с парной, костровая зона и прогулки в санях</h3></div><span class="purpose">Вовлекающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Зимой «Берёзовка» — это тихая деревня, костёр и тишина: у каждого дома своя костровая зона, на территории уютная баня, а на поле можно заказать прогулку в санях.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>На просторном поле можно заказать прогулку на пони, лошадях верхом и в карете или санях зимой, а также взять урок верховой езды или провести фотосессию с лошадьми и пони — по предварительной договорённости.<span class="src">сайт</span></li>
+      <li>Баня: шикарная парная, обливное ведро, запарник для веников, зона релакса, собственный санузел.<span class="src">сайт</span></li>
+      <li>Условия бани: до 4 человек (включая детей), сеанс от 2 часов. Веник, полотенца, простыни — за дополнительную оплату.<span class="src">сайт</span></li>
+      <li>Баня — 3 000 ₽ за 2 часа.<span class="src">анкета</span></li>
+      <li>У каждого дома мангал и костровая зона для душевных вечерних посиделок под треск дров.<span class="src">анкета</span></li>
+      <li>Детская площадка.<span class="src">анкета</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Зимний отдых в Калужской области: база отдыха с баней «Берёзовка»</span></div>
+      <div class="meta-row"><span><b>Title · </b>База отдыха с баней под Обнинском: сани, лошади, костёр | Берёзовка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Зимой в «Берёзовке»: баня с парной на 4 человек за 3 000 ₽ за 2 часа, мангал и костровая зона у каждого дома, прогулки на лошадях и в санях по договорённости.</span></div>
+      <div class="chips">
+        <span class="chip-kw">база отдыха зимой</span><span class="chip-kw">база отдыха с баней</span>
+        <span class="chip-kw">аренда бани калужская область</span><span class="chip-kw">отдых зимой за городом</span>
+        <span class="chip-kw">катание на санях</span><span class="chip-kw">прогулки на лошадях обнинск</span>
+        <span class="chip-kw">база отдыха с детьми</span><span class="chip-kw">загородный отдых калужская область</span>
+        <span class="chip-kw">база отдыха обнинск</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируйте дом на зимние выходные, а прогулку на лошадях согласуйте заранее.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Баня, костёр и сани»</div>
+      <p>Композиция: зимняя территория «Берёзовки», баня или костровая зона у дома в снегу; тезис на плашке в нижней трети, строка «Калужская область, 15 минут от Обнинска», логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — сливочный #F2EEE9, тезис — коричневый #A56948, строка — графит #48453F.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Четыре гостевых дома «Берёзовки»: Барнхаус, Треугольник, Бохо и Зелёный дом</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Каждый дом в «Берёзовке» индивидуален, с душой, и у каждого своя парковка рядом с домом, мангал и костровая зона.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Барнхаус — двухэтажный дом со вторым светом. Воздушный, светлый, для семьи или небольшой компании. 9 000 ₽ ночь на 4 гостей.<span class="src">анкета</span></li>
+      <li>Треугольник — уютное гнёздышко для влюблённых. 7 000 ₽ ночь за 2 гостя.<span class="src">анкета</span></li>
+      <li>Бохо — самый отдалённый дом, одноэтажный, две изолированные комнаты и гостиная. Комфортный светлый дом в стиле бохо. 9 000 ₽ ночь на 4 гостей.<span class="src">анкета</span></li>
+      <li>Зелёный дом — ваша личная дача, с домашним уютом и комфортом. 7 000 ₽ ночь за 2 гостя.<span class="src">анкета</span></li>
+      <li>Площадь: Треугольник — 40 м², Барнхаус — 50 м², Зелёный дом — 40 м², Бохо — 56 м².<span class="src">сайт</span></li>
+      <li>В домах кухня, холодильник, индукционная плита, чайник, капельная кофеварка, посуда; санузел с душевой; постельное бельё, полотенца.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box">
+      <span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гостевые дома посуточно в Калужской области: четыре дома «Берёзовки»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Снять домик под Обнинском: барнхаус, дом-треугольник, бохо | Берёзовка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Четыре гостевых дома «Берёзовки» в деревне Трясь: Барнхаус и Бохо на 4 гостей за 9 000 ₽, Треугольник и Зелёный дом на 2 гостей за 7 000 ₽ за ночь.</span></div>
+      <div class="chips">
+        <span class="chip-kw">снять домик</span><span class="chip-kw">барнхаус посуточно</span>
+        <span class="chip-kw">дом треугольник</span><span class="chip-kw">домик для двоих</span>
+        <span class="chip-kw">гостевые дома посуточно</span><span class="chip-kw">гостевой дом калужская область</span>
+        <span class="chip-kw">домик в лесу</span><span class="chip-kw">дом посуточно обнинск</span>
+        <span class="chip-kw">глэмпинг калужская область</span><span class="chip-kw">база отдыха калужская область</span>
+      </div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте свой дом и бронируйте даты.</p>
+    <div class="cover-box">
+      <span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Четыре дома — четыре характера»</div>
+      <p>Композиция: коллаж из четырёх фото домов — Барнхаус, Треугольник, Бохо, Зелёный дом — с подписью названия на каждом; тезис на плашке по центру, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — коричневый #A56948, тезис — сливочный #F2EEE9, подписи домов — графит #48453F на сливочном #F2EEE9.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании «Берёзовка» на Яндекс Картах и 2ГИС, в паре с новостью этапа.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">Будни ноября −20%</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Воскресенье — четверг</span><span class="fact-pill">Скидка 20%</span><span class="fact-pill">Барнхаус, Бохо — 9 000 ₽ на 4</span><span class="fact-pill">Треугольник, Зелёный — 7 000 ₽ за 2</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон сливочный #F2EEE9, заголовок коричневым #A56948 в верхней части, «−20%» крупно берёзовой зеленью #96AC55, цены домов графитом #48453F. Логотип в верхнем левом углу.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">На Новый год — 2 дома</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Осталось 2 домика</span><span class="fact-pill">Прошлогодние цены</span><span class="fact-pill">Скидка при бронировании по телефону</span><span class="fact-pill">31.12 — 10.01</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #48453F, заголовок сливочным #F2EEE9, цифра «2» крупно коричневым #A56948, факты на плашках берёзовой зелени #96AC55 графитовым текстом. Логотип в верхнем левом углу.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">Сани и лошади зимой</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Прогулки на лошадях</span><span class="fact-pill">Сани зимой</span><span class="fact-pill">Пони</span><span class="fact-pill">Урок верховой езды</span><span class="fact-pill">По предварительной договорённости</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото зимнего поля на весь слайд, внизу плашка коричневого #A56948 с заголовком сливочным #F2EEE9, факты списком сливочным #F2EEE9. Логотип в верхнем левом углу.</div>
+    </div>
+    <div class="story-card">
+      <div class="story-top"><div class="story-thesis">У каждого дома</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Своя парковка рядом</span><span class="fact-pill">Мангал</span><span class="fact-pill">Костровая зона</span><span class="fact-pill">Внутри территории</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон берёзовая зелень #96AC55, заголовок графитом #48453F, четыре факта на сливочных плашках #F2EEE9 коричневым текстом #A56948. Логотип в верхнем левом углу.</div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — будни ноября, Новый год, зимний отдых, четыре дома <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Будни в «Берёзовке» дешевле: скидка 20%</b>воскресенье — четверг в ноябре, дома от 7 000 ₽ за ночь</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Будни ноября −20%</b>дни недели, скидка, цены домов</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Новый год: два свободных домика по прошлогодним ценам</b>скидка при бронировании по телефону, каникулы 11 дней</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>На Новый год — 2 дома</b>свободные домики, цены, даты каникул</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Зимний отдых в деревне: баня, костровая зона, сани</b>баня 3 000 ₽ за 2 часа, прогулки на лошадях по договорённости</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Сани и лошади зимой</b>прогулки, пони, урок верховой езды</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Четыре гостевых дома «Берёзовки»</b>Барнхаус, Треугольник, Бохо, Зелёный дом — площадь, вместимость, цена</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>У каждого дома</b>парковка, мангал, костровая зона</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = {"stM": ["ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26", "окт 26"], "stMF": ["ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026", "октябрь 2026"], "trans": [2862, 1909, 2802, 3429, 3272, 3531, 3833, 5385, 5734, 3767, 3461, 3604], "route": [34, 125, 33, 47, 53, 40, 48, 41, 50, 32, 40, 54], "call": [5, 7, 15, 7, 4, 11, 13, 8, 12, 16, 10, 16], "site": [149, 69, 140, 147, 104, 126, 157, 213, 197, 151, 137, 159], "src": [["Яндекс Поиск", 26260], ["Яндекс Карты", 14663], ["Яндекс Навигатор", 2651], ["Сайт-визитка Яндекса", 12]], "wsM": ["ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "wsMF": ["ноябрь 2024", "декабрь 2024", "январь 2025", "февраль 2025", "март 2025", "апрель 2025", "май 2025", "июнь 2025", "июль 2025", "август 2025", "сентябрь 2025", "октябрь 2025", "ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026"], "main": {"o": [1566, 1522, 2475, 2220, 2369, 2772, 3680, 5437, 7044, 4072, 2662, 2478, 1895, 1278, 1869, 1894, 2438, 2719, 3907, 6588, 7076, 4985, 2140], "r": [10710, 9682, 15208, 13383, 14825, 17037, 23687, 36622, 52726, 29134, 16391, 15282, 12872, 8631, 13297, 11889, 14813, 17613, 25473, 45847, 49751, 34834, 16192]}, "cards": [{"t": "Берёзовка", "a": "База, дом отдыха · д. Трясь, 163А", "r": 5.0, "rc": 170, "rv": 114, "ph": 269, "g": 13, "sh": 5, "pr": true, "me": true, "status": "Сильная", "place": 9}, {"t": "Pine River", "a": "База, дом отдыха", "r": 5, "rc": 7107, "rv": 3430, "ph": 499, "g": 21, "sh": 28, "pr": true, "me": false, "status": "Сильная", "place": 1}, {"t": "Империал Wellness & SPA", "a": "Гостиница", "r": 5, "rc": 2303, "rv": 1117, "ph": 499, "g": 60, "sh": 11, "pr": false, "me": false, "status": "Сильная", "place": 2}, {"t": "В Белкино", "a": "Гостиница", "r": 4.9, "rc": 741, "rv": 373, "ph": 123, "g": 5, "sh": 10, "pr": true, "me": false, "status": "Сильная", "place": 3}, {"t": "Юбилейная", "a": "Гостиница", "r": 4.3, "rc": 2915, "rv": 1079, "ph": 67, "g": 0, "sh": 10, "pr": false, "me": false, "status": "Средняя", "place": 4}, {"t": "Кристалл", "a": "Гостиница", "r": 5, "rc": 1634, "rv": 916, "ph": 499, "g": 6, "sh": 9, "pr": false, "me": false, "status": "Сильная", "place": 5}, {"t": "Орбиталь", "a": "Гостиница", "r": 4.6, "rc": 3555, "rv": 1315, "ph": 411, "g": 0, "sh": 8, "pr": false, "me": false, "status": "Сильная", "place": 6}, {"t": "Fresh", "a": "Гостиница", "r": 5, "rc": 277, "rv": 143, "ph": 344, "g": 88, "sh": 7, "pr": true, "me": false, "status": "Сильная", "place": 7}, {"t": "Пансионат Воробьи", "a": "Гостиница", "r": 4.7, "rc": 456, "rv": 160, "ph": 114, "g": 1, "sh": 5, "pr": false, "me": false, "status": "Сильная", "place": 8}, {"t": "Триумф Отель", "a": "Гостиница", "r": 4.8, "rc": 1848, "rv": 751, "ph": 494, "g": 0, "sh": 5, "pr": false, "me": false, "status": "Сильная", "place": 10}, {"t": "Гринвей", "a": "Гостиница", "r": 5, "rc": 1123, "rv": 545, "ph": 360, "g": 0, "sh": 4, "pr": false, "me": false, "status": "Сильная", "place": 11}], "med": {"r": 4.95, "rc": 1741.0, "rv": 833.5, "ph": 385.5, "g": 3.0}, "medCmp": [{"l": "Рейтинг", "me": 5.0, "med": 4.95, "dec": true}, {"l": "Оценки", "me": 170, "med": 1741.0}, {"l": "Отзывы", "me": 114, "med": 833.5}, {"l": "Фото", "me": 269, "med": 385.5}], "disc": [["Берёзовка", 130], ["Лидер рубрики в радиусе 20 км", 737]], "brands": [{"t": "Pine River", "v": 176559, "y": -4.2, "me": false}, {"t": "Кристалл", "v": 32570, "y": -5.7, "me": false}, {"t": "Триумф Отель", "v": 31276, "y": -6.9, "me": false}, {"t": "Орбиталь", "v": 12869, "y": -4.3, "me": false}, {"t": "Империал", "v": 9733, "y": -13.3, "me": false}, {"t": "Юбилейная", "v": 9728, "y": -4.7, "me": false}, {"t": "Белые Ключи (глэмпинг)", "v": 6183, "y": -12.0, "me": false}, {"t": "Гринвей", "v": 2705, "y": -3.5, "me": false}, {"t": "Пансионат Воробьи", "v": 1801, "y": -31.2, "me": false}, {"t": "Берёзовка", "v": 700, "y": -18.3, "me": true}], "bz": [63, 37, 51, 58, 85, 84, 71, 85, 105, 134, 84, 74, 80, 57, 50, 46, 44, 50, 78, 76, 99, 53, 67], "pine": [12373, 9537, 13247, 13040, 14922, 15169, 22872, 19599, 24690, 20304, 18487, 19737, 15811, 10820, 13527, 12535, 14363, 15316, 16490, 19999, 22377, 18467, 16854], "yoy": [{"q": "база отдыха с баней", "l": 966, "p": 752, "y": 28.5, "o": 127, "m": 11236}, {"q": "банный чан", "l": 6499, "p": 5443, "y": 19.4, "o": 647, "m": 120328}, {"q": "база отдыха калужская область", "l": 50800, "p": 45378, "y": 11.9, "o": 9841, "m": 35228}, {"q": "снять домик", "l": 24438, "p": 21964, "y": 11.3, "o": 3191, "m": 526612}, {"q": "отдых с собакой", "l": 895, "p": 817, "y": 9.5, "o": 272, "m": 30841}, {"q": "база отдыха зимой", "l": 211, "p": 194, "y": 8.8, "o": 23, "m": 2912}, {"q": "база отдыха обнинск", "l": 1693, "p": 1602, "y": 5.7, "o": 1079, "m": 509}, {"q": "база отдыха", "l": 251212, "p": 239405, "y": 4.9, "o": 36789, "m": 2481061}, {"q": "домик в лесу", "l": 3568, "p": 3413, "y": 4.5, "o": 629, "m": 162433}, {"q": "база отдыха с животными", "l": 301, "p": 294, "y": 2.4, "o": 46, "m": 4806}, {"q": "корпоратив на природе", "l": 216, "p": 213, "y": 1.4, "o": 8, "m": 4990}, {"q": "аренда бани", "l": 1768, "p": 1748, "y": 1.1, "o": 225, "m": 73268}, {"q": "глэмпинг", "l": 44711, "p": 44726, "y": -0.0, "o": 6559, "m": 1196357}, {"q": "отдых на природе", "l": 3551, "p": 3605, "y": -1.5, "o": 374, "m": 55237}, {"q": "сертификат на отдых", "l": 179, "p": 188, "y": -4.8, "o": 20, "m": 14445}, {"q": "глэмпинг калужская область", "l": 7502, "p": 7965, "y": -5.8, "o": 1370, "m": 9433}, {"q": "гостевой дом", "l": 96702, "p": 103748, "y": -6.8, "o": 10326, "m": 1293943}, {"q": "отдых на выходные", "l": 1619, "p": 1781, "y": -9.1, "o": 180, "m": 37905}, {"q": "загородный отдых", "l": 1211, "p": 1340, "y": -9.6, "o": 210, "m": 44151}, {"q": "коттедж посуточно", "l": 477, "p": 558, "y": -14.5, "o": 76, "m": 32668}, {"q": "день рождения на природе", "l": 800, "p": 940, "y": -14.9, "o": 89, "m": 11879}, {"q": "база отдыха новый год", "l": 400, "p": 507, "y": -21.1, "o": 40, "m": 7874}, {"q": "дом отдыха", "l": 32785, "p": 42693, "y": -23.2, "o": 4853, "m": 1486260}, {"q": "барнхаус", "l": 9089, "p": 12162, "y": -25.3, "o": 1381, "m": 179857}, {"q": "отдых на новый год", "l": 1066, "p": 1427, "y": -25.3, "o": 146, "m": 36421}, {"q": "база отдыха с детьми", "l": 823, "p": 1253, "y": -34.3, "o": 125, "m": 11682}, {"q": "база отдыха цены", "l": 8080, "p": 15943, "y": -49.3, "o": 902, "m": 50280}], "heat": [{"q": "база отдыха", "d": [15282, 12872, 8631, 13297, 11889, 14813, 17613, 25473, 45847, 49751, 34834, 16192]}, {"q": "глэмпинг", "d": [4586, 3711, 2384, 3517, 2931, 3106, 3580, 4020, 5733, 6706, 5156, 3867]}, {"q": "снять домик", "d": [1541, 1331, 925, 1484, 1356, 1619, 1826, 2572, 3984, 4483, 3144, 1714]}, {"q": "гостевой дом", "d": [4071, 3613, 2823, 7580, 8566, 11231, 10493, 10593, 15717, 14154, 8504, 3428]}, {"q": "банный чан", "d": [615, 628, 440, 614, 451, 429, 572, 409, 473, 709, 980, 794]}, {"q": "аренда бани", "d": [223, 192, 147, 226, 192, 143, 80, 84, 100, 169, 185, 250]}, {"q": "отдых на новый год", "d": [440, 449, 262, 73, 5, 20, 10, 19, 9, 41, 62, 116]}, {"q": "отдых с собакой", "d": [61, 73, 8, 33, 71, 39, 93, 76, 184, 119, 153, 46]}], "heatM": ["окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "heatMF": ["октябрь 2025", "ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026"], "aspects": [["Атмосфера", 94, 91, 2], ["Персонал", 79, 67, 3], ["Интерьер", 50, 48, 1], ["Территория", 33, 30, 3], ["Чистота", 32, 26, 5], ["Вид", 21, 21, 0], ["Расположение", 19, 19, 0], ["Баня", 18, 14, 0], ["Помещение", 17, 15, 2], ["С детьми", 14, 10, 3], ["Номера", 43, 17, 2]], "geo": [["Общий запрос по категории", 23], ["Поиск на карте, текст запроса скрыт", 9], ["Клик по метке на карте", 9], ["Переход из Поиска и по ссылкам", 6], ["Поиск по названию и адресу", 2], ["Поиск конкурента", 1], ["Похожие места", 0]], "geoQ": [["база / дом отдыха без уточнений", 14], ["баня", 5], ["глэмпинг, экоотель", 3], ["чан, бассейн", 2], ["регион: Калужская обл.", 1], ["цена", 0], ["рейтинг", 0]], "kpis": [{"v": "1", "l": "карточка на Яндекс Картах", "n": "д. Трясь, 163А · 4 дома + баня"}, {"v": "43 589", "l": "переходов в карточку за 12 мес", "n": "+75% к прошлому году"}, {"v": "2 470", "l": "целевых действий", "n": "сайт 1 749 · маршрут 597 · звонок 124"}, {"v": "5,0", "l": "рейтинг · 170 оценок", "n": "«Хорошее место 2026»"}, {"v": "5%", "l": "доля переходов в зоне", "n": "9-е место из 11"}], "act": 2470};
+const fmt=n=>n==null?'—':(Math.round(n*100)/100).toLocaleString('ru-RU');
+const fi=n=>Math.round(n).toLocaleString('ru-RU');
+const pct=n=>n==null?'—':(n>0?'+':'')+fmt(n)+'%';
+const NS='http://www.w3.org/2000/svg';const tip=document.getElementById('tip');
+function showTip(e,h){tip.innerHTML=h;tip.style.opacity=1;const x=Math.max(8,Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)),y=Math.max(8,Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8));tip.style.left=x+'px';tip.style.top=y+'px'}
+function hideTip(){tip.style.opacity=0}
+function bindTip(el,h){el.addEventListener('mousemove',e=>showTip(e,h));el.addEventListener('mouseleave',hideTip);el.addEventListener('touchstart',e=>showTip(e.touches[0],h),{passive:true})}
+function svg(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.setAttribute('role','img');return s}
+function el(t,a,p,tx){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(tx!=null)e.textContent=tx;if(p)p.appendChild(e);return e}
+const css=v=>`var(--${v})`;
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x)));const f=x/p;return (f<1.5?1:f<3.5?2:f<7.5?5:10)*p}
+
+const facts=[
+ {big:'9 из 11',t:'место в зоне конкурентов',d:'доля переходов 5%; лидер зоны Pine River забирает 28%',risk:true},
+ {big:'0',t:'публикаций за 12 месяцев',d:'в карточке 2 публикации за всё время, обе от 14.05.2025',risk:true},
+ {big:'170 vs 1 741',t:'оценок у Берёзовки и медиана зоны',d:'рейтинг на уровне лидеров: 5,0 против медианы 4,95',risk:true},
+ {big:'+75%',t:'переходов в карточку за год',d:'43 589 переходов, но звонков 124 — на 2% меньше, чем годом раньше',risk:true},
+ {big:'3 из 4',t:'дома указано в данных карточки',d:'в карточке «номеров: 3», у компании четыре дома и баня; акций в карточке 0',risk:true},
+ {big:'+28,5%',t:'самый быстрорастущий запрос',d:'«база отдыха с баней» в Калужской области год к году; «банный чан» +19,4%',risk:false}];
+document.getElementById('kpis').innerHTML=D.kpis.map(k=>`<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div><div class="n">${k.n}</div></div>`).join('');
+document.getElementById('facts').innerHTML=facts.map(f=>`<div class="fact${f.risk?' risk':''}"><div class="big">${f.big}</div><div class="t">${f.t}</div><div class="d">${f.d}</div></div>`).join('');
+
+function lines(id,M,MF,series,opt={}){const W=opt.w||760,H=opt.h||260,L=56,R=16,T=14,B=30;const s=svg(W,H);const all=series.flatMap(x=>x.d);const mx=Math.max(...all)*1.1,mn=0;
+ const xs=i=>L+i/(M.length-1)*(W-L-R),ys=v=>T+(mx-v)/(mx-mn)*(H-T-B);const g=el('g',{class:'grid'},s);
+ const step=niceStep(mx/4);for(let v=0;v<=mx;v+=step){el('line',{x1:L,x2:W-R,y1:ys(v),y2:ys(v)},g);el('text',{x:L-8,y:ys(v)+4,'text-anchor':'end'},s,fi(v))}
+ const ev=opt.every||(M.length>14?3:2);M.forEach((m,i)=>{if(i%ev===0)el('text',{x:xs(i),y:H-10,'text-anchor':'middle'},s,m)});
+ series.forEach(se=>{if(opt.area&&series.length===1){el('polygon',{points:`${xs(0)},${ys(0)} `+se.d.map((v,i)=>`${xs(i)},${ys(v)}`).join(' ')+` ${xs(se.d.length-1)},${ys(0)}`,fill:css(se.c),'fill-opacity':.12},s)}
+  el('polyline',{points:se.d.map((v,i)=>`${xs(i)},${ys(v)}`).join(' '),fill:'none',stroke:css(se.c),'stroke-width':2.4,'stroke-linejoin':'round'},s);
+  el('circle',{cx:xs(se.d.length-1),cy:ys(se.d[se.d.length-1]),r:4,fill:css(se.c)},s)});
+ const guide=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:css('muted'),'stroke-dasharray':'3 3',opacity:0},s);const w=(W-L-R)/(M.length-1);
+ M.forEach((m,i)=>{const hit=el('rect',{x:xs(i)-w/2,y:T,width:w,height:H-T-B,fill:'transparent'},s);hit.addEventListener('mouseenter',()=>{guide.setAttribute('x1',xs(i));guide.setAttribute('x2',xs(i));guide.setAttribute('opacity',.6)});bindTip(hit,`<b>${MF[i]}</b><br>`+series.map(se=>`${se.n}: ${fi(se.d[i])}`).join('<br>'))});
+ s.addEventListener('mouseleave',()=>guide.setAttribute('opacity',0));document.getElementById(id).appendChild(s)}
+
+function hbars(id,items,opt={}){const W=opt.w||760,L=opt.L||170,R=opt.R||70,rh=opt.rh||26;const H=items.length*rh+8;const s=svg(W,H);const mx=opt.max||Math.max(...items.map(i=>i.v),1);
+ items.forEach((it,i)=>{const y=4+i*rh;const w=it.v>0?Math.max(3,(it.v/mx)*(W-L-R)):0;el('text',{x:L-10,y:y+rh/2+4,'text-anchor':'end',class:'lbl'},s,it.l);
+  if(w>0)el('rect',{x:L,y:y+4,width:w,height:rh-10,rx:4,fill:css(it.c||'accent')},s);el('text',{x:L+w+8,y:y+rh/2+4,class:'val'},s,it.vl??fi(it.v));
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);bindTip(hit,it.tip||`<b>${it.l}</b><br>${it.vl??fi(it.v)}`)});
+ document.getElementById(id).appendChild(s)}
+
+/* 1 traffic */
+lines('transLine',D.stM,D.stMF,[{n:'переходы',d:D.trans,c:'accent'}],{w:520,h:240,area:true,every:2});
+const srcT=D.src.reduce((a,b)=>a+b[1],0);
+hbars('srcBars',D.src.map(s=>({l:s[0],v:s[1],vl:fi(s[1])+' · '+fmt(s[1]/srcT*100)+'%',c:'forest',tip:`<b>${s[0]}</b><br>${fi(s[1])} переходов за 12 мес`})),{w:520,L:170,R:110});
+lines('actLine',D.stM,D.stMF,[{n:'сайт',d:D.site,c:'accent'},{n:'маршрут',d:D.route,c:'forest'},{n:'звонок',d:D.call,c:'c4'}],{w:1040,h:280,every:1});
+
+/* 2 table */
+(function(){const tb=document.querySelector('#cmp tbody');let sortK='place',dir=1,filt='all';const M=D.med;
+ function draw(){const list=D.cards.filter(r=>filt==='all'||r.status===filt).sort((a,b)=>{let x=a[sortK],y=b[sortK];if(typeof x==='string')return dir*x.localeCompare(y);return dir*((+x)-(+y))});
+  tb.innerHTML=list.map(r=>{const cls={'Сильная':'s','Средняя':'m','Риск':'r'}[r.status];const w=b=>b?' weak':'';
+   return `<tr class="${r.me?'me':''}"><td>${r.t}<span class="addr">${r.a}</span></td><td><span class="pill ${cls}">${r.status}</span></td><td class="num${w(r.me&&r.place>3)}">${r.place}</td><td class="num${w(r.sh<10)}">${r.sh}%</td><td class="num${w(r.r<4.5)}">${r.r.toFixed(1).replace('.',',')}</td><td class="num${w(r.rc<M.rc)}">${fi(r.rc)}</td><td class="num${w(r.rv<M.rv)}">${fi(r.rv)}</td><td class="num${w(r.ph<M.ph)}">${fi(r.ph)}</td><td class="num">${fi(r.g)}</td><td>${r.pr?'есть':'нет'}</td></tr>`}).join('')||'<tr><td colspan="10">Карточек с таким статусом нет</td></tr>';
+  document.querySelectorAll('#cmp th').forEach(th=>th.setAttribute('aria-sort',th.dataset.k===sortK?(dir>0?'ascending':'descending'):'none'))}
+ document.querySelectorAll('#cmp th').forEach(th=>{const go=()=>{const k=th.dataset.k;if(sortK===k)dir=-dir;else{sortK=k;dir=(k==='t'||k==='status'||k==='place')?1:-1}draw()};th.addEventListener('click',go);th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+ document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{filt=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()}));draw()})();
+
+/* 3 checklist */
+const check=[
+ {s:'ok',t:'Рейтинг и награда',d:'«Хорошее место» третий год подряд',v:'5,0'},
+ {s:'ok',t:'Ответы на отзывы',d:'на последние отзывы компания отвечает',v:'есть'},
+ {s:'no',t:'Публикации',d:'2 за всё время, последняя 14.05.2025; за 12 месяцев ни одной',v:'0 за год'},
+ {s:'no',t:'Оценки',d:'медиана зоны 1 741, у Pine River 7 107',v:'170'},
+ {s:'no',t:'Фото',d:'медиана зоны 386, у лидеров по 499',v:'269'},
+ {s:'no',t:'Данные о домах',d:'в карточке «номеров: 3», у компании Барнхаус, Треугольник, Бохо, Зелёный дом и баня',v:'3 из 4'},
+ {s:'no',t:'Акции',d:'скидка 20% на будни ноября в карточке не указана',v:'0'},
+ {s:'no',t:'Звонки',d:'124 за год, на 2% меньше прошлого года при росте переходов на 75%',v:'124'}];
+document.getElementById('check').innerHTML=check.map(c=>`<div class="ci"><div class="ic ${c.s}">${c.s==='ok'?'✓':c.s==='no'?'!':'?'}</div><div><b>${c.t}</b><span>${c.d}</span></div><div class="r">${c.v}</div></div>`).join('');
+
+/* scatter */
+(function(){const W=520,H=320,L=44,B=34,T=12,R=70;const s=svg(W,H);const lo=Math.log10(100),hi=Math.log10(10000);const xs=v=>L+(Math.log10(v)-lo)/(hi-lo)*(W-L-R);const ys=v=>T+(5.1-v)/(5.1-4.2)*(H-T-B);
+ const g=el('g',{class:'grid'},s);[100,300,1000,3000,10000].forEach(v=>{el('line',{x1:xs(v),x2:xs(v),y1:T,y2:H-B},g);el('text',{x:xs(v),y:H-B+16,'text-anchor':'middle'},s,fi(v))});
+ [4.3,4.5,4.7,4.9].forEach(v=>{el('line',{x1:L,x2:W-R,y1:ys(v),y2:ys(v)},g);el('text',{x:L-8,y:ys(v)+4,'text-anchor':'end'},s,fmt(v))});
+ el('text',{x:(W+L-R)/2,y:H-2,'text-anchor':'middle'},s,'оценок');
+ D.cards.slice().sort((a,b)=>a.me-b.me).forEach(c=>{const p=el('circle',{cx:xs(c.rc),cy:ys(c.r),r:c.me?9:6,fill:c.me?css('accent'):css('c3'),stroke:css('panel'),'stroke-width':2},s);
+  if(c.me)el('text',{x:xs(c.rc),y:ys(c.r)+24,'text-anchor':'middle',class:'val'},s,'Берёзовка');
+  bindTip(p,`<b>${c.t}</b><br>рейтинг ${fmt(c.r)} · ${fi(c.rc)} оценок`)});
+ document.getElementById('scatter').appendChild(s)})();
+
+hbars('aspects',D.aspects.map(a=>{const p=a[2]/(a[2]+a[3])*100;return {l:a[0],v:p,vl:Math.round(p)+'%',c:p<90?'warn':'forest',tip:`<b>${a[0]}</b><br>${a[1]} упоминаний: ${a[2]} положительных, ${a[3]} отрицательных`}}),{max:100,L:130,R:50,w:1040});
+
+/* 4 competitors */
+hbars('shareChart',D.cards.slice().sort((a,b)=>b.sh-a.sh).map(c=>({l:c.t,v:c.sh,vl:c.sh+'%',c:c.me?'accent':'c3',tip:`<b>${c.t}</b><br>доля переходов в зоне: ${c.sh}%<br>место: ${c.place} из 11`})),{w:520,L:190,R:44});
+hbars('discChart',D.disc.map((d,i)=>({l:d[0],v:d[1],c:i?'c3':'accent',tip:`<b>${d[0]}</b><br>${fi(d[1])} переходов из поиска по рубрике за неделю`})),{w:520,L:220,R:50});
+(function(){const m=D.medCmp;const W=520,rh=56,L=80,R=60;const s=svg(W,m.length*rh+6);
+ m.forEach((it,i)=>{const y=6+i*rh;const mx=Math.max(it.me,it.med)*1.05;const sc=v=>(v/mx)*(W-L-R);el('text',{x:0,y:y+27,class:'lbl'},s,it.l);const f=v=>it.dec?fmt(v):fi(v);
+  [[it.me,'accent','Берёзовка',0],[it.med,'c3','медиана зоны',21]].forEach(([v,c,n,dy])=>{const r=el('rect',{x:L,y:y+6+dy,width:Math.max(2,sc(v)),height:15,rx:4,fill:css(c)},s);el('text',{x:L+sc(v)+8,y:y+18+dy,class:'val'},s,f(v));bindTip(r,`<b>${it.l}</b><br>${n}: ${f(v)}`)})});
+ document.getElementById('medChart').appendChild(s)})();
+hbars('brandChart',D.brands.map(b=>({l:b.t,v:b.v,vl:fi(b.v)+'  '+pct(b.y),c:b.me?'accent':'c3',tip:`<b>${b.t}</b><br>${fi(b.v)} запросов за ноя 2025 — сен 2026<br>к прошлому году: ${pct(b.y)}`})),{L:190,R:140,w:1040});
+
+/* 5 how found */
+hbars('geoChart',D.geo.map(g=>({l:g[0],v:g[1],c:'forest',vl:g[1]+' · '+Math.round(g[1]/50*100)+'%',tip:`<b>${g[0]}</b><br>${g[1]} из 50 визитов`})),{w:520,L:250,R:70,max:50});
+hbars('geoQ',D.geoQ.map(g=>({l:g[0],v:g[1],c:'accent',vl:String(g[1]),tip:`<b>${g[0]}</b><br>${g[1]} из 23 общих запросов`})),{w:520,L:250,R:40,max:23});
+lines('bzLine',D.wsM,D.wsMF,[{n:'«берёзовка глэмпинг»',d:D.bz,c:'accent'}],{w:520,h:200,area:true,every:4});
+lines('pineLine',D.wsM,D.wsMF,[{n:'Pine River',d:D.pine,c:'c3'}],{w:520,h:200,area:true,every:4});
+
+/* 6 demand */
+lines('mainR',D.wsM,D.wsMF,[{n:'Калужская область',d:D.main.r,c:'forest'}],{w:520,h:220,area:true,every:4});
+lines('mainO',D.wsM,D.wsMF,[{n:'Обнинск',d:D.main.o,c:'accent'}],{w:520,h:220,area:true,every:4});
+(function(){const it=D.yoy;const W=1040,mid=520,rh=22,H=it.length*rh+8;const s=svg(W,H);const mx=Math.max(...it.map(x=>Math.abs(x.y)));const sc=v=>v/mx*(W-mid-80);
+ el('line',{x1:mid,x2:mid,y1:0,y2:H,stroke:css('line')},s);
+ it.forEach((x,i)=>{const y=4+i*rh;const w=Math.max(2,Math.abs(sc(x.y)));el('text',{x:x.y<0?mid-w-8:mid-8,y:y+rh/2+4,'text-anchor':'end',class:'lbl'},s,x.q);
+  el('rect',{x:x.y>=0?mid:mid-w,y:y+4,width:w,height:rh-8,rx:3,fill:x.y>=0?css('forest'):css('bad')},s);
+  el('text',{x:x.y>=0?mid+w+6:mid+6,y:y+rh/2+4,class:'val'},s,pct(x.y));
+  const hit=el('rect',{x:0,y,width:W,height:rh,fill:'transparent'},s);bindTip(hit,`<b>${x.q}</b><br>Калужская обл.: ${fi(x.l)} (было ${fi(x.p)})<br>Обнинск: ${fi(x.o)}<br>Москва и область: ${fi(x.m)}`)});
+ document.getElementById('yoy').appendChild(s)})();
+
+/* 7 heat */
+(function(){const H=D.heat;const W=1040,L=170,T=26,ch=30;const cw=(W-L)/12;const s=svg(W,T+H.length*ch+4);
+ D.heatM.forEach((m,j)=>el('text',{x:L+j*cw+cw/2,y:16,'text-anchor':'middle'},s,m));
+ H.forEach((row,i)=>{const avg=row.d.reduce((a,b)=>a+b,0)/12;el('text',{x:L-10,y:T+i*ch+ch/2+4,'text-anchor':'end',class:'lbl'},s,row.q);
+  row.d.forEach((v,j)=>{const dev=v/avg-1;const a=Math.min(1,Math.abs(dev)/0.8);const c=el('rect',{x:L+j*cw+1,y:T+i*ch+1,width:cw-2,height:ch-2,rx:4,fill:dev>=0?css('accent'):css('forest'),'fill-opacity':(0.08+a*0.85).toFixed(2)},s);
+   bindTip(c,`<b>${row.q}</b> · ${D.heatMF[j]}<br>${fi(v)} запросов<br>${pct(Math.round(dev*100))} к среднему месяцу`)})});
+ document.getElementById('heat').appendChild(s)})();
+const season=[
+ {h:'на пике сейчас',t:'Отдых на Новый год',d:'ноябрь — пиковый месяц: в 3,6 раза выше среднего месяца; с января спрос почти обнуляется'},
+ {h:'набирает обороты',t:'База отдыха зимой, аренда бани',d:'январь: «база отдыха зимой» в 2,5 раза выше среднего, «аренда бани» +36%'},
+ {h:'сезонный спад',t:'База отдыха, снять домик',d:'декабрь −61% и −57% к среднему месяцу; летний пик в июле: +124% и +107%'}];
+document.getElementById('seasonCards').innerHTML=season.map(c=>`<div class="panel"><div class="eyebrow">${c.h}</div><b>${c.t}</b><div class="meta" style="margin:0">${c.d}</div></div>`).join('');
+
+/* 8 news, 9 route */
+const news=[
+ {big:'11 дней',t:'Новогодние каникулы 31.12.2026 — 10.01.2027',d:'Правительство утвердило календарь на 2027 год. Длинные каникулы — повод для публикации о новогодних датах: на Новый год в «Берёзовке» осталось 2 домика.',src:[['ppc.world','https://ppc.world/news/pravitelstvo-utverdilo-kalendar-prazdnichnyh-i-vyhodnyh-dney-v-2027-godu/']]},
+ {big:'2% → 3%',t:'Ставка туристического налога растёт',d:'В 2026 году ставка 2%, в 2027 — 3%, к 2029 дойдёт до 5% там, где налог введён. Повод напомнить о бронировании по текущим ценам.',src:[['spmag.ru','https://spmag.ru/articles/turisticheskij-nalog-izmeneniya-s-2026-goda']]},
+ {big:'№ 1345',t:'Классификация гостевых домов',d:'Постановление от 30.08.2025 действует с 01.09.2025 по 31.12.2027: требования к домам и реестр классифицированных средств размещения. Повод рассказать об оснащении каждого дома.',src:[['ppt.ru','https://ppt.ru/obzory/vstupaet-v-silu/postanovlenie-pravitelstva-rf-30-08-2025-1345']]},
+ {big:'+28,5%',t:'Ищут базы отдыха с баней',d:'Запрос растёт быстрее всех в Калужской области; «банный чан» +19,4%. У «Берёзовки» своя баня с парной и зоной релакса, а в отзывах аспект «Баня» без единого негатива.',src:[['Яндекс Вордстат','https://wordstat.yandex.ru/']]}];
+document.getElementById('news').innerHTML=news.map(n=>`<div class="panel"><div class="big">${n.big}</div><p><b>${n.t}</b></p><p>${n.d}</p><div class="meta" style="margin:0">Источник: ${n.src.map(s=>`<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>`).join(', ')}</div></div>`).join('');
+document.getElementById('newsSrc').innerHTML='Поводы для контента: '+news.flatMap(n=>n.src).map(s=>`<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>`).join(', ')+'.';
+const route=[
+ {when:'ноябрь',t:'Навести порядок в карточке',items:['четыре дома и баня в данных карточки вместо «номеров: 3»','акция: −20% на будни ноября','свежие фото домов и бани, догнать медиану зоны в 386 фото','просьба об оценке после выезда']},
+ {when:'каждый месяц',t:'Контент в карточке',items:['новости и сторис ежемесячно: за год их не было ни одной','темы под растущие запросы: баня, чан, отдых с собакой']},
+ {when:'декабрь — март',t:'Зимний сезон',items:['Новый год: 11 дней каникул, 2 свободных домика','«база отдыха зимой» и баня — пик в январе','лошади и сани зимой по договорённости']},
+ {when:'апрель — август',t:'Летний сезон',items:['«база отдыха» +124% в июле: публикации с мая','день рождения на природе: пик в июне','отдых с собакой: июнь +131% к среднему']}];
+document.getElementById('route').innerHTML=route.map(r=>`<div class="step"><div class="when">${r.when}</div><b>${r.t}</b><ul>${r.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+
+const NAV={analytics:[['top','Главное'],['s1','Трафик'],['s2','Сравнение'],['s3','Карточка'],['s4','Конкуренты'],['s5','Как находят'],['s6','Спрос'],['s7','Сезонность'],['s8','Поводы'],['s9','Маршрут']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(v,scroll){if(!NAV[v])v='analytics';
+ document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==v});
+ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v?'true':'false'));
+ sub.innerHTML=NAV[v].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+ if(location.hash.slice(1)!==v){try{history.replaceState(null,'','#'+v)}catch(e){}}
+ if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+ const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
