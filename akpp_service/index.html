@@ -49,19 +49,18 @@ p{margin:0}
 .fact dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
 .fact dd{margin:0;font-weight:600}
 .note{font-size:15px;color:var(--ink-soft);max-width:72ch}
-/* brandbook */
 .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .sw{border-radius:10px;min-height:150px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:1px solid var(--line)}
 .sw b{font-family:var(--display);font-size:17px}
 .sw small{font-family:var(--mono);font-size:12px;opacity:.92}
 .sw i{font-style:normal;font-size:13px;line-height:1.4;opacity:.9;margin-top:6px}
 .sw.lt{color:#FFFFFF}.sw.dk{color:#1E3346}
-/* logic */
-.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:s}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .steps li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
 .steps li .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
 .steps li b{font-family:var(--display);font-size:17px}
 .steps li span{font-size:14.5px;color:var(--ink-soft)}
+.pasts{display:flex;flex-direction:column;gap:10px}
 details.past{border:1px solid var(--line);border-radius:10px;background:var(--card)}
 details.past>summary{cursor:pointer;padding:14px 18px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
 details.past>summary::-webkit-details-marker{display:none}
@@ -69,7 +68,6 @@ details.past>summary::after{content:"+";font-family:var(--mono);color:var(--teal
 details.past[open]>summary::after{content:"−"}
 details.past>div{padding:0 18px 18px}
 summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:8px}
-/* theme cards */
 .tone-banner{border:1px solid var(--line);border-left:4px solid var(--roe);background:var(--card);border-radius:10px;padding:16px 18px;font-size:15px;color:var(--ink-soft)}
 .tone-banner b{color:var(--ink)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0}
@@ -97,7 +95,6 @@ ul.th li::marker{color:var(--roe)}
 .slide .st{font-family:var(--display);font-weight:700;font-size:18px}
 .slide ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:4px}
 .design{font-size:14.5px;color:var(--ink-soft)}
-/* roadmap */
 .road{list-style:none;margin:0;padding:0 0 0 22px;position:relative;display:flex;flex-direction:column;gap:14px}
 .road::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
 .road li{position:relative;display:flex;flex-direction:column;gap:3px}
@@ -122,7 +119,7 @@ ul.th li::marker{color:var(--roe)}
 <body>
 <header class="topbar">
   <div class="topbar-in">
-    <div class="brand">АКПП Сервис<span>Этап 2</span></div>
+    <div class="brand">АКПП Сервис<span>Этап 3</span></div>
     <nav class="nav" aria-label="Разделы">
       <a href="#company">Компания</a>
       <a href="#brand">Брендбук</a>
@@ -138,8 +135,8 @@ ul.th li::marker{color:var(--roe)}
 
 <section id="company">
   <div class="eyebrow">01 · Компания</div>
-  <h1>АКПП Сервис: ТЗ на новости и сторис, этап 2</h1>
-  <p class="lead">Две новости с обложкой и две сторис в формате одного слайда для карточек компании на Яндекс Картах и в 2ГИС — Ижевск и Пермь.</p>
+  <h1>АКПП Сервис: ТЗ на новости и сторис, этап 3</h1>
+  <p class="lead">Две новости и две сторис в формате одного слайда для карточек компании на Яндекс Картах и в 2ГИС — Ижевск и Пермь.</p>
   <dl class="facts">
     <div class="fact"><dt>Компания</dt><dd>«АКПП Сервис»</dd></div>
     <div class="fact"><dt>Виды деятельности</dt><dd>Ремонт АКПП · Экспресс-пункт замены масла · Автосервис, автотехцентр</dd></div>
@@ -168,107 +165,115 @@ ul.th li::marker{color:var(--roe)}
 
 <section id="logic">
   <div class="eyebrow">03 · Логика цикла</div>
-  <h2>От коробки — к автомобилю, от ремонта — к профилактике</h2>
-  <p class="note">Этап 1 раскрыл ядро компании: специализацию на трансмиссиях, диагностику, капитальный ремонт и замену масла. Этап 2 расширяет картину: показывает, что компания работает со всем, что влияет на коробку, и что АКПП можно не только ремонтировать, но и дооснащать.</p>
+  <h2>Когда ремонт не единственный вариант и как коробка попадает на стол мастера</h2>
+  <p class="note">Этапы 1 и 2 раскрыли диагностику, капитальный ремонт, обслуживание, смежные системы и доработки АКПП. Этап 3 закрывает два практических вопроса: что делать, если ремонт коробки нецелесообразен, и из чего складывается работа по снятию, установке и проверке агрегата.</p>
   <ol class="steps">
-    <li><span class="k">Новость 1</span><b>Смежные системы</b><span>Двигатель, зажигание, электроника и ходовая как часть работы с АКПП</span></li>
-    <li><span class="k">Сторис 1</span><b>Трансмиссия целиком</b><span>Раздатки, редукторы, дифференциалы, валы, ступицы</span></li>
-    <li><span class="k">Новость 2</span><b>Доработки АКПП</b><span>Доп. радиатор, магистральный фильтр, замена робота на автомат</span></li>
-    <li><span class="k">Сторис 2</span><b>Уровень масла</b><span>Три способа проверки и доливка</span></li>
+    <li><span class="k">Новость 1</span><b>Ремонт или другая коробка</b><span>Когда компания предлагает б/у или восстановленную АКПП, гарантия до 90 дней</span></li>
+    <li><span class="k">Сторис 1</span><b>Восстановленные АКПП в наличии</b><span>Альтернатива ремонту и гарантия на б/у агрегат</span></li>
+    <li><span class="k">Новость 2</span><b>Снятие и установка АКПП</b><span>Стоимость по типу привода и компоновке, примеры автомобилей</span></li>
+    <li><span class="k">Сторис 2</span><b>Проверка после установки</b><span>Теплообменник, подъёмник, проверка в движении</span></li>
   </ol>
-  <details class="past">
-    <summary>Логика этапа 1</summary>
-    <div><p class="note">Специализация и команда → диагностика: три метода → капитальный ремонт: четыре этапа → замена масла в АКПП, вариаторе и DSG.</p></div>
-  </details>
+  <div class="pasts">
+    <details class="past">
+      <summary>Логика этапа 1</summary>
+      <div><p class="note">Специализация и команда → диагностика: три метода → капитальный ремонт: четыре этапа → замена масла в АКПП, вариаторе и DSG.</p></div>
+    </details>
+    <details class="past">
+      <summary>Логика этапа 2</summary>
+      <div><p class="note">Смежные системы автомобиля → трансмиссия целиком → доработки АКПП → проверка уровня масла.</p></div>
+    </details>
+  </div>
 </section>
 
 <section id="news">
   <div class="eyebrow">04 · Новости</div>
   <h2>Новости этапа</h2>
-  <div class="tone-banner"><b>Тон и голос.</b> Текст начинается с короткого вступления от лица компании («мы») и держит деловой экспертный тон: точные термины с простым пояснением, факты и цифры. Каждая новость раскрывает свою мысль, без перечня всех услуг подряд. SEO-ключи вплетаются в предложения естественно. Без превосходных степеней, телефонов и адресов в тексте — контакты остаются в полях карточки.</div>
+  <div class="tone-banner"><b>Тон и голос.</b> Текст начинается с короткого вступления от лица компании («мы») и держит деловой экспертный тон: точные термины с простым пояснением, факты и цифры. Каждая новость раскрывает свою мысль, без перечня всех услуг подряд. SEO-ключи вплетаются в предложения естественно. Без превосходных степеней, телефонов и адресов в тексте — контакты остаются в полях карточки на Яндекс Картах и в 2ГИС.</div>
 
   <article class="card">
     <div class="card-head">
-      <div class="tags"><span class="tag roe">Новость 1</span><span class="tag">Экспертная</span><span class="tag">Автосервис, автотехцентр</span></div>
-      <h3>Симптом в коробке, причина в другой системе: как «АКПП Сервис» работает со смежными неисправностями</h3>
+      <div class="tags"><span class="tag roe">Новость 1</span><span class="tag">Экспертно-продающая</span><span class="tag">Ремонт АКПП</span></div>
+      <h3>Ремонт или другая коробка: когда «АКПП Сервис» предлагает б/у или восстановленную АКПП</h3>
     </div>
     <div class="blk"><div class="lbl">Вступление (тон и голос)</div>
-      <p class="voice">Мы занимаемся автоматическими коробками передач с 2003 года. За это время трансмиссии стали сложнее, а системы автомобиля теснее связаны друг с другом. Поэтому мы разбираемся не только в коробке, но и во всём, что на неё влияет.</p></div>
+      <p class="voice">Под ремонтом АКПП мы понимаем капитальный ремонт. Но бывает, что ремонт коробки нецелесообразен. Для таких случаев у нас есть другой вариант — б/у или восстановленный агрегат с нашей гарантией.</p></div>
     <div class="blk"><div class="lbl">Тезисы</div>
       <ul class="th">
-        <li>В автомобилях последних 10–12 лет двигатель, АКПП, АБС, контроль тяги, антипробуксовочная система и система управления полным приводом работают во взаимодействии. Сбой в одной системе приводит к некорректной работе остальных.</li>
-        <li>Отсюда принцип компании: при обращении с предполагаемой неисправностью АКПП в ремонте не откажут в 99% случаев, даже если причина в системе впрыска топлива или в блоке АБС.</li>
-        <li>Двигатель: диагностика и ремонт бензиновых ДВС. Мотортестер без разборки двигателя выявляет проблемы ГРМ: неверно выставленные фазы впуска и выпуска, неплотное закрытие клапанов, недостаточное разрежение во впускном тракте.</li>
-        <li>Зажигание: угол опережения и его изменение по нагрузке и оборотам коленвала, состояние свечей без снятия на работающем двигателе (актуально для V-образных моторов), высоковольтные провода и катушки, время горения искры и напряжение пробоя.</li>
-        <li>Электроника: ремонт электронных систем автомобиля со сканером и информационными базами; диагност компании имеет радиоэлектронный опыт. Когда нужно дилерское оборудование, возможна совместная работа с дилерами.</li>
-        <li>Также в работе: ходовая часть, тормозная и рулевая системы, текущее ТО — замена жидкостей, фильтров и расходных материалов.</li>
+        <li>Купить б/у коробку компания предлагает, если повреждено более 70% деталей или стоимость ремонта составляет значительную часть остаточной стоимости автомобиля.</li>
+        <li>Агрегат с разборки, который продают как «новый», по сути является бывшим в употреблении. Качество таких коробок непредсказуемо: одни оказываются в хорошем состоянии, другие имеют серьёзные дефекты.</li>
+        <li>Продавцы б/у агрегатов редко дают гарантию, обычно только на запуск.</li>
+        <li>На б/у АКПП, которые компания продаёт и устанавливает сама, действует гарантия до 90 дней.</li>
+        <li>Восстановленные АКПП есть в наличии.</li>
+        <li>Решение принимается после диагностики и дефектовки, когда понятен объём повреждений.</li>
       </ul></div>
     <div class="blk"><div class="lbl">SEO-ключи</div>
-      <div class="chips"><span>автосервис Ижевск</span><span>автотехцентр Пермь</span><span>ремонт АКПП Ижевск</span><span>ремонт АКПП Пермь</span><span>диагностика двигателя мотортестером</span><span>диагностика ДВС Ижевск</span><span>ремонт системы зажигания</span><span>ремонт автоэлектрики Ижевск</span><span>ремонт электронных систем автомобиля</span><span>компьютерная диагностика автомобиля Пермь</span><span>ремонт ходовой части</span><span>ремонт тормозной системы</span><span>техническое обслуживание автомобиля</span></div></div>
+      <div class="chips"><span>ремонт АКПП Ижевск</span><span>ремонт АКПП Пермь</span><span>контрактная АКПП Ижевск</span><span>АКПП б/у Ижевск</span><span>купить АКПП б/у с установкой</span><span>восстановленная АКПП в наличии</span><span>замена АКПП на б/у</span><span>гарантия на б/у АКПП</span><span>ремонт или замена АКПП</span><span>установка контрактной АКПП</span></div></div>
     <div class="meta">
-      <div><span class="lbl">Цель</span><b>Показать компетенцию шире коробки передач</b></div>
+      <div><span class="lbl">Цель</span><b>Показать вариант, когда ремонт нецелесообразен</b></div>
       <div><span class="lbl">Объём</span><b>До 3000 знаков с пробелами</b></div>
-      <div><span class="lbl">CTA</span><b>Записывайтесь на диагностику: укажите марку, год, тип двигателя и коробки</b></div>
+      <div><span class="lbl">CTA</span><b>Приезжайте на диагностику — подскажем, что выгоднее: ремонт или замена агрегата</b></div>
     </div>
     <div class="cover"><div class="lbl">ТЗ на обложку</div>
-      <div class="thesis">«Автомобиль как система»</div>
-      <p>Фото: мотортестер или сканер, подключённый к автомобилю, подкапотное пространство. Заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span> на светлой плашке <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, акцентная линия или галочка красным <span class="hex" style="--c:#EB493B">#EB493B</span>. Текст не более 20% площади, без телефонов и адресов.</p></div>
+      <div class="thesis">«Ремонт или замена АКПП»</div>
+      <p>Фото: коробка передач на стеллаже или на столе в цеху, крупный план агрегата. Заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span> на светлой плашке <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, акцентная галочка красным <span class="hex" style="--c:#EB493B">#EB493B</span>. Текст не более 20% площади, без цен, телефонов и адресов.</p></div>
   </article>
 
   <article class="card">
     <div class="card-head">
-      <div class="tags"><span class="tag roe">Новость 2</span><span class="tag">Экспертно-продающая</span><span class="tag">Ремонт АКПП</span></div>
-      <h3>Доработки АКПП: дополнительный радиатор, магистральный фильтр и замена робота на автомат</h3>
+      <div class="tags"><span class="tag roe">Новость 2</span><span class="tag">Экспертная</span><span class="tag">Автосервис, автотехцентр</span></div>
+      <h3>Снятие и установка АКПП: от чего зависит стоимость работы</h3>
     </div>
     <div class="blk"><div class="lbl">Вступление (тон и голос)</div>
-      <p class="voice">Мы не только ремонтируем и обслуживаем автоматические коробки передач, но и дооснащаем их. У каждой доработки понятная комплектация и стоимость — рассказываем, что входит в работу.</p></div>
+      <p class="voice">Любой ремонт коробки начинается со снятия агрегата и заканчивается его установкой. Стоимость этой работы у нас зависит от того, как устроен конкретный автомобиль, — рассказываем, на что она опирается.</p></div>
     <div class="blk"><div class="lbl">Тезисы</div>
       <ul class="th">
-        <li>Установка дополнительного радиатора АКПП — от 20 000 ₽. В стоимость входят радиатор, шланги, хомуты, монтажные элементы и работа по монтажу.</li>
-        <li>Установка дополнительного магистрального фильтра АКПП — от 2 500 ₽.</li>
-        <li>Замена масла с адаптером для АКПП с теплообменником — от 3 000 ₽: теплообменник снимается и заменяется специальным адаптером, затем прокачка системы, заливка масла и установка уровня. Подходит для АКПП, вариатора и DSG.</li>
-        <li>Замена роботизированной коробки передач на АКПП — от 130 000 ₽, для Toyota Corolla и Auris.</li>
-        <li>Все работы выполняет сервис, специализирующийся на трансмиссиях с 2003 года, в Ижевске и Перми.</li>
+        <li>Передний привод без подрамника или задний привод — от 10 000 ₽. Примеры: Ford Focus, Mercedes E230, BMW 525.</li>
+        <li>Передний привод с подрамником — от 12 000 ₽. Примеры: Opel Astra, Toyota Camry, Renault Megane.</li>
+        <li>Полный привод, поперечное расположение двигателя — от 14 000 ₽. Примеры: Toyota RAV4, Lexus RX300/330, Ford Maverick, Chevrolet Captiva.</li>
+        <li>Полный привод, продольное расположение двигателя — от 14 000 ₽. Примеры: BMW X3/X5, Mercedes ML/GL, Hyundai Terracan, Toyota LC100.</li>
+        <li>Снятие агрегата, как правило, составляет 40% от стоимости снятия и установки, установка на автомобиль — 60%.</li>
+        <li>Цена может меняться в меньшую или большую сторону в зависимости от модели и комплектации автомобиля.</li>
+        <li>Снятие и установка гидроблока АКПП — от 3 500 ₽, стоимость зависит от модели автомобиля.</li>
       </ul></div>
     <div class="blk"><div class="lbl">SEO-ключи</div>
-      <div class="chips"><span>доработка АКПП Ижевск</span><span>установка радиатора АКПП</span><span>дополнительный радиатор АКПП цена</span><span>магистральный фильтр АКПП</span><span>адаптер теплообменника АКПП</span><span>замена робота на АКПП</span><span>замена роботизированной коробки на автомат Toyota Corolla</span><span>замена робота Toyota Auris</span><span>обслуживание АКПП Пермь</span><span>ремонт АКПП Ижевск</span></div></div>
+      <div class="chips"><span>снятие АКПП Ижевск</span><span>установка АКПП Ижевск</span><span>снятие и установка АКПП цена</span><span>снятие установка АКПП Пермь</span><span>стоимость снятия коробки автомат</span><span>снятие АКПП полный привод</span><span>снятие АКПП передний привод с подрамником</span><span>снятие гидроблока АКПП</span><span>ремонт АКПП Ижевск</span><span>автосервис Ижевск</span></div></div>
     <div class="meta">
-      <div><span class="lbl">Цель</span><b>Показать направление доработок и дооснащения АКПП</b></div>
+      <div><span class="lbl">Цель</span><b>Объяснить, из чего складывается стоимость снятия и установки</b></div>
       <div><span class="lbl">Объём</span><b>До 3000 знаков с пробелами</b></div>
-      <div><span class="lbl">CTA</span><b>Уточняйте доработку для вашего автомобиля на консультации мастера</b></div>
+      <div><span class="lbl">CTA</span><b>Уточняйте стоимость снятия и установки для вашей модели у мастера-приёмщика</b></div>
     </div>
     <div class="cover"><div class="lbl">ТЗ на обложку</div>
-      <div class="thesis">«Доработки АКПП»</div>
-      <p>Фото: дополнительный радиатор или магистральный фильтр на агрегате, крупный план узла. Заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span>, акцентная плашка красным <span class="hex" style="--c:#EB493B">#EB493B</span> с белым текстом. Текст не более 20% площади, без цен и контактов на изображении.</p></div>
+      <div class="thesis">«Снятие и установка АКПП»</div>
+      <p>Фото: автомобиль на подъёмнике, снятая коробка на трансмиссионной стойке. Заголовок белым на синей плашке <span class="hex" style="--c:#3478B9">#3478B9</span>, тонкая акцентная полоса красным <span class="hex" style="--c:#EB493B">#EB493B</span>. Текст не более 20% площади, без цен и контактов на изображении.</p></div>
   </article>
 </section>
 
 <section id="stories">
   <div class="eyebrow">05 · Сторис</div>
   <h2>Сторис этапа</h2>
-  <p class="note">Один слайд — один факт. Название истории обязательно для публикации на Яндекс Картах.</p>
+  <p class="note">Один слайд — один факт. Публикация — карточки компании на Яндекс Картах и в 2ГИС, название истории обязательно.</p>
   <div class="stories">
     <article class="card">
       <div class="card-head">
-        <div class="tags"><span class="tag roe">Сторис 1</span><span class="tag">Автосервис, автотехцентр</span></div>
-        <h3>Трансмиссия целиком</h3>
+        <div class="tags"><span class="tag roe">Сторис 1</span><span class="tag">Ремонт АКПП</span></div>
+        <h3>Восстановленные АКПП в наличии</h3>
       </div>
-      <div class="slide"><div class="st">Не только коробка — вся трансмиссия</div>
-        <ul><li>Раздаточные коробки</li><li>Редукторы и дифференциалы</li><li>Карданные и приводные валы</li><li>Ступицы</li><li>Обслуживание и ремонт — Ижевск и Пермь</li></ul></div>
-      <div class="chips"><span>ремонт раздаточной коробки</span><span>ремонт редуктора</span><span>ремонт дифференциала</span><span>ремонт карданного вала</span></div>
+      <div class="slide"><div class="st">Когда ремонт нецелесообразен</div>
+        <ul><li>Восстановленные АКПП в наличии</li><li>Б/у АКПП — если повреждено более 70% деталей</li><li>Гарантия до 90 дней на б/у АКПП, купленные и установленные в сервисе</li></ul></div>
+      <div class="chips"><span>восстановленная АКПП</span><span>АКПП б/у Ижевск</span><span>контрактная АКПП</span></div>
       <div class="blk"><div class="lbl">Дизайн слайда</div>
-        <p class="design">Фото узла трансмиссии на подъёмнике. Нижняя плашка синим <span class="hex" style="--c:#3478B9">#3478B9</span> с белым текстом, маркеры-галочки красным <span class="hex" style="--c:#EB493B">#EB493B</span>, как на обложке сообщества.</p></div>
+        <p class="design">Фото коробки передач в цеху. Светлый фон <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span>, «до 90 дней» выделить тёмно-красным <span class="hex" style="--c:#C53329">#C53329</span>, маркеры-галочки красным <span class="hex" style="--c:#EB493B">#EB493B</span>.</p></div>
     </article>
     <article class="card">
       <div class="card-head">
-        <div class="tags"><span class="tag roe">Сторис 2</span><span class="tag">Экспресс-пункт замены масла</span></div>
-        <h3>Уровень масла в АКПП</h3>
+        <div class="tags"><span class="tag roe">Сторис 2</span><span class="tag">Автосервис, автотехцентр</span></div>
+        <h3>Проверка после установки АКПП</h3>
       </div>
-      <div class="slide"><div class="st">Проверка уровня масла в АКПП</div>
-        <ul><li>По заводскому щупу — от 250 ₽</li><li>Спецщупом (например, Mercedes после 1996 г. в.) — от 400 ₽</li><li>На подъёмнике (большинство Audi, VW, часть Toyota после 2003 г. в.) — от 500 ₽</li><li>Доливка до нормы — от 500 ₽</li></ul></div>
-      <div class="chips"><span>проверка уровня масла в АКПП</span><span>доливка масла в АКПП</span><span>масло в коробке автомат Ижевск</span></div>
+      <div class="slide"><div class="st">Что проверяем после установки коробки</div>
+        <ul><li>Промывка теплообменника</li><li>Проверка работы на подъёмнике</li><li>Проверка в движении: качество переключений и наличие всех передач</li><li>Блокировка гидротрансформатора и температура ATF</li></ul></div>
+      <div class="chips"><span>установка АКПП</span><span>обкатка АКПП после ремонта</span><span>ремонт АКПП Ижевск</span></div>
       <div class="blk"><div class="lbl">Дизайн слайда</div>
-        <p class="design">Фото щупа АКПП крупным планом. Светлый фон <span class="hex" style="--c:#E7F1F8">#E7F1F8</span>, заголовок синим <span class="hex" style="--c:#3478B9">#3478B9</span>, цены тёмно-красным <span class="hex" style="--c:#C53329">#C53329</span>.</p></div>
+        <p class="design">Фото автомобиля на подъёмнике. Нижняя плашка синим <span class="hex" style="--c:#3478B9">#3478B9</span> с белым текстом, маркеры-галочки красным <span class="hex" style="--c:#EB493B">#EB493B</span>, как на баннере сообщества ВКонтакте.</p></div>
     </article>
   </div>
 </section>
@@ -290,13 +295,22 @@ ul.th li::marker{color:var(--roe)}
         <li><span class="f">Сторис 4</span><b>Замена масла</b><span>Все типы коробок, интервал 30–40 тыс. км, метод вытеснения</span></li>
       </ol></div>
     </details>
-    <details class="stage" open>
-      <summary><h3>Этап 2 <span class="cur">· актуальный</span></h3></summary>
+    <details class="stage">
+      <summary><h3>Этап 2</h3></summary>
       <div><ol class="road">
         <li class="n"><span class="f">Новость 1</span><b>Симптом в коробке, причина в другой системе</b><span>Смежные системы: двигатель, зажигание, электроника, ходовая; принцип «не откажем в 99% случаев»</span></li>
         <li><span class="f">Сторис 1</span><b>Трансмиссия целиком</b><span>Раздатки, редукторы, дифференциалы, валы, ступицы</span></li>
         <li class="n"><span class="f">Новость 2</span><b>Доработки АКПП</b><span>Доп. радиатор, магистральный фильтр, адаптер теплообменника, замена робота на АКПП</span></li>
         <li><span class="f">Сторис 2</span><b>Уровень масла в АКПП</b><span>Три способа проверки и доливка, цены от 250 ₽</span></li>
+      </ol></div>
+    </details>
+    <details class="stage" open>
+      <summary><h3>Этап 3 <span class="cur">· актуальный</span></h3></summary>
+      <div><ol class="road">
+        <li class="n"><span class="f">Новость 1</span><b>Ремонт или другая коробка</b><span>Б/у АКПП при повреждении более 70% деталей, гарантия до 90 дней, восстановленные АКПП в наличии</span></li>
+        <li><span class="f">Сторис 1</span><b>Восстановленные АКПП в наличии</b><span>Альтернатива ремонту, гарантия на б/у агрегат</span></li>
+        <li class="n"><span class="f">Новость 2</span><b>Снятие и установка АКПП</b><span>От 10 000 до 14 000 ₽ по типу привода, примеры моделей, соотношение 40/60</span></li>
+        <li><span class="f">Сторис 2</span><b>Проверка после установки АКПП</b><span>Теплообменник, подъёмник, переключения, блокировка гидротрансформатора, температура ATF</span></li>
       </ol></div>
     </details>
   </div>
