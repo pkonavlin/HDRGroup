@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Брызги» и «Беседка»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company switch + view tabs + section chips; two views (Аналитика / Контент-план) per company */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.cos{display:flex;gap:4px}
+.cos button{font:600 14px var(--f-display);color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.cos button:hover{color:var(--ink)}
+.cos button[aria-pressed="true"]{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va td.nw{white-space:nowrap}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)} .va .down{color:var(--crit)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:11.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .col{fill:var(--gold)}
+.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .phases{display:grid;gap:16px}
+.va .phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.va .phase-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--gold-line);background:var(--panel-2)}
+.va .phase-h h3{margin:0;font-size:16.5px;color:var(--gold)}
+.va .phase-h .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.va .phase ol{margin:0;padding:14px 18px 16px 36px;display:grid;gap:12px}
+.va .phase li::marker{color:var(--gold);font-family:var(--f-mono)}
+.va .phase li b{display:block}
+.va .phase li span{color:var(--ink-2);font-size:15px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span>
+      <div class="cos" role="group" aria-label="Компания"><button type="button" data-co-go="br" aria-pressed="true">Брызги</button><button type="button" data-co-go="be" aria-pressed="false">Беседка</button></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-br-analytics" data-co="br" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="br-top">
+  <span class="eyebrow">Москва · сауны · Сокольники и Бауманская · замер 04.11.2026</span>
+  <h1>Где «Брызги» не видно на Картах и что с этим делать</h1>
+  <p>Две карточки сауны «Брызги» — Стромынский переулок, 4 и Ладожская улица, 2/37. Позиции на Яндекс Картах по 6 запросам, соседи в радиусе 2 км, спрос по Вордстату для региона «Москва».</p>
+</header>
+
+<section id="br-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«сауна», «сауна с бассейном», «сауна для компании» — первые три места</b>Ладожская — 1-е место по «сауна с бассейном» у Бауманской, Стромынский — 1-е по «сауна для компании» и 2-е по «сауна».</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ладожская не показывается по «хамам» и «караоке»</b>В зале «Джунгли» на Ладожской есть турецкая парная и профессиональное караоке АСТ, но по запросам «сауна с хамамом» и «сауна с караоке» карточки нет в первой пятёрке.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новостей нет с 4 марта 2026, прайс «давно не обновлялось»</b>На обеих карточках последняя новость — поздравление с 8 Марта. В прайсе по две позиции с пометкой Яндекса «Давно не обновлялось».</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Сезон начинается сейчас</b>«сауна с бассейном» в Москве: пик приходится на октябрь–январь. В сентябре 2026 — 6 505 запросов, на 29% меньше, чем в сентябре 2025.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Стромынский пер., 4</div><div class="n">4,8</div><div class="s">306 оценок · 165 отзывов</div></div>
+    <div class="kpi"><div class="k">Ладожская ул., 2/37</div><div class="n">4,8</div><div class="s">377 оценок · 217 отзывов</div></div>
+    <div class="kpi"><div class="k">Новостей на карточках</div><div class="n">9 + 8</div><div class="s">последняя — 4 марта 2026</div></div>
+    <div class="kpi"><div class="k">Ищут по названию</div><div class="n">162</div><div class="s">«сауна брызги» в месяц</div></div>
+  </div>
+</section>
+
+<section id="br-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Москве без геолокации, карта у Сокольников и Бауманской. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Ладожская</th><th class="r">Стромынский</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>сауна</td><td class="r me">2</td><td class="r me">2</td><td>Парус, Брызги, Пятница, Уют24, Бухта изобилия</td></tr>
+      <tr><td>сауна с бассейном</td><td class="r me">1</td><td class="r me">4</td><td>Брызги, Русская охота, Банный клуб на Бауманке, Римские Термы, Фитнес Практика</td></tr>
+      <tr><td>сауна для компании</td><td class="r">нет</td><td class="r me">1</td><td>Брызги, Уют24, Парус, Пятница, Русская охота</td></tr>
+      <tr><td>сауна с хамамом</td><td class="r">нет</td><td class="r me">2</td><td>СПА Сиам, Брызги, I-Feel, Парус, Уют24</td></tr>
+      <tr><td>сауна с караоке</td><td class="r">нет</td><td class="r me">3</td><td>Харизма Friends Hall, 4 Комнаты, Брызги, Парус, Неон Чилл</td></tr>
+      <tr><td>сауна с хамамом (у Бауманской)</td><td class="r">нет</td><td class="r">нет</td><td>СПА Сиам, I-Feel, Русская охота, Парус, Фитнес Практика</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи в радиусе 2 км</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Брызги, Ладожская</b></td><td class="r num me">4,8</td><td class="r num me">377</td><td>Ладожская ул., 2/37</td></tr>
+      <tr><td><b>Брызги, Стромынский</b></td><td class="r num me">4,8</td><td class="r num me">306</td><td>Стромынский пер., 4</td></tr>
+      <tr><td>Русская охота</td><td class="r num">5,0</td><td class="r num">451</td><td>Гарднеровский пер., 3, стр. 4</td></tr>
+      <tr><td>Банный клуб на Бауманке</td><td class="r num">5,0</td><td class="r num">234</td><td>Бауманская ул., 22</td></tr>
+      <tr><td>Римские Термы</td><td class="r num">4,7</td><td class="r num">202</td><td>ул. Фридриха Энгельса, 20, стр. 1</td></tr>
+      <tr><td>Парус</td><td class="r num">4,2</td><td class="r num">143</td><td>Лонгиновская ул., 10</td></tr>
+      <tr><td>Пятница</td><td class="r num">4,8</td><td class="r num">123</td><td>ул. Стромынка, 19, корп. 2</td></tr>
+      <tr><td>Уют24</td><td class="r num">4,8</td><td class="r num">35</td><td>Большой Матросский пер., 1</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="br-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточек и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>На Ладожской хамам и караоке нигде не названы словами</h3></div>
+      <p>Новость про хамам опубликована только на Стромынском — «Открылся зал «Модерн» после ремонта» (июль 2025). В прайсе Ладожской две позиции: «Корабль» и «Джунгли» — <b>«Сауна, 2 вида парной, бассейн, караоке»</b>, слова «хамам» нет. Поэтому по «сауна с хамамом» Стромынский на 2-м месте, а Ладожская не попадает в пятёрку даже у Бауманской.</p>
+      <p class="next">Новость про хамам публиковать на обеих карточках, в прайсе Ладожской назвать позицию «Джунгли: финская и турецкая парная (хамам), бассейн 3×4».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Карточки не обновлялись восемь месяцев</h3></div>
+      <p>Последние новости — 4 марта 2026 на обеих карточках. До этого — март 2025. Прайс помечен Яндексом «Давно не обновлялось». С 29 октября 2026 в кабинете Яндекс Бизнеса снова можно редактировать карточки после сбоя дата-центров.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Три разные версии утренней скидки</h3></div>
+      <p>Сайт: с 9:00 до 14:00 — <b>1500 руб в час</b>. Акция на карточке Ладожской: с 9:00 до 14:00 — <b>30%</b>. Новость Стромынского от января 2025: утром <b>1200 руб/час</b>, днём с 14:00 до 18:00 — 1500 руб/час. Человек видит разные цены в двух местах и уходит уточнять к соседям.</p>
+      <p class="next">Оставить одну формулировку скидки на сайте и в акциях обеих карточек.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Описание залов на Стромынском перепутано</h3></div>
+      <p>В блоке «Коротко о месте» Стромынского Яндекс пишет про залы «Джунгли» и «Пиратский». По сайту эти залы на Ладожской, а на Стромынском — «Русский стиль» и «Модерн». Блок собирается из отзывов и данных карточки, поэтому исправляется через названия залов в прайсе и новостях.</p>
+    </div>
+  </div>
+</section>
+
+<section id="br-demand">
+  <div class="sh"><h2>Спрос в Москве</h2><p>Вордстат, регион «Москва», все устройства. Частоты — за 08.09–07.10.2026: новее данные Вордстат после сбоя дата-центров Яндекса пока не отдаёт.</p></div>
+  <div class="chart" data-chart="br"><h3>«сауна с бассейном», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: −29%</div></div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">Запросов</th><th class="r">К прошлому месяцу</th></tr></thead><tbody id="br-mom"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Сезонность: пик с октября по январь (ноябрь 2025 — 13 221, январь 2026 — 13 330), спад с марта по июнь. Ноябрьские и декабрьские публикации попадают на подъём спроса.</p>
+
+  <h3>Запросы по направлениям</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-br"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Бассейн — главный уточняющий запрос</b>: «сауна с бассейном» — 6 843, «сауна в москве с бассейном» — 1 752.</li>
+      <li><b>Хамам ищут отдельно от сауны</b>: «хамам в москве» — 917, «хамам в москве с бассейном» — 284.</li>
+      <li><b>«Брызги» ищут по району</b>: «сауна брызги на бауманской» — 44, «… в сокольниках» — 30.</li>
+      <li>Запрос «сауна» в Москве засорён запросами 18+, поэтому в темах опираемся на уточнённые запросы.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «сауна», «Москва» и метро (Бауманская, Сокольники) в первом абзаце.</li>
+      <li>Отдельные новости под хамам, бассейн и компанию до 12 человек.</li>
+      <li>Называть залы и адреса так же, как на сайте, чтобы Яндекс связывал их с нужной карточкой.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="br-market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Рынок бань и саун РФ, 2024</div><div class="n">43,2 млрд ₽</div><div class="s">+13,2% к 2023 году</div></div>
+    <div class="kpi"><div class="k">Компаний спа, бань и массажа</div><div class="n">22 тыс.+</div><div class="s">март 2026, +10,4% за год</div></div>
+    <div class="kpi"><div class="k">«сауна с бассейном», Москва</div><div class="n">−29%</div><div class="s">сентябрь 2026 к сентябрю 2025</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Компаний становится больше, а спрос на «сауну с бассейном» в Москве за год снизился. На Картах выигрывает тот, кто точнее отвечает на уточнённый запрос: хамам, бассейн, караоке, компания.</p>
+</section>
+
+<section id="br-strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому.</p></div>
+  <div class="phases">
+    <div class="phase"><div class="phase-h"><h3>1. Привести карточки в порядок</h3><span class="when">до 11 ноября</span></div><ol>
+      <li><b>Одна формулировка скидки.</b><span>Сайт и акции обеих карточек — одинаково.</span></li>
+      <li><b>Прайс с названиями залов и парных.</b><span>«Джунгли: финская и турецкая парная, бассейн 3×4», «Пиратский корабль: финская парная, бассейн 3×4», «Русский стиль: финская парная, бассейн 3×5», «Модерн: финская и хамам, джакузи».</span></li>
+    </ol></div>
+    <div class="phase"><div class="phase-h"><h3>2. Новости и сторис</h3><span class="when">с 11 ноября, раз в неделю</span></div><ol>
+      <li><b>Одна новость и одна сторис в неделю на обеих карточках.</b><span>Свой стол без пробкового сбора, хамам, бассейн, корпоратив до 12 человек.</span></li>
+    </ol></div>
+    <div class="phase"><div class="phase-h"><h3>3. Новогодний сезон</h3><span class="when">декабрь — январь</span></div><ol>
+      <li><b>Корпоративы и компании.</b><span>Пик спроса на «сауна с бассейном» приходится на январь. Следующий этап — темы под январские праздники.</span></li>
+    </ol></div>
+  </div>
+</section>
+
+<section id="br-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Москве 04.11.2026 без геолокации, карта у Сокольников и Бауманской; рейтинги и оценки — из выдачи.</li>
+    <li>Вордстат: регион «Москва», все устройства, частоты за 08.09–07.10.2026, динамика по месяцам.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/bryzgi/1370718970/" target="_blank" rel="noopener">«Брызги», Ладожская ул., 2/37 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/bryzgi/1065331298/" target="_blank" rel="noopener">«Брызги», Стромынский пер., 4 — Яндекс Карты</a>
+    <a href="https://sauna-bryzgi.ru/" target="_blank" rel="noopener">sauna-bryzgi.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://style.rbc.ru/impressions/6a1e98e39a7947097522e37c" target="_blank" rel="noopener">РБК Стиль — рынок бань и саун</a>
+    <a href="https://www.directline.pro/connect/p/v-yandeks-biznese-snova-dostupny-rabota-s-kartochkoj-organizaczii/" target="_blank" rel="noopener">Директ Лайн — Яндекс Бизнес снова доступен, 29.10.2026</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-br-content" data-co="br" data-view="content" hidden><div class="wrap">
+<section class="hero" id="br-company">
+  <span class="eyebrow">Сауна · Москва · Сокольники и Бауманская</span>
+  <h1>«Брызги» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточки компании «Брызги» на Яндекс Картах (Ладожская улица и Стромынский переулок) и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ООО «БРЫЗГИ»</div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Сауна, турецкий хамам <small>караоке, бассейн, джакузи</small></div></div>
+    <div class="fact"><div class="k">Адреса</div><div class="v">Стромынский пер., 4 <small>Ладожская ул., 2/37</small></div></div>
+    <div class="fact"><div class="k">Метро</div><div class="v">Сокольники · Бауманская</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Хамам <small>до 12 человек, без пробкового сбора</small></div></div>
+    <div class="fact"><div class="k">Залы</div><div class="v">«Джунгли», «Пиратский корабль» <small>«Русский стиль», «Модерн»</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">sauna-bryzgi.ru</div></div>
+  </div>
+</section>
+
+<section id="br-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Брызги»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: синий подсветки залов, красный мягкой мебели, тёплое дерево парной, светлый фон и почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#372D7F;color:#FCFCF8;border-color:#372D7F"><div class="role">Основной</div><div class="name">Синий</div><div class="hex">#372D7F</div></div>
+    <div class="swatch" style="background:#78130F;color:#FCFCF8;border-color:#78130F"><div class="role">Акцентный</div><div class="name">Красный</div><div class="hex">#78130F</div></div>
+    <div class="swatch" style="background:#7C5430;color:#FCFCF8;border-color:#7C5430"><div class="role">Второстепенный</div><div class="name">Дерево</div><div class="hex">#7C5430</div></div>
+    <div class="swatch" style="background:#FCFCF8;color:#160F10;border-color:#FCFCF8"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#FCFCF8</div></div>
+    <div class="swatch" style="background:#160F10;color:#FCFCF8;border-color:#3a3233"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#160F10</div></div>
+  </div>
+</section>
+
+<section id="br-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап идёт от главного преимущества по брифу к уточнённым запросам, по которым Ладожскую сейчас не видно, и заканчивается декабрьскими компаниями.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">11.11</div><p>Своя еда и напитки без пробкового сбора, круглосуточно, у Сокольников и Бауманской.</p></div>
+    <div class="cycle-row"><div class="tag">18.11</div><p>Хамам: турецкая парная в «Джунглях» и хамам в «Модерне».</p></div>
+    <div class="cycle-row"><div class="tag">25.11</div><p>Бассейны 3×4 и 3×5 с противотоком и гейзером, джакузи в «Модерне».</p></div>
+    <div class="cycle-row"><div class="tag">02.12</div><p>Корпоратив в зале до 12 человек: караоке, бильярд, банкетный зал.</p></div>
+  </div>
+</section>
+
+<section id="br-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточки компании «Брызги» на Яндекс Картах и 2ГИС, одна и та же новость на обоих адресах.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «ты», деловой стиль — так указано в брифе. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней, сравнений с другими саунами, алкоголя и кальяна. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1 · 11 ноября</span><h3>Сауна в Москве со своей едой и напитками без пробкового сбора — у Сокольников и Бауманской</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Брызгах» можно отдыхать со своими напитками и едой — пробкового сбора у нас нет.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сауна финская, хамам, бассейн, джакузи, уютно, можно со своими напитками и едой, без пробочного сбора.<span class="src">бриф</span></li>
+      <li>Ключевые преимущества: хамам, количество людей до 12 чел, без пробкового сбора.<span class="src">бриф</span></li>
+      <li>Кухня: Домашняя, Русская, Европейская, разрешается со своей едой, без пробкового сбора.<span class="src">сайт</span></li>
+      <li>Возьмем на себя подготовку к Вашему мероприятию: от интерьера до заказа и сервировки блюд.<span class="src">сайт</span></li>
+      <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+      <li>Адреса: метро Сокольники, Стромынский пер. д.4; метро Бауманская, ул. Ладожская д. 2/37.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Сауна в Москве со своей едой и напитками без пробкового сбора — «Брызги»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Сауна без пробкового сбора: Сокольники и Бауманская | Брызги</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сауна «Брызги» в Москве: финская парная, хамам, бассейн, своя еда и напитки без пробкового сбора. Круглосуточно, до 12 человек, метро Сокольники и Бауманская.</span></div>
+      <div class="chips"><span class="chip-kw">сауна в москве</span><span class="chip-kw">снять сауну</span><span class="chip-kw">снять сауну в москве</span><span class="chip-kw">сауна недорого</span><span class="chip-kw">сауна в москве недорого</span><span class="chip-kw">сауна сокольники</span><span class="chip-kw">сауна на бауманской</span><span class="chip-kw">сауна круглосуточно</span><span class="chip-kw">сауна для компании</span><span class="chip-kw">сауна брызги</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируй зал и приходи со своим столом.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Свой стол — без сбора»</div>
+      <p>Композиция: гостиная зала с накрытым столом — чай, фрукты, домашняя еда, без алкоголя в кадре; синяя подсветка зала на фоне. Тезис на плашке в нижней трети, строка «Сокольники · Бауманская · круглосуточно». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — синий #372D7F, тезис — светлый #FCFCF8, тонкая линия под тезисом — красный #78130F.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2 · 18 ноября</span><h3>Сауна с хамамом в Москве: турецкая парная в «Джунглях» на Бауманской и хамам в «Модерне» в Сокольниках</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Хамам — наше ключевое преимущество: турецкая парная есть в «Брызгах» и на Бауманской, и в Сокольниках.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сауна, турецкий хамам, караоке, бассейн, джакузи.<span class="src">бриф</span></li>
+      <li>Зал 1 «Джунгли», Ладожская улица, 2/37. Вид парной: Финская на 8 чел., Турецкая на 8 чел. Аква зона: Бассейн 3 x 4.<span class="src">сайт</span></li>
+      <li>Зал 2 «Модерн» Сокольники, Стромынский переулок 4. Вид парной: Финская и хамам. Аква зона: Джакузи с донным гейзером.<span class="src">сайт</span></li>
+      <li>Банные услуги: Ароматерапия, ароматы для парной.<span class="src">сайт</span></li>
+      <li>К Вашим услугам натуральные скрабы и ароматерапия.<span class="src">сайт</span></li>
+      <li>Вместимость: 12 человек.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Сауна с хамамом в Москве — «Брызги» на Бауманской и в Сокольниках</span></div>
+      <div class="meta-row"><span><b>Title · </b>Хамам в Москве: турецкая парная и бассейн у метро Бауманская | Брызги</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сауна с хамамом в Москве: зал «Джунгли» — финская и турецкая парная на 8 человек и бассейн 3×4, зал «Модерн» — финская и хамам, джакузи. Ароматерапия, круглосуточно.</span></div>
+      <div class="chips"><span class="chip-kw">сауна с хамамом</span><span class="chip-kw">хамам в москве</span><span class="chip-kw">хамам в москве с бассейном</span><span class="chip-kw">турецкий хамам в москве</span><span class="chip-kw">сауна хамам бассейн москва</span><span class="chip-kw">баня хамам в москве</span><span class="chip-kw">снять хамам в москве</span><span class="chip-kw">сауна с хамамом и бассейном</span><span class="chip-kw">хамам бауманская</span><span class="chip-kw">хамам сокольники</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирай зал с хамамом и бронируй время.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Хамам и финская парная»</div>
+      <p>Композиция: турецкая парная зала «Джунгли» — каменные лежаки в паре, мягкий свет; тезис на плашке в верхней трети, строка «Бауманская · Сокольники», логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — синий #372D7F, тезис — светлый #FCFCF8, строка — дерево #7C5430 на светлой подложке #FCFCF8.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3 · 25 ноября</span><h3>Сауна с бассейном на Бауманской и в Сокольниках: противоток, гейзер, подогрев и подсветка</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В трёх наших залах — бассейны с противотоком, в «Модерне» — джакузи с донным гейзером.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Зал «Джунгли» и зал «Пиратский корабль», Ладожская улица, 2/37: Бассейн 3 x 4 (Подогрев, Противоток, Фильтрация, Подсветка, Гейзер).<span class="src">сайт</span></li>
+      <li>Зал «Русский стиль», Стромынский переулок 4: Бассейн 3 x 5 (Подогрев, Противоток, Фильтрация, Подсветка, Гейзер).<span class="src">сайт</span></li>
+      <li>Зал «Модерн»: Аква зона: Джакузи с донным гейзером.<span class="src">сайт</span></li>
+      <li>В комфортабельных гостинных расположены просторные чистые бассейны, или профессиональное джакузи, кондиционер, бесплатный Wi-Fi.<span class="src">сайт</span></li>
+      <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Сауна с бассейном в Москве — «Брызги», метро Бауманская и Сокольники</span></div>
+      <div class="meta-row"><span><b>Title · </b>Сауна с бассейном в Москве: противоток и гейзер, круглосуточно | Брызги</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сауна с бассейном у метро Бауманская и Сокольники: бассейны 3×4 и 3×5 с подогревом, противотоком, фильтрацией, подсветкой и гейзером, джакузи в зале «Модерн». Круглосуточно.</span></div>
+      <div class="chips"><span class="chip-kw">сауна с бассейном</span><span class="chip-kw">сауна в москве с бассейном</span><span class="chip-kw">снять сауну с бассейном</span><span class="chip-kw">сауна с бассейном недорого</span><span class="chip-kw">сауна с бассейном рядом</span><span class="chip-kw">сауна в москве с бассейном недорого</span><span class="chip-kw">сауна с джакузи</span><span class="chip-kw">сауна с бассейном бауманская</span><span class="chip-kw">сауна с бассейном сокольники</span><span class="chip-kw">бассейн с противотоком</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируй зал с бассейном — работаем круглосуточно.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Бассейн с противотоком»</div>
+      <p>Композиция: бассейн зала с включённой подсветкой, вид сверху под углом; тезис на плашке в нижней трети, строка «3×4 · 3×5 · гейзер».</p>
+      <p>Цвета: плашка — синий #372D7F, тезис — светлый #FCFCF8, строка — светлый #FCFCF8 на красной полосе #78130F.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4 · 2 декабря</span><h3>Корпоратив в сауне в Москве на компанию до 12 человек: караоке, бильярд, банкетный зал</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас можно устроить корпоратив: в каждом зале «Брызг» до 12 человек, гостиная и банкетный зал.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>У нас можно устроить небольшую вечеринку, корпоратив.<span class="src">сайт</span></li>
+      <li>Вместимость: 12 человек. Количество комнат отдыха: 2.<span class="src">сайт</span></li>
+      <li>Стоимость аренды: «Джунгли» — 2200 руб/час до 6 человек, «Пиратский корабль» — 2000 руб/час до 6 человек, «Модерн» — 1800 руб/час до 6 человек. За каждого человека сверх нормы взимается доп оплата 200 руб/чел в час.<span class="src">сайт</span></li>
+      <li>Развлечения: Бильярд американский, Профессиональное караоке АСТ.<span class="src">сайт</span></li>
+      <li>Для отдыха: Гостиная, Банкетный зал, Шоу программы.<span class="src">сайт</span></li>
+      <li>Парковка: бесплатная — Ладожская улица; охраняемая — «Русский стиль».<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Корпоратив в сауне в Москве на 12 человек — «Брызги»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Корпоратив в сауне: караоке, бильярд, до 12 человек | Брызги, Москва</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сауна для компании в Москве: залы до 12 человек, профессиональное караоке АСТ, американский бильярд, гостиная и банкетный зал. От 1800 руб/час до 6 человек, Бауманская и Сокольники.</span></div>
+      <div class="chips"><span class="chip-kw">корпоратив в сауне</span><span class="chip-kw">сауна для компании</span><span class="chip-kw">сауна с караоке</span><span class="chip-kw">сауна с караоке в москве</span><span class="chip-kw">сауна с караоке и бассейном</span><span class="chip-kw">сауна с бильярдом</span><span class="chip-kw">сауна с бильярдом и караоке москва</span><span class="chip-kw">большая сауна</span><span class="chip-kw">снять сауну в москве</span><span class="chip-kw">новогодний корпоратив москва</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируй зал на декабрь заранее.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Корпоратив до 12 человек»</div>
+      <p>Композиция: гостиная зала с бильярдным столом и микрофонами караоке, без людей и без алкоголя в кадре; тезис на плашке в верхней трети, строка «караоке · бильярд · банкетный зал».</p>
+      <p>Цвета: плашка — красный #78130F, тезис — светлый #FCFCF8, строка — светлый #FCFCF8 на синем #372D7F.</p>
+    </div>
+  </div>
+</section>
+
+<section id="br-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточки компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Свой стол — без сбора</div><span class="slide-no">Сторис 1 · 11 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">Своя еда и напитки</span><span class="fact-pill">Без пробкового сбора</span><span class="fact-pill">Круглосуточно</span><span class="fact-pill">До 12 человек</span><span class="fact-pill">Сокольники · Бауманская</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #372D7F, заголовок светлым #FCFCF8 сверху, факты на светлых плашках #FCFCF8 текстом #160F10, строка «без пробкового сбора» на красной плашке #78130F. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Хамам в двух залах</div><span class="slide-no">Сторис 2 · 18 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">«Джунгли»: финская + турецкая на 8 чел.</span><span class="fact-pill">«Модерн»: финская и хамам</span><span class="fact-pill">Ароматерапия</span><span class="fact-pill">Натуральные скрабы</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FCFCF8, заголовок синим #372D7F, два зала двумя колонками на плашках дерева #7C5430 светлым текстом #FCFCF8.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Бассейны 3×4 и 3×5</div><span class="slide-no">Сторис 3 · 25 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">3×4 — «Джунгли», «Пиратский корабль»</span><span class="fact-pill">3×5 — «Русский стиль»</span><span class="fact-pill">Джакузи — «Модерн»</span><span class="fact-pill">Подогрев · противоток · гейзер</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото бассейна с подсветкой, нижняя половина — плашка синего #372D7F, размеры бассейнов крупно светлым #FCFCF8, подписи залов мелко.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">До 12 человек в зале</div><span class="slide-no">Сторис 4 · 2 декабря</span></div>
+      <div class="facts-line"><span class="fact-pill">Вместимость 12</span><span class="fact-pill">Караоке АСТ</span><span class="fact-pill">Бильярд американский</span><span class="fact-pill">Банкетный зал</span><span class="fact-pill">2 комнаты отдыха</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон красный #78130F, цифра «12» крупно светлым #FCFCF8, список фактов ниже на синих плашках #372D7F.</div></div>
+  </div>
+</section>
+
+<section id="br-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — свой стол, хамам, бассейн, корпоратив <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Сауна со своей едой и напитками без пробкового сбора</b>11.11 · бриф, кухня, круглосуточно, два адреса</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Свой стол — без сбора</b>11.11 · главные факты брифа</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Сауна с хамамом: «Джунгли» и «Модерн»</b>18.11 · турецкая парная на 8 человек, ароматерапия</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Хамам в двух залах</b>18.11 · залы и парные</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Сауна с бассейном: противоток, гейзер, подсветка</b>25.11 · бассейны 3×4 и 3×5, джакузи</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Бассейны 3×4 и 3×5</b>25.11 · размеры и оборудование</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Корпоратив в сауне до 12 человек</b>02.12 · караоке, бильярд, банкетный зал, цены залов</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>До 12 человек в зале</b>02.12 · вместимость и развлечения</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+
+<div class="view va" id="v-be-analytics" data-co="be" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="be-top">
+  <span class="eyebrow">Москва · мини-отель · Чистые пруды · замер 04.11.2026</span>
+  <h1>Где «Беседку» не видно на Картах и что с этим делать</h1>
+  <p>Карточка мини-отеля «Беседка», ул. Жуковского, 9. Позиции на Яндекс Картах по 6 запросам, соседи в радиусе 2 км, спрос по Вордстату для региона «Москва».</p>
+</header>
+
+<section id="be-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«гостиница на час» — 2-е место, «гостиница» — 3-е</b>По почасовому запросу «Беседка» сразу после «Кристалла на Таганке».</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«гостиница на ночь», «посуточно», «мини-отель» — 4-е место, «недорого» — 5-е</b>Выше стоят Loft Hotel H11 и два «Винтерфелла» с 750–1 138 оценками против 313 у «Беседки».</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новости карточки почти все про почасовую аренду и акцию 8 часов</b>Из 23 новостей акция «8 часов за 3000 ₽» выходила трижды, ночной и суточный тарифы подробно не описаны ни разу.</p></div>
+    <div class="v"><span class="pill info">рынок</span><p><b>Ночь в «Беседке» втрое дешевле средней по Москве</b>Средняя цена номера в гостиницах Москвы за январь–июль 2026 — 10,3 тыс. ₽, ночь в «Беседке» — 3 000 ₽.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,6</div><div class="s">313 оценок · 186 отзывов</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">23</div><div class="s">последняя — 4 сентября 2026</div></div>
+    <div class="kpi"><div class="k">«гостиница на ночь»</div><div class="n">1 350</div><div class="s">запросов в месяц, Москва</div></div>
+    <div class="kpi"><div class="k">Ищут по названию</div><div class="n">9</div><div class="s">«гостиница беседка на чистых прудах»</div></div>
+  </div>
+</section>
+
+<section id="be-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Москве без геолокации, карта у Чистых прудов. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Беседка</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>гостиница на час</td><td class="r me">2</td><td>Кристалл на Таганке, Беседка, Винтерфелл Курский вокзал, Винтерфелл Курская, Тихонов</td></tr>
+      <tr><td>гостиница</td><td class="r me">3</td><td>Loft Hotel H11, Винтерфелл Курский вокзал, Беседка, Винтерфелл Курская, JackPot Energy</td></tr>
+      <tr><td>гостиница на ночь</td><td class="r me">4</td><td>Loft Hotel H11, Винтерфелл Курская, Винтерфелл Курский вокзал, Беседка, JackPot Energy</td></tr>
+      <tr><td>гостиница посуточно</td><td class="r me">4</td><td>Loft Hotel H11, Винтерфелл Курский вокзал, Винтерфелл Курская, Беседка, JackPot Energy</td></tr>
+      <tr><td>мини-отель</td><td class="r me">4</td><td>Кристалл на Таганке, Буше, Loft Hotel H11, Беседка, Подушкин</td></tr>
+      <tr><td>гостиница недорого</td><td class="r me">5</td><td>Loft Hotel H11, Винтерфелл Курский вокзал, Винтерфелл Курская, Грегори Урбан, Беседка</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи в радиусе 2 км</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Беседка</b></td><td class="r num me">4,6</td><td class="r num me">313</td><td>ул. Жуковского, 9</td></tr>
+      <tr><td>Винтерфелл Курский вокзал</td><td class="r num">4,6</td><td class="r num">1 138</td><td>ул. Казакова, 8, стр. 1</td></tr>
+      <tr><td>Винтерфелл Курская</td><td class="r num">4,5</td><td class="r num">761</td><td>Старая Басманная ул., 7</td></tr>
+      <tr><td>Loft Hotel H11</td><td class="r num">4,7</td><td class="r num">750</td><td>Хохловский пер., 11, стр. 1</td></tr>
+      <tr><td>Кристалл на Таганке</td><td class="r num">4,6</td><td class="r num">653</td><td>ул. Александра Солженицына, 31, стр. 1</td></tr>
+      <tr><td>Буше</td><td class="r num">4,5</td><td class="r num">423</td><td>ул. Макаренко, 2/21с1</td></tr>
+      <tr><td>Подушкин</td><td class="r num">4,6</td><td class="r num">235</td><td>ул. Маросейка, 9/2с6</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="be-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Ночной и суточный тарифы почти не раскрыты</h3></div>
+      <p>По «гостиница на час» карточка на 2-м месте, по «на ночь» и «посуточно» — на 4-м. В 23 новостях почасовая аренда и акция «8 часов» встречаются в большинстве публикаций, а условия ночи (12 часов, заселение с 20:00 до 24:00) и суток (заселение 14:00, выезд до 12:00) не описаны ни в одной.</p>
+      <p class="next">Отдельные новости под ночной и суточный тарифы — первые две темы этапа.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Меньше оценок, чем у соседей</h3></div>
+      <p>У «Беседки» 313 оценок, у «Винтерфелл Курский вокзал» — 1 138, у «Винтерфелл Курская» — 761, у Loft Hotel H11 — 750. Эти три карточки стоят выше по «на ночь», «посуточно» и «недорого».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Три названия одного места</h3></div>
+      <p>Бриф: <b>мини-отель</b>. Сайт: <b>апартаменты</b> и <b>лофт</b> «Беседка». Карточка: <b>гостиница</b>. По запросу «мини-отель» карточка на 4-м месте.</p>
+      <p class="next">Во всех текстах и в описании карточки — «мини-отель «Беседка».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>На сайте устаревший новогодний тариф</h3></div>
+      <p>На сайте указано: с 27 декабря 2025 года по 10 января 2026 года стоимость номера 8000 рублей в сутки. Тариф на праздники 2026/2027 нигде не опубликован.</p>
+    </div>
+  </div>
+</section>
+
+<section id="be-demand">
+  <div class="sh"><h2>Спрос в Москве</h2><p>Вордстат, регион «Москва», все устройства. Частоты — за 08.09–07.10.2026: новее данные Вордстат после сбоя дата-центров Яндекса пока не отдаёт.</p></div>
+  <div class="chart" data-chart="be"><h3>«гостиница на час», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: −14%</div></div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">Запросов</th><th class="r">К прошлому месяцу</th></tr></thead><tbody id="be-mom"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Летний всплеск в июне–июле (2 869 и 2 847), в августе спрос вернулся к весеннему уровню. За два года «гостиница на час» упала с 5 030 запросов (февраль 2025) до 1 368 (сентябрь 2026), поэтому ставка этапа — на ночь и сутки.</p>
+
+  <h3>Запросы по направлениям</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-be"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Ночь, сутки и час ищут одинаково часто</b>: 1 350, 1 294 и 1 364 запроса в месяц.</li>
+      <li><b>«Недорого» — главный уточнитель</b>: «гостиница москва недорого на ночь» — 626, «… на ночь для двоих» — 353.</li>
+      <li><b>Почасовые запросы дробятся</b>: «на 2 часа» — 80, «на несколько часов» — 70, «на 3 часа» — 48.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «мини-отель», «центр Москвы», «Чистые пруды» и цена в первом абзаце.</li>
+      <li>Цену называть числом: 3 000 ₽ за ночь, 4 000 ₽ за сутки, от 1 200 ₽ за 2 часа.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="be-market">
+  <div class="sh"><h2>Рынок</h2></div>
+  <div class="kpis" style="margin-top:0">
+    <div class="kpi"><div class="k">Загрузка гостиниц Москвы</div><div class="n">70%</div><div class="s">январь–июль 2026, −2 п. п. за год</div></div>
+    <div class="kpi"><div class="k">Средняя цена номера, Москва</div><div class="n">10,3 тыс. ₽</div><div class="s">январь–июль 2026, −6%</div></div>
+    <div class="kpi"><div class="k">Бронирования гостиниц, РФ</div><div class="n">−10%</div><div class="s">I квартал 2026 к 2025</div></div>
+  </div>
+  <p class="small" style="margin-top:14px">Спрос на размещение снижается, гости считают деньги. Бриф называет цену главным преимуществом «Беседки» — тексты держим на конкретных суммах.</p>
+</section>
+
+<section id="be-strategy">
+  <div class="sh"><h2>Стратегия</h2><p>От быстрого к долгому.</p></div>
+  <div class="phases">
+    <div class="phase"><div class="phase-h"><h3>1. Одно название</h3><span class="when">до 12 ноября</span></div><ol>
+      <li><b>«Мини-отель «Беседка»</b><span>в описании карточки и во всех публикациях.</span></li>
+      <li><b>Прайс по тарифам.</b><span>«Ночь, 12 часов, заселение 20:00–24:00 — 3 000 ₽», «Сутки, заселение 14:00 — 4 000 ₽», «2 часа — 1 200 ₽».</span></li>
+    </ol></div>
+    <div class="phase"><div class="phase-h"><h3>2. Новости и сторис</h3><span class="when">с 12 ноября, раз в неделю</span></div><ol>
+      <li><b>Ночь, сутки, 2–4 часа, бронирование.</b><span>Каждая тема — под свой запрос, где карточка сейчас на 4–5 месте.</span></li>
+    </ol></div>
+    <div class="phase"><div class="phase-h"><h3>3. Новогодние праздники</h3><span class="when">декабрь</span></div><ol>
+      <li><b>Тариф на праздники.</b><span>Следующий этап — новость о праздничных датах, когда компания утвердит цену.</span></li>
+    </ol></div>
+  </div>
+</section>
+
+<section id="be-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Москве 04.11.2026 без геолокации, карта у Чистых прудов; рейтинги и оценки — из выдачи.</li>
+    <li>Вордстат: регион «Москва», все устройства, частоты за 08.09–07.10.2026, динамика по месяцам.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/besedka/1288614151/" target="_blank" rel="noopener">«Беседка», ул. Жуковского, 9 — Яндекс Карты</a>
+    <a href="https://hotel-besedka.ru/" target="_blank" rel="noopener">hotel-besedka.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://investfuture.ru/articles/tarify-v-otelyakh-moskvy-snizilis-na-6-do-10-3-tys-rubley-37797850" target="_blank" rel="noopener">Инвестфьючер — тарифы и загрузка отелей Москвы (данные IBC)</a>
+    <a href="https://finance.mail.ru/article/oteli-zazhdalis-gostej-69205468/" target="_blank" rel="noopener">Финансы Mail — бронирования гостиниц в I квартале 2026</a>
+    <a href="https://www.directline.pro/connect/p/v-yandeks-biznese-snova-dostupny-rabota-s-kartochkoj-organizaczii/" target="_blank" rel="noopener">Директ Лайн — Яндекс Бизнес снова доступен, 29.10.2026</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-be-content" data-co="be" data-view="content" hidden><div class="wrap">
+<section class="hero" id="be-company">
+  <span class="eyebrow">Мини-отель · Москва · Чистые пруды</span>
+  <h1>«Беседка» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Беседка» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ООО «Компания «Мир недвижимости»</div></div>
+    <div class="fact"><div class="k">Формат</div><div class="v">Мини-отель, 11 номеров <small>почасовая оплата, ночь или сутки</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Москва, ул. Жуковского, д. 9 <small>Чистые пруды — 690 м</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Центр города, дешево <small>в каждом номере душ и санузел</small></div></div>
+    <div class="fact"><div class="k">Тарифы</div><div class="v">Час 600 ₽ · ночь 3 000 ₽ <small>сутки 4 000 ₽, 1–2 человека</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">hotel-besedka.ru</div></div>
+  </div>
+</section>
+
+<section id="be-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Беседки»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: зелень и дерево интерьера, тёплый свет, светлый фон и почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#485B29;color:#FFFFFF;border-color:#485B29"><div class="role">Основной</div><div class="name">Зелень</div><div class="hex">#485B29</div></div>
+    <div class="swatch" style="background:#624D33;color:#FFFFFF;border-color:#624D33"><div class="role">Второстепенный</div><div class="name">Дерево</div><div class="hex">#624D33</div></div>
+    <div class="swatch" style="background:#AB8855;color:#13120A;border-color:#AB8855"><div class="role">Акцентный</div><div class="name">Тёплый свет</div><div class="hex">#AB8855</div></div>
+    <div class="swatch" style="background:#DCDED9;color:#13120A;border-color:#DCDED9"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#DCDED9</div></div>
+    <div class="swatch" style="background:#13120A;color:#DCDED9;border-color:#3a382e"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#13120A</div></div>
+  </div>
+</section>
+
+<section id="be-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап раскрывает тарифы, которые на карточке ещё не описаны, — ночь, сутки и короткие часы — и заканчивается порядком бронирования перед декабрём.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">12.11</div><p>Ночь в центре Москвы: 12 часов за 3 000 ₽, заселение с 20:00 до 24:00.</p></div>
+    <div class="cycle-row"><div class="tag">19.11</div><p>Сутки за 4 000 ₽: заселение 14:00, выезд до 12:00, приезд в любое время.</p></div>
+    <div class="cycle-row"><div class="tag">26.11</div><p>Номер на 2, 3 или 4 часа: 1 200, 1 800 и 2 400 ₽.</p></div>
+    <div class="cycle-row"><div class="tag">03.12</div><p>Как забронировать: тариф, форма, подтверждение администратора, 18+.</p></div>
+  </div>
+</section>
+
+<section id="be-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Беседка» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «ты», деловой стиль — так указано в брифе. Название везде одно: мини-отель «Беседка». Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона, e-mail, ссылок на сайт и превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1 · 12 ноября</span><h3>Гостиница на ночь в центре Москвы: 12 часов за 3 000 ₽ в мини-отеле у Чистых прудов</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мини-отель «Беседка» — это центр города и недорого: ночь у нас стоит 3 000 ₽.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Мини отель 11 номеров, почасовая оплата, ночь или сутки.<span class="src">бриф</span></li>
+      <li>Ночь: оплата за ночь / 1-2 человека — 3 000 ₽.<span class="src">сайт</span></li>
+      <li>Ночное бронирование включает 12 часов проживания. Заселение с 20:00 до 24:00, выселение ровно через 12 часов.<span class="src">сайт</span></li>
+      <li>Каждую следующую ночь необходимо бронировать отдельно.<span class="src">сайт</span></li>
+      <li>Центр города, дешево, в каждом номере душ и санузел.<span class="src">бриф</span></li>
+      <li>Ул. Жуковского, д. 9; метро «Чистые пруды» — 690 м.<span class="src">бриф, Яндекс Карты</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гостиница на ночь в центре Москвы — мини-отель «Беседка», 3 000 ₽</span></div>
+      <div class="meta-row"><span><b>Title · </b>Гостиница на ночь недорого в центре Москвы, Чистые пруды | Беседка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ночь в мини-отеле «Беседка» в центре Москвы — 3 000 ₽ за 12 часов на 1–2 человек. Заселение с 20:00 до 24:00, душ и санузел в каждом номере, ул. Жуковского, 9.</span></div>
+      <div class="chips"><span class="chip-kw">гостиница на ночь</span><span class="chip-kw">гостиница москва недорого на ночь</span><span class="chip-kw">гостиница в москве на ночь</span><span class="chip-kw">гостиница москва недорого на ночь для двоих</span><span class="chip-kw">гостиница на ночь в москве на двоих</span><span class="chip-kw">снять гостиницу на ночь</span><span class="chip-kw">мини отель москва</span><span class="chip-kw">мини отели в центре москвы</span><span class="chip-kw">гостиница чистые пруды</span><span class="chip-kw">гостиница беседка</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируй ночь — заселение с 20:00.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Ночь — 3 000 ₽»</div>
+      <p>Композиция: номер вечером — двуспальная кровать, тёплый свет, деревянные детали и зелень интерьера; тезис на плашке в нижней трети, строка «12 часов · заселение 20:00–24:00».</p>
+      <p>Цвета: плашка — зелень #485B29, тезис — белый #FFFFFF, строка — тёплый свет #AB8855.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2 · 19 ноября</span><h3>Гостиница посуточно в центре Москвы: сутки за 4 000 ₽ и заезд в любое время</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Беседке» нет ограничений по времени заселения — приезжай в любое время суток.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сутки: оплата за сутки / 1-2 человека — 4 000 ₽.<span class="src">сайт</span></li>
+      <li>Заселение в 14:00, выезд до 12:00.<span class="src">сайт</span></li>
+      <li>У нас нет ограничений по времени заселения, вы можете приехать в любое время суток.<span class="src">сайт</span></li>
+      <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+      <li>Во всех комнатах: двуспальная кровать, шкафы, санузел с душевой кабиной, мини-кухня, кондиционер, TV, Wi-Fi.<span class="src">сайт</span></li>
+      <li>Центр города, дешево, в каждом номере душ и санузел.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гостиница посуточно в центре Москвы — мини-отель «Беседка»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Гостиница посуточно недорого в центре Москвы, 4 000 ₽ | Беседка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сутки в мини-отеле «Беседка» — 4 000 ₽ на 1–2 человек. Заселение 14:00, выезд до 12:00, приезд в любое время суток. Мини-кухня, душ и санузел в номере, Чистые пруды.</span></div>
+      <div class="chips"><span class="chip-kw">гостиница посуточно</span><span class="chip-kw">снять гостиницу посуточно</span><span class="chip-kw">гостиница в москве посуточно</span><span class="chip-kw">снять гостиницу в москве посуточно</span><span class="chip-kw">гостиница в москве недорого посуточно</span><span class="chip-kw">снять номер в гостинице в москве посуточно</span><span class="chip-kw">мини отель москва недорого на сутки</span><span class="chip-kw">мини отель москва недорого</span><span class="chip-kw">гостиница чистые пруды</span><span class="chip-kw">гостиница в центре москвы</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирай тариф «Сутки» и бронируй номер.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Сутки — 4 000 ₽»</div>
+      <p>Композиция: номер днём — кровать, мини-кухня с чайником и микроволновкой; тезис на плашке в верхней трети, строка «заселение 14:00 · выезд до 12:00».</p>
+      <p>Цвета: плашка — дерево #624D33, тезис — белый #FFFFFF, строка — светлый #DCDED9.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3 · 26 ноября</span><h3>Гостиница на 2, 3 или 4 часа в центре Москвы: от 1 200 ₽ в мини-отеле «Беседка»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Беседке» можно снять номер на несколько часов: 2, 3 или 4 часа по фиксированной цене.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Почасовая: оплата за час / 1-2 человека — 600 ₽.<span class="src">сайт</span></li>
+      <li>2 часа — 1 200 р.; 3 часа — 1 800 р.; 4 часа — 2 400 р.<span class="src">сайт</span></li>
+      <li>Если вы желаете забронировать помещение больше чем на 4 часа, выберите ночной или суточный тарифные планы.<span class="src">сайт</span></li>
+      <li>Мини отель 11 номеров.<span class="src">бриф</span></li>
+      <li>Центр города, дешево, в каждом номере душ и санузел.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гостиница на 2, 3 или 4 часа в центре Москвы — «Беседка»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Гостиница на несколько часов в Москве от 1 200 ₽ | Беседка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Номер на 2 часа — 1 200 ₽, на 3 часа — 1 800 ₽, на 4 часа — 2 400 ₽ в мини-отеле «Беседка» у Чистых прудов. Душ и санузел в каждом номере, круглосуточно.</span></div>
+      <div class="chips"><span class="chip-kw">гостиница на 2 часа</span><span class="chip-kw">гостиница на 3 часа</span><span class="chip-kw">гостиница на несколько часов</span><span class="chip-kw">гостиница на пару часов</span><span class="chip-kw">гостиница москва на 2 часа</span><span class="chip-kw">гостиница на час москва</span><span class="chip-kw">снять гостиницу на час</span><span class="chip-kw">сколько стоит гостиница на час</span><span class="chip-kw">гостиница на час недорого</span><span class="chip-kw">гостиница на час центр</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> бронируй номер на нужное число часов.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«2, 3 или 4 часа»</div>
+      <p>Композиция: номер с мягкой мебелью и зеленью интерьера; три цены столбиком на плашке справа, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — светлый #DCDED9, цены — зелень #485B29, тезис — почти чёрный #13120A.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4 · 3 декабря</span><h3>Как забронировать номер в мини-отеле «Беседка» в центре Москвы: тариф, форма, подтверждение</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Забронировать номер в «Беседке» можно онлайн: выбираешь тариф, заполняешь форму, администратор подтверждает бронь.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Для бронирования выберите тариф, нажмите кнопку «Забронировать» и заполните форму.<span class="src">сайт</span></li>
+      <li>В форме: имя, телефон, дата заезда, дата выезда, время заезда, время выезда.<span class="src">сайт</span></li>
+      <li>При бронировании помещения требуется подтверждение администратора.<span class="src">сайт</span></li>
+      <li>Забронировать помещение могут только лица старше 18 лет.<span class="src">сайт</span></li>
+      <li>Мы свяжемся с вами в течении 30 минут.<span class="src">сайт</span></li>
+      <li>Режим работы: круглосуточно.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Как забронировать номер в мини-отеле «Беседка» в Москве</span></div>
+      <div class="meta-row"><span><b>Title · </b>Забронировать номер в центре Москвы: час, ночь, сутки | Беседка</span></div>
+      <div class="meta-row"><span><b>Description · </b>Бронирование в мини-отеле «Беседка»: выберите тариф, заполните форму, администратор подтвердит бронь и свяжется в течение 30 минут. Только 18+, круглосуточно.</span></div>
+      <div class="chips"><span class="chip-kw">забронировать гостиницу</span><span class="chip-kw">снять номер в гостинице</span><span class="chip-kw">снять гостиницу в москве</span><span class="chip-kw">снять гостиницу на ночь</span><span class="chip-kw">гостиница в центре москвы</span><span class="chip-kw">мини отель москва</span><span class="chip-kw">гостиница круглосуточно</span><span class="chip-kw">гостиница чистые пруды</span><span class="chip-kw">гостиница беседка на чистых прудах</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирай тариф и оставляй заявку на бронь.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Бронь в 3 шага»</div>
+      <p>Композиция: вход в мини-отель с табличкой «Беседка»; три шага цифрами на плашке в нижней трети: тариф, форма, подтверждение.</p>
+      <p>Цвета: плашка — зелень #485B29, цифры — тёплый свет #AB8855, текст — белый #FFFFFF.</p>
+    </div>
+  </div>
+</section>
+
+<section id="be-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Ночь — 3 000 ₽</div><span class="slide-no">Сторис 1 · 12 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">12 часов</span><span class="fact-pill">Заселение 20:00–24:00</span><span class="fact-pill">1–2 человека</span><span class="fact-pill">Душ и санузел в номере</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон зелень #485B29, цена крупно белым #FFFFFF, факты на плашках тёплого света #AB8855 текстом #13120A. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Сутки — 4 000 ₽</div><span class="slide-no">Сторис 2 · 19 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">Заселение 14:00</span><span class="fact-pill">Выезд до 12:00</span><span class="fact-pill">Приезд в любое время</span><span class="fact-pill">1–2 человека</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон дерево #624D33, цена крупно белым #FFFFFF, факты списком на светлых плашках #DCDED9.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">От 2 часов</div><span class="slide-no">Сторис 3 · 26 ноября</span></div>
+      <div class="facts-line"><span class="fact-pill">2 часа — 1 200 ₽</span><span class="fact-pill">3 часа — 1 800 ₽</span><span class="fact-pill">4 часа — 2 400 ₽</span><span class="fact-pill">Больше 4 часов — ночь или сутки</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #DCDED9, три цены лесенкой зеленью #485B29, последняя строка мелко почти чёрным #13120A.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Бронь в 3 шага</div><span class="slide-no">Сторис 4 · 3 декабря</span></div>
+      <div class="facts-line"><span class="fact-pill">1 · Тариф</span><span class="fact-pill">2 · Форма</span><span class="fact-pill">3 · Подтверждение администратора</span><span class="fact-pill">Только 18+</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #13120A, номера шагов в кругах тёплого света #AB8855, подписи светлым #DCDED9.</div></div>
+  </div>
+</section>
+
+<section id="be-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — ночь, сутки, часы, бронирование <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Гостиница на ночь в центре Москвы за 3 000 ₽</b>12.11 · 12 часов, заселение 20:00–24:00</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Ночь — 3 000 ₽</b>12.11 · условия ночного тарифа</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Гостиница посуточно: сутки за 4 000 ₽</b>19.11 · заселение 14:00, выезд до 12:00</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Сутки — 4 000 ₽</b>19.11 · условия суточного тарифа</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Гостиница на 2, 3 или 4 часа от 1 200 ₽</b>26.11 · лесенка цен</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>От 2 часов</b>26.11 · три цены</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Как забронировать номер</b>03.12 · тариф, форма, подтверждение, 18+</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Бронь в 3 шага</b>03.12 · порядок бронирования</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={br:[6000,4910,4985,6192,6633,6505],be:[1408,1485,2869,2847,1285,1368]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const k=box.dataset.chart,d=D[k],W=520,H=210,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.2,w=bw*.6;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+  document.getElementById(k+'-mom').innerHTML=d.map((v,i)=>{const c=i?Math.round((v/d[i-1]-1)*100):null;return `<tr><td>${M[i]}</td><td class="r num">${fmt(v)}</td><td class="r num ${c===null?'':c>=0?'up':'down'}">${c===null?'—':(c>0?'+':'')+c+'%'}</td></tr>`}).join('');
+});
+const T={
+ 't-br':[['сауна с бассейном','коммерческое',6843],['сауна в москве','коммерческое, гео',5674],['снять сауну','коммерческое',1977],['сауна в москве с бассейном','коммерческое, гео',1752],['сауна недорого','коммерческое',1388],['хамам в москве','коммерческое, гео',917],['сауна в москве недорого','коммерческое, гео',877],['сауна с бассейном недорого','коммерческое',651],['польза сауны','информационное',600],['снять сауну с бассейном','коммерческое',510],['сауна с джакузи','коммерческое',382],['сауна с бильярдом','коммерческое',345],['хамам в москве с бассейном','коммерческое, гео',284],['сауна круглосуточно','коммерческое',256],['сауна брызги','брендовое',162],['сауна с караоке','коммерческое',129],['сауна сокольники','коммерческое, гео',107],['сауна на бауманской','коммерческое, гео',85],['сауна с хамамом','коммерческое',80],['корпоратив в сауне','коммерческое',61]],
+ 't-be':[['гостиница на час','коммерческое',1364],['гостиница на ночь','коммерческое',1350],['гостиница посуточно','коммерческое',1294],['мини отель москва','коммерческое, гео',1169],['гостиница москва недорого на ночь','коммерческое, гео',626],['снять гостиницу посуточно','коммерческое',568],['гостиница в москве на ночь','коммерческое, гео',390],['гостиница в москве посуточно','коммерческое, гео',380],['гостиница москва недорого на ночь для двоих','коммерческое, гео',353],['гостиница на час москва','коммерческое, гео',303],['гостиница в москве недорого посуточно','коммерческое, гео',195],['мини отель москва недорого','коммерческое, гео',142],['снять гостиницу на час','коммерческое',126],['гостиница чистые пруды','коммерческое, гео',122],['гостиница на 2 часа','коммерческое',80],['гостиница на несколько часов','коммерческое',70],['мини отель москва недорого на сутки','коммерческое, гео',68],['гостиница на 3 часа','коммерческое',48],['гостиница беседка на чистых прудах','брендовое',9]]};
+Object.entries(T).forEach(([id,rows])=>{const mx=Math.max(...rows.map(r=>r[2]));document.getElementById(id).innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('')});
+const NAV={
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['why','Причины'],['demand','Спрос'],['market','Рынок'],['strategy','Стратегия'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let st={co:'br',view:'analytics'};
+function show(co,view,scroll){
+  if(!['br','be'].includes(co))co='br'; if(!NAV[view])view='analytics'; st={co,view};
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=!(el.dataset.co===co&&el.dataset.view===view)});
+  document.querySelectorAll('[data-co-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.coGo===co?'true':'false'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${co}-${id}">${t}</button>`).join('');
+  const h=co+'-'+view; if(location.hash.slice(1)!==h){try{history.replaceState(null,'','#'+h)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-co-go]');if(c){show(c.dataset.coGo,st.view,true);return}
+  const g=e.target.closest('[data-go]');if(g){show(st.co,g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+function fromHash(s){const [co,view]=location.hash.slice(1).split('-');show(co,view,s)}
+window.addEventListener('hashchange',()=>fromHash(true));
+fromHash(false);
+</script>
+
+</body>
+</html>
