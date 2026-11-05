@@ -106,6 +106,18 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
 .rm .t span{font-size:14px;color:var(--ink-soft)}
 @media (max-width:560px){.rm li{grid-template-columns:1fr;gap:4px}.card{padding:18px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.road{gap:14px}
+details.stage{padding:0}
+details.stage>summary{list-style:none;cursor:pointer;padding:18px 22px;margin:0}
+details.stage>summary::-webkit-details-marker{display:none}
+details.stage>summary::after{content:"+";margin-left:auto;font:600 18px/1 var(--mono);color:var(--teal)}
+details.stage[open]>summary::after{content:"–"}
+details.stage>.rm{padding:0 22px 18px}
+details.past{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:0}
+details.past>summary{cursor:pointer;padding:14px 18px;font:600 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+details.past>.flow{padding:0 18px 18px}
+summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
+.src{display:inline-block;font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--roe);background:var(--roe-soft);padding:3px 6px;border-radius:3px;margin-left:4px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -113,7 +125,7 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
 
 <header class="topbar">
   <div class="in">
-    <div class="brand">Сильный Пол<small>ТЗ · Этап 1</small></div>
+    <div class="brand">Сильный Пол<small>ТЗ · Этап 2</small></div>
     <nav aria-label="Разделы">
       <a href="#company">Компания</a>
       <a href="#brand">Брендбук</a>
@@ -128,12 +140,12 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
 <main>
 
 <section id="company" class="hero">
-  <div class="eyebrow">Техническое задание · контент для карточки компании</div>
+  <div class="eyebrow">Техническое задание · Этап 2</div>
   <h1>Сильный Пол: новости и сторис для Яндекс Карт и 2ГИС</h1>
-  <p class="lead">Материалы этапа публикуются в карточке компании «Сильный Пол» на Яндекс Картах и в 2ГИС: 4 новостных поста с обложкой и 4 сторис в формате одного слайда-презентации.</p>
+  <p class="lead">Материалы этапа 2 публикуются в карточке компании «Сильный Пол» на Яндекс Картах и в 2ГИС: 2 новостных поста с обложкой и 2 сторис в формате одного слайда-презентации. Темы продолжают цикл этапа 1.</p>
   <div class="meta-row">
-    <span class="tag">4 новости + обложка</span>
-    <span class="tag">4 сторис · 1 слайд</span>
+    <span class="tag">2 новости + обложка</span>
+    <span class="tag">2 сторис · 1 слайд</span>
     <span class="tag roe">Яндекс Карты · 2ГИС</span>
   </div>
 
@@ -182,21 +194,28 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
 <section id="logic">
   <div class="sec-head">
     <div class="eyebrow">Логика цикла</div>
-    <h2>Новые декоры ламината: от наличия к услугам</h2>
-    <p>Все темы этапа строятся вокруг актуальной темы компании — новых декоров ламината — и товаров, которые компания указала основными: ламинат Underwood и Joss Beaumont.</p>
+    <h2>Этап 2: от новых декоров — к новой коллекции и материалам для укладки</h2>
+    <p>Этап 1 рассказал о ламинате Underwood и Joss Beaumont в наличии, о декорах, характеристиках и услугах. Этап 2 продолжает тему новых декоров ламината из брифа: представляет новинку — коллекцию Joss Beaumont Vivus — и раскрывает сопутствующие товары, которые понадобятся при её укладке: подложку и плинтус.</p>
   </div>
-  <div class="flow">
-    <div class="step"><span class="n">Новость 1</span><b>Товар в наличии</b><span>Новые декоры ламината Underwood и Joss Beaumont, адрес и режим работы</span></div>
-    <div class="step"><span class="n">Новость 2</span><b>Декоры и текстуры</b><span>Максимально приближенные к натуральной доске, толщины от 8 до 12мм</span></div>
-    <div class="step"><span class="n">Новость 3</span><b>Характеристики</b><span>33 и 34 класс, тёплый пол, влагостойкий, км2, E0 и E0,5</span></div>
-    <div class="step"><span class="n">Новость 4</span><b>Товары и услуги</b><span>Сопутствующие товары, доставка в квартиру, укладка, гарантия, услуги хранения</span></div>
+  <details class="past">
+    <summary>Этап 1 · Новые декоры ламината: от наличия к услугам</summary>
+    <div class="flow">
+      <div class="step"><span class="n">Новость 1</span><b>Товар в наличии</b><span>Новые декоры ламината Underwood и Joss Beaumont, адрес и режим работы</span></div>
+      <div class="step"><span class="n">Новость 2</span><b>Декоры и текстуры</b><span>Максимально приближенные к натуральной доске, толщины от 8 до 12мм</span></div>
+      <div class="step"><span class="n">Новость 3</span><b>Характеристики</b><span>33 и 34 класс, тёплый пол, влагостойкий, км2, E0 и E0,5</span></div>
+      <div class="step"><span class="n">Новость 4</span><b>Товары и услуги</b><span>Сопутствующие товары, доставка в квартиру, укладка, гарантия, услуги хранения</span></div>
+    </div>
+  </details>
+  <div class="flow" style="margin-top:14px">
+    <div class="step"><span class="n">Новость 1</span><b>Новинка Joss Beaumont Vivus</b><span>Новые декоры ламината: коллекция Vivus, 12 мм, 33 класс, фаска V4, тёплый пол до 27°C</span></div>
+    <div class="step"><span class="n">Новость 2</span><b>Подложка и плинтус</b><span>Подложка-гармошка Joss Beaumont с пароизоляционной плёнкой, плинтус на МДФ основе</span></div>
   </div>
 </section>
 
 <section id="news">
   <div class="sec-head">
     <div class="eyebrow">Новости</div>
-    <h2>4 новостных поста с обложкой</h2>
+    <h2>2 новостных поста с обложкой</h2>
     <p>Публикация — в разделе новостей карточки «Сильный Пол» на Яндекс Картах и в 2ГИС.</p>
   </div>
 
@@ -206,80 +225,50 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
       <li>На «вы». Чаще на Вы, но более неформальное общение и живое: текст начинается с короткого вступления от лица компании («мы»), а не с перечня товаров.</li>
       <li>Факты — только из тезисов ниже, без добавленных деталей. Без указания цен.</li>
       <li>SEO-ключи вплетаются в каждое предложение органично, без повторов одного ключа подряд.</li>
-      <li>Объём до 3000 знаков с пробелами. CTA в конце — только словами, без телефона и e-mail в тексте. Без капса, минимум эмодзи и восклицательных знаков; слово «самый» в тексте поста не используется — требование модерации Яндекс Карт.</li>
+      <li>Объём до 3000 знаков с пробелами. CTA в конце — только словами, без телефона и e-mail в тексте. Без капса, минимум эмодзи и восклицательных знаков, без превосходных степеней.</li>
     </ul>
   </div>
 
   <div class="cards">
 
     <article class="card">
-      <div class="card-top"><span class="idx">Новость 1</span><span class="tag">Продающая · новые декоры в наличии</span></div>
-      <h3>Новые декоры ламината Underwood и Joss Beaumont — в наличии в магазине «Сильный Пол»</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">У нас в наличии новые декоры ламината Underwood и Joss Beaumont.</p></div>
+      <div class="card-top"><span class="idx">Новость 1</span><span class="tag">Продающая · новые декоры ламината</span></div>
+      <h3>Новая коллекция ламината Joss Beaumont Vivus — в магазине «Сильный Пол»</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">У нас новые декоры ламината Joss Beaumont — коллекция Vivus.</p></div>
       <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии!</li>
-        <li>Наличие товара на складах, что обеспечивает быструю доставку.</li>
-        <li>ТД "Миллион Мелочей". ул.Пришвина 26. Павильон А11/1. Магазин "Сильный Пол".</li>
-        <li>Режим работы: каждый день с 9:00 до 21:00.</li>
+        <li>Ламинат Joss Beaumont Vivus — новинка в каталоге «Сильный Пол». <span class="src">сайт</span></li>
+        <li>Декоры коллекции: Ван Гог, Дали, Микеланджело, Моцарт, Ньютон, Пикассо, Шуберт. Декор под дерево, однополосный ламинат. <span class="src">сайт</span></li>
+        <li>Толщина 12 мм, 33 класс, основа HDF, замковая система JClick. <span class="src">сайт</span></li>
+        <li>Фаска V4 — V-образная, с четырёх сторон. <span class="src">сайт</span></li>
+        <li>Влагостойкость — да. Тёплый пол — до 27°C. <span class="src">сайт</span></li>
+        <li>Страна — Россия. <span class="src">сайт</span></li>
+        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии! Наличие товара на складах, что обеспечивает быструю доставку. <span class="src">бриф</span></li>
       </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>новые декоры ламината</span><span>ламинат Underwood</span><span>ламинат Joss Beaumont</span><span>ламинат в наличии</span><span>купить ламинат</span><span>магазин ламината</span><span>ламинат ул. Пришвина</span><span>ламинат Миллион Мелочей</span><span>магазин напольных покрытий</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат joss beaumont</span><span>joss beaumont vivus</span><span>новая коллекция ламината</span><span>ламинат 33 класс</span><span>ламинат 12 мм</span><span>ламинат с фаской</span><span>ламинат под дерево</span><span>однополосный ламинат</span><span>ламинат для тёплого пола</span><span>влагостойкий ламинат</span><span>купить ламинат</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите посмотреть новые декоры Joss Beaumont Vivus в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
       <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Новые декоры ламината</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината (фото магазина и образцов компания делает по запросу). Сверху логотип, заголовок заглавными в градиенте <span class="hexs">#55201F → #240909</span> в прямоугольной рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор из треугольников <span class="hexs">#764341</span> по краям. Текст не более 20% площади, без контактов и слов «акция», «купить».</p></div>
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Новинка Joss Beaumont Vivus</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината коллекции Vivus (фото магазина и образцов компания делает по запросу). Сверху логотип, надзаголовок «Новинка» контуром <span class="hexs">#321311</span>, заголовок «Joss Beaumont Vivus» заглавными в градиенте <span class="hexs">#55201F → #240909</span> в прямоугольной рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор из треугольников <span class="hexs">#764341</span> по краям. Текст не более 20% площади, без контактов и слов «акция», «купить».</p></div>
       </div>
     </article>
 
     <article class="card">
-      <div class="card-top"><span class="idx">Новость 2</span><span class="tag">Имиджевая · декор и текстура</span></div>
-      <h3>Декоры и текстуры ламината Underwood и Joss Beaumont, максимально приближенные к натуральной доске</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Мы предлагаем ламинат Underwood и Joss Beaumont с декорами и текстурами, максимально приближенными к натуральной доске.</p></div>
+      <div class="card-top"><span class="idx">Новость 2</span><span class="tag">Экспертная · сопутствующие товары</span></div>
+      <h3>Подложка Joss Beaumont и плинтус: что понадобится при укладке ламината</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Вместе с ламинатом у нас можно подобрать подложку и плинтус.</p></div>
       <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Максимально приближенные к натуральной доске декоры и текстуры ламината.</li>
-        <li>В разных толщинах, от 8 до 12мм.</li>
-        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии!</li>
+        <li>Продажа напольных покрытий и сопутствующих товаров: подложный материал, плинтуса. <span class="src">бриф</span></li>
+        <li>Новинка — подложка-гармошка Joss Beaumont с пароизоляционной плёнкой: толщина 3 мм, доступна толщина 2 мм. <span class="src">сайт</span></li>
+        <li>Звукоизоляция до 20 дБ, защита от грибка и бактерий, теплопроводность не более 0,11 м²К/W, плотность 30 кг/м², ширина 1000 мм, 1 упаковка = 10 м². <span class="src">сайт</span></li>
+        <li>При укладке ламината Joss Beaumont понадобятся: подложка Joss Beaumont 3 мм, плёнка п/э армированная Joss Beaumont 140 г/кв.м. <span class="src">сайт</span></li>
+        <li>Весь плинтус на МДФ основе, он является комплектным: покупая любой ламинат, можно подобрать соответствующий плинтус. <span class="src">сайт</span></li>
+        <li>Доставка в квартиру, Укладка. <span class="src">бриф</span></li>
       </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат под дерево</span><span>ламинат с текстурой дерева</span><span>ламинат под натуральную доску</span><span>декоры ламината</span><span>ламинат 12 мм</span><span>ламинат 8 мм</span><span>ламинат Underwood</span><span>ламинат Joss Beaumont</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите выбрать декор ламината в магазин «Сильный Пол».</p></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>подложка под ламинат</span><span>подложка с пароизоляцией</span><span>пароизоляция под ламинат</span><span>звукоизоляционная подложка</span><span>подложка гармошка</span><span>подложка 3 мм</span><span>плинтус для ламината</span><span>плинтус МДФ</span><span>плинтус напольный</span><span>укладка ламината</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите подобрать подложку и плинтус к ламинату в магазин «Сильный Пол».</p></div>
       <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Как натуральная доска</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Крупный план текстуры ламината. Заголовок в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top"><span class="idx">Новость 3</span><span class="tag">Экспертная · характеристики</span></div>
-      <h3>Ламинат Underwood и Joss Beaumont: 33 и 34 класс, совместимость с тёплым полом, влагостойкий</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Мы рассказываем о характеристиках ламината Underwood и Joss Beaumont, который есть у нас в наличии.</p></div>
-      <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Самый износостойкий – 33 и 34 класс в разных толщинах, от 8 до 12мм.</li>
-        <li>Совместимость с тёплым полом.</li>
-        <li>Влагостойкий.</li>
-        <li>Класс пожарной безопасности км2.</li>
-        <li>Класс эмиссии и формальдегида E0 и E0,5.</li>
-      </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат 33 класса</span><span>ламинат 34 класса</span><span>износостойкий ламинат</span><span>влагостойкий ламинат</span><span>ламинат для тёплого пола</span><span>ламинат E0</span><span>ламинат км2</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
-      <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">33 и 34 класс</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината. Цифры «33 · 34» крупно в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top"><span class="idx">Новость 4</span><span class="tag">Продающая · товары и услуги</span></div>
-      <h3>Ламинат Underwood и Joss Beaumont, сопутствующие товары, доставка в квартиру, укладка, гарантия и услуги хранения</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Кроме ламината, у нас есть сопутствующие товары, а ещё мы делаем доставку в квартиру, укладку, даём гарантию и оказываем услуги хранения.</p></div>
-      <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Продажа напольных покрытий и сопутствующих товаров, таких как подложный материал, плинтуса, моющие средства, герметики, клей, грунт.</li>
-        <li>Доставка в квартиру, Укладка, Гарантия, Услуги хранения.</li>
-        <li>Наличие товара на складах, что обеспечивает быструю доставку.</li>
-      </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>укладка ламината</span><span>доставка ламината в квартиру</span><span>подложка под ламинат</span><span>плинтус для ламината</span><span>клей для напольных покрытий</span><span>грунт для пола</span><span>хранение напольных покрытий</span><span>магазин напольных покрытий</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
-      <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Доставка и укладка</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината с плинтусом. Заголовок в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span>.</p></div>
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Подложка и плинтус</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото подложки и плинтуса рядом с ламинатом. Заголовок заглавными в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span> по краям.</p></div>
       </div>
     </article>
 
@@ -290,40 +279,24 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
   <div class="sec-head">
     <div class="eyebrow">Сторис</div>
     <h2>Один слайд — один факт</h2>
-    <p>Формат 1080×1920, слайд-презентация в фирменной стилистике компании: логотип сверху, надзаголовок контуром, заголовок заглавными в рамке, фото по центру, скруглённая плашка <span class="hexs">#4A4140</span> с белым текстом внизу, узор из треугольников <span class="hexs">#764341</span> по краям на фоне <span class="hexs">#FFFFFF → #ECE6E7</span>. Название сторис обязательно для публикации в карточке на Яндекс Картах.</p>
+    <p>Формат 1080×1920, слайд-презентация в фирменной стилистике компании: логотип сверху, надзаголовок контуром, заголовок заглавными в рамке, фото по центру, скруглённая плашка <span class="hexs">#4A4140</span> с белым текстом внизу, узор из треугольников <span class="hexs">#764341</span> по краям на фоне <span class="hexs">#FFFFFF → #ECE6E7</span>. Публикация — карточка «Сильный Пол» на Яндекс Картах и в 2ГИС; название сторис обязательно.</p>
   </div>
   <div class="stories">
 
     <article class="story">
       <div class="card-top"><span class="idx">Сторис 1</span></div>
-      <h3>Товар в наличии</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>Ламинат Underwood и Joss Beaumont - Товар в наличии!</p></div>
-      <div class="chips"><span>ламинат в наличии</span><span>новые декоры ламината</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Ламинат» контуром <span class="hexs">#321311</span>, заголовок «Underwood и Joss Beaumont» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. Фото ламината по центру, на плашке <span class="hexs">#4A4140</span> белым: «Товар в наличии».</div>
+      <h3>Vivus: два вида ламелей</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Joss Beaumont Vivus — 2 вида ламелей: 123 × 683 мм и 193 × 1387 мм. Толщина 12 мм. <span class="src">сайт</span></p></div>
+      <div class="chips"><span>ламинат joss beaumont</span><span>joss beaumont vivus</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Joss Beaumont Vivus» контуром <span class="hexs">#321311</span>, заголовок «Два вида ламелей» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру фото двух ламелей разной ширины, на плашке <span class="hexs">#4A4140</span> белым: «123 × 683 мм и 193 × 1387 мм».</div>
     </article>
 
     <article class="story">
       <div class="card-top"><span class="idx">Сторис 2</span></div>
-      <h3>33 и 34 класс</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>33 и 34 класс в разных толщинах, от 8 до 12мм.</p></div>
-      <div class="chips"><span>ламинат 33 класса</span><span>ламинат 34 класса</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «33 и 34 класс» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото торца ламината, на плашке <span class="hexs">#4A4140</span> белым: «В разных толщинах, от 8 до 12мм».</div>
-    </article>
-
-    <article class="story">
-      <div class="card-top"><span class="idx">Сторис 3</span></div>
-      <h3>Совместимость с тёплым полом</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>Совместимость с тёплым полом. Влагостойкий. Класс пожарной безопасности км2. Класс эмиссии и формальдегида E0 и E0,5.</p></div>
-      <div class="chips"><span>ламинат для тёплого пола</span><span>влагостойкий ламинат</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «Совместимость с тёплым полом» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото ламината, на плашке <span class="hexs">#4A4140</span> белым три строки: влагостойкий, км2, E0 и E0,5.</div>
-    </article>
-
-    <article class="story">
-      <div class="card-top"><span class="idx">Сторис 4</span></div>
-      <h3>Доставка в квартиру и укладка</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>Доставка в квартиру, Укладка, Гарантия, Услуги хранения.</p></div>
-      <div class="chips"><span>укладка ламината</span><span>доставка ламината</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Заголовок «Доставка в квартиру и укладка» в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>. Фото ламината, на плашке <span class="hexs">#4A4140</span> белым: «Гарантия. Услуги хранения».</div>
+      <h3>Подложка-гармошка Joss Beaumont</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>С пароизоляционной плёнкой. Звукоизоляция до 20 дБ. Толщина 3 мм, доступна 2 мм. <span class="src">сайт</span></p></div>
+      <div class="chips"><span>подложка под ламинат</span><span>подложка с пароизоляцией</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Новинка» контуром <span class="hexs">#321311</span>, заголовок «Подложка-гармошка» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру фото подложки, на плашке <span class="hexs">#4A4140</span> белым три строки: пароизоляционная плёнка, до 20 дБ, 3 мм.</div>
     </article>
 
   </div>
@@ -334,18 +307,29 @@ h3{font-weight:700;font-size:20px;line-height:1.2}
     <div class="eyebrow">Карта тем</div>
     <h2>Дорожная карта контента</h2>
   </div>
-  <div class="stage">
-    <div class="stage-head"><h3>Этап 1</h3><span class="badge">актуальный</span></div>
-    <ol class="rm">
-      <li><span class="k">Новость 1</span><span class="t"><b>Новые декоры ламината Underwood и Joss Beaumont — в наличии</b><span>Товар в наличии, адрес, режим работы</span></span></li>
-      <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Товар в наличии</b><span>Ламинат Underwood и Joss Beaumont</span></span></li>
-      <li><span class="k">Новость 2</span><span class="t"><b>Декоры и текстуры, максимально приближенные к натуральной доске</b><span>Декор и толщины от 8 до 12мм</span></span></li>
-      <li class="st"><span class="k">Сторис 2</span><span class="t"><b>33 и 34 класс</b><span>Толщины от 8 до 12мм</span></span></li>
-      <li><span class="k">Новость 3</span><span class="t"><b>33 и 34 класс, совместимость с тёплым полом, влагостойкий</b><span>Характеристики, км2, E0 и E0,5</span></span></li>
-      <li class="st"><span class="k">Сторис 3</span><span class="t"><b>Совместимость с тёплым полом</b><span>Влагостойкий, км2, E0 и E0,5</span></span></li>
-      <li><span class="k">Новость 4</span><span class="t"><b>Сопутствующие товары и услуги</b><span>Доставка в квартиру, укладка, гарантия, услуги хранения</span></span></li>
-      <li class="st"><span class="k">Сторис 4</span><span class="t"><b>Доставка в квартиру и укладка</b><span>Гарантия, услуги хранения</span></span></li>
-    </ol>
+  <div class="road">
+    <details class="stage">
+      <summary class="stage-head"><h3>Этап 1</h3></summary>
+      <ol class="rm">
+        <li><span class="k">Новость 1</span><span class="t"><b>Новые декоры ламината Underwood и Joss Beaumont — в наличии</b><span>Товар в наличии, адрес, режим работы</span></span></li>
+        <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Товар в наличии</b><span>Ламинат Underwood и Joss Beaumont</span></span></li>
+        <li><span class="k">Новость 2</span><span class="t"><b>Декоры и текстуры, максимально приближенные к натуральной доске</b><span>Декор и толщины от 8 до 12мм</span></span></li>
+        <li class="st"><span class="k">Сторис 2</span><span class="t"><b>33 и 34 класс</b><span>Толщины от 8 до 12мм</span></span></li>
+        <li><span class="k">Новость 3</span><span class="t"><b>33 и 34 класс, совместимость с тёплым полом, влагостойкий</b><span>Характеристики, км2, E0 и E0,5</span></span></li>
+        <li class="st"><span class="k">Сторис 3</span><span class="t"><b>Совместимость с тёплым полом</b><span>Влагостойкий, км2, E0 и E0,5</span></span></li>
+        <li><span class="k">Новость 4</span><span class="t"><b>Сопутствующие товары и услуги</b><span>Доставка в квартиру, укладка, гарантия, услуги хранения</span></span></li>
+        <li class="st"><span class="k">Сторис 4</span><span class="t"><b>Доставка в квартиру и укладка</b><span>Гарантия, услуги хранения</span></span></li>
+      </ol>
+    </details>
+    <details class="stage" open>
+      <summary class="stage-head"><h3>Этап 2</h3><span class="badge">актуальный</span></summary>
+      <ol class="rm">
+        <li><span class="k">Новость 1</span><span class="t"><b>Новая коллекция ламината Joss Beaumont Vivus</b><span>Новые декоры, 12 мм, 33 класс, фаска V4, тёплый пол до 27°C</span></span></li>
+        <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Vivus: два вида ламелей</b><span>123 × 683 мм и 193 × 1387 мм</span></span></li>
+        <li><span class="k">Новость 2</span><span class="t"><b>Подложка Joss Beaumont и плинтус</b><span>Подложка-гармошка с пароизоляционной плёнкой, плинтус на МДФ основе</span></span></li>
+        <li class="st"><span class="k">Сторис 2</span><span class="t"><b>Подложка-гармошка Joss Beaumont</b><span>Пароизоляционная плёнка, до 20 дБ, 3 мм</span></span></li>
+      </ol>
+    </details>
   </div>
 </section>
 
