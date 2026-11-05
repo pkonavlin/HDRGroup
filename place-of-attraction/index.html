@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Place of Attraction»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company name + view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va td.nw{white-space:nowrap}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">Place of Attraction</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Геленджик · салон красоты · замер 06.11.2026</span>
+  <h1>Где Place of Attraction не видно на Картах</h1>
+  <p>Карточка салона Place of Attraction, Верхняя улица, 4, корп. 7. Позиции на Яндекс Картах по 10 целевым запросам, соседи по выдаче и спрос по Вордстату для региона «Геленджик».</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>9 из 10 запросов — карточки нет в первых 24 местах</b>Лазерная эпиляция, удаление тату и татуажа, маникюр, педикюр, салон красоты, карбоновый пилинг, коррекция фигуры.</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«фотоомоложение геленджик» — 17-е место</b>Единственный запрос, где карточка попадает в выдачу.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новостей на карточке нет, прайс помечен «Давно не обновлялось»</b>Из публикаций на карточке есть только скидка на лазерную эпиляцию.</p></div>
+    <div class="v"><span class="pill info">соседи</span><p><b>У лидеров выдачи в 5–15 раз больше оценок</b>«Твой стиль» — 633, «Эвант» — 589, The Muv beauty lab — 321; у Place of Attraction — 42.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,8</div><div class="s">42 оценки · 34 отзыва</div></div>
+    <div class="kpi"><div class="k">«салон красоты геленджик»</div><div class="n">655</div><div class="s">запросов в месяц</div></div>
+    <div class="kpi"><div class="k">«маникюр геленджик»</div><div class="n">380</div><div class="s">запросов в месяц</div></div>
+    <div class="kpi"><div class="k">«эпиляция геленджик»</div><div class="n">123</div><div class="s">запросов в месяц</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск «запрос + геленджик», карта по центру Геленджика. Первая пятёрка выдачи, в скобках — число оценок.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Place of Attraction</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>лазерная эпиляция</td><td class="r">нет</td><td>The Muv beauty lab (321), Bliss &amp; Epil (308), Ты Красивая (198), Культура Лазера (42), L-Story (143)</td></tr>
+      <tr><td>удаление тату</td><td class="r">нет</td><td>Tattoo (70), Бакалар (234), Пирсинг-мастер (85), Эвант (589), Студия удаления тату и татуажа (9)</td></tr>
+      <tr><td>удаление татуажа</td><td class="r">нет</td><td>Твой стиль (633), Эстетика лица (88), Face (104), Эвант (589), Пирсинг-мастер (85)</td></tr>
+      <tr><td>удаление татуажа бровей</td><td class="r">нет</td><td>Face (104), Эстетика лица (88), Твой стиль (633), Эвант (589), Брови (8)</td></tr>
+      <tr><td>маникюр</td><td class="r">нет</td><td>The Muv beauty lab (321), Твой стиль (633), Дофамин (248), Дофамин (146), Дофамин (157)</td></tr>
+      <tr><td>педикюр</td><td class="r">нет</td><td>Твой стиль (633), The Muv beauty lab (321), Дофамин (248), Колорист (374), Дофамин (146)</td></tr>
+      <tr><td>салон красоты</td><td class="r">нет</td><td>Твой стиль (633), Эвант (589), The Muv beauty lab (321), Красотка (173), Колорист (374)</td></tr>
+      <tr><td>фотоомоложение</td><td class="r me">17</td><td>Бакалар (234), Сотис (499), Эстетика лица (88), Доктор Полухина (60), Клеанфи (140, реклама)</td></tr>
+      <tr><td>карбоновый пилинг</td><td class="r">нет</td><td>Бакалар (234), Доктор Полухина (60), Лазер Клиник (50), Магия лазера (14), SeaLife (109)</td></tr>
+      <tr><td>коррекция фигуры</td><td class="r">нет</td><td>Твой стиль (633), Да Винчи (280), Vertebra (261), Wong (324), Сити Тай (432)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Кто выше и за счёт чего</h3><ul>
+      <li><b>Оценки.</b> У соседей из пятёрки от 42 до 633 оценок, у большинства — больше 140.</li>
+      <li><b>Узкие названия.</b> Bliss &amp; Epil, «Культура Лазера», «Студия удаления тату и татуажа», Face поднимаются по запросам, совпадающим с их профилем.</li>
+      <li><b>Сетевой охват.</b> «Дофамин» занимает три места из пяти по маникюру и педикюру тремя филиалами.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для контента</h3><ul>
+      <li>Каждая новость — под один запрос, где карточки сейчас нет.</li>
+      <li>Название услуги и «Геленджик» — в заголовке и первом абзаце.</li>
+      <li>Цены называть числом, как на сайте.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sh"><h2>Спрос в Геленджике</h2><p>Вордстат, регион «Геленджик», все устройства, частоты за 08.09–07.10.2026.</p></div>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>С городом</th><th>Запросов в месяц</th></tr></thead><tbody id="t-dem"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Маникюр и салон красоты дают основной объём спроса. По лазерным процедурам частоты ниже, но конкурентов в выдаче меньше и запросы узкие: «лазерная эпиляция бикини» — 22, «глубокое бикини» — 10, «удаление татуажа лазером» — 6.</p>
+  <h3>Источники</h3>
+  <div class="small" style="display:grid;gap:6px">
+    <a href="https://yandex.ru/maps/org/place_of_attraction/199529640929/" target="_blank" rel="noopener">Place of Attraction — Яндекс Карты</a>
+    <a href="https://placeofattraction.ru/price" target="_blank" rel="noopener">placeofattraction.ru — прайс</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Салон красоты · Геленджик</span>
+  <h1>Place of Attraction — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании Place of Attraction на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Place of Attraction</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Салон красоты</div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Маникюр, педикюр, лазерная эпиляция <small>аппаратная коррекция фигуры, фотоомоложение, карбоновый пилинг, удаление тату/татуажа</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Геленджик, Верхняя 4 к 7</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–Сб: 10:00–18:00 <small>обычно по записи</small></div></div>
+    <div class="fact"><div class="k">Преимущество</div><div class="v">Комплексный подход в одном месте</div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">placeofattraction.ru</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль Place of Attraction</h2>
+    <p>Спокойная гамма по брифу, цвета сняты с сайта компании: мятный, бежевый, серый и почти чёрный.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#D4F0D5;color:#222222;border-color:#D4F0D5"><div class="role">Основной</div><div class="name">Мятный</div><div class="hex">#D4F0D5</div></div>
+    <div class="swatch" style="background:#E5E3DF;color:#222222;border-color:#E5E3DF"><div class="role">Фоновый</div><div class="name">Бежевый</div><div class="hex">#E5E3DF</div></div>
+    <div class="swatch" style="background:#777777;color:#FFFFFF;border-color:#777777"><div class="role">Второстепенный</div><div class="name">Серый</div><div class="hex">#777777</div></div>
+    <div class="swatch" style="background:#222222;color:#E5E3DF;border-color:#3a3a3a"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#222222</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап целиком отдан приоритетам из брифа: лазерная эпиляция, удаление тату и татуажа, маникюр, педикюр. По всем четырём запросам карточки сейчас нет в выдаче.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Лазерная эпиляция в Геленджике: цены по зонам.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Удаление тату и татуажа бровей и губ лазером.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Маникюр: аппаратный и с покрытием гель-лаком.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Педикюр: аппаратный, с покрытием и SMART педикюр.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании Place of Attraction на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», можно с юмором — так указано в брифе. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Цены — точные, как на сайте. В тексте нет телефона, e-mail, ссылок и превосходных степеней. В новостях о лазерных процедурах — строка «Имеются противопоказания, необходима консультация специалиста». Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Лазерная эпиляция в Геленджике: цены по зонам в салоне Place of Attraction</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас лазерную эпиляцию можно сделать в один визит с маникюром, педикюром и другими процедурами — искать разных специалистов не нужно.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Продвигать в первую очередь лазерную эпиляцию.<span class="src">бриф</span></li>
+      <li>Эпиляция подмышек — 500₽; эпиляция бикини (классическое) — 800₽; эпиляция бикини тотальное (глубокое) — 1300₽.<span class="src">сайт</span></li>
+      <li>Эпиляция голени с коленом — 1200₽; эпиляция ног полностью — 1800₽; эпиляция рук полностью — 1000₽.<span class="src">сайт</span></li>
+      <li>Эпиляция верхней губы — 300₽; эпиляция лица полностью — 1000₽.<span class="src">сайт</span></li>
+      <li>Клиенту не нужно искать разных специалистов: всё можно сделать за один визит или в рамках программы преображения.<span class="src">бриф</span></li>
+      <li>С понедельника по субботу: 10:00–18:00, обычно по записи. Геленджик, Верхняя 4 к 7.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Лазерная эпиляция в Геленджике — цены по зонам в Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Title · </b>Лазерная эпиляция в Геленджике: бикини, подмышки, ноги | Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Description · </b>Лазерная эпиляция в Геленджике: подмышки — 500₽, бикини классическое — 800₽, глубокое бикини — 1300₽, ноги полностью — 1800₽. Салон Place of Attraction, Верхняя 4 к 7.</span></div>
+      <div class="chips"><span class="chip-kw">лазерная эпиляция</span><span class="chip-kw">лазерная эпиляция геленджик</span><span class="chip-kw">эпиляция геленджик</span><span class="chip-kw">лазерная эпиляция бикини</span><span class="chip-kw">лазерная эпиляция глубокое бикини</span><span class="chip-kw">лазерная эпиляция подмышек</span><span class="chip-kw">лазерная эпиляция лица</span><span class="chip-kw">лазерная эпиляция цена</span><span class="chip-kw">студия лазерной эпиляции</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на лазерную эпиляцию.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Лазерная эпиляция от 300₽»</div>
+      <p>Композиция: кабинет салона с аппаратом для эпиляции, без людей; тезис на плашке в нижней трети, строка «подмышки · бикини · ноги». Текст не больше 20% площади.</p>
+      <p>Цвета: фон кадра — бежевый #E5E3DF, плашка — мятный #D4F0D5, тезис — почти чёрный #222222, строка — серый #777777.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Удаление тату и татуажа лазером в Геленджике: брови, губы, татуировки</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы удаляем татуировки и татуаж лазером, а с бровями работаем пикосекундным лазером.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Продвигать в первую очередь удаление тату и татуажа.<span class="src">бриф</span></li>
+      <li>Работа с бровями пикосекундным лазером.<span class="src">бриф</span></li>
+      <li>Удаление татуажа бровей — 1900₽; удаление татуажа губ — 1900₽; с анестезией +500₽.<span class="src">сайт</span></li>
+      <li>Удаление тату — 50₽, цена за 1 см².<span class="src">сайт</span></li>
+      <li>Наши опытные специалисты используют современное оборудование.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Удаление тату и татуажа лазером в Геленджике — Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Title · </b>Удаление татуажа бровей и губ лазером в Геленджике | Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Description · </b>Удаление татуажа бровей и губ лазером — 1900₽, с анестезией +500₽. Удаление тату — 50₽ за 1 см². Брови — пикосекундным лазером. Геленджик, Верхняя 4 к 7.</span></div>
+      <div class="chips"><span class="chip-kw">удаление тату</span><span class="chip-kw">удаление тату лазером</span><span class="chip-kw">удаление татуажа</span><span class="chip-kw">удаление татуажа лазером</span><span class="chip-kw">удаление татуажа бровей</span><span class="chip-kw">лазерное удаление татуажа бровей</span><span class="chip-kw">удаление татуажа губ</span><span class="chip-kw">сколько стоит удаление тату</span><span class="chip-kw">удаление тату геленджик</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на удаление татуажа или тату.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Удаление татуажа — 1900₽»</div>
+      <p>Композиция: лазерный аппарат крупным планом в кабинете; тезис на плашке в верхней трети, строка «брови · губы · тату».</p>
+      <p>Цвета: плашка — почти чёрный #222222, тезис — бежевый #E5E3DF, строка — мятный #D4F0D5.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Маникюр в Геленджике: аппаратный и с покрытием гель-лаком</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас маникюр — часть комплексного ухода: за один визит можно успеть и ногти, и другие процедуры.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Продвигать в первую очередь маникюр и педикюр.<span class="src">бриф</span></li>
+      <li>Аппаратный маникюр — 1000₽; маникюр с покрытием гель-лаком — 1500₽.<span class="src">сайт</span></li>
+      <li>Френч — 200₽; снятие гель-лака с ногтей на руках — 200₽; покрытие ногтя стразами — от 50₽.<span class="src">сайт</span></li>
+      <li>Ремонт ногтя — от 100₽; наращивание одного ногтя — от 100₽; достраивание углов одного ногтя — 100₽.<span class="src">сайт</span></li>
+      <li>С понедельника по субботу: 10:00–18:00, обычно по записи.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Маникюр в Геленджике — аппаратный и с гель-лаком в Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Title · </b>Маникюр в Геленджике с покрытием гель-лаком — 1500₽ | Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Description · </b>Маникюр в Геленджике: аппаратный — 1000₽, с покрытием гель-лаком — 1500₽, френч — 200₽, наращивание ногтя — от 100₽. Салон Place of Attraction, Верхняя 4 к 7.</span></div>
+      <div class="chips"><span class="chip-kw">маникюр</span><span class="chip-kw">маникюр геленджик</span><span class="chip-kw">маникюр педикюр геленджик</span><span class="chip-kw">маникюр в геленджике салоны</span><span class="chip-kw">маникюр с покрытием гель-лаком</span><span class="chip-kw">аппаратный маникюр</span><span class="chip-kw">маникюр осень 2026</span><span class="chip-kw">маникюр рядом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на маникюр.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Маникюр с гель-лаком — 1500₽»</div>
+      <p>Композиция: руки с готовым покрытием на рабочем столе мастера; тезис на плашке в нижней трети, строка «аппаратный · френч · стразы».</p>
+      <p>Цвета: плашка — мятный #D4F0D5, тезис — почти чёрный #222222, строка — серый #777777 на бежевом #E5E3DF.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Педикюр в Геленджике: аппаратный, с покрытием и SMART педикюр</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Педикюр у нас можно совместить с маникюром и другими процедурами за один визит.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Продвигать в первую очередь маникюр и педикюр.<span class="src">бриф</span></li>
+      <li>Аппаратный педикюр — 1000₽; педикюр с покрытием гель-лаком — 1500₽.<span class="src">сайт</span></li>
+      <li>SMART педикюр (обработка стоп) — 500₽.<span class="src">сайт</span></li>
+      <li>Снятие гель-лака с ногтей на ногах — 100₽.<span class="src">сайт</span></li>
+      <li>Клиенту не нужно искать разных специалистов: всё можно сделать за один визит.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Педикюр в Геленджике — аппаратный и SMART педикюр в Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Title · </b>Педикюр в Геленджике: аппаратный, с гель-лаком, SMART | Place of Attraction</span></div>
+      <div class="meta-row"><span><b>Description · </b>Педикюр в Геленджике: аппаратный — 1000₽, с покрытием гель-лаком — 1500₽, SMART педикюр (обработка стоп) — 500₽. Салон Place of Attraction, Верхняя 4 к 7.</span></div>
+      <div class="chips"><span class="chip-kw">педикюр</span><span class="chip-kw">педикюр геленджик</span><span class="chip-kw">маникюр педикюр</span><span class="chip-kw">маникюр педикюр геленджик</span><span class="chip-kw">аппаратный педикюр</span><span class="chip-kw">smart педикюр</span><span class="chip-kw">педикюр с покрытием гель-лаком</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на педикюр.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«SMART педикюр — 500₽»</div>
+      <p>Композиция: кресло для педикюра в салоне, без людей; тезис на плашке в верхней трети, строка «аппаратный · с покрытием · SMART».</p>
+      <p>Цвета: плашка — серый #777777, тезис — белый #FFFFFF, строка — мятный #D4F0D5.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Лазерная эпиляция</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Подмышки — 500₽</span><span class="fact-pill">Бикини классическое — 800₽</span><span class="fact-pill">Бикини глубокое — 1300₽</span><span class="fact-pill">Ноги полностью — 1800₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон мятный #D4F0D5, заголовок почти чёрным #222222, цены на бежевых плашках #E5E3DF. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Удаление татуажа и тату</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Брови — 1900₽</span><span class="fact-pill">Губы — 1900₽</span><span class="fact-pill">С анестезией +500₽</span><span class="fact-pill">Тату — 50₽ за 1 см²</span><span class="fact-pill">Пикосекундный лазер для бровей</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #222222, заголовок бежевым #E5E3DF, факты на мятных плашках #D4F0D5 текстом #222222.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Маникюр</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Аппаратный — 1000₽</span><span class="fact-pill">С гель-лаком — 1500₽</span><span class="fact-pill">Френч — 200₽</span><span class="fact-pill">Наращивание ногтя — от 100₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый #E5E3DF, заголовок почти чёрным #222222, цены на мятных плашках #D4F0D5, подписи серым #777777.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Педикюр</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Аппаратный — 1000₽</span><span class="fact-pill">С гель-лаком — 1500₽</span><span class="fact-pill">SMART педикюр — 500₽</span><span class="fact-pill">Снятие гель-лака — 100₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон серый #777777, заголовок белым #FFFFFF, цены на бежевых плашках #E5E3DF текстом #222222.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — эпиляция, удаление тату, маникюр, педикюр <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Лазерная эпиляция в Геленджике: цены по зонам</b>подмышки, бикини, ноги, лицо</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Лазерная эпиляция</b>цены по зонам</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Удаление тату и татуажа лазером</b>брови, губы, тату за 1 см²</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Удаление татуажа и тату</b>цены и анестезия</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Маникюр: аппаратный и с гель-лаком</b>цены и доп. услуги</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Маникюр</b>четыре цены</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Педикюр: аппаратный, с покрытием, SMART</b>цены</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Педикюр</b>четыре цены</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const fmt=n=>n.toLocaleString('ru-RU');
+const rows=[['маникюр','маникюр геленджик — 380',2056],['салон красоты','салон красоты геленджик — 655',1083],['эпиляция','эпиляция геленджик — 123',490],['педикюр','педикюр геленджик — 96',354],['лазерная эпиляция','лазерная эпиляция геленджик — 73',295],['rf лифтинг','—',92],['фотоомоложение','фотоомоложение лица — 24',55],['вакуумный массаж','—',41],['удаление тату','удаление тату лазером — 3',16],['удаление татуажа','удаление татуажа лазером — 6',16]];
+const mx=Math.max(...rows.map(r=>r[2]));
+document.getElementById('t-dem').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('');
+const NAV={analytics:[['summary','Итог'],['maps','Позиции на Картах'],['demand','Спрос']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let cur='analytics';
+function show(view,scroll){if(!NAV[view])view='analytics';cur=view;
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
