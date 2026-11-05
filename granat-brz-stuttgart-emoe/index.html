@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Гранат» и партнёры</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:50;background:rgba(12,22,38,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:16px;padding-right:16px}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0;flex-wrap:wrap}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze)}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.cos{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;max-width:100%}.cos::-webkit-scrollbar{display:none}
+.cos button{font:600 14px var(--f-display);color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.cos button:hover{color:var(--ink)}.cos button[aria-pressed="true"]{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){main section,main header.top{scroll-margin-top:240px}th,td{padding:10px 10px}.cos{display:grid;grid-template-columns:1fr 1fr;width:100%}.cos button{padding:7px 8px}.swatches{grid-template-columns:1fr 1fr!important}.swatch{min-height:96px!important}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top{scroll-margin-top:170px}
+main section{padding-block:44px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+header.top,.hero{padding-block:52px 40px!important;border-bottom:1px solid var(--gold-line)}
+header.top h1,.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.14;max-width:24ch}
+header.top p,.lead{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.sh h2,.sec-head h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.sh p,.sec-head p{margin:0;color:var(--ink-2)}
+h3.sub{font:700 17px var(--f-display);margin:30px 0 12px}
+.verdicts{display:grid;gap:10px}
+.v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.v p{margin:0;min-width:0;color:var(--ink-2)}.v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.v{grid-template-columns:1fr;gap:8px}.v .pill{justify-self:start}}
+.pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.pill.crit{color:var(--crit);background:var(--crit-soft)}.pill.warn{color:var(--warn);background:var(--warn-soft)}.pill.good{color:var(--good);background:var(--good-soft)}.pill.info{color:var(--ink-2);background:var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.kpi{background:var(--panel);padding:16px 18px;min-width:0}.kpi .k{font-size:12.5px;color:var(--ink-3)}.kpi .n{font:700 26px var(--f-display);margin-top:4px;color:var(--gold)}.kpi .s{font-size:13px;color:var(--ink-2)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+tr:last-child td{border-bottom:0}td.r,th.r{text-align:right}td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}td.nw{white-space:nowrap}
+.small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.fact{background:var(--panel);padding:16px 18px;min-width:0}.fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.fact .v2{margin-top:6px;font:700 15.5px var(--f-display)}.fact .v2 small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}.swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}.swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.cycle{display:grid;gap:12px}.cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.cycle-row p{margin:0;font-size:15px;min-width:0}
+.tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.tone-banner b{color:var(--ink)}
+.period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.period h3{font:700 19px var(--f-display);color:var(--gold)}.pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.card-top>div{min-width:0}
+.num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;color:var(--gold)}
+.thesis-lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--ink-3);margin:18px 0 8px}
+.thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.thesis li{position:relative;padding-left:20px;font-size:15px}
+.thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.seo-box .lbl{color:var(--ink-3)}
+.meta-row{margin-bottom:8px;font-size:14px;color:var(--ink-2)}.meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.cta-line b{color:var(--ink)}
+.cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.cover-box p{margin:0;font-size:14px;color:var(--ink-2)}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.facts-line{display:flex;flex-wrap:wrap;gap:8px}.fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.design-note b{color:var(--gold-2);font-weight:600}
+details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}.stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.card{padding:20px 18px}.story-grid{grid-template-columns:1fr}.cycle-row{flex-direction:column;gap:6px}.stage-body{margin-left:12px}.stage-item{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><div class="cos" id="cos" role="group" aria-label="Компания"></div></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main id="main"></main>
+<script>
+const Y='Яндекс Карты';
+const CO=[
+{id:'gr',name:'Гранат',
+ an:{eb:'Екатеринбург · автомойка · ул. Амундсена, 63 · замер 05.11.2026',h1:'Где «Гранат» не видно на Картах',p:'Карточка «Гранат», ул. Амундсена, 63. Позиции на Яндекс Картах по 2 целевым запросам у адреса компании и соседи по выдаче.',
+  v:[['good','видно','«автомойка» — 1-е место у Амундсена','Выше AQUAservice (4,8 · 1 300 оценок), «Доверие» и Aquagizer.'],
+     ['crit','нет в выдаче','«шиномонтаж» — нет в первой пятёрке','На карточке есть рубрика «Шиномонтаж», но первые места у профильных шиномонтажей, в том числе соседа на Амундсена, 53/2.'],
+     ['warn','риск','Прайс на карточке «давно не обновлялось»','Так Яндекс помечает блок «Товары и услуги».']],
+  k:[['Рейтинг','4,3','207 оценок · 92 отзыва'],['Новостей на карточке','80','всего за историю'],['Рубрики','3','автомойка · детейлинг · шиномонтаж']],
+  pos:[['автомойка','1','Гранат, AQUAservice, Доверие, Aquagizer, Конвейерная мойка Т'],['шиномонтаж','нет','Шиномонтаж и ремонт дисков, Римэкс, Diskoprav96, Шиномонтаж (Амундсена, 53/2), Апельсин Мс']],
+  nb:[['Гранат','4,3','207','ул. Амундсена, 63',1],['AQUAservice','4,8','1 300','Волгоградская ул., 183'],['Доверие','4,3','271','Волгоградская ул., 33А'],['Aquagizer','5,0','391','Московская ул., 281Б'],['Конвейерная мойка Т','4,4','645','Московская ул., 285'],['Шиномонтаж','4,4','79','ул. Амундсена, 53/2'],['Апельсин Мс','5,0','245','ул. Начдива Онуфриева, 55']]},
+ c:{eb:'Автомойка · Екатеринбург · ул. Амундсена, 63',h1:'«Гранат» — ТЗ на контент, этап 1',
+  f:[['Компания','Гранат','автомойка, детейлинг, шиномонтаж'],['Адрес','ул. Амундсена, 63',''],['Типы мойки','Бесконтактная, ручная','комплексная, мойка двигателя, колёс'],['Удобства','Кафе, Wi-Fi','парковка, оплата из машины']],
+  cp:'Этап начинается с шиномонтажа — запроса, по которому карточки нет в пятёрке, затем раскрывает виды мойки, уход за кузовом и удобства для гостей.',
+  n:[
+   {h:'Шиномонтаж на Амундсена: мойка и смена колёс в одном месте',p:'Продающий',i:'В «Гранате» можно не только помыть машину, но и сделать шиномонтаж — на одном адресе, на Амундсена, 63.',t:[['Рубрики: автомойка, детейлинг, шиномонтаж.',Y],['Чернение шин.',Y],['Мойка колёс.',Y],['Режим работы: до 22:00.',Y]],h1:'Шиномонтаж на Амундсена в Екатеринбурге — «Гранат»',ti:'Шиномонтаж и автомойка на Амундсена, 63 | Гранат',d:'Шиномонтаж и автомойка «Гранат» в Екатеринбурге: смена колёс, мойка колёс, чернение шин. ул. Амундсена, 63, до 22:00.',kw:['шиномонтаж екатеринбург','шиномонтаж амундсена','шиномонтаж рядом','переобуться екатеринбург','смена резины','шиномонтаж и мойка','сезонный шиномонтаж','шиномонтаж юго-западный','автомойка амундсена'],cta:'Записывайтесь на шиномонтаж',ct:'«Шиномонтаж и мойка»',cc:'Композиция: колесо на стенде шиномонтажа, на фоне — пост мойки; тезис на плашке в нижней трети, строка «ул. Амундсена, 63». Цвета — фирменные цвета логотипа «Гранат». Текст не больше 20% площади.'},
+   {h:'Автомойка на Амундсена: бесконтактная, ручная и комплексная',p:'Продающий',i:'Мы моем машины разными способами — выбирайте тот, что подходит именно вам.',t:[['Тип мойки: бесконтактная, ручная, комплексная.',Y],['Мойка двигателя, мойка колёс.',Y],['Нанесение воска.',Y],['Оплата не выходя из машины.',Y]],h1:'Автомойка на Амундсена в Екатеринбурге — «Гранат»',ti:'Бесконтактная и ручная мойка на Амундсена | Гранат',d:'Автомойка «Гранат»: бесконтактная, ручная и комплексная мойка, мойка двигателя и колёс, воск. Екатеринбург, ул. Амундсена, 63.',kw:['автомойка екатеринбург','бесконтактная мойка','ручная мойка','комплексная мойка','мойка двигателя','автомойка рядом','автомойка амундсена','мойка с воском','помыть машину'],cta:'Приезжайте на мойку',ct:'«Мойка на выбор»',cc:'Композиция: машина в пене на посту, три подписи способа мойки по вертикали справа. Цвета — фирменные цвета логотипа «Гранат».'},
+   {h:'Детейлинг и химчистка салона на автомойке «Гранат»',p:'Продающий',i:'Кроме мойки, в «Гранате» ухаживают за кузовом и салоном.',t:[['Рубрика: детейлинг.',Y],['Химчистка.',Y],['Нанесение воска.',Y],['Чернение шин.',Y]],h1:'Детейлинг и химчистка салона на Амундсена — «Гранат»',ti:'Химчистка салона и детейлинг в Екатеринбурге | Гранат',d:'Детейлинг и химчистка салона на автомойке «Гранат», ул. Амундсена, 63: воск для кузова, чернение шин, мойка.',kw:['химчистка салона автомобиля','химчистка салона екатеринбург','детейлинг екатеринбург','нанесение воска на кузов','детейлинг мойка','химчистка авто','уход за кузовом','детейлинг амундсена'],cta:'Записывайтесь на химчистку',ct:'«Салон и кузов»',cc:'Композиция: салон с открытой дверью, деталь — блестящий кузов в отражении. Тезис на плашке в верхней трети. Цвета — фирменные цвета логотипа «Гранат».'},
+   {h:'Подарочный сертификат на мойку и кафе с Wi-Fi: «Гранат» на Амундсена',p:'Имиджевый',i:'Пока машину моют, можно выпить кофе и поработать в кафе на территории.',t:[['Кафе, Wi-Fi.',Y],['Парковка.',Y],['Оплата: картой, наличными, безналичный расчёт, рассрочка, дисконтная система.',Y],['Подарочный сертификат.',Y]],h1:'Подарочный сертификат на автомойку и кафе с Wi-Fi в Екатеринбурге — «Гранат»',ti:'Автомойка с кафе и подарочным сертификатом | Гранат',d:'Автомойка «Гранат» на Амундсена, 63: кафе и Wi-Fi, парковка, дисконтная система и подарочный сертификат.',kw:['автомойка с кафе','автомойка с зоной ожидания','подарочный сертификат на автомойку','автомойка екатеринбург','автомойка wi-fi','автомойка амундсена','автомойка с парковкой'],cta:'Заезжайте на мойку',ct:'«Кофе, пока моют»',cc:'Композиция: столик кафе с чашкой, за стеклом — пост мойки. Тезис на плашке в нижней трети. Цвета — фирменные цвета логотипа «Гранат».'}],
+  s:[['Шиномонтаж на Амундсена',['Шиномонтаж','Мойка колёс','Чернение шин','До 22:00']],['Мойка на выбор',['Бесконтактная','Ручная','Комплексная','Двигатель и колёса']],['Салон и кузов',['Детейлинг','Химчистка','Воск','Чернение шин']],['Пока моют машину',['Кафе','Wi-Fi','Парковка','Подарочный сертификат']]],
+  st:'шиномонтаж, виды мойки, детейлинг, удобства'}},
+{id:'cb',name:'Конвейерная Brz',
+ an:{eb:'Берёзовский · автомойка · Берёзовский тракт, 4Б · замер 05.11.2026',h1:'Где «Конвейерную Brz» не видно на Картах',p:'Карточка «Конвейерная Brz», Берёзовский тракт, 4Б. Позиции на Яндекс Картах по 2 целевым запросам у адреса компании и соседи по выдаче.',
+  v:[['good','видно','«конвейерная мойка» — 1-е место','Выше Yadrena Wash Tunnel на том же Берёзовском тракте.'],
+     ['warn','слабо','«автомойка» в Берёзовском — 3-е место','Выше Yadrena Wash № 2 (5,0 · 1 492 оценки) и «Мой express».'],
+     ['crit','пусто','На карточке нет новостей','Раздел новостей не заполнен, прайс помечен «давно не обновлялось».']],
+  k:[['Рейтинг','4,4','181 оценка · 95 отзывов'],['Новостей на карточке','0','раздел пуст'],['Режим','24/7','круглосуточно']],
+  pos:[['конвейерная мойка','1','Конвейерная Brz, Yadrena Wash № 2, Yadrena Wash Tunnel, Yadrena Wash, Мой express'],['автомойка','3','Yadrena Wash № 2, Мой express, Конвейерная Brz, ТТ-Автомойка, Chisto VIP']],
+  nb:[['Конвейерная Brz','4,4','181','Берёзовский тракт, 4Б',1],['Yadrena Wash № 2','5,0','1 492','Берёзовский тракт, 12'],['Yadrena Wash Tunnel','5,0','127','Берёзовский тракт, 12'],['Yadrena Wash','5,0','188','ул. Гагарина, 20'],['Мой express','4,6','123','Кольцевая ул., 4к1'],['ТТ-Автомойка','4,8','218','ул. Орджоникидзе, 17'],['Chisto VIP','4,6','347','ул. Чапаева, 42']]},
+ c:{eb:'Автомойка · Берёзовский · Берёзовский тракт, 4Б',h1:'«Конвейерная Brz» — ТЗ на контент, этап 1',
+  f:[['Компания','Конвейерная Brz','автомойка'],['Адрес','Берёзовский тракт, 4Б','Берёзовский'],['Типы мойки','Туннельная, самообслуживание','smart'],['Режим','Круглосуточно','']],
+  cp:'Карточка уже первая по «конвейерной мойке» — этап закрепляет это и поднимает её по общему запросу «автомойка» в Берёзовском.',
+  n:[
+   {h:'Конвейерная мойка в Берёзовском круглосуточно — на Берёзовском тракте',p:'Продающий',i:'Мы работаем круглосуточно: конвейерная мойка на Берёзовском тракте открыта в любое время.',t:[['Тип мойки: туннельная.',Y],['Режим работы: круглосуточно.',Y],['Адрес: Берёзовский тракт, 4Б.',Y]],h1:'Конвейерная мойка в Берёзовском — «Конвейерная Brz»',ti:'Конвейерная автомойка 24/7 на Берёзовском тракте | Brz',d:'Конвейерная автомойка «Конвейерная Brz» в Берёзовском: туннельная мойка круглосуточно, Берёзовский тракт, 4Б.',kw:['конвейерная мойка','конвейерная мойка березовский','автомойка березовский','автомойка круглосуточно','туннельная мойка','автомойка березовский тракт','мойка 24 часа'],cta:'Заезжайте в любое время',ct:'«Конвейер 24/7»',cc:'Композиция: машина в туннеле конвейера, щётки в движении. Тезис на плашке в нижней трети, строка «Берёзовский тракт, 4Б». Цвета — фирменные цвета логотипа компании.'},
+   {h:'Мойка самообслуживания в Берёзовском — круглосуточно',p:'Продающий',i:'Хотите помыть машину сами — у нас есть и такой формат, тоже круглосуточно.',t:[['Тип мойки: самообслуживание.',Y],['Режим работы: круглосуточно.',Y],['Адрес: Берёзовский тракт, 4Б.',Y]],h1:'Мойка самообслуживания в Берёзовском — «Конвейерная Brz»',ti:'Мойка самообслуживания 24/7 в Берёзовском | Brz',d:'Мойка самообслуживания на Берёзовском тракте, 4Б: помойте машину сами в любое время суток.',kw:['мойка самообслуживания березовский','мойка самообслуживания','автомойка самообслуживания','автомойка березовский','мойка 24 часа','помыть машину самому'],cta:'Приезжайте помыть машину',ct:'«Помой сам — 24/7»',cc:'Композиция: пистолет высокого давления и пена на кузове. Тезис на плашке в верхней трети. Цвета — фирменные цвета логотипа компании.'},
+   {h:'Базовая мойка и «Интенсив» на «Конвейерной Brz»: что выбрать',p:'Экспертный',i:'У нас два режима мойки кузова — бережный базовый и «Интенсив» для сильной грязи.',t:[['Автомойка базовая: бережная мойка кузова, очистка от грязи и пыли, сушка поверхности авто — 630 ₽.',Y],['Автомойка «Интенсив»: эффективное удаление загрязнений, мытьё кузова, колёс, подбор правильного режима — 740 ₽.',Y]],h1:'Мойка кузова в Берёзовском: базовая и «Интенсив»',ti:'Мойка кузова от 630 ₽ в Берёзовском | Конвейерная Brz',d:'Базовая мойка кузова с сушкой — 630 ₽, «Интенсив» с мойкой колёс — 740 ₽. Конвейерная Brz, Берёзовский тракт, 4Б.',kw:['мойка кузова','мойка кузова цена','автомойка березовский','недорогая автомойка','мойка кузова с сушкой','конвейерная мойка цена'],cta:'Выбирайте режим и заезжайте',ct:'«Базовая или Интенсив»',cc:'Композиция: две половины кадра — сухой чистый кузов и колесо в пене; подписи режимов с ценами. Цвета — фирменные цвета логотипа компании.'},
+   {h:'Химчистка дисков на автомойке в Берёзовском',p:'Продающий',i:'Диски мы отмываем отдельно — от сложных загрязнений, которые не уходят обычной мойкой.',t:[['Химчистка дисков: удаление сложных загрязнений, предотвращение коррозии, улучшение внешнего вида — 180 ₽.',Y],['Режим работы: круглосуточно.',Y]],h1:'Химчистка дисков в Берёзовском — «Конвейерная Brz»',ti:'Химчистка дисков 180 ₽ на Берёзовском тракте | Brz',d:'Химчистка дисков от сложных загрязнений и коррозии — 180 ₽. Конвейерная Brz, круглосуточно.',kw:['химчистка дисков','мойка дисков','чистка дисков от налета','автомойка березовский','химчистка дисков цена'],cta:'Добавьте химчистку дисков к мойке',ct:'«Чистые диски»',cc:'Композиция: крупный план диска до и после очистки. Тезис на плашке в нижней трети. Цвета — фирменные цвета логотипа компании.'}],
+  s:[['Конвейер 24/7',['Туннельная мойка','Круглосуточно','Берёзовский тракт, 4Б']],['Помой сам',['Самообслуживание','Круглосуточно']],['Два режима мойки',['Базовая — 630 ₽','«Интенсив» — 740 ₽','Сушка кузова']],['Чистые диски',['Химчистка дисков — 180 ₽','Сложные загрязнения','Против коррозии']]],
+  st:'конвейер, самообслуживание, режимы мойки, диски'}},
+{id:'st',name:'Stuttgart',
+ an:{eb:'Екатеринбург · детейлинг-центр · ул. Металлургов, 87 · замер 05.11.2026',h1:'Где «Stuttgart» не видно на Картах',p:'Карточка «Stuttgart», ул. Металлургов, 87. Позиции на Яндекс Картах по 4 целевым запросам у адреса компании и соседи по выдаче.',
+  v:[['good','видно','«полировка автомобиля» — 1-е место','Выше Autolab (5,0 · 1 019 оценок), Two Brothers и «Скил» на Металлургов, 84.'],
+     ['warn','слабо','«химчистка салона» и «хранение шин» — 2-е место','По химчистке впереди Autolab, по хранению шин — Kolesa66.'],
+     ['crit','нет в выдаче','«детейлинг» — нет в первой пятёрке','Главная рубрика карточки, но Яндекс ставит выше Novo, Navitola, Loud Movements, Cardy и «Антикор 96».']],
+  k:[['Рейтинг','4,3','353 оценки · 213 отзывов'],['Новостей на карточке','60','всего за историю'],['Прайс','обновлён','8 сентября 2026']],
+  pos:[['полировка автомобиля','1','Stuttgart, Autolab, Two Brothers, Lider, Скил'],['химчистка салона автомобиля','2','Autolab, Stuttgart, Скил, Urban Detailing Hub, Mustang'],['хранение шин','2','Kolesa66, Stuttgart, Шиномонтаж (Суходольская), Честный шиномонтаж, У Льва'],['детейлинг','нет','Novo, Navitola, Loud Movements, Cardy, Антикор 96']],
+  nb:[['Stuttgart','4,3','353','ул. Металлургов, 87',1],['Скил','5,0','29','ул. Металлургов, 84'],['Autolab','5,0','1 019','ул. Архангела Михаила, 9а'],['Two Brothers','4,8','68','ул. Крауля, 166Ак3'],['Lider','4,9','21','ул. Крауля, 176'],['Navitola','5,0','307','Красноармейская ул., 10'],['Kolesa66','4,8','194','Чусовской тракт, 5']]},
+ c:{eb:'Детейлинг-центр · Екатеринбург · ул. Металлургов, 87',h1:'«Stuttgart» — ТЗ на контент, этап 1',
+  f:[['Компания','Stuttgart','детейлинг, автомойка, шиномонтаж'],['Адрес','ул. Металлургов, 87',''],['Режим','до 22:00','предварительная запись'],['Удобства','Кафе, Wi-Fi','парковка, полная доступность для колясок']],
+  cp:'Этап выводит карточку в детейлинг — главный запрос, по которому её сейчас нет в пятёрке, затем закрепляет химчистку и сезонное хранение колёс.',
+  n:[
+   {h:'Детейлинг-центр на Металлургов: полировка, бронирование стекла, тонировка, шумоизоляция',p:'Продающий',i:'Stuttgart — детейлинг-центр: мы защищаем и восстанавливаем кузов, стёкла и салон.',t:[['Полировка: снятие тончайшего слоя лака механическим способом поэтапно — от 4 000 ₽.',Y],['Бронирование стекла — 23 000 ₽; тонировка — 4 000 ₽.',Y],['Шумоизоляция — 5 000 ₽.',Y]],h1:'Детейлинг в Екатеринбурге — детейлинг-центр «Stuttgart»',ti:'Детейлинг-центр на Металлургов, 87 | Stuttgart',d:'Детейлинг в Екатеринбурге: полировка от 4 000 ₽, бронирование стекла, тонировка, шумоизоляция. ул. Металлургов, 87.',kw:['детейлинг екатеринбург','детейлинг центр','полировка кузова','бронирование стекла','тонировка авто','шумоизоляция авто','детейлинг металлургов','детейлинг вертикальная'],cta:'Записывайтесь на консультацию по детейлингу',ct:'«Детейлинг-центр»',cc:'Композиция: машина в боксе под светом, мастер с полировальной машинкой. Тезис на плашке в нижней трети, строка «ул. Металлургов, 87». Цвета — фирменные цвета логотипа «Stuttgart».'},
+   {h:'Комплексная мойка с химчисткой салона: «Nano», «Nano+» и «Premium»',p:'Продающий',i:'Мы собрали мойку и уборку салона в готовые комплексы — от быстрого до премиального.',t:[['Комплекс «Nano»: 2-х фазная мойка нано-шампунем, влажная уборка салона, продувка воздуховодов, ароматизация — 2 490 ₽.',Y],['Комплекс «Nano+»: 3-х фазная мойка, консервация кузова нано-воском, уборка салона — 3 540 ₽.',Y],['Комплекс «Premium»: полировка всего пластика в салоне, кондиционер кожи всех сидений — 6 090 ₽.',Y],['Стоимость исходит из класса авто.',Y]],h1:'Комплексная мойка и химчистка салона — «Stuttgart»',ti:'Химчистка салона и комплексная мойка от 2 490 ₽ | Stuttgart',d:'Комплексы «Nano», «Nano+» и «Premium» в Stuttgart: мойка, уборка салона, нано-воск, кондиционер кожи. Екатеринбург, ул. Металлургов, 87.',kw:['химчистка салона автомобиля','химчистка салона екатеринбург','комплексная мойка','детейлинг мойка','мойка нано шампунем','уборка салона авто','кондиционер для кожи салона'],cta:'Выбирайте комплекс и записывайтесь',ct:'«Три комплекса»',cc:'Композиция: салон с кожаными сиденьями, три уровня комплексов столбиком на плашке справа. Цвета — фирменные цвета логотипа «Stuttgart».'},
+   {h:'Ремонт литых дисков на Металлургов: правка, прокатка, аргон, покраска',p:'Продающий',i:'Мы восстанавливаем литые диски — от правки до полной покраски комплекта.',t:[['Правка литых дисков — 3 000 ₽.',Y],['Прокатка дисков — 5 000 ₽.',Y],['Сварка аргон — 6 000 ₽.',Y],['Покраска дисков, 4 шт. — 25 000 ₽.',Y]],h1:'Ремонт литых дисков в Екатеринбурге — «Stuttgart»',ti:'Правка и покраска литых дисков | Stuttgart, Металлургов 87',d:'Ремонт дисков в Stuttgart: правка литых дисков, прокатка, сварка аргоном, покраска комплекта. Екатеринбург, ул. Металлургов, 87.',kw:['ремонт литых дисков','правка литых дисков','прокатка дисков','покраска дисков','сварка дисков аргоном','ремонт дисков екатеринбург'],cta:'Привозите диски на диагностику',ct:'«Диски как новые»',cc:'Композиция: литой диск на станке правки. Тезис на плашке в верхней трети. Цвета — фирменные цвета логотипа «Stuttgart».'},
+   {h:'Сезонное хранение колёс и шиномонтаж в «Stuttgart»',p:'Продающий',i:'Переобули машину — колёса можно оставить у нас до следующего сезона.',t:[['Хранение колёс на сезон: от легкового авто — 5 000 ₽, джипы — 6 000 ₽.',Y],['Перебортовка: легковые — 2 700 ₽, кроссоверы — 3 350 ₽, джипы — 3 600 ₽.',Y],['Балансировка колёс.',Y],['Предварительная запись.',Y]],h1:'Хранение шин и шиномонтаж в Екатеринбурге — «Stuttgart»',ti:'Хранение колёс на сезон от 5 000 ₽ | Stuttgart',d:'Сезонное хранение колёс от 5 000 ₽, перебортовка и балансировка в Stuttgart. Екатеринбург, ул. Металлургов, 87, предварительная запись.',kw:['хранение шин','хранение шин екатеринбург','сезонное хранение колес','шиномонтаж екатеринбург','перебортовка колес','балансировка колес','шиномонтаж металлургов'],cta:'Записывайтесь на шиномонтаж',ct:'«Колёса — на хранение»',cc:'Композиция: стеллаж с комплектами колёс. Тезис на плашке в нижней трети. Цвета — фирменные цвета логотипа «Stuttgart».'}],
+  s:[['Детейлинг-центр',['Полировка','Бронирование стекла','Тонировка','Шумоизоляция']],['Три комплекса',['Nano — 2 490 ₽','Nano+ — 3 540 ₽','Premium — 6 090 ₽']],['Ремонт дисков',['Правка','Прокатка','Аргон','Покраска']],['Хранение колёс',['Легковые — 5 000 ₽','Джипы — 6 000 ₽','Перебортовка','Балансировка']]],
+  st:'детейлинг, комплексы, диски, хранение колёс'}},
+{id:'yo',name:'Ё-мой-ё',
+ an:{eb:'Екатеринбург · автомойка · ул. Блюхера, 39 · замер 05.11.2026',h1:'Где «Ё-мой-ё» не видно на Картах',p:'Карточка «Ё-мой-ё», ул. Блюхера, 39, этаж −2. Позиции на Яндекс Картах по 2 целевым запросам у адреса компании и соседи по выдаче.',
+  v:[['good','видно','«ручная мойка» — 1-е место у Блюхера','Выше Aquagizer, Boomer (5,0 · 1 694 оценки) и Time на Блюхера, 1А.'],
+     ['warn','слабо','«мойка самообслуживания» — 3-е место','Впереди Aquagizer (4,8 · 1 377) и WashTec на Восточной, 5В.'],
+     ['warn','риск','Прайс на карточке «давно не обновлялось»','Так Яндекс помечает блок «Товары и услуги».']],
+  k:[['Рейтинг','4,3','114 оценок · 63 отзыва'],['Мойка кузова','580–900 ₽','по данным карточки'],['Режим','до 21:00','']],
+  pos:[['ручная мойка','1','Ё-мой-ё, Aquagizer, Boomer, AvtoSpa, Time'],['мойка самообслуживания','3','Aquagizer, WashTec, Ё-мой-ё, 150 Bar, Гуд мойнинг']],
+  nb:[['Ё-мой-ё','4,3','114','ул. Блюхера, 39',1],['Aquagizer','4,8','1 377','Восточная ул., 5В'],['WashTec','4,3','514','Восточная ул., 5В/1'],['Boomer','5,0','1 694','Восточная ул., 5Бк2'],['Time','4,8','781','ул. Блюхера, 1А'],['AvtoSpa','4,4','306','ул. Гагарина, 6Б'],['150 Bar','4,7','150','ул. Сулимова, 5']]},
+ c:{eb:'Автомойка · Екатеринбург · ул. Блюхера, 39',h1:'«Ё-мой-ё» — ТЗ на контент, этап 1',
+  f:[['Компания','Ё-мой-ё','автомойка, детейлинг, шиномонтаж'],['Адрес','ул. Блюхера, 39','этаж −2'],['Типы мойки','Ручная, самообслуживание','химчистка'],['Режим','до 21:00','']],
+  cp:'Этап поднимает карточку по «мойке самообслуживания», закрепляет ручную мойку и раскрывает услуги, которых нет у соседей в выдаче.',
+  n:[
+   {h:'Мойка самообслуживания на Блюхера, 39 — помойте машину сами',p:'Продающий',i:'В «Ё-мой-ё» машину можно помыть самостоятельно — на подземном этаже на Блюхера, 39.',t:[['Автомойка самообслуживания.',Y],['Адрес: ул. Блюхера, 39, этаж −2.',Y],['Оплата картой, наличными, дисконтная система.',Y]],h1:'Мойка самообслуживания на Блюхера — «Ё-мой-ё»',ti:'Мойка самообслуживания в Екатеринбурге, Блюхера 39 | Ё-мой-ё',d:'Мойка самообслуживания «Ё-мой-ё» на ул. Блюхера, 39, этаж −2: помойте машину сами, оплата картой, дисконтная система.',kw:['мойка самообслуживания','мойка самообслуживания екатеринбург','автомойка самообслуживания','мойка самообслуживания блюхера','автомойка втузгородок','помыть машину самому','автомойка блюхера'],cta:'Приезжайте помыть машину',ct:'«Помой сам»',cc:'Композиция: пост самообслуживания, пистолет и пена на кузове. Тезис на плашке в нижней трети, строка «ул. Блюхера, 39, −2 этаж». Цвета — фирменные цвета логотипа «Ё-мой-ё».'},
+   {h:'Ручная мойка на Блюхера: моем за вас',p:'Продающий',i:'Не хотите мыть сами — запишитесь, и машину помоют наши мастера вручную.',t:[['Тип мойки: ручная.',Y],['Стоимость мойки кузова: 580–900 ₽.',Y],['Нанесение воска.',Y],['Режим работы: до 21:00.',Y]],h1:'Ручная мойка на Блюхера в Екатеринбурге — «Ё-мой-ё»',ti:'Ручная мойка кузова от 580 ₽, Блюхера 39 | Ё-мой-ё',d:'Ручная мойка кузова 580–900 ₽ и нанесение воска на автомойке «Ё-мой-ё», ул. Блюхера, 39.',kw:['ручная мойка','ручная мойка екатеринбург','мойка кузова','автомойка блюхера','мойка с воском','автомойка рядом','ручная мойка цена'],cta:'Записывайтесь на ручную мойку',ct:'«Ручная мойка»',cc:'Композиция: мастер протирает кузов микрофиброй. Тезис на плашке в верхней трети, строка «кузов 580–900 ₽». Цвета — фирменные цвета логотипа «Ё-мой-ё».'},
+   {h:'Предпродажная подготовка и химчистка салона на Блюхера',p:'Продающий',i:'Собираетесь продавать машину — мы подготовим её к продаже.',t:[['Предпродажная подготовка.',Y],['Химчистка.',Y],['Рубрика: детейлинг.',Y],['Нанесение воска.',Y]],h1:'Предпродажная подготовка авто в Екатеринбурге — «Ё-мой-ё»',ti:'Предпродажная подготовка и химчистка салона | Ё-мой-ё',d:'Предпродажная подготовка автомобиля, химчистка салона и воск на автомойке «Ё-мой-ё», ул. Блюхера, 39.',kw:['предпродажная подготовка авто','предпродажная подготовка екатеринбург','химчистка салона автомобиля','химчистка салона екатеринбург','детейлинг блюхера','подготовка авто к продаже'],cta:'Записывайтесь на предпродажную подготовку',ct:'«Готовим к продаже»',cc:'Композиция: чистый салон и блестящий кузов, без людей. Тезис на плашке в нижней трети. Цвета — фирменные цвета логотипа «Ё-мой-ё».'},
+   {h:'Автомойка на Блюхера, куда можно с собакой: кафе, Wi-Fi и мотошиномонтаж',p:'Имиджевый',i:'К нам можно приехать с собакой, а пока ждёте — посидеть в кафе.',t:[['Можно с собаками до 35 см.',Y],['Кафе, Wi-Fi, парковка.',Y],['Мотошиномонтаж.',Y],['Шиномонтаж.',Y]],h1:'Автомойка с кафе на Блюхера — «Ё-мой-ё»',ti:'Автомойка с кафе, Wi-Fi и мотошиномонтажом | Ё-мой-ё',d:'Автомойка «Ё-мой-ё» на ул. Блюхера, 39: можно с собакой до 35 см, кафе, Wi-Fi, шиномонтаж и мотошиномонтаж.',kw:['автомойка с кафе','автомойка блюхера','мотошиномонтаж екатеринбург','шиномонтаж блюхера','автомойка pet friendly','автомойка с wi-fi'],cta:'Заезжайте на мойку',ct:'«Можно с собакой»',cc:'Композиция: зона ожидания с кафе, на полу — небольшая собака. Тезис на плашке в верхней трети. Цвета — фирменные цвета логотипа «Ё-мой-ё».'}],
+  s:[['Помой сам',['Самообслуживание','Блюхера, 39, этаж −2','Дисконтная система']],['Ручная мойка',['Кузов 580–900 ₽','Воск','До 21:00']],['Готовим к продаже',['Предпродажная подготовка','Химчистка','Воск']],['Можно с собакой',['Собаки до 35 см','Кафе','Wi-Fi','Мотошиномонтаж']]],
+  st:'самообслуживание, ручная мойка, предпродажка, удобства'}}];
+
+const EX={
+gr:{dm:[['автомойка','11 799','−10%','декабрь, март'],['шиномонтаж','15 035','−17%','октябрь, апрель']],
+ dn:'Сейчас начинается сезон мойки: в 2025 году спрос на «автомойку» вырос с 17 038 в октябре до 33 510 в декабре. Шиномонтаж прошёл пик в октябре, но в ноябре 2025 его искали 13 122 раза — тема ещё актуальна.',
+ bb:[['Основной','Синий','#34486C','#FCFCFC'],['Акцентный','Красный','#E83020','#FCFCFC'],['Фоновый','Светло-серый','#E4E4E8','#0C0C0C'],['Светлый','Белый','#FCFCFC','#0C0C0C'],['Текстовый','Почти чёрный','#0C0C0C','#FCFCFC']],
+ bp:'Цвета сняты с опубликованной сторис компании: синий фон, красные плашки-акценты, светло-серая плашка цены.',
+ cl:'Цвета: фон — синий #34486C, плашка тезиса — красный #E83020, текст — белый #FCFCFC, строка — на светло-серой плашке #E4E4E8.',
+ sn:'фон синий #34486C, тезис белым #FCFCFC, ключевой факт на красной плашке #E83020, остальные факты на светло-серых плашках #E4E4E8 текстом #0C0C0C. Логотип в верхнем левом углу.',
+ cp:'Ноябрь — начало зимнего пика мойки и хвост сезона шиномонтажа. Этап открывается шиномонтажом, по которому карточки нет в пятёрке, дальше — виды мойки под зимний спрос, химчистка салона и подарочный сертификат к декабрю.'},
+cb:{dm:[['конвейерная мойка','382','+15%','ноябрь — март'],['автомойка березовский','314','+7%','ноябрь — декабрь']],
+ dn:'Регион Вордстата — Свердловская область. Оба запроса растут к прошлому году, а пик приходится на зиму: в декабре 2025 «конвейерную мойку» искали 1 812 раз, «автомойку березовский» — 1 097.',
+ bb:[['Основной','Синий','#3C86C8','#FEFEFE'],['Текстовый','Чёрный','#020202','#FEFEFE'],['Фоновый','Белый','#FEFEFE','#020202'],['Отраслевой','Светло-голубой','#DCEBF7','#020202'],['Отраслевой акцент','Оранжевый','#F28C28','#020202']],
+ bp:'Синий, чёрный и белый сняты с логотипа компании. Светло-голубой и оранжевый добавлены из отраслевой палитры автомоек: синий с белым — цвета чистоты, оранжевый — акцент скорости.',
+ cl:'Цвета: фон — белый #FEFEFE, тезис — синий #3C86C8, строка — чёрный #020202, акцентная полоса — оранжевый #F28C28.',
+ sn:'фон белый #FEFEFE, тезис синим #3C86C8, факты на светло-голубых плашках #DCEBF7 текстом #020202, ключевая цифра на оранжевой плашке #F28C28. Логотип в верхнем левом углу.',
+ cp:'Зима — пиковый сезон для обоих целевых запросов. Карточка уже первая по «конвейерной мойке», этап закрепляет это круглосуточным форматом и поднимает её по «автомойке» в Берёзовском.'},
+st:{dm:[['детейлинг','4 308','−10%','весна — лето'],['полировка автомобиля','884','+4%','лето'],['химчистка салона автомобиля','548','−11%','лето, пик — июль'],['хранение шин','716','−21%','октябрь, апрель']],
+ dn:'Хранение шин — сезонная услуга прямо сейчас: пик в октябре (1 663 запроса в 2025 году). Детейлинг ищут круглый год, это самый частотный запрос, по которому карточки нет в пятёрке.',
+ bb:[['Основной','Тёмный','#302834','#FCFCFC'],['Акцентный','Золото логотипа','#E4BE52','#302834'],['Вторичный','Золото сторис','#F4C25C','#302834'],['Фоновый сторис','Графит','#343434','#FCFCFC'],['Текстовый','Светлый','#FCFCFC','#302834']],
+ bp:'Цвета сняты с логотипа и опубликованной сторис компании: тёмный фон, золото знака и линий, графит фона сторис.',
+ cl:'Цвета: фон — тёмный #302834, тезис — золото #E4BE52, строка — светлый #FCFCFC, линии — золото #F4C25C.',
+ sn:'фон графит #343434, тезис крупно светлым #FCFCFC, факты по вертикальной золотой линии #F4C25C с маркерами, номер в золотом круге #E4BE52. Логотип в верхнем левом углу.',
+ cp:'Ноябрь — время хранения колёс, поэтому этап открывается им. Дальше — детейлинг, главный запрос, по которому карточки нет в пятёрке, комплексы с химчисткой салона и ремонт дисков.',
+ order:[3,0,1,2]},
+yo:{dm:[['мойка самообслуживания','1 341','+11%','ноябрь, март'],['ручная мойка','142','+63%','апрель — май']],
+ dn:'Мойку самообслуживания чаще всего ищут в ноябре и марте: в ноябре 2025 — 2 848 запросов. Спрос на оба формата вырос к прошлому году.',
+ bb:[['Основной','Тёмно-зелёный','#20241E','#FEFEFE'],['Акцентный','Голубой','#52B4DA','#20241E'],['Светлый','Белый','#FEFEFE','#20241E']],
+ bp:'Цвета сняты с логотипа компании: тёмный фон, голубое кольцо, белый знак.',
+ cl:'Цвета: фон — тёмно-зелёный #20241E, тезис — белый #FEFEFE, акцентная линия — голубой #52B4DA.',
+ sn:'фон тёмно-зелёный #20241E, тезис крупно белым #FEFEFE, факты в голубых контурных плашках #52B4DA. Логотип в верхнем левом углу.',
+ cp:'Ноябрь — пик мойки самообслуживания, поэтому этап открывается ей. Дальше — ручная мойка, где карточка уже первая, предпродажная подготовка и удобства для гостей.'}};
+CO.forEach(c=>{const x=EX[c.id];c.an.dm=x.dm;c.an.dn=x.dn;Object.assign(c.c,{bb:x.bb,bp:x.bp,cl:x.cl,sn:x.sn,cp:x.cp});
+ if(x.order){c.c.n=x.order.map(i=>c.c.n[i]);c.c.s=x.order.map(i=>c.c.s[i])}
+ c.c.n.forEach(n=>{n.cc=n.cc.replace(/ ?Цвета — фирменные цвета логотипа[^.]*\./,' '+x.cl)})});
+if(EX.st)CO[2].c.st='хранение колёс, детейлинг, комплексы, диски';
+
+const e=s=>String(s);
+function analytics(c){const a=c.an;return `<div class="view" data-co="${c.id}" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="${c.id}-summary"><span class="eyebrow">${a.eb}</span><h1>${a.h1}</h1><p>${a.p}</p></header>
+<section id="${c.id}-short"><div class="sh"><h2>Коротко</h2></div><div class="verdicts">${a.v.map(v=>`<div class="v"><span class="pill ${v[0]}">${v[1]}</span><p><b>${v[2]}</b>${v[3]}</p></div>`).join('')}</div>
+<div class="kpis">${a.k.map(k=>`<div class="kpi"><div class="k">${k[0]}</div><div class="n">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('')}</div></section>
+<section id="${c.id}-maps"><div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск с картой у адреса компании, первая пятёрка выдачи.</p></div>
+<div class="tbl"><table><thead><tr><th>Запрос</th><th class="r">${c.name}</th><th>Первая пятёрка</th></tr></thead><tbody>${a.pos.map(p=>`<tr><td>${p[0]}</td><td class="r ${p[1]!=='нет'?'me':''}">${p[1]}</td><td>${p[2]}</td></tr>`).join('')}</tbody></table></div>
+<h3 class="sub">Конкуренты в гео-выдаче</h3>
+<div class="tbl"><table><thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead><tbody>${a.nb.map(n=>`<tr><td>${n[4]?'<b>'+n[0]+'</b>':n[0]}</td><td class="r ${n[4]?'me':''}">${n[1]}</td><td class="r ${n[4]?'me':''}">${n[2]}</td><td>${n[3]}</td></tr>`).join('')}</tbody></table></div></section>
+<section id="${c.id}-demand"><div class="sh"><h2>Спрос по Вордстату</h2><p>Регион «${c.id==='cb'?'Свердловская область':'Екатеринбург'}», все устройства. Частоты — за 08.09–07.10.2026, динамика по месяцам с ноября 2024 по сентябрь 2026.</p></div>
+<div class="tbl"><table><thead><tr><th>Запрос</th><th class="r">В месяц</th><th class="r">К сен 2025</th><th>Пик</th></tr></thead><tbody>${a.dm.map(d=>`<tr><td>${d[0]}</td><td class="r">${d[1]}</td><td class="r nw" style="color:${d[2][0]==='+'?'var(--good)':'var(--crit)'}">${d[2]}</td><td>${d[3]}</td></tr>`).join('')}</tbody></table></div>
+<p class="small" style="margin-top:14px">${a.dn}</p></section>
+</div></div>`}
+function content(c){const x=c.c;return `<div class="view" data-co="${c.id}" data-view="content" hidden><div class="wrap">
+<section class="hero" id="${c.id}-company"><span class="eyebrow">${x.eb}</span><h1>${x.h1}</h1><p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «${c.name}» на Яндекс Картах и в 2ГИС.</p>
+<div class="factgrid">${x.f.map(f=>`<div class="fact"><div class="k">${f[0]}</div><div class="v2">${f[1]}${f[2]?' <small>'+f[2]+'</small>':''}</div></div>`).join('')}</div></section>
+<section id="${c.id}-brandbook"><div class="sec-head"><span class="sec-num">01 · Мини-брендбук</span><h2>Фирменный стиль «${c.name}»</h2><p>${x.bp}</p></div>
+<div class="swatches">${x.bb.map(b=>`<div class="swatch" style="background:${b[2]};color:${b[3]};border-color:${b[2]==='#FEFEFE'||b[2]==='#FCFCFC'?'var(--line)':b[2]}"><div class="role">${b[0]}</div><div class="name">${b[1]}</div><div class="hex">${b[2]}</div></div>`).join('')}</div></section>
+<section id="${c.id}-cycle"><div class="sec-head"><span class="sec-num">02 · Логика цикла</span><h2>Последовательность тем этапа</h2><p>${x.cp}</p></div>
+<div class="cycle">${x.n.map((n,i)=>`<div class="cycle-row"><div class="tag">Тема ${i+1}</div><p>${n.h}</p></div>`).join('')}</div></section>
+<section id="${c.id}-news"><div class="sec-head"><span class="sec-num">03 · Новости</span><h2>Темы для новостных публикаций</h2><p>4 темы с обложкой. Публикация — карточка компании «${c.name}» на Яндекс Картах и в 2ГИС.</p></div>
+<div class="tone-banner"><b>Тон текстов:</b> вступление от лица компании, дальше факты по теме. Факты в тезисах приведены по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, ссылок и превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+<div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+${x.n.map((n,i)=>`<div class="card"><div class="card-top"><div><span class="num">Новость ${i+1}</span><h3>${n.h}</h3></div><span class="purpose">${n.p}</span></div>
+<div class="intro"><span class="lbl">Вступление (тон и голос)</span>${n.i}</div><span class="thesis-lbl">Тезисы</span>
+<ul class="thesis">${n.t.map(t=>`<li>${t[0]}<span class="src">${t[1]}</span></li>`).join('')}</ul>
+<div class="seo-box"><span class="lbl">SEO-блок</span><div class="meta-row"><b>H1 · </b>${n.h1}</div><div class="meta-row"><b>Title · </b>${n.ti}</div><div class="meta-row"><b>Description · </b>${n.d}</div><div class="chips">${n.kw.map(k=>`<span class="chip-kw">${k}</span>`).join('')}</div></div>
+<p class="cta-line"><b>CTA:</b> ${n.cta}.</p>
+<div class="cover-box"><span class="lbl">ТЗ на обложку</span><div class="thesis-cover">${n.ct}</div><p>${n.cc}</p></div></div>`).join('')}</section>
+<section id="${c.id}-stories"><div class="sec-head"><span class="sec-num">04 · Сторис</span><h2>Темы для сторис</h2><p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и в 2ГИС.</p></div>
+<div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+<div class="story-grid">${x.s.map((s,i)=>`<div class="story-card"><div class="story-top"><div class="story-thesis">${s[0]}</div><span class="slide-no">Сторис ${i+1}</span></div><div class="facts-line">${s[1].map(f=>`<span class="fact-pill">${f}</span>`).join('')}</div><div class="design-note"><b>Дизайн слайда:</b> ${x.sn}</div></div>`).join('')}</div></section>
+<section id="${c.id}-map"><div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+<details class="stage" open><summary>Этап 1 — ${x.st} <span class="badge">Актуальный</span></summary><div class="stage-body">
+${x.n.map((n,i)=>`<div class="stage-item"><span class="fmt">Новость ${i+1}</span><span class="txt"><b>${n.h}</b></span></div><div class="stage-item"><span class="fmt">Сторис ${i+1}</span><span class="txt"><b>${x.s[i][0]}</b></span></div>`).join('')}
+</div></details></section>
+</div></div>`}
+document.getElementById('main').innerHTML=CO.map(c=>analytics(c)+content(c)).join('');
+document.getElementById('cos').innerHTML=CO.map(c=>`<button type="button" data-co-go="${c.id}">${c.name}</button>`).join('');
+const NAV={analytics:[['summary','Итог'],['maps','Позиции и конкуренты'],['demand','Спрос']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let st={co:'gr',view:'analytics'};
+function show(co,view,scroll){if(!CO.some(c=>c.id===co))co='gr';if(!NAV[view])view='analytics';st={co,view};
+ document.querySelectorAll('.view').forEach(el=>{el.hidden=!(el.dataset.co===co&&el.dataset.view===view)});
+ document.querySelectorAll('[data-co-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.coGo===co?'true':'false'));
+ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+ sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${co}-${id}">${t}</button>`).join('');
+ const h=co+'-'+view;if(location.hash.slice(1)!==h){try{history.replaceState(null,'','#'+h)}catch(err){}}
+ if(scroll)window.scrollTo({top:0})}
+document.addEventListener('click',ev=>{const c=ev.target.closest('[data-co-go]');if(c){show(c.dataset.coGo,st.view,true);return}
+ const g=ev.target.closest('[data-go]');if(g){show(st.co,g.dataset.go,true);return}
+ const t=ev.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+function fromHash(s){const [co,view]=location.hash.slice(1).split('-');show(co,view,s)}
+window.addEventListener('hashchange',()=>fromHash(true));fromHash(false);
+</script>
+</body>
+</html>
