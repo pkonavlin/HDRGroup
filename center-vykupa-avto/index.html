@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Центр Выкупа Автомобилей»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}.co{font-size:12.5px;padding:5px 9px}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Центр Выкупа Автомобилей</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Новосибирск · выкуп авто · замер 05.11.2026</span>
+  <h1>Где «Центр Выкупа Автомобилей» не видно на Картах</h1>
+  <p>Карточка на ул. Панфиловцев, 60к5. Позиции на Яндекс Картах по 10 целевым запросам и соседи по выдаче.</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«срочный выкуп авто» — 3-е место, «автовыкуп» и «выкуп битых авто» — 4-е</b>Выше стоят Avtocash и Invest-avto, у которых в выдаче показывается позиция прайса под запрос.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Главный запрос «выкуп авто» — карточки нет в первой десятке</b>Выше — Avtocash, автосалоны Tenet и Автомир Chery, «Сибирский Автовыкуп» с рекламой, «Выкуп Авто 54».</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«скупка авто», «выкуп неисправных авто», «выкуп авто с запретом», «продать авто на запчасти», «скупка мотоциклов» — карточки нет в пятёрке</b>Все эти направления есть на сайте компании отдельными разделами.</p></div>
+    <div class="v"><span class="pill info">сильная сторона</span><p><b>Больше всех оценок среди соседей</b>5,0 и 96 оценок. У ближайших конкурентов в выдаче — от 6 до 48 оценок.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">96 оценок · 92 отзыва</div></div>
+    <div class="kpi"><div class="k">Запросов в топ-5</div><div class="n">4 из 10</div><div class="s">лучшее место — 3-е</div></div>
+    <div class="kpi"><div class="k">Публикаций на карточке</div><div class="n">0</div><div class="s">новостей нет</div></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Новосибирску без геолокации. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Место</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>выкуп авто</td><td class="r">нет в топ-10</td><td>Avtocash, Tenet Expocar, Сибирский Автовыкуп, Выкуп Авто 54, Автомир Chery</td></tr>
+      <tr><td>скупка авто</td><td class="r">нет</td><td>Avtocash, Tenet Expocar, Сибирский Автовыкуп, Автомир Chery, Выкуп Авто 54</td></tr>
+      <tr><td>срочный выкуп авто</td><td class="r me">3</td><td>Avtocash, Invest-avto, Центр Выкупа Автомобилей, Vikup-auto154, Вебкар54</td></tr>
+      <tr><td>автовыкуп</td><td class="r me">4</td><td>Avtocash, Invest-avto, Vikup-auto154, Центр Выкупа Автомобилей, Вебкар54</td></tr>
+      <tr><td>выкуп битых авто</td><td class="r me">4</td><td>Avtocash, Invest-avto, Vikup-auto154, Центр Выкупа Автомобилей, Amcar54</td></tr>
+      <tr><td>выкуп неисправных авто</td><td class="r">нет</td><td>Avtocash, Vikup-auto154, Invest-avto, Выкуп Авто, Amcar54</td></tr>
+      <tr><td>выкуп авто в залоге</td><td class="r me">5</td><td>Avtocash, Invest-avto, Выкуп Авто, Purchase of any car, Центр Выкупа Автомобилей</td></tr>
+      <tr><td>выкуп авто с запретом</td><td class="r">нет</td><td>Avtocash, Invest-avto, Vikup-auto154, AutoVikup Pro, Выкуп Авто 54</td></tr>
+      <tr><td>продать авто на запчасти</td><td class="r">нет</td><td>Autodoc.ru, Столица, Am-avto, Автозапчасти Техника, Autotrade</td></tr>
+      <tr><td>скупка мотоциклов</td><td class="r">нет</td><td>Moto-union, Випскупка, Комиссионка</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>В выдаче показывает</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Центр Выкупа Автомобилей</b></td><td class="r num me">5,0</td><td class="r num me">96</td><td>—</td><td>ул. Панфиловцев, 60к5</td></tr>
+      <tr><td>Avtocash</td><td class="r num">5,0</td><td class="r num">42</td><td>«Выкуп авто в запрете и в залоге», «Выкуп битых или не исправных авто»</td><td>ул. Ватутина, 16/1</td></tr>
+      <tr><td>Invest-avto</td><td class="r num">5,0</td><td class="r num">48</td><td>«Выкуп битых авто», «Выкуп авто в залоге», «Срочный выкуп автомобилей» — цена от</td><td>ул. Немировича-Данченко, 122</td></tr>
+      <tr><td>Вебкар54</td><td class="r num">4,9</td><td class="r num">40</td><td>«Выкуп авто срочно в Новосибирске сегодня»</td><td>ул. Фрунзе, 80</td></tr>
+      <tr><td>Vikup-auto154</td><td class="r num">4,9</td><td class="r num">38</td><td>«Выкуп BMW»</td><td>Красный пр-т, 200</td></tr>
+      <tr><td>Amcar54</td><td class="r num">4,9</td><td class="r num">23</td><td>—</td><td>ул. Широкая, 2Ак5</td></tr>
+      <tr><td>Выкуп Авто 54</td><td class="r num">4,7</td><td class="r num">14</td><td>«Выкуп авто с запретом регистрации», «Выкуп неисправных авто»</td><td>ул. Толбухина, 19А</td></tr>
+      <tr><td>Выкуп Авто</td><td class="r num">4,6</td><td class="r num">11</td><td>«Выкуп кредитных автомобилей», спецпредложение</td><td>Гусинобродское ш., 62</td></tr>
+      <tr><td>Сибирский Автовыкуп</td><td class="r num">4,3</td><td class="r num">6</td><td>«Выкуп битых авто», реклама</td><td>ул. Нижегородская, 270/1</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки и выдачи.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Направления выкупа не названы на карточке словами</h3></div>
+      <p>У Avtocash, Invest-avto и «Выкуп Авто 54» под названием в выдаче стоит позиция прайса, совпадающая с запросом: <b>«Выкуп авто в запрете и в залоге»</b>, <b>«Выкуп битых авто»</b>, <b>«Выкуп авто с запретом регистрации»</b>. У «Центра Выкупа Автомобилей» такой строки нет ни по одному из 10 запросов, публикаций на карточке тоже нет. Поэтому при лучшем рейтинге карточка уступает по «выкуп авто», «с запретом», «неисправных».</p>
+      <p class="next">Новости этапа — по одному направлению на тему, словами запроса: выкуп авто, в залоге и с запретом, битые и неисправные, на запчасти и мототехника.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Рубрики карточки описывают продажу, а не выкуп</h3></div>
+      <p>Рубрики: <b>«Автомобили с пробегом»</b>, <b>«Продажа автомобилей с пробегом»</b>, <b>«Автосалон»</b>, в особенностях — «Трейд-ин» и «Тест-драйв». По «выкуп авто» и «скупка авто» в пятёрку попадают автосалоны Tenet Expocar и Автомир Chery. У Вебкар54 есть рубрика «Оценка автомобилей».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Запчасти и мототехника — чужая выдача</h3></div>
+      <p>По «продать авто на запчасти» Яндекс показывает магазины запчастей и авторазборку, по «скупка мотоциклов» — прокат и комиссионку. Сайт компании ведёт отдельные разделы «Продать машину на запчасти» и «Скупка мототехники», на карточке этих слов нет.</p>
+    </div>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Выкуп авто · Новосибирск и Новосибирская область</span>
+  <h1>«Центр Выкупа Автомобилей» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Центр Выкупа Автомобилей» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Центр Выкупа Автомобилей</div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Новосибирск, ул. Панфиловцев, 60к5</div></div>
+    <div class="fact"><div class="k">География</div><div class="v">Новосибирск <small>и Новосибирская область</small></div></div>
+    <div class="fact"><div class="k">Выезд оценщика</div><div class="v">Бесплатно <small>в любую точку НСО</small></div></div>
+    <div class="fact"><div class="k">Оплата</div><div class="v">Наличными, на карту <small>или на расчётный счёт</small></div></div>
+    <div class="fact"><div class="k">Опыт</div><div class="v">За 10 лет <small>выкупили более 700 автомобилей</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">avtovikup.org</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">01 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с главного запроса «выкуп авто», где карточки нет в первой десятке, и дальше закрывает по одному направлению с сайта, которых на карточке нет словами.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Выкуп авто в день обращения: бесплатный выезд оценщика, осмотр, договор, деньги у машины.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Выкуп авто в залоге, в кредите и с запретом.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Выкуп битых и неисправных машин в любом состоянии, «как есть».</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Машина на запчасти, снятая с учёта, после такси и мототехника.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">02 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> от первого лица компании («мы»), спокойно и по делу. Вступление задаёт голос, дальше факты по теме. Факты в тезисах приведены дословно по сайту компании. В тексте нет телефона, e-mail, ссылок, превосходных степеней и сравнений с другими компаниями. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Выкуп авто в Новосибирске в день обращения: бесплатный выезд оценщика и деньги сразу у машины</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выкупаем автомобиль в день обращения: приезжаем к машине сами, осматриваем, оформляем договор и сразу отдаём деньги.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Выезд оценщика в любую точку Новосибирска или области бесплатно. Время: до 30 минут.<span class="src">сайт</span></li>
+      <li>Специалист приезжает в назначенное вами место и удобное вам время.<span class="src">сайт</span></li>
+      <li>Осмотр машины, время: 15–20 минут. Сверяем номерные знаки на кузове и агрегате с документами, проверяем целостность лакокрасочного покрытия, работоспособность узлов и агрегатов, степень потёртости салона.<span class="src">сайт</span></li>
+      <li>Оформление сделки и оплата сразу у авто, время: до 30 минут. Заключаем договор купли-продажи.<span class="src">сайт</span></li>
+      <li>Вы выбираете, каким способом хотите получить деньги: наличными, на карту, на расчётный счёт. Вы получаете всю сумму сразу.<span class="src">сайт</span></li>
+      <li>Всё, что нужно от вас: доступ к авто, ПТС, свидетельство о регистрации, гражданский паспорт, ключи от авто.<span class="src">сайт</span></li>
+      <li>Снимаем авто с учёта и по договору гарантируем отсутствие штрафов на выкупленный автомобиль.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Выкуп авто в Новосибирске в день обращения — Центр Выкупа Автомобилей</span></div>
+      <div class="meta-row"><span><b>Title · </b>Выкуп авто в Новосибирске: бесплатная оценка и оплата сразу | Центр Выкупа Автомобилей</span></div>
+      <div class="meta-row"><span><b>Description · </b>Выкуп авто в Новосибирске и области: бесплатный выезд оценщика, осмотр 15–20 минут, договор купли-продажи и оплата сразу у машины — наличными, на карту или на расчётный счёт.</span></div>
+      <div class="chips"><span class="chip-kw">выкуп авто</span><span class="chip-kw">выкуп авто новосибирск</span><span class="chip-kw">скупка авто</span><span class="chip-kw">срочный выкуп авто</span><span class="chip-kw">автовыкуп</span><span class="chip-kw">продать авто быстро</span><span class="chip-kw">оценка авто бесплатно</span><span class="chip-kw">выкуп авто в день обращения</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставляйте заявку на бесплатную оценку — оценщик приедет к вашей машине.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Выкуп в день обращения»</div>
+      <p>Композиция: оценщик осматривает автомобиль на улице, папка с договором в руках, лиц крупно нет. Тезис на плашке в нижней трети, строка «оценка бесплатно · деньги сразу». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: плашка — основной цвет мини-брендбука, тезис — светлый, строка — акцентный.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Выкуп авто в залоге, в кредите и с запретом на регистрационные действия в Новосибирске</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выкупаем машины, которые сложно продать самому: автомобили в залоге, в кредите и с запретом.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направления: «Выкуп авто в залоге», «Скупка автомобилей с запретом».<span class="src">сайт</span></li>
+      <li>Мы принимаем к выкупу автомобили в любом состоянии: от новых и подержанных до неисправных, с проблемами в документах или даже под запретом.<span class="src">сайт</span></li>
+      <li>Мы готовы выкупить ваше авто даже если оно находится в кредите.<span class="src">сайт</span></li>
+      <li>На звонке спрашиваем: техническое состояние, сколько владельцев, юридическая чистота, было ли ДТП. Сразу назовём примерную цену.<span class="src">сайт</span></li>
+      <li>Оформляем договор купли-продажи, гарантируем чистоту и безопасность сделки.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Выкуп авто в залоге и с запретом в Новосибирске</span></div>
+      <div class="meta-row"><span><b>Title · </b>Выкуп кредитных и залоговых авто, авто с запретом | Центр Выкупа Автомобилей</span></div>
+      <div class="meta-row"><span><b>Description · </b>Выкупаем автомобили в залоге, в кредите и с запретом на регистрационные действия в Новосибирске и области. Договор купли-продажи, бесплатный выезд оценщика.</span></div>
+      <div class="chips"><span class="chip-kw">выкуп авто в залоге</span><span class="chip-kw">выкуп авто с запретом</span><span class="chip-kw">выкуп кредитных авто</span><span class="chip-kw">продать авто в кредите</span><span class="chip-kw">выкуп залоговых авто новосибирск</span><span class="chip-kw">выкуп авто с ограничениями</span><span class="chip-kw">выкуп авто новосибирск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> расскажите о машине в заявке — назовём примерную цену ещё до встречи.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Выкуп авто в залоге и с запретом»</div>
+      <p>Композиция: документы на автомобиль и ключи на капоте машины; тезис на плашке в верхней трети, строка «в кредите · в залоге · с запретом».</p>
+      <p>Цвета: плашка — основной цвет, тезис — светлый, строка — на акцентной полосе.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Выкуп битых и неисправных авто в Новосибирске — в любом состоянии, «как есть»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выкупаем машину «как есть»: после ДТП, с неисправностями, без мойки и подготовки к продаже.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направления: «Скупка битых авто», «Скупка неисправных машин», «Скупка машин в любом состоянии».<span class="src">сайт</span></li>
+      <li>Мы занимаемся скупкой не только исправных, но и автомобилей с историей: битых, аварийных, с проблемными документами.<span class="src">сайт</span></li>
+      <li>Вы избавите себя от необходимости проводить подготовительные работы по продаже автомобиля, такие как мойка, полировка, фотосессия, подготовка объявления и встречи с потенциальными покупателями.<span class="src">сайт</span></li>
+      <li>Эксперт проводит оценку состояния вашего авто, учитывая все возможные повреждения и техническое состояние.<span class="src">сайт</span></li>
+      <li>Оценку авто мы предоставляем бесплатно, без скрытых платежей и комиссий.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Выкуп битых и неисправных авто в Новосибирске</span></div>
+      <div class="meta-row"><span><b>Title · </b>Выкуп битых авто после ДТП и неисправных машин | Центр Выкупа Автомобилей</span></div>
+      <div class="meta-row"><span><b>Description · </b>Выкупаем битые, аварийные и неисправные автомобили в Новосибирске и области в любом состоянии. Бесплатная оценка с учётом повреждений, без мойки и подготовки.</span></div>
+      <div class="chips"><span class="chip-kw">выкуп битых авто</span><span class="chip-kw">выкуп неисправных авто</span><span class="chip-kw">выкуп авто после дтп</span><span class="chip-kw">скупка битых машин</span><span class="chip-kw">выкуп аварийных авто</span><span class="chip-kw">выкуп авто в любом состоянии</span><span class="chip-kw">продать битую машину новосибирск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставляйте заявку — оценим машину с учётом всех повреждений.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Выкупим битую и неисправную»</div>
+      <p>Композиция: автомобиль с повреждённым передним бампером на площадке, нейтральный свет, без людей; тезис на плашке в нижней трети, строка «в любом состоянии · как есть».</p>
+      <p>Цвета: плашка — основной цвет, тезис — светлый, строка — акцентный.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Продать машину на запчасти, снятую с учёта или после такси — и мототехнику — в Новосибирске</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выкупаем не только легковые машины на ходу: берём автомобили на запчасти, снятые с учёта, после такси и мототехнику.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направления: «Продать машину на запчасти», «Продать авто, снятую с учёта», «Продать машину после такси», «Скупка мототехники».<span class="src">сайт</span></li>
+      <li>Мы купим ваш автомобиль в любом состоянии, будь то старые иномарки или отечественные авто, подержанные или практически новые машины, а также автомобили с пробегом.<span class="src">сайт</span></li>
+      <li>Оставляйте заявку. Приедем в любую точку НСО.<span class="src">сайт</span></li>
+      <li>Узнайте предварительную стоимость вашего авто по телефону за 5 минут.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Продать машину на запчасти и мототехнику в Новосибирске</span></div>
+      <div class="meta-row"><span><b>Title · </b>Продать авто на запчасти, снятое с учёта, после такси | Центр Выкупа Автомобилей</span></div>
+      <div class="meta-row"><span><b>Description · </b>Выкупаем машины на запчасти, снятые с учёта и после такси, а также мототехнику в Новосибирске и области. Выезд в любую точку НСО, предварительная цена по телефону.</span></div>
+      <div class="chips"><span class="chip-kw">продать авто на запчасти</span><span class="chip-kw">продать машину снятую с учета</span><span class="chip-kw">выкуп авто после такси</span><span class="chip-kw">скупка мототехники</span><span class="chip-kw">скупка мотоциклов новосибирск</span><span class="chip-kw">выкуп старых авто</span><span class="chip-kw">скупка авто</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> опишите машину в заявке — приедем в любую точку НСО.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Запчасти, такси, мото — выкупаем»</div>
+      <p>Композиция: две половины кадра — легковой автомобиль и мотоцикл на одной площадке; тезис на плашке по центру, строка «снятые с учёта · после такси».</p>
+      <p>Цвета: плашка — основной цвет, тезис — светлый, строка — акцентный.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">03 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Выкуп в день обращения</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Выезд оценщика бесплатно</span><span class="fact-pill">Осмотр 15–20 минут</span><span class="fact-pill">Договор до 30 минут</span><span class="fact-pill">Наличные · карта · р/с</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон основного цвета, заголовок светлым сверху, четыре факта шагами сверху вниз на светлых плашках. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">В залоге и с запретом</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Авто в залоге</span><span class="fact-pill">Авто в кредите</span><span class="fact-pill">Авто с запретом</span><span class="fact-pill">Договор купли-продажи</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> светлый фон, заголовок основным цветом, три ситуации тремя плашками акцентного цвета, строка про договор внизу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Битые и неисправные — «как есть»</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Битые</span><span class="fact-pill">Аварийные</span><span class="fact-pill">Неисправные</span><span class="fact-pill">Оценка бесплатно</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото машины после ДТП в верхней половине, нижняя половина — плашка основного цвета с фактами светлым текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Запчасти, такси, мото</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">На запчасти</span><span class="fact-pill">Снятые с учёта</span><span class="fact-pill">После такси</span><span class="fact-pill">Мототехника</span><span class="fact-pill">Выезд по НСО</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон акцентного цвета, четыре категории сеткой 2×2 на плашках основного цвета, строка «выезд по НСО» внизу.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">04 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — выкуп в день обращения, залог и запрет, битые, запчасти и мото <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Выкуп авто в день обращения</b>выезд оценщика, осмотр, договор, оплата сразу</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Выкуп в день обращения</b>четыре шага сделки</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Выкуп авто в залоге, в кредите и с запретом</b>направления сайта, вопросы на звонке</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>В залоге и с запретом</b>три ситуации</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Выкуп битых и неисправных авто</b>в любом состоянии, без подготовки</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Битые и неисправные — «как есть»</b>категории и бесплатная оценка</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>На запчасти, снятые с учёта, после такси, мототехника</b>выезд по НСО, цена по телефону</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Запчасти, такси, мото</b>четыре категории</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['a-summary','Итог'],['a-maps','Позиции на Картах'],['a-why','Причины']],
+ content:[['c-company','Компания'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
