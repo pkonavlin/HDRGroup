@@ -129,17 +129,13 @@
   .fact .v{font-size:15px; font-weight:600; color:var(--ink);}
 
   /* ---------- brandbook ---------- */
-  .swatch-row{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-bottom:32px;}
-  .swatch{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface);}
-  .swatch .chip{height:74px;}
-  .swatch .meta{padding:10px 12px;}
-  .swatch .role{font-family:"IBM Plex Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);}
-  .swatch .hex{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; margin-top:2px;}
-
-  .bb-notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;}
-  .bb-note h3{font-size:15px; color:var(--ocean); margin-bottom:8px;}
-  .bb-note ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
-  .bb-note li{margin-bottom:5px;}
+  .swatch-row{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-bottom:8px;}
+  .swatch{
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    height:104px; padding:12px 14px; display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .swatch .role{font-family:"IBM Plex Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.8;}
+  .swatch .hex{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:700; margin-top:2px;}
 
   /* ---------- cycle ---------- */
   .cycle{display:flex; flex-wrap:wrap; align-items:center; gap:0; font-family:"IBM Plex Mono",monospace; font-size:13.5px;}
@@ -211,7 +207,6 @@
     font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
     background:var(--roe); color:#fff; border-radius:999px; padding:4px 10px;
   }
-  .stage-date{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-soft);}
   .stage-body{padding:0 20px 20px; font-size:14px; color:var(--ink-soft);}
   .stage-body .two-col{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:6px;}
   .stage-body h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--teal); margin:0 0 8px; font-family:"IBM Plex Mono",monospace;}
@@ -231,7 +226,6 @@
     .card-head{flex-direction:column;}
   }
 
-  
 </style>
 </head>
 <body>
@@ -250,9 +244,9 @@
 <main>
 
   <section id="company" class="hero">
-    <div class="eyebrow">ТЗ на контент · Этап 2</div>
+    <div class="eyebrow">ТЗ на контент · Этап 3</div>
     <h1>Dorian — двери, гардеробные системы, системы перегородок</h1>
-    <p class="lede">Ростов-на-Дону. Собственное производство, коллаборация с итальянским архитектурным бюро Stradivari Design, сегмент «средний+» и «премиум». Материалы ниже — темы второго этапа, подготовленные по анкете компании, карточке на Яндекс Картах и каталогу dorian.ru.</p>
+    <p class="lede">Ростов-на-Дону. Собственное производство, коллаборация с итальянским архитектурным бюро Stradivari Design, сегмент «средний+» и «премиум». Материалы ниже — темы третьего этапа, подготовленные по анкете компании, карточке на Яндекс Картах и каталогу dorian.ru.</p>
 
     <div class="fact-grid">
       <div class="fact"><div class="k">Профиль</div><div class="v">Двери, гардеробные, перегородки</div></div>
@@ -274,73 +268,33 @@
     <p class="section-sub">После анализа анкеты компании определены рабочая палитра и визуальные принципы — сдержанный минимализм без ярких и пёстрых решений, тёплая нейтральная база.</p>
 
     <div class="swatch-row">
-      <div class="swatch">
-        <div class="chip" style="background:#FFFFFF; border-bottom:1px solid var(--line);"></div>
-        <div class="meta"><div class="role">Основной</div><div class="hex">#FFFFFF · белый</div></div>
+      <div class="swatch" style="background:#FFFFFF; border:1px solid var(--line); color:#1A1A1A;">
+        <div class="role">Основной</div><div class="hex">#FFFFFF · белый</div>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#F7F4EF;"></div>
-        <div class="meta"><div class="role">Фоновый</div><div class="hex">#F7F4EF · тёплый айвори</div></div>
+      <div class="swatch" style="background:#F7F4EF; color:#1A1A1A;">
+        <div class="role">Фоновый</div><div class="hex">#F7F4EF · тёплый айвори</div>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#DAD3C8;"></div>
-        <div class="meta"><div class="role">Второстепенный</div><div class="hex">#DAD3C8 · светло-серый тёплый</div></div>
+      <div class="swatch" style="background:#DAD3C8; color:#1A1A1A;">
+        <div class="role">Второстепенный</div><div class="hex">#DAD3C8 · светло-серый тёплый</div>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#948B7D;"></div>
-        <div class="meta"><div class="role">Акцентный</div><div class="hex">#948B7D · таупе (точечно)</div></div>
+      <div class="swatch" style="background:#948B7D; color:#1A1A1A;">
+        <div class="role">Акцентный</div><div class="hex">#948B7D · таупе (точечно)</div>
       </div>
-      <div class="swatch">
-        <div class="chip" style="background:#322E29;"></div>
-        <div class="meta"><div class="role">Текстовый</div><div class="hex">#322E29 · тёплый графит</div></div>
-      </div>
-    </div>
-
-    <div class="bb-notes">
-      <div class="bb-note">
-        <h3>Палитра и запреты</h3>
-        <ul>
-          <li>База — белый и тёплый светло-серый, без холодных сизых оттенков</li>
-          <li>Акцент используется точечно — линии, теги, мелкие детали, не заливки</li>
-          <li>Пёстрые сочетания и красные оттенки исключены полностью</li>
-        </ul>
-      </div>
-      <div class="bb-note">
-        <h3>Тон и обращение</h3>
-        <ul>
-          <li>Строго деловой стиль, без юмора и разговорных оборотов</li>
-          <li>Обращение к аудитории — на «вы»</li>
-          <li>Без превосходных степеней и оценочных эпитетов</li>
-        </ul>
-      </div>
-      <div class="bb-note">
-        <h3>Визуальный лексикон</h3>
-        <ul>
-          <li>Фактуры материалов крупным планом — эмаль, шпон, HPL, массив, алюминий и стекло</li>
-          <li>Интерьер шоурума и кромки/фурнитура — сдержанный, ровный свет</li>
-          <li>Графика — тонкие прямые линии, геометрия каркасов гардеробных как мотив</li>
-        </ul>
-      </div>
-      <div class="bb-note">
-        <h3>Композиция</h3>
-        <ul>
-          <li>Много воздуха, минимум декоративных элементов</li>
-          <li>Один смысловой акцент на кадр или слайд</li>
-          <li>Логотип — предоставлен в векторном формате, используется без искажений</li>
-        </ul>
+      <div class="swatch" style="background:#322E29; color:#F5F8F8;">
+        <div class="role">Текстовый</div><div class="hex">#322E29 · тёплый графит</div>
       </div>
     </div>
   </section>
 
   <section id="cycle">
     <div class="eyebrow">03 · Логика цикла</div>
-    <h2 class="section-title">Последовательность этапа 2</h2>
-    <p class="section-sub">Пройдено на этапе 1: позиционирование бренда → акция на эмаль → двери и перегородки из алюминия и стекла → акция −15% на комплекс. Этап 2 углубляет оставшиеся товарные группы, а также анонсирует текущие акции компании.</p>
+    <h2 class="section-title">Последовательность этапа 3</h2>
+    <p class="section-sub">Пройдено ранее: позиционирование бренда, акции, двери и перегородки из алюминия и стекла, паркет, коллекции и дизайн Stradivari, экономия пространства, акции до 30 ноября. Этап 3 закрывает оставшиеся товарные группы ассортимента — скрытые двери, классические и неоклассические двери, мебель собственного производства и стеновые панели.</p>
     <div class="cycle">
-      <span class="step">Паркет: технология и форматы</span><span class="arrow">→</span>
-      <span class="step">Коллекции и дизайн Stradivari</span><span class="arrow">→</span>
-      <span class="step">Экономия пространства</span><span class="arrow">→</span>
-      <span class="step now">Акции до 30 ноября</span>
+      <span class="step">Скрытые двери</span><span class="arrow">→</span>
+      <span class="step">Классические и неоклассические двери</span><span class="arrow">→</span>
+      <span class="step">Мебель собственного производства</span><span class="arrow">→</span>
+      <span class="step now">Стеновые панели</span>
     </div>
   </section>
 
@@ -351,29 +305,29 @@
 
     <div class="card">
       <div class="card-head">
-        <h3>1. Паркет Dorian: технология и форматы укладки</h3>
+        <h3>1. Скрытые двери Dorian</h3>
         <span class="tag">Продуктовая</span>
       </div>
       <ul class="thesis">
-        <li>В ассортименте Dorian — паркет собственной разработки</li>
-        <li>Фирменная технология покрытия — масло UF</li>
-        <li>Три формата укладки: «Палуба», «Венгерская ёлка», «Французская ёлка»</li>
-        <li>Паркет — часть общего ассортимента компании наравне с дверями, перегородками, гардеробными и мебелью собственного производства</li>
-        <li>Подбор формата и материала — по телефону или в шоуруме на просп. Михаила Нагибина, 30Л</li>
+        <li>В ассортименте Dorian — скрытые двери, отдельная товарная группа компании</li>
+        <li>После монтажа дверь становится на одном уровне со стеной, без видимых коробки и наличников</li>
+        <li>Собственное производство Dorian</li>
+        <li>Концепция и дизайн — в коллаборации с итальянским архитектурным бюро Stradivari Design</li>
+        <li>Подбор решения — в шоуруме Dorian</li>
       </ul>
       <div class="chips">
-        <span class="chip-kw">паркет Ростов-на-Дону</span>
-        <span class="chip-kw">паркет ёлочкой на заказ</span>
-        <span class="chip-kw">паркет с масляным покрытием</span>
-        <span class="chip-kw">венгерская ёлка паркет</span>
+        <span class="chip-kw">скрытые двери Ростов-на-Дону</span>
+        <span class="chip-kw">двери скрытого монтажа Ростов-на-Дону</span>
+        <span class="chip-kw">двери без наличников на заказ</span>
+        <span class="chip-kw">двери вровень со стеной</span>
       </div>
-      <div class="kv"><b>Meta description:</b> Паркет Dorian — фирменная технология покрытия маслом и три формата укладки. Собственное производство, Ростов-на-Дону.</div>
-      <div class="cta-line">CTA: уточните формат и материал по телефону +7 918 853-43-66</div>
+      <div class="kv"><b>Meta description:</b> Скрытые двери Dorian — монтаж вровень со стеной, без коробки и наличников. Собственное производство, Ростов-на-Дону.</div>
+      <div class="cta-line">CTA: уточняйте решение в шоуруме Dorian</div>
       <div class="cover-box">
         <div class="role">ТЗ на обложку</div>
         <ul>
-          <li>Текст: «Паркет Dorian» + подпись «3 формата укладки»</li>
-          <li>Визуал — фактура деревянного пола крупным планом (укладка ёлочкой)</li>
+          <li>Текст: «Скрытые двери Dorian»</li>
+          <li>Визуал — дверное полотно вровень со стеной крупным планом, без видимой коробки</li>
           <li>Брендбук Dorian, без ярких контрастов</li>
         </ul>
       </div>
@@ -381,29 +335,29 @@
 
     <div class="card">
       <div class="card-head">
-        <h3>2. Коллекции дверей Dorian: дизайн от Stradivari Design</h3>
-        <span class="tag">Экспертная</span>
+        <h3>2. Классические и неоклассические двери Dorian</h3>
+        <span class="tag">Продуктовая</span>
       </div>
       <ul class="thesis">
-        <li>Концепция и стиль коллекций межкомнатных дверей Dorian разработаны итальянским архитектурным бюро Stradivari Design</li>
-        <li>В линейке бренда — именные коллекции с индивидуальным дизайном полотна</li>
-        <li>Среди технологических решений — двойная покраска полотна в два цвета на одной двери</li>
-        <li>Коллекции сочетаются со стеновыми панелями и другими интерьерными решениями Dorian</li>
-        <li>Подбор коллекции под проект — в шоуруме на просп. Михаила Нагибина, 30Л</li>
+        <li>В ассортименте Dorian — классические и неоклассические межкомнатные двери, отдельная товарная группа компании</li>
+        <li>Собственное производство</li>
+        <li>Концепция и дизайн — в коллаборации с итальянским архитектурным бюро Stradivari Design</li>
+        <li>Решения подбираются под классический и неоклассический интерьер</li>
+        <li>Подбор модели — в шоуруме Dorian</li>
       </ul>
       <div class="chips">
-        <span class="chip-kw">дизайнерские двери Ростов-на-Дону</span>
-        <span class="chip-kw">авторские коллекции дверей премиум</span>
-        <span class="chip-kw">двери двойного цвета</span>
+        <span class="chip-kw">классические двери Ростов-на-Дону</span>
+        <span class="chip-kw">неоклассические двери на заказ</span>
         <span class="chip-kw">межкомнатные двери на заказ Ростов-на-Дону</span>
+        <span class="chip-kw">двери премиум класса Ростов-на-Дону</span>
       </div>
-      <div class="kv"><b>Meta description:</b> Коллекции межкомнатных дверей Dorian — авторский дизайн архитектурного бюро Stradivari Design. Собственное производство, Ростов-на-Дону.</div>
-      <div class="cta-line">CTA: подберите коллекцию в шоуруме, телефон +7 918 853-43-66</div>
+      <div class="kv"><b>Meta description:</b> Классические и неоклассические двери Dorian — собственное производство, дизайн Stradivari Design. Ростов-на-Дону.</div>
+      <div class="cta-line">CTA: подберите модель в шоуруме Dorian</div>
       <div class="cover-box">
         <div class="role">ТЗ на обложку</div>
         <ul>
-          <li>Текст: «Дизайн от Stradivari Design»</li>
-          <li>Визуал — дверное полотно с выразительной фактурой крупным планом</li>
+          <li>Текст: «Классические двери Dorian»</li>
+          <li>Визуал — дверное полотно классической формы крупным планом</li>
           <li>Брендбук Dorian, без ярких контрастов</li>
         </ul>
       </div>
@@ -413,29 +367,27 @@
   <section id="stories">
     <div class="eyebrow">05 · Сторис</div>
     <h2 class="section-title">Темы для сторис</h2>
-    <p class="section-sub">2 темы, формат — 1 слайд, без обложки. Только тезисы и факты, без развёрнутых сценариев.</p>
+    <p class="section-sub">2 темы, один слайд — один факт. Только тезисы и факты, без развёрнутых сценариев.</p>
 
     <div class="story-grid">
       <div class="story-card">
-        <h3>1. Системы экономии пространства Dorian</h3>
+        <h3>1. Мебель собственного производства Dorian</h3>
         <ul>
-          <li>Двери-пенал — экономят место при открывании</li>
-          <li>Система Magic — скрытый рельс</li>
-          <li>Часть ассортимента раздвижных систем Dorian</li>
-          <li>Собственное производство</li>
+          <li>Столы и стулья из массива собственного производства</li>
+          <li>Комоды и витрины в едином стиле с интерьером</li>
+          <li>Часть общего ассортимента Dorian наравне с дверями, перегородками и гардеробными</li>
         </ul>
-        <div class="design-note"><div class="role">Дизайн слайда</div>Светло-серый фон #DAD3C8, тонкая линейная схема раздвижной двери вместо фото, подпись системы графитом #322E29 внизу.</div>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Тёплый айвори #F7F4EF фоном, фактура массива крупным планом, подпись графитом #322E29 внизу.</div>
       </div>
 
       <div class="story-card">
-        <h3>2. Акции Dorian до 30 ноября: классика −20%, алюминий −10%</h3>
+        <h3>2. Стеновые панели Dorian</h3>
         <ul>
-          <li>Классические двери в эмали — скидка 20%, от 59 047 ₽</li>
-          <li>Алюминиевые конструкции — скидка 10%, от 35 700 ₽ за м²</li>
-          <li>Обе акции действуют до 30 ноября</li>
-          <li>Материалы для публикации предоставлены компанией — готовые макеты, использовать как есть</li>
+          <li>Отдельная товарная группа ассортимента Dorian</li>
+          <li>Собственное производство</li>
+          <li>Сочетаются с коллекциями дверей и другими интерьерными решениями Dorian</li>
         </ul>
-        <div class="design-note"><div class="role">Дизайн слайда</div>Готовые макеты от компании (2 файла: «Классика сторис», «Алюминиевые конструкции») — публикуются без изменений дизайна, доп. оформление не требуется.</div>
+        <div class="design-note"><div class="role">Дизайн слайда</div>Светло-серый фон #DAD3C8, фактура панели крупным планом, акцент таупе #948B7D на подписи.</div>
       </div>
     </div>
   </section>
@@ -447,8 +399,31 @@
 
     <details class="stage" open>
       <summary>
-        <div class="stage-title">Этап 2 <span class="badge">актуальный</span></div>
-        <div class="stage-date">10.2026</div>
+        <div class="stage-title">Этап 3 <span class="badge">актуальный</span></div>
+      </summary>
+      <div class="stage-body">
+        <div class="two-col">
+          <div>
+            <h4>Новости</h4>
+            <ul>
+              <li>Скрытые двери Dorian</li>
+              <li>Классические и неоклассические двери Dorian</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Сторис</h4>
+            <ul>
+              <li>Мебель собственного производства Dorian</li>
+              <li>Стеновые панели Dorian</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="stage">
+      <summary>
+        <div class="stage-title">Этап 2</div>
       </summary>
       <div class="stage-body">
         <div class="two-col">
@@ -473,7 +448,6 @@
     <details class="stage">
       <summary>
         <div class="stage-title">Этап 1</div>
-        <div class="stage-date">09.2026</div>
       </summary>
       <div class="stage-body">
         <div class="two-col">
