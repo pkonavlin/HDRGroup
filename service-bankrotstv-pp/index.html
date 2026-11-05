@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Сервис Банкротств»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company name + view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);min-width:0}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Сервис Банкротств Петрова и Попкова</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="sb-top">
+  <span class="eyebrow">Москва · банкротство физлиц и ИП · Цветной бульвар · замер 06.11.2026</span>
+  <h1>По каким запросам «Сервис Банкротств» не видно на Картах</h1>
+  <p>Карточка на Цветном бульваре, 11с6: рейтинг 5,0, 235 оценок. Позиции на Яндекс Картах по 9 целевым запросам и соседи в радиусе 2 км.</p>
+</header>
+
+<section id="sb-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Москве, карта у Цветного бульвара. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Место</th><th>Статус</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>банкротство физических лиц</td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>Юрист Бавин А. Н. (реклама), Профф Банкрот, Джастис, М. Кулешина, НЦБ</td></tr>
+      <tr><td>банкротство физических лиц <span class="sub">(по всей Москве)</span></td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>Банкирро, Банкирро, Заря, Джастис, Профф Банкрот</td></tr>
+      <tr><td>юрист по банкротству</td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>Де-Юрекс, Исократ, Адвокат Богославцева О. И., М. Кулешина, Центр правовой помощи и судебной защиты</td></tr>
+      <tr><td>списание долгов</td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>НИИ судебной экспертизы (реклама), Коллегия Финансист, План банкротства, НЦБ, Legelex</td></tr>
+      <tr><td>юрист по долгам</td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>Долгам.нет, Lawyer Plus, Долг Эксперт, МГКА Розенберг и партнёры, Финон</td></tr>
+      <tr><td>банкротство с ипотекой</td><td class="r">нет</td><td><span class="pill crit">нет в выдаче</span></td><td>Legelex, МКБК Финанс, Альфа-М, НЦБ, Энерготрансбанк</td></tr>
+      <tr><td>консультация по банкротству</td><td class="r me">2</td><td><span class="pill good">видно</span></td><td>Legelex, Сервис Банкротств, Альфа-М, Де-Юрекс, НЦБ</td></tr>
+      <tr><td>банкротство ИП</td><td class="r me">1</td><td><span class="pill good">видно</span></td><td>Сервис Банкротств, Банкротство Топ, А-Банкротство, План банкротства Меркулова, Основа</td></tr>
+      <tr><td>банкротство супругов</td><td class="r me">1</td><td><span class="pill good">видно</span></td><td>Сервис Банкротств, Афонин и партнёры, «Лемчик, Крупский и партнёры», Представительство арбитражных управляющих, Калачёв и партнёры</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи в радиусе 2 км</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Рубрика</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Сервис Банкротств Петрова и Попкова</b></td><td class="r num me">5,0</td><td class="r num me">235</td><td>Юридические услуги, финансовый консалтинг</td><td>Цветной бульвар, 11с6</td></tr>
+      <tr><td>Долг Эксперт</td><td class="r num">5,0</td><td class="r num">684</td><td>Юридические услуги</td><td>ул. Кузнецкий Мост, 21/5</td></tr>
+      <tr><td>Афонин и партнёры</td><td class="r num">5,0</td><td class="r num">262</td><td>Юридические услуги</td><td>Новослободская ул., 26с1</td></tr>
+      <tr><td>Калачёв и партнёры</td><td class="r num">5,0</td><td class="r num">214</td><td>Юридические услуги</td><td>Газетный пер., 17с3</td></tr>
+      <tr><td>Лемчик, Крупский и партнёры</td><td class="r num">4,7</td><td class="r num">149</td><td>Юридические услуги</td><td>ул. Малая Дмитровка, 20</td></tr>
+      <tr><td>Альфа-М</td><td class="r num">5,0</td><td class="r num">89</td><td>Юридические услуги</td><td>ул. Кузнецкий Мост, 21/5</td></tr>
+      <tr><td>МКБК Финанс</td><td class="r num">4,9</td><td class="r num">76</td><td>—</td><td>Чистопрудный бульвар, 5</td></tr>
+      <tr><td>Представительство арбитражных управляющих</td><td class="r num">5,0</td><td class="r num">59</td><td>—</td><td>Малая Сухаревская пл., 2с2</td></tr>
+      <tr><td>Legelex</td><td class="r num">—</td><td class="r num">0</td><td>Юридические услуги, банкротство физических лиц</td><td>Селивёрстов пер., 10с2</td></tr>
+      <tr><td>План банкротства Меркулова</td><td class="r num">—</td><td class="r num">0</td><td>Банкротство физических лиц</td><td>Самотёчная ул., 5</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="sb-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>В рубриках нет «Банкротства физических лиц»</h3></div>
+      <p>Рубрики карточки: <b>«Юридические услуги»</b> и <b>«Финансовый консалтинг»</b>. У всех карточек первой пятёрки по «банкротство физических лиц», «списание долгов» и «банкротство с ипотекой» первой стоит рубрика «Банкротство физических лиц». Карточка видна только там, где запрос совпадает с названием компании или прайсом: «банкротство ИП», «банкротство супругов», «консультация по банкротству».</p>
+      <p class="next">Добавить рубрику «Банкротство физических лиц» первой.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Прайс устарел и расходится с ценами компании</h3></div>
+      <p>Блок «Товары и услуги» помечен Яндексом «Давно не обновлялось», в нём две позиции: консультация — <b>5 000 ₽ за академический час</b> и <b>1 750 ₽</b>. Действующий прайс компании: юридическая консультация — 5 700 ₽ в час, первичная консультация — бесплатно, банкротство физических лиц «под ключ» — от 15 000 ₽ в месяц. Позиций про ипотеку, ИП, сбор документов и участие в заседаниях на карточке нет.</p>
+      <p class="next">Загрузить 9 позиций прайса компании с ценами в формате «от N ₽».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>На карточке одна новость</h3></div>
+      <p>Во вкладке «Новости» — 1 публикация. Тем «ипотека», «долги», «списание долгов» на карточке нет, поэтому Яндексу не с чем связать карточку по этим запросам.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Меньше оценок, чем у соседей по долговым запросам</h3></div>
+      <p>По «юрист по долгам» в пятёрке карточки с 315–1 412 оценками, у «Сервиса Банкротств» — 235.</p>
+    </div>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" data-view="content" hidden><div class="wrap">
+<section class="hero" id="sb-company">
+  <span class="eyebrow">Юридические услуги · Москва · Цветной бульвар</span>
+  <h1>«Сервис Банкротств Петрова и Попкова» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Сфера</div><div class="v">Юриспруденция, консалтинг <small>юридическое сопровождение</small></div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Банкротство физлиц и ИП «под ключ» <small>консультации, документы, суд</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">г. Москва, Цветной бульвар, дом 11, оф. 208</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">ПН–ПТ с 10 до 20</div></div>
+    <div class="fact"><div class="k">Опыт</div><div class="v">С 2015 года <small>семейная компания, основали два брата</small></div></div>
+    <div class="fact"><div class="k">Первичная консультация</div><div class="v">Бесплатно <small>проводит сам руководитель</small></div></div>
+    <div class="fact"><div class="k">Оплата</div><div class="v">Рассрочка на 6, 8, 10 месяцев <small>без штрафных санкций и процентов</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">servicebankrot.ru</div></div>
+  </div>
+</section>
+
+<section id="sb-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Сервиса Банкротств»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: почти чёрный кнопок и текста сайта и белый фон.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#1E1E1E;color:#FFFFFF;border-color:#3a3a3a"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#1E1E1E</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#1E1E1E;border-color:#FFFFFF"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="sb-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с главной услуги компании и бесплатной консультации у руководителя, дальше раскрывает отдельные услуги и работу с кредиторами. Каждая тема ведёт под запрос, по которому карточки сейчас нет в первой пятёрке или она не первая.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Банкротство физических лиц «под ключ»: этапы, стоимость, рассрочка.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Бесплатная первичная консультация, которую проводит руководитель.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Отдельные услуги: сбор документов, подача заявления, участие в заседаниях.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Работа с кредиторами: уведомляем банки и микрозаймы, посещаем Банк, МФО, БКИ, ФССП.</p></div>
+  </div>
+</section>
+
+<section id="sb-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», неформальный тон допустим — так указано в брифе. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Без обещаний результата и гарантий списания, без слов «дорого», «не сможем», жаргона и уменьшительных суффиксов. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других компаний. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Банкротство физических лиц под ключ в Москве: этапы, стоимость и рассрочка</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы ведём банкротство физических лиц «под ключ» и работаем до списания долга, а не до банкротства.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Процесс банкротства: бесплатная консультация, заключение договора, сбор документов, подача документов в суд, назначение фин. управляющего, признание банкротом.<span class="src">сайт</span></li>
+      <li>Банкротство физических лиц «под ключ» — от 15 000 ₽ в месяц.<span class="src">бриф</span></li>
+      <li>Есть рассрочка на 6, 8, 10 месяцев. Гибкость при оплате, в том числе когда возникает какие-то сложности. Нет штрафных санкций, процентов.<span class="src">бриф</span></li>
+      <li>Можно оплатить картой или удаленно.<span class="src">бриф</span></li>
+      <li>МЫ ходим на все судебные заседания. Не требуется личного участия в судах, ходят юристы по доверенности.<span class="src">бриф</span></li>
+      <li>Можно провести весь процесс полностью удалённо. Работаем по всей стране, вне зависимости от часовых поясов.<span class="src">бриф</span></li>
+      <li>Оформляется официальный договор. Персональная ответственность у руководителя компании по договору.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Банкротство физических лиц под ключ в Москве</span></div>
+      <div class="meta-row"><span><b>Title · </b>Банкротство физлиц под ключ, рассрочка 6–10 месяцев | Сервис Банкротств</span></div>
+      <div class="meta-row"><span><b>Description · </b>Банкротство физических лиц под ключ от 15 000 ₽ в месяц: документы, суд, финансовый управляющий. Рассрочка 6, 8, 10 месяцев, юристы ходят в суд по доверенности.</span></div>
+      <div class="chips"><span class="chip-kw">банкротство физических лиц</span><span class="chip-kw">банкротство физических лиц москва</span><span class="chip-kw">банкротство физических лиц под ключ</span><span class="chip-kw">юрист по банкротству</span><span class="chip-kw">юрист по банкротству москва</span><span class="chip-kw">банкротство в рассрочку</span><span class="chip-kw">этапы банкротства физического лица</span><span class="chip-kw">банкротство удаленно</span><span class="chip-kw">списание долгов</span><span class="chip-kw">банкротство цветной бульвар</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> начните с бесплатной консультации у руководителя.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Банкротство под ключ»</div>
+      <p>Композиция: шесть этапов процедуры цифрами в одну линию на белом фоне, от «консультация» до «признание банкротом». Тезис крупно сверху, строка «рассрочка 6 · 8 · 10 мес.» снизу. Текст и логотип — не больше 20% площади.</p>
+      <p>Цвета: фон — белый #FFFFFF, тезис и этапы — почти чёрный #1E1E1E, строка — белым на плашке #1E1E1E.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Бесплатная консультация по банкротству в Москве: проводит руководитель компании</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Первичная консультация у нас бесплатная, и проводит её сам руководитель — всегда.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Первичная консультация бесплатно. Консультацию проводит сам руководитель ВСЕГДА.<span class="src">бриф</span></li>
+      <li>На бесплатной консультации даем пошаговые инструкции!<span class="src">бриф</span></li>
+      <li>После этой консультации у вас будет реальное понимание по дальнейшим шагам в рамках процедуры банкротства. Обсудим риски и стратегию.<span class="src">сайт</span></li>
+      <li>Выйду на связь в рабочее время в течение 15 минут — договоримся о дате и времени консультации. Можно онлайн.<span class="src">сайт</span></li>
+      <li>Нет посредников. На связи сам руководитель.<span class="src">бриф</span></li>
+      <li>У юристов Большой опыт, с 2015 года.<span class="src">бриф</span></li>
+      <li>Офис в центре Москвы: Цветной бульвар, дом 11, оф. 208. ПН–ПТ с 10 до 20.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Бесплатная консультация по банкротству в Москве</span></div>
+      <div class="meta-row"><span><b>Title · </b>Консультация по банкротству бесплатно у руководителя | Сервис Банкротств</span></div>
+      <div class="meta-row"><span><b>Description · </b>Первичную консультацию по банкротству физлиц и ИП проводит руководитель компании: пошаговая инструкция, риски и стратегия. Можно онлайн, офис на Цветном бульваре.</span></div>
+      <div class="chips"><span class="chip-kw">консультация по банкротству</span><span class="chip-kw">бесплатная консультация по банкротству</span><span class="chip-kw">консультация юриста по банкротству</span><span class="chip-kw">юрист по банкротству москва</span><span class="chip-kw">консультация по банкротству онлайн</span><span class="chip-kw">юрист по долгам</span><span class="chip-kw">юрист по долгам консультация</span><span class="chip-kw">банкротство физических лиц консультация</span><span class="chip-kw">юрист цветной бульвар</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию — очно или онлайн.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Консультация бесплатно»</div>
+      <p>Композиция: рабочий стол в офисе компании с документами и ноутбуком, без людей в кадре. Тезис на тёмной плашке в нижней трети, строка «проводит руководитель · можно онлайн».</p>
+      <p>Цвета: плашка — почти чёрный #1E1E1E, тезис и строка — белый #FFFFFF.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Отдельные услуги по банкротству: сбор документов, подача заявления, участие в судебных заседаниях</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Если вам не нужно сопровождение «под ключ», мы берём на себя отдельные этапы процедуры банкротства физического лица или ИП.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сбор документов для процедуры банкротства физического лица — от 35 000 ₽ за услугу. Сбор документов для процедуры банкротства ИП — от 35 000 ₽ за услугу.<span class="src">бриф</span></li>
+      <li>Подготовка документов и подача заявления на банкротство физического лица — от 50 000 ₽ за услугу. То же для ИП — от 50 000 ₽ за услугу.<span class="src">бриф</span></li>
+      <li>Участие в отдельных судебных заседаниях по банкротству физического лица — от 30 000 ₽ за услугу. То же для ИП — от 30 000 ₽ за услугу.<span class="src">бриф</span></li>
+      <li>Юридическая консультация — 5 700 ₽/час.<span class="src">бриф</span></li>
+      <li>Услуги: полное сопровождение дела в суде или отдельные слушания; участие в судебных заседаниях в качестве представителя.<span class="src">сайт</span></li>
+      <li>Работают реально юристы, в том числе и с красными дипломами.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Подготовка документов и подача заявления на банкротство в Москве</span></div>
+      <div class="meta-row"><span><b>Title · </b>Документы на банкротство, подача заявления, суд — отдельно | Сервис Банкротств</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сбор документов на банкротство — от 35 000 ₽, подача заявления — от 50 000 ₽, участие в заседании — от 30 000 ₽. Для физлиц и ИП, Москва, Цветной бульвар.</span></div>
+      <div class="chips"><span class="chip-kw">подача заявления на банкротство</span><span class="chip-kw">документы для банкротства физического лица</span><span class="chip-kw">заявление на банкротство физического лица</span><span class="chip-kw">юрист по банкротству</span><span class="chip-kw">представитель в суде по банкротству</span><span class="chip-kw">банкротство физических лиц москва</span><span class="chip-kw">банкротство ип</span><span class="chip-kw">сопровождение банкротства</span><span class="chip-kw">банкротство цена</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку — подберём нужную услугу на консультации.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Документы, заявление, суд»</div>
+      <p>Композиция: папка с документами и бланк заявления на белом столе, без людей. Три услуги столбиком с ценами «от N ₽» на белой плашке справа, тезис сверху.</p>
+      <p>Цвета: фон плашки — белый #FFFFFF, тезис и цены — почти чёрный #1E1E1E.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Юрист по долгам в Москве: сами уведомляем кредиторов и посещаем банк, МФО, БКИ и ФССП</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы сами уведомляем кредиторов — банки и микрозаймы, — чтобы они меньше звонили вам.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Уведомляем сами кредиторов (банки и микрозаймы), чтобы они меньше звонили вам.<span class="src">бриф</span></li>
+      <li>Услуга: посещение Банка / МФО / БКИ / ФССП.<span class="src">сайт</span></li>
+      <li>Работаем ДО списания долга, а не до банкротства.<span class="src">бриф</span></li>
+      <li>Юристы всегда на связи. Всегда есть понимание кто занимается делом.<span class="src">бриф</span></li>
+      <li>Есть закрытый чат для клиентов.<span class="src">бриф</span></li>
+      <li>Не бросаем клиента даже если есть какие-то ответвления, помогаем с разводами, делением детей и имущества.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Юрист по долгам в Москве — работа с банками, МФО, БКИ и ФССП</span></div>
+      <div class="meta-row"><span><b>Title · </b>Юрист по долгам: уведомим кредиторов, посетим банк и МФО | Сервис Банкротств</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сами уведомляем банки и микрозаймы о процедуре, посещаем Банк, МФО, БКИ и ФССП. Работаем до списания долга, юристы на связи. Москва, Цветной бульвар.</span></div>
+      <div class="chips"><span class="chip-kw">юрист по долгам</span><span class="chip-kw">юрист по долгам москва</span><span class="chip-kw">юрист по кредитам</span><span class="chip-kw">помощь с долгами</span><span class="chip-kw">списание долгов</span><span class="chip-kw">списание долгов москва</span><span class="chip-kw">долги по микрозаймам</span><span class="chip-kw">звонят кредиторы что делать</span><span class="chip-kw">юрист по мфо</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на бесплатную консультацию и получите пошаговый план.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кредиторов уведомим сами»</div>
+      <p>Композиция: стопка писем-уведомлений и телефон экраном вниз на офисном столе, без людей. Тезис на тёмной плашке в нижней трети, строка «Банк · МФО · БКИ · ФССП».</p>
+      <p>Цвета: плашка — почти чёрный #1E1E1E, тезис и строка — белый #FFFFFF.</p>
+    </div>
+  </div>
+</section>
+
+<section id="sb-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Под ключ — от 15 000 ₽ в месяц</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Рассрочка 6 · 8 · 10 мес.</span><span class="fact-pill">Без штрафов и процентов</span><span class="fact-pill">Суд — по доверенности</span><span class="fact-pill">Полностью удалённо</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, цена крупно почти чёрным #1E1E1E, четыре факта сеткой 2×2 в тонких рамках #1E1E1E. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Консультация бесплатно</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Проводит руководитель</span><span class="fact-pill">Пошаговая инструкция</span><span class="fact-pill">Можно онлайн</span><span class="fact-pill">Цветной бульвар, 11</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #1E1E1E, заголовок крупно белым #FFFFFF, факты на белых плашках #FFFFFF тёмным текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Отдельные услуги</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Сбор документов — от 35 000 ₽</span><span class="fact-pill">Подача заявления — от 50 000 ₽</span><span class="fact-pill">Заседание — от 30 000 ₽</span><span class="fact-pill">Физлица и ИП</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, три услуги строками с ценой справа почти чёрным #1E1E1E, разделители тонкой линией #1E1E1E.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Кредиторов уведомляем сами</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Банки и микрозаймы</span><span class="fact-pill">Банк · МФО · БКИ · ФССП</span><span class="fact-pill">Юристы всегда на связи</span><span class="fact-pill">Работаем до списания долга</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #1E1E1E, заголовок белым #FFFFFF, факты белыми строками с тонким разделителем.</div></div>
+  </div>
+</section>
+
+<section id="sb-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — услуги компании и работа с кредиторами <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Банкротство физических лиц под ключ</b>этапы, цена, рассрочка · «банкротство физических лиц», «юрист по банкротству»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Под ключ — от 15 000 ₽ в месяц</b>оплата и формат работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Бесплатная консультация у руководителя</b>пошаговая инструкция, онлайн · «консультация по банкротству»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Консультация бесплатно</b>кто проводит и как записаться</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Отдельные услуги: документы, заявление, суд</b>цены из прайса компании · «юрист по банкротству»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Отдельные услуги</b>три услуги с ценами</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Работа с кредиторами</b>уведомления, Банк, МФО, БКИ, ФССП · «юрист по долгам», «списание долгов»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Кредиторов уведомляем сами</b>как компания ведёт дело до списания долга</span></div>
+    </div>
+  </details>
+</section>
+
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['top','Итог'],['maps','Позиции и соседи'],['why','Причины']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="sb-${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
