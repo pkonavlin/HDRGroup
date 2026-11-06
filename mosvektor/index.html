@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «МосВектор»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+/* content view */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;max-width:560px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+/* analytics view */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.no{color:var(--crit)}
+.va td.nw{white-space:nowrap}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .srcs{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">МосВектор</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Москва · аренда спецтехники · замер 06.11.2026</span>
+  <h1>Где «МосВектор» не видно на Яндекс Картах</h1>
+  <p>Карточка «МосВектор», Благовещенский переулок, 3, строение 1. Позиции по 10 целевым запросам в поиске по Москве и карточки, которые стоят в выдаче выше.</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>9 из 10 целевых запросов — карточки нет в первой пятёрке</b>Автовышки, автокраны, манипуляторы, экскаваторы-погрузчики, вездеходы и «аренда спецтехники» — во всех случаях первые места занимают другие компании.</p></div>
+    <div class="v"><span class="pill good">видно</span><p><b>По названию «мосвектор» карточка открывается сразу</b>Находят только те, кто уже знает компанию.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>На карточке нет ни одной публикации</b>Вкладки с новостями нет, прайс помечен Яндексом «Давно не обновлялось».</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,9</div><div class="s">50 оценок · 39 отзывов</div></div>
+    <div class="kpi"><div class="k">Видно по запросам</div><div class="n">1 из 10</div><div class="s">только брендовый</div></div>
+    <div class="kpi"><div class="k">Публикаций на карточке</div><div class="n">0</div><div class="s">новостей и сторис нет</div></div>
+    <div class="kpi"><div class="k">Фото на карточке</div><div class="n">98</div><div class="s">рубрика «Аренда спецтехники»</div></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Москве без геолокации. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">МосВектор</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>аренда автовышки</td><td class="r no">нет</td><td>Skylift, Avtovyshka777, SpecTeh Biz, Sk Mit, MosTransArenda</td></tr>
+      <tr><td>автовышка</td><td class="r no">нет</td><td>Avtovyshka777, Автовышки, Skylift, SpecTeh Biz, Автовышка</td></tr>
+      <tr><td>автовышка вездеход</td><td class="r no">нет</td><td>Skylift, SpecTeh Biz</td></tr>
+      <tr><td>аренда автокрана</td><td class="r no">нет</td><td>Sk Mit, ArendaKranov.ru, SpecTeh Biz, Kran-Grupp, Mosavtokran</td></tr>
+      <tr><td>автокран 25 тонн</td><td class="r no">нет</td><td>Mosavtokran, ArendaKranov.ru, Kran-Grupp, Manipulator-avtokran, Specteharenda</td></tr>
+      <tr><td>аренда манипулятора</td><td class="r no">нет</td><td>Specstroy Manipulyator, Manigroup, Moscow Special Equipment, Manipulyator 24, Manipulators for rent</td></tr>
+      <tr><td>аренда экскаватора погрузчика</td><td class="r no">нет</td><td>Moscow Special Equipment, MosTransArenda, Sk Mit, AvtoSpecGrupp, Спецтехмашины</td></tr>
+      <tr><td>экскаватор с гидромолотом</td><td class="r no">нет</td><td>SpecTexAlliance, TransLeader, Манипулятор, MBS-Stroy, Старатели плюс</td></tr>
+      <tr><td>аренда спецтехники</td><td class="r no">нет</td><td>Specteharenda, MosTransArenda, Sk Mit, Moscow Special Equipment, Ragnar Machinery</td></tr>
+      <tr><td>мосвектор</td><td class="r me">1</td><td>МосВектор</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Конкуренты в гео-выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>В выдаче по запросам</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>МосВектор</b></td><td class="r num me">4,9</td><td class="r num me">50</td><td class="me">мосвектор</td><td>Благовещенский пер., 3с1</td></tr>
+      <tr><td>MosTransArenda</td><td class="r num">5,0</td><td class="r num">297</td><td>автовышки, экскаватор-погрузчик, спецтехника</td><td>пр-т Андропова, 22</td></tr>
+      <tr><td>Sk Mit</td><td class="r num">5,0</td><td class="r num">67</td><td>автовышки, автокран, экскаватор-погрузчик, спецтехника</td><td>Озерковский пер., 12</td></tr>
+      <tr><td>SpecTeh Biz</td><td class="r num">4,8</td><td class="r num">34</td><td>автовышки, вездеход, автокран</td><td>Огородный пр-д, 9Ас1</td></tr>
+      <tr><td>Skylift</td><td class="r num">5,0</td><td class="r num">50</td><td>автовышки, вездеход</td><td>Стахановская ул., 24</td></tr>
+      <tr><td>Moscow Special Equipment</td><td class="r num">5,0</td><td class="r num">96</td><td>манипулятор, экскаватор-погрузчик, спецтехника</td><td>Нижегородская ул., 29-33с4</td></tr>
+      <tr><td>Kran-Grupp</td><td class="r num">5,0</td><td class="r num">149</td><td>автокран, автокран 25 тонн</td><td>Заречная ул., 9</td></tr>
+      <tr><td>ArendaKranov.ru</td><td class="r num">5,0</td><td class="r num">78</td><td>автокран, автокран 25 тонн</td><td>ул. Генерала Дорохова, 18сБ</td></tr>
+      <tr><td>Mosavtokran</td><td class="r num">5,0</td><td class="r num">49</td><td>автокран, автокран 25 тонн</td><td>Тимирязевская ул., 42</td></tr>
+      <tr><td>Specteharenda</td><td class="r num">5,0</td><td class="r num">88</td><td>спецтехника, автокран 25 тонн</td><td>пр-т Мира, 102кБ</td></tr>
+      <tr><td>Ragnar Machinery</td><td class="r num">5,0</td><td class="r num">415</td><td>спецтехника</td><td>ул. Ленинская Слобода, 19</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Виды техники нигде не названы в публикациях</h3></div>
+      <p>На карточке нет ни одной новости и ни одной сторис. Автовышки, манипуляторы и экскаваторы-погрузчики упоминаются только в рубрике «Виды техники». По запросам «аренда автовышки», «аренда манипулятора», «экскаватор с гидромолотом» карточки нет в пятёрке.</p>
+      <p class="next">Каждая новость этапа — под один вид техники и один запрос из таблицы позиций.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Прайс устарел и начинается с кранов</h3></div>
+      <p>Блок «Товары и услуги» помечен Яндексом <b>«Давно не обновлялось»</b>. Первые шесть позиций — автокраны с ценой за час. У Mosavtokran и SpecTeh Biz в выдаче рядом с карточкой показана позиция прайса, совпадающая с запросом: «Автокран 25 тонн», «Автовышка 28 метров (вездеход)».</p>
+      <p class="next">Обновить прайс по сайту: автовышки по высотам, манипуляторы, автокраны, экскаваторы-погрузчики JCB 3CX — с названиями так, как их ищут.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Меньше оценок, чем у соседей по выдаче</h3></div>
+      <p>У «МосВектор» 50 оценок. У MosTransArenda — 297, у Kran-Grupp — 149, у Moscow Special Equipment — 96, у Ragnar Machinery — 415, при рейтинге 5,0 у всех четырёх.</p>
+    </div>
+  </div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Москве 06.11.2026 без геолокации, 10 целевых запросов по направлениям из брифа; рейтинги и оценки — из выдачи.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="srcs">
+    <a href="https://yandex.ru/maps/org/mosvektor/119111366036/" target="_blank" rel="noopener">«МосВектор», Благовещенский пер., 3с1 — Яндекс Карты</a>
+    <a href="https://mosvektor.ru/" target="_blank" rel="noopener">mosvektor.ru</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Аренда спецтехники · Москва и Московская область</span>
+  <h1>«МосВектор» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «МосВектор» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ООО «Мосвектор»</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Аренда спецтехники <small>из собственного автопарка</small></div></div>
+    <div class="fact"><div class="k">Техника</div><div class="v">Автовышки 16–60 м <small>автокраны 25–80 т, КМУ до 15 т, экскаваторы-погрузчики</small></div></div>
+    <div class="fact"><div class="k">Преимущество</div><div class="v">Собственный парк техники</div></div>
+    <div class="fact"><div class="k">Офис</div><div class="v">Благовещенский пер., 3, стр. 1 <small>метро «Маяковская»</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">08:00–20:00</div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">mosvektor.ru</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «МосВектор»</h2>
+    <p>После анализа ресурсов компании определён основной цвет для обложек и слайдов — красный, заданный в коде сайта mosvektor.ru.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#FF5252;color:#1A0A0A;border-color:#FF5252"><div class="role">Основной</div><div class="name">Красный</div><div class="hex">#FF5252</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Каждая тема — один вид техники из брифа и один запрос, по которому карточки сейчас нет в выдаче. Темы раскрывают, как правильно заказать технику, — одно из направлений, которые предложила компания.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Автовышки от 16 до 60 м: высота подъёма и грузоподъёмность люльки.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Автокраны от 25 до 80 т: грузоподъёмность и длина стрелы.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Краны-манипуляторы до 15 т: что значат цифры 3/5 и 8/15.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Экскаватор-погрузчик JCB 3CX с ковшом, вилами и гидромолотом.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «МосВектор» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», строго деловой стиль — так указано в брифе. Без жаргонизмов. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Цены — точные, без учёта НДС, как на сайте. В тексте нет телефона и e-mail, превосходных степеней, сравнений с другими компаниями и политической повестки. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Аренда автовышки в Москве: как выбрать высоту подъёма и грузоподъёмность люльки</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы сдаём в аренду автовышки от 16 до 60 метров из собственного автопарка. Чтобы машина подошла к задаче с первой подачи, при заказе важно назвать нужную высоту и вес груза в люльке.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сдаем в аренду спецтехнику из собственного автопарка. Преимущественно автовышки от 16 до 60 м.<span class="src">бриф</span></li>
+      <li>Наша компания предлагает аренду телескопических и коленчатых автовышек.<span class="src">сайт</span></li>
+      <li>Высота подъёма стрелы и грузоподъёмность люльки: 0–16 м — 200 кг; 23–25 м — 350 кг; 33–36 м — 450 кг; 41–45 м — 450 кг.<span class="src">сайт</span></li>
+      <li>Стоимость смены: 0–16 м — 8800 руб; 20–22 м — 10400; 29–32 м — 13600; 46–50 м — 26400. Цены указаны без учета НДС.<span class="src">сайт</span></li>
+      <li>Въезд в Садовое кольцо, ТТК, центр + час к смене.<span class="src">сайт</span></li>
+      <li>Дополнительное обслуживание опытными операторами-машинистами, прошедшими аттестацию.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аренда автовышки в Москве от 16 до 60 метров — «МосВектор»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Аренда автовышки в Москве: высота и люлька, цены смены | МосВектор</span></div>
+      <div class="meta-row"><span><b>Description · </b>Автовышки от 16 до 60 м из собственного автопарка «МосВектор». Грузоподъёмность люльки от 200 до 450 кг, смена от 8800 руб без НДС, операторы-машинисты с аттестацией.</span></div>
+      <div class="chips"><span class="chip-kw">аренда автовышки</span><span class="chip-kw">аренда автовышки в москве</span><span class="chip-kw">автовышка</span><span class="chip-kw">автовышка москва</span><span class="chip-kw">заказать автовышку</span><span class="chip-kw">услуги автовышки</span><span class="chip-kw">автовышка 22 метра</span><span class="chip-kw">автовышка 45 метров</span><span class="chip-kw">автовышка с оператором</span><span class="chip-kw">аренда автовышки цена</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку и укажите высоту работ — подберём автовышку.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Автовышки 16–60 м»</div>
+      <p>Композиция: автовышка «МосВектор» с поднятой люлькой у фасада здания, вид снизу; тезис на плашке в нижней трети, строка «люлька 200–450 кг». Текст и логотип не больше 20% площади.</p>
+      <p>Цвета: плашка — красный #FF5252, тезис — белый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Аренда автокрана в Москве: краны от 25 до 80 тонн и длина стрелы под задачу</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В нашем собственном парке — автокраны от 25 до 80 тонн. Для заказа крана важны две цифры: вес груза и длина стрелы, на которую его нужно подать.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Автокраны от 25 до 80 тн.<span class="src">бриф</span></li>
+      <li>Аренда автомобильного крана 25 тонн: длина стрелы 28 м — смена от 15000; 31 м — от 16000; 33 м — от 18333.<span class="src">сайт</span></li>
+      <li>Аренда автомобильного крана 32 тонны: длина стрелы 31 м, смена от 20833.<span class="src">сайт</span></li>
+      <li>Аренда автомобильного крана Liebherr 40 тонн: длина стрелы 34 м, смена от 32000. 50 тонн: 34 м, от 38000. 60 тонн: 60 м, от 45000.<span class="src">сайт</span></li>
+      <li>Аренда крана вездехода Zoomlion ZTC800V 80 тонн: длина стрелы 74 м, смена от 70000.<span class="src">сайт</span></li>
+      <li>Сдаем в аренду спецтехнику из собственного автопарка.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аренда автокрана в Москве от 25 до 80 тонн — «МосВектор»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Аренда автокрана 25–80 т в Москве: стрела до 74 м | МосВектор</span></div>
+      <div class="meta-row"><span><b>Description · </b>Автокраны 25, 32, 40, 50, 60 и 80 тонн из собственного парка «МосВектор». Длина стрелы от 28 до 74 м, смена автокрана 25 тонн — от 15000 руб.</span></div>
+      <div class="chips"><span class="chip-kw">аренда автокрана</span><span class="chip-kw">аренда автокрана в москве</span><span class="chip-kw">автокран 25 тонн</span><span class="chip-kw">аренда автокрана 25 тонн</span><span class="chip-kw">автокран 50 тонн</span><span class="chip-kw">автокран 80 тонн</span><span class="chip-kw">кран вездеход</span><span class="chip-kw">заказать автокран</span><span class="chip-kw">автокран москва цена</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> сообщите вес груза и вылет стрелы — подберём автокран.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Автокраны 25–80 т»</div>
+      <p>Композиция: автокран с выдвинутой стрелой на строительной площадке; тезис на плашке в верхней трети, строка «стрела до 74 м».</p>
+      <p>Цвета: плашка — красный #FF5252, тезис — белый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Аренда манипулятора в Москве: что означают 3/5, 7/10 и 8/15 тонн</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У каждого нашего манипулятора две цифры грузоподъёмности: первая — для стрелы, вторая — для автомобиля. По ним выбирают машину под груз.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>КМУ до 15 тн.<span class="src">бриф</span></li>
+      <li>Грузоподъемность стрелы/базы: 3/5 т — Unic V370, длина стрелы 8 м, 13000 руб; 5/5 т — Unic V500, 12 м, 14500 руб.<span class="src">сайт</span></li>
+      <li>7/10 т — KANGLIM 1256, 18 м, 15000 руб; 7/12 т — SOOSAN 736, 18 м, 16000 руб.<span class="src">сайт</span></li>
+      <li>8/15 т — SOOSAN SCS 746L, 21 м, 18500 руб; 8/15 т — HiaB 190T, 22 м вездеход, 21000 руб.<span class="src">сайт</span></li>
+      <li>7/10 т — КАМАЗ 43118 вездеход, 21 м, 23000 руб.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аренда манипулятора в Москве до 15 тонн — «МосВектор»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Аренда манипулятора 3/5–8/15 т в Москве, стрела до 22 м | МосВектор</span></div>
+      <div class="meta-row"><span><b>Description · </b>Краны-манипуляторы Unic, KANGLIM, SOOSAN, HiaB и КАМАЗ 43118 вездеход. Грузоподъёмность стрелы до 8 т, автомобиля до 15 т, смена от 13000 руб.</span></div>
+      <div class="chips"><span class="chip-kw">аренда манипулятора</span><span class="chip-kw">аренда манипулятора в москве</span><span class="chip-kw">манипулятор</span><span class="chip-kw">кран манипулятор</span><span class="chip-kw">манипулятор 5 тонн</span><span class="chip-kw">манипулятор 10 тонн</span><span class="chip-kw">манипулятор 15 тонн</span><span class="chip-kw">манипулятор вездеход</span><span class="chip-kw">заказать манипулятор</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> назовите вес и габариты груза — подберём манипулятор.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Манипуляторы до 15 т»</div>
+      <p>Композиция: кран-манипулятор с разложенной стрелой у груза на поддонах; тезис на плашке в нижней трети, строка «3/5 · 7/10 · 8/15 т».</p>
+      <p>Цвета: плашка — красный #FF5252, тезис — белый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Аренда экскаватора-погрузчика JCB 3CX в Москве: с ковшом, вилами и гидромолотом</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Экскаваторы-погрузчики JCB 3CX в нашем парке работают с ковшом, с вилами и с гидромолотом. Комплектацию выбирают под вид работ на объекте.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Эскаваторы-погрузчики с ковшом и с молотом.<span class="src">бриф</span></li>
+      <li>Аренда экскаватор-погрузчик JCB 3 CX: грузоподъемность 1500 кг, объём фронтального ковша 1.1 м3, объём заднего ковша 0.25 м3.<span class="src">сайт</span></li>
+      <li>Максимальная глубина копания 5.88 м, высота выгрузки экскаватора 2.64 м.<span class="src">сайт</span></li>
+      <li>Стоимость смены: JCB 3 CX — от 17000; с вилами — от 19000 руб; с гидромолотом — от 19000 руб.<span class="src">сайт</span></li>
+      <li>Сдаем в аренду спецтехнику из собственного автопарка.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аренда экскаватора-погрузчика JCB 3CX в Москве — «МосВектор»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Экскаватор-погрузчик JCB 3CX с гидромолотом в аренду | МосВектор</span></div>
+      <div class="meta-row"><span><b>Description · </b>JCB 3CX с ковшом, вилами или гидромолотом: глубина копания 5,88 м, фронтальный ковш 1,1 м³. Смена от 17000 руб, собственный парк «МосВектор».</span></div>
+      <div class="chips"><span class="chip-kw">аренда экскаватора погрузчика</span><span class="chip-kw">аренда экскаватора погрузчика в москве</span><span class="chip-kw">экскаватор с гидромолотом</span><span class="chip-kw">аренда экскаватора с гидромолотом</span><span class="chip-kw">jcb 3cx аренда</span><span class="chip-kw">экскаватор погрузчик</span><span class="chip-kw">аренда экскаватора</span><span class="chip-kw">экскаватор с вилами</span><span class="chip-kw">аренда спецтехники</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выберите комплектацию и оставьте заявку на смену.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«JCB 3CX с гидромолотом»</div>
+      <p>Композиция: экскаватор-погрузчик JCB 3CX с гидромолотом на объекте, вид сбоку; тезис на плашке в верхней трети, строка «ковш · вилы · гидромолот».</p>
+      <p>Цвета: плашка — красный #FF5252, тезис — белый.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Автовышки 16–60 м</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Телескопические и коленчатые</span><span class="fact-pill">Люлька 200–450 кг</span><span class="fact-pill">Смена от 8800 руб</span><span class="fact-pill">Собственный парк</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон красный #FF5252, заголовок крупно белым, факты на белых плашках тёмным текстом. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Каска на высоте обязательна</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">СИЗ: каска</span><span class="fact-pill">Соблюдение техники безопасности</span><span class="fact-pill">Операторы-машинисты с аттестацией</span><span class="fact-pill">Регулярное техобслуживание</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, заголовок красным #FF5252, четыре факта столбиком с тонкой красной линией слева.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Автокраны 25–80 т</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">25 · 32 · 40 · 50 · 60 · 80 т</span><span class="fact-pill">Стрела до 74 м</span><span class="fact-pill">Смена от 15000 руб</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото автокрана со стрелой, нижняя половина — плашка красного #FF5252, тоннаж крупно белым.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Техника-вездеход</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Автовышка 36 м вездеход</span><span class="fact-pill">Автовышка 45 м вездеход</span><span class="fact-pill">Манипулятор 8/15 т HiaB вездеход</span><span class="fact-pill">Кран Zoomlion 80 т вездеход</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, заголовок красным #FF5252, четыре машины списком на красных плашках белым текстом.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — автовышки, автокраны, манипуляторы, экскаваторы <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Аренда автовышки: высота и люлька</b>16–60 м, люлька 200–450 кг, цены смены</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Автовышки 16–60 м</b>типы и грузоподъёмность люльки</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Аренда автокрана 25–80 т</b>тоннаж и длина стрелы по моделям</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Каска на высоте обязательна</b>СИЗ и техника безопасности</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Аренда манипулятора: 3/5–8/15 т</b>стрела и база, модели и цены</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Автокраны 25–80 т</b>линейка тоннажа</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Экскаватор-погрузчик JCB 3CX</b>ковш, вилы, гидромолот</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Техника-вездеход</b>автовышки, манипулятор, кран</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['a-summary','Итог'],['a-maps','Позиции на Картах'],['a-why','Причины'],['a-method','Методика']],
+ content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');let cur='analytics';
+function show(view,scroll){
+  if(!NAV[view])view='analytics';cur=view;
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
