@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Алекс Авто»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company name + view tabs + section chips */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+/* content view */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+/* analytics view */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right;font-variant-numeric:tabular-nums}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.no{color:var(--crit);font-weight:600}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Алекс Авто</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Реутов · ремонт двигателей · Транспортная ул., 7А · замер 06.11.2026</span>
+  <h1>Где «Алекс Авто» не видно на Картах</h1>
+  <p>Карточка «Мотор центр Алекс Авто» на Яндекс Картах: позиции по 10 целевым запросам в Реутове и соседи по выдаче в радиусе 2 км.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>7 запросов из 10 — карточки нет в первых 25 результатах</b>«ремонт дизельного двигателя», «ремонт двигателя газель», «ремонт газели», «ремонт грузовиков», «ремонт кпп», «ремонт ходовой части», «компьютерная диагностика автомобиля». Все эти работы есть на сайте компании.</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«ремонт коммерческого транспорта» — 8-е место, «капитальный ремонт двигателя» — 13-е, «ремонт двигателя» — 16-е</b>Даже по главной рубрике карточка ниже второго экрана выдачи.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новостей на карточке нет</b>Раздел «Новости» пустой. Рубрики карточки: ремонт двигателей, экспресс-пункт замены масла, автобусы и микроавтобусы — КПП, ходовой, грузовиков и диагностики среди них нет.</p></div>
+    <div class="v"><span class="pill info">соседи</span><p><b>На одной улице — 12 автосервисов в радиусе 1 км</b>Ремонт двигателей заявлен у Romax (Транспортная, 7Б), Франц-бус (5), Дизель сервис (11Б), Мос ДВС (1/2). У большинства оценок больше, чем у «Алекс Авто».</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,9</div><div class="s">67 оценок · 37 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в топ-10</div><div class="n">1 из 10</div><div class="s">«ремонт коммерческого транспорта»</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">раздел пустой</div></div>
+    <div class="kpi"><div class="k">Сервисов в радиусе 1 км</div><div class="n">12</div><div class="s">по выдаче Яндекс Карт</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Реутову без геолокации, просмотрено 25 результатов. В первой пятёрке почти везде стоят рекламные размещения.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Алекс Авто</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>ремонт коммерческого транспорта</td><td class="r me">8</td><td>Старт, Ремонт-Портера, Газель-ремонт, СТЛ моторс, Мульти Моторс</td></tr>
+      <tr><td>капитальный ремонт двигателя</td><td class="r me">13</td><td>Франц-бус, Мир Карсервис, Автогермес Geely, АвтоГЕРМЕС Belgee, Авторитэйл ГАЗ</td></tr>
+      <tr><td>ремонт двигателя</td><td class="r me">16</td><td>Франц-бус, Лексус-Измайлово, Мир Карсервис, Кардан Сити Моторс 1, 1Автоклимат</td></tr>
+      <tr><td>ремонт дизельного двигателя</td><td class="r no">нет</td><td>Мир Карсервис, Авторитэйл ГАЗ, Автовыхлоп, Автодом Ауди Восток, Автогермес Geely</td></tr>
+      <tr><td>ремонт двигателя газель</td><td class="r no">нет</td><td>Астра Моторс, Франц-бус, 1Автоклимат, Авторитэйл ГАЗ, Автовыхлоп</td></tr>
+      <tr><td>ремонт газели</td><td class="r no">нет</td><td>Астра Моторс, Франц-бус, Мир Карсервис, 1Автоклимат, Авторитэйл ГАЗ</td></tr>
+      <tr><td>ремонт грузовиков</td><td class="r no">нет</td><td>Кардан Сити Моторс 1, 1Автоклимат, Орех, СТЛ моторс, Автовыхлоп</td></tr>
+      <tr><td>ремонт кпп</td><td class="r no">нет</td><td>Лексус-Измайлово, Мир Карсервис, Авторитэйл ГАЗ, Ремзона, Автодом Ауди Восток</td></tr>
+      <tr><td>ремонт ходовой части</td><td class="r no">нет</td><td>Франц-бус, Мир Карсервис, Лексус-Измайлово, Кардан Сити Моторс 1, Маслофф</td></tr>
+      <tr><td>компьютерная диагностика автомобиля</td><td class="r no">нет</td><td>Автовейто, Лексус-Измайлово, Кардан Сити Моторс 1, Haval Нижегородец, БорисХоф Infiniti</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи в радиусе 2 км</h2><p>Сервисы из той же выдачи, отсортированы по расстоянию от Транспортной, 7А.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Рубрики</th><th>Адрес</th><th class="r">Км</th></tr></thead>
+    <tbody>
+      <tr><td><b>Мотор центр Алекс Авто</b></td><td class="r me">4,9</td><td class="r me">67</td><td>ремонт двигателей, замена масла, автобусы и микроавтобусы</td><td>Транспортная ул., 7А</td><td class="r">0</td></tr>
+      <tr><td>7Авто</td><td class="r">5,0</td><td class="r">483</td><td>автосервис, шиномонтаж</td><td>Транспортная ул., 7А</td><td class="r">0,02</td></tr>
+      <tr><td>Газель-ремонт</td><td class="r">4,3</td><td class="r">53</td><td>автосервис, автодиагностика, ремонт двигателей</td><td>Транспортная ул., 7А</td><td class="r">0,02</td></tr>
+      <tr><td>Romax</td><td class="r">4,6</td><td class="r">105</td><td>ремонт двигателей, металлообработка</td><td>Транспортная ул., 7Б</td><td class="r">0,05</td></tr>
+      <tr><td>Мульти Моторс</td><td class="r">4,6</td><td class="r">86</td><td>автосервис</td><td>Транспортная ул., 5А</td><td class="r">0,06</td></tr>
+      <tr><td>Франц-бус</td><td class="r">4,8</td><td class="r">68</td><td>ремонт двигателей, покраска</td><td>Транспортная ул., 5</td><td class="r">0,2</td></tr>
+      <tr><td>Ремонт-Портера</td><td class="r">4,3</td><td class="r">126</td><td>автосервис, автозапчасти</td><td>Транспортная ул., 5</td><td class="r">0,2</td></tr>
+      <tr><td>СТЛ моторс</td><td class="r">4,5</td><td class="r">192</td><td>автосервис, автозапчасти</td><td>Транспортная ул., 11</td><td class="r">0,28</td></tr>
+      <tr><td>Дизель сервис</td><td class="r">4,5</td><td class="r">68</td><td>ремонт двигателей, автосервис</td><td>Транспортная ул., 11Б</td><td class="r">0,37</td></tr>
+      <tr><td>Мос ДВС</td><td class="r">5,0</td><td class="r">85</td><td>ремонт двигателей, металлообработка</td><td>Транспортная ул., 1/2</td><td class="r">0,63</td></tr>
+      <tr><td>Газель Сервис 24</td><td class="r">4,9</td><td class="r">258</td><td>автосервис</td><td>Балашиха, Никольско-Архангельский, вл3А</td><td class="r">0,74</td></tr>
+      <tr><td>Автовыхлоп</td><td class="r">5,0</td><td class="r">224</td><td>автосервис, автодиагностика</td><td>Транспортная ул., вл3Ас1</td><td class="r">0,79</td></tr>
+      <tr><td>Газель Сервис</td><td class="r">4,8</td><td class="r">326</td><td>автосервис, ремонт двигателей</td><td>просп. Мира, 59</td><td class="r">0,98</td></tr>
+      <tr><td>Кардан Сити Моторс 1</td><td class="r">4,8</td><td class="r">340</td><td>ремонт карданных валов, автодиагностика</td><td>просп. Мира, 56</td><td class="r">1,33</td></tr>
+      <tr><td>Орех</td><td class="r">4,5</td><td class="r">918</td><td>автосервис, ремонт грузовых автомобилей</td><td>Балашиха, ул. Станция Стройка, 5с1</td><td class="r">1,82</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:14px">Рейтинг у «Алекс Авто» выше, чем у большинства соседей, но оценок меньше: у 7Авто — 483, у Газель Сервис — 326, у СТЛ моторс — 192. Рубрики соседей шире: «автосервис», «автодиагностика», «ремонт грузовых автомобилей». По ним «Алекс Авто» в выдачу не попадает.</p>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Реутову 06.11.2026 без геолокации, первые 25 результатов по каждому запросу; рейтинги, оценки, рубрики и расстояния — из выдачи.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/motor_tsentr_aleks_avto/77105164896/" target="_blank" rel="noopener">«Мотор центр Алекс Авто», Транспортная ул., 7А — Яндекс Карты</a>
+    <a href="https://alex-autoservis.ru/" target="_blank" rel="noopener">alex-autoservis.ru</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Ремонт двигателей · Реутов · Транспортная ул., 7А</span>
+  <h1>«Алекс Авто» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Мотор центр Алекс Авто» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Мотор центр «Алекс Авто»</div></div>
+    <div class="fact"><div class="k">Направление</div><div class="v">Коммерческий транспорт <small>полный спектр работ, подбор автозапчастей</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">г. Реутов, ул. Транспортная, 7А</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно 9:00–20:00</div></div>
+    <div class="fact"><div class="k">Гарантия</div><div class="v">Гарантия качества до 100 000 км</div></div>
+    <div class="fact"><div class="k">Марки</div><div class="v">Газель, Sollers Argo, Sollers Atlant <small>IVECO, HYUNDAI, ISUZU</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">alex-autoservis.ru</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Алекс Авто»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: красный заголовков сайта, яркий красный логотипа, серый и светло-серый плашек сайта, почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#B9261A;color:#FFFFFF;border-color:#B9261A"><div class="role">Основной</div><div class="name">Красный</div><div class="hex">#B9261A</div></div>
+    <div class="swatch" style="background:#FB1A19;color:#FFFFFF;border-color:#FB1A19"><div class="role">Акцентный</div><div class="name">Красный логотипа</div><div class="hex">#FB1A19</div></div>
+    <div class="swatch" style="background:#C6C6C6;color:#030202;border-color:#C6C6C6"><div class="role">Второстепенный</div><div class="name">Серый</div><div class="hex">#C6C6C6</div></div>
+    <div class="swatch" style="background:#E5E5E5;color:#030202;border-color:#E5E5E5"><div class="role">Фоновый</div><div class="name">Светло-серый</div><div class="hex">#E5E5E5</div></div>
+    <div class="swatch" style="background:#030202;color:#E5E5E5;border-color:#3a3433"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#030202</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап идёт от профиля компании — ремонта двигателей — к направлениям, по которым карточки сейчас нет в выдаче: Газель и Sollers, КПП, грузовики.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Ремонт двигателя CUMMINS Газель дизель: регулировка клапанов, калибровка ДВС, сборка и обкатка ДВС.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Ремонт Газель и новая услуга — ремонт и тех. обслуживание малотоннажного коммерческого транспорта Sollers Argo, Sollers Atlant.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Ремонт КПП: общая диагностика, снятие и разборка механизма, дефектовка, замена вышедших из строя элементов, сборка и установка.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Грузовики малой и средней тоннажности IVECO, HYUNDAI, ISUZU: ремонт ходовой части, тормозной системы, пневматической системы, электрооборудования.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Мотор центр Алекс Авто» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по сайту компании. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других сервисов. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Ремонт двигателя CUMMINS Газель дизель в Реутове</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выполняем ремонт двигателя CUMMINS Газель дизель.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Ремонт двигателя CUMMINS Газель дизель.<span class="src">сайт</span></li>
+      <li>При ремонте двигателей Cummins выполняем следующие работы: регулировка клапанов; калибровка ДВС.<span class="src">сайт</span></li>
+      <li>Разборка силовой установки с проведением последующей дефектации.<span class="src">сайт</span></li>
+      <li>Замена маховиков, прокладок, опор двигателя; сборка и обкатка ДВС; снятие и установка навесного оборудования.<span class="src">сайт</span></li>
+      <li>г. Реутов, ул. Транспортная 7 А; режим работы ежедневно 9:00–20:00.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт двигателя CUMMINS Газель дизель в Реутове — «Алекс Авто»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт двигателя CUMMINS Газель дизель в Реутове | Алекс Авто</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ремонт двигателя CUMMINS Газель дизель: регулировка клапанов, калибровка ДВС, разборка силовой установки с дефектацией, замена маховиков, прокладок, опор двигателя, сборка и обкатка ДВС.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт двигателя</span><span class="chip-kw">ремонт дизельного двигателя</span><span class="chip-kw">ремонт двигателя газель</span><span class="chip-kw">ремонт двигателя cummins</span><span class="chip-kw">ремонт двигателя газель дизель</span><span class="chip-kw">ремонт двс</span><span class="chip-kw">ремонт двигателя реутов</span><span class="chip-kw">регулировка клапанов</span><span class="chip-kw">замена опор двигателя</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на ремонт двигателя в «Алекс Авто».</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Ремонт двигателя CUMMINS»</div>
+      <p>Композиция: двигатель Cummins на стенде в цехе; тезис на плашке в нижней трети, строка «Газель дизель». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: плашка — красный #B9261A, тезис — белый #FFFFFF, строка — почти чёрный #030202 на светло-сером #E5E5E5.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Ремонт Газель и ремонт, тех. обслуживание Sollers Argo, Sollers Atlant в Реутове</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выполняем полный спектр работ по ремонту коммерческого транспорта и подбор автозапчастей.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Полный спектр работ по ремонту коммерческого транспорта, подбор автозапчастей.<span class="src">сайт</span></li>
+      <li>Новая услуга: ремонт и тех. обслуживание малотоннажного коммерческого транспорта Sollers Argo (Арго), Sollers Atlant (Атлант).<span class="src">сайт</span></li>
+      <li>Ремонт Газель: ремонт, техобслуживание, автозапчасти для грузовых машин Газель.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт Газель и Sollers Argo, Sollers Atlant в Реутове — «Алекс Авто»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт и тех. обслуживание Газель, Sollers Argo, Sollers Atlant в Реутове | Алекс Авто</span></div>
+      <div class="meta-row"><span><b>Description · </b>Полный спектр работ по ремонту коммерческого транспорта, подбор автозапчастей. Ремонт, техобслуживание, автозапчасти для Газель. Ремонт и тех. обслуживание Sollers Argo, Sollers Atlant.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт газели</span><span class="chip-kw">ремонт газели реутов</span><span class="chip-kw">техобслуживание газель</span><span class="chip-kw">ремонт коммерческого транспорта</span><span class="chip-kw">ремонт sollers</span><span class="chip-kw">ремонт sollers argo</span><span class="chip-kw">ремонт sollers atlant</span><span class="chip-kw">автозапчасти газель</span><span class="chip-kw">подбор автозапчастей</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайте Газель или Sollers на ремонт и техобслуживание.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Газель и Sollers»</div>
+      <p>Композиция: Газель и Sollers Atlant у подъёмника в цехе, капоты открыты; тезис на плашке в верхней трети, строка «ремонт · техобслуживание · автозапчасти».</p>
+      <p>Цвета: плашка — светло-серый #E5E5E5, тезис — красный #B9261A, строка — белый #FFFFFF на почти чёрном #030202.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Ремонт КПП в Реутове: общая диагностика, дефектовка, сборка и установка</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выполняем ремонт КПП.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Список работ по устранению неисправностей КПП содержит следующие мероприятия: общую диагностику.<span class="src">сайт</span></li>
+      <li>Снятие и разборку механизма.<span class="src">сайт</span></li>
+      <li>Дефектовку (определение причины неисправности).<span class="src">сайт</span></li>
+      <li>Замену вышедших из строя элементов механизма; сборку и установку.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт КПП в Реутове — «Алекс Авто»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт КПП в Реутове | Алекс Авто</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ремонт КПП: общая диагностика, снятие и разборка механизма, дефектовка (определение причины неисправности), замена вышедших из строя элементов механизма, сборка и установка. Реутов, ул. Транспортная, 7А.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт кпп</span><span class="chip-kw">ремонт кпп реутов</span><span class="chip-kw">ремонт коробки передач</span><span class="chip-kw">диагностика кпп</span><span class="chip-kw">дефектовка кпп</span><span class="chip-kw">разборка кпп</span><span class="chip-kw">неисправности кпп</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на диагностику КПП.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Ремонт КПП»</div>
+      <p>Композиция: разобранная коробка передач на верстаке, шестерни и синхронизаторы крупным планом; тезис на плашке слева, строка «диагностика · дефектовка · сборка и установка».</p>
+      <p>Цвета: плашка — почти чёрный #030202, тезис — белый #FFFFFF, строка — красный логотипа #FB1A19.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Грузовики малой и средней тоннажности IVECO, HYUNDAI, ISUZU в Реутове: ремонт, тех. обслуживание</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы выполняем ремонт и тех. обслуживание грузовиков малой и средней тоннажности IVECO, HYUNDAI, ISUZU.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Грузовики малой и средней тоннажности. Ремонт, тех. обслуживание.<span class="src">сайт</span></li>
+      <li>IVECO, HYUNDAI, ISUZU.<span class="src">сайт</span></li>
+      <li>Ремонт ходовой части. Ремонт трансмиссии. Ремонт рулевого управления. Ремонт двигателя.<span class="src">сайт</span></li>
+      <li>Ремонт топливной системы. Ремонт электрооборудования. Ремонт тормозной системы. Ремонт пневматической системы.<span class="src">сайт</span></li>
+      <li>Установка дополнительного оборудования.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт грузовиков IVECO, HYUNDAI, ISUZU в Реутове — «Алекс Авто»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт, тех. обслуживание грузовиков малой и средней тоннажности в Реутове | Алекс Авто</span></div>
+      <div class="meta-row"><span><b>Description · </b>Грузовики малой и средней тоннажности IVECO, HYUNDAI, ISUZU: ремонт ходовой части, трансмиссии, рулевого управления, двигателя, топливной системы, электрооборудования, тормозной и пневматической системы, установка дополнительного оборудования.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт грузовиков</span><span class="chip-kw">ремонт грузовых автомобилей</span><span class="chip-kw">ремонт iveco</span><span class="chip-kw">ремонт hyundai грузовик</span><span class="chip-kw">ремонт isuzu</span><span class="chip-kw">ремонт ходовой части</span><span class="chip-kw">ремонт тормозной системы</span><span class="chip-kw">ремонт пневматической системы</span><span class="chip-kw">ремонт рулевого управления</span><span class="chip-kw">ремонт топливной системы</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайте грузовик на ремонт или тех. обслуживание.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«IVECO · HYUNDAI · ISUZU»</div>
+      <p>Композиция: грузовик малой тоннажности на посту ремонта, ходовая часть в кадре; тезис на плашке в нижней трети, строка «ремонт · тех. обслуживание».</p>
+      <p>Цвета: плашка — красный #B9261A, тезис — белый #FFFFFF, строка — почти чёрный #030202 на сером #C6C6C6.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Ремонт двигателя CUMMINS</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Регулировка клапанов</span><span class="fact-pill">Калибровка ДВС</span><span class="fact-pill">Разборка с дефектацией</span><span class="fact-pill">Сборка и обкатка ДВС</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #E5E5E5, заголовок красным #B9261A, факты на плашках почти чёрного #030202 белым текстом. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Газель и Sollers</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Газель</span><span class="fact-pill">Sollers Argo</span><span class="fact-pill">Sollers Atlant</span><span class="fact-pill">Подбор автозапчастей</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон красный #B9261A, заголовок белым #FFFFFF, три марки столбиком на светло-серых плашках #E5E5E5 текстом #030202.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Ремонт КПП</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Общая диагностика</span><span class="fact-pill">Снятие и разборка механизма</span><span class="fact-pill">Дефектовка</span><span class="fact-pill">Замена вышедших из строя элементов</span><span class="fact-pill">Сборка и установка</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон почти чёрный #030202, этапы цепочкой на серых плашках #C6C6C6, номера этапов красным логотипа #FB1A19.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Гарантия до 100 000 км</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Гарантия качества до 100 000 км</span><span class="fact-pill">Ежедневно 9:00–20:00</span><span class="fact-pill">Реутов, Транспортная, 7А</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #E5E5E5, «100 000 км» крупно красным #B9261A, строки ниже почти чёрным #030202.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — двигатель Cummins, Газель и Sollers, КПП, грузовики <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Ремонт двигателя CUMMINS Газель дизель</b>регулировка клапанов, калибровка ДВС, сборка и обкатка ДВС</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Ремонт двигателя CUMMINS</b>работы по ремонту двигателя</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Ремонт Газель и Sollers Argo, Sollers Atlant</b>ремонт, техобслуживание, автозапчасти</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Газель и Sollers</b>марки и подбор автозапчастей</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Ремонт КПП</b>общая диагностика, дефектовка, сборка и установка</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Ремонт КПП</b>список работ по устранению неисправностей</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Грузовики IVECO, HYUNDAI, ISUZU: ремонт, тех. обслуживание</b>ремонт ходовой части, тормозной и пневматической системы, электрооборудования</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Гарантия до 100 000 км</b>гарантия, режим работы, адрес</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['maps','Позиции на Картах'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let cur='analytics';
+function show(view,scroll){
+  if(!NAV[view])view='analytics';cur=view;
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
