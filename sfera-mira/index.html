@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Сфера Мира»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:16px;padding-right:16px}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze)}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}.va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)}.va .down{color:var(--crit)}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0;margin-top:20px}
+.va .chart h3{margin:0 0 2px;font-size:15px}.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}.va .chart svg .val{fill:var(--ink);font-size:10.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}.va .chart .col{fill:var(--gold)}.va .chart .col.pk{fill:var(--gold-2)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.vc .verified{display:inline-block;margin-top:12px;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--good);background:var(--good-soft);border:1px solid rgba(127,203,164,.35);border-radius:8px;padding:5px 10px}
+.va .srcs{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Сфера Мира</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Анапа · юридические услуги · замер 06.11.2026</span>
+  <h1>Где «Сферу Мира» не видно на Картах</h1>
+  <p>Карточка юридической компании «Сфера Мира», Владимирская ул., 55, корп. 8. Спрос по 10 целевым запросам в Вордстате для региона «Анапа» и позиции карточки на Яндекс Картах по направлениям из брифа.</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«юрист», «юридические услуги», «семейный юрист» — карточки нет в первых 11–20</b>По общему запросу «юрист» выше стоят 20 карточек юристов, адвокатов и нотариусов.</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«юрист по наследству» — 13-е место</b>Единственный целевой запрос, по которому карточка вообще попала в список.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>На карточке нет ни одной новости и ни одной истории</b>4,7 при 19 оценках и 10 отзывах. У лидеров выдачи — 59–190 оценок.</p></div>
+    <div class="v"><span class="pill info">спрос</span><p><b>«юрист» в Анапе растёт: 4 065 запросов в сентябре 2026</b>На 9% больше, чем в сентябре 2025 (3 741).</p></div>
+  </div>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос в Анапе</h2><p>Вордстат, регион «Анапа», все устройства. Частоты — за 08.09–07.10.2026.</p></div>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-q"></tbody></table></div>
+  <div class="chart" data-chart="q"><h3>«юрист», октябрь 2025 — сентябрь 2026</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: +9%</div></div>
+  <p class="small" style="margin-top:12px">Пик в сентябре 2026 и декабре 2025, провал в январе–феврале (2 249 и 2 183). Ноябрь и декабрь — сезон спроса, публикации этапа попадают на него.</p>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск в Анапе 06.11.2026, карта по центру города. Пустые карточки без названия в счёт мест не исключались.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Сфера Мира</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>юрист</td><td class="r">нет в топ-20</td><td>Бизнес-Юрист, Хомченко и партнеры, Союз Юристов, Белокопытовъ и Ко, М-Право</td></tr>
+      <tr><td>юридические услуги</td><td class="r">нет в топ-11</td><td>Бизнес-Юрист, Белокопытовъ и Ко, М-Право, Хомченко и партнеры, Союз Юристов</td></tr>
+      <tr><td>юридическая консультация</td><td class="r">нет в топ-5</td><td>Бизнес-Юрист, Белокопытовъ и Ко, М-Право, Союз Юристов, Адвокат Ковалевская Е. Т.</td></tr>
+      <tr><td>юрист по наследству</td><td class="r me">13</td><td>Хомченко и партнеры, Адвокат Ковалевская Е. Т., Юридическая практика, Союз Юристов, Юрист Шарина Ю. С.</td></tr>
+      <tr><td>семейный юрист</td><td class="r">нет в топ-13</td><td>Хомченко и партнеры, Юрист Шарина Ю. С., М-Право, Про-юрист.рф, Союз Юристов</td></tr>
+      <tr><td>юрист по недвижимости</td><td class="r">нет в топ-5</td><td>Хомченко и партнеры, Адвокат Ковалевская Е. Т., Юридическая практика, Адвокат Васильцов В. Ю., Юрист Шарина Ю. С.</td></tr>
+      <tr><td>земельный юрист</td><td class="r">нет в топ-5</td><td>Юридическая практика, Хомченко и партнеры, Адвокат Ковалевская Е. Т., Юрист Шарина Ю. С., Союз Юристов</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="a-rivals">Конкуренты в гео-выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th class="r">В топ-5 по запросам</th></tr></thead>
+    <tbody>
+      <tr><td><b>Сфера Мира</b></td><td class="r num me">4,7</td><td class="r num me">19</td><td class="r num me">0 из 7</td></tr>
+      <tr><td>Хомченко и партнеры</td><td class="r num">5,0</td><td class="r num">190</td><td class="r num">6 из 7</td></tr>
+      <tr><td>Союз Юристов</td><td class="r num">5,0</td><td class="r num">78</td><td class="r num">6 из 7</td></tr>
+      <tr><td>Юрист Шарина Ю. С.</td><td class="r num">4,9</td><td class="r num">25</td><td class="r num">4 из 7</td></tr>
+      <tr><td>Адвокат Ковалевская Е. Т.</td><td class="r num">4,9</td><td class="r num">25</td><td class="r num">4 из 7</td></tr>
+      <tr><td>М-Право</td><td class="r num">5,0</td><td class="r num">59</td><td class="r num">4 из 7</td></tr>
+      <tr><td>Бизнес-Юрист</td><td class="r num">5,0</td><td class="r num">59</td><td class="r num">3 из 7</td></tr>
+      <tr><td>Юридическая практика</td><td class="r num">4,7</td><td class="r num">13</td><td class="r num">3 из 7</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:14px">«Юридическая практика» с 4,7 и 13 оценками стоит в пятёрке по наследству, недвижимости и земле — значит, дело не только в числе оценок: карточке «Сферы Мира» не хватает текстов, где эти направления названы словами. Контент-план начинается со знакомства с компанией под общие запросы «юрист» и «юридические услуги», дальше — наследство, семейные споры и интеллектуальные права.</p>
+  <h3>Источники</h3>
+  <div class="srcs">
+    <a href="https://yandex.ru/maps/org/sfera_mira/195674177477/" target="_blank" rel="noopener">«Сфера Мира», Владимирская ул., 55, корп. 8 — Яндекс Карты</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Юридическая компания · Анапа</span>
+  <h1>«Сфера Мира» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Сфера Мира» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ЮК «Сфера Мира»</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Юридические услуги <small>для граждан и бизнеса</small></div></div>
+    <div class="fact"><div class="k">Направления</div><div class="v">Наследство, недвижимость <small>семейные, наследственные, земельные споры</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">г. Анапа, ул. Владимирская, д. 55, корп. 8</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">ПН–ПТ 9:00–18:00</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Прозрачность и доверие <small>работаем по договору, команда юристов</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v">yksferamira.ru</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head"><span class="sec-num">01 · Мини-брендбук</span><h2>Фирменный стиль «Сферы Мира»</h2><p>Цвета знака: синий голубь (PANTONE 289) и золотая полусфера (PANTONE 118), светлый фон для слайдов.</p></div>
+  <div class="swatches">
+    <div class="swatch" style="background:#0C2340;color:#FFFFFF;border-color:#0C2340"><div class="role">Основной</div><div class="name">Синий · PANTONE 289</div><div class="hex">#0C2340</div></div>
+    <div class="swatch" style="background:#AC8400;color:#FFFFFF;border-color:#AC8400"><div class="role">Акцентный</div><div class="name">Золотой · PANTONE 118</div><div class="hex">#AC8400</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#0C2340;border-color:#FFFFFF"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+  <div class="tone-banner" style="margin-top:14px"><b>Обязательная надпись:</b> «Не является публичной офертой» — на каждой обложке и каждом слайде сторис, мелким шрифтом внизу.</div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head"><span class="sec-num">02 · Логика цикла</span><h2>Последовательность тем этапа</h2><p>Карточка стартует с нуля, поэтому этап открывается знакомством с компанией. Дальше — три направления из брифа, по которым карточки нет в первой пятёрке Карт. Все факты — из брифа и сайта компании, нормы — из действующих ГК РФ и СК РФ.</p></div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>ЮК «Сфера Мира» в Анапе: юридические услуги для граждан и бизнеса.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Наследство: срок принятия и что делать, если он пропущен.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Семейные споры: раздел общего имущества супругов.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Защита интеллектуальных прав: товарный знак для бизнеса.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head"><span class="sec-num">03 · Новости</span><h2>Темы для новостных публикаций</h2><p>4 темы с обложкой. Публикация — карточка компании «Сфера Мира» на Яндекс Картах и 2ГИС.</p></div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль — так указано в брифе. Вступление от лица компании, дальше факты по теме. Нормы закона пересказываются без добавлений, со ссылкой на статью. Без телефона и e-mail в тексте, без превосходных степеней, гарантий результата и процентов экономии, без упоминания конкурентов и внутренних процессов компании. В конце — «Не является публичной офертой». Объём — до 3 000 знаков с пробелами.</div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Юрист в Анапе: юридическая компания «Сфера Мира» для граждан и бизнеса</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="verified">Проверено · факты компании из брифа и сайта, правовых норм в теме нет · можно публиковать</div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Юридическая компания «Сфера Мира» оказывает юридические услуги для граждан и бизнеса в Анапе. Мы объясняем сложные юридические моменты простым языком.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Юридические услуги для граждан и бизнеса (работаем с юрлицами и индивидуальными предпринимателями, самозанятыми).<span class="src">бриф</span></li>
+      <li>Направления: представительство в суде, оформление наследства, сопровождение сделок с недвижимостью, защита интеллектуальных прав, семейные, наследственные, земельные споры.<span class="src">бриф</span></li>
+      <li>Подготовка исков, заявлений, писем, жалоб, запросов, договоры купли-продажи, аренды, найма и иные правовые документы.<span class="src">бриф</span></li>
+      <li>Информируем о каждом шаге и даём реалистичный прогноз. Работаем по договору.<span class="src">бриф</span></li>
+      <li>Если требуется решить сложный вопрос, проблему решает не один юрист, а целая команда.<span class="src">бриф</span></li>
+      <li>Адрес: г. Анапа, ул. Владимирская, д. 55, корп. 8. Режим работы: ПН–ПТ с 9:00 до 18:00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Юрист в Анапе — юридическая компания «Сфера Мира»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Юридические услуги в Анапе для граждан и бизнеса | Сфера Мира</span></div>
+      <div class="meta-row"><span><b>Description · </b>Юридическая компания «Сфера Мира» в Анапе: представительство в суде, наследство, недвижимость, семейные и земельные споры, защита интеллектуальных прав. Работаем по договору.</span></div>
+      <div class="chips"><span class="chip-kw">юрист</span><span class="chip-kw">юрист анапа</span><span class="chip-kw">юридические услуги</span><span class="chip-kw">услуги юриста</span><span class="chip-kw">консультация юриста</span><span class="chip-kw">судебный юрист анапа</span><span class="chip-kw">юридическая компания анапа</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию юриста.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Юристы для граждан и бизнеса»</div>
+      <p>Композиция: знак компании (голубь в полусфере) крупно на синем фоне; тезис под знаком, строка «Анапа · работаем по договору». Внизу мелко «Не является публичной офертой». Текст не больше 20% площади.</p>
+      <p>Цвета: фон — синий #0C2340, тезис — белый #FFFFFF, строка — золотой #AC8400.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Юрист по наследству в Анапе: срок принятия наследства и что делать, если он пропущен</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="verified">Проверено · ст. 1154, 1155 ГК РФ (ред. от 08.08.2024, КонсультантПлюс) · можно публиковать</div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы занимаемся оформлением наследства и наследственными спорами. Первое, что важно знать наследнику, — срок.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направления: оформление наследства, наследственные споры.<span class="src">бриф</span></li>
+      <li>Наследство может быть принято в течение шести месяцев со дня открытия наследства.<span class="src">п. 1 ст. 1154 ГК РФ</span></li>
+      <li>Если срок пропущен, суд может его восстановить, когда наследник не знал и не должен был знать об открытии наследства или пропустил срок по другим уважительным причинам.<span class="src">п. 1 ст. 1155 ГК РФ</span></li>
+      <li>Обратиться в суд нужно в течение шести месяцев после того, как причины пропуска срока отпали.<span class="src">п. 1 ст. 1155 ГК РФ</span></li>
+      <li>Подготовка исков, заявлений, представительство в суде.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Юрист по наследству в Анапе: срок принятия наследства</span></div>
+      <div class="meta-row"><span><b>Title · </b>Вступление в наследство в Анапе: сроки и восстановление | Сфера Мира</span></div>
+      <div class="meta-row"><span><b>Description · </b>Юрист по наследству в Анапе: оформление наследства и наследственные споры. Наследство принимается в течение шести месяцев, пропущенный срок может восстановить суд.</span></div>
+      <div class="chips"><span class="chip-kw">юрист по наследству</span><span class="chip-kw">вступление в наследство</span><span class="chip-kw">оформление наследства</span><span class="chip-kw">восстановление срока принятия наследства</span><span class="chip-kw">право на наследство</span><span class="chip-kw">юрист анапа</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию по наследственному делу.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Наследство: 6 месяцев»</div>
+      <p>Композиция: папка с документами на рабочем столе, без читаемых данных; цифра «6» крупно, тезис на плашке в нижней трети, строка «Оформление наследства · Анапа». Логотип в верхнем левом углу, внизу мелко «Не является публичной офертой».</p>
+      <p>Цвета: плашка — синий #0C2340, тезис — белый #FFFFFF, цифра — золотой #AC8400.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Семейный юрист в Анапе: раздел общего имущества супругов в браке и после развода</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="verified">Проверено · ст. 38 СК РФ (ред. от 23.03.2026, КонсультантПлюс) · можно публиковать</div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы ведём семейные споры. Раздел имущества — один из частых вопросов: когда его можно провести и какие есть сроки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направления: семейные споры, представительство в суде, подготовка исков и заявлений.<span class="src">бриф</span></li>
+      <li>Общее имущество супругов может быть разделено как в период брака, так и после его расторжения по требованию любого из супругов.<span class="src">п. 1 ст. 38 СК РФ</span></li>
+      <li>Супруги могут разделить имущество по соглашению; такое соглашение должно быть нотариально удостоверено.<span class="src">п. 2 ст. 38 СК РФ</span></li>
+      <li>К требованиям о разделе общего имущества супругов, брак которых расторгнут, применяется трёхлетний срок исковой давности.<span class="src">п. 7 ст. 38 СК РФ</span></li>
+      <li>Объясняем сложные юридические моменты простым языком и даём реалистичный прогноз.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Семейный юрист в Анапе: раздел имущества супругов</span></div>
+      <div class="meta-row"><span><b>Title · </b>Раздел имущества супругов в Анапе: сроки и порядок | Сфера Мира</span></div>
+      <div class="meta-row"><span><b>Description · </b>Семейный юрист в Анапе: раздел общего имущества супругов в браке и после развода, соглашение о разделе, трёхлетний срок исковой давности.</span></div>
+      <div class="chips"><span class="chip-kw">семейный юрист</span><span class="chip-kw">семейный юрист анапа</span><span class="chip-kw">юрист по семейным делам анапа</span><span class="chip-kw">юрист по разделу имущества анапа</span><span class="chip-kw">раздел имущества супругов</span><span class="chip-kw">консультация юриста</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию по семейному спору.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Раздел имущества: в браке и после»</div>
+      <p>Композиция: два комплекта ключей и документы на светлом столе, без людей; тезис на плашке в верхней трети, строка «Семейные споры · Анапа». Внизу мелко «Не является публичной офертой».</p>
+      <p>Цвета: фон — белый #FFFFFF, плашка — синий #0C2340, строка — золотой #AC8400.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Защита интеллектуальных прав в Анапе: товарный знак для вашего бизнеса</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="verified">Проверено · ст. 1477, 1491 ГК РФ (ред. от 23.07.2025, КонсультантПлюс) · можно публиковать</div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы помогаем бизнесу и гражданам превращать идеи в охраняемые активы и защищать их от нарушений.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Направление: защита интеллектуальных прав.<span class="src">бриф</span></li>
+      <li>Мы помогаем бизнесу и гражданам превращать идеи в охраняемые активы и эффективно защищать их от нарушений.<span class="src">сайт</span></li>
+      <li>Товарный знак — обозначение, служащее для индивидуализации товаров; исключительное право на него удостоверяется свидетельством.<span class="src">п. 1 ст. 1477 ГК РФ</span></li>
+      <li>Исключительное право на товарный знак действует десять лет с даты подачи заявки на регистрацию.<span class="src">п. 1 ст. 1491 ГК РФ</span></li>
+      <li>Срок продлевается на десять лет по заявлению правообладателя, поданному в последний год действия права; продлевать можно неограниченное число раз.<span class="src">п. 2 ст. 1491 ГК РФ</span></li>
+      <li>Работаем с юрлицами, индивидуальными предпринимателями и самозанятыми.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Защита интеллектуальных прав в Анапе: товарный знак</span></div>
+      <div class="meta-row"><span><b>Title · </b>Товарный знак и защита интеллектуальных прав в Анапе | Сфера Мира</span></div>
+      <div class="meta-row"><span><b>Description · </b>Защита интеллектуальных прав в Анапе для бизнеса и граждан. Право на товарный знак действует десять лет с даты подачи заявки и продлевается без ограничения числа раз.</span></div>
+      <div class="chips"><span class="chip-kw">защита интеллектуальных прав</span><span class="chip-kw">регистрация товарного знака</span><span class="chip-kw">интеллектуальная собственность</span><span class="chip-kw">бизнес юрист анапа</span><span class="chip-kw">услуги юриста</span><span class="chip-kw">юрист анапа</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию по защите интеллектуальных прав.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Товарный знак: 10 лет защиты»</div>
+      <p>Композиция: абстрактный знак ® на светлом фоне, без чужих брендов; тезис на плашке в нижней трети, строка «Интеллектуальные права · Анапа». Внизу мелко «Не является публичной офертой».</p>
+      <p>Цвета: фон — белый #FFFFFF, знак и цифра «10» — золотой #AC8400, плашка — синий #0C2340.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head"><span class="sec-num">04 · Сторис</span><h2>Темы для сторис</h2><p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p></div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Юристы для граждан и бизнеса</div><span class="slide-no">Сторис 1</span></div>
+      <div class="verified">Проверено · можно публиковать</div>
+      <div class="facts-line"><span class="fact-pill">Юрлица, ИП, самозанятые</span><span class="fact-pill">Представительство в суде</span><span class="fact-pill">Работаем по договору</span><span class="fact-pill">ПН–ПТ 9:00–18:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #0C2340, знак компании сверху, заголовок белым #FFFFFF, факты на золотых плашках #AC8400 белым текстом. Внизу мелко «Не является публичной офертой».</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Наследство: 6 месяцев</div><span class="slide-no">Сторис 2</span></div>
+      <div class="verified">Проверено · ст. 1154, 1155 ГК РФ · можно публиковать</div>
+      <div class="facts-line"><span class="fact-pill">Срок — 6 месяцев</span><span class="fact-pill">Пропущен — восстанавливает суд</span><span class="fact-pill">Уважительные причины</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, цифра «6» крупно золотым #AC8400, заголовок и факты синим #0C2340.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Раздел имущества</div><span class="slide-no">Сторис 3</span></div>
+      <div class="verified">Проверено · ст. 38 СК РФ · можно публиковать</div>
+      <div class="facts-line"><span class="fact-pill">В браке и после развода</span><span class="fact-pill">Соглашение — у нотариуса</span><span class="fact-pill">После развода — 3 года</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #0C2340, заголовок белым #FFFFFF, цифра «3» золотым #AC8400, факты на белых плашках синим текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Товарный знак: 10 лет</div><span class="slide-no">Сторис 4</span></div>
+      <div class="verified">Проверено · ст. 1477, 1491 ГК РФ · можно публиковать</div>
+      <div class="facts-line"><span class="fact-pill">Право — по свидетельству</span><span class="fact-pill">10 лет с даты заявки</span><span class="fact-pill">Продление без ограничений</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, «10» крупно золотым #AC8400, факты списком на синих плашках #0C2340 белым текстом.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — компания, наследство, семья, интеллектуальные права <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Юрист в Анапе: «Сфера Мира» для граждан и бизнеса</b>направления, работа по договору, команда</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Юристы для граждан и бизнеса</b>кому помогаем и как работаем</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Юрист по наследству: срок принятия</b>ст. 1154, 1155 ГК РФ</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Наследство: 6 месяцев</b>срок и восстановление</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Семейный юрист: раздел имущества</b>ст. 38 СК РФ</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Раздел имущества</b>в браке, после развода, 3 года</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Защита интеллектуальных прав: товарный знак</b>ст. 1477, 1491 ГК РФ</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Товарный знак: 10 лет</b>срок и продление</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={q:[3448,3125,3452,2249,2183,2830,2827,2814,3002,3410,3687,4065]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=560,H=220,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.15,w=bw*.7;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i].split(' ')[0]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+});
+const Q=[['юрист','коммерческое',4049],['юрист анапа','коммерческое, гео',919],['консультация юриста','коммерческое',836],['вступление в наследство','информационное',258],['юрист по недвижимости','коммерческое',150],['земельный юрист','коммерческое',107],['семейный юрист','коммерческое',102],['услуги юриста','коммерческое',96],['судебный юрист','коммерческое',34],['юрист по банкротству','коммерческое',31]];
+const qm=Math.max(...Q.map(r=>r[2]));
+document.getElementById('t-q').innerHTML=Q.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/qm*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('');
+const NAV={analytics:[['a-summary','Итог'],['a-demand','Спрос'],['a-maps','Позиции на Картах'],['a-rivals','Конкуренты']],content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>el.hidden=el.dataset.view!==view);
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
