@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Психолог Попова Оксана»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar (company name + view tabs + section chips); two views */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Психолог Попова Оксана</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="pp-top">
+  <span class="eyebrow">Липецк · психологическое консультирование · замер 09.11.2026</span>
+  <h1>По каким запросам психолога Попову Оксану не видно на Картах</h1>
+  <p>Карточка «Психолог Попова Оксана», ул. Леонтия Кривенкова, 33, кабинет 11/3. Позиции на Яндекс Картах по 8 целевым запросам из направлений брифа и сравнение с соседями по выдаче.</p>
+</header>
+
+<section id="pp-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill warn">слабо</span><p><b>Рубрика «Психологическое консультирование» — 5-е место</b>Это единственный запрос из восьми, где карточка попала в первую пятёрку.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«психолог», «психолог тревожность», «когнитивно-поведенческая терапия» — карточки нет</b>Тревожность бриф называет самой актуальной темой, метод КПТ — основным. По обоим запросам выше стоят другие кабинеты.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«семейный психолог», «психолог развод», «выгорание», «самооценка» — карточки нет</b>Все четыре направления есть в брифе: парная консультация, развод, ревность и измена, выгорание, низкая самооценка.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,4</div><div class="s">7 оценок · 6 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов в первой пятёрке</div><div class="n">1 из 8</div><div class="s">только рубрика</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">прайса на карточке нет</div></div>
+    <div class="kpi"><div class="k">Рубрик на карточке</div><div class="n">1</div><div class="s">психологическое консультирование</div></div>
+  </div>
+</section>
+
+<section id="pp-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Липецку без геолокации. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Попова</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>психологическое консультирование (рубрика)</td><td class="r me">5</td><td>По душам, Центр психологии Выставкиной, Кабинет Елены Правдиной, Психолог Ксения Полунина, Психолог Попова Оксана</td></tr>
+      <tr><td>психолог</td><td class="r">нет</td><td>Центр психологии Выставкиной, По душам, Кабинет Елены Правдиной, Центр практической психологии Сергея Полозова, Кабинет Татаркиной Н. И.</td></tr>
+      <tr><td>психолог тревожность</td><td class="r">нет</td><td>Центр психологии Выставкиной, Кабинет Татаркиной Н. И., Кабинет Елены Правдиной, ГОБУ Центр психолого-педагогической помощи, Центр «Семья»</td></tr>
+      <tr><td>когнитивно-поведенческая терапия</td><td class="r">нет</td><td>Выдача сразу открывает одну карточку — «По душам»</td></tr>
+      <tr><td>семейный психолог</td><td class="r">нет</td><td>Центр психологии Выставкиной, По душам, Кабинет Елены Правдиной, Центр «Семья», Психологический кабинет (ул. Доватора, 12)</td></tr>
+      <tr><td>психолог развод</td><td class="r">нет</td><td>Центр психологии Выставкиной, По душам, Кабинет Елены Правдиной, Центр Сергея Полозова, Кабинет Татаркиной Н. И.</td></tr>
+      <tr><td>психолог выгорание</td><td class="r">нет</td><td>Центр психологии Выставкиной, Кабинет Елены Правдиной, Центр «Семья»</td></tr>
+      <tr><td>психолог самооценка</td><td class="r">нет</td><td>Кабинет Елены Правдиной, Центр психологии Выставкиной, Психологический кабинет (ул. Доватора, 12)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Что видно в выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Психолог Попова Оксана</b></td><td class="r num me">4,4</td><td class="r num me">7</td><td>1 рубрика, без цен и акций</td></tr>
+      <tr><td>Центр психологии Выставкиной</td><td class="r num">5,0</td><td class="r num">190</td><td>Акция «Первое посещение со скидкой 10%», услуги в прайсе</td></tr>
+      <tr><td>По душам</td><td class="r num">5,0</td><td class="r num">55</td><td>3 рубрики, прайс от 3 000 ₽, направления терапии в особенностях, включая когнитивное и поведенческое</td></tr>
+      <tr><td>Центр «Семья»</td><td class="r num">4,8</td><td class="r num">93</td><td>Консультирование взрослых от 1 200 ₽</td></tr>
+      <tr><td>ГОБУ Центр психолого-педагогической помощи</td><td class="r num">4,2</td><td class="r num">85</td><td>Государственный центр</td></tr>
+      <tr><td>Кабинет Татаркиной Н. И.</td><td class="r num">4,4</td><td class="r num">19</td><td>Рубрика «Психологическая служба»</td></tr>
+      <tr><td>Кабинет Елены Правдиной</td><td class="r num">4,4</td><td class="r num">14</td><td>2 рубрики: психологическая служба и консультирование</td></tr>
+      <tr><td>Центр Сергея Полозова</td><td class="r num">4,7</td><td class="r num">14</td><td>2 рубрики: психологический центр и консультирование</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="pp-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточки и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>На карточке нет ни слова про запросы клиентов и метод</h3></div>
+      <p>На карточке нет новостей, нет прайса и нет описания направлений. Слов «тревога», «КПТ», «выгорание», «самооценка», «парная консультация» Яндексу взять неоткуда. У «По душам» направления терапии перечислены в особенностях карточки, поэтому по «когнитивно-поведенческая терапия» выдача сразу открывает её.</p>
+      <p class="next">Новости под каждый запрос из брифа и прайс с двумя позициями: «Индивидуальная консультация — 2 500 ₽», «Парная консультация — 3 000 ₽».</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Одна рубрика против двух-трёх у соседей</h3></div>
+      <p>У карточки только «Психологическое консультирование». Правдина, Полозов и «По душам» добавили «Психологическую службу», «Психологический центр», «Семейное консультирование» и стоят выше по «психолог» и «семейный психолог».</p>
+      <p class="next">Добавить рубрики «Психологическая служба» и «Семейное консультирование» — парная консультация есть в брифе.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Меньше всего оценок в выдаче</h3></div>
+      <p>7 оценок против 190 у Центра Выставкиной, 93 у Центра «Семья» и 55 у «По душам». Даже кабинеты с тем же рейтингом 4,4 (Правдина, Татаркина) набрали вдвое больше оценок.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pp-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Липецку 09.11.2026 без геолокации, первая пятёрка выдачи; рейтинги и оценки — из выдачи.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/psikholog_popova_oksana/66567133683/" target="_blank" rel="noopener">«Психолог Попова Оксана» — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/9/lipetsk/category/psychological_counseling/27648301459/" target="_blank" rel="noopener">Рубрика «Психологическое консультирование», Липецк — Яндекс Карты</a>
+    <a href="https://vk.ru/ps_oxanapopova" target="_blank" rel="noopener">vk.ru/ps_oxanapopova</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="pp-company">
+  <span class="eyebrow">Психологическое консультирование · Липецк</span>
+  <h1>«Психолог Попова Оксана» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка «Психолог Попова Оксана» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Специалист</div><div class="v">Попова Оксана <small>практикующий психолог</small></div></div>
+    <div class="fact"><div class="k">Метод</div><div class="v">Когнитивно-поведенческая терапия (КПТ)</div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">ул. Леонтия Кривенкова, 33 <small>офис 11/3, 2-й этаж</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 9:00–20:00 <small>вс 12:00–18:00, сб выходной</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Индивидуальная — 2 500 ₽ <small>парная — 3 000 ₽</small></div></div>
+    <div class="fact"><div class="k">Принципы</div><div class="v">Конфиденциальность <small>корректность, профессионализм</small></div></div>
+  </div>
+</section>
+
+<section id="pp-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: зелёная ткань кресла, тёмно-зелёные подушки, горчичный акцент, светлая стена кабинета и почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#374D50;color:#F4F5F6;border-color:#374D50"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#374D50</div></div>
+    <div class="swatch" style="background:#2D433D;color:#F4F5F6;border-color:#2D433D"><div class="role">Второстепенный</div><div class="name">Тёмный зелёный</div><div class="hex">#2D433D</div></div>
+    <div class="swatch" style="background:#AF8B3B;color:#141F20;border-color:#AF8B3B"><div class="role">Акцентный</div><div class="name">Горчичный</div><div class="hex">#AF8B3B</div></div>
+    <div class="swatch" style="background:#B0B4B9;color:#141F20;border-color:#B0B4B9"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#B0B4B9</div></div>
+    <div class="swatch" style="background:#141F20;color:#B0B4B9;border-color:#3a4546"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#141F20</div></div>
+  </div>
+</section>
+
+<section id="pp-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап открывается приоритетной темой брифа — тревогой, затем раскрывает метод КПТ и закрывает запросы, по которым карточку сейчас не видно: парная консультация и выгорание с самооценкой.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Психолог при тревоге в Липецке: индивидуальная консультация.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Когнитивно-поведенческая терапия: принципы работы.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Парная консультация: ревность, измена, развод.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Выгорание, низкая самооценка, страхи — с чем приходят к психологу.</p></div>
+  </div>
+</section>
+
+<section id="pp-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка «Психолог Попова Оксана» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», от первого лица — так указано в брифе. Безоценочно, с признанием чувств, понятным языком; термин объясняется сразу. В тексте нет обещаний результата, диагнозов, директивных советов, телефона, e-mail и превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Психолог в Липецке при тревоге: индивидуальная консультация в методе КПТ</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Тревога — один из самых частых запросов, с которыми ко мне обращаются. Работаю с ним в методе когнитивно-поведенческой терапии.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Работаю в методе Когнитивно-поведенческая терапия (КПТ).<span class="src">бриф</span></li>
+      <li>Наиболее распространённые запросы, с которыми обращаются: тревога; страхи; если вас что-то беспокоит, но нет понимания, что конкретно.<span class="src">бриф</span></li>
+      <li>Тема тревожности сейчас очень актуальна.<span class="src">бриф</span></li>
+      <li>Я опираюсь на принципы конфиденциальности, корректности и профессионализма в своей работе.<span class="src">бриф</span></li>
+      <li>Индивидуальная консультация 2500 руб.<span class="src">бриф</span></li>
+      <li>г. Липецк, ул. Леонтия Кривенкова, 33, офис 11/3, 2-й этаж.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Психолог в Липецке при тревоге — Попова Оксана, КПТ</span></div>
+      <div class="meta-row"><span><b>Title · </b>Психолог при тревоге в Липецке: консультация в методе КПТ | Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Description · </b>Психолог Попова Оксана в Липецке работает с тревогой и страхами в методе когнитивно-поведенческой терапии. Индивидуальная консультация — 2 500 ₽, ул. Леонтия Кривенкова, 33.</span></div>
+      <div class="chips"><span class="chip-kw">психолог тревожность</span><span class="chip-kw">психолог при тревоге</span><span class="chip-kw">психолог липецк</span><span class="chip-kw">психолог в липецке</span><span class="chip-kw">консультация психолога</span><span class="chip-kw">психолог страхи</span><span class="chip-kw">психолог кпт</span><span class="chip-kw">психолог попова оксана</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на индивидуальную консультацию.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Когда тревожно»</div>
+      <p>Композиция: кабинет психолога — два кресла, мягкий дневной свет, без людей в кадре. Тезис на плашке в нижней трети, строка «Психолог · КПТ · Липецк». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — основной зелёный #374D50, тезис — светлый #B0B4B9, строка — светлый #B0B4B9 на тёмном зелёном #2D433D.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Когнитивно-поведенческая терапия в Липецке: как проходит работа с психологом</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Я работаю в методе когнитивно-поведенческой терапии и не даю готовых советов — чаще задаю вопросы, которые помогают разобраться.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Работаю в методе Когнитивно-поведенческая терапия (КПТ).<span class="src">бриф</span></li>
+      <li>Безоценочность и уважение. Психолог не осуждает, не стыдит и не обесценивает чувства клиента.<span class="src">бриф</span></li>
+      <li>Эмпатия и признание чувств. Сначала — понимание.<span class="src">бриф</span></li>
+      <li>Ясность и конкретность. Ответ должен быть понятным, без избытка терминов. Если используется термин — он объясняется.<span class="src">бриф</span></li>
+      <li>Вопросы вместо готовых советов.<span class="src">бриф</span></li>
+      <li>Соблюдение границ. Психолог не решает проблемы за клиента.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Когнитивно-поведенческая терапия в Липецке — психолог Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Title · </b>КПТ-психолог в Липецке: принципы работы | Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Description · </b>Психолог Попова Оксана работает в методе когнитивно-поведенческой терапии: безоценочно, с признанием чувств, понятным языком и вопросами вместо готовых советов. Липецк, ул. Леонтия Кривенкова, 33.</span></div>
+      <div class="chips"><span class="chip-kw">когнитивно-поведенческая терапия</span><span class="chip-kw">кпт психолог</span><span class="chip-kw">кпт липецк</span><span class="chip-kw">когнитивно-поведенческий психолог</span><span class="chip-kw">психолог липецк</span><span class="chip-kw">психологическое консультирование</span><span class="chip-kw">психолог тревожность</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию, чтобы обсудить ваш запрос.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Вопросы вместо советов»</div>
+      <p>Композиция: блокнот и ручка на столе кабинета, зелень растения в кадре. Тезис на плашке в верхней трети, строка «Когнитивно-поведенческая терапия».</p>
+      <p>Цвета: плашка — светлый #B0B4B9, тезис — тёмный зелёный #2D433D, строка — основной зелёный #374D50.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Семейный психолог в Липецке: парная консультация при ревности, измене и разводе</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Ко мне можно прийти вдвоём: провожу парные консультации, когда отношения переживают ревность, измену или развод.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Запросы: ревность и измена партнёра; одиночество, ситуации отвержения, развода.<span class="src">бриф</span></li>
+      <li>Парная консультация 3000 руб.<span class="src">бриф</span></li>
+      <li>Психолог не даёт директивных советов в стиле «брось его» или «уволься», если это не кризисная ситуация с угрозой безопасности.<span class="src">бриф</span></li>
+      <li>Я опираюсь на принципы конфиденциальности, корректности и профессионализма в своей работе.<span class="src">бриф</span></li>
+      <li>С понедельника по пятницу с 9:00 до 20:00, в воскресенье с 12:00 до 18:00, суббота выходной.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Семейный психолог в Липецке — парная консультация, Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Title · </b>Парная консультация психолога в Липецке — 3 000 ₽ | Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Description · </b>Парная консультация психолога в Липецке при ревности, измене и разводе — 3 000 ₽. Конфиденциально, без директивных советов. Ул. Леонтия Кривенкова, 33.</span></div>
+      <div class="chips"><span class="chip-kw">семейный психолог</span><span class="chip-kw">семейный психолог липецк</span><span class="chip-kw">психолог для пар</span><span class="chip-kw">парная консультация психолога</span><span class="chip-kw">психолог развод</span><span class="chip-kw">психолог ревность</span><span class="chip-kw">психолог измена</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на парную консультацию.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Парная консультация»</div>
+      <p>Композиция: два кресла напротив друг друга в кабинете, без людей. Тезис на плашке в нижней трети, строка «3 000 ₽ · Липецк».</p>
+      <p>Цвета: плашка — тёмный зелёный #2D433D, тезис — светлый #B0B4B9, цена — светлый #B0B4B9 на основном зелёном #374D50.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Психолог в Липецке при выгорании, низкой самооценке и страхах: с чем можно прийти</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Не обязательно точно знать, что не так, чтобы прийти к психологу. Перечислю запросы, с которыми ко мне обращаются чаще всего.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Эмоциональное выгорание; низкая самооценка; агрессивность и раздражительность; отсутствие каких-либо эмоций; страхи.<span class="src">бриф</span></li>
+      <li>Если вас что-то беспокоит, но нет понимания, что конкретно; если вас беспокоит конкретная сфера; резкое изменение жизни.<span class="src">бриф</span></li>
+      <li>Работаю в методе Когнитивно-поведенческая терапия (КПТ).<span class="src">бриф</span></li>
+      <li>Индивидуальная консультация 2500 руб.<span class="src">бриф</span></li>
+      <li>г. Липецк, ул. Леонтия Кривенкова, 33, офис 11/3, 2-й этаж.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Психолог в Липецке при выгорании и низкой самооценке — Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Title · </b>Выгорание, самооценка, страхи: психолог в Липецке | Попова Оксана</span></div>
+      <div class="meta-row"><span><b>Description · </b>С какими запросами приходят к психологу: эмоциональное выгорание, низкая самооценка, раздражительность, страхи, резкое изменение жизни. Индивидуальная консультация — 2 500 ₽, Липецк.</span></div>
+      <div class="chips"><span class="chip-kw">психолог выгорание</span><span class="chip-kw">эмоциональное выгорание психолог</span><span class="chip-kw">психолог самооценка</span><span class="chip-kw">психолог страхи</span><span class="chip-kw">индивидуальная консультация психолога</span><span class="chip-kw">психолог липецк</span><span class="chip-kw">психолог для взрослых</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на индивидуальную консультацию.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«С чем можно прийти»</div>
+      <p>Композиция: кресло у окна с пледом, спокойный свет. Тезис на плашке в верхней трети, три запроса строкой: «выгорание · самооценка · страхи».</p>
+      <p>Цвета: плашка — основной зелёный #374D50, тезис — светлый #B0B4B9, строка запросов — тёмный зелёный #2D433D на светлом #B0B4B9.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pp-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Когда тревожно</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Тревога</span><span class="fact-pill">Страхи</span><span class="fact-pill">Метод КПТ</span><span class="fact-pill">2 500 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон основной зелёный #374D50, заголовок светлым #B0B4B9 сверху, факты на светлых плашках #B0B4B9 текстом #141F20, цена крупно горчичным #AF8B3B внизу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Как я работаю</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Безоценочность</span><span class="fact-pill">Эмпатия</span><span class="fact-pill">Ясность</span><span class="fact-pill">Вопросы вместо советов</span><span class="fact-pill">Границы</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #B0B4B9, заголовок тёмным зелёным #2D433D, пять принципов списком на плашках основного зелёного #374D50 светлым текстом #B0B4B9.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Парная консультация</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Ревность</span><span class="fact-pill">Измена</span><span class="fact-pill">Развод</span><span class="fact-pill">3 000 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмный зелёный #2D433D, цена крупно светлым #B0B4B9, запросы в ряд на светлых плашках #B0B4B9.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">С чем приходят</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Выгорание</span><span class="fact-pill">Низкая самооценка</span><span class="fact-pill">Раздражительность</span><span class="fact-pill">Резкое изменение жизни</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #B0B4B9, запросы столбиком основным зелёным #374D50, внизу строка «Пн–пт 9:00–20:00 · вс 12:00–18:00».</div></div>
+  </div>
+</section>
+
+<section id="pp-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — тревога, КПТ, пары, выгорание <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Психолог при тревоге: консультация в методе КПТ</b>тревога, страхи, 2 500 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Когда тревожно</b>запросы и цена</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Когнитивно-поведенческая терапия: как проходит работа</b>пять принципов из брифа</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Как я работаю</b>принципы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Парная консультация при ревности, измене, разводе</b>3 000 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Парная консультация</b>запросы и цена</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Выгорание, самооценка, страхи — с чем прийти</b>запросы из брифа</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>С чем приходят</b>запросы и режим работы</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['top','Итог'],['maps','Позиции'],['why','Причины'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="pp-${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
