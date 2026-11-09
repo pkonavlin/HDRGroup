@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Кризантема»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)} .va .down{color:var(--crit)}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:10.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .col{fill:var(--gold)}
+.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Кризантема</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Екатеринбург · магазин цветов · ул. Репина, 88 · замер 09.11.2026</span>
+  <h1>Где «Кризантему» не видно на Картах и что с этим делать</h1>
+  <p>Карточка цветочной мастерской «Кризантема» на Яндекс Картах. Позиции по 10 целевым запросам, соседи по выдаче у ул. Репина, 88 и спрос по Вордстату для региона «Екатеринбург».</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Карточки нет ни по одному из 10 запросов</b>На карточке не указан адрес точки: вместо него стоит «Оказывает услуги в Екатеринбурге». Поэтому Яндекс не показывает «Кризантему» ни в поиске по городу, ни рядом с ул. Репина, 88, где в первой пятёрке пять соседних магазинов.</p></div>
+    <div class="v"><span class="pill crit">пусто</span><p><b>Нет оценок, новостей, прайса и сайта</b>На карточке 3 фото, «Ещё нет отзывов», ни одной публикации. У соседей по Репина — от 28 до 876 оценок, рейтинг 4,3–5,0 и кешбэк 5%.</p></div>
+    <div class="v"><span class="pill warn">что сделать</span><p><b>Указать адрес ул. Репина, 88 и заполнить карточку</b>Адрес, рубрики «Магазин цветов» и «Доставка цветов и букетов», прайс в формате «от N ₽» по брифу, затем еженедельные новости и сторис под запросы ниже.</p></div>
+    <div class="v"><span class="pill info">спрос</span><p><b>Ноябрь — один из двух пиков года</b>«доставка цветов» в Екатеринбурге: ноябрь 2025 — 23 174 запроса, март 2026 — 23 706. Сентябрь 2026 — 17 021, на 3% больше, чем в сентябре 2025.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Оценки и отзывы</div><div class="n">0</div><div class="s">«Ещё нет отзывов»</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">фото — 3</div></div>
+    <div class="kpi"><div class="k">«цветы екатеринбург»</div><div class="n">18 743</div><div class="s">запросов в месяц</div></div>
+    <div class="kpi"><div class="k">«доставка цветов»</div><div class="n">12 918</div><div class="s">запросов в месяц</div></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Екатеринбургу без геолокации; последняя строка — карта у ул. Репина, 88. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Кризантема</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>цветы</td><td class="r">нет</td><td>Цветочная долина, Свой цветной, Вбукете.рф, Цветы для улыбки, Fanya Flower project</td></tr>
+      <tr><td>доставка цветов</td><td class="r">нет</td><td>Цветочная долина, Bambini Flowers, Свой цветной, Вбукете.рф, Fanya Flower project</td></tr>
+      <tr><td>магазин цветов</td><td class="r">нет</td><td>Цветочная долина, Bambini Flowers, Свой цветной, Вбукете.рф, Fanya Flower project</td></tr>
+      <tr><td>цветочный магазин</td><td class="r">нет</td><td>Bambini Flowers, Цветочная долина, Вбукете.рф, Свой цветной, Fanya Flower project</td></tr>
+      <tr><td>купить букет</td><td class="r">нет</td><td>Цветочная долина, Bambini Flowers, Вбукете.рф, Свой цветной, Fanya Flower project</td></tr>
+      <tr><td>букет цветов</td><td class="r">нет</td><td>CvetkovVille (2 адреса), Цветочная долина, Вбукете.рф, Свой цветной</td></tr>
+      <tr><td>цветы недорого</td><td class="r">нет</td><td>Цветочная долина, Bambini Flowers, Свой цветной, Магцветов.рф, Fanya Flower project</td></tr>
+      <tr><td>цветы с бесплатной доставкой</td><td class="r">нет</td><td>Свой цветной, Bambini Flowers, Цветы от Лофф, Ten memories, CvetkovVille</td></tr>
+      <tr><td>цветочная мастерская</td><td class="r">нет</td><td>CvetkovVille (2 адреса), Цветочная долина, Свой цветной, Bambini Flowers</td></tr>
+      <tr><td>цветы (у ул. Репина, 88)</td><td class="r">нет</td><td>Вбукете.рф, БукетЕкб, Rose Mix, БукетЕкб, Сеzон</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по выдаче у ул. Репина, 88</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Кризантема</b></td><td class="r num me">—</td><td class="r num me">0</td><td>адрес на карточке не указан</td></tr>
+      <tr><td>БукетЕкб</td><td class="r num">5,0</td><td class="r num">876</td><td>ул. Шаумяна, 84</td></tr>
+      <tr><td>Вбукете.рф</td><td class="r num">5,0</td><td class="r num">697</td><td>ул. Репина, 99</td></tr>
+      <tr><td>Rose Mix</td><td class="r num">4,9</td><td class="r num">123</td><td>ул. Репина, 94</td></tr>
+      <tr><td>Сеzон</td><td class="r num">4,3</td><td class="r num">38</td><td>ул. Репина, 107</td></tr>
+      <tr><td>БукетЕкб</td><td class="r num">4,7</td><td class="r num">28</td><td>Белореченская ул., 29</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">У всех пяти соседей на карточке есть адрес, кешбэк 5% на покупки, у трёх — отметка «Награды 2026». Вбукете.рф, Rose Mix и Сеzон стоят на той же улице Репина.</p>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос в Екатеринбурге</h2><p>Вордстат, регион «Екатеринбург», все устройства. Частоты — за 08.09–07.10.2026: более новые данные Вордстат сейчас не отдаёт.</p></div>
+  <div class="chart" data-chart="d"><h3>«доставка цветов», октябрь 2025 — сентябрь 2026</h3><div class="cs">запросов в месяц · ноябрь 2025 к ноябрю 2024: −6%</div></div>
+
+  <h3>10 целевых запросов</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-d"></tbody></table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Город в запросе</b>: «цветы екатеринбург» — 18 743, «доставка цветов екатеринбург» — 5 037.</li>
+      <li><b>Доставку ищут чаще магазина</b>: «доставка цветов» — 12 918, «магазин цветов» — 4 075.</li>
+      <li><b>Бесплатную доставку ищут отдельно</b>: «бесплатная доставка цветов» — 152, «доставка цветов недорого» — 494.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «цветы», «Екатеринбург» и адрес ул. Репина, 88 в первом абзаце.</li>
+      <li>Отдельная новость под бесплатную доставку и под свежие поставки.</li>
+      <li>Ноябрь и март — пики спроса: в ноябре ищут цветы к Дню матери.</li>
+    </ul></div>
+  </div>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/krizantema/45651486765/" target="_blank" rel="noopener">«Кризантема» — Яндекс Карты</a>
+    <a href="https://www.instagram.com/krizantema_ekb/" target="_blank" rel="noopener">@krizantema_ekb — Instagram</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Магазин цветов · Екатеринбург · ул. Репина, 88</span>
+  <h1>«Кризантема» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Кризантема» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Цветочная мастерская КРИЗАНТЕМА</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Розничная торговля цветами <small>срезанные цветы и сопутствующие товары</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">ул. Репина, 88 <small>Екатеринбург</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно 8:00–22:00</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Бесплатная доставка <small>быстрая сборка, свежие букеты и композиции</small></div></div>
+    <div class="fact"><div class="k">Сопутствующие товары</div><div class="v">Диффузоры, вазы, свечи <small>крем для рук, мягкие игрушки, конверты</small></div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Кризантемы»</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: зелёный фон и белый знак аватара, светлый фон публикаций.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#48554B;color:#FFFFFF;border-color:#48554B"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#48554B</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#48554B;border-color:#FFFFFF"><div class="role">Знак и текст на зелёном</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+    <div class="swatch" style="background:#E0D9D3;color:#48554B;border-color:#E0D9D3"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#E0D9D3</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с адреса мастерской, потом раскрывает свежие поставки и бесплатную доставку — запросы, по которым карточку сейчас не видно, — и заканчивается сопутствующими товарами к букету.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Цветочная мастерская «Кризантема» на ул. Репина, 88: ежедневно с 8:00 до 22:00, есть парковка.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Поставки цветов дважды в неделю: проверенный импорт и свежие российские сорта.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Бесплатная доставка цветов по Екатеринбургу и быстрая сборка букета.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>К букету: диффузоры, вазы, свечи, крем для рук, мягкие игрушки, конверты.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Кризантема» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», строго деловой стиль — так указано в брифе. Вступление от лица мастерской, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней, упоминаний конкурентов. В дизайне нет красного и чёрного. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Магазин цветов на Репина, 88 в Екатеринбурге: цветочная мастерская «Кризантема» открыта каждый день</h3></div><span class="purpose">Знакомство</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Цветочная мастерская «Кризантема» открыла двери на ул. Репина, 88 — здесь можно выбрать свежий букет или композицию каждый день с 8:00 до 22:00.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Розничная торговля цветами. Срезанные цветы и сопутствующие товары.<span class="src">бриф</span></li>
+      <li>Режим работы: с понедельника по воскресенье с 8.00 до 22.00.<span class="src">бриф</span></li>
+      <li>Адрес: Репина 88.<span class="src">бриф</span></li>
+      <li>Название «Кризантема» соединяет имя основательницы Кристины и хризантему.<span class="src">Instagram</span></li>
+      <li>Есть парковка.<span class="src">Instagram</span></li>
+      <li>Бесплатная доставка, быстрая сборка, свежие букеты и композиции.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Магазин цветов на Репина, 88 — цветочная мастерская «Кризантема», Екатеринбург</span></div>
+      <div class="meta-row"><span><b>Title · </b>Магазин цветов в Екатеринбурге на ул. Репина, 88 | Кризантема</span></div>
+      <div class="meta-row"><span><b>Description · </b>Цветочная мастерская «Кризантема» в Екатеринбурге: свежие букеты и композиции, бесплатная доставка. Ул. Репина, 88, ежедневно с 8:00 до 22:00, есть парковка.</span></div>
+      <div class="chips"><span class="chip-kw">магазин цветов</span><span class="chip-kw">цветы магазин</span><span class="chip-kw">цветочная мастерская</span><span class="chip-kw">цветы екатеринбург</span><span class="chip-kw">цветы екб</span><span class="chip-kw">цветы репина</span><span class="chip-kw">магазин цветов екатеринбург</span><span class="chip-kw">цветы купить</span><span class="chip-kw">кризантема</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> приходите выбрать букет на ул. Репина, 88.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Репина, 88 — каждый день»</div>
+      <p>Композиция: витрина мастерской с букетами на фоне; тезис на зелёной плашке в нижней трети, строка «8:00–22:00 · есть парковка», знак в верхнем левом углу. Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — зелёный #48554B, тезис — белый #FFFFFF, строка — светлый #E0D9D3.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Свежие цветы в Екатеринбурге: поставки в «Кризантему» дважды в неделю</h3></div><span class="purpose">Поступление</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Свежесть — наш главный приоритет: дважды в неделю мы получаем поставки цветов.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Дважды в неделю мы получаем поставки самых красивых цветов.<span class="src">Instagram</span></li>
+      <li>Мы тщательно выбираем лучшее для вас: проверенный импорт и свежие российские сорта.<span class="src">Instagram</span></li>
+      <li>В «Кризантеме» вас всегда ждут стойкие, ароматные и только что приехавшие цветы.<span class="src">Instagram</span></li>
+      <li>Свежие букеты и композиции.<span class="src">бриф</span></li>
+      <li>Адрес: Репина 88; с понедельника по воскресенье с 8.00 до 22.00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Свежие цветы в Екатеринбурге — поставки дважды в неделю в «Кризантеме»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Свежие цветы в Екатеринбурге: импорт и российские сорта | Кризантема</span></div>
+      <div class="meta-row"><span><b>Description · </b>Цветы в Екатеринбурге с поставками дважды в неделю: проверенный импорт и свежие российские сорта. Букеты и композиции на ул. Репина, 88, ежедневно с 8:00 до 22:00.</span></div>
+      <div class="chips"><span class="chip-kw">цветы екатеринбург</span><span class="chip-kw">свежие цветы</span><span class="chip-kw">цветы купить</span><span class="chip-kw">купить цветы екатеринбург</span><span class="chip-kw">букет цветов</span><span class="chip-kw">цветы розы</span><span class="chip-kw">заказать цветы</span><span class="chip-kw">цветы екб</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> заходите за свежим букетом.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Поставки дважды в неделю»</div>
+      <p>Композиция: только что распакованные цветы в вёдрах крупным планом; тезис на светлой плашке в верхней трети, строка «импорт · российские сорта».</p>
+      <p>Цвета: плашка — светлый #E0D9D3, тезис — зелёный #48554B, строка — белый #FFFFFF на зелёном #48554B.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Доставка цветов по Екатеринбургу бесплатно: быстрая сборка букета в «Кризантеме»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Доставка букетов из «Кризантемы» бесплатная, а собираем мы их быстро.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Бесплатная доставка, быстрая сборка, свежие букеты и композиции.<span class="src">бриф</span></li>
+      <li>Розничная торговля цветами. Срезанные цветы и сопутствующие товары.<span class="src">бриф</span></li>
+      <li>С понедельника по воскресенье с 8.00 до 22.00.<span class="src">бриф</span></li>
+      <li>Адрес мастерской: Репина 88.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Бесплатная доставка цветов по Екатеринбургу — «Кризантема»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Доставка цветов в Екатеринбурге бесплатно, быстрая сборка | Кризантема</span></div>
+      <div class="meta-row"><span><b>Description · </b>Доставка цветов в Екатеринбурге без оплаты за доставку: быстрая сборка, свежие букеты и композиции. Мастерская «Кризантема», ул. Репина, 88, ежедневно с 8:00 до 22:00.</span></div>
+      <div class="chips"><span class="chip-kw">доставка цветов</span><span class="chip-kw">доставка цветов екатеринбург</span><span class="chip-kw">бесплатная доставка цветов</span><span class="chip-kw">доставка цветов на дом</span><span class="chip-kw">доставка цветов недорого</span><span class="chip-kw">заказать цветы с доставкой</span><span class="chip-kw">цветы с доставкой</span><span class="chip-kw">букет цветов с доставкой</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> заказывайте букет с бесплатной доставкой.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Доставка бесплатно»</div>
+      <p>Композиция: готовый букет в упаковке в руках флориста; тезис крупно на зелёной плашке, строка «быстрая сборка · Екатеринбург».</p>
+      <p>Цвета: плашка — зелёный #48554B, тезис — белый #FFFFFF, строка — светлый #E0D9D3.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Что добавить к букету: диффузоры, вазы, свечи и мягкие игрушки в «Кризантеме»</h3></div><span class="purpose">Поступление</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Кризантеме», кроме цветов, есть сопутствующие товары — их можно взять вместе с букетом.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Диффузоры, вазы, крем для рук, свечи, мягкие игрушки, конверты.<span class="src">бриф</span></li>
+      <li>Розничная торговля цветами. Срезанные цветы и сопутствующие товары.<span class="src">бриф</span></li>
+      <li>Сезонные поводы: 8 марта, День матери, День учителя, выпускной, 1 сентября.<span class="src">бриф</span></li>
+      <li>Бесплатная доставка, быстрая сборка.<span class="src">бриф</span></li>
+      <li>Адрес: Репина 88.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Цветы и подарки к букету в Екатеринбурге — «Кризантема»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Букет цветов и подарок: вазы, свечи, игрушки, конверты | Кризантема</span></div>
+      <div class="meta-row"><span><b>Description · </b>В мастерской «Кризантема» к букету — диффузоры, вазы, свечи, крем для рук, мягкие игрушки и конверты. Бесплатная доставка по Екатеринбургу, ул. Репина, 88.</span></div>
+      <div class="chips"><span class="chip-kw">букет цветов</span><span class="chip-kw">цветы и подарки</span><span class="chip-kw">букет с игрушкой</span><span class="chip-kw">цветы женщине</span><span class="chip-kw">заказать цветы</span><span class="chip-kw">цветы маме</span><span class="chip-kw">цветы онлайн</span><span class="chip-kw">магазин цветов екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте букет и подарок к нему в одном месте.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«К букету — подарок»</div>
+      <p>Композиция: букет рядом со свечой, вазой и мягкой игрушкой на светлом фоне; тезис на зелёной плашке в нижней трети.</p>
+      <p>Цвета: фон — светлый #E0D9D3, плашка — зелёный #48554B, тезис — белый #FFFFFF.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Репина, 88</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Ежедневно 8:00–22:00</span><span class="fact-pill">Есть парковка</span><span class="fact-pill">Срезанные цветы</span><span class="fact-pill">Сопутствующие товары</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #48554B, адрес крупно белым #FFFFFF, факты на светлых плашках #E0D9D3 текстом #48554B. Знак в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Поставки 2 раза в неделю</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Проверенный импорт</span><span class="fact-pill">Российские сорта</span><span class="fact-pill">Свежие букеты</span><span class="fact-pill">Композиции</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #E0D9D3, цифра «2» крупно зелёным #48554B, факты списком на зелёных плашках #48554B белым текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Доставка бесплатно</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Бесплатная доставка</span><span class="fact-pill">Быстрая сборка</span><span class="fact-pill">Екатеринбург</span><span class="fact-pill">8:00–22:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото букета в упаковке на верхней половине, нижняя половина — плашка зелёного #48554B с тезисом белым #FFFFFF.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">К букету</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Диффузоры</span><span class="fact-pill">Вазы</span><span class="fact-pill">Свечи</span><span class="fact-pill">Крем для рук</span><span class="fact-pill">Мягкие игрушки</span><span class="fact-pill">Конверты</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, товары сеткой 2×3 на светлых плитках #E0D9D3, подписи зелёным #48554B.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — адрес, свежие поставки, доставка, товары к букету <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Магазин цветов на Репина, 88</b>режим работы, парковка, название мастерской</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Репина, 88</b>адрес и часы работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Свежие цветы: поставки дважды в неделю</b>импорт и российские сорта</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Поставки 2 раза в неделю</b>происхождение цветов</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Бесплатная доставка цветов по Екатеринбургу</b>доставка и быстрая сборка</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Доставка бесплатно</b>условия доставки</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Что добавить к букету</b>сопутствующие товары, сезонные поводы</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>К букету</b>шесть позиций сопутствующих товаров</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['окт 25','ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D=[17509,23174,11966,10250,13752,23706,10082,11797,10536,13351,19807,17021];
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D,W=640,H=220,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.18,w=bw*.64;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${(v/1000).toFixed(1).replace('.',',')}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+});
+const rows=[['цветы екатеринбург','коммерческое, гео',18743],['доставка цветов','коммерческое',12918],['цветы купить','коммерческое',7020],['букет цветов','коммерческое',6733],['доставка цветов екатеринбург','коммерческое, гео',5037],['магазин цветов','коммерческое',4075],['заказать цветы','коммерческое',2119],['доставка цветов на дом','коммерческое',900],['доставка цветов недорого','коммерческое',494],['бесплатная доставка цветов','коммерческое',152]];
+const mx=Math.max(...rows.map(r=>r[2]));document.getElementById('t-d').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('');
+const NAV={analytics:[['a-summary','Итог'],['a-maps','Позиции на Картах'],['a-demand','Спрос']],content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
