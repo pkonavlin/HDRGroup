@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Гедонист клуб»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar (mark + company + view tabs + section chips); two views — Аналитика / Контент-план */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+/* content view */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+/* analytics view */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause p b{color:var(--ink)}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Гедонист клуб</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Ленинградская область · Приозерский район · Новожилово · замер 11.11.2026</span>
+  <h1>Где «Гедонист клуб» не видно на Картах</h1>
+  <p>Позиции карточки на Яндекс Картах по 9 целевым запросам при карте у Новожилово и соседи по геовыдаче.</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«база отдыха» — 1-е место, «база отдыха с баней» — 2-е</b>По рубрике «База, дом отдыха» карточка в первой пятёрке рядом с Igora Resort, Chernika House и Novozhilovo Park.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«шале посуточно», «снять коттедж посуточно», «коттедж с баней», «дом для двоих с камином»</b>По этим запросам выдачу собирают карточки посуточной аренды жилья и гостевых домов: Anttila Hutor, Черничный склон, Elki haus, Лес и гора.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«баня с чаном», «аренда бани»</b>Наверху карточки с рубрикой «Баня»: Тарасовские бани и баня «Лес и гора». Русская баня с чаном у «Гедониста» есть, но карточка по банным запросам не показывается.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Цена шале «Оникс» на карточке и на сайте разная</b>В услугах карточки — 9 500 ₽, на сайте — 10 500.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">198 оценок · 102 отзыва</div></div>
+    <div class="kpi"><div class="k">Запросов в первой пятёрке</div><div class="n">2 из 9</div><div class="s">только «база отдыха»</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">4</div><div class="s">фото — 219</div></div>
+    <div class="kpi"><div class="k">Награда Яндекс Карт</div><div class="n">2026</div><div class="s">«Хорошее место»</div></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск в регионе «Санкт-Петербург и Ленинградская область», карта у деревни Новожилово. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Гедонист клуб</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>база отдыха</td><td class="r me">1</td><td>Гедонист клуб, Novozhilovo Park, Igora Resort, Chernika House, Фрегат</td></tr>
+      <tr><td>база отдыха с баней</td><td class="r me">2</td><td>Chernika House, Гедонист клуб, Igora Resort, Novozhilovo Park, Novozhilovo Club</td></tr>
+      <tr><td>шале посуточно</td><td class="r">нет</td><td>Anttila Hutor, Черничный склон, Nova Holiday</td></tr>
+      <tr><td>снять коттедж посуточно</td><td class="r">нет</td><td>Anttila Hutor, House near Igora, Черничный склон, Anttila Hutor 2, Nova Holiday</td></tr>
+      <tr><td>коттедж с баней</td><td class="r">нет</td><td>Elki haus, Chernika House, Лес и гора, Дом в Папоротниках, Shishkin place</td></tr>
+      <tr><td>дом для двоих с камином</td><td class="r">нет</td><td>Elki haus, Chernika House</td></tr>
+      <tr><td>домик в лесу</td><td class="r">нет</td><td>Шишки на Лампушке — выдача сразу открывает одну карточку</td></tr>
+      <tr><td>баня с чаном</td><td class="r">нет</td><td>Тарасовские бани — выдача сразу открывает одну карточку</td></tr>
+      <tr><td>аренда бани</td><td class="r">нет</td><td>Тарасовские бани, Лес и гора (баня), Баня на курорте Игора</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по геовыдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th>Рубрика</th><th class="r">Рейтинг</th><th class="r">Оценки</th></tr></thead>
+    <tbody>
+      <tr><td><b>Гедонист клуб</b></td><td>База, дом отдыха</td><td class="r num me">5,0</td><td class="r num me">198</td></tr>
+      <tr><td>Igora Resort</td><td>База, дом отдыха</td><td class="r num">5,0</td><td class="r num">11 918</td></tr>
+      <tr><td>Anttila Hutor</td><td>Посуточная аренда жилья</td><td class="r num">5,0</td><td class="r num">1 205</td></tr>
+      <tr><td>Фрегат</td><td>База, дом отдыха · банкетный зал</td><td class="r num">4,9</td><td class="r num">883</td></tr>
+      <tr><td>Chernika House</td><td>База, дом отдыха</td><td class="r num">5,0</td><td class="r num">770</td></tr>
+      <tr><td>Черничный склон</td><td>Посуточная аренда жилья</td><td class="r num">5,0</td><td class="r num">496</td></tr>
+      <tr><td>Novozhilovo Park</td><td>База, дом отдыха</td><td class="r num">5,0</td><td class="r num">486</td></tr>
+      <tr><td>Elki haus</td><td>Гостевой дом</td><td class="r num">4,7</td><td class="r num">398</td></tr>
+      <tr><td>Anttila Hutor 2</td><td>Посуточная аренда жилья</td><td class="r num">5,0</td><td class="r num">361</td></tr>
+      <tr><td>Лес и гора</td><td>Гостевой дом</td><td class="r num">5,0</td><td class="r num">293</td></tr>
+      <tr><td>Тарасовские бани</td><td>Баня · сауна</td><td class="r num">5,0</td><td class="r num">155</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-why">
+  <div class="sh"><h2>Почему карточку не видно</h2><p>Каждая причина подтверждена данными карточек и выдачи. Порядок — по силе влияния.</p></div>
+  <div class="causes">
+    <div class="cause">
+      <div class="cause-h"><span class="pill crit">главное</span><h3>Одна рубрика — «База, дом отдыха»</h3></div>
+      <p>По запросам про шале, коттеджи и дом с камином Яндекс показывает карточки из рубрик <b>«Посуточная аренда жилья»</b> и <b>«Гостевой дом»</b>. У «Гедониста» в аренду три шале, но этих рубрик на карточке нет, поэтому её нет ни в одной из четырёх выдач.</p>
+      <p class="next">Добавить рубрики «Посуточная аренда жилья» и «Гостевой дом», в новостях называть шале по имени и писать «шале посуточно» и «коттедж» в первом абзаце.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Баня есть, а банных запросов нет</h3></div>
+      <p>В услугах карточки есть «Русская баня» за 9 000 ₽, на сайте — русская баня с чаном на открытом воздухе, но по «баня с чаном» и «аренда бани» первыми стоят карточки с рубрикой <b>«Баня»</b>: Тарасовские бани и баня «Лес и гора».</p>
+      <p class="next">Добавить рубрику «Баня», в прайсе дать позиции «Русская баня, 3 часа» и «Чан» отдельно.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill warn">сильное</span><h3>Оценок меньше, чем у соседей</h3></div>
+      <p>У «Гедониста» 198 оценок. У Anttila Hutor — 1 205, у Фрегата — 883, у Chernika House — 770. Рейтинг у всех 4,9–5,0, поэтому в выдаче решает объём.</p>
+    </div>
+    <div class="cause">
+      <div class="cause-h"><span class="pill info">слабое</span><h3>Разная цена «Оникса»</h3></div>
+      <p>Услуги карточки: Шале «Оникс» — <b>9 500 ₽</b>. Сайт: <b>10 500</b>. Цены «Обсидиана» и «Базальта» совпадают — 12 000.</p>
+      <p class="next">Оставить одну цену на сайте и в услугах карточки.</p>
+    </div>
+  </div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск 11.11.2026 в регионе «Санкт-Петербург и Ленинградская область», карта у деревни Новожилово; рейтинги, оценки и рубрики — из выдачи.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/gedonist_klub/143288547588/" target="_blank" rel="noopener">«Гедонист клуб» — Яндекс Карты</a>
+    <a href="https://hedonistclub.ru/" target="_blank" rel="noopener">hedonistclub.ru</a>
+    <a href="https://go.2gis.com/mfxfm" target="_blank" rel="noopener">«Гедонист клуб» — 2ГИС</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">База отдыха · Ленинградская область · Новожилово</span>
+  <h1>«Гедонист клуб» — ТЗ на контент, этап 2</h1>
+  <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «Гедонист клуб» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Гедонист клуб <small>ИП Овсюхно Николай Николаевич</small></div></div>
+    <div class="fact"><div class="k">Формат</div><div class="v">Загородный клуб <small>шале и банный комплекс</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Приозерский р-н, д. Новожилово <small>Ленинградская область, Сосновское с/п</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Круглосуточно</div></div>
+    <div class="fact"><div class="k">Шале</div><div class="v">«Обсидиан», «Базальт», «Оникс»</div></div>
+    <div class="fact"><div class="k">Баня</div><div class="v">Русская баня <small>чан на открытом воздухе</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">hedonistclub.ru</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">01 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап 1 рассказал о клубе, домиках, бане и выходных в целом. Этап 2 называет шале по именам — под запросы про шале, коттеджи посуточно и дом с камином, по которым карточки сейчас нет в выдаче.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Шале «Оникс» — камерный дом для двоих с камином и панорамными окнами.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Шале «Обсидиан» и «Базальт» — 95 м² в стиле фахверк в самом сердце елового леса.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">02 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>2 темы с обложкой. Публикация — карточка компании «Гедонист клуб» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», как на сайте клуба. Вступление от лица компании, дальше факты по теме — каждый тезис дословно по источнику, указанному рядом. Название везде одно: «Гедонист клуб». В тексте нет телефона, e-mail, ссылок и превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">2 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Шале для двоих с камином в Ленинградской области: «Оникс» в «Гедонист клубе»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Оникс» — наше камерное шале для двоих: камин и панорамные окна в еловый лес.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Камерное шале для двоих. Весь дизайн и атмосфера этого дома созданы для того, чтобы ваш отдых был романтичным, вдохновляющим и медитативным.<span class="src">сайт</span></li>
+      <li>Панорамные окна позволят вам раствориться в гармонии елового леса, в то время как живое пламя камина сделает ваш вечер незабываемым.<span class="src">сайт</span></li>
+      <li>10500 — Стоимость аренды; 1 — Этаж; 1 — Комнаты; 44 м² — Площадь.<span class="src">сайт</span></li>
+      <li>Камерность: Это уютное шале просто создано для того, кто хочет провести вечер в атмосфере единения с кем-то действительно важным.<span class="src">сайт</span></li>
+      <li>Итоговая стоимость проживания зависит от количества человек и может отличаться в выходные и праздники.<span class="src">сайт</span></li>
+      <li>Поздний заезд возможен без дополнительной оплаты, поздний выезд доступен за дополнительную плату, если есть такая возможность.<span class="src">сайт, FAQ</span></li>
+      <li>Адрес: Ленинградская область, Приозерский р-н, деревня Новожилово.<span class="src">сайт</span></li>
+      <li>40 мин. — Время в пути.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Шале для двоих с камином в Ленинградской области — «Оникс»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Дом для двоих с камином посуточно, Новожилово | Гедонист клуб</span></div>
+      <div class="meta-row"><span><b>Description · </b>Шале «Оникс» в «Гедонист клубе»: камерный дом для двоих, 44 м², камин и панорамные окна в еловый лес. Поздний заезд без доплаты, Приозерский район.</span></div>
+      <div class="chips"><span class="chip-kw">дом для двоих с камином</span><span class="chip-kw">шале для двоих</span><span class="chip-kw">шале посуточно</span><span class="chip-kw">домик для двоих в лесу</span><span class="chip-kw">дом с камином посуточно</span><span class="chip-kw">романтический отдых за городом</span><span class="chip-kw">отдых вдвоём ленинградская область</span><span class="chip-kw">шале приозерский район</span><span class="chip-kw">новожилово шале</span><span class="chip-kw">гедонист клуб</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте даты и бронируйте шале «Оникс».</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Шале для двоих с камином»</div>
+      <p>Композиция: интерьер «Оникса» вечером — горящий камин на переднем плане, панорамное окно на ели за ним, без людей. Тезис на мягком затемнении в нижней трети, строка «44 м² · камин · панорамные окна». Текст не больше 20% площади.</p>
+      <p>Цвета: по стилю этапа 1 — глубокий лесной зелёный под тезисом, молочный текст, тонкая линия тёплого древесного.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Аренда шале в стиле фахверк в еловом лесу: «Обсидиан» и «Базальт», 95 м²</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Обсидиан» и «Базальт» — наши просторные шале в стиле фахверк в самом сердце елового леса.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Просторное шале в стиле Фахверк в самом сердце елового леса. Дом находится в отдалении от других строений клуба, обеспечивая полную приватность, в то же время предлагая гостю городской уровень комфорта.<span class="src">сайт</span></li>
+      <li>В шале вас ждет камин, придающий шарм, тепло и уют вашему отдыху. Панорамное остекление, просторная терраса с лежаками обеспечат вам полное погружение в атмосферу дикого елового леса.<span class="src">сайт</span></li>
+      <li>«Обсидиан»: 12 000 — Стоимость аренды; 95м² — Площадь; 2 — Этажа; 6 — Спальных мест.<span class="src">сайт</span></li>
+      <li>«Базальт»: 12000 — Стоимость аренды; 2 — Этажа; 4 — Комнаты; 95 м² — Площадь.<span class="src">сайт</span></li>
+      <li>Умный дом: Система "Умный дом", вкупе с полным оснащением бытовой техникой, обеспечит вам городской уровень комфорта.<span class="src">сайт</span></li>
+      <li>Проектор: Что может быть лучше тихого вечера с любимым фильмом на большом экране.<span class="src">сайт</span></li>
+      <li>Стоимость проживания указана за двух человек, за каждого последующего человека необходимо доплатить 1500. Стоимость в выходные дни и праздники может отличаться.<span class="src">сайт</span></li>
+      <li>...дома в загородном клубе «Гедонист», банный комплекс, который расположен на территории клуба.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аренда шале в стиле фахверк в Ленинградской области — «Обсидиан» и «Базальт»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Аренда шале с камином в еловом лесу, Приозерский район | Гедонист клуб</span></div>
+      <div class="meta-row"><span><b>Description · </b>Шале «Обсидиан» и «Базальт»: 95 м², 2 этажа, камин, терраса с лежаками, умный дом, проектор. 12 000 за двух человек, банный комплекс на территории клуба, деревня Новожилово.</span></div>
+      <div class="chips"><span class="chip-kw">снять коттедж посуточно</span><span class="chip-kw">шале посуточно</span><span class="chip-kw">аренда шале</span><span class="chip-kw">коттедж с баней</span><span class="chip-kw">аренда коттеджа с камином</span><span class="chip-kw">коттедж ленинградская область посуточно</span><span class="chip-kw">снять дом на выходные</span><span class="chip-kw">коттедж приозерский район</span><span class="chip-kw">коттедж новожилово</span><span class="chip-kw">шале фахверк</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте шале и бронируйте даты.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Шале в стиле фахверк»</div>
+      <p>Композиция: фасад шале в стиле фахверк среди елей, терраса с лежаками, вечерний свет в панорамных окнах. Тезис на мягком затемнении в верхней трети, строка «2 этажа · камин · терраса».</p>
+      <p>Цвета: по стилю этапа 1 — графитовый под тезисом, молочный текст, строка бежевым.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">03 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>2 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">2 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">«Оникс» — камерное шале для двоих</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">44 м² — Площадь</span><span class="fact-pill">1 — Этаж</span><span class="fact-pill">Камин</span><span class="fact-pill">Панорамные окна</span><span class="fact-pill">Поздний заезд возможен без дополнительной оплаты</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото камина «Оникса», нижняя половина — плашка глубокого лесного зелёного, тезис и факты молочным. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">На территории клуба</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Около 10 000 кв. м. — площадь земли в девственном лесу</span><span class="fact-pill">Небольшая детская площадка, с горкой и качелями</span><span class="fact-pill">Спортивная площадка</span><span class="fact-pill">Мангальная зона</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый, тезис графитовым сверху, четыре факта столбиком с тонкими линиями тёплого древесного между ними.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">04 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage">
+    <summary>Этап 1 — знакомство, домики, баня, выходные</summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Hedonist Club — место для перезагрузки вдали от города</b>расположение, тишина, лес</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Знакомство с Hedonist Club</b>дома, виды, баня и чан</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Домики Hedonist Club: комфорт среди природы</b>размещение, интерьер, оборудование</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Почему выбирают отдых в лесу</b>тишина, природа, уютный дом</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Русская баня и чан: восстановление тела и души</b>баня на дровах, чан</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Банный комплекс Hedonist Club</b>русская баня, чан</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Идеальный формат отдыха на выходные</b>сценарий двух дней</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Сценарий идеального выходного</b>утро, день, вечер</span></div>
+      <div class="stage-item"><span class="fmt">Сторис</span><span class="txt"><b>Что входит в комфортное проживание · Отдых в любое время года · Панорамные окна · Как выбрать домик · Отдельный дом вместо гостиницы</b>дополнительные темы этапа</span></div>
+    </div>
+  </details>
+  <details class="stage" open>
+    <summary>Этап 2 — шале по именам <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Шале для двоих с камином: «Оникс»</b>44 м², камин, панорамные окна, поздний заезд</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>«Оникс» — для двоих</b>параметры шале</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Аренда шале в стиле фахверк: «Обсидиан» и «Базальт»</b>95 м², камин, терраса, умный дом, проектор</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>На территории клуба</b>детская и спортивная площадки, мангальная зона</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['a-summary','Итог'],['a-maps','Позиции и соседи'],['a-why','Причины'],['a-method','Методика']],
+ content:[['c-company','Компания'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
