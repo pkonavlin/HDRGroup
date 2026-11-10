@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Massage Lilit»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar + view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Massage Lilit</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Калининград · студия массажа · замер 11.11.2026</span>
+  <h1>Где «Massage Lilit» не видно на Яндекс Картах</h1>
+  <p>Две карточки студии — ул. Малоярославская, 6 и ул. Чекистов, 81к1. Позиции на Яндекс Картах по 10 целевым запросам из направлений брифа и карточки конкурентов из первой пятёрки выдачи по Калининграду.</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни одна карточка не входит в первую пятёрку ни по одному из 10 запросов</b>Включая приоритетные направления брифа: «криосауна», «флоатинг», «коррекция фигуры».</p></div>
+    <div class="v"><span class="pill good">окно</span><p><b>По «криосауна» и «флоатинг» конкуренты слабые</b>В пятёрке «криосауна» — MyoFlex (4,3 · 7 оценок) и Wellife без рейтинга; в «флоатинг» — психологическая служба NaturEll (4,2 · 4 оценки) и студия йоги SvetLaiya. Карточка с рейтингом 5,0 и описанием процедуры может занять эти места.</p></div>
+    <div class="v"><span class="pill warn">рубрика</span><p><b>Малоярославская стоит только в рубрике «Спа»</b>По «массаж», «лимфодренажный массаж», «медовый массаж» выдачу занимают карточки с рубрикой «Массажный салон»: Здравница Фёдорова, Studiya idealnogo tela, Massage Cult, XL меняем на XS.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Карточка на Чекистов почти пустая</b>4,2 по 5 оценкам и 2 отзыва. Рубрики «Спа» и «Оздоровительный центр», цен и услуг для записи на карточке нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">ул. Малоярославская, 6</div><div class="n">5,0</div><div class="s">56 оценок · 38 отзывов · «Хорошее место 2026»</div></div>
+    <div class="kpi"><div class="k">ул. Чекистов, 81к1</div><div class="n">4,2</div><div class="s">5 оценок · 2 отзыва</div></div>
+    <div class="kpi"><div class="k">Запросов в первой пятёрке</div><div class="n">0 из 10</div><div class="s">по обеим карточкам</div></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Калининграду без геолокации, 11.11.2026. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Малоярославская</th><th class="r">Чекистов</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>массаж</td><td class="r">нет</td><td class="r">нет</td><td>Здравница Фёдорова, Spakotiki by Time Spa, Sombun, Altajskaja sdravnica, Spakotiki</td></tr>
+      <tr><td>коррекция фигуры</td><td class="r">нет</td><td class="r">нет</td><td>Studiya idealnogo tela, Secret Krasoty, Spakotiki by Time Spa, Este U Med, VIP Clinic</td></tr>
+      <tr><td>антицеллюлитный массаж</td><td class="r">нет</td><td class="r">нет</td><td>Spakotiki, Ck студия Body, Bazar Beauty Home, Cosmo Pershin, Тепло</td></tr>
+      <tr><td>лимфодренажный массаж</td><td class="r">нет</td><td class="r">нет</td><td>Здравница Фёдорова, Studiya idealnogo tela, Massage Cult, XL меняем на XS, Altajskaja sdravnica</td></tr>
+      <tr><td>медовый массаж</td><td class="r">нет</td><td class="r">нет</td><td>Massage Cult, BodyMind Spa, Feel Bali, Marusya. Sculptor, Katarina</td></tr>
+      <tr><td>массаж для беременных</td><td class="r">нет</td><td class="r">нет</td><td>Здравница Фёдорова, Amber SPA, Altajskaja sdravnica, Spakotiki by Time Spa, XL меняем на XS</td></tr>
+      <tr><td>спа салон</td><td class="r">нет</td><td class="r">нет</td><td>Amber SPA, Spakotiki by Time Spa, SPA Natabella, Morion, К8 СПА</td></tr>
+      <tr><td>криосауна</td><td class="r">нет</td><td class="r">нет</td><td>MyoFlex, Wellife, Narine, Kreativ</td></tr>
+      <tr><td>криотерапия</td><td class="r">нет</td><td class="r">нет</td><td>Academie, VIP Clinic (Пугачёва), MedExpert, VIP Clinic (Шиллера), Студия Императрица</td></tr>
+      <tr><td>флоатинг</td><td class="r">нет</td><td class="r">нет</td><td>NaturEll, SPArohod, BodyMind Spa, SvetLaiya, Morion</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Конкуренты из гео-выдачи</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Рубрика</th><th class="r">В пятёрке</th></tr></thead>
+    <tbody>
+      <tr><td><b>Massage Lilit, Малоярославская</b></td><td class="r num me">5,0</td><td class="r num me">56</td><td>Спа</td><td class="r num me">0</td></tr>
+      <tr><td><b>Massage Lilit, Чекистов</b></td><td class="r num me">4,2</td><td class="r num me">5</td><td>Спа, оздоровительный центр</td><td class="r num me">0</td></tr>
+      <tr><td>Spakotiki by Time Spa</td><td class="r num">5,0</td><td class="r num">592</td><td>Спа, массажный салон</td><td class="r num">4</td></tr>
+      <tr><td>Здравница Фёдорова</td><td class="r num">5,0</td><td class="r num">327</td><td>Массажный салон</td><td class="r num">3</td></tr>
+      <tr><td>Altajskaja sdravnica</td><td class="r num">5,0</td><td class="r num">443</td><td>Спа, массажный салон</td><td class="r num">3</td></tr>
+      <tr><td>Amber SPA</td><td class="r num">4,9</td><td class="r num">925</td><td>Спа, бассейн</td><td class="r num">2</td></tr>
+      <tr><td>Studiya idealnogo tela</td><td class="r num">5,0</td><td class="r num">108</td><td>Массажный салон</td><td class="r num">2</td></tr>
+      <tr><td>Massage Cult</td><td class="r num">5,0</td><td class="r num">40</td><td>Массажный салон</td><td class="r num">2</td></tr>
+      <tr><td>XL меняем на XS</td><td class="r num">5,0</td><td class="r num">125</td><td>Массажный салон</td><td class="r num">2</td></tr>
+      <tr><td>BodyMind Spa</td><td class="r num">5,0</td><td class="r num">162</td><td>Спа, массажный салон</td><td class="r num">2</td></tr>
+      <tr><td>MyoFlex</td><td class="r num">4,3</td><td class="r num">7</td><td>Оздоровительный центр, массажный салон</td><td class="r num">1</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Почему карточек нет в выдаче</h3><ul>
+      <li><b>Рубрика.</b> У Малоярославской нет рубрики «Массажный салон», которая есть у большинства карточек из пятёрки по массажным запросам.</li>
+      <li><b>Оценки.</b> По «массаж» у четырёх карточек из пятёрки — от 327 до 592 оценок, у Малоярославской — 56, у карточки на Чекистов — 5.</li>
+      <li><b>Карточка на Чекистов не заполнена.</b> На ней нет цен и услуг для онлайн-записи, которые есть на Малоярославской.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для контент-плана</h3><ul>
+      <li>Две новости — под «криосауна / криотерапия» и «флоатинг», где пятёрка слабая.</li>
+      <li>Две новости — под «коррекция фигуры» и «аппаратная коррекция фигуры»: ручные и аппаратные техники по авторской методике.</li>
+      <li>В каждом тексте — «Калининград» и название процедуры в первом абзаце.</li>
+    </ul></div>
+  </div>
+
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/massage_lilit/14269115812/" target="_blank" rel="noopener">Massage Lilit, ул. Малоярославская, 6 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/massage_lilit/221597901616/" target="_blank" rel="noopener">Massage Lilit, ул. Чекистов, 81к1 — Яндекс Карты</a>
+    <a href="https://massage-lilit.ru/" target="_blank" rel="noopener">massage-lilit.ru</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Студия массажа · Калининград</span>
+  <h1>«Massage Lilit» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточки компании «Massage Lilit» на Яндекс Картах и в 2ГИС, один контент-план на оба филиала.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Massage Lilit</div></div>
+    <div class="fact"><div class="k">Направление</div><div class="v">Коррекция фигуры <small>ручные и аппаратные методики, массажи, криосауна, флоатинг</small></div></div>
+    <div class="fact"><div class="k">Адреса</div><div class="v">ул. Малоярославская, 6 <small>ул. Чекистов, 81к1</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно с 9:00 до 20:00</div></div>
+    <div class="fact"><div class="k">Приоритет брифа</div><div class="v">Криосауна, флоатинг <small>персональный подход в коррекции фигуры</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v mono">massage-lilit.ru</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Massage Lilit»</h2>
+    <p>Сдержанный минимализм. В оформлении используются только тёмно-зелёный и бежевый.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#1F3D2B;color:#F4EDE2;border-color:#1F3D2B"><div class="role">Основной</div><div class="name">Тёмно-зелёный</div><div class="hex">#1F3D2B</div></div>
+    <div class="swatch" style="background:#E8DCC8;color:#1F3D2B;border-color:#E8DCC8"><div class="role">Фоновый</div><div class="name">Бежевый</div><div class="hex">#E8DCC8</div></div>
+    <div class="swatch" style="background:#F4EDE2;color:#1F3D2B;border-color:#F4EDE2"><div class="role">Светлый</div><div class="name">Светло-бежевый</div><div class="hex">#F4EDE2</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап целиком отдан приоритетам брифа: две процедуры, по которым карточки сейчас не видны при слабых конкурентах, и две темы о коррекции фигуры — основном направлении студии.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Криосауна: 3 минуты при температуре до −160.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Флоатинг: глубокое расслабление в капсуле с раствором магниевой соли.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Коррекция фигуры с персональной консультацией и авторской методикой.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Аппаратная коррекция фигуры: аппарат и ручные техники в одной процедуре.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточки компании «Massage Lilit» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль — так указано в брифе. Вступление от лица студии, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Цены — в формате «от N ₽». В тексте нет телефона и e-mail, превосходных степеней, упоминаний конкурентов и внутренних процессов компании. Для крио и флоатинга — строка «Имеются противопоказания, необходима консультация специалиста». Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Криосауна в Калининграде: 3 минуты при температуре до −160 в студии Massage Lilit</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В нашей студии есть криосауна — процедура длится всего 3 минуты.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Криотерапия — это процедура кратковременного воздействия экстремально низких температур на поверхность тела в специальной криокамере.<span class="src">бриф</span></li>
+      <li>Сеанс длится 3 минуты при температуре до −160.<span class="src">бриф</span></li>
+      <li>Крио сауна — от 4 000 ₽.<span class="src">бриф</span></li>
+      <li>Массаж, коррекция фигуры, уход за лицом и телом, криосауна и флоатинг — возможность выстроить комплексную программу заботы о себе.<span class="src">бриф</span></li>
+      <li>Используем сертифицированное оборудование и современные технологии для ухода за телом.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Криосауна в Калининграде — студия Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Title · </b>Криосауна и криотерапия в Калининграде, сеанс 3 минуты | Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Description · </b>Криосауна в студии Massage Lilit в Калининграде: сеанс 3 минуты при температуре до −160 в специальной криокамере. От 4 000 ₽, ежедневно с 9:00 до 20:00.</span></div>
+      <div class="chips"><span class="chip-kw">криосауна</span><span class="chip-kw">криосауна калининград</span><span class="chip-kw">криотерапия</span><span class="chip-kw">криотерапия калининград</span><span class="chip-kw">криокамера</span><span class="chip-kw">криосауна цена</span><span class="chip-kw">общая криотерапия</span><span class="chip-kw">massage lilit</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на сеанс криосауны онлайн.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Криосауна · 3 минуты»</div>
+      <p>Композиция: криокамера студии на светлом фоне, без людей; тезис на плашке в нижней трети, строка «до −160 · от 4 000 ₽», мелкая строка «Имеются противопоказания, необходима консультация специалиста». Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — тёмно-зелёный #1F3D2B, тезис — светло-бежевый #F4EDE2, строка — бежевый #E8DCC8.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Флоатинг в Калининграде: глубокое расслабление в капсуле с магниевой солью</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы создаём пространство, где можно полноценно отдохнуть от повседневного ритма, — флоатинг как раз для этого.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Флоатинг — это процедура глубокого расслабления в специальной капсуле в растворе с высокой концентрацией магниевой соли.<span class="src">бриф</span></li>
+      <li>Глубокое физическое и эмоциональное расслабление, снижение мышечного напряжения.<span class="src">бриф</span></li>
+      <li>Флоаткамера — от 3 800 ₽.<span class="src">бриф</span></li>
+      <li>Флоатинг: длительность 60 мин.<span class="src">сайт</span></li>
+      <li>Создаём пространство, где можно не только позаботиться о своём теле, но и полноценно отдохнуть от повседневного ритма.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Флоатинг в Калининграде — студия Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Title · </b>Флоатинг и флоат-капсула в Калининграде, 60 минут | Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Description · </b>Флоатинг в Калининграде: 60 минут в капсуле с раствором высокой концентрации магниевой соли. Глубокое расслабление и снижение мышечного напряжения, от 3 800 ₽.</span></div>
+      <div class="chips"><span class="chip-kw">флоатинг</span><span class="chip-kw">флоатинг калининград</span><span class="chip-kw">флоаткамера</span><span class="chip-kw">флоат капсула</span><span class="chip-kw">флоатинг цена</span><span class="chip-kw">камера сенсорной депривации</span><span class="chip-kw">расслабляющие процедуры калининград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на флоатинг онлайн.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Флоатинг · 60 минут»</div>
+      <p>Композиция: флоат-капсула студии с приглушённым светом, без людей; тезис на плашке в верхней трети, строка «раствор магниевой соли · от 3 800 ₽», мелкая строка о противопоказаниях внизу.</p>
+      <p>Цвета: фон плашки — бежевый #E8DCC8, тезис — тёмно-зелёный #1F3D2B.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Коррекция фигуры в Калининграде: персональная консультация и авторская методика Massage Lilit</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Перед началом работы мы проводим персональную консультацию и подбираем процедуры под ваши цели.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Перед началом работы мы проводим персональную консультацию, оцениваем особенности тела и подбираем процедуры с учётом индивидуальных потребностей и целей.<span class="src">бриф</span></li>
+      <li>Все наши мастера обучены авторской методике Massage Lilit, что позволяет придерживаться единого подхода к качеству и технике работы.<span class="src">бриф</span></li>
+      <li>Коррекция фигуры (ручной, медовый, глина) — комплексная процедура, направленная на моделирование контуров тела, улучшение качества кожи и работу с проблемными зонами. От 2 200 ₽.<span class="src">бриф</span></li>
+      <li>Коррекция фигуры (сахарный) — процедура с использованием скрабов, направленная на улучшение внешнего вида кожи и проработку проблемных зон. От 2 500 ₽.<span class="src">бриф</span></li>
+      <li>Коррекция фигуры (липосакция) — более глубокая проработка тканей в корректирующем массаже. От 2 700 ₽.<span class="src">бриф</span></li>
+      <li>Наша задача — разобраться в потребностях клиента, подобрать подходящую программу и сопровождать его на протяжении курса.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Коррекция фигуры в Калининграде — авторская методика Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Title · </b>Коррекция фигуры массажем в Калининграде, от 2 200 ₽ | Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Description · </b>Коррекция фигуры в Калининграде: персональная консультация, ручной, медовый, сахарный массаж и липосакция по авторской методике Massage Lilit. От 2 200 ₽.</span></div>
+      <div class="chips"><span class="chip-kw">коррекция фигуры</span><span class="chip-kw">коррекция фигуры калининград</span><span class="chip-kw">коррекционный массаж</span><span class="chip-kw">медовый массаж</span><span class="chip-kw">антицеллюлитный массаж</span><span class="chip-kw">моделирующий массаж тела</span><span class="chip-kw">массаж для похудения</span><span class="chip-kw">массаж калининград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию и первую процедуру коррекции фигуры.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Коррекция фигуры по авторской методике»</div>
+      <p>Композиция: кабинет студии — массажный стол, мёд и глина в чашах на столике; тезис на плашке в нижней трети, строка «консультация · курс под ваши цели».</p>
+      <p>Цвета: плашка — тёмно-зелёный #1F3D2B, тезис — светло-бежевый #F4EDE2.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Аппаратная коррекция фигуры в Калининграде: аппарат и ручные техники в одной процедуре</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы сочетаем ручные и аппаратные массажные техники и подбираем оптимальную комбинацию для каждого клиента.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Мы сочетаем ручные и аппаратные массажные техники, подбирая оптимальную комбинацию процедур для каждого клиента.<span class="src">бриф</span></li>
+      <li>Аппаратная коррекция фигуры — комбинированная работа аппарата и ручных техник, направленная на коррекцию фигуры. От 2 500 ₽.<span class="src">бриф</span></li>
+      <li>Аппаратная коррекция фигуры (Мигидо) — от 2 700 ₽.<span class="src">бриф</span></li>
+      <li>Бамбуковый пилинг — разогрев в сауне «здравница» + процедура механического отшелушивания ороговевших клеток кожи с использованием специальных средств с частицами бамбука. От 2 500 ₽.<span class="src">бриф</span></li>
+      <li>Используем сертифицированное оборудование и современные технологии для ухода за телом.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Аппаратная коррекция фигуры в Калининграде — Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Title · </b>Аппаратная коррекция фигуры в Калининграде, от 2 500 ₽ | Massage Lilit</span></div>
+      <div class="meta-row"><span><b>Description · </b>Аппаратная коррекция фигуры в Калининграде: работа аппарата и ручных техник в одной процедуре, Мигидо, бамбуковый пилинг. От 2 500 ₽, ежедневно с 9:00 до 20:00.</span></div>
+      <div class="chips"><span class="chip-kw">аппаратная коррекция фигуры</span><span class="chip-kw">аппаратный массаж</span><span class="chip-kw">аппаратная коррекция фигуры калининград</span><span class="chip-kw">коррекция фигуры</span><span class="chip-kw">бамбуковый пилинг</span><span class="chip-kw">спа салон калининград</span><span class="chip-kw">массаж тела калининград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на аппаратную коррекцию фигуры онлайн.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Аппарат + ручные техники»</div>
+      <p>Композиция: аппарат для коррекции фигуры в кабинете студии, рядом массажный стол; тезис на плашке в верхней трети, строка «от 2 500 ₽».</p>
+      <p>Цвета: плашка — бежевый #E8DCC8, тезис — тёмно-зелёный #1F3D2B.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточки компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Криосауна</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">3 минуты</span><span class="fact-pill">до −160</span><span class="fact-pill">криокамера</span><span class="fact-pill">от 4 000 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-зелёный #1F3D2B, заголовок светло-бежевым #F4EDE2, факты на бежевых плашках #E8DCC8 текстом #1F3D2B, строка о противопоказаниях внизу мелко. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Флоатинг</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">60 минут</span><span class="fact-pill">капсула</span><span class="fact-pill">раствор магниевой соли</span><span class="fact-pill">от 3 800 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый #E8DCC8, заголовок тёмно-зелёным #1F3D2B, факты в тёмно-зелёных плашках светлым текстом #F4EDE2.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Коррекция фигуры</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Персональная консультация</span><span class="fact-pill">Авторская методика</span><span class="fact-pill">Ручной · медовый · глина</span><span class="fact-pill">от 2 200 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-бежевый #F4EDE2, заголовок тёмно-зелёным #1F3D2B, факты списком с тонкими разделителями #E8DCC8.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Аппарат + руки</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Аппаратная коррекция — от 2 500 ₽</span><span class="fact-pill">Мигидо — от 2 700 ₽</span><span class="fact-pill">Сертифицированное оборудование</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-зелёный #1F3D2B, цены крупно бежевым #E8DCC8, подписи светло-бежевым #F4EDE2.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — криосауна, флоатинг, коррекция фигуры <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Криосауна в Калининграде: 3 минуты до −160</b>криокамера, от 4 000 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Криосауна</b>время, температура, цена</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Флоатинг: расслабление в капсуле с магниевой солью</b>60 минут, от 3 800 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Флоатинг</b>капсула, раствор, цена</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Коррекция фигуры: консультация и авторская методика</b>ручной, медовый, сахарный, липосакция</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Коррекция фигуры</b>персональный подход</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Аппаратная коррекция фигуры</b>аппарат и ручные техники, Мигидо, бамбуковый пилинг</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Аппарат + руки</b>цены аппаратных процедур</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['a-summary','Итог'],['a-maps','Позиции и конкуренты']],
+ content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
