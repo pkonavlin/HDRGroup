@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Аудит кабинета Яндекс Директа автошколы Старт: расходы, цели, структура, объявления и приоритеты улучшения.">
+<title>Аудит рекламы автошколы Старт · 09.11.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: HDR presales-аудит — navy, острые углы, HUD-уголки, hairline, mono-теги; верхний sticky-бар, одна колонка чтения */
+:root{
+  --bg:#0B1220;
+  --panel:#101A2C;
+  --panel-2:#14203A;
+  --line:#22304A;
+  --line-strong:#33456A;
+  --fg:#E6ECF5;
+  --muted:#8C9AB3;
+  --accent:#E3B860;
+  --accent-soft:rgba(227,184,96,.14);
+  --danger:#D9705C;
+  --danger-soft:rgba(217,112,92,.14);
+  --ok:#6FC2A6;
+  --bar:#4A5C80;
+  --f-display:"Manrope","Segoe UI",Arial,sans-serif;
+  --f-body:"Manrope","Segoe UI",Arial,sans-serif;
+  --f-mono:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:1px solid var(--accent);outline-offset:3px}
+strong{font-weight:700;color:#fff}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(11,18,32,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:28px;height:60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap;flex:none}
+.brand b{font-weight:800;letter-spacing:-.01em;font-size:15px}
+.brand span{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+.topnav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0;margin-left:auto}
+.topnav::-webkit-scrollbar{display:none}
+.topnav a{flex:none;text-decoration:none;color:var(--muted);font-size:13px;padding:8px 12px;border:1px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s}
+.topnav a{max-width:340px;overflow:hidden;text-overflow:ellipsis}
+.topnav a i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--accent);margin-right:6px}
+.topnav a:hover,.topnav a.on{color:var(--fg);border-color:var(--line-strong)}
+
+/* page */
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:56px 96px}
+.col{max-width:860px}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tag::before{content:"";width:6px;height:6px;background:var(--accent)}
+.tag.danger::before{background:var(--danger)}
+
+/* HUD corners */
+.hud{position:relative;border:1px solid var(--line);background:var(--panel)}
+.hud::before,.hud::after{content:"";position:absolute;width:12px;height:12px;pointer-events:none}
+.hud::before{top:-1px;left:-1px;border-top:1px solid var(--accent);border-left:1px solid var(--accent)}
+.hud::after{bottom:-1px;right:-1px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent)}
+.hud.danger::before{border-color:var(--danger)}
+.hud.danger::after{border-color:var(--danger)}
+
+/* hero */
+.hero{display:grid;gap:28px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(32px,5vw,54px);line-height:1.06;letter-spacing:-.035em;margin:0;max-width:880px;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.meta span{font-family:var(--f-mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:5px 10px}
+.sub{margin:0;font-family:var(--f-mono);font-size:13px;color:var(--muted);letter-spacing:.02em}
+.print{font:inherit;font-family:var(--f-mono);font-size:12px;color:var(--fg);background:transparent;border:1px solid var(--line-strong);padding:5px 10px;cursor:pointer}
+.print:hover{border-color:var(--accent);color:var(--accent)}
+.lead strong.inl{display:inline;font-size:inherit;color:var(--fg);margin:0;font-weight:700}
+.lead{font-size:18px;line-height:1.7;color:#C9D3E3;max-width:860px;margin:0}
+.lead strong{display:block;font-size:20px;line-height:1.5;color:var(--fg);margin-bottom:12px;font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.kpi{background:var(--panel);padding:20px 20px 18px;display:grid;gap:6px;align-content:start}
+.kpi .l{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-size:28px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15}
+.kpi .v.acc{color:var(--accent)}
+.kpi .s{font-size:13px;color:var(--muted);line-height:1.45}
+
+/* spend chart */
+.spend{padding:28px 28px 24px;display:grid;gap:22px}
+.spend-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.spend-head h3{margin:0;font-size:20px;letter-spacing:-.01em}
+.spend-head span{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.bars{display:grid;gap:18px}
+.bar-row{display:grid;gap:8px}
+.bar-top{display:flex;justify-content:space-between;gap:16px;font-size:14px}
+.bar-top b{font-weight:600}
+.bar-top span{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-top span em{font-style:normal;color:var(--fg)}
+.track{height:10px;background:var(--panel-2);position:relative;overflow:hidden}
+.fill{display:block;height:100%;background:var(--bar)}
+.fill.acc{background:var(--accent)}
+.note{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+
+/* sections */
+section{padding-top:64px}
+.sec-head{display:grid;gap:14px;margin-bottom:28px;padding-top:28px;border-top:1px solid var(--line)}
+.sec-head .num{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.12em}
+h2{font-family:var(--f-display);font-size:clamp(25px,3vw,32px);line-height:1.2;letter-spacing:-.025em;margin:0;font-weight:700;max-width:860px;text-wrap:balance}
+h3{font-size:20px;line-height:1.35;letter-spacing:-.01em;margin:40px 0 16px;font-weight:700;text-wrap:balance}
+p{margin:16px 0;color:#C9D3E3}
+.src{font-size:13px;color:var(--muted)}
+.src a{color:var(--muted)}
+.src a:hover{color:var(--accent)}
+
+/* callouts */
+.callout{padding:22px 24px;margin:28px 0;display:grid;gap:10px}
+.callout p{margin:0}
+.callout.danger{background:linear-gradient(0deg,var(--danger-soft),var(--danger-soft)),var(--panel)}
+
+/* tables */
+.table-wrap{overflow-x:auto;margin:24px 0 14px;border:1px solid var(--line);background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
+th{text-align:left;font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel-2)}
+th,td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+td{color:#D5DDEA}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+td:not(:first-child),th:not(:first-child){min-width:110px}
+th:first-child,td:first-child{min-width:200px}
+td.num,th.num{text-align:right;white-space:nowrap}
+td .id{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+.st{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--line-strong);color:var(--muted);margin-left:4px;white-space:nowrap}
+.st.live{color:var(--ok);border-color:rgba(111,194,166,.45)}
+.st.arch{color:var(--muted)}
+.st.new{color:var(--accent);border-color:rgba(227,184,96,.45)}
+.zero{color:var(--danger)}
+.pri{display:inline-block;font-family:var(--f-mono);font-size:12px;font-weight:500;padding:3px 8px;margin-bottom:6px}
+.pri.p1{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(217,112,92,.5)}
+.pri.p2{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(227,184,96,.45)}
+.when{display:block;font-size:13px;color:var(--muted)}
+
+/* metrics grid */
+.defs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:24px 0}
+.def{background:var(--panel);padding:20px;display:grid;gap:8px;align-content:start}
+.def b{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.def p{margin:0;font-size:15px}
+
+.keep{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.keep span{font-size:13px;border:1px solid var(--line-strong);padding:6px 12px;color:#D5DDEA}
+
+footer{margin-top:72px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+footer .mono{font-family:var(--f-mono);font-size:12px}
+
+@media (max-width:980px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.defs{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .topbar-in{gap:14px}
+  .brand span{display:none}
+  .wrap{padding-block:36px 72px}
+  .lead{font-size:16px}.lead strong{font-size:18px}
+  .kpi .v{font-size:23px}
+  .spend{padding:20px 18px}
+  .bar-top{flex-direction:column;gap:2px}
+  section{padding-top:44px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{
+  @page{size:A4;margin:15mm 14mm}
+  :root{--bg:#fff;--panel:#fff;--panel-2:#f2f4f8;--line:#d6dce6;--line-strong:#b9c3d3;--fg:#111827;--muted:#5b6475;--accent:#9a6b12;--bar:#8a97ad}
+  body{font-size:10pt;line-height:1.5}
+  body::before,.topbar,.print{display:none}
+  p,td,.lead{color:#1f2937}strong{color:#000}
+  .wrap{padding:0;max-width:none}
+  .hud::before,.hud::after{display:none}
+  section{padding-top:18pt}
+  h2{break-after:avoid}h3{break-after:avoid}
+  tr{break-inside:avoid}thead{display:table-header-group}
+  .table-wrap{overflow:visible}
+  td:not(:first-child),th:not(:first-child),th:first-child,td:first-child{min-width:0}
+  a{color:inherit;text-decoration:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><b>Автошкола «Старт»</b><span>Аудит кабинета start-uc</span></div>
+    <nav class="topnav" aria-label="Разделы аудита">
+      <a href="#section-1">1. Архив скрывал большую часть расходов</a>
+      <a href="#section-2">2. Цели и стратегии требуют проверки раньше бюджета</a>
+      <a href="#section-3">3. Поиск тематический, но структура и тексты слабы</a>
+      <a href="#section-4">4. В сетях есть хорошая сегментация и точки для оптимизации</a>
+      <a href="#section-5">5. Посадочная содержит сильный оффер, но путь к записи можно сократить</a>
+      <a href="#section-6">6. Приоритеты на ближайшие четыре недели</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="hero">
+  <span class="tag">Аудит кабинета start-uc</span>
+  <h1>Кабинету «Старт» нужен <em>учёт реальных обращений</em></h1>
+  <p class="sub">Аудит Яндекс Директа · start-uc · 9 ноября 2026 года</p>
+  <div class="meta">
+    <span>Проверено 9 ноября 2026 года.</span>
+    <span>Рекламные настройки не изменялись.</span>
+    <span>Ссылки Директа требуют доступа к кабинету.</span>
+    <button class="print" type="button" onclick="window.print()">Печать / сохранить PDF</button>
+  </div>
+  <p class="lead"><strong>Реклама технически работает, но кабинет пока не позволяет доказательно оценить стоимость реальной заявки и окупаемость.</strong>Основные причины — смешение промежуточных действий с обращениями, разные определения конверсии в отчётах и отсутствие данных о договорах. За период 11.08–09.11.2026 кабинет израсходовал <strong class="inl">92 874 ₽</strong>; 72,2% этой суммы приходится на одну архивную сетевую кампанию. Новые сетевые кампании лучше разделены по направлениям, но данных пока недостаточно для обоснованного масштабирования. Поиск содержит тематические запросы и приносит целевые события, однако две очень похожие кампании дробят небольшую статистику, а объявления слабо используют преимущества школы. Приоритет — проверить измерение заявок, привести отчёты к сопоставимым целям, затем улучшать структуру и объявления. Оснований сразу увеличивать бюджет или массово запрещать приложения по имеющимся данным нет.</p>
+
+  <div class="kpis">
+    <div class="kpi"><span class="l">Расход · 90 дней</span><span class="v">92 874 ₽</span><span class="s">11.08–09.11.2026, включая архив</span></div>
+    <div class="kpi"><span class="l">Вне списка без архива</span><span class="v acc">82,4%</span><span class="s">76 543,40 ₽ не видны в представлении «Все, кроме архивных»</span></div>
+    <div class="kpi"><span class="l">Одна архивная сеть</span><span class="v">72,2%</span><span class="s">67 058,66 ₽ — кампания 713525881</span></div>
+    <div class="kpi"><span class="l">Расход · 30 дней</span><span class="v">15 487,76 ₽</span><span class="s">10.10–09.11.2026, 887 кликов</span></div>
+  </div>
+
+  <figure class="spend hud" style="margin:0" aria-label="Доля расходов кампаний за 11 августа — 9 ноября 2026 года">
+    <div class="spend-head"><h3>Куда ушли 92 874 ₽</h3><span>Расход по кампаниям · 11.08–09.11.2026 · включая архив</span></div>
+    <div class="bars">
+      <div class="bar-row"><div class="bar-top"><b>Архивная сеть 713525881</b><span><em>67 058,66 ₽</em> · 72,2%</span></div><div class="track"><span class="fill acc" style="width:72.2%"></span></div></div>
+      <div class="bar-row"><div class="bar-top"><b>Две действующие поисковые</b><span><em>12 920,00 ₽</em> · 13,9%</span></div><div class="track"><span class="fill" style="width:13.9%"></span></div></div>
+      <div class="bar-row"><div class="bar-top"><b>Остальные кампании и Карты</b><span><em>12 895,34 ₽</em> · 13,9%</span></div><div class="track"><span class="fill" style="width:13.9%"></span></div></div>
+    </div>
+    <p class="note">Каждая полоса — доля общего расхода, шкала 0–100%. Источник: список всех кампаний Директа. Доли рассчитаны, суммы взяты из интерфейса. Это распределение расходов, не оценка их окупаемости.</p>
+  </figure>
+</div>
+
+<!-- 1 -->
+<section id="section-1">
+  <div class="sec-head"><h2>1. Архив скрывал большую часть расходов</h2></div>
+  <div class="col">
+  <p>Первоначальное представление «Все, кроме архивных» показывало 16 330,60 ₽ расходов. С включением архива сумма выросла до 92 874 ₽: <strong>76 543,40 ₽, или 82,4% расходов, находились за пределами исходного списка</strong>. Для оценки работы подрядчика или истории кабинета нужно всегда включать архив. Для оценки того, что работает сейчас, наоборот, необходимо отдельно смотреть действующие кампании. Это разные задачи, которые нельзя решать одной таблицей. <span class="src">(<a href="https://direct.yandex.ru/dna/grid/campaigns/?ulogin=start-uc&amp;stat-preset=last90Days&amp;dim-filter=CPC_AND_CPM&amp;status-filter=ALL&amp;sort-key=status&amp;sort-direction=asc" target="_blank" rel="noopener">Все кампании</a>, <a href="https://direct.yandex.ru/dna/grid/campaigns?ulogin=start-uc&amp;stat-preset=last90Days&amp;status-filter=ALL_EXCEPT_ARCHIVED" target="_blank" rel="noopener">Без архива</a>)</span></p>
+  </div>
+
+  <h3>Сводка двух представлений периода</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Показатель</th><th class="num">11.08–09.11.2026</th><th class="num">10.10–09.11.2026</th></tr></thead>
+    <tbody>
+      <tr><td>Расход</td><td class="num">92 874,00 ₽</td><td class="num">15 487,76 ₽</td></tr>
+      <tr><td>Показы</td><td class="num">915 472</td><td class="num">251 285</td></tr>
+      <tr><td>Клики</td><td class="num">4 432</td><td class="num">887</td></tr>
+      <tr><td>CTR</td><td class="num">0,48%</td><td class="num">0,35%</td></tr>
+      <tr><td>События в списке кампаний</td><td class="num">48</td><td class="num">20</td></tr>
+      <tr><td>CPA в этом представлении</td><td class="num">1 934,87 ₽</td><td class="num">774,39 ₽</td></tr>
+      <tr><td>Отказы</td><td class="num">48,56%</td><td class="num">51,40%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="col">
+  <p class="src">Источник: список всех кампаний, включая архив; пресеты интерфейса «Последние 90 дней» и «Последние 30 дней». Фактические даты взяты из ссылок отчётов. Второй интервал включает 31 календарную дату, поэтому здесь не используется искусственно рассчитанный «средний день» и не вычитаются условные ровно 60 дней. (<a href="https://direct.yandex.ru/dna/grid/campaigns/?ulogin=start-uc&amp;stat-preset=last90Days&amp;status-filter=ALL" target="_blank" rel="noopener">Период 90</a>, <a href="https://direct.yandex.ru/dna/grid/campaigns/?ulogin=start-uc&amp;stat-preset=last30Days&amp;status-filter=ALL" target="_blank" rel="noopener">Период 30</a>)</p>
+  <p>Снижение отображаемого CPA с 1 934,87 до 774,39 ₽ выглядит положительно, но <strong>не доказывает, что реальные заявки подешевели</strong>. Изменились состав активных кампаний и длительность их работы; определения событий между экранами различаются. Отказы за более короткий период даже выше. Правильный вывод: в текущем представлении отношение расходов к учитываемым событиям улучшилось, а качество обращений и продажи остаются неизвестными.</p>
+  </div>
+
+  <h3>Какие кампании сформировали результат</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Кампания и статус</th><th class="num">Расход за 11.08–09.11</th><th class="num">Клики</th><th class="num">События / CPA в списке</th></tr></thead>
+    <tbody>
+      <tr><td><span class="id">707748267</span> · «Ярослав Поиск (авто)» · <span class="st live">действует</span></td><td class="num">4 675,00 ₽</td><td class="num">590</td><td class="num">5 / 935,00 ₽</td></tr>
+      <tr><td><span class="id">707748270</span> · «Ярослав Поиск (авто)» · <span class="st live">действует</span></td><td class="num">8 245,00 ₽</td><td class="num">1 122</td><td class="num">9 / 916,11 ₽</td></tr>
+      <tr><td><span class="id">715514293</span> · «Катя РСЯ… без бюджета» · <span class="st new">с 27.10</span></td><td class="num">0,00 ₽</td><td class="num">132</td><td class="num">0 / —</td></tr>
+      <tr><td><span class="id">715517706</span> · «Катя РСЯ… бюджет» · <span class="st new">с 27.10</span></td><td class="num">2 492,56 ₽</td><td class="num">143</td><td class="num">7 / 356,08 ₽</td></tr>
+      <tr><td>Присутствие в Картах · <span class="st live">действует</span></td><td class="num">918,03 ₽</td><td class="num">0 в этом списке</td><td class="num">0 / —</td></tr>
+      <tr><td><span class="id">713525881</span> · «Катя РСЯ… бюджет до 27.10» · <span class="st arch">архив</span></td><td class="num">67 058,66 ₽</td><td class="num">1 953</td><td class="num">24 / 2 794,11 ₽</td></tr>
+      <tr><td><span class="id">713617964</span> · «Катя… без бюджета до 27.10» · <span class="st arch">архив</span></td><td class="num">3 135,00 ₽</td><td class="num">254</td><td class="num">3 / 1 045,00 ₽</td></tr>
+      <tr><td><span class="id">707748268</span> · «Ярослав РСЯ (все категории)» · <span class="st arch">архив</span></td><td class="num">6 349,74 ₽</td><td class="num">209</td><td class="num zero">0 / —</td></tr>
+    </tbody>
+  </table></div>
+  <div class="col">
+  <p>Остальные увиденные кампании расхода за период не имели. Название «без бюджета» не означает отсутствие лимита: у новой кампании 715514293 в настройках стоит 10 000 ₽ в неделю. Во время просмотра текущий день обновлялся: между экранами встречаются различия на несколько кликов, показов и копейку. <span class="src">(<a href="https://direct.yandex.ru/dna/grid/campaigns/?ulogin=start-uc&amp;stat-preset=last90Days&amp;status-filter=ALL" target="_blank" rel="noopener">Источник таблицы</a>)</span></p>
+
+  <div class="callout hud danger">
+    <p><strong>Ключевой риск сопоставимости:</strong> у архивной 713525881 список показывает 24 события, а её специализированный отчёт с шестью выбранными целями и автоматической атрибуцией — 60 событий при тех же 67 058,66 ₽ расходов и 1 953 кликах. CPA там уже 1 117,64 ₽. Причина расхождения полностью не установлена; это нельзя объявить ошибкой интерфейса или объяснить только одним фактором. До унификации целей, фильтров и атрибуции ни 48 общих событий, ни CPA разных экранов не являются единым показателем эффективности. <span class="src">(<a href="https://direct.yandex.ru/dna/reports/library/profit-strategies/?ulogin=start-uc&amp;state=19650263" target="_blank" rel="noopener">Подробный отчёт архива</a>)</span></p>
+  </div>
+
+  <p>Карты также требуют самостоятельной оценки. Их 918,03 ₽ входят в общий расход, но в списке нет кликов: это не доказательство отсутствия пользы размещения. Общий CPC интерфейса не следует использовать для финансовой сверки без проверки состава расходов; часть расхода относится к Картам, где в этом списке нет кликов. Для Карт нужны отдельные обращения и действия в профиле организации.</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="section-2">
+  <div class="sec-head"><h2>2. Цели и стратегии требуют проверки раньше бюджета</h2></div>
+  <div class="col">
+  <p>В поиске 707748267 и 707748270 применяется <strong>«Максимум конверсий», оплата за конверсии</strong>. Используются два счётчика: сайта 85318885 и профиля организации 87131839. Цель 249237785 «Автоцель: заполнил контактные данные» имеет цену 850 ₽; цель 237100183 «Успешная отправка заявки» в профиле организации — 150 ₽. В новой сетевой 715514293 обеим этим целям назначено по 900 ₽. Разная цена допустима, если соответствует качеству и вероятности продажи, но таких подтверждающих данных сейчас нет. <span class="src">(<a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=707748267" target="_blank" rel="noopener">Поиск 1</a>, <a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=707748270" target="_blank" rel="noopener">Поиск 2</a>, <a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=715514293" target="_blank" rel="noopener">Сеть с оплатой за конверсии</a>)</span></p>
+  <p><strong>Заполнение контактов не гарантирует отправку формы.</strong> Пользователь мог начать вводить данные и не завершить обращение. Отдельная цель заявки профиля ближе к обращению, но её качество и уникальность тоже нужно проверить. При нескольких целях Директ может учитывать и оплачивать разные действия одного визита. Поэтому стоимость события нельзя называть CPL без реестра уникальных валидных обращений. <span class="src">(<a href="https://yandex.ru/support/direct/ru/statistics/multiple-goals-strategy" target="_blank" rel="noopener">Как оплачиваются несколько целей</a>)</span></p>
+  <p>Обе поисковые кампании и новая сеть с оплатой за конверсии показывают «Обучение стратегии остановлено», 0/10 за неделю. Это важный диагностический сигнал, но <strong>причина не установлена</strong>: история изменений и корректность срабатывания целей тестовыми обращениями не проверялись. Нельзя автоматически приписывать статус сломанной цели, низкой цене или узкой аудитории. Для «Максимума конверсий» справка Яндекса описывает обучение порядка 7–14 дней и значимость достаточного количества конверсий; порог 10 в неделю нельзя превращать в универсальное правило для всех стратегий. <span class="src">(<a href="https://yandex.ru/support/direct/ru/strategies/average-cpa" target="_blank" rel="noopener">Обучение стратегии</a>)</span></p>
+  <p>Нулевой расход при кликах у оплаты за конверсии сам по себе нормален. Например, за 10.10–09.11 у второго поиска 105 кликов, ноль учитываемых событий и ноль расходов. Это не доказывает ни техническую поломку, ни полезность такого трафика: обращение могло не произойти, а конверсия может учитываться позже в допустимом окне. <span class="src">(<a href="https://yandex.ru/support/direct/ru/strategies/average-cpa-conversions" target="_blank" rel="noopener">Оплата за конверсии</a>)</span></p>
+
+  <h3>«Максимум прибыли» сейчас оптимизируется по условным оценкам</h3>
+  <p>Новая 715517706 использует «Максимум прибыли» с оплатой за клики и лимитом 10 000 ₽ в неделю. Заполнению контактов назначена средняя маржа 800 ₽; кликам по телефону, мессенджеру, маршруту, кнопке звонка профиля и звонку в профиле — по 100 ₽. В архивной 713525881 набор аналогичный, но заполнению контактов назначено 1 000 ₽. <span class="src">(<a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=715517706" target="_blank" rel="noopener">Новая кампания</a>, <a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=713525881" target="_blank" rel="noopener">Архивная кампания</a>)</span></p>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Кампания</th><th class="num">Ценность событий</th><th class="num">Расход</th><th class="num">Прибыль по ценности</th></tr></thead>
+    <tbody>
+      <tr><td><span class="id">715517706</span> новая · 7 событий</td><td class="num">2 100 ₽</td><td class="num">2 492,57 ₽</td><td class="num zero">−392,57 ₽</td></tr>
+      <tr><td><span class="id">713525881</span> архив · 60 событий</td><td class="num">14 100 ₽</td><td class="num">67 058,66 ₽</td><td class="num zero">−52 958,66 ₽</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="col">
+  <p>В специализированном отчёте новой кампании ценность семи событий составляет 2 100 ₽ при расходе 2 492,57 ₽; «прибыль по ценности» равна −392,57 ₽. В архивной ценность 60 событий — 14 100 ₽ при расходе 67 058,66 ₽; разность −52 958,66 ₽. <strong>Это отрицательный результат в заданной модели ценности, а не доказанный убыток школы.</strong> Реальные договоры, оплаты и маржа не передаются в подтверждённом виде. Сам набор условных ценностей тоже не подтверждён экономикой. <span class="src">(<a href="https://direct.yandex.ru/dna/reports/library/profit-strategies/?ulogin=start-uc&amp;state=19650076" target="_blank" rel="noopener">Новый отчёт</a>, <a href="https://direct.yandex.ru/dna/reports/library/profit-strategies/?ulogin=start-uc&amp;state=19650263" target="_blank" rel="noopener">Архивный отчёт</a>)</span></p>
+  <p>По методике Яндекса, если цель не равна продаже, её средняя маржа должна учитывать вероятность перехода в продажу. Здесь для обоснования 800–1 000 ₽ за ввод контактов нужна фактическая конверсия такого действия в договор и маржа договора. Без неё стратегия получает неподтверждённую экономическую модель. Переключать всё на другую стратегию немедленно тоже не стоит: сначала нужно выбрать надёжное событие и оценить его объём. <span class="src">(<a href="https://yandex.ru/support/direct/ru/strategies/maximum-profit" target="_blank" rel="noopener">Максимум прибыли</a>, <a href="https://yandex.ru/support/direct/ru/statistics/profit-and-value" target="_blank" rel="noopener">Доход и ценность</a>)</span></p>
+  <p>Недельные лимиты поисковых кампаний по 300 млн ₽ не соответствуют масштабу фактического расхода. Это <strong>формальные ограничения, а не план трат и не подтверждение перерасхода</strong>. После согласования допустимого риска стоит заменить их осмысленными лимитами и настроить контроль общего расхода. Сейчас безопасный бюджет в деньгах не может быть рассчитан из экономики: допустимый CPL и договорная конверсия неизвестны.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="section-3">
+  <div class="sec-head"><h2>3. Поиск тематический, но структура и тексты слабы</h2></div>
+  <div class="col">
+  <p>Две действующие поисковые кампании очень похожи: одинаковые названия, по одной группе «Новая группа», по 11 одинаковых ключей, одна география — Тверская область, показы круглосуточно и корректировка +10% для Твери. У первой есть дополнительные минусы «ce», «д», «застраховать». В каждой найдено по одному одинаковому объявлению с одинаковым изображением: «Обучение на права в Твери» и «Автошкола „Старт“ предлагает обучение на любые категории прав». Это не доказывает полную идентичность всей истории настроек, но назначение разделения сейчас неочевидно. <span class="src">(<a href="https://direct.yandex.ru/dna/grid/groups/?ulogin=start-uc&amp;campaigns-ids=707748267" target="_blank" rel="noopener">Группы первой</a>, <a href="https://direct.yandex.ru/dna/groups-edit/?ulogin=start-uc&amp;campaigns-ids=707748270&amp;groups-ids=5724892809" target="_blank" rel="noopener">Вторая группа</a>)</span></p>
+  <p><strong>Рекомендация — определить роль каждой кампании.</strong> Если нет отдельной географии, продукта, гипотезы или эксперимента, рассмотреть объединение после проверки истории. Польза — меньше раздробленной статистики и понятнее управление. Утверждать, что эти две кампании обязательно повышают друг другу цену аукциона, оснований нет. Разделение бренда и общего спроса полезно для аналитики, но при малом объёме не требует создавать ещё множество кампаний.</p>
+  <p>Фактические запросы первой кампании показывают, что автотаргетинг приносит тематический спрос. При двух выбранных целях все четыре строки с расходом связаны с автотаргетингом: «автошкола тверь» — 1 870 ₽, 60 кликов, два события; «автошкола онлайн тверь» — 935 ₽, два клика, одно событие; «автошколы твери только с практикой» и «сколько сейчас сдать на права тверь» — по 935 ₽ и одному событию. Единичные результаты не дают устойчивой оценки запроса, но <strong>отключать автотаргетинг целиком по принципу “он плохой” здесь не обосновано</strong>. <span class="src">(<a href="https://direct.yandex.ru/dna/reports/library/search-queries?ulogin=start-uc&amp;state=19650219" target="_blank" rel="noopener">Запросы</a>)</span></p>
+  <p>Бренд «автошкола старт тверь» дал 51 клик без учитываемых событий и расходов. В хвосте встречаются другие автошколы, Редкино и категория D — по одному-два клика без расходов. Такие запросы нужно сверить с реальными направлениями и зоной обслуживания, но называть их доказанным сливом бюджета нельзя. В категориях автотаргетинга конкуренты исключены, однако отдельные конкурентные запросы пришли через ключи: фильтры автотаргетинга не заменяют работу с семантикой.</p>
+  <p>Минус-лист содержит полезные отсечения билетов, видео, штрафов и самостоятельного обучения. Одновременно слова «курсы», «гибдд», «гаи» требуют смысловой проверки: часть запросов с ними может соответствовать покупке обучения. Важно: <strong>минус «курсы» не блокирует ключ «курсы вождения Тверь»</strong>, поскольку при полном вхождении минус-фразы в ключ Директ её игнорирует. Изменять минусы следует по запросам, а не по одному визуальному пересечению. <span class="src">(<a href="https://yandex.ru/support/direct/ru/keywords/negative-keywords" target="_blank" rel="noopener">Принцип работы минус-фраз</a>)</span></p>
+
+  <h3>Реклама недоиспользует преимущества школы</h3>
+  <p>В быстрой ссылке есть «Сдайте эксамен…», а в сетевой — «погрузик». Это простые исправления качества. Ссылка «Обучим профессии вплоть до 6 разряда мастерства» ведёт на главную: профессиональное обучение у бизнеса действительно есть, но в группе категории B такая ссылка отвлекает от намерения пользователя. Формулировку «любые категории» нужно сверить с действующим перечнем школы. Общие уточнения «Качественно» и «Быстро» менее полезны, чем конкретные условия. <span class="src">(<a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=707748267" target="_blank" rel="noopener">Настройки поиска</a>, <a href="https://direct.yandex.ru/dna/campaigns-edit/?ulogin=start-uc&amp;campaigns-ids=715517706" target="_blank" rel="noopener">Настройки сети</a>)</span></p>
+
+  <div class="callout hud">
+    <p>На странице B уже есть материал для более предметной рекламы: обучение за 2,5 месяца, стандарт от 53 000 ₽, дистанционная теория, бензин и занятия с инструктором в цене, выбор времени. После подтверждения актуальности можно проверить вариант «Категория B в Твери — от 53 000 ₽» с текстом про состав цены и расписание, вести сразу на страницу B, а АКПП — на соответствующую страницу. Это гипотеза для сравнения по подтверждённым обращениям, а не обещание роста CTR или конверсии. <span class="src">(<a href="https://старттверь.рф/categories/b/" target="_blank" rel="noopener">Страница B</a>)</span></p>
+  </div>
+
+  <p>В поле «Параметры URL» поисковых кампаний записан полный адрес сайта с UTM, тогда как подсказка предлагает строку параметров. Это требует проверки сформированного конечного URL и сохранения меток. <strong>Поломка аналитики не доказана:</strong> конечная ссылка после обработки Директом не проверялась.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="section-4">
+  <div class="sec-head"><h2>4. В сетях есть хорошая сегментация и точки для оптимизации</h2></div>
+  <div class="col">
+  <p>Сильная сторона новой 715517706 — разделение на автомобили, тракторные категории и профессии. В группах соответственно 27, 20 и 15 ключей; объявлений — 10, 3 и 3. Используются несколько заголовков, текстов, изображений и видео, а посадочные ведут на соответствующие направления: B, квадроцикл, погрузчик. Есть интересы по сайтам конкурентов, сегменты посетителей и похожих на посетителей, офферный ретаргетинг. <strong>Писать, что ретаргетинг отсутствует или креативы не проработаны, было бы неверно.</strong> <span class="src">(<a href="https://direct.yandex.ru/dna/grid/groups/?ulogin=start-uc&amp;campaigns-ids=715517706" target="_blank" rel="noopener">Группы</a>, <a href="https://direct.yandex.ru/dna/groups-edit/?ulogin=start-uc&amp;campaigns-ids=715517706&amp;groups-ids=5815973284" target="_blank" rel="noopener">Автомобили: аудитории</a>)</span></p>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Группа новой сети</th><th class="num">Расход</th><th class="num">Клики</th><th class="num">События</th><th class="num">CPA события</th></tr></thead>
+    <tbody>
+      <tr><td>Автомобили</td><td class="num">1 633,69 ₽</td><td class="num">88</td><td class="num">2</td><td class="num">816,85 ₽</td></tr>
+      <tr><td>Тракторные категории</td><td class="num">426,81 ₽</td><td class="num">38</td><td class="num">3</td><td class="num">142,27 ₽</td></tr>
+      <tr><td>Профессии</td><td class="num">432,06 ₽</td><td class="num">17</td><td class="num">2</td><td class="num">216,03 ₽</td></tr>
+    </tbody>
+  </table></div>
+  <div class="col">
+  <p class="src">Источник: группы 715517706, период 10.10–09.11.2026; кампания создана 27.10. События относятся к текущему набору целей, не к уникальным лидам. При двух-трёх событиях нельзя уверенно признать тракторное направление победителем и резко перенести туда бюджет. Нужно раздельно учитывать заявки и договоры по продуктам, поскольку их цена и экономика различаются.</p>
+
+  <h3>Площадки нужно оценивать по отдельным кампаниям</h3>
+  <p>В новой кампании сетевой срез содержит 1 100,80 ₽, 81 клик и три события — это только сети, не весь расход вместе с Картами. У VK Android девять кликов, у Avito пять, у отдельных приложений три. Оснований массово исключать приложения здесь недостаточно. <span class="src">(<a href="https://direct.yandex.ru/dna/reports/library/pages?ulogin=start-uc&amp;state=19650164" target="_blank" rel="noopener">Площадки новой сети</a>)</span></p>
+  <p>В архивной 713525881 выборки больше. Ниже показан срез «только сети, больше 10 кликов» за 11.08–09.11; он охватывает <strong>41 599,37 ₽, а не все 67 058,66 ₽</strong> кампании. Выбраны шесть целей, поэтому эти события нельзя подставлять в сводку с другим определением конверсии. <span class="src">(<a href="https://direct.yandex.ru/dna/reports/library/pages?ulogin=start-uc&amp;state=19650285" target="_blank" rel="noopener">Площадки архива</a>)</span></p>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Площадка</th><th class="num">Расход</th><th class="num">Клики</th><th class="num">События</th></tr></thead>
+    <tbody>
+      <tr><td>com.vkontakte.android</td><td class="num">13 347,59 ₽</td><td class="num">246</td><td class="num">17</td></tr>
+      <tr><td>Яндекс</td><td class="num">7 762,53 ₽</td><td class="num">201</td><td class="num">16</td></tr>
+      <tr><td>com.avito.android</td><td class="num">5 939,27 ₽</td><td class="num">85</td><td class="num">5</td></tr>
+      <tr><td>yandex.ru</td><td class="num">4 923,94 ₽</td><td class="num">59</td><td class="num">2</td></tr>
+      <tr><td>com.vk.vkclient</td><td class="num">3 091,93 ₽</td><td class="num">62</td><td class="num zero">0</td></tr>
+      <tr><td>dsp.yandex.ru</td><td class="num">978,13 ₽</td><td class="num">187</td><td class="num zero">0</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="col">
+  <p>VK-клиент с 3 091,93 ₽ и 62 кликами без событий — предметный кандидат для углублённой проверки перед ограничением; dsp.yandex.ru тоже требует проверки состава трафика. Но основной VK Android дал 17 событий: запретить весь VK на основании одного другого приложения было бы ошибкой. Перед решением нужны единые цели, зрелый период и оценка реальных обращений. Пустой список исключений сам по себе не является недоработкой; отсутствие анализа площадок было бы ею. <span class="src">(<a href="https://yandex.ru/support/direct/ru/statistics/library/platforms-report" target="_blank" rel="noopener">Методика анализа площадок</a>)</span></p>
+  <p>География «Тверская область» и корректировка Твери не выглядят заведомо ошибочными. Для решения о сужении нужно сопоставить фактическую географию пользователей с доступностью обучения. Поиск круглосуточно тоже допустим, если форму можно оставить ночью и обращения обрабатываются. Отчёты по часам, устройствам и фактическому местонахождению подробно не исследованы, поэтому рекомендации отключить ночь или всю область за пределами города пока не обоснованы.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="section-5">
+  <div class="sec-head"><h2>5. Посадочная содержит сильный оффер, но путь к записи можно сократить</h2></div>
+  <div class="col">
+  <p>Главная в просмотренном состоянии показывала две карточки категории B: МКПП 53 000 ₽ и АКПП 70 000 ₽, возраст от 16 лет и срок 2,5 месяца. Разделы тракторных категорий и профессий присутствовали как заголовки, но карточек под ними в проверенном состоянии не было. Это <strong>наблюдение, требующее воспроизведения</strong>, а не доказанная серверная поломка. Для соответствующего рекламного трафика лучше использовать предметные страницы, которые открываются. <span class="src">(<a href="https://старттверь.рф/" target="_blank" rel="noopener">Главная</a>)</span></p>
+  <p>Страница B содержит стандарт за 53 000 ₽ и комфорт за 64 000 ₽, расписание, дистанционную теорию, выбор инструктора и пояснение состава цены. Эти тарифы нельзя механически сравнивать с АКПП за 70 000 ₽ на главной: названия и продукты различаются. Есть контакты, карта, изображения лицензии и заключения, ссылки на отзывы — базовые элементы доверия присутствуют. <span class="src">(<a href="https://старттверь.рф/categories/b/" target="_blank" rel="noopener">Категория B</a>)</span></p>
+  <p>В эмуляции 390 × 844 страница адаптируется, горизонтального выхода контента не обнаружено, форма открывается и помещается. Однако первый экран B занят заголовком, фотографией и длинным вводным текстом; цена и условия появляются ниже. Cookie-уведомление перекрывает значительную часть нижней зоны, а кнопка записи доступна в меню. Рекомендуется поднять короткий оффер и цену выше, сделать заметную кнопку записи рядом с ним и уменьшить вмешательство cookie-блока в основной сценарий. Эффект нужно проверять по завершённым формам, а не только открытиям.</p>
+  <p>Страница погрузчика работает: цена 14 000 ₽, 3–4 разряды и работа с организациями. При этом зарплатные данные обозначены как сведения за 2023 год. Их нужно проверить и обновить или убрать устаревшее утверждение, не подставляя новые неподтверждённые цифры. <span class="src">(<a href="https://старттверь.рф/categories/profession-loader/" target="_blank" rel="noopener">Погрузчик</a>)</span></p>
+
+  <div class="callout hud">
+    <p>Формы не отправлялись: доставка заявок, успешное событие и связь с менеджером не проверены. Переключатель коллтрекинга в просмотренной поисковой кампании выключен, но это не доказывает отсутствие внешнего сервиса на сайте. Производительность Web Vitals и реальная мобильная скорость не измерялись. Для следующего этапа нужен контрольный проход «реклама → страница → отправка → получение менеджером → цель в аналитике» отдельно для сайта, звонка и профиля организации.</p>
+  </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="section-6">
+  <div class="sec-head"><h2>6. Приоритеты на ближайшие четыре недели</h2></div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Приоритет и срок</th><th>Действие</th><th>Зачем</th><th>Как проверить результат</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pri p1">P1</span><span class="when">· первые 2–3 дня</span></td><td>Проверить завершённую отправку формы, получение обращения, цели сайта и профиля; отделить ввод контактов от отправки</td><td>Исключить оптимизацию на незавершённое действие</td><td>Одно тестовое обращение сопоставлено с записью менеджера и нужной целью; промежуточные события видны отдельно</td></tr>
+      <tr><td><span class="pri p1">P1</span><span class="when">· первая неделя</span></td><td>Создать реестр уникальных обращений с направлением, источником, качеством, договором и оплатой</td><td>Получить настоящий CPL и стоимость договора</td><td>У каждого обращения есть ID, статус и источник; повторы объединяются</td></tr>
+      <tr><td><span class="pri p1">P1</span><span class="when">· первая неделя</span></td><td>Собрать единый отчёт: одинаковые цели, даты, атрибуция, статусы и состав расходов</td><td>Устранить несопоставимость 24/60 и общего CPA</td><td>Цифры воспроизводятся при сохранённых настройках; список и подробные отчёты объяснимо согласованы</td></tr>
+      <tr><td><span class="pri p1">P1</span><span class="when">· первая неделя</span></td><td>Пересмотреть цены и маржу целей, задать осмысленные бюджетные ограничения</td><td>Связать оптимизацию с качеством обращения и ограничить риск</td><td>Ценности обоснованы вероятностью договора и маржой либо явно обозначены временными гипотезами</td></tr>
+      <tr><td><span class="pri p2">P2</span><span class="when">· первая неделя</span></td><td>Исправить опечатки, проверить быстрые ссылки и итоговые UTM; усилить объявления условиями B</td><td>Повысить соответствие запросу и прозрачность предложения</td><td>Все ссылки и метки работают; объявления ведут на нужный продукт</td></tr>
+      <tr><td><span class="pri p2">P2</span><span class="when">· вторая неделя</span></td><td>Определить назначение двух поисковых кампаний, сохранить или объединить по результату проверки</td><td>Упростить управление небольшой статистикой</td><td>У каждой кампании есть отдельная понятная роль и сопоставимый KPI</td></tr>
+      <tr><td><span class="pri p2">P2</span><span class="when">· вторая неделя</span></td><td>Проверить запросы, географию и площадки на едином наборе целей</td><td>Ограничивать доказанно слабые сегменты</td><td>Решения опираются на расход и валидные обращения, а не общий CTR или несколько кликов</td></tr>
+      <tr><td><span class="pri p2">P2</span><span class="when">· недели 2–4</span></td><td>Поднять оффер и запись на посадочной, проверить пустые разделы и мобильный сценарий</td><td>Сократить путь к заявке</td><td>Измеряются отправки, валидность и доля договоров; нет ухудшения качества</td></tr>
+      <tr><td><span class="pri p2">P2</span><span class="when">· недели 3–4</span></td><td>Настроить передачу квалифицированных обращений и договоров в аналитику</td><td>Дать стратегии сигнал качества</td><td>Проверены привязка, задержка и отсутствие повторного учёта</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="col">
+  <p>Порядок важнее количества одновременных изменений. После исправления измерения лучше проверять отдельную гипотезу или небольшой связанный пакет, фиксировать дату и оставлять период на накопление и дозревание результатов. Пересоздавать кампании каждую неделю и сравнивать их по разным целям означает снова терять сопоставимость.</p>
+
+  <h3>Минимальный учёт можно начать без сложной CRM</h3>
+  <p>Для первого этапа достаточно согласованного реестра: ID обращения, дата, направление, кампания, ClientID/yclid при наличии, способ связи, результат контакта, квалификация, договор и фактическая оплата. Клик по телефону, состоявшийся звонок и отправка формы одного человека не должны автоматически превращаться в три уникальные заявки. Правила объединения нужно задать в реестре, а не предполагать, что любой импорт сделает это сам.</p>
+  </div>
+
+  <p>Рабочие показатели: <strong>CPL — расход на уникальное валидное обращение; стоимость квалифицированной заявки — расход на подходящее школе обращение; стоимость договора — расход на договор</strong>. Сравнивать их нужно по сопоставимой когорте с учётом времени принятия решения. Реальная окупаемость появится только после привязки оплат и маржи. Офлайн-конверсии позволяют передавать квалификацию и договоры; формат и допустимые окна загрузки нужно выбрать под цикл сделки, не обещая импортировать любую старую продажу. <span class="src">(<a href="https://yandex.ru/support/direct/ru/strategies/offline-conversions" target="_blank" rel="noopener">Офлайн-конверсии</a>, <a href="https://yandex.ru/support/metrica/ru/data/offline-params" target="_blank" rel="noopener">Импорт офлайн-данных</a>, <a href="https://yandex.ru/support/metrica/ru/data/yclid" target="_blank" rel="noopener">Передача по yclid</a>)</span></p>
+
+  <h3>Что сохранить из текущей работы</h3>
+  <p>Стоит сохранить предметную сегментацию новой РСЯ, разнообразие креативов, направление на профильные посадочные, аудитории посетителей и похожих, мониторинг сайта и базовый минус-лист. Поисковые запросы дают основание продолжать работу с автотаргетингом. Улучшение должно развивать эти элементы, одновременно повышая качество измерения и конкретность поисковых объявлений.</p>
+
+  <h3>Основание и границы аудита</h3>
+  <p>Кабинет и страницы изучены через авторизованный интерфейс браузера. Проверены действующие и расходовавшие архивные кампании, основные настройки, поисковые группы и объявления, запросы первой поисковой кампании, новые сетевые группы и выбранные креативы, отчёты площадок новой и основной архивной сети, главная и страницы B/погрузчика. CSV был запрошен через интерфейс, но файл не поступил за 20 секунд; попытка остановлена, повторных ожиданий не было. Числа получены из таблиц интерфейса, а не из успешно скачанной выгрузки. Ссылки с параметром state ведут к сохранённому состоянию отчёта и требуют доступа к кабинету; после перехода следует сверять даты и цели.</p>
+  <p>Не выполнены: полный аудит каждой старой нулевой кампании и каждого креатива, проверка всех посадочных, история изменений, подробные срезы устройств/часов/фактической географии, отправка заявок, серверная доставка, внешний коллтрекинг, реальные договоры и оплаты. Пользователь подтвердил отсутствие данных о допустимом CPL и договорах. Нулевой доход в кабинете не трактуется как отсутствие продаж. Часть специальных отчётов явно показывает расход без НДС; для финансовой сверки нужно дополнительно согласовать налоговую базу и сопоставить с актами. <strong>Рекламные настройки не изменялись; менялись только фильтры и представления для изучения.</strong></p>
+  </div>
+</section>
+
+<footer>
+  <span>Подготовлено по состоянию интерфейса на 9 ноября 2026 года. Полный текст и источники доступны в этой странице; сеть для чтения не требуется. Для перехода к источникам понадобится интернет и доступ к кабинету.</span>
+</footer>
+
+</main>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.topnav a'));
+  if(!('IntersectionObserver' in window))return;
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){l.classList.remove('on')});
+        var a=map[e.target.id];
+        if(a){a.classList.add('on')}
+      }
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  Object.keys(map).forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
+})();
+</script>
+</body>
+</html>
