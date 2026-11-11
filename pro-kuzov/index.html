@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Про кузов»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar + view tabs + section chips; two views (Аналитика / Контент-план) */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+/* content view */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+/* analytics view */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.miss{color:var(--crit);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)} .va .down{color:var(--crit)}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}
+.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}
+.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:11.5px}
+.va .chart .grid{stroke:var(--line);stroke-width:1}
+.va .chart .col{fill:var(--gold)}
+.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Про кузов</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="pk-top">
+  <span class="eyebrow">Челябинск · кузовной ремонт · Ленинский район · замер 11.11.2026</span>
+  <h1>Где «Про кузов» не видно на Картах</h1>
+  <p>Карточка «Про кузов», ул. Машиностроителей, 1, корп. 3. Позиции на Яндекс Картах по 10 целевым запросам, соседи по гео-выдаче, спрос по Вордстату для региона «Челябинск».</p>
+</header>
+
+<section id="pk-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно рядом</span><p><b>У Машиностроителей карточка во второй–третьей позиции</b>«кузовной ремонт», «ремонт бампера», «рихтовка» — 2-е место, «покраска автомобиля», «полировка», «удаление вмятин» — 3-е, если смотреть карту вокруг сервиса.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По городу карточки нет ни по одному главному запросу</b>По «кузовной ремонт» (2 221 запрос в сентябре) нет в первых 35 карточках Челябинска, по «покраска авто» — в первых 32.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«замена порогов» и «ремонт после ДТП» уходят соседям</b>По порогам рядом с сервисом показывается вторая карточка «ПроКузов» (3,1 · 6 оценок), а основная не попадает в пятёрку. По ремонту после ДТП нет ни одной из двух.</p></div>
+    <div class="v"><span class="pill warn">свободно</span><p><b>«антихром» — 399 запросов в месяц и пустая выдача</b>Яндекс Карты по этому запросу рядом с сервисом не показывают ни одной организации.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Яндекс Карты</div><div class="n">4,2</div><div class="s">33 оценки · 11 отзывов</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">на 11.11.2026</div></div>
+    <div class="kpi"><div class="k">«кузовной ремонт», Челябинск</div><div class="n">2 221</div><div class="s">запросов, сентябрь 2026 · +57% к 2025</div></div>
+    <div class="kpi"><div class="k">2ГИС</div><div class="n">4,8</div><div class="s">34 оценки · 14 отзывов</div></div>
+  </div>
+</section>
+
+<section id="pk-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Челябинску, карта у ул. Машиностроителей. Первая пятёрка выдачи. Отдельно — поиск по всему городу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Рядом</th><th class="r">Город</th><th>Первая пятёрка рядом с сервисом</th></tr></thead>
+    <tbody>
+      <tr><td>кузовной ремонт</td><td class="r me">2</td><td class="r miss">нет в 35</td><td>АвтоРемонт-Сервис, Про кузов, Авторитэйл ГАЗ, Ev-service, Навита</td></tr>
+      <tr><td>покраска авто</td><td class="r me">3</td><td class="r miss">нет в 32</td><td>Навита, АвтоРемонт-Сервис, Про кузов, Ev-service, Belgee центр на Копейском</td></tr>
+      <tr><td>замена порогов</td><td class="r miss">нет</td><td class="r">—</td><td>АвтоРемонт-Сервис, Навита, ПроКузов (3,1), Belgee центр на Копейском, Oil Bank</td></tr>
+      <tr><td>антихром</td><td class="r miss">нет</td><td class="r">—</td><td>Ничего не найдено</td></tr>
+      <tr><td>ремонт бампера</td><td class="r me">2</td><td class="r">—</td><td>АвтоРемонт-Сервис, Про кузов, Навита, Belgee центр на Копейском, Ev-service</td></tr>
+      <tr><td>полировка авто</td><td class="r me">3</td><td class="r">—</td><td>Навита, АвтоРемонт-Сервис, Про кузов, Аполло, Belgee центр на Копейском</td></tr>
+      <tr><td>удаление вмятин</td><td class="r me">3</td><td class="r">—</td><td>Навита, АвтоРемонт-Сервис, Про кузов, Belgee центр на Копейском, Ev-service</td></tr>
+      <tr><td>рихтовка</td><td class="r me">2</td><td class="r">—</td><td>АвтоРемонт-Сервис, Про кузов, Навита, Oil Bank, Ev-service</td></tr>
+      <tr><td>ремонт после ДТП</td><td class="r miss">нет</td><td class="r">—</td><td>АвтоРемонт-Сервис, Belgee центр на Копейском, Ev-service, Детройт авто, 10 Вал</td></tr>
+      <tr><td>антикоррозийная обработка</td><td class="r me">5</td><td class="r">—</td><td>Антикор академия, Навита, АвтоРемонт-Сервис, Belgee центр на Копейском, Про кузов</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Соседи по гео-выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Где выше «Про кузов»</th></tr></thead>
+    <tbody>
+      <tr><td><b>Про кузов</b></td><td class="r num me">4,2</td><td class="r num me">33</td><td>—</td></tr>
+      <tr><td>ПроКузов (вторая карточка, тот же адрес)</td><td class="r num">3,1</td><td class="r num">6</td><td>замена порогов</td></tr>
+      <tr><td>АвтоРемонт-Сервис, Копейское ш., 36А/1</td><td class="r num">5,0</td><td class="r num">231</td><td>кузовной ремонт, ремонт бампера, рихтовка, полировка, вмятины, покраска, ДТП</td></tr>
+      <tr><td>Навита, Копейское ш., 35Б</td><td class="r num">4,8</td><td class="r num">195</td><td>покраска, полировка, вмятины, пороги</td></tr>
+      <tr><td>Belgee центр на Копейском</td><td class="r num">5,0</td><td class="r num">224</td><td>пороги, ремонт после ДТП</td></tr>
+      <tr><td>Ev-service, Копейское ш., 32/4</td><td class="r num">4,9</td><td class="r num">109</td><td>ремонт после ДТП</td></tr>
+      <tr><td>Авторитэйл, ГАЗ</td><td class="r num">4,4</td><td class="r num">232</td><td>—</td></tr>
+      <tr><td>Oil Bank</td><td class="r num">4,9</td><td class="r num">62</td><td>замена порогов</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Почему соседи выше</h3><ul>
+      <li><b>Оценок в 3–7 раз больше</b>: 109–231 у соседей с Копейского шоссе против 33.</li>
+      <li><b>Две карточки на одном адресе</b> делят запросы: по порогам Яндекс выбирает «ПроКузов», где пороги есть в прайсе.</li>
+      <li><b>Прайс основной карточки — три общие позиции</b> с пометкой «Давно не обновлялось»; порогов, бампера и антихрома в нём нет.</li>
+      <li><b>Новостей и сторис нет</b>, сторис скрыты без тарифа.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Каждая новость — под запрос, где карточки нет или она на 3-м месте.</li>
+      <li>«Кузовной ремонт», «Челябинск» и «Ленинский район» — в первом абзаце.</li>
+      <li>Пороги, арки, антихром и ремонт после ДТП называть словами и ценой «от».</li>
+      <li>Название везде одно: «Про кузов».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="pk-demand">
+  <div class="sh"><h2>Спрос в Челябинске</h2><p>Вордстат, регион «Челябинск», все устройства, помесячно. «кузовной ремонт» за 10.09–09.10.2026 — 2 418 запросов.</p></div>
+  <div class="chart" data-chart="pk"><h3>«кузовной ремонт», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц · сентябрь 2026 к сентябрю 2025: +57%</div></div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">Запросов</th><th class="r">К прошлому месяцу</th></tr></thead><tbody id="pk-mom"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Сезонность: пики в мае и с июля по сентябрь (май 2026 — 2 773, август 2026 — 2 554), спад с декабря по февраль (1 162–1 220). Ноябрьские публикации выходят на снижении спроса и закрепляют карточку до весеннего роста.</p>
+
+  <h3>10 целевых запросов</h3>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Сентябрь 2026</th><th class="r">К сент. 2025</th></tr></thead><tbody id="t-pk"></tbody></table></div>
+  <p class="small" style="margin-top:12px">Брендовый запрос «про кузов» — 71 в сентябре 2026, в него попадают и общие фразы со словами «про кузов».</p>
+</section>
+
+<section id="pk-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: 11.11.2026, поиск по Челябинску с картой у ул. Машиностроителей, 1 к3 (первая пятёрка) и по всему городу (первые 32–35 карточек).</li>
+    <li>Вордстат: регион «Челябинск», все устройства, ноябрь 2024 — сентябрь 2026 по месяцам.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/pro_kuzov/1471263693/" target="_blank" rel="noopener">«Про кузов», ул. Машиностроителей, 1 к3 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/prokuzov/80591940363/" target="_blank" rel="noopener">«ПроКузов», тот же адрес — Яндекс Карты</a>
+    <a href="https://2gis.ru/chelyabinsk/firm/70000001095025721" target="_blank" rel="noopener">«ПроКузов» — 2ГИС</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="pk-company">
+  <span class="eyebrow">Кузовной ремонт · Челябинск · Ленинский район</span>
+  <h1>«Про кузов» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Про кузов» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Про кузов <small>автосервис: кузовной и мелкосрочный ремонт</small></div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Рихтовка, покраска, переварка <small>ремонт пластика, антихром, полировка</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">ул. Машиностроителей, 1 к3 <small>Ленинский район, Челябинск</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн — Пт 10:00–19:00 <small>Сб — Вс выходной</small></div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Мастера с опытом от 10 лет <small>гарантия на все работы, без предоплаты</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽»</div></div>
+  </div>
+</section>
+
+<section id="pk-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Про кузов»</h2>
+    <p>Фирменные цвета по брифу — оранжевый и чёрный. Оттенки сняты с материалов карточек компании.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#E08048;color:#101010;border-color:#E08048"><div class="role">Основной</div><div class="name">Оранжевый</div><div class="hex">#E08048</div></div>
+    <div class="swatch" style="background:#101010;color:#F8F8F8;border-color:#3a3a3a"><div class="role">Текстовый · фон</div><div class="name">Чёрный</div><div class="hex">#101010</div></div>
+    <div class="swatch" style="background:#F8F8F8;color:#101010;border-color:#F8F8F8"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#F8F8F8</div></div>
+  </div>
+</section>
+
+<section id="pk-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап начинается с главного направления по брифу — кузовного ремонта — и дальше закрывает запросы, по которым карточки сейчас нет в выдаче.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Кузовной ремонт в Ленинском районе: рихтовка, вмятины, зазоры; гарантия и работа без предоплаты.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Покраска автомобиля и антихром: цены за элемент, полировка.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Замена порогов, арок и переварка кузова.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Ремонт после ДТП: дефектовка для страховой и арматурные работы.</p></div>
+  </div>
+</section>
+
+<section id="pk-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Про кузов» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», допустим неформальный тон и юмор — так указано в брифе. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней и сравнений с другими сервисами. Цены — в формате «от N ₽». Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Кузовной ремонт в Челябинске, Ленинский район: рихтовка, удаление вмятин и выставление зазоров</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы занимаемся кузовным ремонтом, и мастера у нас — с опытом от 10 лет: знаем характерные поломки по всем популярным моделям.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Кузовной ремонт — рихтовка, покраска, переварка, ремонт пластика, антихром.<span class="src">бриф</span></li>
+      <li>Удаление вмятин, рихтовка и выправление споттером кузовных повреждений любой сложности — от 3 500 ₽.<span class="src">бриф</span></li>
+      <li>Выставление зазоров и диагоналей кузова — от 3 500 ₽.<span class="src">бриф</span></li>
+      <li>Гарантия: предоставляем гарантию на все работы.<span class="src">бриф</span></li>
+      <li>Работаем без предоплаты. Делаем в срок. Качественные расходники.<span class="src">бриф</span></li>
+      <li>Улица Машиностроителей, 1 к3, Ленинский район, Челябинск. Пн — Пт 10:00–19:00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Кузовной ремонт в Челябинске — «Про кузов», Ленинский район</span></div>
+      <div class="meta-row"><span><b>Title · </b>Кузовной ремонт в Челябинске: рихтовка и вмятины от 3 500 ₽ | Про кузов</span></div>
+      <div class="meta-row"><span><b>Description · </b>Кузовной ремонт в Ленинском районе Челябинска: рихтовка, удаление вмятин споттером, выставление зазоров от 3 500 ₽. Гарантия на все работы, без предоплаты.</span></div>
+      <div class="chips"><span class="chip-kw">кузовной ремонт</span><span class="chip-kw">кузовной ремонт челябинск</span><span class="chip-kw">кузовной ремонт в ленинском районе челябинск</span><span class="chip-kw">качественный кузовной ремонт</span><span class="chip-kw">кузовной ремонт недорого</span><span class="chip-kw">кузовной ремонт автомобиля</span><span class="chip-kw">рихтовка</span><span class="chip-kw">удаление вмятин</span><span class="chip-kw">центр кузовного ремонта челябинск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на осмотр — посчитаем ремонт до начала работ.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кузовной ремонт с гарантией»</div>
+      <p>Композиция: кузовной цех сервиса, автомобиль с выправленным крылом крупным планом; тезис на плашке в нижней трети, строка «рихтовка · вмятины · зазоры · от 3 500 ₽». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — чёрный #101010, тезис — светлый #F8F8F8, строка — оранжевый #E08048.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Покраска автомобиля и антихром в Челябинске: цены за элемент от 17 000 ₽</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Красим как отдельный элемент, так и автомобиль целиком, а ещё делаем антихром и полировку.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Окрас (покраска) двери, крышки багажника, крыла переднего, бампера переднего/заднего — от 17 000 ₽.<span class="src">бриф</span></li>
+      <li>Окрас крыла/боковины кузова — от 20 000 ₽, капота — от 25 000 ₽, крыши — от 34 000 ₽.<span class="src">бриф</span></li>
+      <li>Окрас (покраска) всего автомобиля — от 250 000 ₽.<span class="src">бриф</span></li>
+      <li>Кузовной ремонт — рихтовка, покраска, переварка, ремонт пластика, антихром.<span class="src">бриф</span></li>
+      <li>Полировка кузова автомобиля — от 20 000 ₽, одного элемента — от 1 000 ₽.<span class="src">бриф</span></li>
+      <li>Качественные расходники. Гарантия на все работы.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Покраска автомобиля и антихром в Челябинске — «Про кузов»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Покраска авто в Челябинске от 17 000 ₽ за элемент, антихром | Про кузов</span></div>
+      <div class="meta-row"><span><b>Description · </b>Покраска двери, бампера, крыла от 17 000 ₽, капота от 25 000 ₽, крыши от 34 000 ₽. Антихром и полировка кузова. Ленинский район, гарантия на все работы.</span></div>
+      <div class="chips"><span class="chip-kw">покраска авто</span><span class="chip-kw">покраска автомобиля челябинск</span><span class="chip-kw">покраска бампера</span><span class="chip-kw">покраска элемента</span><span class="chip-kw">антихром</span><span class="chip-kw">антихром челябинск</span><span class="chip-kw">полировка авто</span><span class="chip-kw">кузовной ремонт и покраска</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> приезжайте на осмотр — подберём цвет и посчитаем покраску.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Покраска от 17 000 ₽ за элемент»</div>
+      <p>Композиция: свежеокрашенная дверь или бампер в покрасочной камере, блик на лаке; тезис на плашке в верхней трети, строка «покраска · антихром · полировка».</p>
+      <p>Цвета: плашка — оранжевый #E08048, тезис — чёрный #101010, строка — светлый #F8F8F8 на чёрной полосе #101010.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Замена порогов и колёсных арок в Челябинске: переварка кузова от 15 000 ₽</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Беремся за то, за что многие не берутся: меняем пороги, арки и силовые элементы кузова.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Замена порога автомобиля — от 20 000 ₽.<span class="src">бриф</span></li>
+      <li>Замена колесной арки автомобиля — от 15 000 ₽.<span class="src">бриф</span></li>
+      <li>Замена заднего крыла — от 25 000 ₽, замена лонжерона — от 20 000 ₽, замена крыши — от 35 000 ₽.<span class="src">бриф</span></li>
+      <li>Замена задней панели — от 15 000 ₽, передней панели — от 8 000 ₽, пола багажника — от 10 000 ₽.<span class="src">бриф</span></li>
+      <li>Сварочные работы.<span class="src">бриф</span></li>
+      <li>Восстановим дорогие и редкие детали.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Замена порогов и арок в Челябинске — «Про кузов»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Замена порогов от 20 000 ₽, арок от 15 000 ₽ в Челябинске | Про кузов</span></div>
+      <div class="meta-row"><span><b>Description · </b>Замена порогов, колёсных арок, заднего крыла, лонжерона и пола багажника. Сварочные работы и переварка кузова в Ленинском районе Челябинска, гарантия на все работы.</span></div>
+      <div class="chips"><span class="chip-kw">замена порогов</span><span class="chip-kw">замена порогов челябинск</span><span class="chip-kw">кузовной ремонт замена порогов</span><span class="chip-kw">замена арок</span><span class="chip-kw">ремонт арок автомобиля</span><span class="chip-kw">замена лонжерона</span><span class="chip-kw">сварочные работы авто</span><span class="chip-kw">кузовной ремонт пороги</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> покажите кузов мастеру — назовём объём работ и срок.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Пороги и арки — меняем»</div>
+      <p>Композиция: автомобиль на подъёмнике, новый порог вварен по низу кузова; тезис на плашке в нижней трети, строка «порог от 20 000 ₽ · арка от 15 000 ₽».</p>
+      <p>Цвета: плашка — чёрный #101010, тезис — оранжевый #E08048, строка — светлый #F8F8F8.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Ремонт после ДТП в Челябинске: дефектовка для страховой и замена элементов</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>После ДТП мы проводим дефектовку повреждений для страховой компании и берём на себя кузовной ремонт.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Дефектовка повреждений после ДТП для страховой компании — от 3 000 ₽.<span class="src">бриф</span></li>
+      <li>Замена бампера переднего/заднего — от 3 000 ₽.<span class="src">бриф</span></li>
+      <li>Снятие/установка двери — от 4 000 ₽, замена капота — от 4 000 ₽, замена крышки багажника — от 4 000 ₽.<span class="src">бриф</span></li>
+      <li>Замена стекла двери — от 5 000 ₽.<span class="src">бриф</span></li>
+      <li>Ремонт по ОСАГО.<span class="src">Яндекс Карты</span></li>
+      <li>Работаем без предоплаты. Гарантия на все работы.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт после ДТП в Челябинске — «Про кузов»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт авто после ДТП в Челябинске, дефектовка для страховой | Про кузов</span></div>
+      <div class="meta-row"><span><b>Description · </b>Дефектовка повреждений после ДТП для страховой от 3 000 ₽, замена бампера, капота, двери и стекла. Кузовной ремонт и покраска в Ленинском районе, без предоплаты.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт после дтп</span><span class="chip-kw">ремонт авто после дтп челябинск</span><span class="chip-kw">кузовной ремонт после дтп</span><span class="chip-kw">дефектовка после дтп</span><span class="chip-kw">ремонт по осаго</span><span class="chip-kw">замена бампера</span><span class="chip-kw">ремонт бампера</span><span class="chip-kw">оценка кузовного ремонта</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> привозите автомобиль на дефектовку в будний день с 10:00 до 19:00.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«После ДТП — к нам»</div>
+      <p>Композиция: передняя часть автомобиля со снятым бампером на посту дефектовки; тезис на плашке в верхней трети, строка «дефектовка для страховой · от 3 000 ₽».</p>
+      <p>Цвета: плашка — оранжевый #E08048, тезис — чёрный #101010, строка — светлый #F8F8F8.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pk-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Кузов с гарантией</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Мастера от 10 лет</span><span class="fact-pill">Гарантия на все работы</span><span class="fact-pill">Без предоплаты</span><span class="fact-pill">Рихтовка от 3 500 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон чёрный #101010, заголовок светлым #F8F8F8, факты на оранжевых плашках #E08048 чёрным текстом. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Покраска и антихром</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Элемент от 17 000 ₽</span><span class="fact-pill">Капот от 25 000 ₽</span><span class="fact-pill">Антихром</span><span class="fact-pill">Полировка элемента от 1 000 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон оранжевый #E08048, заголовок чёрным #101010, цены столбиком на чёрных плашках светлым текстом #F8F8F8.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Пороги и арки</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Порог от 20 000 ₽</span><span class="fact-pill">Арка от 15 000 ₽</span><span class="fact-pill">Лонжерон от 20 000 ₽</span><span class="fact-pill">Сварочные работы</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото низа кузова на подъёмнике, нижняя половина — чёрная плашка #101010, цены крупно оранжевым #E08048.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">После ДТП</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Дефектовка для страховой от 3 000 ₽</span><span class="fact-pill">Ремонт по ОСАГО</span><span class="fact-pill">Бампер от 3 000 ₽</span><span class="fact-pill">Пн — Пт 10:00–19:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #F8F8F8, заголовок чёрным #101010, факты на оранжевых плашках #E08048.</div></div>
+  </div>
+</section>
+
+<section id="pk-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — кузов, покраска, пороги, ДТП <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Кузовной ремонт в Ленинском районе</b>рихтовка, вмятины, зазоры, гарантия</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Кузов с гарантией</b>опыт, гарантия, без предоплаты</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Покраска автомобиля и антихром</b>цены за элемент, полировка</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Покраска и антихром</b>цены столбиком</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Замена порогов и арок</b>переварка и силовые элементы кузова</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Пороги и арки</b>цены на замену</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Ремонт после ДТП</b>дефектовка для страховой, арматурные работы</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>После ДТП</b>дефектовка, ОСАГО, бампер</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D=[1382,2773,1420,2076,2554,2221];
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+(function(){const box=document.querySelector('[data-chart]'),d=D,W=520,H=210,L=48,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+ const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+ let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+ d.forEach((v,i)=>{const x=L+i*bw+bw*.2,w=bw*.6;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+ box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+ document.getElementById('pk-mom').innerHTML=d.map((v,i)=>{const c=i?Math.round((v/d[i-1]-1)*100):null;return `<tr><td>${M[i]}</td><td class="r num">${fmt(v)}</td><td class="r num ${c===null?'':c>=0?'up':'down'}">${c===null?'—':(c>0?'+':'')+c+'%'}</td></tr>`}).join('');
+})();
+const ROWS=[['кузовной ремонт','коммерческое',2221,57],['покраска авто','коммерческое',1279,6],['антикоррозийная обработка','коммерческое',545,-15],['замена порогов','коммерческое',487,2],['антихром','коммерческое',399,-6],['ремонт бампера','коммерческое',374,-9],['полировка авто','коммерческое',271,-1],['удаление вмятин','коммерческое',193,25],['рихтовка','коммерческое',159,-13],['ремонт после дтп','коммерческое',125,18]];
+(function(){const mx=Math.max(...ROWS.map(r=>r[2]));document.getElementById('t-pk').innerHTML=ROWS.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td><td class="r num ${r[3]>=0?'up':'down'}">${r[3]>0?'+':''}${r[3]}%</td></tr>`).join('')})();
+const NAV={analytics:[['summary','Итог'],['maps','Позиции и соседи'],['demand','Спрос'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');let cur='analytics';
+function show(view,scroll){if(!NAV[view])view='analytics';cur=view;
+ document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+ sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="pk-${id}">${t}</button>`).join('');
+ if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+ if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+ const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+
+</body>
+</html>
