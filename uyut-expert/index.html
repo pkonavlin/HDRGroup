@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Уют-Эксперт»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;gap:14px;padding-block:12px}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 15px var(--f-display);color:var(--ink)}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+main section{padding-block:48px;border-bottom:1px solid var(--line);max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));scroll-margin-top:110px}
+main section:last-of-type{border-bottom:0}
+.hero{padding-block:52px 40px!important;border-bottom:1px solid var(--gold-line)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:26ch}
+.lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.fact{background:var(--panel);padding:16px 18px;min-width:0}
+.fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.sec-head h2{font-size:clamp(22px,3vw,28px)}
+.sec-head p{margin:0;color:var(--ink-2)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.cycle{display:grid;gap:12px}
+.cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.cycle-row p{margin:0;font-size:15px;min-width:0}
+.tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.tone-banner b{color:var(--ink)}
+.period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.period h3{font:700 19px var(--f-display);color:var(--gold)}
+.pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.card-top>div{min-width:0}
+.num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.intro .lbl,.thesis-lbl,.seo-box .lbl,.cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.intro .lbl{color:var(--gold)}
+.thesis-lbl{color:var(--ink-3);margin-top:18px}
+.thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.thesis li{position:relative;padding-left:20px;font-size:15px}
+.thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.seo-box .lbl{color:var(--ink-3)}
+.meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.cta-line b{color:var(--ink)}
+.cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.cover-box .lbl{color:var(--gold)}
+.thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.cover-box p:last-child{margin-bottom:0}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.design-note b{color:var(--gold-2);font-weight:600}
+details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+details.stage[open]{border-color:var(--gold-line)}
+details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+details.stage summary::-webkit-details-marker{display:none}
+.badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.card{padding:20px 18px}.story-grid{grid-template-columns:1fr}.cycle-row{flex-direction:column;gap:6px}.stage-body{margin-left:12px}.stage-item{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span>
+    <span class="coname">Уют-Эксперт</span>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<section class="hero" id="company">
+  <span class="eyebrow">Строительные и отделочные работы · Екатеринбург</span>
+  <h1>«Уют-Эксперт» — ТЗ на контент, этап 3</h1>
+  <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «Уют-Эксперт» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ООО «РК» «Уют-Эксперт»</div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Ремонт квартир и коттеджей под ключ <small>капитальный, дизайнерский, элитный и премиум-класса</small></div></div>
+    <div class="fact"><div class="k">Регион</div><div class="v">Екатеринбург <small>Свердловская область, Москва</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">9:00–21:00 <small>без выходных</small></div></div>
+    <div class="fact"><div class="k">Гарантия</div><div class="v">5 лет <small>вместо стандартных 2 лет</small></div></div>
+    <div class="fact"><div class="k">Опыт мастеров</div><div class="v">от 8 лет</div></div>
+    <div class="fact"><div class="k">Стоимость</div><div class="v">от 3 500 ₽/м² <small>ремонт квартиры</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v" style="font-family:var(--f-mono)">уют-эксперт.рф</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Уют-Эксперт»</h2>
+    <p>После анализа ресурсов компании определена рабочая палитра для обложек и слайдов: тёплый нейтральный фон, графит и тёплая бронза — спокойная и сдержанная, без ярких и кричащих цветов.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#2B2A28;color:#F5F1EA;border-color:#2B2A28"><div class="role">Основной</div><div class="name">Графит</div><div class="hex">#2B2A28</div></div>
+    <div class="swatch" style="background:#B08D57;color:#1E1C1A;border-color:#B08D57"><div class="role">Акцентный</div><div class="name">Тёплая бронза</div><div class="hex">#B08D57</div></div>
+    <div class="swatch" style="background:#C9BBA6;color:#1E1C1A;border-color:#C9BBA6"><div class="role">Второстепенный</div><div class="name">Природный камень</div><div class="hex">#C9BBA6</div></div>
+    <div class="swatch" style="background:#F5F1EA;color:#1E1C1A;border-color:#F5F1EA"><div class="role">Фоновый</div><div class="name">Тёплый светлый</div><div class="hex">#F5F1EA</div></div>
+    <div class="swatch" style="background:#1E1C1A;color:#F5F1EA;border-color:#3a3733"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#1E1C1A</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап продолжает цикл публикаций на карточке: от общих вопросов ремонта и знакомства с компанией к конкретным гарантиям и практическим вопросам, которые встают перед стартом работ.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Перепланировка квартиры: что считается перепланировкой и почему её нужно согласовывать до начала ремонта, а не после.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Гарантия 5 лет вместо стандартных 2 лет: из чего складывается ответственность компании за результат.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>2 темы с обложкой. Публикация — карточка компании «Уют-Эксперт» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», спокойный деловой стиль. Вступление от лица компании, дальше факты по теме. Факты в тезисах — дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней, сравнений с другими компаниями. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Согласование перепланировки квартиры в Екатеринбурге: что нужно знать перед ремонтом</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Перепланировка — один из вопросов, с которым сталкивается почти каждый, кто планирует ремонт квартиры, и мы разбираемся в нём вместе с клиентом ещё на этапе проекта.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Перепланировка — изменение конфигурации помещения: перенос или снос стен, перенос дверных проёмов, устройство новых проёмов.<span class="src">отраслевой источник</span></li>
+      <li>Переустройство — замена или перенос инженерных систем: сантехники, электропроводки, газового оборудования.<span class="src">отраслевой источник</span></li>
+      <li>Перепланировку нужно согласовывать до начала работ, а не задним числом.<span class="src">отраслевой источник</span></li>
+      <li>Несогласованная перепланировка может привести к штрафу и предписанию вернуть помещение в исходное состояние.<span class="src">отраслевой источник</span></li>
+      <li>Уют-Эксперт ведёт ремонт «под ключ» — от замера и сметы до сдачи объекта — и учитывает такие вопросы в рамках проекта.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Согласование перепланировки квартиры в Екатеринбурге — «Уют-Эксперт»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Перепланировка квартиры: что нужно знать перед ремонтом | Уют-Эксперт</span></div>
+      <div class="meta-row"><span><b>Description · </b>Перепланировка квартиры в Екатеринбурге: что считается перепланировкой, какие документы нужны и чем грозит несогласованная перепланировка. Учитываем на этапе проекта ремонта под ключ.</span></div>
+      <div class="chips"><span class="chip-kw">согласование перепланировки екатеринбург</span><span class="chip-kw">как согласовать перепланировку квартиры</span><span class="chip-kw">перепланировка квартиры документы</span><span class="chip-kw">узаконить перепланировку екатеринбург</span><span class="chip-kw">перепланировка квартиры 2026</span><span class="chip-kw">проект перепланировки квартиры</span><span class="chip-kw">штраф за незаконную перепланировку</span><span class="chip-kw">переустройство и перепланировка</span><span class="chip-kw">ремонт с перепланировкой екатеринбург</span><span class="chip-kw">перепланировка свердловская область</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> уточняйте вопросы перепланировки на этапе планирования ремонта.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Перепланировка: по правилам»</div>
+      <p>Композиция: план квартиры или чертёж на столе, нейтральный ровный свет, без людей в кадре; тезис на плашке в нижней трети.</p>
+      <p>Цвета: фон тёплый светлый #F5F1EA, тезис почти чёрный #1E1C1A, тонкая линия под тезисом — бронза #B08D57.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Гарантия на ремонт 5 лет вместо стандартных 2 лет: как «Уют-Эксперт» отвечает за качество</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы даём на выполненный ремонт гарантию 5 лет вместо стандартных 2 — и выстраиваем работу так, чтобы отвечать за этот срок.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Даём гарантию 5 лет на ремонт, вместо стандартных 2 лет.<span class="src">сайт</span></li>
+      <li>Команда формируется из мастеров с опытом работы от 8 лет.<span class="src">сайт</span></li>
+      <li>Контроль качества на объекте — ежедневный, со стороны бригадира.<span class="src">сайт</span></li>
+      <li>Ремонт ведётся по договору с фиксированной ценой и сроками.<span class="src">сайт</span></li>
+      <li>Стоимость ремонта квартиры — от 3 500 рублей за м².<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гарантия на ремонт квартиры 5 лет — «Уют-Эксперт», Екатеринбург</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт квартир с гарантией 5 лет в Екатеринбурге | Уют-Эксперт</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ремонт квартир под ключ в Екатеринбурге с гарантией 5 лет вместо стандартных 2. Мастера с опытом от 8 лет, ежедневный контроль качества, цена от 3 500 ₽/м² по договору.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт квартир с гарантией екатеринбург</span><span class="chip-kw">гарантия на ремонт квартиры</span><span class="chip-kw">ремонт квартир под ключ гарантия</span><span class="chip-kw">строительная компания с гарантией екатеринбург</span><span class="chip-kw">ремонт квартиры цена за м2 екатеринбург</span><span class="chip-kw">ремонт квартир от 3500 руб м2</span><span class="chip-kw">надежная ремонтная компания екатеринбург</span><span class="chip-kw">договор на ремонт квартиры с фиксированной ценой</span><span class="chip-kw">гарантия 5 лет на ремонт</span><span class="chip-kw">ремонт квартир под ключ екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставляйте заявку на расчёт сметы с гарантией 5 лет.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Гарантия 5 лет»</div>
+      <p>Композиция: готовый интерьер после ремонта (сданная комната), крупная цифра «5» на плашке в верхней трети.</p>
+      <p>Цвета: плашка графит #2B2A28, цифра бронза #B08D57, текст тёплый светлый #F5F1EA.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>2 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p>
+  </div>
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Перепланировка по правилам</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Перенос стен и дверей — перепланировка</span><span class="fact-pill">Согласование до начала работ</span><span class="fact-pill">Без согласования — штраф</span><span class="fact-pill">Учитываем на этапе проекта</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёплый светлый #F5F1EA, заголовок почти чёрным #1E1C1A, факты на плашках природного камня #C9BBA6, акцентная плашка — бронза #B08D57.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Гарантия 5 лет</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">5 лет вместо стандартных 2</span><span class="fact-pill">Мастера с опытом от 8 лет</span><span class="fact-pill">Ежедневный контроль бригадиром</span><span class="fact-pill">Цена и сроки — в договоре</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #2B2A28, цифра «5» крупно бронзой #B08D57, факты светлым текстом #F5F1EA на плашках природного камня #C9BBA6.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+
+  <details class="stage">
+    <summary>Этап 1 — знакомство с ремонтом и экспертность</summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Почему ремонт лучше доверять профессионалам: 5 ошибок самостоятельной отделки</b>Неправильная подготовка поверхности, ошибки выбора материалов, нарушение технологии и последовательности работ, отсутствие контроля качества</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Этапы ремонта квартиры: от черновых работ до готового интерьера</b>Подготовка объекта, демонтаж, черновые работы, инженерные системы, чистовая отделка, сдача объекта</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Как выбрать материалы для ремонта: цена, качество и долговечность</b>Почему дешёвые материалы увеличивают расходы, какие характеристики важны, зависимость от типа помещения</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Современная отделка интерьера: тренды ремонта 2026 года</b>Натуральные материалы, функциональные пространства, минимализм, тёплые оттенки, практичные решения</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Из чего складывается качественный ремонт</b>Правильная подготовка, соблюдение технологий, профессиональное выполнение</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Черновая и чистовая отделка: в чём разница</b>Выравнивание и коммуникации — против стен, пола, потолка и финального интерьера</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Почему ремонт лучше делать комплексно</b>Единый контроль качества, соблюдение сроков, меньше ошибок между этапами</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Что получает клиент у профессиональной компании</b>Понятный процесс, профессиональное выполнение, готовое пространство для жизни</span></div>
+    </div>
+  </details>
+
+  <details class="stage">
+    <summary>Этап 2 — линейка услуг и работа с компанией</summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Какой ремонт делает «Уют-Эксперт»: от капитального до элитного</b>Капитальный, дизайнерский, элитный и премиум-ремонт квартир и коттеджей, свои дизайнеры интерьера в штате</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Как проходит сотрудничество с «Уют-Эксперт»: от заявки до сдачи объекта</b>Заявка и замер, смета и договор, согласование дизайн-проекта, производство работ, сдача объекта</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Какой ремонт делает «Уют-Эксперт»</b>Зеркалит новость 1 — линейка услуг тезисно</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Как проходит ремонт с «Уют-Эксперт»</b>Зеркалит новость 2 — этапы сотрудничества тезисно</span></div>
+    </div>
+  </details>
+
+  <details class="stage" open>
+    <summary>Этап 3 — гарантии и практические вопросы ремонта <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Согласование перепланировки квартиры в Екатеринбурге</b>Что считается перепланировкой, что нужно для согласования, чем грозит несогласованная перепланировка</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Перепланировка по правилам</b>Зеркалит новость 1</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Гарантия на ремонт 5 лет вместо стандартных 2 лет</b>Опыт мастеров от 8 лет, ежедневный контроль бригадиром, договор с фиксированной ценой, цена от 3 500 ₽/м²</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Гарантия 5 лет</b>Зеркалит новость 2</span></div>
+    </div>
+  </details>
+</section>
+</main>
+<script>
+const NAV=[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']];
+document.getElementById('subnav').innerHTML=NAV.map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-to]');
+  if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
+});
+</script>
+</body>
+</html>
