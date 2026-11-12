@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Хотбери»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: одна sticky-панель HDR Group, два вида — «Аналитика» и «Контент-план» */
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Хотбери»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Видное · суши-бар, пиццерия · бульвар Зелёные Аллеи, 14 · замер 12.11.2026</span>
+  <h1>Где «Хотбери» видно на Картах, а где нет</h1>
+  <p>Карточка «Хотбери» на Яндекс Картах. Позиции в рубриках и поиске по Видному, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«Доставка роллов» — 2-е место</b>Выше стоит только Mokkano в том же доме (бульвар Зелёные Аллеи, 14) с плашкой спецпредложения «скидка 20% на первый заказ».</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«Суши-бары» — 3-е место</b>Выше Mokkano и Yakitoriya (2611 оценок). У «Хотбери» рейтинг 5,0 и 621 оценка, но новостей и сторис на карточке нет.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Пиццерии» — карточки нет в первой пятёрке</b>Пицца есть в рубриках карточки и в меню сайта (28 и 33 см), но выдачу забирают Papa Johns, Pizza Express 24, Allo! Pizza, Koritsa, Dodo Pizza.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Ближайший конкурент — в том же здании</b>Mokkano на бульваре Зелёные Аллеи, 14 показывает в выдаче акцию на первый заказ и стоит выше «Хотбери» в двух рубриках из трёх.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">621 оценка · 439 отзывов</div></div>
+    <div class="kpi"><div class="k">Место в «Доставке роллов»</div><div class="n">2</div><div class="s">поиск по Видному</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">меню на карточке давно не обновлялось</div></div>
+    <div class="kpi"><div class="k">Награда</div><div class="n">2026</div><div class="s">«Хорошее место 2026»</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции в рубриках Яндекс Карт</h2><p>Поиск по городу Видное, первая пятёрка.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Рубрика / запрос</th><th class="r">Место</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>Доставка роллов</td><td class="r me">2</td><td>Mokkano, Хотбери, Emiko Sushi, Yakitoriya, Kaifa</td></tr>
+      <tr><td>Суши-бары</td><td class="r me">3</td><td>Mokkano, Yakitoriya, Хотбери, Kaifa, Saigoncafe</td></tr>
+      <tr><td>Пиццерии</td><td class="r">нет</td><td>Papa Johns, Pizza Express 24, Allo! Pizza, Koritsa, Dodo Pizza</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: роллы и суши, пицца, доставка, популярные позиции, комбо-наборы. Для каждого указано, какая тема этапа ведёт карточку в выдачу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Состояние карточки</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>доставка роллов видное</td><td>доставка</td><td>видно, 2-е место</td><td class="nw">Новость 1</td></tr>
+      <tr><td>доставка суши видное</td><td>доставка</td><td>новостей нет</td><td class="nw">Новость 1</td></tr>
+      <tr><td>доставка еды видное</td><td>доставка</td><td>новостей нет</td><td class="nw">Новость 1</td></tr>
+      <tr><td>сеты роллов</td><td>комбо-наборы</td><td>новостей нет</td><td class="nw">Новость 2</td></tr>
+      <tr><td>комбо роллы и пицца</td><td>комбо-наборы</td><td>новостей нет</td><td class="nw">Новость 2</td></tr>
+      <tr><td>пицца видное</td><td>пицца</td><td>нет в пятёрке</td><td class="nw">Новость 3</td></tr>
+      <tr><td>доставка пиццы видное</td><td>пицца</td><td>нет в пятёрке</td><td class="nw">Новость 3</td></tr>
+      <tr><td>суши видное</td><td>роллы и суши</td><td>3-е место</td><td class="nw">Новость 4</td></tr>
+      <tr><td>роллы видное</td><td>роллы и суши</td><td>новостей нет</td><td class="nw">Новость 4</td></tr>
+      <tr><td>запеченные роллы</td><td>популярные позиции</td><td>новостей нет</td><td class="nw">Новость 4</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Карточки в Видном, которые стоят рядом с «Хотбери» в выдаче по суши, роллам и доставке.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>Отметки</th></tr></thead>
+    <tbody>
+      <tr><td><b>Хотбери</b></td><td class="r num me">5,0</td><td class="r num me">621</td><td>бульвар Зелёные Аллеи, 14</td><td>Хорошее место 2026</td></tr>
+      <tr><td>Mokkano</td><td class="r num">4,8</td><td class="r num">423</td><td>бульвар Зелёные Аллеи, 14</td><td>Хорошее место 2026, спецпредложение</td></tr>
+      <tr><td>Yakitoriya</td><td class="r num">4,9</td><td class="r num">2611</td><td>Советский пр., 4</td><td>—</td></tr>
+      <tr><td>Kaifa</td><td class="r num">5,0</td><td class="r num">212</td><td>Берёзовая ул., 9</td><td>Хорошее место 2026, спецпредложение</td></tr>
+      <tr><td>Saigoncafe</td><td class="r num">5,0</td><td class="r num">712</td><td>пр. Ленинского Комсомола, 9к4</td><td>Хорошее место 2026</td></tr>
+      <tr><td>Emiko Sushi</td><td class="r num">5,0</td><td class="r num">522</td><td>Советская ул., вл10/1</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>У двух соседей — акция в выдаче</b>: Mokkano и Kaifa показывают спецпредложение на первый заказ, у «Хотбери» плашки нет.</li>
+      <li><b>По оценкам «Хотбери» в середине</b>: 621 против 2611 у Yakitoriya и 423 у Mokkano.</li>
+      <li><b>Пиццу забирают сетевые пиццерии</b>: в рубрике «Пиццерии» нет ни одной суши-карточки.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Отдельная новость про доставку роллов, суши и пиццы по Видному.</li>
+      <li>Отдельная новость про пиццу 28 и 33 см — под «пицца видное».</li>
+      <li>Сеты и комбо — отдельной темой, как просит бриф.</li>
+      <li>В каждом тексте — «Видное» и «бульвар Зелёные Аллеи, 14» в первом абзаце.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 12.11.2026: рубрики «Суши-бары», «Пиццерии» и поиск «доставка роллов» по городу Видное.</li>
+    <li>Рейтинги, оценки и отметки — из выдачи и карточек.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/khotberi/78086964890/" target="_blank" rel="noopener">«Хотбери», Видное, бульвар Зелёные Аллеи, 14 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/10719/vidnoe/category/sushi_bar/1387788996/" target="_blank" rel="noopener">Суши-бары в Видном — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/10719/vidnoe/category/pizzeria/184106392/" target="_blank" rel="noopener">Пиццерии в Видном — Яндекс Карты</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Ресторан роллов, суши и пиццы · Видное · бульвар Зелёные Аллеи, 14</span>
+  <h1>«Хотбери» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Хотбери» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Хотбери</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Ресторан <small>роллы, суши, пицца и другие популярные блюда · акцент на доставку и самовывоз</small></div></div>
+    <div class="fact"><div class="k">Зал</div><div class="v">Уютный зал <small>пообедать, поужинать или провести время с друзьями</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">С 11:00 до 23:00 ежедневно</div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Видное, бульвар Зелёные Аллеи, 14 <small>справа от подъезда 5</small></div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>юмор допустим · без упоминания конкурентов и политики</small></div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>После анализа ресурсов компании определены цвета публикаций: красный логотипа, оранжевый кнопок сайта и графитовый текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#CC0033;color:#FFFFFF;border-color:#CC0033"><div class="role">Основной</div><div class="name">Красный</div><div class="hex">#CC0033</div></div>
+    <div class="swatch" style="background:#FE9800;color:#262626;border-color:#FE9800"><div class="role">Акцентный</div><div class="name">Оранжевый</div><div class="hex">#FE9800</div></div>
+    <div class="swatch" style="background:#262626;color:#FFFFFF;border-color:#3a3a3a"><div class="role">Текстовый</div><div class="name">Графит</div><div class="hex">#262626</div></div>
+    <div class="swatch" style="background:#F2F2F2;color:#262626;border-color:#F2F2F2"><div class="role">Второстепенный</div><div class="name">Светло-серый</div><div class="hex">#F2F2F2</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#262626;border-color:#FFFFFF"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Темы идут по приоритетам брифа: сначала доставка, затем выгодные сеты и комбо, пицца — по ней карточки нет в выдаче, — и в конце популярные позиции меню.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Доставка и самовывоз роллов, суши и пиццы по Видному.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Сеты и комбо-наборы на компанию.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Пицца 28 и 33 см с доставкой.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Популярные позиции: классические, острые, горячие и запечённые роллы.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Хотбери» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», юмор допустим — так указано в брифе. Вступление от лица ресторана, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других заведений. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Доставка роллов, суши и пиццы по Видному — «Хотбери» на бульваре Зелёные Аллеи, 14</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Хотбери» готовим роллы, суши и пиццу и делаем основной акцент на доставку и самовывоз.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Современный ресторан, специализирующийся на приготовлении роллов, суши, пиццы и других популярных блюд с основным акцентом на доставку и самовывоз.<span class="src">бриф</span></li>
+      <li>С 11:00 до 23:00 ежедневно.<span class="src">бриф</span></li>
+      <li>Видное, бульвар Зелёные Аллеи, 14, справа от подъезда 5.<span class="src">бриф</span></li>
+      <li>Зоны доставки по Видному отмечены на карте на сайте.<span class="src">сайт</span></li>
+      <li>Оплата картой, наличными, онлайн.<span class="src">Яндекс Карты</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Доставка роллов и пиццы в Видном — «Хотбери»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Доставка роллов, суши и пиццы, Видное | Хотбери</span></div>
+      <div class="meta-row"><span><b>Description · </b>Роллы, суши и пицца с доставкой и самовывозом в Видном. «Хотбери», бульвар Зелёные Аллеи, 14, ежедневно с 11:00 до 23:00.</span></div>
+      <div class="chips"><span class="chip-kw">доставка роллов видное</span><span class="chip-kw">доставка суши видное</span><span class="chip-kw">доставка еды видное</span><span class="chip-kw">роллы с доставкой</span><span class="chip-kw">заказать роллы</span><span class="chip-kw">суши на дом</span><span class="chip-kw">самовывоз роллов</span><span class="chip-kw">доставка пиццы</span><span class="chip-kw">хотбери видное</span><span class="chip-kw">зелёные аллеи</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> закажите доставку на сайте или заберите заказ на бульваре Зелёные Аллеи, 14.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Доставка по Видному»</div>
+      <p>Композиция: сет роллов и пицца в фирменной упаковке на светлом фоне. Тезис на плашке в нижней трети, строка «Ежедневно 11:00–23:00». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: фон — белый #FFFFFF, плашка — красный #CC0033, тезис — белый #FFFFFF, строка времени — оранжевый #FE9800.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Сеты и комбо-наборы в «Хотбери»: роллы и пицца на компанию</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Когда собираетесь компанией, выбирать по одному роллу долго. Поэтому у нас есть сеты и комбо-наборы.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Выгодные комбо-наборы — направление, которому ресторан уделяет особое внимание.<span class="src">бриф</span></li>
+      <li>Разделы меню «Сеты» и «Комбо».<span class="src">сайт</span></li>
+      <li>Вкусные и разнообразные роллы, суши, пиццу, горячие закуски и другие блюда на любой вкус.<span class="src">бриф</span></li>
+      <li>Сочетаем качество, свежие ингредиенты и разнообразие меню, чтобы каждый нашёл что-то для себя.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Сеты роллов и комбо-наборы — «Хотбери», Видное</span></div>
+      <div class="meta-row"><span><b>Title · </b>Сеты роллов и комбо с пиццей, Видное | Хотбери</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сеты роллов и комбо-наборы на компанию в «Хотбери». Доставка и самовывоз в Видном, бульвар Зелёные Аллеи, 14.</span></div>
+      <div class="chips"><span class="chip-kw">сеты роллов</span><span class="chip-kw">сет роллов видное</span><span class="chip-kw">комбо набор</span><span class="chip-kw">комбо роллы и пицца</span><span class="chip-kw">роллы на компанию</span><span class="chip-kw">большой сет</span><span class="chip-kw">заказать сет</span><span class="chip-kw">сеты с доставкой</span><span class="chip-kw">запеченный сет</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выберите сет или комбо в разделах меню на сайте «Хотбери».</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Сеты и комбо»</div>
+      <p>Композиция: большой сет роллов сверху, рядом пицца — одним набором на столе. Тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — графит #262626, тезис — белый #FFFFFF, акцентная линия — оранжевый #FE9800.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Пицца 28 и 33 см в Видном — с доставкой из «Хотбери»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы готовим не только роллы: в меню «Хотбери» есть пицца двух размеров.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Разделы меню «Пицца 28 см» и «Пицца 33 см».<span class="src">сайт</span></li>
+      <li>Ресторан, специализирующийся на приготовлении роллов, суши, пиццы.<span class="src">бриф</span></li>
+      <li>Основной акцент на доставку и самовывоз.<span class="src">бриф</span></li>
+      <li>С 11:00 до 23:00 ежедневно.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Пицца 28 и 33 см в Видном — «Хотбери»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Пицца с доставкой, Видное, бульвар Зелёные Аллеи, 14 | Хотбери</span></div>
+      <div class="meta-row"><span><b>Description · </b>Пицца 28 и 33 см с доставкой и самовывозом в Видном. «Хотбери», ежедневно с 11:00 до 23:00.</span></div>
+      <div class="chips"><span class="chip-kw">пицца видное</span><span class="chip-kw">доставка пиццы видное</span><span class="chip-kw">заказать пиццу</span><span class="chip-kw">пицца 33 см</span><span class="chip-kw">пицца 28 см</span><span class="chip-kw">пиццерия видное</span><span class="chip-kw">пицца на дом</span><span class="chip-kw">пицца самовывоз</span><span class="chip-kw">роллы и пицца</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> закажите пиццу нужного размера с доставкой по Видному.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Пицца 28 и 33 см»</div>
+      <p>Композиция: две пиццы разного размера рядом, вид сверху. Тезис на плашке в нижней трети.</p>
+      <p>Цвета: фон — светло-серый #F2F2F2, плашка — оранжевый #FE9800, тезис — графит #262626.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Классические, острые, горячие и запечённые роллы — популярное в меню «Хотбери»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы стремимся к тому, чтобы гости получали удовольствие от еды и оставались довольны каждым заказом. Рассказываем, из чего выбирать.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Разделы меню: маки, классические роллы, острые роллы, горячие, запеченные роллы, суши и гунканы.<span class="src">сайт</span></li>
+      <li>Мы гарантируем качество каждого блюда.<span class="src">бриф</span></li>
+      <li>Свежие ингредиенты и разнообразие меню.<span class="src">бриф</span></li>
+      <li>Уютный зал, где гости могут комфортно пообедать, поужинать или провести время с друзьями.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Роллы и суши в Видном — меню «Хотбери»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Классические, горячие и запеченные роллы, Видное | Хотбери</span></div>
+      <div class="meta-row"><span><b>Description · </b>Маки, классические, острые, горячие и запеченные роллы, суши и гунканы в «Хотбери». Видное, бульвар Зелёные Аллеи, 14.</span></div>
+      <div class="chips"><span class="chip-kw">суши видное</span><span class="chip-kw">роллы видное</span><span class="chip-kw">запеченные роллы</span><span class="chip-kw">горячие роллы</span><span class="chip-kw">острые роллы</span><span class="chip-kw">филадельфия</span><span class="chip-kw">маки</span><span class="chip-kw">гунканы</span><span class="chip-kw">суши-бар видное</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выберите роллы в меню на сайте или загляните в зал на бульваре Зелёные Аллеи, 14.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Роллы на любой вкус»</div>
+      <p>Композиция: ряд из четырёх видов роллов — классический, острый, горячий, запечённый — на тёмной доске. Тезис на плашке в нижней трети.</p>
+      <p>Цвета: плашка — красный #CC0033, тезис — белый #FFFFFF, подложка — графит #262626.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Доставка и самовывоз</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Ежедневно 11:00–23:00</span><span class="fact-pill">Роллы, суши, пицца</span><span class="fact-pill">бульвар Зелёные Аллеи, 14</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон красный #CC0033, заголовок белым #FFFFFF, факты на белых плашках #FFFFFF текстом #262626. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Сеты и комбо</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Сеты</span><span class="fact-pill">Комбо-наборы</span><span class="fact-pill">Роллы и пицца</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото сета, нижняя половина — плашка графит #262626, заголовок оранжевым #FE9800, факты белым #FFFFFF.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Пицца 28 и 33 см</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">28 см</span><span class="fact-pill">33 см</span><span class="fact-pill">Доставка и самовывоз</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон оранжевый #FE9800, размеры крупно графитом #262626, факты на светло-серых плашках #F2F2F2.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Уютный зал</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Пообедать</span><span class="fact-pill">Поужинать</span><span class="fact-pill">Провести время с друзьями</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото зала, нижняя треть — плашка белая #FFFFFF, заголовок красным #CC0033, факты графитом #262626.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — доставка, сеты и комбо, пицца, популярные роллы <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Доставка роллов, суши и пиццы по Видному</b>под «доставка роллов видное», «доставка суши видное»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Доставка и самовывоз</b>режим и адрес</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Сеты и комбо-наборы</b>под «сеты роллов», «комбо роллы и пицца»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Сеты и комбо</b>наборы на компанию</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Пицца 28 и 33 см</b>под «пицца видное», «доставка пиццы видное»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Пицца 28 и 33 см</b>два размера</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Популярные роллы</b>под «суши видное», «роллы видное», «запеченные роллы»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Уютный зал</b>обед, ужин, встреча с друзьями</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['maps','Рубрики'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
