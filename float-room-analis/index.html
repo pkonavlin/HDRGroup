@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Float Room: анализ филиалов, спрос региона и точки роста</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f3f0;--surface:#fcfcfb;--surface-2:#efeeea;--line:#e2e0da;--grid:#e9e7e2;
+  --text:#0b0b0b;--text-2:#52514e;--muted:#7d7c77;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s7:#6250d6;
+  --good:#1a8f4f;--warn:#c98500;--bad:#d03b3b;--neutral:#b9b7b0;
+  --div-pos:#2a78d6;--div-neg:#eb6834;
+  --heat0:#eef4fc;--heat1:#1c5bab;
+  --radius:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --bg:#121211;--surface:#1a1a19;--surface-2:#242422;--line:#2f2f2c;--grid:#2a2a28;
+    --text:#f0efec;--text-2:#c3c2b7;--muted:#8e8d86;
+    --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s7:#9085e9;
+    --good:#2fae6a;--warn:#d9a020;--bad:#e66767;--neutral:#5d5c57;
+    --div-pos:#3987e5;--div-neg:#d95926;--heat0:#1f2a38;--heat1:#7fb4f5;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121211;--surface:#1a1a19;--surface-2:#242422;--line:#2f2f2c;--grid:#2a2a28;
+  --text:#f0efec;--text-2:#c3c2b7;--muted:#8e8d86;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s7:#9085e9;
+  --good:#2fae6a;--warn:#d9a020;--bad:#e66767;--neutral:#5d5c57;
+  --div-pos:#3987e5;--div-neg:#d95926;--heat0:#1f2a38;--heat1:#7fb4f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
+.num{font-variant-numeric:tabular-nums}
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:10px 20px;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.brand{font-weight:700;white-space:nowrap}
+.nav a{color:var(--text-2);text-decoration:none;font-size:13px;white-space:nowrap}
+.nav a:hover{color:var(--text)}
+.theme{margin-left:auto;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;white-space:nowrap}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:clamp(26px,4vw,40px);line-height:1.12;margin:6px 0 6px;letter-spacing:-.02em}
+.sub{color:var(--text-2);margin:0 0 22px}
+h2{font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+.sec{margin-top:44px;scroll-margin-top:60px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sec-n{color:var(--muted);font-size:13px;font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.ct{font-weight:600;font-size:15px;margin:0}
+.cs{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:900px){.g5{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.g2,.g3{grid-template-columns:minmax(0,1fr)}}
+.kpi .v{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .l{color:var(--text-2);font-size:13px;margin-top:4px}
+.fact .v{font-size:34px;font-weight:750;letter-spacing:-.02em;line-height:1.05}
+.fact .l{font-weight:600;margin-top:6px}
+.fact .d{color:var(--muted);font-size:13px;margin-top:4px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text,.lbl{fill:var(--muted);font-size:11px}
+.vlbl{fill:var(--text-2);font-size:11px}
+.gl{stroke:var(--grid);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--text-2);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+#tt{position:fixed;pointer-events:none;z-index:50;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;box-shadow:0 6px 24px rgba(0,0,0,.14);opacity:0;transition:opacity .08s;max-width:260px}
+#tt b{display:block;margin-bottom:3px}
+#tt .r{display:flex;justify-content:space-between;gap:14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+th{background:var(--surface-2);color:var(--text-2);font-weight:600;cursor:pointer;user-select:none;position:sticky;top:0}
+th:first-child{background:var(--surface-2);z-index:2}
+tr.own td{background:color-mix(in srgb,var(--s1) 9%,var(--surface))}
+tr.own td:first-child{background:color-mix(in srgb,var(--s1) 9%,var(--surface))}
+td.bad{color:var(--bad);font-weight:600}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600}
+.p-strong{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.p-mid{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+.p-risk{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--text-2);border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer}
+.filters button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.note{color:var(--muted);font-size:12.5px;margin-top:8px}
+.season .tag{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.season .v{font-size:22px;font-weight:700;margin:4px 0 2px}
+.season .d{color:var(--text-2);font-size:13px}
+.rule .v{font-size:28px;font-weight:750;letter-spacing:-.02em}
+.rule .l{font-weight:600;margin-top:4px}
+.rule .d{color:var(--text-2);font-size:13px;margin-top:6px}
+.rule a,.foot a{color:var(--s1)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;counter-reset:s}
+@media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.steps{grid-template-columns:minmax(0,1fr)}}
+.step{position:relative}
+.step .when{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.step h3{margin:4px 0 8px;font-size:17px}
+.step ul{margin:0;padding-left:18px;color:var(--text-2);font-size:13.5px}
+.step li{margin:3px 0}
+.step .k{position:absolute;right:16px;top:12px;font-size:34px;font-weight:800;color:var(--surface-2)}
+.foot{margin-top:50px;color:var(--text-2);font-size:12.5px;border-top:1px solid var(--line);padding-top:18px}
+.foot ul{padding-left:18px}
+.foot li{margin:3px 0}
+@media(max-width:480px){main{padding:20px 14px 50px}.card{padding:14px}.kpi .v{font-size:24px}.fact .v{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="nav"><div class="nav-in">
+  <span class="brand">Float Room</span>
+  <a href="#traffic">Трафик</a><a href="#compare">Сравнение</a><a href="#state">Карточка</a><a href="#comp">Конкуренты</a><a href="#find">Как находят</a><a href="#demand">Спрос</a><a href="#season">Сезонность</a><a href="#news">Поводы</a><a href="#route">Маршрут</a>
+  <button class="theme" id="themeBtn" type="button">Тема</button>
+</div></div>
+<main>
+<h1>Float Room: анализ филиалов, спрос региона и точки роста</h1>
+<p class="sub">Курган · спа-салон, флоатинг и массаж · 1 карточка на Яндекс Картах (ул. Коли Мяготина, 129) · статистика ноябрь 2025 — октябрь 2026</p>
+
+<div class="grid g5" id="kpis"></div>
+
+<div class="sec" id="main30">
+  <div class="sec-head"><h2>Главное за 30 секунд</h2></div>
+  <div class="grid g3" id="facts"></div>
+</div>
+
+<section class="sec" id="traffic">
+  <div class="sec-head"><span class="sec-n">01</span><h2>Куда приходит трафик</h2></div>
+  <div class="grid g2">
+    <div class="card"><p class="ct">Переходы в карточку по месяцам</p><p class="cs">дискавери и прямые переходы · ноя 2025 — окт 2026</p><div class="legend" id="lg-tr"></div><div class="chart" id="ch-tr"></div></div>
+    <div class="card"><p class="ct">Целевые действия по месяцам</p><p class="cs">звонки, маршруты, переходы на сайт</p><div class="legend" id="lg-act"></div><div class="chart" id="ch-act"></div></div>
+  </div>
+  <div class="card" style="margin-top:14px"><p class="ct">Переходы по неделям: сентябрь → ноябрь 2026</p><p class="cs">дискавери и прямые переходы</p><div class="legend" id="lg-wk"></div><div class="chart" id="ch-wk"></div></div>
+</section>
+
+<section class="sec" id="compare">
+  <div class="sec-head"><span class="sec-n">02</span><h2>Сравнение карточек в зоне</h2></div>
+  <div class="filters" id="flt"></div>
+  <div class="tw"><table id="tbl"></table></div>
+</section>
+
+<section class="sec" id="state">
+  <div class="sec-head"><span class="sec-n">03</span><h2>Состояние карточек</h2></div>
+  <div class="grid g2">
+    <div class="card"><p class="ct">Сколько карточек проседает</p><p class="cs">Float Room и 11 конкурентов зоны</p><div class="legend" id="lg-gaps"></div><div class="chart" id="ch-gaps"></div></div>
+    <div class="card"><p class="ct">Рейтинг × число оценок</p><p class="cs">все карточки с рейтингом · ось оценок логарифмическая</p><div class="legend" id="lg-sc"></div><div class="chart" id="ch-sc"></div></div>
+  </div>
+</section>
+
+<section class="sec" id="comp">
+  <div class="sec-head"><span class="sec-n">04</span><h2>Конкуренты</h2></div>
+  <div class="grid g2">
+    <div class="card"><p class="ct">Доля переходов в зоне 10 км</p><p class="cs">неделя 28.09 — 04.10.2026 · Яндекс Бизнес, «Конкуренты»</p><div class="chart" id="ch-share"></div></div>
+    <div class="card"><p class="ct">Float Room против медианы конкурентов</p><p class="cs">11 уникальных карточек зоны</p><div class="legend" id="lg-med"></div><div class="chart" id="ch-med"></div></div>
+  </div>
+  <div class="card" style="margin-top:14px"><p class="ct">Брендовый спрос: Курган, сумма за 12 месяцев</p><p class="cs">окт 2025 — сен 2026 · изменение к предыдущим 12 месяцам · Вордстат</p><div class="chart" id="ch-brand"></div></div>
+</section>
+
+<section class="sec" id="find">
+  <div class="sec-head"><span class="sec-n">05</span><h2>Как клиенты находят Float Room</h2></div>
+  <div class="grid g2">
+    <div class="card"><p class="ct">Источники визитов</p><p class="cs">50 последних визитов, 02 — 10.11.2026 · Геовизор</p><div class="chart" id="ch-src"></div></div>
+    <div class="card"><p class="ct">Что уточняют в общих запросах</p><p class="cs">18 визитов из общих запросов по категории</p><div class="chart" id="ch-ref"></div></div>
+  </div>
+  <div class="card" style="margin-top:14px"><p class="ct">Брендовый спрос по месяцам: Float Room против Алтайской Здравницы</p><p class="cs">Курган · окт 2024 — сен 2026 · Вордстат</p><div class="legend" id="lg-bm"></div><div class="chart" id="ch-bm"></div></div>
+</section>
+
+<section class="sec" id="demand">
+  <div class="sec-head"><span class="sec-n">06</span><h2>Спрос на рынке</h2></div>
+  <div class="card"><p class="ct">«спа салон»: Курган и Курганская область</p><p class="cs">запросов в месяц · окт 2024 — сен 2026 · Вордстат</p><div class="legend" id="lg-main"></div><div class="chart" id="ch-main"></div></div>
+  <div class="card" style="margin-top:14px"><p class="ct">Что растёт и что падает</p><p class="cs">Курган · окт 2025 — сен 2026 к окт 2024 — сен 2025 · Вордстат</p><div class="chart" id="ch-div"></div></div>
+</section>
+
+<section class="sec" id="season">
+  <div class="sec-head"><span class="sec-n">07</span><h2>Сезонность</h2></div>
+  <div class="card"><p class="ct">Спрос по направлениям и месяцам</p><p class="cs">Курган · окт 2025 — сен 2026 · Вордстат</p><div class="chart" id="ch-heat"></div></div>
+  <div class="grid g3" style="margin-top:14px" id="seasonCards"></div>
+</section>
+
+<section class="sec" id="news">
+  <div class="sec-head"><span class="sec-n">08</span><h2>Поводы для контента</h2></div>
+  <div class="grid g2" id="rules"></div>
+</section>
+
+<section class="sec" id="route">
+  <div class="sec-head"><span class="sec-n">09</span><h2>Маршрут роста</h2></div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<div class="foot" id="foot"></div>
+</main>
+<div id="tt"></div>
+<script>
+const D={"kpi": {"cards": 1, "trans": 5694, "act": 766, "rating": 4.9, "oc": 64, "share": 42}, "facts": [{"v": "1-е место", "l": "в своей зоне: 42 % переходов", "d": "Алтайская Здравница — 37 %, у остальных 6 карточек списка — от 0,2 до 8 %"}, {"v": "−79 %", "l": "дискавери-переходов в октябре", "d": "≈139 в неделю в сентябре → ≈29 с 5 октября"}, {"v": "64 vs 3", "l": "оценок у Float Room и медиана зоны", "d": "рейтинг 4,9, все 36 отзывов — 5★ и с ответом"}, {"v": "−28 %", "l": "брендовый спрос Float Room за год", "d": "832 → 600; у Алтайской Здравницы 3 531 → 7 292 (+107 %)"}, {"v": "−37 %", "l": "запрос «спа салон» в Кургане", "d": "7 884 → 4 968 за 12 месяцев; по области −30 %"}, {"v": "+39 %", "l": "«массаж цена» — крупнейший из быстрорастущих запросов", "d": "1 318 → 1 835; «подарочный сертификат спа» +88 %"}], "cardMonths": {"short": ["ноя 25", "дек", "янв 26", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт"], "full": ["ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026", "октябрь 2026"]}, "disc": [146, 207, 228, 290, 320, 232, 810, 615, 228, 598, 631, 163], "direct": [55, 103, 79, 85, 110, 85, 99, 115, 165, 115, 132, 83], "phone": [2, 10, 9, 14, 18, 10, 12, 27, 9, 81, 86, 8], "route": [4, 5, 7, 7, 11, 7, 97, 54, 8, 63, 64, 10], "site": [3, 7, 9, 18, 11, 18, 7, 15, 18, 15, 12, 10], "wk": {"l": ["31.08", "07.09", "14.09", "21.09", "28.09", "05.10", "12.10", "19.10", "26.10", "02.11"], "d": [126, 128, 141, 156, 142, 34, 21, 20, 31, 40], "n": [23, 28, 31, 32, 34, 27, 25, 8, 10, 30]}, "tcols": [{"k": "name", "n": "Карточка"}, {"k": "status", "n": "Статус"}, {"k": "rating", "n": "Рейтинг", "d": 1}, {"k": "oc", "n": "Оценки"}, {"k": "rev", "n": "Отзывы"}, {"k": "ph", "n": "Фото"}, {"k": "posts", "n": "Публикации за год"}, {"k": "stories", "n": "Сторис"}, {"k": "share", "n": "Доля в зоне", "suf": " %"}, {"k": "leader", "n": "Лидер зоны"}, {"k": "trans", "n": "Переходы"}, {"k": "phone", "n": "Звонки"}, {"k": "route", "n": "Маршруты"}, {"k": "site", "n": "Сайт"}, {"k": "conv", "n": "Конверсия", "d": 1, "suf": " %"}], "trows": [{"name": "Float Room · Коли Мяготина, 129", "own": true, "status": "Сильная", "rating": 4.9, "oc": 64, "rev": 36, "ph": 180, "posts": 16, "stories": "есть", "share": 42, "leader": "Float Room", "trans": 5694, "phone": 286, "route": 337, "site": 143, "conv": 13.5}, {"name": "Алтайская Здравница", "own": false, "status": "Сильная", "rating": 5.0, "oc": 73, "rev": 57, "ph": 79, "posts": null, "stories": "есть", "share": 37, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Сиам · Гоголя", "own": false, "status": "Сильная", "rating": 4.6, "oc": 126, "rev": 46, "ph": 38, "posts": null, "stories": "нет", "share": 8, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Lavanda", "own": false, "status": "Сильная", "rating": 5.0, "oc": 36, "rev": 31, "ph": 40, "posts": null, "stories": "нет", "share": 7, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Сиам · Заозёрный", "own": false, "status": "Средняя", "rating": 4.4, "oc": 51, "rev": 22, "ph": 26, "posts": null, "stories": "нет", "share": 4, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Фишка", "own": false, "status": "Средняя", "rating": 4.4, "oc": 25, "rev": 14, "ph": 28, "posts": null, "stories": "нет", "share": 2, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "New_body_life", "own": false, "status": "Риск", "rating": null, "oc": 0, "rev": 0, "ph": 30, "posts": null, "stories": "нет", "share": 0.9, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Relax SPA", "own": false, "status": "Риск", "rating": null, "oc": 0, "rev": 0, "ph": 20, "posts": null, "stories": "нет", "share": 0.2, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Кристина · Невежина, 4", "own": false, "status": "Риск", "rating": null, "oc": 0, "rev": 0, "ph": 12, "posts": null, "stories": "нет", "share": null, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Кристина · Невежина, 3", "own": false, "status": "Риск", "rating": null, "oc": 0, "rev": 0, "ph": 3, "posts": null, "stories": "нет", "share": null, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "ForBody Studio", "own": false, "status": "Риск", "rating": null, "oc": 0, "rev": 1, "ph": 6, "posts": null, "stories": "нет", "share": null, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}, {"name": "Золотой Алтай", "own": false, "status": "Средняя", "rating": 4.0, "oc": 3, "rev": 1, "ph": 6, "posts": null, "stories": "нет", "share": null, "leader": null, "trans": null, "phone": null, "route": null, "site": null, "conv": null}], "gaps": [{"l": "Нет сторис", "own": 0, "c": 10}, {"l": "Нет «Хорошего места»", "own": 0, "c": 10}, {"l": "Меньше 10 оценок", "own": 0, "c": 6}, {"l": "Без рейтинга / < 4,0", "own": 0, "c": 5}, {"l": "Меньше 10 отзывов", "own": 0, "c": 6}, {"l": "Меньше 10 фото", "own": 0, "c": 3}], "scatter": [{"n": "Float Room", "r": 4.9, "oc": 64, "own": true, "lab": true, "lx": -14, "ly": 4, "anchor": "end"}, {"n": "Алтайская Здравница", "r": 5.0, "oc": 73, "lab": true, "lx": 8, "ly": -12, "anchor": "middle"}, {"n": "Сиам · Гоголя", "r": 4.6, "oc": 126, "lab": true, "lx": -10, "ly": 20, "anchor": "end"}, {"n": "Lavanda", "r": 5.0, "oc": 36, "lab": false, "lx": -10, "ly": 20, "anchor": "end"}, {"n": "Сиам · Заозёрный", "r": 4.4, "oc": 51, "lab": false, "lx": -10, "ly": 20, "anchor": "end"}, {"n": "Фишка", "r": 4.4, "oc": 25, "lab": false, "lx": -10, "ly": 20, "anchor": "end"}, {"n": "Золотой Алтай", "r": 4.0, "oc": 3, "lab": false, "lx": -10, "ly": 20, "anchor": "end"}], "share": [{"n": "Float Room", "p": 42, "own": true}, {"n": "Алтайская Здравница", "p": 37}, {"n": "Сиам · Гоголя", "p": 8}, {"n": "Lavanda", "p": 7}, {"n": "Сиам · Заозёрный", "p": 4}, {"n": "Фишка", "p": 2}, {"n": "New_body_life", "p": 0.9}, {"n": "Relax SPA", "p": 0.2}], "med": [{"l": "Рейтинг", "own": 4.9, "c": 4.5, "max": 5, "fo": "4,9", "fc": "4,5"}, {"l": "Оценки", "own": 64, "c": 3, "max": 64, "fo": "64", "fc": "3"}, {"l": "Отзывы", "own": 36, "c": 1, "max": 36, "fo": "36", "fc": "1"}, {"l": "Фото", "own": 180, "c": 26, "max": 180, "fo": "180", "fc": "26"}], "brand": [{"n": "Алтайская Здравница", "a": 3531, "b": 7292, "p": 107, "own": false}, {"n": "Сиам (спа + массаж)", "a": 1254, "b": 1138, "p": -9, "own": false}, {"n": "Float Room", "a": 832, "b": 600, "p": -28, "own": true}, {"n": "Relax SPA", "a": 129, "b": 71, "p": -45, "own": false}, {"n": "Lavanda (массаж)", "a": 13, "b": 23, "p": 77, "own": false}, {"n": "New_body_life", "a": 3, "b": 1, "p": -67, "own": false}, {"n": "Фишка (спа)", "a": 0, "b": 0, "p": null, "own": false}], "src": [{"l": "Общий запрос по категории", "v": 18}, {"l": "Из Поиска и по ссылкам", "v": 15}, {"l": "Клик по метке на карте", "v": 10}, {"l": "Поиск на карте без текста", "v": 3}, {"l": "Поиск по бренду", "v": 2}, {"l": "Похожие места", "v": 2}, {"l": "Поиск конкурентов", "v": 0}], "ref": [{"l": "«массажный салон»", "v": 5, "t": "массажный салон ×5"}, {"l": "«спа-салон»", "v": 4, "t": "спа-салон ×4"}, {"l": "«массаж», «массажи»", "v": 4, "t": "массаж ×3, массажи ×1"}, {"l": "Конкретные услуги", "v": 4, "t": "подарочные сертификаты для мужчин; spa-процедуры; массаж для детей до года; массаж для взрослых"}, {"l": "Район / адрес", "v": 1, "t": "«какие салоны красоты есть от памятника Коли Мяготина до Дома быта»"}, {"l": "Цена / акция", "v": 0, "t": "0 визитов"}, {"l": "«рейтинг», «лучший»", "v": 0, "t": "0 визитов"}], "bm": {"f": [70, 79, 113, 87, 82, 97, 42, 65, 34, 60, 76, 27, 74, 61, 57, 56, 60, 88, 27, 41, 36, 37, 39, 24], "a": [6, 15, 259, 385, 364, 454, 384, 296, 282, 318, 400, 368, 394, 463, 786, 572, 751, 1150, 460, 388, 420, 461, 726, 721]}, "ws": {"short": ["окт 24", "ноя", "дек", "янв 25", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт 25", "ноя", "дек", "янв 26", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен"], "full": ["октябрь 2024", "ноябрь 2024", "декабрь 2024", "январь 2025", "февраль 2025", "март 2025", "апрель 2025", "май 2025", "июнь 2025", "июль 2025", "август 2025", "сентябрь 2025", "октябрь 2025", "ноябрь 2025", "декабрь 2025", "январь 2026", "февраль 2026", "март 2026", "апрель 2026", "май 2026", "июнь 2026", "июль 2026", "август 2026", "сентябрь 2026"]}, "main": {"c": [769, 775, 763, 793, 830, 665, 554, 679, 509, 499, 608, 440, 555, 442, 569, 359, 352, 467, 282, 355, 324, 322, 450, 491], "o": [964, 969, 972, 1070, 1011, 834, 748, 875, 666, 712, 868, 596, 753, 662, 794, 506, 522, 610, 461, 480, 486, 477, 662, 801]}, "div": [{"l": "подарочный сертификат спа", "a": 49, "b": 92, "p": 88}, {"l": "спа головы", "a": 75, "b": 114, "p": 52}, {"l": "массаж цена", "a": 1318, "b": 1835, "p": 39}, {"l": "магниевая ванна", "a": 267, "b": 355, "p": 33}, {"l": "массаж для беременных", "a": 84, "b": 108, "p": 29}, {"l": "спа девичник", "a": 25, "b": 32, "p": 28}, {"l": "спортивный массаж", "a": 267, "b": 289, "p": 8}, {"l": "джакузи", "a": 2145, "b": 2251, "p": 5}, {"l": "сертификат на массаж", "a": 320, "b": 333, "p": 4}, {"l": "массаж спины", "a": 2315, "b": 2389, "p": 3}, {"l": "массаж шеи", "a": 907, "b": 896, "p": -1}, {"l": "спа капсула", "a": 64, "b": 63, "p": -2}, {"l": "массаж", "a": 137357, "b": 133099, "p": -3}, {"l": "детский массаж", "a": 616, "b": 584, "p": -5}, {"l": "флоатинг", "a": 1587, "b": 1444, "p": -9}, {"l": "кедровая бочка", "a": 404, "b": 352, "p": -13}, {"l": "релакс массаж", "a": 307, "b": 260, "p": -15}, {"l": "спа", "a": 22024, "b": 18486, "p": -16}, {"l": "антицеллюлитный массаж", "a": 1074, "b": 892, "p": -17}, {"l": "массаж лица", "a": 5913, "b": 4861, "p": -18}, {"l": "обертывание", "a": 1817, "b": 1495, "p": -18}, {"l": "тайский массаж", "a": 3150, "b": 2577, "p": -18}, {"l": "лимфодренажный массаж", "a": 1474, "b": 1188, "p": -19}, {"l": "соляная пещера", "a": 911, "b": 636, "p": -30}, {"l": "массажный салон", "a": 2975, "b": 2062, "p": -31}, {"l": "спа программа", "a": 147, "b": 101, "p": -31}, {"l": "спа салон", "a": 7884, "b": 4968, "p": -37}, {"l": "спа для двоих", "a": 260, "b": 130, "p": -50}, {"l": "спа для мужчин", "a": 1089, "b": 491, "p": -55}], "heat": [{"l": "спа салон", "v": [555, 442, 569, 359, 352, 467, 282, 355, 324, 322, 450, 491]}, {"l": "флоатинг", "v": [165, 105, 106, 233, 126, 160, 99, 97, 62, 98, 98, 95]}, {"l": "массаж лица", "v": [443, 440, 346, 466, 435, 487, 341, 276, 354, 485, 447, 341]}, {"l": "массаж спины", "v": [210, 232, 164, 215, 167, 207, 153, 151, 177, 211, 271, 231]}, {"l": "тайский массаж", "v": [239, 299, 263, 296, 203, 188, 176, 148, 140, 216, 224, 185]}, {"l": "обертывание", "v": [142, 148, 88, 141, 113, 150, 124, 101, 107, 156, 144, 81]}, {"l": "сертификат на массаж", "v": [16, 51, 62, 21, 26, 32, 16, 13, 34, 16, 22, 24]}, {"l": "магниевая ванна", "v": [17, 29, 36, 37, 28, 31, 30, 18, 11, 38, 47, 33]}], "seasonCards": [{"t": "На пике сейчас", "v": "Сертификаты и «спа салон»", "d": "«сертификат на массаж» — пик в декабре (62 запроса, ×4,8 к маю); «спа салон» — тоже максимум в декабре (569)"}, {"t": "Набирает обороты", "v": "Флоатинг", "d": "январь — 233 запроса, ×3,8 к июньскому минимуму; ноябрь–декабрь — 105–106"}, {"t": "Сезонный спад", "v": "Обёртывание", "d": "после пика в июле (156) — минимум года в сентябре (81); в декабре 2025 тоже провал (88)"}], "rules": [{"v": "11 дней", "l": "новогодние каникулы: 31.12.2026 — 10.01.2027", "d": "Повод для сертификатов и спа-программ на праздники.", "s": "ppt.ru", "u": "https://ppt.ru/news/proizvodstvennyy-kalendar/utverdili-grafik-vyhodnyh-i-prazdnichnyh-dney-na-2027-god"}, {"v": "12 сеансов", "l": "флоатинга — и меньше стресса и тревожности", "d": "Так показало исследование, на которое ссылаются медиа: аргумент для абонементов.", "s": "Лайфхакер", "u": "https://lifehacker.ru/floating/"}, {"v": "+10,4 %", "l": "компаний в отрасли спа, массажа и бань за год", "d": "Март 2025 → март 2026: 19 942 → 22 015. Конкуренция растёт — выделяться нужно контентом.", "s": "Контур", "u": "https://kontur.ru/press/news/83949-chistota_i_krasota"}, {"v": "«Хорошее место 2026»", "l": "награда Яндекса у Float Room", "d": "Из 11 конкурентов зоны она есть только у Алтайской Здравницы — готовый повод для публикации и сторис.", "s": "Яндекс Карты", "u": "https://yandex.ru/maps/org/float_room/222567077136/"}], "steps": [{"w": "Ноябрь", "h": "Порядок в карточке", "li": ["Разобраться в падении дискавери-переходов с 5 октября и вернуть поток", "Цены и сертификаты на виду: «массаж цена» +39 %, «подарочный сертификат спа» +88 %", "Фото и услуги в карточке — под растущие запросы: «спа головы» +52 %, «магниевая ванна» +33 %"]}, {"w": "Каждый месяц", "h": "Регулярный контент", "li": ["Публикации со словами растущих запросов", "Сторис по услугам: флоатинг, магниевая ванна, массаж", "Поток отзывов: сейчас 10 новых за год, у Алтайской Здравницы 57 всего", "Ответы на каждый отзыв — как сейчас"]}, {"w": "Декабрь — март", "h": "Зимний сезон", "li": ["Декабрь: пик «спа салон» и сертификатов", "Январь: пик флоатинга, 11 дней каникул", "Абонементы на курс флоатинга", "Сертификаты: в декабре спрос на них максимальный (62)"]}, {"w": "Май — сентябрь", "h": "Летний сезон", "li": ["В карточке пики переходов — май, август, сентябрь", "Массаж спины и магниевая ванна — пик в августе", "Утренние сеансы со скидкой — в публикации", "«Спа для двоих» — на летние даты"]}], "foot": "<p><b>Источники и даты</b></p><ul>\n<li>Яндекс Бизнес, кабинет Float Room (id 222567077136): переходы и действия, ноябрь 2025 — октябрь 2026, по неделям — 31.08 — 08.11.2026 (неполная неделя с 09.11 не показана); статистика обработана по 10.11.2026.</li>\n<li>Яндекс Бизнес, «Конкуренты»: неделя 28.09 — 04.10.2026 (расчёт от 07.10.2026), зона — радиус 10 км, 10 похожих карточек + Lavanda.</li>\n<li>Яндекс Бизнес, Геовизор: 50 последних визитов, 02 — 10.11.2026.</li>\n<li>Публичные карточки <a href=\"https://yandex.ru/maps/org/float_room/222567077136/\" target=\"_blank\" rel=\"noopener\">Яндекс Карт</a>: рейтинг, оценки, отзывы, фото, сторис, награды — 13.11.2026. Публикации Float Room — из кабинета, 13.11.2026.</li>\n<li><a href=\"https://wordstat.yandex.ru/\" target=\"_blank\" rel=\"noopener\">Яндекс Вордстат</a>: октябрь 2024 — сентябрь 2026, регионы «Курган» и «Курганская область»; все устройства.</li>\n<li>Сайт <a href=\"https://salon-floatinga-float-room.clients.site/\" target=\"_blank\" rel=\"noopener\">salon-floatinga-float-room.clients.site</a>, 13.11.2026.</li>\n<li>Поводы: <a href=\"https://ppt.ru/news/proizvodstvennyy-kalendar/utverdili-grafik-vyhodnyh-i-prazdnichnyh-dney-na-2027-god\" target=\"_blank\" rel=\"noopener\">ppt.ru</a>, <a href=\"https://lifehacker.ru/floating/\" target=\"_blank\" rel=\"noopener\">Лайфхакер</a>, <a href=\"https://kontur.ru/press/news/83949-chistota_i_krasota\" target=\"_blank\" rel=\"noopener\">Контур</a>.</li></ul>\n<p><b>Ограничения</b></p><ul>\n<li>У компании одна карточка, поэтому сравнение строится с карточками конкурентов в её зоне.</li>\n<li>Вордстат ещё не отдаёт октябрь 2026; регион «Курган + 5 км» в Вордстате недоступен — взят город и область.</li>\n<li>Брендовые запросы конкурентов: Сиам — «сиам спа» + «сиам массаж», Relax SPA — «relax spa» + «релакс спа», Lavanda — «лаванда массаж». Float Room — «float room» + «флоат рум» + «флоатрум».</li>\n<li>Публикации, переходы и действия конкурентов недоступны — в таблице «нет данных».</li>\n<li>Доля в зоне — последний доступный расчёт Яндекса (неделя 28.09 — 04.10.2026, проверено 13.11.2026), он сделан до спада октябрьских переходов.</li><li>Публикации Float Room за 12 месяцев: 16 опубликованы, ещё 1 (24.10.2026) не прошла модерацию и вышла заново 11.11.2026.</li><li>Запросы «алтайская здравница» в Вордстате почти нулевые до декабря 2024 — рост к прошлому году частично связан с этим.</li><li>Отзывы за 12 месяцев посчитаны по дате отзыва на Картах.</li></ul>"};
+const fmt=(v,d=0)=>v==null?'—':Number(v).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d}).replace(/ /g,' ');
+const pct=v=>(v>0?'+':v<0?'−':'')+fmt(Math.abs(v))+' %';
+const NS='http://www.w3.org/2000/svg';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tt=document.getElementById('tt');
+function showTT(e,html){tt.innerHTML=html;tt.style.opacity=1;const w=tt.offsetWidth,h=tt.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;tt.style.left=Math.max(6,x)+'px';tt.style.top=Math.max(6,y)+'px'}
+function hideTT(){tt.style.opacity=0}
+function el(tag,attrs,parent){const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);if(parent)parent.appendChild(n);return n}
+function txt(p,x,y,s,cls,anchor){const t=el('text',{x,y,class:cls||'lbl','text-anchor':anchor||'start'},p);t.textContent=s;return t}
+function legend(id,items){document.getElementById(id).innerHTML=items.map(i=>`<span><i style="background:var(${i.c})"></i>${i.n}</span>`).join('')}
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const m=v/p;const s=[1,1.2,1.6,2,2.4,3,4,5,6,8,10].find(x=>m<=x);return s*p}
+function W(id){return Math.max(300,document.getElementById(id).clientWidth)}
+
+function lineChart(id,labels,series,opt={}){
+  const host=document.getElementById(id);host.innerHTML='';
+  const w=W(id),h=opt.h||240,ml=44,mr=12,mt=10,mb=26;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'},host);
+  const max=niceMax(Math.max(...series.flatMap(s=>s.v))*1.05);
+  const x=i=>ml+(w-ml-mr)*(labels.length===1?0.5:i/(labels.length-1)), y=v=>mt+(h-mt-mb)*(1-v/max);
+  for(let k=0;k<=4;k++){const v=max*k/4;el('line',{x1:ml,x2:w-mr,y1:y(v),y2:y(v),class:'gl'},svg);txt(svg,ml-6,y(v)+4,fmt(v),'lbl num','end')}
+  const step=Math.ceil(labels.length/(w<520?6:12));
+  labels.forEach((l,i)=>{if(i%step===0||i===labels.length-1&&labels.length<=12)txt(svg,x(i),h-8,l,'lbl','middle')});
+  series.forEach(s=>{el('path',{d:s.v.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(''),fill:'none',stroke:`var(${s.c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},svg)});
+  const cross=el('line',{y1:mt,y2:h-mb,stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'3 3',opacity:0},svg);
+  const dots=series.map(s=>el('circle',{r:4.5,fill:`var(${s.c})`,stroke:'var(--surface)','stroke-width':2,opacity:0},svg));
+  const ov=el('rect',{x:ml,y:mt,width:w-ml-mr,height:h-mt-mb,fill:'transparent'},svg);
+  const mv=e=>{const r=svg.getBoundingClientRect();const px=(e.clientX-r.left)*w/r.width;let i=Math.round((px-ml)/(w-ml-mr)*(labels.length-1));i=Math.max(0,Math.min(labels.length-1,i));
+    cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));cross.setAttribute('opacity',1);
+    dots.forEach((d,k)=>{d.setAttribute('cx',x(i));d.setAttribute('cy',y(series[k].v[i]));d.setAttribute('opacity',1)});
+    showTT(e,`<b>${(opt.full||labels)[i]}</b>`+series.map(s=>`<div class="r"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(${s.c});margin-right:6px"></i>${s.n}</span><span class="num">${fmt(s.v[i])}</span></div>`).join(''))};
+  ov.addEventListener('mousemove',mv);ov.addEventListener('touchstart',e=>mv(e.touches[0]),{passive:true});
+  ov.addEventListener('mouseleave',()=>{hideTT();cross.setAttribute('opacity',0);dots.forEach(d=>d.setAttribute('opacity',0))});
+}
+
+function barsV(id,labels,series,opt={}){ // grouped vertical bars
+  const host=document.getElementById(id);host.innerHTML='';
+  const w=W(id),h=opt.h||240,ml=44,mr=8,mt=10,mb=26;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`},host);
+  const max=niceMax(Math.max(...series.flatMap(s=>s.v))*1.05);
+  const y=v=>mt+(h-mt-mb)*(1-v/max);
+  for(let k=0;k<=4;k++){const v=max*k/4;el('line',{x1:ml,x2:w-mr,y1:y(v),y2:y(v),class:'gl'},svg);txt(svg,ml-6,y(v)+4,fmt(v),'lbl num','end')}
+  const gw=(w-ml-mr)/labels.length, bw=Math.min(22,(gw-6)/series.length-2);
+  labels.forEach((l,i)=>{
+    const g0=ml+i*gw+(gw-(bw+2)*series.length)/2;
+    series.forEach((s,k)=>{const v=s.v[i],yy=y(v),hh=Math.max(0,h-mb-yy);
+      const r=el('path',{d:roundTop(g0+k*(bw+2),yy,bw,hh,3),fill:`var(${s.c})`},svg);
+      const hit=el('rect',{x:ml+i*gw,y:mt,width:gw,height:h-mt-mb,fill:'transparent'},svg);
+      hit.addEventListener('mousemove',e=>showTT(e,`<b>${(opt.full||labels)[i]}</b>`+series.map(z=>`<div class="r"><span>${z.n}</span><span class="num">${fmt(z.v[i])}</span></div>`).join('')));hit.addEventListener('mouseleave',hideTT);});
+    const st=Math.ceil(labels.length/Math.floor((w-ml)/48));if(i%st===0)txt(svg,ml+i*gw+gw/2,h-8,l,'lbl','middle');
+  });
+}
+function roundTop(x,y,w,h,r){r=Math.min(r,h,w/2);if(h<=0)return '';return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`}
+function roundRight(x,y,w,h,r){r=Math.min(r,w,h/2);if(w<=0)return '';return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`}
+
+function roundLeft(x,y,w,h,r){r=Math.min(r,w,h/2);if(w<=0)return '';return `M${x+w},${y}H${x+r}Q${x},${y} ${x},${y+r}V${y+h-r}Q${x},${y+h} ${x+r},${y+h}H${x+w}Z`}
+function barsH(id,items,opt={}){ // items {l,v,c,tip}
+  const host=document.getElementById(id);host.innerHTML='';
+  const w0=W(id),stack=w0<520&&!opt.pair;
+  const w=w0,lw=stack?0:Math.min(opt.lw||180,w*0.42),rh=(opt.rh||30)+(stack?16:0),mt=4,h=mt+items.length*rh+4,vw=opt.vw||70;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`},host);
+  const max=opt.max||Math.max(...items.map(i=>i.v))||1;
+  items.forEach((it,i)=>{const y0=mt+i*rh+(stack?16:0),bh=(opt.rh||30)-12,bwid=(w-lw-vw)*it.v/max;
+    if(stack)txt(svg,0,y0-4,it.l,'lbl').setAttribute('style','fill:var(--text-2);font-size:12px');else txt(svg,0,y0+bh/2+4+3,it.l,'lbl').setAttribute('style','fill:var(--text-2);font-size:12px');
+    el('rect',{x:lw,y:y0+3,width:w-lw-vw,height:bh,fill:'var(--surface-2)',rx:3},svg);
+    if(it.v>0)el('path',{d:roundRight(lw,y0+3,Math.max(2,bwid),bh,4),fill:`var(${it.c||'--s1'})`},svg);
+    txt(svg,lw+Math.max(2,bwid)+6,y0+bh/2+7,it.vl||fmt(it.v),'vlbl num');
+    const hit=el('rect',{x:0,y:y0-(stack?16:0),width:w,height:rh,fill:'transparent'},svg);
+    hit.addEventListener('mousemove',e=>showTT(e,`<b>${it.l.trim()||''}</b>${it.tip||fmt(it.v)}`));hit.addEventListener('mouseleave',hideTT);
+  });
+}
+
+function diverging(id,items){
+  const host=document.getElementById(id);host.innerHTML='';
+  const w=W(id),narrow=w<560,lw=narrow?0:200,rh=narrow?36:24,off=narrow?14:0,h=items.length*rh+30;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`},host);
+  const max=Math.max(...items.map(i=>Math.abs(i.p)));const cx=lw+(w-lw)/2,half=(w-lw)/2-42;
+  el('line',{x1:cx,x2:cx,y1:0,y2:h-24,stroke:'var(--neutral)','stroke-width':1},svg);
+  txt(svg,cx-half,h-6,'падает','lbl');txt(svg,cx+half,h-6,'растёт','lbl','end');
+  items.forEach((it,i)=>{const y0=i*rh+off,bh=(narrow?rh-off:rh)-8,bw=half*Math.abs(it.p)/max;
+    const t=narrow?txt(svg,cx,y0-3,it.l,'lbl','middle'):txt(svg,0,y0+bh/2+5,it.l,'lbl');t.setAttribute('style','fill:var(--text-2);font-size:12px');
+    const c=it.p>=0?'var(--div-pos)':'var(--div-neg)';
+    if(it.p>=0)el('path',{d:roundRight(cx,y0+2,Math.max(2,bw),bh,3),fill:c},svg);
+    else el('path',{d:roundLeft(cx-Math.max(2,bw),y0+2,Math.max(2,bw),bh,3),fill:c},svg);
+    const tx=it.p>=0?cx+bw+5:cx-bw-5;txt(svg,tx,y0+bh/2+6,pct(it.p),'vlbl num',it.p>=0?'start':'end');
+    const hit=el('rect',{x:0,y:y0-off,width:w,height:rh,fill:'transparent'},svg);
+    hit.addEventListener('mousemove',e=>showTT(e,`<b>${it.l}</b><div class="r"><span>предыдущие 12 мес.</span><span class="num">${fmt(it.a)}</span></div><div class="r"><span>последние 12 мес.</span><span class="num">${fmt(it.b)}</span></div><div class="r"><span>изменение</span><span class="num">${pct(it.p)}</span></div>`));hit.addEventListener('mouseleave',hideTT);
+  });
+}
+
+function heat(id,rows,labels,full){
+  const host=document.getElementById(id);host.innerHTML='';
+  const w=W(id),narrow=w<560,lw=narrow?128:170,cw=(w-lw)/labels.length,rh=30,h=rows.length*rh+24;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`},host);
+  const c0=css('--heat0'),c1=css('--heat1');
+  const mix=(a,b,t)=>{const p=s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16));const A=p(a),B=p(b);return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')'};
+  rows.forEach((r,j)=>{const mx=Math.max(...r.v),mn=Math.min(...r.v);
+    const t=txt(svg,0,j*rh+rh/2+4,r.l,'lbl');t.setAttribute('style','fill:var(--text-2);font-size:'+(narrow?11:12)+'px');
+    r.v.forEach((v,i)=>{const k=mx===mn?0:(v-mn)/(mx-mn);const rc=el('rect',{x:lw+i*cw+1,y:j*rh+1,width:cw-2,height:rh-2,rx:4,fill:mix(c0,c1,k)},svg);
+      if(v===mx){el('rect',{x:lw+i*cw+1.5,y:j*rh+1.5,width:cw-3,height:rh-3,rx:4,fill:'none',stroke:'var(--text)','stroke-width':1.2},svg)}
+      rc.addEventListener('mousemove',e=>showTT(e,`<b>${r.l} · ${full[i]}</b><div class="r"><span>запросов</span><span class="num">${fmt(v)}</span></div><div class="r"><span>к минимуму года</span><span class="num">×${fmt(mn?v/mn:0,1)}</span></div>`));rc.addEventListener('mouseleave',hideTT)})});
+  labels.forEach((l,i)=>{if(!narrow||i%2===0)txt(svg,lw+i*cw+cw/2,h-6,l,'lbl','middle')});
+}
+
+function scatter(id,pts){
+  const host=document.getElementById(id);host.innerHTML='';
+  const w=W(id),h=250,ml=36,mr=14,mt=12,mb=30;
+  const svg=el('svg',{viewBox:`0 0 ${w} ${h}`},host);
+  const lx=v=>Math.log10(v),x0=lx(2),x1=lx(200),x=v=>ml+(w-ml-mr)*(lx(v)-x0)/(x1-x0),ymin=3.8,ymax=5.1,y=v=>mt+(h-mt-mb)*(1-(v-ymin)/(ymax-ymin));
+  [4,4.5,5].forEach(v=>{el('line',{x1:ml,x2:w-mr,y1:y(v),y2:y(v),class:'gl'},svg);txt(svg,ml-6,y(v)+4,fmt(v,1),'lbl num','end')});
+  [3,10,30,100].forEach(v=>{el('line',{x1:x(v),x2:x(v),y1:mt,y2:h-mb,class:'gl'},svg);txt(svg,x(v),h-12,fmt(v),'lbl num','middle')});
+  txt(svg,w-mr,h-0,'оценок','lbl','end');
+  pts.forEach(p=>{const c=el('circle',{cx:x(p.oc),cy:y(p.r),r:p.own?8:6,fill:`var(${p.own?'--s1':'--neutral'})`,stroke:'var(--surface)','stroke-width':2},svg);
+    const hit=el('circle',{cx:x(p.oc),cy:y(p.r),r:14,fill:'transparent'},svg);
+    hit.addEventListener('mousemove',e=>showTT(e,`<b>${p.n}</b><div class="r"><span>рейтинг</span><span class="num">${fmt(p.r,1)}</span></div><div class="r"><span>оценок</span><span class="num">${fmt(p.oc)}</span></div>`));hit.addEventListener('mouseleave',hideTT);
+    if(p.lab)txt(svg,x(p.oc)+(p.lx||10),y(p.r)+(p.ly||4),p.n,'vlbl',p.anchor||'start')});
+}
+
+/* ---------- content ---------- */
+function render(){
+  const K=D.kpi;
+  document.getElementById('kpis').innerHTML=[
+    [fmt(K.cards),'карточка в Кургане'],[fmt(K.trans),'переходов за 12 месяцев'],[fmt(K.act),'целевых действий'],[fmt(K.rating,1),'рейтинг · '+fmt(K.oc)+' оценки'],[fmt(K.share)+' %','доля в зоне, 1-е место · 28.09 — 04.10']
+  ].map(([v,l])=>`<div class="card kpi"><div class="v num">${v}</div><div class="l">${l}</div></div>`).join('');
+  document.getElementById('facts').innerHTML=D.facts.map(f=>`<div class="card fact"><div class="v">${f.v}</div><div class="l">${f.l}</div><div class="d">${f.d}</div></div>`).join('');
+
+  const M=D.cardMonths;
+  legend('lg-tr',[{n:'Дискавери',c:'--s1'},{n:'Прямые',c:'--s2'}]);
+  barsV('ch-tr',M.short,[{n:'Дискавери',c:'--s1',v:D.disc},{n:'Прямые',c:'--s2',v:D.direct}],{full:M.full});
+  legend('lg-act',[{n:'Звонки',c:'--s1'},{n:'Маршруты',c:'--s2'},{n:'Сайт',c:'--s3'}]);
+  lineChart('ch-act',M.short,[{n:'Звонки',c:'--s1',v:D.phone},{n:'Маршруты',c:'--s2',v:D.route},{n:'Сайт',c:'--s3',v:D.site}],{full:M.full});
+  legend('lg-wk',[{n:'Дискавери',c:'--s1'},{n:'Прямые',c:'--s2'}]);
+  barsV('ch-wk',D.wk.l,[{n:'Дискавери',c:'--s1',v:D.wk.d},{n:'Прямые',c:'--s2',v:D.wk.n}],{h:200,full:D.wk.l.map(l=>'неделя с '+l)});
+
+  renderTable('all');
+  legend('lg-gaps',[{n:'Float Room',c:'--s1'},{n:'Конкуренты зоны (из 11)',c:'--neutral'}]);
+  barsH('ch-gaps',D.gaps.flatMap(g=>[{l:g.l,v:g.own,c:'--s1',vl:g.own?'да':'нет',tip:'Float Room: '+(g.own?'да':'нет')},{l:'',v:g.c,c:'--neutral',vl:fmt(g.c)+' из 11',tip:'Конкуренты: '+fmt(g.c)+' из 11'}]).map((it,i,a)=>{if(i%2===1)it.l='   ';return it}),{max:11,lw:150,rh:22,vw:64,pair:true});
+  legend('lg-sc',[{n:'Float Room',c:'--s1'},{n:'Конкуренты',c:'--neutral'}]);
+  scatter('ch-sc',D.scatter);
+
+  barsH('ch-share',D.share.map(s=>({l:s.n,v:s.p,c:s.own?'--s1':'--neutral',vl:fmt(s.p,s.p<1?1:0)+' %',tip:'доля переходов: '+fmt(s.p,s.p<1?1:0)+' %'})),{lw:160,vw:56});
+  legend('lg-med',[{n:'Float Room',c:'--s1'},{n:'Медиана конкурентов',c:'--neutral'}]);
+  const md=D.med;
+  barsH('ch-med',md.flatMap(m=>[{l:m.l,v:m.own/m.max,c:'--s1',vl:m.fo,tip:'Float Room: '+m.fo},{l:' ',v:m.c/m.max,c:'--neutral',vl:m.fc,tip:'Медиана конкурентов: '+m.fc}]),{max:1,lw:80,rh:22,vw:56,pair:true});
+  barsH('ch-brand',D.brand.map(b=>({l:b.n,v:b.b,c:b.own?'--s1':'--neutral',vl:fmt(b.b)+(b.p==null?'':' · '+pct(b.p)),tip:`<div class="r"><span>последние 12 мес.</span><span class="num">${fmt(b.b)}</span></div><div class="r"><span>предыдущие 12 мес.</span><span class="num">${fmt(b.a)}</span></div>`})),{lw:170,vw:120});
+
+  barsH('ch-src',D.src.map(s=>({l:s.l,v:s.v,c:'--s1',vl:fmt(s.v)+' · '+fmt(100*s.v/50)+' %',tip:fmt(s.v)+' визитов из 50'})),{lw:190,vw:84});
+  barsH('ch-ref',D.ref.map(s=>({l:s.l,v:s.v,c:'--s3',vl:fmt(s.v),tip:s.t})),{lw:190,vw:40});
+  legend('lg-bm',[{n:'Float Room',c:'--s1'},{n:'Алтайская Здравница',c:'--s2'}]);
+  lineChart('ch-bm',D.ws.short,[{n:'Float Room',c:'--s1',v:D.bm.f},{n:'Алтайская Здравница',c:'--s2',v:D.bm.a}],{full:D.ws.full});
+
+  legend('lg-main',[{n:'Курган',c:'--s1'},{n:'Курганская область',c:'--s2'}]);
+  lineChart('ch-main',D.ws.short,[{n:'Курган',c:'--s1',v:D.main.c},{n:'Курганская область',c:'--s2',v:D.main.o}],{full:D.ws.full});
+  diverging('ch-div',D.div);
+  heat('ch-heat',D.heat,D.ws.short.slice(12),D.ws.full.slice(12));
+  document.getElementById('seasonCards').innerHTML=D.seasonCards.map(s=>`<div class="card season"><div class="tag">${s.t}</div><div class="v">${s.v}</div><div class="d">${s.d}</div></div>`).join('');
+  document.getElementById('rules').innerHTML=D.rules.map(r=>`<div class="card rule"><div class="v num">${r.v}</div><div class="l">${r.l}</div><div class="d">${r.d} <a href="${r.u}" target="_blank" rel="noopener">${r.s}</a></div></div>`).join('');
+  document.getElementById('steps').innerHTML=D.steps.map((s,i)=>`<div class="card step"><span class="k">${i+1}</span><div class="when">${s.w}</div><h3>${s.h}</h3><ul>${s.li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+  document.getElementById('foot').innerHTML=D.foot;
+}
+
+let sortKey=null,sortDir=-1,curF='all';
+function renderTable(f){
+  curF=f;const cols=D.tcols;
+  document.getElementById('flt').innerHTML=[['all','Все'],['Сильная','Сильная'],['Средняя','Средняя'],['Риск','Риск']].map(([k,l])=>`<button type="button" class="${k===f?'on':''}" data-f="${k}">${l}</button>`).join('');
+  document.querySelectorAll('#flt button').forEach(b=>b.onclick=()=>renderTable(b.dataset.f));
+  let rows=D.trows.filter(r=>f==='all'||r.status===f);
+  if(sortKey){rows=[...rows].sort((a,b)=>{const x=a[sortKey],y=b[sortKey];if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*sortDir})}
+  const cell=(c,r)=>{const v=r[c.k];let s;if(c.k==='status'){s=`<span class="pill ${v==='Сильная'?'p-strong':v==='Риск'?'p-risk':'p-mid'}">${v}</span>`}else if(c.k==='name'){s=r.name}else if(typeof v==='number'){s=fmt(v,c.k==='share'&&v<1?1:(c.d||0))+(c.suf||'')}else s=v==null?'нет данных':v;
+    const bad=c.bad&&v!=null&&typeof v!=='string'&&c.bad(v);const nd=v==null&&c.k!=='name';return `<td class="${bad?'bad':''} ${c.k!=='name'?'num':''}" style="${nd?'color:var(--muted)':''}">${s}</td>`};
+  const badF={rating:v=>v<4,oc:v=>v<10,rev:v=>v<10,ph:v=>v<10,posts:v=>v<1};
+  document.getElementById('tbl').innerHTML='<thead><tr>'+cols.map(c=>`<th data-k="${c.k}">${c.n}${sortKey===c.k?(sortDir>0?' ↑':' ↓'):''}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>`<tr class="${r.own?'own':''}">`+cols.map(c=>cell({...c,bad:badF[c.k]},r)).join('')+'</tr>').join('')+'</tbody>';
+  document.querySelectorAll('#tbl th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=-1}renderTable(curF)});
+}
+
+const btn=document.getElementById('themeBtn');
+function curTheme(){return document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function setLabel(){btn.textContent=curTheme()==='dark'?'Светлая тема':'Тёмная тема'}
+btn.onclick=()=>{document.documentElement.dataset.theme=curTheme()==='dark'?'light':'dark';try{localStorage.setItem('fr-theme',document.documentElement.dataset.theme)}catch(e){}setLabel();render()};
+try{const s=localStorage.getItem('fr-theme');if(s)document.documentElement.dataset.theme=s}catch(e){}
+setLabel();render();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(render,150)});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{setLabel();render()});
+</script>
+</body>
+</html>
