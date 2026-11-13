@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>«Балтик-Стар»: анализ филиалов, спрос региона и точки роста</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#F5F3EE;--panel:#FFFFFF;--sunk:#ECE8DF;--ink:#14213A;--ink-2:#46536A;--ink-3:#77839A;
+  --line:rgba(20,33,58,.12);--gold-line:rgba(160,120,50,.35);--gold:#9A7330;--gold-soft:rgba(154,115,48,.09);
+  --s-strong:#2E8B62;--s-mid:#B7801F;--s-risk:#C8473B;--s-off:#9AA3B2;
+  --c1:#2F5DA8;--c2:#B7801F;--c3:#2E8B62;--c4:#8A5BB5;--neg:#C8473B;--pos:#2E8B62;--grid:rgba(20,33,58,.08);
+  --f-mark:'EB Garamond',Georgia,serif;--f-d:'Montserrat',system-ui,sans-serif;--f-b:'Manrope',system-ui,sans-serif;--f-m:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0F1B2D;--panel:#16263E;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;
+  --line:rgba(152,161,172,.18);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-soft:rgba(227,192,138,.10);
+  --s-strong:#6FC79B;--s-mid:#E2B45E;--s-risk:#EE8577;--s-off:#5F6B7D;
+  --c1:#7FA8E8;--c2:#E2B45E;--c3:#6FC79B;--c4:#B996DE;--neg:#EE8577;--pos:#6FC79B;--grid:rgba(238,241,245,.07);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-b);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{margin:0;text-wrap:balance}
+.num,.mono{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+.bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.bar-in{display:flex;align-items:center;gap:14px;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+.bar-in::-webkit-scrollbar{display:none}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:16px;letter-spacing:.3em;white-space:nowrap}
+.bar-in b{font:600 14px var(--f-d);white-space:nowrap}
+.bar-in nav{display:flex;gap:6px;margin-left:auto}
+.bar-in nav a{font:500 12px var(--f-m);color:var(--ink-3);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.bar-in nav a:hover{color:var(--gold);border-color:var(--gold-line)}
+header.hero{padding:56px 0 36px;border-bottom:1px solid var(--gold-line)}
+.kicker{font:500 12px var(--f-m);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.hero h1{font:800 clamp(28px,4.6vw,48px)/1.08 var(--f-d);margin-top:12px;max-width:22ch;letter-spacing:-.01em}
+.hero p{color:var(--ink-2);margin:14px 0 0;max-width:62ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:30px}
+.kpi{background:var(--panel);padding:18px}
+.kpi .k{font-size:13px;color:var(--ink-3)}
+.kpi .n{font:700 30px/1.15 var(--f-d);font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi .s{font-size:13px;color:var(--ink-2);margin-top:2px}
+section{padding:48px 0;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.sh{display:flex;gap:12px;align-items:baseline;margin-bottom:22px;flex-wrap:wrap}
+.sh .n{font:600 12px var(--f-m);color:var(--gold)}
+.sh h2{font:700 clamp(21px,2.8vw,27px)/1.2 var(--f-d)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:6px;align-content:start}
+.fact .big{font:800 36px/1 var(--f-d);font-variant-numeric:tabular-nums}
+.fact .big.r{color:var(--s-risk)}.fact .big.g{color:var(--s-strong)}.fact .big.y{color:var(--gold)}
+.fact b{font-weight:600}
+.fact span{font-size:14px;color:var(--ink-2)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.panel h3{font:700 16px/1.3 var(--f-d)}
+.cap{font:500 12px var(--f-m);color:var(--ink-3);margin:4px 0 12px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-2);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-b);fill:var(--ink-2);font-size:12px}
+.chart .ax{fill:var(--ink-3);font-size:11px;font-family:var(--f-m)}
+.chart .hit{fill:transparent;cursor:default}
+.tip{position:fixed;z-index:100;pointer-events:none;background:var(--ink);color:var(--bg);font:500 13px/1.4 var(--f-b);padding:8px 11px;border-radius:8px;max-width:280px;opacity:0;transition:opacity .1s;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.tip b{font-weight:700}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{font:600 13px var(--f-b);color:var(--ink-2);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font:600 11.5px var(--f-m);color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;position:sticky;top:0;background:var(--panel);user-select:none}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);z-index:1}
+td{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-b);font-weight:600}
+td.w{color:var(--s-risk);font-weight:600}
+tr:last-child td{border-bottom:0}
+.pill{font:600 10.5px var(--f-m);text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.p-Сильная{color:var(--s-strong);background:color-mix(in srgb,var(--s-strong) 14%,transparent)}
+.p-Средняя{color:var(--s-mid);background:color-mix(in srgb,var(--s-mid) 16%,transparent)}
+.p-Риск{color:var(--s-risk);background:color-mix(in srgb,var(--s-risk) 14%,transparent)}
+.foot{font-size:12.5px;color:var(--ink-3);margin-top:10px}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.sc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.sc .k{font:600 11px var(--f-m);text-transform:uppercase;letter-spacing:.06em;color:var(--gold)}
+.sc .t{font:700 19px var(--f-d);margin-top:6px}
+.sc p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
+.news{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.nw{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:18px;display:grid;gap:8px;align-content:start}
+.nw .big{font:800 30px/1 var(--f-d)}
+.nw p{margin:0;font-size:14.5px}
+.nw a{font:500 12px var(--f-m);color:var(--ink-3)}
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;counter-reset:s}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+.step .when{font:600 11px var(--f-m);text-transform:uppercase;color:var(--gold);letter-spacing:.06em}
+.step h3{font:700 17px/1.3 var(--f-d);margin:8px 0 8px}
+.step ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:grid;gap:4px}
+.online{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:12px}
+.oc{background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:13px}
+.oc b{display:block;font:700 15px var(--f-d)}
+.oc span{color:var(--ink-3);font-family:var(--f-m);font-size:11.5px}
+footer{padding:40px 0 60px;font-size:13px;color:var(--ink-3)}
+footer ul{padding-left:18px;display:grid;gap:4px}
+footer a{color:var(--ink-2)}
+@media(max-width:640px){.chart text{font-size:10.5px}.chart .ax{font-size:10px}header.hero{padding:36px 0 26px}.kpi .n{font-size:24px}.fact .big{font-size:30px}section{padding:36px 0}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <span class="mark">HDR</span><b>Балтик-Стар · Санкт-Петербург</b>
+  <nav><a href="#traffic">Трафик</a><a href="#table">Филиалы</a><a href="#health">Карточки</a><a href="#comp">Конкуренты</a><a href="#find">Как находят</a><a href="#market">Спрос</a><a href="#season">Сезонность</a><a href="#route">Маршрут роста</a></nav>
+</div></div>
+<main class="wrap">
+<header class="hero">
+  <span class="kicker">HDR Group · Яндекс Карты · данные на 13.11.2026</span>
+  <h1>«Балтик-Стар»: анализ филиалов, спрос региона и точки роста</h1>
+  <p>Все 26 карточек сети автошкол в Санкт-Петербурге и Ленобласти: трафик за 12 месяцев, наполнение, конкуренты в зоне каждого филиала, поисковый спрос и сезонность.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<section id="main"><div class="sh"><span class="n">00</span><h2>Главное за 30 секунд</h2></div><div class="facts" id="facts"></div></section>
+
+<section id="traffic"><div class="sh"><span class="n">01</span><h2>Куда приходит трафик</h2></div>
+  <div class="panel"><h3>Переходы в карточку по филиалам</h3><div class="cap">ноябрь 2025 — октябрь 2026</div>
+    <div class="legend"><span><i style="background:var(--s-strong)"></i>Сильная</span><span><i style="background:var(--s-mid)"></i>Средняя</span><span><i style="background:var(--s-risk)"></i>Риск</span></div>
+    <div class="chart" id="c-trbar"></div></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="panel"><h3>Переходы сети по месяцам</h3><div class="cap">15 адресных филиалов</div><div class="chart" id="c-trline"></div></div>
+    <div class="panel"><h3>Целевые действия сети по месяцам</h3><div class="cap">15 адресных филиалов</div>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Маршруты</span><span><i style="background:var(--c2)"></i>Сайт</span><span><i style="background:var(--c3)"></i>Звонки</span></div>
+      <div class="chart" id="c-actline"></div></div>
+  </div>
+</section>
+
+<section id="table"><div class="sh"><span class="n">02</span><h2>Сравнение всех филиалов</h2></div>
+  <div class="filters" id="flt"></div>
+  <div class="tbl"><table id="tb"><thead><tr></tr></thead><tbody></tbody></table></div>
+  <div class="foot" id="tb-foot"></div>
+</section>
+
+<section id="health"><div class="sh"><span class="n">03</span><h2>Состояние карточек</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Сколько из 26 карточек проседает</h3><div class="cap">все карточки сети, включая онлайн</div><div class="chart" id="c-health"></div></div>
+    <div class="panel"><h3>Рейтинг × число оценок</h3><div class="cap">26 карточек сети</div>
+      <div class="legend"><span><i style="background:var(--s-strong)"></i>Сильная</span><span><i style="background:var(--s-mid)"></i>Средняя</span><span><i style="background:var(--s-risk)"></i>Риск</span></div>
+      <div class="chart" id="c-scatter"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Публикации сети по месяцам</h3><div class="cap">новостей на карточке филиала, ноябрь 2025 — ноябрь 2026</div><div class="chart" id="c-posts"></div></div>
+  <div class="panel" style="margin-top:16px"><h3>Онлайн и зональная карточки</h3><div class="cap">11 карточек без адреса филиала, в сравнение не входят</div><div class="online" id="online"></div></div>
+</section>
+
+<section id="comp"><div class="sh"><span class="n">04</span><h2>Конкуренты</h2></div>
+  <div class="panel"><h3>Доля филиала и лидера его зоны</h3><div class="cap">доля дискавери-переходов в зоне, неделя 28.09–04.10.2026</div>
+    <div class="legend"><span><i style="background:var(--gold)"></i>Балтик-Стар</span><span><i style="background:var(--s-off)"></i>Лидер зоны (или ближайший соперник)</span></div>
+    <div class="chart" id="c-pair"></div></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="panel"><h3>Кто чаще всего обходит сеть</h3><div class="cap">в скольких из 15 зон присутствует</div><div class="chart" id="c-top"></div></div>
+    <div class="panel"><h3>Филиал сети против конкурента в его зоне</h3><div class="cap">медианы: 15 филиалов и <span id="uq"></span> карточек конкурентов</div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Балтик-Стар</span><span><i style="background:var(--s-off)"></i>Конкуренты</span></div>
+      <div class="chart" id="c-med"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Брендовый спрос: Балтик-Стар и автошколы города</h3><div class="cap">Вордстат, Санкт-Петербург, октябрь 2025 — сентябрь 2026</div><div class="chart" id="c-brand"></div></div>
+</section>
+
+<section id="find"><div class="sh"><span class="n">05</span><h2>Как клиенты находят филиалы</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Источники визитов</h3><div class="cap">765 последних визитов по 15 филиалам, ноябрь 2026</div><div class="chart" id="c-src"></div></div>
+    <div class="panel"><h3>Уточнения в общих запросах</h3><div class="cap">231 общий запрос по категории</div><div class="chart" id="c-ref"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Брендовый спрос: Балтик-Стар против Фары</h3><div class="cap">Вордстат, Санкт-Петербург, запросов в месяц</div>
+    <div class="legend"><span><i style="background:var(--gold)"></i>«балтик стар»</span><span><i style="background:var(--s-off)"></i>«фара автошкола»</span></div>
+    <div class="chart" id="c-bvl"></div></div>
+</section>
+
+<section id="market"><div class="sh"><span class="n">06</span><h2>Спрос на рынке</h2></div>
+  <div class="panel"><h3>«автошкола» по месяцам</h3><div class="cap">Вордстат, ноябрь 2024 — сентябрь 2026</div>
+    <div class="legend"><span><i style="background:var(--c1)"></i>Санкт-Петербург</span><span><i style="background:var(--c2)"></i>СПб и Ленобласть</span></div>
+    <div class="chart" id="c-main"></div></div>
+  <div class="panel" style="margin-top:16px"><h3>Что растёт и что падает</h3><div class="cap">Вордстат, Санкт-Петербург, ноябрь 2025 — сентябрь 2026 к тем же месяцам год назад</div><div class="chart" id="c-div"></div></div>
+</section>
+
+<section id="season"><div class="sh"><span class="n">07</span><h2>Сезонность</h2></div>
+  <div class="panel"><h3>Направления по месяцам</h3><div class="cap">Вордстат, Санкт-Петербург, октябрь 2025 — сентябрь 2026</div><div class="chart" id="c-heat"></div></div>
+  <div class="cards3" id="seasc"></div>
+</section>
+
+<section id="rules"><div class="sh"><span class="n">08</span><h2>Новые правила — готовые поводы для контента</h2></div><div class="news" id="news"></div></section>
+
+<section id="route"><div class="sh"><span class="n">09</span><h2>Маршрут роста</h2></div>
+  <div class="route">
+    <div class="step"><div class="when">Шаг 1 · ноябрь</div><h3>Навести порядок в 26 карточках</h3><ul><li>10 онлайн-карточек: объединить с адресными или наполнить, 5 без рейтинга</li><li>Фото до 40+ в каждом филиале</li><li>Услуги и цены во всех карточках одинаково</li><li>Сбор оценок там, где их меньше 40</li></ul></div>
+    <div class="step"><div class="when">Шаг 2 · каждый месяц</div><h3>Контент во всех филиалах без пауз</h3><ul><li>4 новости и 4 сторис в месяц на всю сеть</li><li>Никаких провалов, как в мае–июле 2026</li><li>Темы под растущий спрос: медкомиссия, вычет, автомат</li></ul></div>
+    <div class="step"><div class="when">Шаг 3 · декабрь — февраль</div><h3>Зимний сезон</h3><ul><li>Снегоход и трактор: пик спроса в январе</li><li>Налоговый вычет за обучение: рост с января</li><li>Набор групп к весне, онлайн-теория</li></ul></div>
+    <div class="step"><div class="when">Шаг 4 · март — сентябрь</div><h3>Летний сезон</h3><ul><li>Мотошкола: спрос вдвое выше зимнего с марта по август</li><li>Квадроцикл, права на автомат</li><li>Экзамен в ГИБДД по новым правилам</li></ul></div>
+  </div>
+</section>
+</main>
+<div class="wrap"><footer>
+  <b>Источники и ограничения</b>
+  <ul>
+    <li>Кабинет Яндекс Бизнеса, сеть «Балтик-Стар»: 26 открытых карточек, статистика переходов и действий за ноябрь 2025 — октябрь 2026 (данные обработаны по 10.11.2026), раздел «Конкуренты» (неделя 28.09–04.10.2026), геовизор (последние 51 визит каждого филиала).</li>
+    <li>Публичные карточки Яндекс Карт: рейтинг, оценки, отзывы, фото, сторис — на 13.11.2026.</li>
+    <li>Яндекс Вордстат, регионы «Санкт-Петербург» и «Санкт-Петербург и Ленинградская область», ноябрь 2024 — сентябрь 2026; октябрь 2026 в Вордстате ещё не опубликован.</li>
+    <li>Невский пр., 54: переходы не учитывались с декабря 2025 по май 2026. Московский пр., 2/6: действия не учитывались в мае и июне 2026.</li>
+    <li>Зональная карточка (Кудрово, 10 км) работает как рекламная и в статистику филиалов не включена.</li>
+    <li id="src-news"></li>
+  </ul>
+</footer></div>
+<div class="tip" id="tip"></div>
+<script>
+const D={"months": ["ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26", "окт 26"], "branches": [{"id": "1019957495", "name": "Московский просп., 2/6", "cat": "Автошкола", "st": "Сильная", "r": 4.9, "n": 108, "rv": 85, "ph": 53, "posts": 39, "stories": true, "share": 35.0, "place": 1, "of": 10, "leader": "Балтик-Стар", "leadshare": 20.0, "rad": "1 км", "tr": 9631, "trp": 5815, "calls": 133, "routes": 527, "site": 172, "conv": 8.6, "note": "действия не учитывались май — июнь 2026", "m_tr": [398, 363, 444, 399, 1458, 556, 326, 407, 659, 979, 2220, 1422], "m_ph": [7, 7, 8, 5, 11, 7, 0, 0, 2, 17, 48, 21], "m_ro": [79, 66, 48, 50, 45, 44, 0, 0, 24, 60, 73, 38], "m_si": [9, 14, 11, 11, 10, 15, 0, 0, 5, 17, 53, 27]}, {"id": "1092630679", "name": "Бухарестская ул., 96", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 61, "rv": 48, "ph": 26, "posts": 40, "stories": true, "share": 19.0, "place": 2, "of": 6, "leader": "Фара", "leadshare": 72.0, "rad": "5 км", "tr": 9008, "trp": 2070, "calls": 43, "routes": 136, "site": 234, "conv": 4.6, "note": null, "m_tr": [325, 258, 339, 1377, 1850, 1153, 267, 269, 1120, 567, 550, 933], "m_ph": [3, 3, 2, 3, 3, 1, 3, 4, 5, 2, 10, 4], "m_ro": [20, 9, 7, 8, 11, 9, 6, 20, 27, 6, 7, 6], "m_si": [13, 16, 28, 12, 23, 25, 23, 22, 28, 14, 17, 13]}, {"id": "1079434600", "name": "ул. Бабушкина, 52", "cat": "Автошкола", "st": "Сильная", "r": 4.9, "n": 268, "rv": 207, "ph": 35, "posts": 41, "stories": true, "share": 5.0, "place": 6, "of": 10, "leader": "Фара", "leadshare": 39.0, "rad": "5 км", "tr": 7168, "trp": 8498, "calls": 135, "routes": 206, "site": 323, "conv": 9.3, "note": null, "m_tr": [588, 622, 762, 772, 754, 456, 599, 501, 617, 556, 562, 379], "m_ph": [10, 13, 10, 6, 15, 18, 9, 13, 9, 14, 11, 7], "m_ro": [15, 14, 18, 19, 17, 16, 18, 18, 21, 19, 14, 17], "m_si": [17, 10, 32, 19, 25, 37, 26, 30, 27, 37, 44, 19]}, {"id": "1250195793", "name": "просп. Стачек, 77", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 61, "rv": 57, "ph": 26, "posts": 40, "stories": true, "share": 3.0, "place": 10, "of": 10, "leader": "Фара", "leadshare": 22.0, "rad": "5 км", "tr": 5785, "trp": 3736, "calls": 39, "routes": 152, "site": 189, "conv": 6.6, "note": null, "m_tr": [526, 583, 746, 717, 580, 430, 346, 318, 502, 414, 372, 251], "m_ph": [5, 5, 4, 7, 1, 1, 2, 1, 5, 5, 1, 2], "m_ro": [11, 10, 15, 15, 13, 11, 10, 19, 20, 18, 8, 2], "m_si": [23, 13, 21, 17, 21, 11, 9, 13, 8, 22, 24, 7]}, {"id": "47658009181", "name": "ул. Турку, 11к1", "cat": "Автошкола", "st": "Сильная", "r": 4.9, "n": 39, "rv": 34, "ph": 31, "posts": 40, "stories": true, "share": 43.0, "place": 2, "of": 8, "leader": "Фара", "leadshare": 44.0, "rad": "1 км", "tr": 5490, "trp": 2583, "calls": 76, "routes": 138, "site": 178, "conv": 7.1, "note": null, "m_tr": [305, 274, 429, 339, 327, 273, 346, 292, 364, 233, 891, 1417], "m_ph": [1, 5, 9, 4, 3, 0, 4, 7, 2, 0, 20, 21], "m_ro": [10, 5, 15, 4, 13, 4, 12, 13, 17, 7, 20, 18], "m_si": [17, 8, 21, 14, 15, 11, 15, 13, 7, 9, 24, 24]}, {"id": "1113716714", "name": "просп. Сизова, 17", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 48, "rv": 40, "ph": 23, "posts": 40, "stories": true, "share": 16.0, "place": 3, "of": 7, "leader": "Дебют", "leadshare": 40.0, "rad": "1 км", "tr": 4854, "trp": 3153, "calls": 18, "routes": 164, "site": 99, "conv": 5.8, "note": null, "m_tr": [346, 383, 508, 522, 565, 361, 350, 335, 533, 316, 380, 255], "m_ph": [1, 0, 0, 2, 4, 2, 1, 2, 0, 3, 1, 2], "m_ro": [11, 7, 13, 13, 19, 14, 14, 21, 20, 6, 21, 5], "m_si": [4, 7, 13, 15, 15, 7, 6, 4, 6, 9, 8, 5]}, {"id": "1134887510", "name": "Большая Зеленина ул., 15", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 66, "rv": 58, "ph": 33, "posts": 37, "stories": true, "share": 2.0, "place": 9, "of": 9, "leader": "Фара", "leadshare": 22.0, "rad": "5 км", "tr": 3935, "trp": 3742, "calls": 37, "routes": 118, "site": 211, "conv": 9.3, "note": null, "m_tr": [433, 154, 486, 591, 478, 255, 208, 238, 455, 279, 199, 159], "m_ph": [2, 2, 3, 8, 2, 1, 2, 2, 6, 1, 4, 4], "m_ro": [12, 3, 9, 27, 16, 5, 2, 11, 14, 11, 4, 4], "m_si": [17, 8, 24, 38, 21, 9, 12, 14, 27, 13, 12, 16]}, {"id": "98332974041", "name": "просп. Энгельса, 154", "cat": "Автошкола", "st": "Сильная", "r": 4.9, "n": 39, "rv": 34, "ph": 33, "posts": 40, "stories": true, "share": 26.0, "place": 2, "of": 9, "leader": "Альтернатива", "leadshare": 60.0, "rad": "1 км", "tr": 3848, "trp": 1562, "calls": 50, "routes": 108, "site": 146, "conv": 7.9, "note": null, "m_tr": [93, 90, 224, 165, 139, 174, 146, 162, 222, 130, 821, 1482], "m_ph": [0, 1, 2, 3, 1, 2, 0, 3, 2, 2, 15, 19], "m_ro": [6, 3, 7, 5, 3, 6, 3, 8, 20, 9, 18, 20], "m_si": [9, 3, 11, 11, 17, 10, 3, 8, 6, 9, 33, 26]}, {"id": "1155374951", "name": "ул. Маяковского, 40", "cat": "Автошкола", "st": "Средняя", "r": 4.9, "n": 21, "rv": 21, "ph": 22, "posts": 40, "stories": true, "share": 15.0, "place": 4, "of": 8, "leader": "Умная Автошкола", "leadshare": 30.0, "rad": "1 км", "tr": 3839, "trp": 2675, "calls": 21, "routes": 62, "site": 116, "conv": 5.2, "note": null, "m_tr": [366, 233, 432, 322, 302, 357, 330, 350, 486, 275, 230, 156], "m_ph": [1, 1, 4, 1, 5, 1, 0, 0, 2, 2, 2, 2], "m_ro": [1, 6, 5, 5, 1, 4, 4, 10, 16, 7, 3, 0], "m_si": [7, 8, 23, 5, 9, 10, 8, 12, 12, 10, 9, 3]}, {"id": "166553589835", "name": "Екатерининский просп., 2", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 57, "rv": 44, "ph": 41, "posts": 39, "stories": true, "share": 5.0, "place": 7, "of": 9, "leader": "Фара", "leadshare": 40.0, "rad": "5 км", "tr": 3664, "trp": 2838, "calls": 45, "routes": 173, "site": 144, "conv": 9.9, "note": null, "m_tr": [244, 243, 385, 323, 383, 307, 310, 317, 357, 318, 294, 183], "m_ph": [5, 4, 1, 3, 3, 3, 4, 6, 4, 5, 2, 5], "m_ro": [22, 8, 12, 20, 16, 15, 11, 16, 29, 13, 7, 4], "m_si": [12, 8, 18, 8, 15, 11, 13, 16, 10, 16, 9, 8]}, {"id": "95634829430", "name": "ул. Бабушкина, 3", "cat": "Автошкола", "st": "Сильная", "r": 4.7, "n": 69, "rv": 50, "ph": 33, "posts": 40, "stories": true, "share": 3.0, "place": 8, "of": 9, "leader": "Фара", "leadshare": 38.0, "rad": "5 км", "tr": 3410, "trp": 3952, "calls": 29, "routes": 139, "site": 179, "conv": 10.2, "note": null, "m_tr": [275, 337, 463, 283, 327, 235, 257, 274, 359, 247, 219, 134], "m_ph": [2, 4, 0, 2, 2, 2, 6, 1, 2, 2, 4, 2], "m_ro": [13, 26, 10, 15, 10, 8, 3, 13, 21, 5, 8, 7], "m_si": [14, 12, 14, 11, 16, 15, 17, 10, 14, 16, 28, 12]}, {"id": "78992211124", "name": "просп. Авиаконструкторов, 2", "cat": "Автошкола", "st": "Сильная", "r": 5, "n": 56, "rv": 45, "ph": 36, "posts": 40, "stories": true, "share": 46.0, "place": 1, "of": 10, "leader": "Балтик-Стар", "leadshare": 11.0, "rad": "1 км", "tr": 3218, "trp": 2082, "calls": 42, "routes": 79, "site": 129, "conv": 7.8, "note": null, "m_tr": [161, 169, 331, 223, 182, 219, 222, 195, 329, 143, 450, 594], "m_ph": [2, 3, 4, 4, 2, 2, 1, 2, 2, 2, 0, 18], "m_ro": [5, 3, 8, 5, 7, 5, 2, 7, 13, 6, 2, 16], "m_si": [7, 3, 16, 9, 11, 15, 7, 9, 15, 8, 2, 27]}, {"id": "150673355191", "name": "Московский просп., 109", "cat": "Автошкола", "st": "Сильная", "r": 4.9, "n": 43, "rv": 36, "ph": 29, "posts": 40, "stories": true, "share": 2.0, "place": 9, "of": 10, "leader": "Ягуар", "leadshare": 27.0, "rad": "5 км", "tr": 3103, "trp": 2286, "calls": 17, "routes": 118, "site": 132, "conv": 8.6, "note": null, "m_tr": [281, 211, 469, 288, 261, 238, 252, 247, 367, 225, 186, 78], "m_ph": [3, 3, 0, 0, 2, 1, 3, 0, 0, 2, 2, 1], "m_ro": [14, 5, 8, 10, 14, 7, 7, 6, 27, 8, 11, 1], "m_si": [11, 4, 11, 11, 21, 11, 8, 9, 8, 10, 22, 6]}, {"id": "1142084297", "name": "Бассейная ул., 41", "cat": "Мотошкола", "st": "Сильная", "r": 5, "n": 45, "rv": 42, "ph": 30, "posts": 40, "stories": true, "share": 8.0, "place": 7, "of": 9, "leader": "МотоДрайв", "leadshare": 24.0, "rad": "5 км", "tr": 2667, "trp": 1686, "calls": 27, "routes": 77, "site": 159, "conv": 9.9, "note": null, "m_tr": [162, 149, 232, 235, 146, 286, 333, 307, 311, 216, 152, 138], "m_ph": [3, 1, 1, 1, 1, 4, 3, 4, 6, 2, 0, 1], "m_ro": [3, 1, 5, 4, 4, 5, 7, 18, 16, 11, 2, 1], "m_si": [15, 13, 15, 19, 15, 18, 11, 10, 11, 14, 10, 8]}, {"id": "175447029874", "name": "Невский просп., 54", "cat": "Автошкола", "st": "Средняя", "r": 4.9, "n": 27, "rv": 24, "ph": 13, "posts": 40, "stories": true, "share": 23.0, "place": 2, "of": 10, "leader": "АвтоRide", "leadshare": 33.0, "rad": "1 км", "tr": 1804, "trp": 1795, "calls": 20, "routes": 98, "site": 48, "conv": 9.2, "note": "переходы не учитывались дек 2025 — май 2026", "m_tr": [177, 0, 0, 0, 0, 0, 0, 298, 532, 326, 263, 208], "m_ph": [1, 2, 4, 1, 4, 1, 0, 1, 4, 0, 0, 2], "m_ro": [6, 7, 9, 4, 12, 4, 4, 10, 23, 16, 3, 0], "m_si": [3, 2, 4, 5, 6, 7, 1, 4, 5, 5, 4, 2]}], "online": [{"id": "1006798574", "name": "Онлайн-карточка, СПб", "r": null, "n": 0, "rv": 0, "ph": 12, "posts": 0, "st": "Риск", "last": null}, {"id": "1124940495", "name": "Онлайн-карточка, СПб", "r": 4.7, "n": 14, "rv": 14, "ph": 18, "posts": 0, "st": "Средняя", "last": null}, {"id": "1385645379", "name": "Онлайн-карточка, СПб", "r": 4.7, "n": 12, "rv": 10, "ph": 24, "posts": 0, "st": "Средняя", "last": "2024-11-25"}, {"id": "205048624183", "name": "Кудрово / Заневское (зона 10 км)", "r": 5, "n": 62, "rv": 52, "ph": 31, "posts": 34, "st": "Сильная", "last": "2026-09-17"}, {"id": "54831635294", "name": "Шушары (онлайн)", "r": 4.1, "n": 7, "rv": 4, "ph": 39, "posts": 0, "st": "Средняя", "last": "2021-08-16"}, {"id": "25737579329", "name": "Мурино (онлайн)", "r": 5, "n": 124, "rv": 98, "ph": 28, "posts": 0, "st": "Сильная", "last": "2024-11-25"}, {"id": "116641012819", "name": "Онлайн-карточка, СПб", "r": null, "n": 0, "rv": 0, "ph": 7, "posts": 0, "st": "Риск", "last": null}, {"id": "40350087772", "name": "Онлайн-карточка, СПб", "r": null, "n": 0, "rv": 0, "ph": 6, "posts": 0, "st": "Риск", "last": null}, {"id": "185627411228", "name": "Онлайн-карточка, СПб", "r": null, "n": 0, "rv": 0, "ph": 5, "posts": 0, "st": "Риск", "last": null}, {"id": "179161307725", "name": "Онлайн-карточка, СПб", "r": 4.1, "n": 7, "rv": 2, "ph": 15, "posts": 0, "st": "Средняя", "last": "2021-08-16"}, {"id": "217989851192", "name": "Онлайн-карточка, СПб", "r": null, "n": 0, "rv": 0, "ph": 6, "posts": 0, "st": "Риск", "last": null}], "health": [["Нет публикаций за 12 месяцев", 10], ["Меньше 10 оценок", 7], ["Нет рейтинга", 5], ["Меньше 10 фото", 4], ["Рейтинг ниже 4,0", 0], ["Нет сторис", 0]], "N": 26, "net_tr": [4680, 4069, 6250, 6556, 7752, 5300, 4292, 4510, 7213, 5224, 7789, 7789], "net_ph": [46, 54, 52, 50, 59, 46, 38, 46, 51, 59, 120, 111], "net_ro": [228, 173, 189, 204, 201, 157, 103, 190, 308, 202, 201, 139], "net_si": [178, 129, 262, 205, 240, 212, 159, 174, 189, 209, 299, 203], "kpi": {"cards": 26, "addr": 15, "tr": 71424, "trp": 48473, "act": 5486, "wr": 4.92, "medshare": 15.0, "lead": 2, "last": 2, "top3": 36.1, "uniq": 96}, "top": [["Фара", 8, 32.8, 7], ["ДОСААФ", 4, 14.8, 0], ["Победа", 4, 1.6, 0], ["Система автошкол Смольный", 4, 4.8, 0], ["Светофор", 4, 10.0, 0], ["Ягуар", 3, 22.0, 1], ["Дистанция", 3, 6.3, 0], ["Автопилот", 3, 6.7, 0]], "med": [["Рейтинг", 4.9, 5.0], ["Оценки", 56, 112.5], ["Отзывы", 44, 77], ["Фото", 31, 42]], "geo": {"note": "Геовизор, 15 адресных филиалов × 51 последний визит = 765 визитов, ~5–10 ноября 2026", "total": 765, "sources": {"Клик по метке на карте": 383, "Общий запрос": 231, "Поиск по бренду": 60, "Ссылки и Поиск": 59, "Похожие места": 30, "Другое": 2}, "general_refine": {"Без уточнения": 178, "Район или адрес": 25, "Услуга: мото, C, A1, трактор": 25, "Цена, маткапитал": 2, "«Лучшие»": 1}, "top_queries": {"автошкола": 161, "балтик-стар (все написания)": 60, "мотошкола (все)": 15, "автошкола спб": 7}}, "ws": {"labels": ["ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "city": [57721, 47981, 67961, 63118, 73240, 69622, 66401, 81078, 91085, 91463, 85635, 75310, 62360, 48869, 63283, 59013, 71199, 67868, 62749, 61989, 59514, 61113, 67225], "region": [72301, 61130, 87330, 80408, 92755, 87059, 85574, 104310, 116124, 116997, 109618, 96136, 80074, 63456, 81764, 76739, 90592, 88134, 84144, 85861, 84323, 85338, 90534], "main_yoy": -13.8, "reg_yoy": -10.1, "div": [["Медкомиссия на права", 45.2, 59694], ["Налоговый вычет", 41.2, 3063], ["Категория E (прицеп)", 25.0, 480], ["Права на автомат", 20.3, 8235], ["Автошкола маткапитал", 18.5, 1558], ["Автошкола рассрочка", 7.4, 1005], ["Права категории C", 3.5, 4066], ["Права категории B", 0.7, 8065], ["Мотошкола", 0.1, 49546], ["Экзамен в ГИБДД", -0.5, 84790], ["Права категории A", -1.6, 2170], ["Билеты ПДД", -3.6, 174775], ["Автоинструктор", -6.8, 14279], ["Автошкола онлайн", -9.7, 6598], ["Восстановл. навыков", -10.5, 2984], ["Уроки вождения", -10.5, 10927], ["Права на снегоход", -21.8, 2494], ["Права на квадроцикл", -23.0, 17335], ["Права категории D", -27.2, 2232], ["Автошкола цена", -40.4, 17914], ["Права на трактор", -41.0, 11677]], "brands": [["Светофор", 30332, 17.4], ["Фара", 27611, -39.5], ["ДОСААФ", 19280, -9.1], ["Мустанг", 18073, 25.1], ["Ягуар", 11024, 12.9], ["Смольный", 9970, -27.2], ["МотоДрайв", 7438, 20.1], ["Дистанция", 4866, 3.1], ["Балтик-Стар", 4223, -11.0], ["Дебют", 3977, -1.5], ["Альтернатива", 3580, -7.3], ["Умная автошкола", 976, -31.6]], "lab12": ["окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26"], "seas": [["Автошкола", [75310, 62360, 48869, 63283, 59013, 71199, 67868, 62749, 61989, 59514, 61113, 67225]], ["Мотошкола", [3435, 2619, 2553, 2734, 2995, 5339, 5500, 5248, 4902, 5082, 5158, 3981]], ["Квадроцикл", [1187, 1077, 901, 1412, 1097, 1479, 1787, 1939, 1805, 1826, 1564, 1261]], ["Снегоход", [179, 263, 278, 581, 407, 165, 141, 74, 72, 63, 127, 144]], ["Трактор", [1116, 1063, 955, 1178, 1125, 1085, 951, 923, 783, 819, 799, 880]], ["Медкомиссия", [3689, 3974, 3478, 4637, 4802, 6187, 5563, 5789, 4983, 5860, 5299, 5433]], ["Права на автомат", [680, 577, 493, 583, 529, 663, 695, 951, 867, 800, 684, 713]], ["Налоговый вычет", [165, 191, 158, 298, 352, 382, 421, 236, 190, 209, 246, 215]]], "bs": [325, 378, 300, 331, 451, 407, 388, 546, 431, 344, 440, 358, 307, 375, 246, 383, 416, 308, 404, 335, 386, 348, 357], "lead": [1518, 1312, 2140, 2128, 2189, 2011, 2074, 2472, 2769, 2383, 2641, 2584, 2322, 1873, 2361, 2327, 2729, 2878, 2672, 2732, 2522, 2479, 2853], "fara": [3267, 2059, 3415, 3586, 4259, 3452, 3329, 4471, 5076, 3859, 3908, 2986, 2288, 1722, 2551, 2459, 2652, 2510, 2101, 2045, 2059, 1981, 2257]}, "news": [{"fact": "60 дней", "line": "С 12.05.2026 практический экзамен назначают в течение 60 дней после сдачи теории; на всю практику по-прежнему полгода, иначе теорию сдают заново", "src": "Постановление Правительства РФ от 30.04.2026 № 508", "url": "https://its.1c.ru/db/content/newscomm/src/499723.htm"}, {"fact": "12 месяцев", "line": "С 12.05.2026 за телефон, камеру или шпаргалку на экзамене результат аннулируют, следующая попытка — не раньше чем через год", "src": "Постановление № 508", "url": "https://its.1c.ru/db/content/newscomm/src/499723.htm"}, {"fact": "62 → 47", "line": "С 01.03.2026 действуют новые программы подготовки водителей (Приказ Минпросвещения № 505): программ меньше, практики больше, часть теории дистанционно, переподготовка для новой категории без полного курса", "src": "Гарант", "url": "https://harant.ru/blog/avtomobilnoe-pravo/izmeneniya-v-zakonodatelstve-v-2026-godu-chto-vazhno-dlya-avtomobilistov/"}, {"fact": "Рейтинг", "line": "Закон о рейтинге автошкол: ГИБДД будет публиковать долю сдавших с первой попытки и аварийность выпускников; запуск рейтинга ожидают в начале 2027", "src": "Профиль", "url": "https://profile.ru/?p=1858923"}, {"fact": "01.03.2027", "line": "Электронная медсправка через ЕГИСЗ, фото- и видеофиксация экзаменов", "src": "Постановление № 508", "url": "https://its.1c.ru/db/content/newscomm/src/499723.htm"}]};
+const fmt=n=>n==null?'—':(typeof n==='number'?n.toLocaleString('ru-RU',{maximumFractionDigits:1}):n);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const tip=document.getElementById('tip');
+function showTip(e,h){tip.innerHTML=h;tip.style.opacity=1;const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8);tip.style.left=x+'px';tip.style.top=y+'px'}
+function hideTip(){tip.style.opacity=0}
+const NS='http://www.w3.org/2000/svg';
+const CW=id=>Math.max(300,Math.min(1100,document.getElementById(id).clientWidth||640));
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function svg(id,w,h){const c=document.getElementById(id);c.innerHTML='';return el('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'},c)}
+function hover(node,html){node.addEventListener('mousemove',e=>showTip(e,html));node.addEventListener('mouseleave',hideTip);node.addEventListener('touchstart',e=>showTip(e.touches[0],html),{passive:true})}
+const SC={'Сильная':'var(--s-strong)','Средняя':'var(--s-mid)','Риск':'var(--s-risk)'};
+const short=s=>s.replace('просп.','пр.').replace(' ул.','').replace('Большая ','Б. ');
+
+// HBAR generic: items [{label,value,color,tip}]
+function hbar(id,items,o={}){
+  const w=CW(id),lw=Math.min(o.lw||170,Math.round(w*0.47)),pad=o.pad||60,rh=o.rh||26,h=items.length*rh+6,max=o.max||Math.max(...items.map(i=>i.value)),W=w-lw-pad;
+  const s=svg(id,w,h);
+  items.forEach((it,i)=>{const y=i*rh+3,bw=Math.max(2,it.value/max*W);
+    const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=it.label;
+    el('rect',{x:lw,y:y+4,width:bw,height:rh-10,rx:4,fill:it.color||'var(--c1)'},s);
+    const v=el('text',{x:lw+bw+6,y:y+rh/2+4,class:'ax'},s);v.textContent=it.vlabel||fmt(it.value);
+    const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,it.tip||`<b>${it.label}</b><br>${fmt(it.value)}`)});
+}
+// LINE: series [{name,color,data}] labels
+function line(id,labels,series,o={}){
+  const w=CW(id),h=o.h||240,l=52,r=12,t=12,b=28,W=w-l-r,H=h-t-b;
+  const all=series.flatMap(s=>s.data.filter(v=>v!=null));const raw=Math.max(...all)*1.05,mag=Math.pow(10,Math.floor(Math.log10(raw/4))),max=Math.ceil(raw/4/mag)*mag*4,min=o.zero===false?Math.min(...all)*0.9:0;
+  const s=svg(id,w,h);const X=i=>l+i*(W/(labels.length-1)),Y=v=>t+H-(v-min)/(max-min)*H;
+  for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=Y(v);el('line',{x1:l,x2:w-r,y1:y,y2:y,stroke:'var(--grid)'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end',class:'ax'},s);tx.textContent=v>=10000?Math.round(v/1000)+'k':fmt(Math.round(v))}
+  const step=Math.ceil(labels.length/Math.max(3,Math.min(8,Math.floor(W/62))));labels.forEach((lb,i)=>{const last=labels.length-1;if(i!==last&&i%step)return;if(i===last&&last%step&&last%step<step*0.7)return;const tx=el('text',{x:X(i),y:h-8,'text-anchor':'middle',class:'ax'},s);tx.textContent=lb});
+  series.forEach(se=>{let d='';se.data.forEach((v,i)=>{if(v==null)return;d+=(d?'L':'M')+X(i)+','+Y(v)});el('path',{d,fill:'none',stroke:se.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},s)});
+  const cross=el('line',{y1:t,y2:t+H,stroke:'var(--ink-3)','stroke-dasharray':'3 3',opacity:0},s);
+  const dots=series.map(se=>el('circle',{r:4,fill:se.color,stroke:'var(--panel)','stroke-width':2,opacity:0},s));
+  const hit=el('rect',{x:l,y:t,width:W,height:H,class:'hit'},s);
+  const mv=e=>{const p=s.createSVGPoint();const pt=e.touches?e.touches[0]:e;p.x=pt.clientX;p.y=pt.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const i=Math.max(0,Math.min(labels.length-1,Math.round((q.x-l)/(W/(labels.length-1)))));cross.setAttribute('x1',X(i));cross.setAttribute('x2',X(i));cross.setAttribute('opacity',1);
+    series.forEach((se,k)=>{const v=se.data[i];if(v==null){dots[k].setAttribute('opacity',0);return}dots[k].setAttribute('cx',X(i));dots[k].setAttribute('cy',Y(v));dots[k].setAttribute('opacity',1)});
+    showTip(pt,`<b>${labels[i]}</b>`+series.map(se=>`<br>${se.name}: ${se.data[i]==null?'нет данных':fmt(se.data[i])}`).join(''))};
+  hit.addEventListener('mousemove',mv);hit.addEventListener('touchmove',mv,{passive:true});hit.addEventListener('mouseleave',()=>{hideTip();cross.setAttribute('opacity',0);dots.forEach(d=>d.setAttribute('opacity',0))});
+}
+const K=D.kpi,B=D.branches;
+// KPIs
+document.getElementById('kpis').innerHTML=[
+ ['Карточек в сети',K.cards,`${K.addr} адресных · 1 зональная · 10 онлайн`],
+ ['Переходы за 12 месяцев',fmt(K.tr),`+${Math.round((K.tr/K.trp-1)*100)}% к прошлому году`],
+ ['Целевые действия',fmt(K.act),'звонки, маршруты, сайт'],
+ ['Средний рейтинг',K.wr.toFixed(2).replace('.',','),'взвешенный по оценкам'],
+ ['Медианная доля в зоне',fmt(K.medshare)+'%','доля филиала среди конкурентов']
+].map(k=>`<div class="kpi"><div class="k">${k[0]}</div><div class="n">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
+// facts
+const noPosts=D.health[0][1],noRate=D.health[2][1];const div0=D.ws.div[0];
+const medN=D.med[1];
+document.getElementById('facts').innerHTML=[
+ ['y',`${K.lead} из 15`,'филиалов лидируют в своей зоне','В 7 зонах первое место у «Фары»'],
+ ['',`${fmt(K.top3)}%`,'трафика сети дают 3 филиала из 15','Московский 2/6, Бухарестская 96, Бабушкина 52'],
+ ['r',`${noPosts} из 26`,'карточек без публикаций за год','Все онлайн-карточки; в мае–июле 2026 пауза во всей сети'],
+ ['r',`${noRate}`,'карточек без рейтинга','Ещё 2 онлайн-карточки — 4,1 и 7 оценок'],
+ ['r',`в ${(medN[2]/medN[1]).toFixed(1).replace('.',',')} раза`,'меньше оценок, чем у конкурента рядом',`Медиана ${medN[1]} против ${fmt(medN[2])}`],
+ ['g',`+${fmt(div0[1])}%`,`«${div0[0].toLowerCase()}» — самый быстрый рост`,`Рынок «автошкола» за год ${fmt(D.ws.main_yoy)}%, сеть +${Math.round((K.tr/K.trp-1)*100)}%`]
+].map(f=>`<div class="fact"><div class="big ${f[0]}">${f[1]}</div><b>${f[2]}</b><span>${f[3]}</span></div>`).join('');
+// traffic
+hbar('c-trbar',B.map(b=>({label:short(b.name),value:b.tr,color:SC[b.st],tip:`<b>${b.name}</b><br>Переходы: ${fmt(b.tr)}<br>Год назад: ${fmt(b.trp)}<br>Статус: ${b.st}${b.note?'<br><i>'+b.note+'</i>':''}`})),{lw:150});
+line('c-trline',D.months,[{name:'Переходы',color:'var(--c1)',data:D.net_tr}]);
+line('c-actline',D.months,[{name:'Маршруты',color:'var(--c1)',data:D.net_ro},{name:'Сайт',color:'var(--c2)',data:D.net_si},{name:'Звонки',color:'var(--c3)',data:D.net_ph}]);
+// table
+const COLS=[['name','Филиал'],['st','Статус'],['r','Рейтинг'],['n','Оценки'],['rv','Отзывы'],['ph','Фото'],['posts','Публикации, год'],['stories','Сторис'],['share','Доля в зоне, %'],['leader','Лидер зоны'],['tr','Переходы'],['calls','Звонки'],['routes','Маршруты'],['site','Сайт'],['conv','Конверсия, %']];
+const weak={r:v=>v<4.5,n:v=>v<40,rv:v=>v<30,ph:v=>v<25,posts:v=>v<12,share:v=>v<10,conv:v=>v<6};
+let sortK='tr',sortD=-1,flt='all';
+const thead=document.querySelector('#tb thead tr');thead.innerHTML=COLS.map(c=>`<th data-k="${c[0]}" tabindex="0">${c[1]}</th>`).join('');
+thead.querySelectorAll('th').forEach(th=>{const f=()=>{const k=th.dataset.k;sortD=sortK===k?-sortD:-1;sortK=k;renderT()};th.onclick=f;th.onkeydown=e=>{if(e.key==='Enter')f()}});
+function renderT(){const rows=B.filter(b=>flt==='all'||b.st===flt).slice().sort((a,b)=>{const x=a[sortK],y=b[sortK];return (typeof x==='string'?x.localeCompare(y):x-y)*sortD});
+ document.querySelector('#tb tbody').innerHTML=rows.map(b=>'<tr>'+COLS.map(([k])=>{let v=b[k];if(k==='st')return `<td><span class="pill p-${v}">${v}</span></td>`;if(k==='stories')return '<td>есть</td>';if(k==='leader')return `<td style="font-family:var(--f-b)">${v===('Балтик-Стар')?'<b>Балтик-Стар</b>':v}</td>`;if(k==='name')return `<td>${short(v)}${b.note?' *':''}</td>`;
+ const w=weak[k]&&weak[k](v)?' class="w"':'';return `<td${w}>${k==='r'?String(v.toFixed(1)).replace('.',','):fmt(v)}</td>`}).join('')+'</tr>').join('')}
+const counts={all:B.length};B.forEach(b=>counts[b.st]=(counts[b.st]||0)+1);
+document.getElementById('flt').innerHTML=[['all','Все'],['Сильная','Сильная'],['Средняя','Средняя'],['Риск','Риск']].filter(f=>counts[f[0]]).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${f[0]==='all'}">${f[1]} · ${counts[f[0]]}</button>`).join('');
+document.querySelectorAll('#flt button').forEach(b=>b.onclick=()=>{flt=b.dataset.f;document.querySelectorAll('#flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderT()});
+renderT();
+document.getElementById('tb-foot').textContent='* '+B.filter(b=>b.note).map(b=>short(b.name)+': '+b.note).join('; ')+'. Переходы и действия — ноябрь 2025 — октябрь 2026, доля в зоне — неделя 28.09–04.10.2026.';
+// health
+hbar('c-health',D.health.map(h=>({label:h[0],value:h[1],color:h[1]?'var(--s-risk)':'var(--s-strong)',vlabel:h[1]+' из 26'})),{max:26,lw:210});
+// scatter
+(function(){const pts=[...B.map(b=>({n:b.n,r:b.r,st:b.st,l:short(b.name)})),...D.online.filter(o=>o.r).map(o=>({n:o.n,r:o.r,st:o.st,l:o.name}))];
+ const w=CW('c-scatter'),h=260,l=44,r=14,t=12,b=30,W=w-l-r,H=h-t-b,s=svg('c-scatter',w,h);
+ const lx=v=>l+(Math.log10(v)-Math.log10(2))/(Math.log10(400)-Math.log10(2))*W,Y=v=>t+H-(v-4)/(5.05-4)*H;
+ [4,4.25,4.5,4.75,5].forEach(v=>{el('line',{x1:l,x2:w-r,y1:Y(v),y2:Y(v),stroke:'var(--grid)'},s);const tx=el('text',{x:l-6,y:Y(v)+4,'text-anchor':'end',class:'ax'},s);tx.textContent=String(v).replace('.',',')});
+ [2,5,10,30,100,300].forEach(v=>{const tx=el('text',{x:lx(v),y:h-8,'text-anchor':'middle',class:'ax'},s);tx.textContent=v});
+ pts.forEach(p=>{const c=el('circle',{cx:lx(p.n),cy:Y(p.r),r:6,fill:SC[p.st],stroke:'var(--panel)','stroke-width':2},s);hover(c,`<b>${p.l}</b><br>Рейтинг ${String(p.r).replace('.',',')} · ${p.n} оценок`)});
+ const nr=D.online.filter(o=>!o.r).length;const tx=el('text',{x:w-r,y:t+H-6,'text-anchor':'end',class:'ax'},s);tx.textContent=`ещё ${nr} без рейтинга`;
+})();
+// posts by month
+(function(){const m=['ноя 25','дек 25','янв 26','фев 26','мар 26','апр 26','май 26','июн 26','июл 26','авг 26','сен 26','окт 26','ноя 26'],v=[0,4,6,6,5,8,0,0,0,2,4,5,2];
+ const w=CW('c-posts'),h=170,l=30,b=26,t=10,W=w-l-10,H=h-t-b,s=svg('c-posts',w,h),bw=W/m.length;
+ m.forEach((lb,i)=>{const bh=v[i]/8*H,x=l+i*bw;el('rect',{x:x+4,y:t+H-bh,width:bw-8,height:Math.max(bh,1.5),rx:4,fill:v[i]?'var(--c1)':'var(--s-risk)'},s);const tx=el('text',{x:x+bw/2,y:h-8,'text-anchor':'middle',class:'ax'},s);tx.textContent=lb;const hit=el('rect',{x,y:t,width:bw,height:H,class:'hit'},s);hover(hit,`<b>${lb}</b><br>${v[i]} новостей на филиал${i===12?' (по 13.11)':''}`)});
+})();
+document.getElementById('online').innerHTML=D.online.map(o=>`<div class="oc"><b>${o.r?String(o.r).replace('.',','):'нет рейтинга'}</b>${o.name.replace(' (онлайн)','')}<br><span>${o.n} оценок · ${o.ph} фото · ${o.posts?o.posts+' публ.':'нет публикаций'}</span></div>`).join('');
+// competitors pair
+(function(){const items=B.slice().sort((a,b)=>b.share-a.share);const w=CW('c-pair'),rh=34,lw=Math.min(150,Math.round(w*0.45)),W=w-lw-50,h=items.length*rh+6,s=svg('c-pair',w,h);
+ items.forEach((b,i)=>{const y=i*rh+3;const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=short(b.name);
+  const w1=Math.max(2,b.share/100*W),w2=Math.max(2,b.leadshare/100*W);
+  el('rect',{x:lw,y:y+4,width:w1,height:11,rx:4,fill:'var(--gold)'},s);el('rect',{x:lw,y:y+18,width:w2,height:11,rx:4,fill:'var(--s-off)'},s);
+  const v=el('text',{x:lw+Math.max(w1,w2)+6,y:y+rh/2+4,class:'ax'},s);v.textContent=fmt(b.share)+'%';
+  const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,`<b>${b.name}</b><br>Доля: ${fmt(b.share)}% · место ${b.place} из ${b.of}<br>${b.place===1?'Ближайший соперник':'Лидер зоны «'+b.leader+'»'}: ${fmt(b.leadshare)}%<br>Радиус зоны: ${b.rad}`)});
+})();
+hbar('c-top',D.top.map(t=>({label:t[0],value:t[1],color:'var(--s-off)',vlabel:t[1]+' зон',tip:`<b>${t[0]}</b><br>В ${t[1]} зонах из 15<br>Средняя доля: ${fmt(t[2])}%<br>Лидирует в ${t[3]} зонах`})),{max:15,lw:190});
+document.getElementById('uq').textContent=D.kpi.uniq;
+(function(){const w=CW('c-med'),rh=46,lw=90,W=w-lw-60,h=D.med.length*rh+6,s=svg('c-med',w,h);
+ D.med.forEach((m,i)=>{const y=i*rh+3,mx=Math.max(m[1],m[2]),norm=m[0]==='Рейтинг'?5:mx;const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=m[0];
+  [[m[1],'var(--gold)',6],[m[2],'var(--s-off)',22]].forEach(([v,c,dy])=>{const bw=Math.max(2,v/norm*W);el('rect',{x:lw,y:y+dy,width:bw,height:13,rx:4,fill:c},s);const tx=el('text',{x:lw+bw+6,y:y+dy+11,class:'ax'},s);tx.textContent=fmt(v)});
+  const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,`<b>${m[0]}</b><br>Балтик-Стар: ${fmt(m[1])}<br>Конкуренты: ${fmt(m[2])}`)});
+})();
+hbar('c-brand',D.ws.brands.map(b=>({label:b[0],value:b[1],color:b[0]==='Балтик-Стар'?'var(--gold)':'var(--s-off)',vlabel:fmt(b[1])+'  '+(b[2]>0?'+':'')+fmt(b[2])+'%',tip:`<b>${b[0]}</b><br>${fmt(b[1])} запросов за 12 месяцев<br>Год к году (ноя–сен): ${b[2]>0?'+':''}${fmt(b[2])}%`})),{lw:150,pad:120});
+// find
+const G=D.geo;hbar('c-src',Object.entries(G.sources).map(([k,v])=>({label:k,value:v,color:k.includes('бренду')?'var(--gold)':'var(--c1)',vlabel:(v/G.total<.01?'<1':Math.round(v/G.total*100))+'%',tip:`<b>${k}</b><br>${v} визитов из ${G.total}`})),{lw:230});
+hbar('c-ref',Object.entries(G.general_refine).map(([k,v])=>({label:k,value:v,color:'var(--c1)',vlabel:String(v)})),{lw:260});
+line('c-bvl',D.ws.labels,[{name:'«балтик стар»',color:'var(--gold)',data:D.ws.bs},{name:'«фара автошкола»',color:'var(--s-off)',data:D.ws.fara}]);
+// market
+line('c-main',D.ws.labels,[{name:'Санкт-Петербург',color:'var(--c1)',data:D.ws.city},{name:'СПб и Ленобласть',color:'var(--c2)',data:D.ws.region}]);
+(function(){const it=D.ws.div,w=CW('c-div'),rh=24,lw=Math.min(220,Math.round(w*0.42)),h=it.length*rh+6,mid=lw+(w-lw-50)*0.55,sc=(w-lw-60)*0.45/50,s=svg('c-div',w,h);
+ el('line',{x1:mid,x2:mid,y1:0,y2:h,stroke:'var(--ink-3)','stroke-width':1},s);
+ it.forEach((d,i)=>{const y=i*rh+3,v=Math.max(-50,Math.min(50,d[1])),bw=Math.max(2,Math.abs(v)*sc);const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=d[0];
+  el('rect',{x:v>=0?mid:mid-bw,y:y+4,width:bw,height:rh-9,rx:4,fill:v>=0?'var(--pos)':'var(--neg)'},s);
+  const tx=el('text',{x:v>=0?mid+bw+5:mid-bw-5,y:y+rh/2+4,'text-anchor':v>=0?'start':'end',class:'ax'},s);tx.textContent=(d[1]>0?'+':'')+fmt(d[1])+'%';
+  const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,`<b>${d[0]}</b><br>${d[1]>0?'+':''}${fmt(d[1])}% год к году<br>${fmt(d[2])} запросов за 12 месяцев`)});
+})();
+// heat
+(function(){const S=D.ws.seas,L=D.ws.lab12,w=CW('c-heat'),lw=Math.min(130,Math.round(w*0.3)),cw=(w-lw)/12,rh=30,h=S.length*rh+26,s=svg('c-heat',w,h);
+ L.forEach((lb,j)=>{if(cw<34&&j%2)return;const tx=el('text',{x:lw+j*cw+cw/2,y:h-6,'text-anchor':'middle',class:'ax'},s);tx.textContent=lb.split(' ')[0]});
+ S.forEach(([n,v],i)=>{const mx=Math.max(...v),mn=Math.min(...v);const t=el('text',{x:lw-8,y:i*rh+rh/2+4,'text-anchor':'end'},s);t.textContent=n;
+  v.forEach((x,j)=>{const a=0.08+0.92*(x-mn)/(mx-mn||1);const r=el('rect',{x:lw+j*cw+1,y:i*rh+1,width:cw-2,height:rh-2,rx:4,fill:'var(--c1)','fill-opacity':a.toFixed(2)},s);hover(r,`<b>${n}</b> · ${L[j]}<br>${fmt(x)} запросов`)})});
+})();
+(function(){const S=D.ws.seas;const pk=S.map(([n,v])=>[n,D.ws.lab12[v.indexOf(Math.max(...v))]]);
+ document.getElementById('seasc').innerHTML=[
+ ['Растёт весь год','Медкомиссия и налоговый вычет','Медкомиссия +45% за год, вычет за обучение +41%; пик — март и апрель'],
+ ['Набирает обороты','Снегоход и трактор','Пик в январе: снегоход в 9 раз выше июльского минимума'],
+ ['Сезонный спад','Мотошкола и квадроцикл','После сентября спрос падает почти вдвое и возвращается в марте']].map(c=>`<div class="sc"><div class="k">${c[0]}</div><div class="t">${c[1]}</div><p>${c[2]}</p></div>`).join('');})();
+document.getElementById('news').innerHTML=D.news.slice(0,4).map(n=>`<div class="nw"><div class="big">${n.fact}</div><p>${n.line}</p><a href="${n.url}" target="_blank" rel="noopener">${n.src}</a></div>`).join('');
+document.getElementById('src-news').innerHTML='Поводы для контента: '+[...new Set(D.news.map(n=>n.url))].map(u=>`<a href="${u}" target="_blank" rel="noopener">${new URL(u).hostname}</a>`).join(', ');
+window.__draw=1;</script>
+</body>
+</html>
