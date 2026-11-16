@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Про Интерьер»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Про Интерьер»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Челябинск · отделочные материалы · наб. Героя России С.А. Кислова, 23 · замер 16.11.2026</span>
+  <h1>Где «Про Интерьер» видно на Картах, а где нет</h1>
+  <p>Карточка «Про Интерьер» на Яндекс Картах: позиции в поиске по Челябинску, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из четырёх замеренных запросов карточки нет в первой пятёрке</b>«Стеновые панели», «гибкая керамика», «двери скрытого монтажа», «товары для интерьера» — поиск по Челябинску.</p></div>
+    <div class="v"><span class="pill warn">пустая карточка</span><p><b>На карточке нет новостей, сторис, прайса и описания</b>Рубрики — «Товары для интерьера» и «Декоративные покрытия». Отзывов и оценок пока нет.</p></div>
+    <div class="v"><span class="pill warn">фабрика выше</span><p><b>По «стеновым панелям» первое место у карточки фабрики Baijax</b>«Про Интерьер» — официальный представитель фабрики в Челябинске и УрФО, но в выдаче по этому запросу его карточки нет.</p></div>
+    <div class="v"><span class="pill good">сильная сторона</span><p><b>Узкие товары, которых нет у соседей по выдаче</b>Бамбуковые WPC-панели, гибкая керамика и двери скрытого монтажа в одном шоуруме 180 м².</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Отзывов на Яндекс Картах</div><div class="n">0</div><div class="s">рейтинга пока нет</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в первой пятёрке</div><div class="n">0 из 4</div><div class="s">поиск по Челябинску</div></div>
+    <div class="kpi"><div class="k">Новостей и сторис</div><div class="n">0</div><div class="s">карточка без публикаций</div></div>
+    <div class="kpi"><div class="k">Шоурум</div><div class="n">180 м²</div><div class="s">наб. Героя России С.А. Кислова, 23</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: бамбуковые WPC-панели, гибкая керамика, двери скрытого монтажа и комплектация проектов. Для каждого — состояние карточки и тема этапа, которая ведёт её в выдачу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>стеновые панели челябинск</td><td>WPC-панели</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>wpc панели челябинск</td><td>WPC-панели</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>бамбуковые панели челябинск</td><td>WPC-панели</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>гибкая керамика челябинск</td><td>гибкая керамика</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>гибкая керамика для фасада</td><td>гибкая керамика</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>двери скрытого монтажа челябинск</td><td>двери</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>скрытые двери челябинск</td><td>двери</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>товары для интерьера челябинск</td><td>комплектация</td><td>нет в первых 5</td><td class="nw">Новость 4</td></tr>
+      <tr><td>отделочные материалы челябинск</td><td>комплектация</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+      <tr><td>декоративные покрытия челябинск</td><td>комплектация</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Карточки, которые стоят в первой пятёрке по замеренным запросам. Рекламных карточек в этих выдачах не было.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>стеновые панели</td><td>Baijax</td><td>Hi Wood</td><td>Decor Ural</td><td>Панели Про</td><td>Стеновые панели</td></tr>
+      <tr><td>гибкая керамика</td><td>Керамик-центр</td><td>Дом керамики дисконт</td><td>Экоклинкер</td><td>White ceramic</td><td>Profit-House</td></tr>
+      <tr><td>двери скрытого монтажа</td><td>OknoMania</td><td>Русдверь</td><td>Русдверь</td><td>Русдверь</td><td>Русдверь</td></tr>
+      <tr><td>товары для интерьера</td><td>Kuchenland Home</td><td>Kuchenland Home</td><td>Kuchenland Home</td><td>Kuchenland Home</td><td>Zlatiks</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Карточки в выдаче и «Про Интерьер»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Про Интерьер</b></td><td class="r num me">—</td><td class="r num me">0</td><td>наб. Героя России С.А. Кислова, 23</td><td>нет в первых 5 по 4 запросам</td></tr>
+      <tr><td>Baijax</td><td class="r num">4,3</td><td class="r num">7</td><td>пос. Шершни, Заводская ул., 12</td><td>1 место · стеновые панели</td></tr>
+      <tr><td>Hi Wood</td><td class="r num">4,5</td><td class="r num">14</td><td>Лесопарковая ул., 7</td><td>2 место · стеновые панели</td></tr>
+      <tr><td>Decor Ural</td><td class="r num">5,0</td><td class="r num">71</td><td>Свердловский тракт, 1Жк4</td><td>3 место · стеновые панели</td></tr>
+      <tr><td>Панели Про</td><td class="r num">—</td><td class="r num">—</td><td>ул. Труда, 185А</td><td>4 место · стеновые панели</td></tr>
+      <tr><td>Керамик-центр</td><td class="r num">4,6</td><td class="r num">135</td><td>ул. Рылеева, 18</td><td>1 место · гибкая керамика</td></tr>
+      <tr><td>Экоклинкер</td><td class="r num">4,3</td><td class="r num">7</td><td>пл. Революции, 7А</td><td>3 место · гибкая керамика</td></tr>
+      <tr><td>OknoMania</td><td class="r num">5,0</td><td class="r num">71</td><td>ул. Кирова, 104к2</td><td>1 место · двери скрытого монтажа</td></tr>
+      <tr><td>Русдверь</td><td class="r num">4,5–4,8</td><td class="r num">41–256</td><td>4 точки</td><td>2–5 место · двери скрытого монтажа</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Оценки не решают</b>: Baijax с 7 оценками и «Панели Про» без рейтинга стоят в пятёрке по «стеновым панелям».</li>
+      <li><b>В выдаче — узкие карточки под запрос</b>: «Стеновые панели», «Панели Про», «Керамик-центр» прямо называют товар.</li>
+      <li><b>По «товарам для интерьера» и «дверям» выдачу держат сети</b>: Kuchenland Home и Русдверь — по 4 точки в пятёрке.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Отдельная новость на каждый товар брифа: WPC-панели, гибкая керамика, двери скрытого монтажа, комплектация проектов.</li>
+      <li>В каждом тексте — «Челябинск» и название товара в первом абзаце.</li>
+      <li>Карточка пустая — все темы этапа новые, повторов нет.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 16.11.2026: поиск по Челябинску, четыре запроса, первая страница выдачи — пять карточек.</li>
+    <li>Рекламные карточки отделяются по метке «Реклама»; в замеренных выдачах её не было.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/pro_interyer/101735533200/" target="_blank" rel="noopener">«Про Интерьер», Челябинск, наб. Героя России С.А. Кислова, 23 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/56/chelyabinsk/search/%D1%81%D1%82%D0%B5%D0%BD%D0%BE%D0%B2%D1%8B%D0%B5%20%D0%BF%D0%B0%D0%BD%D0%B5%D0%BB%D0%B8/" target="_blank" rel="noopener">Стеновые панели в Челябинске — Яндекс Карты</a>
+    <a href="https://xn--e1aahudfhebq6i.online/" target="_blank" rel="noopener">Проинтерьер.online — сайт компании</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Отделочные материалы · Челябинск · наб. Героя России С.А. Кислова, 23</span>
+  <h1>«Про Интерьер» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Про Интерьер» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Про Интерьер</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Отделочные материалы <small>поставка и продажа для частных и коммерческих пространств, комплектация проектов</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">11:00–19:00 <small>выходные по договорённости</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Челябинск, набережная Героя России С.А. Кислова, 23</div></div>
+    <div class="fact"><div class="k">Стиль</div><div class="v">Сдержанный минимализм <small>фактуры камня, дерева, металла</small></div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>строго деловой тон · от компании · без цен</small></div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">01 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Темы идут под запросы, по которым карточки нет в выдаче: сначала WPC-панели, затем гибкая керамика, двери скрытого монтажа и в конце — комплектация проектов.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Бамбуковые WPC-панели: дизайны и свойства.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Гибкая керамика для внутренней и наружной отделки.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Двери скрытого монтажа.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Комплектация проектов: склад, поставка с фабрики, шоурум.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">02 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Про Интерьер» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», строго деловой, вежливо и дипломатично, от лица компании. Вступление — от компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Без цен, без упоминаний конкурентов и политики — так указано в брифе. В тексте нет телефона и e-mail, превосходных степеней. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Бамбуковые WPC-панели в Челябинске: однотонные, под ткань, камень, дерево и металл</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем бамбуковые WPC-панели для внутренней отделки частных и коммерческих пространств.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Панели бамбуковые WPC: однотонные, ткань, камень, дерево, металл.<span class="src">бриф</span></li>
+      <li>Гибкие, влагостойкие, ударопрочные (для внутренней отделки).<span class="src">бриф</span></li>
+      <li>Большой выбор дизайнов.<span class="src">бриф</span></li>
+      <li>Официальный представитель фабрики Baijax в Челябинске и УрФО.<span class="src">сайт</span></li>
+      <li>Подбор под конкретную задачу, сопровождение, квалифицированные монтажники, которые действительно умеют работать с материалом.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Бамбуковые WPC-панели в Челябинске — «Про Интерьер»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Стеновые панели WPC из бамбука, Челябинск | Про Интерьер</span></div>
+      <div class="meta-row"><span><b>Description · </b>Бамбуковые WPC-панели: однотонные, под ткань, камень, дерево и металл. Гибкие, влагостойкие, ударопрочные. «Про Интерьер», Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">стеновые панели челябинск</span><span class="chip-kw">wpc панели челябинск</span><span class="chip-kw">бамбуковые панели челябинск</span><span class="chip-kw">панели под камень</span><span class="chip-kw">панели под дерево</span><span class="chip-kw">панели под металл</span><span class="chip-kw">влагостойкие стеновые панели</span><span class="chip-kw">гибкие стеновые панели</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> приходите в шоурум и подберите дизайн панелей под ваш проект.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«WPC-панели: 5 видов дизайна»</div>
+      <p>Композиция: пять вертикальных полос-образцов панелей — однотонная, ткань, камень, дерево, металл — с подписями. Тезис на плашке в нижней трети, логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Стиль: сдержанный минимализм, фактуры камня, дерева и металла, цвета логотипа компании.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Гибкая керамика в Челябинске — для внутренней и наружной отделки</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем гибкую керамику, которая подходит и для интерьера, и для отделки снаружи.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Гибкая керамика для внутренней и наружной отделки.<span class="src">бриф</span></li>
+      <li>Материалы безопасны, экологичны и соответствуют современным стандартам качества.<span class="src">сайт</span></li>
+      <li>Устойчивы к влаге, перепадам температур, ультрафиолету и механическим нагрузкам.<span class="src">сайт</span></li>
+      <li>Подходят для жилых и коммерческих объектов.<span class="src">сайт</span></li>
+      <li>Опыт работы с коммерческими пространствами.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гибкая керамика в Челябинске — «Про Интерьер»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Гибкая керамика для интерьера и фасада, Челябинск | Про Интерьер</span></div>
+      <div class="meta-row"><span><b>Description · </b>Гибкая керамика для внутренней и наружной отделки, для жилых и коммерческих объектов. «Про Интерьер», Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">гибкая керамика челябинск</span><span class="chip-kw">гибкая керамика для фасада</span><span class="chip-kw">гибкая керамика для интерьера</span><span class="chip-kw">отделка фасада</span><span class="chip-kw">наружная отделка</span><span class="chip-kw">гибкая плитка</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку — подберём гибкую керамику под ваш объект.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Гибкая керамика: внутри и снаружи»</div>
+      <p>Композиция: кадр разделён на две половины — фрагмент интерьерной стены и фрагмент фасада с гибкой керамикой. Тезис на плашке по центру, логотип в верхнем левом углу.</p>
+      <p>Стиль: сдержанный минимализм, фактура камня, цвета логотипа компании.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Двери скрытого монтажа в Челябинске — в шоуруме «Про Интерьер»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем двери скрытого монтажа и подбираем их под конкретную задачу вашего пространства.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Двери скрытого монтажа.<span class="src">бриф</span></li>
+      <li>Двери скрытого монтажа и профили.<span class="src">сайт</span></li>
+      <li>Подбор под конкретную задачу, сопровождение, квалифицированные монтажники.<span class="src">бриф</span></li>
+      <li>Подбираем материалы с учётом пространства, условий эксплуатации и желаемого вида.<span class="src">сайт</span></li>
+      <li>Собственный шоурум площадью 180 м².<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Двери скрытого монтажа в Челябинске — «Про Интерьер»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Двери скрытого монтажа и профили, Челябинск | Про Интерьер</span></div>
+      <div class="meta-row"><span><b>Description · </b>Двери скрытого монтажа и профили: подбор под задачу, сопровождение, монтаж. Шоурум 180 м², Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">двери скрытого монтажа челябинск</span><span class="chip-kw">скрытые двери челябинск</span><span class="chip-kw">двери скрытого монтажа купить</span><span class="chip-kw">скрытые двери под отделку</span><span class="chip-kw">профиль для скрытых дверей</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> посмотрите двери скрытого монтажа в шоуруме.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Двери скрытого монтажа»</div>
+      <p>Композиция: стена, в которой дверь читается только по тонкому контуру, дверь слегка приоткрыта. Тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
+      <p>Стиль: сдержанный минимализм, фактура металла на профиле, цвета логотипа компании.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Комплектация проектов в Челябинске: склад в Челябинске и Москве, поставка напрямую с фабрики</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы комплектуем проекты отделочными материалами для частных и коммерческих пространств.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Складская программа в Челябинске и Москве, комплектация напрямую с фабрики.<span class="src">бриф</span></li>
+      <li>Опыт работы с коммерческими пространствами.<span class="src">бриф</span></li>
+      <li>Комплексный подход: подбор под конкретную задачу, сопровождение, квалифицированные монтажники.<span class="src">бриф</span></li>
+      <li>Рассчитываем и согласовываем объёмы, сроки и детали поставки, организуем поставку, даём рекомендации по монтажу и эксплуатации.<span class="src">сайт</span></li>
+      <li>Собственный шоурум площадью 180 м².<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Отделочные материалы и комплектация проектов в Челябинске — «Про Интерьер»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Отделочные материалы, товары для интерьера, Челябинск | Про Интерьер</span></div>
+      <div class="meta-row"><span><b>Description · </b>Комплектация проектов отделочными материалами: склад в Челябинске и Москве, поставка напрямую с фабрики. «Про Интерьер», Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">товары для интерьера челябинск</span><span class="chip-kw">отделочные материалы челябинск</span><span class="chip-kw">декоративные покрытия челябинск</span><span class="chip-kw">комплектация объектов</span><span class="chip-kw">отделка коммерческих помещений</span><span class="chip-kw">шоурум отделочных материалов</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку на комплектацию вашего проекта.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Склад в Челябинске и Москве»</div>
+      <p>Композиция: инфографика из трёх блоков — «склад Челябинск · Москва», «напрямую с фабрики», «шоурум 180 м²». Тезис крупно в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Стиль: сдержанный минимализм, фон с фактурой камня, цвета логотипа компании.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">03 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">WPC-панели: 5 дизайнов</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Однотонные</span><span class="fact-pill">Ткань</span><span class="fact-pill">Камень</span><span class="fact-pill">Дерево</span><span class="fact-pill">Металл</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> пять образцов панелей столбиком, подписи справа. Минимализм, цвета логотипа, логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Гибкая керамика</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Внутренняя отделка</span><span class="fact-pill">Наружная отделка</span><span class="fact-pill">Жилые и коммерческие объекты</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон — фактура камня, заголовок крупно сверху, факты на плашках в цветах логотипа.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Шоурум 180 м²</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Наб. Героя России С.А. Кислова, 23</span><span class="fact-pill">11:00–19:00</span><span class="fact-pill">Выходные по договорённости</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото шоурума от компании, нижняя треть — плашка с адресом и часами в цветах логотипа.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Склад в Челябинске и Москве</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Комплектация с фабрики</span><span class="fact-pill">Официальный представитель Baijax в УрФО</span><span class="fact-pill">Коммерческие пространства</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон — фактура металла, заголовок крупно, факты списком на плашках в цветах логотипа.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">04 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — WPC-панели, гибкая керамика, двери, комплектация <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Бамбуковые WPC-панели</b>под «стеновые панели челябинск», «wpc панели челябинск»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>WPC-панели: 5 дизайнов</b>однотонные, ткань, камень, дерево, металл</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Гибкая керамика внутри и снаружи</b>под «гибкая керамика челябинск», «гибкая керамика для фасада»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Гибкая керамика</b>интерьер и фасад</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Двери скрытого монтажа</b>под «двери скрытого монтажа челябинск», «скрытые двери челябинск»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Шоурум 180 м²</b>адрес и часы работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Комплектация проектов</b>под «товары для интерьера челябинск», «отделочные материалы челябинск»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Склад в Челябинске и Москве</b>поставка напрямую с фабрики</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
