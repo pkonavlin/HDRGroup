@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Арт Флора»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Арт Флора»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Новотроицк · салон цветов · ул. Уральская, 4 · замер 16.11.2026</span>
+  <h1>Где «Арт Флора» видно на Картах, а где нет</h1>
+  <p>Карточка «Арт Флора» на Яндекс Картах. Позиции в поиске по Новотроицку, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill warn">слабо</span><p><b>«Доставка цветов» — 8-е место из 9</b>Выше стоят Букетоника, Мир растений, Цветок, Букетоff, Дом Цветов, Экспресс цветы. Доставка есть в особенностях карточки и в брифе, но публикаций о ней нет.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Цветы», «Букеты», «Магазин цветов» — карточки нет в списке</b>Во всех трёх запросах первая четвёрка одна и та же: Букетоника, Цветок, Мир растений, Букетоff.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Свадебный букет» — карточки нет</b>Свадебная флористика есть в брифе, но в выдаче 7 других карточек.</p></div>
+    <div class="v"><span class="pill good">свободная ниша</span><p><b>«Комнатные растения» — выдача пустая</b>По Новотроицку Карты не показывают ни одной организации. Горшечные растения, кашпо и грунт есть в брифе.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новостей на карточке нет</b>Раздел «Новости» пуст, при этом у лидера выдачи 244 оценки против 17 у «Арт Флора».</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,5</div><div class="s">17 оценок · 11 отзывов</div></div>
+    <div class="kpi"><div class="k">Место в «Доставке цветов»</div><div class="n">8</div><div class="s">из 9 карточек</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">раздел пуст</div></div>
+    <div class="kpi"><div class="k">Фото на карточке</div><div class="n">43</div><div class="s">вход, снаружи, внутри</div></div>
+  </div>
+</section>
+
+<section id="maps">
+  <div class="sh"><h2>Позиции в поиске Яндекс Карт</h2><p>Поиск по городу Новотроицк, без геолокации.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Место</th><th>Первые карточки</th></tr></thead>
+    <tbody>
+      <tr><td>Доставка цветов</td><td class="r me">8</td><td>Букетоника, Мир растений, Цветок, Букетоff, Дом Цветов, Экспресс цветы</td></tr>
+      <tr><td>Магазин цветов</td><td class="r">нет</td><td>Букетоника, Цветок, Мир растений, Орхидея, Букетоff</td></tr>
+      <tr><td>Цветы</td><td class="r">нет</td><td>Букетоника, Цветок, Мир растений, Букетоff, Цветочный павильон</td></tr>
+      <tr><td>Букеты</td><td class="r">нет</td><td>Букетоника, Цветок, Букетоff, Мир растений, Дом Цветов</td></tr>
+      <tr><td>Свадебный букет</td><td class="r">нет</td><td>Букетоника, Букетоff, Цветок, Мир растений, ЦветоБум, Шафран</td></tr>
+      <tr><td>Комнатные растения</td><td class="r">—</td><td>выдача пустая</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: предзаказы к праздникам, поступление нового цветка (срезка и горшечные), доставка, композиции, свадебная флористика, сопутствующие товары. Для каждого указано, какая тема этапа ведёт карточку в выдачу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Состояние карточки</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>букет маме новотроицк</td><td>предзаказы к праздникам</td><td>новостей нет</td><td class="nw">Новость 1</td></tr>
+      <tr><td>цветы на день матери</td><td>предзаказы к праздникам</td><td>новостей нет</td><td class="nw">Новость 1</td></tr>
+      <tr><td>цветы новотроицк</td><td>поступление срезки</td><td>нет в списке</td><td class="nw">Новость 2</td></tr>
+      <tr><td>букеты новотроицк</td><td>поступление срезки</td><td>нет в списке</td><td class="nw">Новость 2</td></tr>
+      <tr><td>комнатные растения новотроицк</td><td>поступление горшечных</td><td>выдача пустая</td><td class="nw">Новость 3</td></tr>
+      <tr><td>магазин цветов новотроицк</td><td>бонусная система</td><td>нет в списке</td><td class="nw">Новость 4</td></tr>
+      <tr><td>доставка цветов новотроицк</td><td>доставка</td><td>8-е место</td><td class="nw">Сторис 1</td></tr>
+      <tr><td>цветы в коробке</td><td>композиции</td><td>новостей нет</td><td class="nw">Сторис 2</td></tr>
+      <tr><td>свадебный букет новотроицк</td><td>свадебная флористика</td><td>нет в списке</td><td class="nw">Сторис 3</td></tr>
+      <tr><td>воздушные шары новотроицк</td><td>сопутствующие товары</td><td>новостей нет</td><td class="nw">Сторис 4</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Карточки Новотроицка, которые стоят в выдаче по цветам, букетам и доставке.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th></tr></thead>
+    <tbody>
+      <tr><td><b>Арт Флора</b></td><td class="r num me">4,5</td><td class="r num me">17</td><td>ул. Уральская, 4</td></tr>
+      <tr><td>Букетоника</td><td class="r num">5,0</td><td class="r num">244</td><td>Советская ул., 55</td></tr>
+      <tr><td>Цветок</td><td class="r num">4,8</td><td class="r num">101</td><td>Советская ул., 74Б</td></tr>
+      <tr><td>Мир растений</td><td class="r num">4,4</td><td class="r num">98</td><td>Советская ул., 61</td></tr>
+      <tr><td>Букетоff</td><td class="r num">4,7</td><td class="r num">79</td><td>Советская ул., 65Б</td></tr>
+      <tr><td>Орхидея</td><td class="r num">4,3</td><td class="r num">45</td><td>ул. Мира, 3</td></tr>
+      <tr><td>Цветы</td><td class="r num">3,6</td><td class="r num">8</td><td>Уральская ул., 33</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Выдачу держат четыре карточки</b>: Букетоника, Цветок, Мир растений и Букетоff стоят в первой пятёрке по всем проверенным запросам.</li>
+      <li><b>По оценкам «Арт Флора» в конце списка</b>: 17 против 244 у Букетоники и 101 у Цветка.</li>
+      <li><b>По комнатным растениям конкурентов в выдаче нет</b>: первая карточка с публикациями об этом получает свободный запрос.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Новости отданы приоритетам брифа — предзаказ и поступление нового цветка — и бонусной системе.</li>
+      <li>Отдельная новость про горшечные растения, кашпо и грунт — под пустую выдачу.</li>
+      <li>Доставка, композиции, свадебная флористика и шары — в сторис.</li>
+      <li>В каждом тексте — «Новотроицк» и «ул. Уральская, 4» в первом абзаце.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 16.11.2026: поиск «доставка цветов», «магазин цветов», «цветы», «букеты», «свадебный букет», «комнатные растения» по городу Новотроицк.</li>
+    <li>Рейтинги и число оценок — из выдачи и карточек.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/art_flora/237330820682/" target="_blank" rel="noopener">«Арт Флора», Новотроицк, ул. Уральская, 4 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/11090/novotroitsk/search/%D0%B4%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%20%D1%86%D0%B2%D0%B5%D1%82%D0%BE%D0%B2/" target="_blank" rel="noopener">Доставка цветов в Новотроицке — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/11090/novotroitsk/search/%D1%86%D0%B2%D0%B5%D1%82%D1%8B/" target="_blank" rel="noopener">Цветы в Новотроицке — Яндекс Карты</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Салон цветов · Новотроицк · ул. Уральская, 4</span>
+  <h1>«Арт Флора» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Арт Флора» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Салон цветов «Арт Флора»</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Цветы и подарки <small>цветы, сувениры, мягкие игрушки, горшечные растения, кашпо и грунт, надувные шары, оформление подарков</small></div></div>
+    <div class="fact"><div class="k">Преимущество</div><div class="v">Свежий цветок <small>по доступным ценам · качество и оперативность обслуживания</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно с 8:30 до 20:00</div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Новотроицк, ул. Уральская, 4 <small>Оренбургская область</small></div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>деловой стиль · цены в формате «от N ₽» · без конкурентов, политики и внутренних процессов</small></div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>После анализа ресурсов компании определены цвета публикаций: зелёный знака на вывеске салона, чёрный и белый — фирменные цвета компании.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#37A340;color:#FFFFFF;border-color:#37A340"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#37A340</div></div>
+    <div class="swatch" style="background:#111111;color:#FFFFFF;border-color:#3a3a3a"><div class="role">Текстовый</div><div class="name">Чёрный</div><div class="hex">#111111</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#111111;border-color:#FFFFFF"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Новости идут по двум приоритетам брифа — предзаказы к флористическим праздникам и поступление нового цветка, срезки и горшечных, — и бонусная система салона. Сторис закрывают доставку, композиции, свадебную флористику и сопутствующие товары.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Предзаказ букетов ко Дню Мамы.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Поступление нового цветка: срезка для букетов и композиций.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Поступление горшечных растений, кашпо и грунта.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Бонусная система салона: 150 ₽ за первую покупку и 5% с каждой.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Арт Флора» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль — так указано в брифе. Вступление от лица салона, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Цены — только в формате «от N ₽» по актуальному прайсу. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других салонов. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Букет маме ко Дню Мамы — предзаказ в салоне «Арт Флора», Новотроицк</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Арт Флора» принимаем предзаказы к значимым флористическим праздникам. Ближайший из них — День Мамы.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Предзаказы значимых флористических праздников (14 февраля, 8 марта, 1 сентября, День Мамы, День Учителя).<span class="src">бриф</span></li>
+      <li>Повседневные и праздничные букеты. Сборка авторских букетов, монобукетов или классических композиций.<span class="src">бриф</span></li>
+      <li>Курьерская доставка букетов по городу, в том числе срочная или анонимная доставка, часто с фотоотчетом до отправки и в момент вручения.<span class="src">бриф</span></li>
+      <li>Ежедневно с 8:30 до 20:00, Новотроицк, ул. Уральская, 4.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Букет маме ко Дню Мамы — предзаказ в Новотроицке</span></div>
+      <div class="meta-row"><span><b>Title · </b>Букет маме, предзаказ ко Дню Мамы, Новотроицк | Арт Флора</span></div>
+      <div class="meta-row"><span><b>Description · </b>Предзаказ букетов и композиций ко Дню Мамы в салоне цветов «Арт Флора». Новотроицк, ул. Уральская, 4, ежедневно с 8:30 до 20:00.</span></div>
+      <div class="chips"><span class="chip-kw">букет маме новотроицк</span><span class="chip-kw">цветы на день матери</span><span class="chip-kw">день мамы букет</span><span class="chip-kw">предзаказ букета</span><span class="chip-kw">цветы маме</span><span class="chip-kw">доставка цветов маме</span><span class="chip-kw">авторский букет</span><span class="chip-kw">монобукет</span><span class="chip-kw">арт флора новотроицк</span><span class="chip-kw">уральская 4</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оформите предзаказ букета ко Дню Мамы в салоне на ул. Уральской, 4.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Букет маме»</div>
+      <p>Композиция: праздничный букет из фотоархива салона на светлом фоне. Тезис на плашке в нижней трети, строка «Предзаказ ко Дню Мамы». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: фон — белый #FFFFFF, плашка — зелёный #37A340, тезис — белый #FFFFFF, вторая строка — чёрный #111111 на белом.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Поступление нового цветка в «Арт Флора»: свежая срезка для букетов в Новотроицке</h3></div><span class="purpose">Информационный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы регулярно принимаем новые поставки цветов и сразу собираем из них букеты и композиции.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Поступление нового цветка (как срезка, так и горшечка).<span class="src">бриф</span></li>
+      <li>Всегда свежий цветок по доступным ценам, всегда отвечаем за качество и оперативность обслуживания.<span class="src">бриф</span></li>
+      <li>Сборка авторских букетов, монобукетов или классических композиций для дней рождения, юбилеев, свиданий и других поводов.<span class="src">бриф</span></li>
+      <li>Стоимость — в формате «от N ₽» по прайсу после прихода цветка.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Свежие цветы и букеты в Новотроицке — новое поступление</span></div>
+      <div class="meta-row"><span><b>Title · </b>Цветы и букеты, новое поступление, Новотроицк | Арт Флора</span></div>
+      <div class="meta-row"><span><b>Description · </b>Новое поступление срезанных цветов в салоне «Арт Флора». Авторские букеты, монобукеты и композиции, Новотроицк, ул. Уральская, 4.</span></div>
+      <div class="chips"><span class="chip-kw">цветы новотроицк</span><span class="chip-kw">букеты новотроицк</span><span class="chip-kw">свежие цветы</span><span class="chip-kw">купить цветы</span><span class="chip-kw">букет на день рождения</span><span class="chip-kw">букет на юбилей</span><span class="chip-kw">монобукет</span><span class="chip-kw">авторские букеты</span><span class="chip-kw">салон цветов новотроицк</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> загляните в салон на ул. Уральской, 4 и выберите цветы из нового поступления.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Новое поступление»</div>
+      <p>Композиция: охапка свежей срезки в вёдрах на витрине салона, фото из архива компании. Тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — белый #FFFFFF, тезис — зелёный #37A340, тонкая линия под тезисом — чёрный #111111.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Горшечные растения, кашпо и грунт — новое поступление в «Арт Флора», Новотроицк</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Помимо срезки к нам поступают и горшечные растения. Рядом с ними — всё, что нужно для пересадки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Поступление нового цветка (как срезка, так и горшечка).<span class="src">бриф</span></li>
+      <li>Горшечные растения, кашпо и грунт для горшечных растений.<span class="src">бриф</span></li>
+      <li>Всегда свежий цветок по доступным ценам.<span class="src">бриф</span></li>
+      <li>Ежедневно с 8:30 до 20:00, ул. Уральская, 4.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Комнатные растения, кашпо и грунт в Новотроицке</span></div>
+      <div class="meta-row"><span><b>Title · </b>Горшечные растения, кашпо, грунт, Новотроицк | Арт Флора</span></div>
+      <div class="meta-row"><span><b>Description · </b>Новое поступление горшечных растений, кашпо и грунта в салоне «Арт Флора». Новотроицк, ул. Уральская, 4.</span></div>
+      <div class="chips"><span class="chip-kw">комнатные растения новотроицк</span><span class="chip-kw">горшечные растения</span><span class="chip-kw">купить комнатное растение</span><span class="chip-kw">цветы в горшке</span><span class="chip-kw">кашпо</span><span class="chip-kw">грунт для растений</span><span class="chip-kw">кашпо новотроицк</span><span class="chip-kw">растения в подарок</span><span class="chip-kw">цветочный магазин</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> подберите растение и кашпо в салоне на ул. Уральской, 4.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Растения в горшках»</div>
+      <p>Композиция: ряд горшечных растений в кашпо на полке салона, фото из архива компании. Тезис на плашке в нижней трети.</p>
+      <p>Цвета: плашка — зелёный #37A340, тезис — белый #FFFFFF, подложка — белый #FFFFFF.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Бонусная система салона цветов «Арт Флора»: 150 ₽ за первую покупку и 5% с каждой следующей</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В салоне «Арт Флора» действует бонусная система. Рассказываем, как начисляются бонусы и как ими оплатить покупку.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Всем новым покупателям приветственный бонус 150 ₽ (после первой покупки).<span class="src">компания</span></li>
+      <li>5% от каждой покупки накопительно — каждому зарегистрированному в системе покупателю.<span class="src">компания</span></li>
+      <li>Бонусы не сгорают.<span class="src">компания</span></li>
+      <li>Бонусами можно оплатить до 30% последующей покупки.<span class="src">компания</span></li>
+      <li>Ежедневно с 8:30 до 20:00, Новотроицк, ул. Уральская, 4.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Бонусная система салона цветов «Арт Флора», Новотроицк</span></div>
+      <div class="meta-row"><span><b>Title · </b>Бонусы за покупку цветов, Новотроицк | Арт Флора</span></div>
+      <div class="meta-row"><span><b>Description · </b>Приветственный бонус 150 ₽ после первой покупки и 5% с каждой покупки. Бонусы не сгорают. Салон цветов «Арт Флора», ул. Уральская, 4.</span></div>
+      <div class="chips"><span class="chip-kw">магазин цветов новотроицк</span><span class="chip-kw">салон цветов новотроицк</span><span class="chip-kw">цветы новотроицк</span><span class="chip-kw">бонусы за покупку</span><span class="chip-kw">бонусная программа</span><span class="chip-kw">накопительная система</span><span class="chip-kw">приветственный бонус</span><span class="chip-kw">купить букет</span><span class="chip-kw">арт флора</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> зарегистрируйтесь в бонусной системе при покупке в салоне на ул. Уральской, 4.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«150 ₽ за первую покупку»</div>
+      <p>Композиция: букет из фотоархива салона справа, слева крупная цифра «150 ₽» и строка «+5% с каждой покупки». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: фон — белый #FFFFFF, цифра — зелёный #37A340, строка — чёрный #111111.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Доставка цветов по городу</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Срочная</span><span class="fact-pill">Анонимная</span><span class="fact-pill">Часто с фотоотчётом</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #37A340, заголовок белым #FFFFFF, факты на белых плашках #FFFFFF текстом #111111. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Композиции в коробках и корзинах</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Шляпные коробки</span><span class="fact-pill">Корзины</span><span class="fact-pill">Деревянные ящики</span><span class="fact-pill">Кашпо</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото композиции, нижняя половина — плашка белая #FFFFFF, заголовок зелёным #37A340, факты чёрным #111111.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Свадебная флористика</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Букет невесты и дублёр</span><span class="fact-pill">Бутоньерка жениха</span><span class="fact-pill">Браслеты подружкам</span><span class="fact-pill">Венки</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок чёрным #111111, факты на зелёных плашках #37A340 белым текстом #FFFFFF.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">К букету — в одном салоне</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Открытки и топперы</span><span class="fact-pill">Воздушные шары</span><span class="fact-pill">Мягкие игрушки</span><span class="fact-pill">Вазы, кашпо, грунт</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон чёрный #111111, заголовок белым #FFFFFF, факты на зелёных плашках #37A340 белым текстом #FFFFFF.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — предзаказ ко Дню Мамы, новое поступление, бонусы <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Букет маме ко Дню Мамы</b>под «букет маме новотроицк», «цветы на день матери»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Доставка цветов по городу</b>срочная, анонимная, с фотоотчётом</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Новое поступление срезки</b>под «цветы новотроицк», «букеты новотроицк»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Композиции в коробках и корзинах</b>шляпные коробки, корзины, ящики, кашпо</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Горшечные растения, кашпо и грунт</b>под «комнатные растения новотроицк»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Свадебная флористика</b>букет невесты, бутоньерка, браслеты, венки</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Бонусная система салона</b>под «магазин цветов новотроицк», «салон цветов новотроицк»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>К букету — в одном салоне</b>открытки, шары, игрушки, вазы</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['maps','Поиск'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
