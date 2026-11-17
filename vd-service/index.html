@@ -139,7 +139,7 @@ main section:last-of-type{border-bottom:0}
 .va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
 @media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
 .va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
-.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)}
 .va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
 .va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
 .va .kpi .k{font-size:12.5px;color:var(--ink-3)}
@@ -177,7 +177,7 @@ main section:last-of-type{border-bottom:0}
 <main>
 <div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
 <header class="top" id="top">
-  <span class="eyebrow">Самара · автосервис · ул. Промышленности, 62Б, корп. 2 · замер 16.11.2026</span>
+  <span class="eyebrow">Самара · автосервис · ул. Промышленности, 62Б · замер 16.11.2026</span>
   <h1>Где «Vd Сервис» видно на Картах, а где нет</h1>
   <p>Карточка «Vd Сервис» на Яндекс Картах: позиции в поиске по Самаре, 10 целевых запросов и соседи по гео-выдаче.</p>
 </header>
@@ -185,10 +185,10 @@ main section:last-of-type{border-bottom:0}
 <section id="summary">
   <div class="sh"><h2>Коротко</h2></div>
   <div class="verdicts">
-    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из пяти замеренных запросов карточки нет в первых 19–25 результатах</b>«Автосервис», «замена масла», «развал схождение», «ремонт ходовой части», «заправка автокондиционера» — поиск по Самаре.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному из пяти замеренных запросов карточки нет в первых 18–25 результатах</b>«Автосервис», «замена масла», «развал схождение», «ремонт ходовой части», «заправка автокондиционера» — поиск по Самаре.</p></div>
     <div class="v"><span class="pill warn">реклама сверху</span><p><b>Над органической выдачей — от 3 до 9 рекламных карточек</b>Мир Масел (ул. Промышленности, 279Г) и «Ремонт рулевых реек» показывают рекламу в четырёх запросах из пяти.</p></div>
     <div class="v"><span class="pill good">сильная сторона</span><p><b>Рейтинг 5,0 и награда «Хорошее место 2026»</b>175 оценок, 169 отзывов. В органике по замеренным запросам у соседей рейтинги от 4,3 до 5,0.</p></div>
-    <div class="v"><span class="pill warn">мало контента</span><p><b>На карточке одна новость</b>Новость от 10 ноября — про аппаратную замену охлаждающей жидкости. По остальным направлениям брифа публикаций нет.</p></div>
+    <div class="v"><span class="pill warn">мало контента</span><p><b>На карточке одна новость</b>Новость — про аппаратную замену охлаждающей жидкости. По направлениям брифа — обслуживание и ремонт, автохимия и масла, запчасти и шины, комплекс на Промышленности, 62Б — публикаций нет.</p></div>
   </div>
   <div class="kpis">
     <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">175 оценок · 169 отзывов</div></div>
@@ -199,20 +199,20 @@ main section:last-of-type{border-bottom:0}
 </section>
 
 <section id="queries">
-  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: ТО и замена масла, ходовая и развал-схождение, диагностика, автосервис в целом. Для каждого — состояние карточки и тема этапа, которая ведёт её в выдачу.</p></div>
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям брифа: обслуживание и ремонт, автохимия и масла, запчасти и шины, комплекс на ул. Промышленности, 62Б. Для каждого — состояние карточки и тема этапа, которая ведёт её в выдачу.</p></div>
   <div class="tbl"><table>
     <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
     <tbody>
-      <tr><td>замена масла самара</td><td>ТО и масло</td><td>нет в первых 18</td><td class="nw">Новость 1</td></tr>
-      <tr><td>замена масла в акпп самара</td><td>ТО и масло</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
-      <tr><td>то автомобиля самара</td><td>ТО и масло</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
-      <tr><td>ремонт ходовой части самара</td><td>ходовая</td><td>нет в первых 19</td><td class="nw">Новость 2</td></tr>
-      <tr><td>развал схождение самара</td><td>ходовая</td><td>нет в первых 19</td><td class="nw">Новость 2</td></tr>
-      <tr><td>ремонт подвески самара</td><td>ходовая</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
-      <tr><td>компьютерная диагностика авто самара</td><td>диагностика</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
-      <tr><td>заправка автокондиционера самара</td><td>диагностика</td><td>нет в первых 25</td><td class="nw">Новость 3</td></tr>
-      <tr><td>автосервис самара</td><td>автосервис</td><td>нет в первых 25</td><td class="nw">Новость 4</td></tr>
-      <tr><td>ремонт авто самара</td><td>автосервис</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+      <tr><td>автосервис самара</td><td>обслуживание и ремонт</td><td>нет в первых 25</td><td class="nw">Новость 1</td></tr>
+      <tr><td>ремонт авто самара</td><td>обслуживание и ремонт</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>компьютерная диагностика авто самара</td><td>обслуживание и ремонт</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>замена масла самара</td><td>масла и жидкости</td><td>нет в первых 18</td><td class="nw">Новость 2</td></tr>
+      <tr><td>моторное масло купить самара</td><td>масла и жидкости</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>автохимия самара</td><td>автохимия</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>запчасти для авто самара</td><td>запчасти</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>купить шины самара</td><td>шины</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>шиномонтаж самара</td><td>комплекс</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+      <tr><td>автосервис промышленности самара</td><td>комплекс</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -234,7 +234,7 @@ main section:last-of-type{border-bottom:0}
   <div class="tbl"><table>
     <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
     <tbody>
-      <tr><td><b>Vd Сервис</b></td><td class="r num me">5,0</td><td class="r num me">175</td><td>ул. Промышленности, 62Б, корп. 2</td><td>нет в первых 25 · Хорошее место 2026</td></tr>
+      <tr><td><b>Vd Сервис</b></td><td class="r num me">5,0</td><td class="r num me">175</td><td>ул. Промышленности, 62Б</td><td>нет в первых 25 · Хорошее место 2026</td></tr>
       <tr><td>Мир Масел</td><td class="r num">5,0</td><td class="r num">285</td><td>ул. Промышленности, 279Г</td><td>реклама в 4 из 5 запросов</td></tr>
       <tr><td>Шевроле сервис</td><td class="r num">4,8</td><td class="r num">214</td><td>ул. Промышленности, 144</td><td>органика: 5 и 3 место</td></tr>
       <tr><td>Ремонт пластика</td><td class="r num">4,9</td><td class="r num">93</td><td>ул. Промышленности, 64Д</td><td>органика: 4 место</td></tr>
@@ -251,7 +251,7 @@ main section:last-of-type{border-bottom:0}
       <li><b>Верх выдачи занят рекламой</b>: от 3 до 9 рекламных карточек над органикой.</li>
     </ul></div>
     <div class="note"><h3>Что это значит для текстов</h3><ul>
-      <li>Отдельная новость на каждое направление брифа: ТО и масло, ходовая и развал-схождение, диагностика, порядок работы сервиса.</li>
+      <li>Отдельная новость на каждое направление брифа: обслуживание и ремонт, автохимия и масла, запчасти и шины, комплекс на Промышленности, 62Б.</li>
       <li>В каждом тексте — «Самара» и «ул. Промышленности, 62Б» в первом абзаце.</li>
       <li>Тема охлаждающей жидкости уже опубликована и в этап не входит.</li>
     </ul></div>
@@ -266,25 +266,25 @@ main section:last-of-type{border-bottom:0}
   </ul>
   <h3>Источники</h3>
   <div class="src">
-    <a href="https://yandex.ru/maps/org/vd_servis/9229226847/" target="_blank" rel="noopener">«Vd Сервис», Самара, ул. Промышленности, 62Б, корп. 2 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/vd_servis/9229226847/" target="_blank" rel="noopener">«Vd Сервис», Самара, ул. Промышленности, 62Б — Яндекс Карты</a>
     <a href="https://yandex.ru/maps/51/samara/search/%D0%B0%D0%B2%D1%82%D0%BE%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81/" target="_blank" rel="noopener">Автосервис в Самаре — Яндекс Карты</a>
-    <a href="https://autoservice.vd63.ru/" target="_blank" rel="noopener">Автосервис ВД ГРУПП 63 — сайт компании</a>
+    <a href="https://vd63.ru/" target="_blank" rel="noopener">vd63.ru — сайт компании</a>
   </div>
 </section>
 </div></div>
 
 <div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
 <section class="hero" id="company">
-  <span class="eyebrow">Автосервис · Самара · ул. Промышленности, 62Б, корп. 2</span>
+  <span class="eyebrow">Автосервис · Самара · ул. Промышленности, 62Б</span>
   <h1>«Vd Сервис» — ТЗ на контент, этап 1</h1>
   <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Vd Сервис» на Яндекс Картах и в 2ГИС.</p>
   <div class="factgrid">
-    <div class="fact"><div class="k">Компания</div><div class="v">Vd Сервис <small>в брифе — VD Group Автосервис</small></div></div>
-    <div class="fact"><div class="k">Сфера</div><div class="v">Автосервис <small>легковые и коммерческие авто</small></div></div>
-    <div class="fact"><div class="k">Режим работы</div><div class="v">8:00–20:00</div></div>
-    <div class="fact"><div class="k">Адрес</div><div class="v">Самара, улица Промышленности, 62Б, корп. 2</div></div>
-    <div class="fact"><div class="k">Гарантия</div><div class="v">30 дней <small>на работы и детали</small></div></div>
-    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>без указания цен · стилистика — насыщенная инфографика</small></div></div>
+    <div class="fact"><div class="k">Компания</div><div class="v">Vd Сервис</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Автосервис <small>комплексное обслуживание и ремонт автомобилей</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно с 8:00 до 20:00</div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Самара, ул. Промышленности, 62Б <small>автосервис, шиномонтаж, автомаркет24, АЗС, кафе</small></div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>деловой стиль, от имени компании</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽» <small>по прайс-листу компании</small></div></div>
   </div>
 </section>
 
@@ -292,7 +292,7 @@ main section:last-of-type{border-bottom:0}
   <div class="sec-head">
     <span class="sec-num">01 · Мини-брендбук</span>
     <h2>Цвета для обложек и слайдов</h2>
-    <p>Цвета сняты с логотипа и сайта компании: зелёный и красный логотипа, графитовый текст и светлый фон сайта.</p>
+    <p>Фирменные цвета по брифу — белый, красный, зелёный; оттенки сняты с логотипа и сайта компании. Стилистика — сдержанный минимализм.</p>
   </div>
   <div class="swatches">
     <div class="swatch" style="background:#128754;color:#FFFFFF;border-color:#128754"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#128754</div></div>
@@ -307,13 +307,13 @@ main section:last-of-type{border-bottom:0}
   <div class="sec-head">
     <span class="sec-num">02 · Логика цикла</span>
     <h2>Последовательность тем этапа</h2>
-    <p>Темы идут под запросы, по которым карточки нет в выдаче: сначала ТО и замена масла, затем ходовая, диагностика и в конце — как устроена работа сервиса.</p>
+    <p>Темы идут под запросы, по которым карточки нет в выдаче: сначала автосервис в целом, затем автохимия и масла, запчасти и шины и в конце — комплекс на ул. Промышленности, 62Б.</p>
   </div>
   <div class="cycle">
-    <div class="cycle-row"><div class="tag">Тема 1</div><p>Плановое ТО и замена масла в ДВС и АКПП.</p></div>
-    <div class="cycle-row"><div class="tag">Тема 2</div><p>Ходовая часть и развал-схождение на 3D-стенде.</p></div>
-    <div class="cycle-row"><div class="tag">Тема 3</div><p>Компьютерная диагностика и диагностика кондиционера.</p></div>
-    <div class="cycle-row"><div class="tag">Тема 4</div><p>Прозрачная стоимость, свой склад запчастей и гарантия 30 дней.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Комплексное обслуживание и ремонт — от замены расходников до диагностики сложных узлов.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Автохимия, смазочные материалы и технические жидкости в розницу и оптом, с подбором под модель.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Заказ запчастей от 20 минут и шины с подбором под автомобиль.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Комплекс на ул. Промышленности, 62Б: автосервис, шиномонтаж, автомаркет24, АЗС и кафе.</p></div>
   </div>
 </section>
 
@@ -323,107 +323,104 @@ main section:last-of-type{border-bottom:0}
     <h2>Темы для новостных публикаций</h2>
     <p>4 темы с обложкой. Публикация — карточка компании «Vd Сервис» на Яндекс Картах и 2ГИС.</p>
   </div>
-  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», вступление от лица сервиса, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. Без цен — так указано в брифе. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других сервисов. Объём — до 3 000 знаков с пробелами.</div>
+  <div class="tone-banner"><b>Тон текстов:</b> деловой стиль, обращение на «вы», от имени компании. Вступление — от лица сервиса, дальше факты брифа без дополнений. Цены — только в формате «от N ₽» по прайс-листу компании. В тексте нет телефона и e-mail, превосходных степеней и упоминаний других сервисов. Объём — до 3 000 знаков с пробелами.</div>
 
   <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 1</span><h3>Плановое ТО и замена масла в ДВС и АКПП в Самаре — «Vd Сервис» на ул. Промышленности</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы проводим плановое ТО и меняем масло в двигателе и АКПП, а масло подбираем по марке и модели вашего авто.</div>
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Комплексное обслуживание и ремонт автомобилей в Самаре — «Vd Сервис» на ул. Промышленности</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы занимаемся комплексным обслуживанием и ремонтом автомобилей — от замены расходников до диагностики сложных узлов.</div>
     <span class="thesis-lbl">Тезисы</span>
     <ul class="thesis">
-      <li>Плановое ТО (техническое обслуживание). Замена масла, фильтров (масляного, воздушного, салонного, топливного), проверка основных систем и регламентных узлов.<span class="src">бриф</span></li>
-      <li>Подходит для сохранения гарантии и продления ресурса авто.<span class="src">бриф</span></li>
-      <li>Моторные масла: синтетические и полусинтетические масла разных вязкостей и допусков. Подбираются по марке/модели авто и условиям эксплуатации.<span class="src">бриф</span></li>
-      <li>Трансмиссионные масла и спецжидкости: ATF, масла для МКПП, редукторов, раздаток, жидкости для ГУР.<span class="src">бриф</span></li>
-      <li>Работаем с легковыми и коммерческими авто.<span class="src">бриф</span></li>
+      <li>Автосервис специализируется на комплексном обслуживании и ремонте автомобилей — от замены расходников до диагностики сложных узлов.<span class="src">бриф</span></li>
+      <li>Компания использует профессиональное оборудование.<span class="src">бриф</span></li>
+      <li>Оригинальные либо сертифицированные запчасти, чтобы гарантировать надёжность выполненных работ.<span class="src">бриф</span></li>
+      <li>Работаем ежедневно с 8:00 до 20:00.<span class="src">бриф</span></li>
+      <li>Адрес: Самара, ул. Промышленности, 62Б.<span class="src">бриф</span></li>
     </ul>
     <div class="seo-box"><span class="lbl">SEO-блок</span>
-      <div class="meta-row"><span><b>H1 · </b>Замена масла и плановое ТО в Самаре — «Vd Сервис»</span></div>
-      <div class="meta-row"><span><b>Title · </b>Замена масла в ДВС и АКПП, ТО автомобиля, Самара | Vd Сервис</span></div>
-      <div class="meta-row"><span><b>Description · </b>Плановое ТО, замена масла и фильтров в двигателе и АКПП. «Vd Сервис», Самара, ул. Промышленности, 62Б, корп. 2, с 8:00 до 20:00.</span></div>
-      <div class="chips"><span class="chip-kw">замена масла самара</span><span class="chip-kw">замена масла в акпп самара</span><span class="chip-kw">то автомобиля самара</span><span class="chip-kw">замена масла в двигателе</span><span class="chip-kw">замена фильтров</span><span class="chip-kw">плановое то</span><span class="chip-kw">замена масла в мкпп</span><span class="chip-kw">автосервис промышленности</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Автосервис в Самаре: обслуживание и ремонт авто — «Vd Сервис»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Автосервис Самара, ремонт и обслуживание авто, ул. Промышленности | Vd Сервис</span></div>
+      <div class="meta-row"><span><b>Description · </b>Комплексное обслуживание и ремонт автомобилей — от замены расходников до диагностики сложных узлов. «Vd Сервис», Самара, ул. Промышленности, 62Б, ежедневно 8:00–20:00.</span></div>
+      <div class="chips"><span class="chip-kw">автосервис самара</span><span class="chip-kw">ремонт авто самара</span><span class="chip-kw">компьютерная диагностика авто самара</span><span class="chip-kw">обслуживание автомобиля</span><span class="chip-kw">замена расходников</span><span class="chip-kw">диагностика авто</span><span class="chip-kw">оригинальные запчасти</span><span class="chip-kw">сто промышленности</span></div>
     </div>
-    <p class="cta-line"><b>CTA:</b> запишитесь на ТО онлайн в карточке компании.</p>
+    <p class="cta-line"><b>CTA:</b> запишитесь онлайн в карточке компании.</p>
     <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«ТО и замена масла»</div>
-      <p>Композиция: инфографика — силуэт автомобиля и выноски «масло ДВС», «АКПП», «фильтры». Тезис на плашке в нижней трети, логотип в верхнем левом углу, текст не больше 20% площади.</p>
-      <p>Цвета: фон — светло-серый #F9F9F9, плашка — зелёный #128754, тезис — белый #FFFFFF, выноски — графит #1C1C1B.</p>
+      <div class="thesis-cover">«От расходников до сложных узлов»</div>
+      <p>Композиция: одно фото автомобиля в ремзоне, много свободного поля. Тезис одной строкой в нижней трети, логотип в верхнем левом углу. Без инфографики и лишних элементов, текст не больше 20% площади.</p>
+      <p>Цвета: фон под тезисом — белый #FFFFFF, тезис — графит #1C1C1B, тонкая акцентная линия — зелёный #128754.</p>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 2</span><h3>Ремонт ходовой и развал-схождение на 3D-стенде в Самаре</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы ремонтируем ходовую часть и рулевое управление и регулируем углы установки колёс на 3D-стенде.</div>
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Автохимия, масла и технические жидкости в Самаре — с подбором под ваш автомобиль</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы продаём автохимию, смазочные материалы и технические жидкости в розницу и оптом и подбираем их под конкретную модель автомобиля.</div>
     <span class="thesis-lbl">Тезисы</span>
     <ul class="thesis">
-      <li>Ходовая часть и рулевое управление. Замена амортизаторов, сайлентблоков, шаровых опор, рулевых тяг и наконечников, ступичных подшипников.<span class="src">бриф</span></li>
-      <li>Улучшает устойчивость, снижает износ шин.<span class="src">бриф</span></li>
-      <li>Развал-схождение. Регулировка углов установки колёс на 3D-стенде.<span class="src">бриф</span></li>
-      <li>Нужна после ремонта подвески и для равномерного износа шин.<span class="src">бриф</span></li>
-      <li>Свой склад запчастей: держим ходовые позиции на складе, остальное привозим от 20 минут.<span class="src">бриф</span></li>
+      <li>В розничной и оптовой продаже — автохимия, смазочные материалы и технические жидкости.<span class="src">бриф</span></li>
+      <li>Подбор под конкретную модель автомобиля.<span class="src">бриф</span></li>
+      <li>На территории по адресу ул. Промышленности, 62Б работают автосервис и автомаркет24.<span class="src">бриф</span></li>
+      <li>Ежедневно с 8:00 до 20:00.<span class="src">бриф</span></li>
     </ul>
     <div class="seo-box"><span class="lbl">SEO-блок</span>
-      <div class="meta-row"><span><b>H1 · </b>Ремонт ходовой и развал-схождение 3D в Самаре — «Vd Сервис»</span></div>
-      <div class="meta-row"><span><b>Title · </b>Ремонт ходовой части и подвески, развал-схождение, Самара | Vd Сервис</span></div>
-      <div class="meta-row"><span><b>Description · </b>Замена амортизаторов, сайлентблоков, шаровых опор и развал-схождение на 3D-стенде. «Vd Сервис», Самара, ул. Промышленности, 62Б, корп. 2.</span></div>
-      <div class="chips"><span class="chip-kw">ремонт ходовой части самара</span><span class="chip-kw">развал схождение самара</span><span class="chip-kw">ремонт подвески самара</span><span class="chip-kw">развал схождение 3d</span><span class="chip-kw">замена амортизаторов</span><span class="chip-kw">замена сайлентблоков</span><span class="chip-kw">замена шаровых опор</span><span class="chip-kw">рулевые тяги</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Автохимия, моторные масла и техжидкости в Самаре — «Vd Сервис»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Автохимия, масла и технические жидкости в розницу и оптом, Самара | Vd Сервис</span></div>
+      <div class="meta-row"><span><b>Description · </b>Автохимия, смазочные материалы и технические жидкости в розницу и оптом с подбором под модель автомобиля. «Vd Сервис», Самара, ул. Промышленности, 62Б.</span></div>
+      <div class="chips"><span class="chip-kw">замена масла самара</span><span class="chip-kw">моторное масло купить самара</span><span class="chip-kw">автохимия самара</span><span class="chip-kw">масла оптом самара</span><span class="chip-kw">технические жидкости</span><span class="chip-kw">смазочные материалы</span><span class="chip-kw">подбор масла по авто</span></div>
     </div>
-    <p class="cta-line"><b>CTA:</b> запишитесь на диагностику ходовой онлайн в карточке компании.</p>
+    <p class="cta-line"><b>CTA:</b> напишите нам в карточке компании — подберём под ваш автомобиль.</p>
     <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Ходовая и развал 3D»</div>
-      <p>Композиция: колесо с подвеской крупным планом, инфографика углов установки колёс поверх. Тезис на плашке в верхней трети, логотип в верхнем левом углу.</p>
-      <p>Цвета: плашка — графит #1C1C1B, тезис — белый #FFFFFF, линии углов — красный #DA0D28.</p>
+      <div class="thesis-cover">«Подбор под ваш автомобиль»</div>
+      <p>Композиция: предметное фото — одна канистра масла на светлом фоне, много воздуха. Тезис одной строкой сверху, логотип в верхнем левом углу.</p>
+      <p>Цвета: фон — светло-серый #F9F9F9, тезис — графит #1C1C1B, короткая линия под тезисом — красный #DA0D28.</p>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 3</span><h3>Компьютерная диагностика и диагностика кондиционера в Самаре — без лишних работ</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы начинаем с диагностики: сначала находим точную причину неисправности, потом ремонтируем.</div>
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Запчасти от 20 минут и шины с подбором — «Vd Сервис», Самара</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы заказываем запчасти и шины под ваш автомобиль; срок ожидания запчастей — от 20 минут.</div>
     <span class="thesis-lbl">Тезисы</span>
     <ul class="thesis">
-      <li>Компьютерная диагностика. Считывание ошибок ЭБУ, проверка датчиков и систем (двигатель, трансмиссия, ABS, SRS и т. д.) с помощью профессиональных сканеров.<span class="src">бриф</span></li>
-      <li>Помогает точно выявить причину неисправности без лишних работ.<span class="src">бриф</span></li>
-      <li>Автосервис в Самаре: диагностика кондиционера.<span class="src">бриф</span></li>
-      <li>Диагностика системы кондиционирования, заправка автокондиционеров, дезинфекция системы кондиционирования.<span class="src">сайт</span></li>
-      <li>Используем профессиональные сканеры и 3D-стенды и не делаем лишних работ.<span class="src">бриф</span></li>
+      <li>Доступен заказ запчастей — срок ожидания составляет от 20 минут.<span class="src">бриф</span></li>
+      <li>Заказ шин с подбором под ваш автомобиль.<span class="src">бриф</span></li>
+      <li>Оригинальные либо сертифицированные запчасти.<span class="src">бриф</span></li>
+      <li>На территории комплекса на ул. Промышленности, 62Б работает шиномонтаж.<span class="src">бриф</span></li>
     </ul>
     <div class="seo-box"><span class="lbl">SEO-блок</span>
-      <div class="meta-row"><span><b>H1 · </b>Компьютерная диагностика авто в Самаре — «Vd Сервис»</span></div>
-      <div class="meta-row"><span><b>Title · </b>Компьютерная диагностика и заправка автокондиционера, Самара | Vd Сервис</span></div>
-      <div class="meta-row"><span><b>Description · </b>Считывание ошибок ЭБУ, проверка двигателя, трансмиссии, ABS, SRS и диагностика кондиционера. «Vd Сервис», Самара, ул. Промышленности, 62Б, корп. 2.</span></div>
-      <div class="chips"><span class="chip-kw">компьютерная диагностика авто самара</span><span class="chip-kw">заправка автокондиционера самара</span><span class="chip-kw">диагностика кондиционера авто</span><span class="chip-kw">диагностика двигателя</span><span class="chip-kw">ошибки эбу</span><span class="chip-kw">диагностика abs</span><span class="chip-kw">дезинфекция кондиционера</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Заказ запчастей и шин в Самаре — «Vd Сервис»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Запчасти от 20 минут, шины с подбором, Самара | Vd Сервис</span></div>
+      <div class="meta-row"><span><b>Description · </b>Заказ запчастей со сроком ожидания от 20 минут и шин с подбором под автомобиль. «Vd Сервис», Самара, ул. Промышленности, 62Б.</span></div>
+      <div class="chips"><span class="chip-kw">запчасти для авто самара</span><span class="chip-kw">купить шины самара</span><span class="chip-kw">заказ запчастей</span><span class="chip-kw">подбор шин по авто</span><span class="chip-kw">оригинальные запчасти</span><span class="chip-kw">сертифицированные запчасти</span></div>
     </div>
-    <p class="cta-line"><b>CTA:</b> запишитесь на диагностику онлайн в карточке компании.</p>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку в карточке компании.</p>
     <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Сначала диагностика»</div>
-      <p>Композиция: экран диагностического сканера с инфографикой систем — двигатель, трансмиссия, ABS, SRS, кондиционер. Тезис на плашке в нижней трети.</p>
-      <p>Цвета: фон — белый #FFFFFF, плашка — зелёный #128754, тезис — белый #FFFFFF, иконки систем — графит #1C1C1B.</p>
+      <div class="thesis-cover">«Запчасти от 20 минут»</div>
+      <p>Композиция: крупная цифра «20» и подпись «минут» на чистом фоне, рядом одна деталь или шина. Логотип в верхнем левом углу, других элементов нет.</p>
+      <p>Цвета: фон — белый #FFFFFF, цифра — зелёный #128754, подпись — графит #1C1C1B.</p>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 4</span><h3>Как работает «Vd Сервис»: цена в заказ-наряде, свой склад и гарантия 30 дней</h3></div><span class="purpose">Имиджевый</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы называем стоимость до начала ремонта и согласовываем с вами каждую дополнительную работу.</div>
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Автосервис, шиномонтаж, автомаркет24, АЗС и кафе — комплекс на ул. Промышленности, 62Б</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы работаем в многофункциональном комплексе на ул. Промышленности, 62Б: здесь работают автосервис, шиномонтаж, автомаркет24 и АЗС, а для ожидания есть кафе.</div>
     <span class="thesis-lbl">Тезисы</span>
     <ul class="thesis">
-      <li>Прозрачная стоимость без сюрпризов. Даём предварительную оценку по работам и запчастям до начала ремонта, фиксируем цену в заказ-наряде.<span class="src">бриф</span></li>
-      <li>Если в процессе находим дополнительные проблемы — обязательно согласовываем с клиентом.<span class="src">бриф</span></li>
-      <li>Гарантия на работы и детали 30 дней.<span class="src">бриф</span></li>
-      <li>Свой склад запчастей и быстрые поставки. Держим ходовые позиции на складе (фильтры, колодки, ремни), остальное привозим от 20 минут.<span class="src">бриф</span></li>
-      <li>Клиент может наблюдать за ремонтом по камерам или присутствовать в ремзоне, получает фото/видео от мастера и отчёт по каждой операции.<span class="src">бриф</span></li>
+      <li>На территории по адресу ул. Промышленности, 62Б расположен многофункциональный комплекс.<span class="src">бриф</span></li>
+      <li>Здесь работают автосервис, шиномонтаж, автомаркет24 и АЗС.<span class="src">бриф</span></li>
+      <li>Для комфортного ожидания предусмотрено кафе.<span class="src">бриф</span></li>
+      <li>Ежедневно с 8:00 до 20:00.<span class="src">бриф</span></li>
     </ul>
     <div class="seo-box"><span class="lbl">SEO-блок</span>
-      <div class="meta-row"><span><b>H1 · </b>Автосервис в Самаре с гарантией 30 дней — «Vd Сервис»</span></div>
-      <div class="meta-row"><span><b>Title · </b>Автосервис Самара, ремонт авто, ул. Промышленности | Vd Сервис</span></div>
-      <div class="meta-row"><span><b>Description · </b>Цена в заказ-наряде до начала ремонта, свой склад запчастей и гарантия 30 дней на работы и детали. «Vd Сервис», Самара, ул. Промышленности, 62Б, корп. 2.</span></div>
-      <div class="chips"><span class="chip-kw">автосервис самара</span><span class="chip-kw">ремонт авто самара</span><span class="chip-kw">автосервис с гарантией</span><span class="chip-kw">запчасти в наличии</span><span class="chip-kw">ремонт коммерческого транспорта</span><span class="chip-kw">автотехцентр самара</span><span class="chip-kw">сто промышленности</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Автосервис и шиномонтаж на Промышленности, 62Б в Самаре — «Vd Сервис»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Автосервис, шиномонтаж, АЗС и кафе на ул. Промышленности, Самара | Vd Сервис</span></div>
+      <div class="meta-row"><span><b>Description · </b>Многофункциональный комплекс: автосервис, шиномонтаж, автомаркет24, АЗС и кафе. «Vd Сервис», Самара, ул. Промышленности, 62Б, ежедневно 8:00–20:00.</span></div>
+      <div class="chips"><span class="chip-kw">шиномонтаж самара</span><span class="chip-kw">автосервис промышленности самара</span><span class="chip-kw">шиномонтаж промышленности</span><span class="chip-kw">автомаркет самара</span><span class="chip-kw">автосервис с кафе</span><span class="chip-kw">азс промышленности самара</span></div>
     </div>
-    <p class="cta-line"><b>CTA:</b> запишитесь онлайн в карточке компании и получите оценку работ до начала ремонта.</p>
+    <p class="cta-line"><b>CTA:</b> запишитесь онлайн в карточке компании.</p>
     <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Гарантия 30 дней»</div>
-      <p>Композиция: инфографика из трёх блоков — «цена в заказ-наряде», «склад запчастей», «гарантия 30 дней». Тезис крупно в верхней трети, логотип в верхнем левом углу.</p>
-      <p>Цвета: фон — графит #1C1C1B, тезис — белый #FFFFFF, цифра «30» — красный #DA0D28, блоки — зелёный #128754.</p>
+      <div class="thesis-cover">«Всё на Промышленности, 62Б»</div>
+      <p>Композиция: фото комплекса снаружи, внизу белая полоса с тезисом и одним рядом из пяти тонких иконок с подписями — автосервис, шиномонтаж, автомаркет24, АЗС, кафе.</p>
+      <p>Цвета: полоса — белый #FFFFFF, тезис — графит #1C1C1B, иконки — зелёный #128754.</p>
     </div>
   </div>
 </section>
@@ -436,34 +433,34 @@ main section:last-of-type{border-bottom:0}
   </div>
   <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
   <div class="story-grid">
-    <div class="story-card"><div class="story-top"><div class="story-thesis">Плановое ТО</div><span class="slide-no">Сторис 1</span></div>
-      <div class="facts-line"><span class="fact-pill">Масло и фильтры</span><span class="fact-pill">Проверка основных систем</span><span class="fact-pill">Легковые и коммерческие авто</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #128754, заголовок белым #FFFFFF, факты на белых плашках #FFFFFF текстом #1C1C1B. Логотип в верхнем левом углу.</div></div>
-    <div class="story-card"><div class="story-top"><div class="story-thesis">Развал-схождение на 3D-стенде</div><span class="slide-no">Сторис 2</span></div>
-      <div class="facts-line"><span class="fact-pill">3D-стенд</span><span class="fact-pill">После ремонта подвески</span><span class="fact-pill">Равномерный износ шин</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фото колеса на стенде, нижняя половина — плашка графит #1C1C1B, заголовок белым #FFFFFF, факты красным #DA0D28.</div></div>
-    <div class="story-card"><div class="story-top"><div class="story-thesis">Тормозная система</div><span class="slide-no">Сторис 3</span></div>
-      <div class="facts-line"><span class="fact-pill">Колодки, диски, барабаны</span><span class="fact-pill">Тормозные шланги</span><span class="fact-pill">Замена тормозной жидкости</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #F9F9F9, заголовок красным #DA0D28, факты на графитовых плашках #1C1C1B белым текстом #FFFFFF.</div></div>
-    <div class="story-card"><div class="story-top"><div class="story-thesis">Гарантия 30 дней</div><span class="slide-no">Сторис 4</span></div>
-      <div class="facts-line"><span class="fact-pill">На работы и детали</span><span class="fact-pill">Цена в заказ-наряде</span><span class="fact-pill">Запчасти от 20 минут</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон графит #1C1C1B, цифра «30» крупно красным #DA0D28, факты на зелёных плашках #128754 белым текстом #FFFFFF.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">От расходников до сложных узлов</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Профессиональное оборудование</span><span class="fact-pill">Оригинальные или сертифицированные запчасти</span><span class="fact-pill">Ежедневно 8:00–20:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок графит #1C1C1B, одна тонкая линия зелёным #128754, факты строками без плашек. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Масла и автохимия</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Розница и опт</span><span class="fact-pill">Технические жидкости</span><span class="fact-pill">Подбор под модель авто</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #F9F9F9, заголовок графит #1C1C1B, короткая линия красным #DA0D28, факты графитом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Запчасти от 20 минут</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Заказ запчастей</span><span class="fact-pill">Шины с подбором</span><span class="fact-pill">Шиномонтаж на территории</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #128754, цифра «20» крупно белым #FFFFFF, факты белым мелким кеглем.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Комплекс на Промышленности, 62Б</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Автосервис</span><span class="fact-pill">Шиномонтаж</span><span class="fact-pill">Автомаркет24</span><span class="fact-pill">АЗС</span><span class="fact-pill">Кафе</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #1C1C1B, заголовок белым #FFFFFF, факты белым через тонкие разделители, одна точка-акцент красным #DA0D28.</div></div>
   </div>
 </section>
 
 <section id="map">
   <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
   <details class="stage" open>
-    <summary>Этап 1 — ТО и масло, ходовая, диагностика, порядок работы <span class="badge actual">Актуальный</span></summary>
+    <summary>Этап 1 — обслуживание и ремонт, автохимия, запчасти и шины, комплекс <span class="badge actual">Актуальный</span></summary>
     <div class="stage-body">
-      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Плановое ТО и замена масла в ДВС и АКПП</b>под «замена масла самара», «то автомобиля самара»</span></div>
-      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Плановое ТО</b>масло, фильтры, проверка систем</span></div>
-      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Ремонт ходовой и развал-схождение 3D</b>под «ремонт ходовой части самара», «развал схождение самара»</span></div>
-      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Развал-схождение на 3D-стенде</b>когда нужен</span></div>
-      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Компьютерная диагностика и кондиционер</b>под «компьютерная диагностика авто самара», «заправка автокондиционера самара»</span></div>
-      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Тормозная система</b>колодки, диски, жидкость</span></div>
-      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Цена в заказ-наряде, склад, гарантия 30 дней</b>под «автосервис самара», «ремонт авто самара»</span></div>
-      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Гарантия 30 дней</b>на работы и детали</span></div>
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Комплексное обслуживание и ремонт</b>под «автосервис самара», «ремонт авто самара»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>От расходников до сложных узлов</b>оборудование, запчасти, режим работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Автохимия, масла и технические жидкости</b>под «моторное масло купить самара», «автохимия самара»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Масла и автохимия</b>розница, опт, подбор</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Запчасти от 20 минут и шины с подбором</b>под «запчасти для авто самара», «купить шины самара»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Запчасти от 20 минут</b>запчасти, шины, шиномонтаж</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Комплекс на ул. Промышленности, 62Б</b>под «шиномонтаж самара», «автосервис промышленности самара»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Комплекс на Промышленности, 62Б</b>автосервис, шиномонтаж, автомаркет24, АЗС, кафе</span></div>
     </div>
   </details>
 </section>
