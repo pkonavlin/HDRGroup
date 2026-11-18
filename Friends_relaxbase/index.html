@@ -31,7 +31,6 @@
   section{padding:64px 0}
   .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;font-size:12px;color:var(--roe);margin-bottom:10px;display:block}
 
-  /* top bar */
   header.topbar{
     position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
@@ -44,13 +43,11 @@
   nav.toplinks a{font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
   nav.toplinks a:hover{color:var(--roe)}
 
-  /* hero facts */
   .facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
   .fact{background:var(--card);padding:20px}
   .fact .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:6px;display:block}
   .fact .v{font-size:16px;font-weight:600}
 
-  /* brandbook swatches */
   .swatch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:28px 0}
   .swatch{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
   .swatch .chip{height:84px}
@@ -61,13 +58,15 @@
   .brandbook-notes .row{display:flex;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
   .brandbook-notes .row b{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);min-width:150px;flex:none}
 
-  /* logic cycle */
   .cycle{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px}
   .cycle .step{flex:1 1 200px;border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
   .cycle .step .n{font-family:var(--mono);color:var(--roe);font-weight:700;font-size:13px;margin-bottom:8px;display:block}
   .cycle .arrow{align-self:center;color:var(--ink-soft);font-size:20px}
 
-  /* cards: news */
+  .research-note{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);margin-top:18px}
+  .research-note .label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:8px;display:block}
+  .research-note ul{margin:8px 0 0;padding-left:20px;color:var(--ink-soft);font-size:14px}
+
   .news-card{border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--card);margin-bottom:22px}
   .news-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
   .tag{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:100px;border:1px solid var(--teal);color:var(--teal)}
@@ -79,14 +78,12 @@
   .meta-block, .cta-block, .cover-block{border-top:1px dashed var(--line);padding-top:14px;margin-top:14px}
   .meta-block .label, .cta-block .label, .cover-block .label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--roe);margin-bottom:6px;display:block}
 
-  /* stories */
   .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:24px}
   .story-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--card)}
   .story-card h3{font-size:18px;margin-bottom:10px}
   .story-card .design-note{margin-top:14px;padding:12px 14px;background:var(--ice);border-radius:10px;font-size:13.5px;color:var(--ink-soft)}
   .story-card .design-note b{color:var(--ink)}
 
-  /* map / timeline */
   .timeline{border-left:2px solid var(--line);margin-top:24px;padding-left:24px;display:grid;gap:18px}
   .tl-item{position:relative}
   .tl-item::before{content:"";position:absolute;left:-30px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--roe)}
@@ -177,87 +174,98 @@
 
   <section id="cycle">
     <span class="eyebrow">03 · Логика цикла</span>
-    <h2>Этап 2 — переход на осенне-зимний формат отдыха</h2>
-    <p style="color:var(--ink-soft);max-width:640px">Этап 1 раскрыл бассейн, баню, инвентарь для пикника и активный отдых. С приходом холодов формат смещается: бассейн — сезонная история тёплых месяцев, а беседка с мангалом и баня на дровах продолжают работать и зимой. Этап 2 отражает эту смену сезона и открывает ещё не раскрытую сторону базы — приём гостей с домашними питомцами.</p>
+    <h2>Этап 3 — новогодний сезон: два разных повода, одна база</h2>
+    <p style="color:var(--ink-soft);max-width:640px">Этап 2 закрыл сезонный переход (беседка и баня вместо бассейна) и открыл тему питомцев. Этап 3 углубляет зимнюю линию конкретным сезонным поводом — Новым годом — но раскрывает его для двух разных аудиторий: компании/корпоративы в беседках и семейный отдых на зимних каникулах.</p>
     <div class="cycle">
-      <div class="step"><span class="n">01</span>Осенне-зимний отдых — беседка и баня вместо бассейна</div>
+      <div class="step"><span class="n">01</span>Новый год компанией — беседки на 6–30 человек, корпоративы и праздники</div>
       <div class="arrow">→</div>
-      <div class="step"><span class="n">02</span>Отдых с питомцами — база принимает гостей с животными</div>
+      <div class="step"><span class="n">02</span>Новогодние каникулы — спокойный семейный отдых, в том числе с детьми</div>
+    </div>
+    <div class="research-note">
+      <span class="label">Почему эти темы — по данным поискового спроса</span>
+      <ul>
+        <li>Отраслевые SEO-разборы по базам отдыха называют запросы категории «на Новый год» / «корпоратив» частью типового коммерческого ядра запросов для баз отдыха (наравне с «с баней», «с бассейном»).</li>
+        <li>По тем же источникам спрос по фразам вида «новогодний отдых» начинает расти уже с сентября — к середине-концу ноября (текущий момент) он в активной фазе, тема своевременна, а не забегает вперёд сезона.</li>
+        <li>В разобранном кейсе отдельно зафиксирован реальный пример результативного запроса «где отдохнуть с детьми в [регион]» — он стал источником заметного прироста трафика базе отдыха после публикации материала под эту формулировку. Это подтверждает ценность семейно-каникулярного угла (тема 2), отдельно от корпоративного (тема 1).</li>
+        <li>Локальный SEO для баз отдыха держится на гео-привязанных формулировках («база отдыха + район/населённый пункт») — учтено в SEO-блоках ниже через «Кореновский район» / «Краснодарский край» / «Кубань».</li>
+        <li>Оговорка: это качественные паттерны спроса из открытых отраслевых разборов, а не прямая выгрузка частотностей Яндекс Вордстата по карточке клиента — точных цифр по региону «Кореновский район» в открытых источниках не нашлось, контент-план строится на паттернах запросов, а не на придуманных показателях.</li>
+      </ul>
     </div>
   </section>
 
   <section id="news">
     <span class="eyebrow">04 · Новости</span>
-    <h2>Темы для новостей (этап 2)</h2>
-    <p style="color:var(--ink-soft);max-width:640px">Темы учитывают сезонный переход с осени на зиму и продолжают повествование, не повторяя ранее раскрытые материалы (бассейн, баня как услуга, инвентарь для пикника, активный отдых, домики, кафе, комфорт и безопасность).</p>
+    <h2>Темы для новостей (этап 3)</h2>
+    <p style="color:var(--ink-soft);max-width:640px">Темы продолжают повествование и не повторяют раскрытое ранее (бассейн, баня как услуга и как сезонный переход, инвентарь для пикника, активный отдых, домики, кафе, комфорт и безопасность, питомцы).</p>
 
     <div class="news-card">
-      <div class="news-head"><span class="tag">Сезонная</span></div>
-      <h3>Осенне-зимний отдых на базе «Друзья»: беседка с мангалом и баня на дровах продолжают работать и в холода</h3>
+      <div class="news-head"><span class="tag">Сезонная / продающая</span></div>
+      <h3>Встречайте Новый год компанией на базе отдыха «Друзья»: беседки на 6–30 человек для праздников и корпоративов</h3>
       <ul class="thesis-list">
-        <li>Бассейн на базе отдыха «Друзья» — формат тёплого времени года.</li>
-        <li>С похолоданием отдых смещается к беседке с мангальной зоной и бане на дровах — они работают круглый год.</li>
-        <li>Баня на дровах особенно актуальна в прохладную погоду — как завершение прогулки на свежем воздухе.</li>
-        <li>У каждой беседки своя мангальная зона и холодильник, что позволяет провести время компанией и в осенне-зимний сезон.</li>
-        <li>Бронирование беседки и бани на осенне-зимний период — по телефону +7 (988) 368-73-04.</li>
+        <li>Новый год и зимние праздники — повод собраться большой компанией на природе.</li>
+        <li>9 беседок вместимостью от 6 до 30 человек подходят и для семейного праздника, и для корпоратива.</li>
+        <li>У каждой беседки своя мангальная зона и холодильник — часть подготовки к празднику можно не возить с собой.</li>
+        <li>Баня на дровах — тёплое завершение праздничного вечера после прогулки на морозе.</li>
+        <li>На новогодние даты беседки раскупаются быстрее обычного — бронировать стоит заранее, по телефону +7 (988) 368-73-04.</li>
       </ul>
       <div class="chips">
-        <span class="chip-seo">база отдыха зимой Кореновский район</span>
-        <span class="chip-seo">баня на дровах осенью Краснодарский край</span>
-        <span class="chip-seo">отдых в беседке зимой Кубань</span>
-        <span class="chip-seo">база отдыха круглый год Кореновск</span>
-        <span class="chip-seo">баня и мангал осенью</span>
-        <span class="chip-seo">зимний отдых на природе Краснодарский край</span>
+        <span class="chip-seo">база отдыха на новый год Краснодарский край</span>
+        <span class="chip-seo">корпоратив на новый год Кореновский район</span>
+        <span class="chip-seo">беседка на новый год аренда Кубань</span>
+        <span class="chip-seo">где встретить новый год компанией Краснодарский край</span>
+        <span class="chip-seo">новогодний корпоратив на природе Кубань</span>
+        <span class="chip-seo">аренда беседки на праздники Кореновск</span>
       </div>
-      <div class="meta-block"><span class="label">Мета-описание</span>База отдыха «Друзья» работает и в холодное время года — беседка с мангалом и баня на дровах продолжают принимать гостей с приходом осени и зимы.</div>
-      <div class="cta-block"><span class="label">CTA</span>Забронировать беседку и баню на осенне-зимний период — по телефону +7 (988) 368-73-04.</div>
-      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Отдых продолжается зимой». Фото беседки и бани на территории в прохладное время года (без снега, если нет подтверждённых зимних фото — общий план с минимальной зеленью). Плашка шоколадно-коричневая #503D2F, текст белый #FFFFFF, тонкая оливковая обводка #6A7F34.</div>
+      <div class="meta-block"><span class="label">Мета-описание</span>База отдыха «Друзья» в Кореновском районе приглашает встретить Новый год компанией — беседки на 6–30 человек с мангальной зоной и баня на дровах.</div>
+      <div class="cta-block"><span class="label">CTA</span>Забронировать беседку на новогодние даты заранее — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Новый год компанией». Фото беседки/территории в зимнее время без конкретных праздничных декораций, если нет подтверждённых фото оформленной беседки — общий план. Плашка шоколадно-коричневая #503D2F, текст белый #FFFFFF, тонкая оливковая обводка #6A7F34.</div>
     </div>
 
     <div class="news-card">
-      <div class="news-head"><span class="tag">Сервисная</span></div>
-      <h3>База отдыха «Друзья» принимает гостей с домашними питомцами</h3>
+      <div class="news-head"><span class="tag">Сезонная / вовлекающая</span></div>
+      <h3>Новогодние каникулы на базе отдыха «Друзья»: место для спокойного отдыха всей семьёй</h3>
       <ul class="thesis-list">
-        <li>На базу отдыха «Друзья» можно приехать вместе с домашним питомцем.</li>
-        <li>Территория подходит для прогулки с животным — беседки и домики расположены на благоустроенной озеленённой территории.</li>
-        <li>Формат удобен тем, кто не хочет оставлять питомца дома на время отдыха компанией или с ночёвкой в домике.</li>
-        <li>Осенние прогулки на свежем воздухе — ещё один повод выбраться на базу вместе с собакой.</li>
-        <li>Уточнить условия пребывания с питомцем — по телефону +7 (988) 368-73-04.</li>
+        <li>Зимние каникулы — время для отдыха с семьёй без привязки к большому поводу или торжеству.</li>
+        <li>База отдыха «Друзья» подходит для отдыха на несколько часов или с ночёвкой в домике.</li>
+        <li>Беседка с мангальной зоной и баня на дровах создают уютную атмосферу для зимнего дня на природе.</li>
+        <li>Детская площадка — для отдыха с детьми на каникулах.</li>
+        <li>Уточнить свободные даты на новогодние каникулы — по телефону +7 (988) 368-73-04.</li>
       </ul>
       <div class="chips">
-        <span class="chip-seo">база отдыха с животными Кореновский район</span>
-        <span class="chip-seo">можно с собакой база отдыха Краснодарский край</span>
-        <span class="chip-seo">отдых с питомцами на природе Кубань</span>
-        <span class="chip-seo">база отдыха для животных Кореновск</span>
-        <span class="chip-seo">прогулка с собакой на природе осенью</span>
+        <span class="chip-seo">где отдохнуть на новогодних каникулах Краснодарский край</span>
+        <span class="chip-seo">семейный отдых на новый год Кореновский район</span>
+        <span class="chip-seo">база отдыха на каникулы Кубань</span>
+        <span class="chip-seo">отдых с детьми на новогодних каникулах Краснодарский край</span>
+        <span class="chip-seo">куда поехать на новогодние каникулы Кореновск</span>
       </div>
-      <div class="meta-block"><span class="label">Мета-описание</span>База отдыха «Друзья» в Кореновском районе принимает гостей с домашними питомцами — беседки и домики на озеленённой территории для отдыха вместе с животным.</div>
-      <div class="cta-block"><span class="label">CTA</span>Уточнить условия отдыха с питомцем — по телефону +7 (988) 368-73-04.</div>
-      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Можно с питомцами». Фото территории/беседки с акцентом на зелень и простор (без постановочного кадра с животным, если нет реального фото с базы). Плашка коричневая #503D2F, зелёный акцент #6A7F34, текст белый.</div>
+      <div class="meta-block"><span class="label">Мета-описание</span>На новогодних каникулах база отдыха «Друзья» в Кореновском районе принимает семьи — беседка, баня на дровах и детская площадка для спокойного отдыха на природе.</div>
+      <div class="cta-block"><span class="label">CTA</span>Уточнить свободные даты на новогодние каникулы — по телефону +7 (988) 368-73-04.</div>
+      <div class="cover-block"><span class="label">ТЗ на обложку</span>Тезис обложки: «Каникулы в приятном месте». Фото территории/беседки в зимнее время, спокойный семейный кадр, без постановочных праздничных декораций, если нет подтверждённых фото. Плашка коричневая #503D2F, зелёный акцент #6A7F34, текст белый.</div>
     </div>
   </section>
 
   <section id="stories">
     <span class="eyebrow">05 · Сторис</span>
-    <h2>Темы для сторис (этап 2, 1 слайд, без обложки)</h2>
+    <h2>Темы для сторис (этап 3, 1 слайд, без обложки)</h2>
     <div class="story-grid">
       <div class="story-card">
-        <h3>1. Отдых продолжается зимой</h3>
+        <h3>1. Новый год компанией</h3>
         <ul class="thesis-list">
-          <li>Бассейн — сезон тёплых месяцев</li>
-          <li>Беседка с мангалом и баня — круглый год</li>
+          <li>Беседки на 6–30 человек</li>
+          <li>Мангальная зона и холодильник у каждой</li>
           <li>Баня на дровах — 1 500 ₽/час</li>
+          <li>Бронировать заранее — даты расходятся быстро</li>
         </ul>
-        <div class="design-note"><b>Дизайн слайда:</b> фото беседки/бани в прохладное время года. Плашка снизу #503D2F, текст белый #FFFFFF, тонкая линия-разделитель #6A7F34.</div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото беседки/территории в зимнее время без неподтверждённого праздничного декора. Плашка снизу #503D2F, текст белый #FFFFFF, тонкая линия-разделитель #6A7F34.</div>
       </div>
       <div class="story-card">
-        <h3>2. Можно с питомцами</h3>
+        <h3>2. Новогодние каникулы — семейный отдых</h3>
         <ul class="thesis-list">
-          <li>Гости с животными — добро пожаловать</li>
-          <li>Беседки и домики на озеленённой территории</li>
-          <li>Подходит для осенних прогулок</li>
+          <li>Спокойный отдых с семьёй на каникулах</li>
+          <li>Беседка, баня, детская площадка</li>
+          <li>На несколько часов или с ночёвкой в домике</li>
         </ul>
-        <div class="design-note"><b>Дизайн слайда:</b> фото территории общим планом (зелень, дорожки). Коричневая подложка #503D2F, зелёный акцент #6A7F34, текст белый.</div>
+        <div class="design-note"><b>Дизайн слайда:</b> фото территории/беседки общим планом, спокойный семейный кадр. Коричневая подложка #503D2F, зелёный акцент #6A7F34, текст белый.</div>
       </div>
     </div>
   </section>
@@ -275,10 +283,19 @@
           </ul>
         </div>
       </details>
+      <details class="stage">
+        <summary>Этап 2 — осенне-зимний формат + питомцы</summary>
+        <div class="body">
+          <ul>
+            <li>Новости: осенне-зимний отдых (беседка + баня вместо бассейна) · можно с питомцами</li>
+            <li>Сторис: те же 2 темы, зеркально, 1 слайд без обложки</li>
+          </ul>
+        </div>
+      </details>
       <div class="tl-item">
-        <span class="stage-title">Этап 2 — осенне-зимний формат + питомцы<span class="badge">актуальный</span></span>
+        <span class="stage-title">Этап 3 — новогодний сезон: компания + семья<span class="badge">актуальный</span></span>
         <ul>
-          <li>Новости: осенне-зимний отдых (беседка + баня вместо бассейна) · можно с питомцами</li>
+          <li>Новости: Новый год компанией в беседках · новогодние каникулы — семейный отдых</li>
           <li>Сторис: те же 2 темы, зеркально, 1 слайд без обложки</li>
         </ul>
       </div>
@@ -295,6 +312,7 @@
       <li>Фотоматериалы сайта, предоставленные компанией — попиксельный анализ для определения фирменных цветов</li>
       <li>Карточка «Друзья» на Яндекс Картах — адрес, рейтинг 5.0/106 отзывов, удобства (в т.ч. «можно с животными»), актуальность беседок и цен</li>
       <li>Документ «Стратегия контента» и реальная переписка с клиентом — история ранее опубликованных тем, учтена, чтобы не дублировать уже раскрытое</li>
+      <li>Отраслевые SEO-разборы по продвижению баз отдыха (sostav.ru, vc.ru) — качественные паттерны коммерческих запросов («на Новый год», «корпоратив», «где отдохнуть с детьми», гео-привязка к району/региону) и сезонность спроса; использованы как ориентир для тем и SEO-блоков этапа 3, без прямой выгрузки частотностей Яндекс Вордстата по карточке клиента</li>
     </ul>
   </div>
 </footer>
