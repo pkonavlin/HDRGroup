@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Riverside De Lux»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Riverside De Lux»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Ишеевка · база отдыха · ул. Ленина, 110 · замер 19.11.2026</span>
+  <h1>Где «Riverside De Lux» видно на Картах, а где нет</h1>
+  <p>Карточка «Riverside De Lux» на Яндекс Картах: позиции в поиске по Ульяновску, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«База отдыха ишеевка» — 3 место из трёх</b>Выше «Scandinavia. Village» и «Своя ферма» — у обеих по 800–1 538 оценок и спецпредложение на карточке.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По запросам об отдыхе и аренде домов в Ульяновске карточки нет в первой пятёрке</b>«База отдыха с бассейном», «снять дом посуточно», «дом с сауной и чаном» — первые места занимают базы, бани и посуточные квартиры.</p></div>
+    <div class="v"><span class="pill warn">пустая карточка</span><p><b>На карточке нет новостей, сторис, описания и цен</b>Бассейн, чан, сауна, пляж и пирс карточке пока не дают ни одного текста.</p></div>
+    <div class="v"><span class="pill warn">мало оценок</span><p><b>4 оценки против 153–3 232 у соседей сверху</b>Рейтинг на карточке — 4,2. Рубрика одна: «База отдыха».</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,2</div><div class="s">4 оценки · 3 отзыва</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">1 из 4</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Новостей и сторис на карточке</div><div class="n">0</div><div class="s">публикаций нет</div></div>
+    <div class="kpi"><div class="k">Рубрик на карточке</div><div class="n">1</div><div class="s">база отдыха</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по тому, что есть у базы по брифу и сайту: дома посуточно, барнхаусы и шале, сауна, бассейн и чан, пляж у реки, отдых в праздники.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>база отдыха ишеевка</td><td>общий, район</td><td>3 место</td><td class="nw">Новость 1</td></tr>
+      <tr><td>база отдыха ульяновск</td><td>общий</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>снять дом посуточно ульяновск</td><td>аренда домов</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>барнхаус посуточно ульяновск</td><td>аренда домов</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>шале ульяновск посуточно</td><td>аренда домов</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>дом с сауной и чаном ульяновск</td><td>сауна и чан</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>база отдыха с бассейном ульяновск</td><td>бассейн</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>чан с подогревом ульяновск</td><td>сауна и чан</td><td>не замеряли</td><td class="nw">Сторис 2</td></tr>
+      <tr><td>база отдыха с пляжем ульяновск</td><td>пляж и пирс</td><td>не замеряли</td><td class="nw">Сторис 3</td></tr>
+      <tr><td>загородный дом на новый год ульяновск</td><td>праздники</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка по замеренным запросам, поиск по Ульяновску.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>база отдыха ишеевка</td><td>Scandinavia. Village</td><td>Своя ферма</td><td class="me">Riverside De Lux</td><td>—</td><td>—</td></tr>
+      <tr><td>база отдыха с бассейном</td><td>Простоквашино</td><td>Хуторок</td><td>Иволга</td><td>Термы Наутико</td><td>Термы. Лес</td></tr>
+      <tr><td>снять дом посуточно</td><td>Много квартир 73</td><td>Хуторок</td><td>DomArenda73</td><td>Dendro House</td><td>Квартиры посуточно, Камышинская</td></tr>
+      <tr><td>дом с сауной и чаном</td><td>Горки Парк</td><td>Loft Sauna 73</td><td>Царская усадьба</td><td>Var House</td><td>Дом / The Dom</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Карточки рядом с «Riverside De Lux»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Рубрика</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Riverside De Lux</b></td><td class="r num me">4,2</td><td class="r num me">4</td><td>база отдыха</td><td>3 место · ишеевка</td></tr>
+      <tr><td>Scandinavia. Village</td><td class="r num">5,0</td><td class="r num">1 538</td><td>турбаза</td><td>1 место · ишеевка</td></tr>
+      <tr><td>Своя ферма</td><td class="r num">4,9</td><td class="r num">800</td><td>турбаза</td><td>2 место · ишеевка</td></tr>
+      <tr><td>Хуторок</td><td class="r num">4,4</td><td class="r num">1 215</td><td>база отдыха</td><td>2 место в 2 из 4</td></tr>
+      <tr><td>Иволга</td><td class="r num">5,0</td><td class="r num">3 232</td><td>база отдыха</td><td>3 место · бассейн</td></tr>
+      <tr><td>Dendro House</td><td class="r num">5,0</td><td class="r num">200</td><td>база отдыха</td><td>4 место · дом посуточно</td></tr>
+      <tr><td>Горки Парк</td><td class="r num">4,9</td><td class="r num">153</td><td>база отдыха</td><td>1 место · сауна и чан</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>В Ишеевке выше две турбазы</b> с сотнями оценок и спецпредложением прямо на карточке.</li>
+      <li><b>По «бассейну» и «сауне с чаном» лидируют базы и бани</b>, о которых есть тексты и фото именно про эти удобства.</li>
+      <li><b>По «дому посуточно» в выдаче квартиры и гостевые дома</b> — барнхаусов и шале в первой пятёрке нет.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Первая тема — сама база под «база отдыха ишеевка» и «база отдыха ульяновск», дальше то, по чему карточки сейчас нет: дома посуточно, сауна с чаном и бассейн, праздники за городом.</li>
+      <li>В каждом тексте — «Ишеевка», «Ульяновск» и «ул. Ленина, 110» в первом абзаце.</li>
+      <li>Дома в текстах называем так, как на сайте и карточке: барнхаус и шале.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Ульяновску, четыре запроса, первая пятёрка выдачи.</li>
+    <li>Остальные запросы из списка — целевые для текстов этапа, позиции по ним не замерялись.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/riversayd_de_lyuks/175552589608/" target="_blank" rel="noopener">«Riverside De Lux», Ишеевка, ул. Ленина, 110 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/195/ulyanovsk/search/%D0%B1%D0%B0%D0%B7%D0%B0%20%D0%BE%D1%82%D0%B4%D1%8B%D1%85%D0%B0%20%D0%B8%D1%88%D0%B5%D0%B5%D0%B2%D0%BA%D0%B0/" target="_blank" rel="noopener">База отдыха в Ишеевке — Яндекс Карты</a>
+    <a href="https://riverside73.ru/" target="_blank" rel="noopener">riverside73.ru — сайт базы отдыха</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">База отдыха · рп. Ишеевка · ул. Ленина, 110</span>
+  <h1>«Riverside De Lux» — ТЗ на контент, этап 1</h1>
+  <p class="lead">Первый период работы. 4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Riverside De Lux» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Riverside De Lux <small>база отдыха в посёлке Ишеевка</small></div></div>
+    <div class="fact"><div class="k">Что сдаётся</div><div class="v">3 дома посуточно <small>2 барн-хауса и 1 дом шале</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–вс 09:00–20:00 <small>дома сдаются на круглосуточное проживание</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">пос. Ишеевка, ул. Ленина, 110</div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы»</div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽» <small>цены динамические</small></div></div>
+    <div class="fact"><div class="k">Юридические сведения</div><div class="v">ИП Бекситов Адель Абулатович <small>ИНН 731302454508, ОГРНИП 326730000030753</small></div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Фирменные цвета по брифу. Стилистика — сдержанный минимализм.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#1D3A2B;color:#F4EFE8"><div class="role">Основной</div><div class="name">Тёмно-зелёный</div><div class="hex">#1D3A2B</div></div>
+    <div class="swatch" style="background:#ECE2D7;color:#1D3A2B"><div class="role">Фоновый</div><div class="name">Бежевый</div><div class="hex">#ECE2D7</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Первый период: сначала знакомство с базой под «база отдыха ишеевка» и «база отдыха ульяновск», затем то, по чему карточки сейчас нет в выдаче: дома посуточно, сауна с чаном и бассейн, отдых за городом в праздники.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Знакомство с базой: три дизайнерских дома на закрытой территории у реки, около 10 минут от города.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Барнхаусы и шале посуточно на 6–12 человек: кухня-гостиная с техникой, спальни с камином.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Сауна в доме, бассейн и чан с подогревом на территории каждого дома.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Праздники за городом: дома для проживания в любое время года.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Riverside De Lux» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы». Вступление — от лица базы, дальше только факты брифа и сайта, без дополнений. Цены — в формате «от N ₽», только актуальные из системы бронирования компании. Без телефона и e-mail в тексте, без упоминания конкурентов и общественно-политической повестки. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>База отдыха в Ишеевке: три дизайнерских дома у реки в 10 минутах от Ульяновска</h3></div><span class="purpose">Знакомство</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — база отдыха Riverside De Lux в посёлке Ишеевка: три дизайнерских дома на собственной закрытой территории у реки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>3 дома в аренду посуточно: 2 барн-хауса и 1 дом шале.<span class="src">бриф</span></li>
+      <li>Благоустроенная закрытая территория.<span class="src">бриф</span></li>
+      <li>Расположение у реки, примерно в 10 минутах от города.<span class="src">сайт</span></li>
+      <li>Приватные загородные дома у реки для отдыха и важных событий в кругу своих.<span class="src">сайт</span></li>
+      <li>Дизайнерский интерьер.<span class="src">бриф</span></li>
+      <li>Собственный пляж с бассейном и пирсом.<span class="src">бриф</span></li>
+      <li>Пос. Ишеевка, ул. Ленина, 110; дома сдаются на круглосуточное проживание.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>База отдыха в Ишеевке под Ульяновском — Riverside De Lux на ул. Ленина, 110.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>База отдыха в Ишеевке — три дизайнерских дома у реки</span></div>
+      <div class="meta-row"><span><b>Title · </b>База отдыха Ишеевка, Ульяновск: дома посуточно у реки | Riverside De Lux</span></div>
+      <div class="meta-row"><span><b>Description · </b>Три дизайнерских дома на закрытой территории у реки: 2 барн-хауса и шале. Пляж с бассейном и пирсом. Пос. Ишеевка, ул. Ленина, 110.</span></div>
+      <div class="chips"><span class="chip-kw">база отдыха ишеевка</span><span class="chip-kw">база отдыха ульяновск</span><span class="chip-kw">загородный отдых ульяновск</span><span class="chip-kw">отдых у реки</span><span class="chip-kw">дома посуточно</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Выбирайте дом и даты отдыха в Riverside De Lux в Ишеевке — бронирование через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Три дизайнерских дома у реки»</div>
+      <p>Композиция: фото территории с домами из фотоархива компании, поверх — строка фактов: 2 барн-хауса · шале · 10 минут от города. Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка с фактами — тёмно-зелёный #1D3A2B, текст — бежевый #ECE2D7.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Барнхаус или шале посуточно под Ульяновском: дома на 6–12 человек с кухней-гостиной и камином</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>У нас три дома — два барн-хауса и шале, и каждый рассчитан на компанию от 6 до 12 человек.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>3 дома посуточно: 2 барн-хауса и 1 дом шале, вместимость 6–12 человек.<span class="src">бриф · сайт</span></li>
+      <li>Просторная кухня-гостиная: холодильник, посудомоечная машина, духовка.<span class="src">сайт</span></li>
+      <li>Уютные спальни с камином, тёплая ванная комната с душевой кабиной.<span class="src">сайт</span></li>
+      <li>Дизайнерский ремонт, высокоскоростной Wi-Fi.<span class="src">сайт</span></li>
+          </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Снять дом посуточно под Ульяновском — барнхаусы и шале Riverside De Lux в Ишеевке.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Барнхаус и шале посуточно в Ишеевке — дома на 6–12 человек</span></div>
+      <div class="meta-row"><span><b>Title · </b>Снять дом посуточно, Ульяновск: барнхаус и шале на 6–12 человек | Riverside De Lux</span></div>
+      <div class="meta-row"><span><b>Description · </b>Два барн-хауса и шале на 6–12 человек: кухня-гостиная с техникой, спальни с камином, Wi-Fi. Ишеевка, ул. Ленина, 110.</span></div>
+      <div class="chips"><span class="chip-kw">снять дом посуточно ульяновск</span><span class="chip-kw">барнхаус посуточно ульяновск</span><span class="chip-kw">шале ульяновск посуточно</span><span class="chip-kw">дом для компании</span><span class="chip-kw">база отдыха ишеевка</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Выбирайте барнхаус или шале в Riverside De Lux в Ишеевке — бронирование через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Барнхаус или шале · 6–12 человек»</div>
+      <p>Композиция: фото кухни-гостиной или спальни с камином из фотоархива компании, внизу — строка: кухня-гостиная · камин · Wi-Fi. Логотип в верхнем левом углу.</p>
+      <p>Цвета: нижняя плашка — бежевый #ECE2D7, текст — тёмно-зелёный #1D3A2B.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Дом с сауной, бассейном и чаном в Ишеевке: всё на территории вашего дома</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Сауна у нас прямо в доме, а бассейн и чан с подогревом — на территории каждого из трёх домов.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сауна внутри дома с быстрым нагревом.<span class="src">сайт</span></li>
+      <li>Обшивка сауны из ольхи, профессиональная печь с увлажнением.<span class="src">сайт</span></li>
+      <li>На территории каждого дома — бассейн и чан с подогревом.<span class="src">сайт</span></li>
+      <li>Просторный участок с мощением, мангальная зона, качели, ландшафтный дизайн.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Дом с сауной и чаном под Ульяновском — Riverside De Lux в Ишеевке, ул. Ленина, 110.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Дом с сауной, бассейном и чаном в Ишеевке</span></div>
+      <div class="meta-row"><span><b>Title · </b>Дом с сауной и чаном, база отдыха с бассейном, Ульяновск | Riverside De Lux</span></div>
+      <div class="meta-row"><span><b>Description · </b>Сауна из ольхи в доме, бассейн и чан с подогревом у каждого дома, мангальная зона. Ишеевка, ул. Ленина, 110.</span></div>
+      <div class="chips"><span class="chip-kw">дом с сауной и чаном ульяновск</span><span class="chip-kw">база отдыха с бассейном ульяновск</span><span class="chip-kw">чан с подогревом ульяновск</span><span class="chip-kw">дом с сауной посуточно</span><span class="chip-kw">база отдыха ишеевка</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Выбирайте дом с сауной и чаном в Riverside De Lux в Ишеевке — бронирование через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Сауна в доме · бассейн и чан у каждого дома»</div>
+      <p>Композиция: фото чана или бассейна у дома из фотоархива компании, тезис крупно в верхней трети. Логотип в верхнем левом углу.</p>
+      <p>Цвета: тезис — бежевый #ECE2D7 на полупрозрачной плашке тёмно-зелёного #1D3A2B.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Новогодние праздники за городом: дома в Ишеевке для отдыха в любое время года</h3></div><span class="purpose">Сезонный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Наши дома подготовлены для комфортного проживания в любое время года — в том числе на новогодние праздники.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Комфортное проживание в любое время года: есть кухня, техника, климатконтроль.<span class="src">бриф</span></li>
+      <li>В доме отопление с управлением.<span class="src">сайт</span></li>
+      <li>Спальни с камином, сауна внутри дома.<span class="src">сайт</span></li>
+      <li>Подогреваемые бассейн и чаны.<span class="src">сайт</span></li>
+      <li>Дома на компанию 6–12 человек, сдаются на круглосуточное проживание.<span class="src">сайт · бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Новый год в загородном доме под Ульяновском — Riverside De Lux в Ишеевке.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Загородный дом на новогодние праздники в Ишеевке</span></div>
+      <div class="meta-row"><span><b>Title · </b>Загородный дом на Новый год, Ульяновск: сауна, камин, чан | Riverside De Lux</span></div>
+      <div class="meta-row"><span><b>Description · </b>Дома для проживания в любое время года: отопление с управлением, камин, сауна и чан с подогревом. Ишеевка, ул. Ленина, 110.</span></div>
+      <div class="chips"><span class="chip-kw">загородный дом на новый год ульяновск</span><span class="chip-kw">новый год за городом</span><span class="chip-kw">снять дом на новый год</span><span class="chip-kw">база отдыха ульяновск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Выбирайте дом на праздники в Riverside De Lux в Ишеевке — бронирование через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Праздники за городом: камин, сауна, чан»</div>
+      <p>Композиция: вечернее фото дома или зимней территории из фотоархива компании, тезис внизу на плашке. Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — тёмно-зелёный #1D3A2B, текст — бежевый #ECE2D7.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Три дома у реки</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">2 барн-хауса</span><span class="fact-pill">1 шале</span><span class="fact-pill">6–12 человек</span><span class="fact-pill">10 минут от города</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-зелёный #1D3A2B, факты бежевым #ECE2D7, много воздуха.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">У каждого дома</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Сауна из ольхи в доме</span><span class="fact-pill">Бассейн</span><span class="fact-pill">Чан с подогревом</span><span class="fact-pill">Мангальная зона</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый #ECE2D7, заголовок и факты тёмно-зелёным #1D3A2B.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Пляж и пирс</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">2 бунгало</span><span class="fact-pill">Лежаки и душ</span><span class="fact-pill">Терраса</span><span class="fact-pill">Пирс с беседкой на 12</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото пирса на фоне, нижняя плашка тёмно-зелёная #1D3A2B с фактами бежевым.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Круглый год</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Отопление с управлением</span><span class="fact-pill">Спальни с камином</span><span class="fact-pill">Кухня с техникой</span><span class="fact-pill">Wi-Fi</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый #ECE2D7, факты тёмно-зелёным #1D3A2B, тонкие разделители.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — знакомство с базой, дома посуточно, сауна и чан, праздники <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Три дизайнерских дома у реки</b>под «база отдыха ишеевка», «база отдыха ульяновск»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Три дома у реки</b>2 барн-хауса, шале, 6–12 человек</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Барнхаус и шале посуточно</b>под «снять дом посуточно», «барнхаус», «шале»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>У каждого дома</b>сауна, бассейн, чан, мангальная зона</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Сауна, бассейн и чан</b>под «дом с сауной и чаном», «база отдыха с бассейном»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Пляж и пирс</b>бунгало, терраса, пирс с беседкой на 12</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Праздники за городом</b>под «загородный дом на новый год ульяновск»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Круглый год</b>отопление, камин, кухня, Wi-Fi</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
