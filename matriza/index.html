@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Матрица»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px dashed var(--gold-line);background:var(--panel)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85;color:var(--ink-3)}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl,.vc .legal .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .legal{margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--good-soft);font-size:13.5px;color:var(--ink-2)}
+.vc .legal .lbl{color:var(--good)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Матрица»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Калининград · стоматология · ул. Аэропортная, 11 · замер 19.11.2026</span>
+  <h1>Где «Матрицу» видно на Картах, а где нет</h1>
+  <p>Карточка «Матрица» на Яндекс Картах: позиции в поиске у ул. Аэропортной, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Ни по одному замеренному запросу карточки нет в первой пятёрке</b>«Стоматология», «имплантация зубов», «детская стоматология», «кт зубов» — и в поиске по городу, и с центром карты у ул. Аэропортной, 11.</p></div>
+    <div class="v"><span class="pill warn">мало контента</span><p><b>На карточке две новости</b>Лечение кариеса и профессиональная гигиена полости рта. По имплантации, КТ-диагностике, детскому приёму, эстетике и ортопедии публикаций нет.</p></div>
+    <div class="v"><span class="pill warn">мало оценок</span><p><b>21 оценка против 138–2 036 у соседей сверху</b>Рейтинг 4,9 на уровне лидеров, но по числу оценок карточка заметно отстаёт.</p></div>
+    <div class="v"><span class="pill warn">одна рубрика</span><p><b>На карточке указана только «Стоматологическая клиника»</b>Направления, которые клиника ведёт по брифу (имплантация, детская стоматология, КТ, ортодонтия), карточке пока дают только тексты.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,9</div><div class="s">21 оценка · 19 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">0 из 4</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">2</div><div class="s">кариес · профгигиена</div></div>
+    <div class="kpi"><div class="k">Рубрик на карточке</div><div class="n">1</div><div class="s">стоматологическая клиника</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: имплантация и хирургия, КТ-диагностика, детский приём, эстетика и ортопедия, ортодонтия.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология калининград</td><td>общий</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>имплантация зубов калининград</td><td>хирургия</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>удаление зубов калининград</td><td>хирургия</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>кт зубов калининград</td><td>диагностика</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>ортопантомограмма калининград</td><td>диагностика</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>детская стоматология калининград</td><td>детский приём</td><td>нет в первых 5</td><td class="nw">Новость 4</td></tr>
+      <tr><td>отбеливание зубов калининград</td><td>гигиена и эстетика</td><td>не замеряли</td><td class="nw">Сторис 2</td></tr>
+      <tr><td>коронки из диоксида циркония калининград</td><td>ортопедия</td><td>не замеряли</td><td class="nw">следующий этап</td></tr>
+      <tr><td>брекеты калининград</td><td>ортодонтия</td><td>не замеряли</td><td class="nw">следующий этап</td></tr>
+      <tr><td>стоматология аэропортная</td><td>общий, район</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка по замеренным запросам.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология (город)</td><td>Республиканская стоматологическая поликлиника</td><td>Первый</td><td>Стоматологическая поликлиника, Пролетарская</td><td>Ортодонт Люкс</td><td>Стоматология и ЛОР, пр. Мира</td></tr>
+      <tr><td>стоматология (у Аэропортной)</td><td>LuViDenta, Кутаисская</td><td>LuViDenta, Суздальская</td><td>Хэппи Смайл</td><td>LClinic</td><td>Novikov Smile</td></tr>
+      <tr><td>имплантация зубов</td><td>Атлант</td><td>LuViDenta, Суздальская</td><td>LuViDenta, Кутаисская</td><td>Центр на Литовском валу</td><td>Стомик</td></tr>
+      <tr><td>детская стоматология</td><td>LuViDenta, Кутаисская</td><td>LuViDenta, Суздальская</td><td>Хэппи Смайл</td><td>LClinic</td><td>Атлант</td></tr>
+      <tr><td>кт зубов</td><td>Спектр-Диагностика</td><td>Clinic Expert, Стекольная</td><td>Clinic Expert, Букетная</td><td>Эдкар</td><td>Novaproff</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Карточки рядом с «Матрицей»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Матрица</b></td><td class="r num me">4,9</td><td class="r num me">21</td><td>ул. Аэропортная, 11</td><td>нет в первых 5</td></tr>
+      <tr><td>LuViDenta</td><td class="r num">5,0</td><td class="r num">264</td><td>ул. Кутаисская, 3</td><td>1–3 место в 3 из 4</td></tr>
+      <tr><td>LuViDenta</td><td class="r num">5,0</td><td class="r num">138</td><td>ул. Суздальская, 20к1</td><td>2 место в 3 из 4</td></tr>
+      <tr><td>Хэппи Смайл</td><td class="r num">4,8</td><td class="r num">173</td><td>ул. Юрия Гагарина, 13</td><td>3 место в 2 из 4</td></tr>
+      <tr><td>LClinic</td><td class="r num">5,0</td><td class="r num">243</td><td>Литовский Вал, 87А</td><td>4 место в 2 из 4</td></tr>
+      <tr><td>Атлант</td><td class="r num">4,9</td><td class="r num">349</td><td>ул. Гражданская, 5А</td><td>1 и 5 место</td></tr>
+      <tr><td>Спектр-Диагностика</td><td class="r num">4,9</td><td class="r num">1 367</td><td>ул. Куйбышева, 78</td><td>1 место · кт зубов</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Район держит LuViDenta</b>: две карточки сети в первой тройке по общему запросу и детской стоматологии.</li>
+      <li><b>Разница в оценках</b>: у соседей сверху от 138 до 1 367 оценок, у «Матрицы» — 21.</li>
+      <li><b>По «кт зубов» лидируют диагностические центры</b>: стоматологических клиник в пятёрке нет — место для карточки с собственным КТ.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Первая тема — клиника полного цикла под главный запрос «стоматология калининград», дальше направления, где карточки нет: имплантация, КТ-диагностика, детский приём.</li>
+      <li>В каждом тексте — «Калининград» и «ул. Аэропортная, 11» в первом абзаце.</li>
+      <li>Лечение кариеса и профгигиена уже опубликованы и в этап не входят.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Калининграду и с центром карты у ул. Аэропортной, 11. Четыре запроса, первая пятёрка выдачи.</li>
+    <li>Остальные запросы из списка — целевые для текстов этапа, позиции по ним не замерялись.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/matritsa/131460693332/" target="_blank" rel="noopener">«Матрица», Калининград, ул. Аэропортная, 11 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/22/kaliningrad/search/%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F/" target="_blank" rel="noopener">Стоматология в Калининграде — Яндекс Карты</a>
+    <a href="https://stom-matrix.ru/" target="_blank" rel="noopener">stom-matrix.ru — сайт клиники</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Стоматология · Калининград · ул. Аэропортная, 11</span>
+  <h1>«Матрица» — ТЗ на контент, этап 1</h1>
+  <p class="lead">Первый период работы. 4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Матрица» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Матрица <small>клиника цифровой стоматологии</small></div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Стоматология полного цикла <small>терапия, хирургия, гигиена, ортопедия, ортодонтия, лечение детей</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 9:00–20:00 <small>сб 9:00–14:00, вс — выходной</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Калининград, ул. Аэропортная, 11</div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы» <small>неформальный тон допустим</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽» <small>акционные цены — до конца года</small></div></div>
+    <div class="fact"><div class="k">Лицензия</div><div class="v">Л041-01157-39/06116454</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Фирменные цвета по брифу: зелёный в разных оттенках и бежевый. Стилистика — насыщенная инфографика. HEX снимаем с файла логотипа клиники.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">HEX — по логотипу</div></div>
+    <div class="swatch"><div class="role">Дополнительный</div><div class="name">Зелёный, второй оттенок</div><div class="hex">HEX — по логотипу</div></div>
+    <div class="swatch"><div class="role">Фоновый</div><div class="name">Бежевый</div><div class="hex">HEX — по логотипу</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Первый период: сначала знакомство с клиникой под главный запрос «стоматология калининград», затем направления, где карточки сейчас нет в выдаче: имплантация, КТ-диагностика, детский приём. Акционные цены брифа — в теме 2 и сторис 2.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Знакомство с клиникой: стоматология полного цикла на ул. Аэропортной, 11 — все направления, КТ и своя операционная в одном месте.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Дентальная имплантация и своя операционная; акции до конца года — в сторис.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>КТ-диагностика в клинике: снимки с разрешением 70–75 мкм, сканирование 7–10 секунд.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Детский приём: лечение молочных и постоянных зубов, профилактика аномалий прикуса, игровая зона.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Матрица» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы», тепло и по-человечески; неформальный тон допустим. Вступление — от лица клиники, дальше факты брифа и сайта без дополнений. Цены — только из брифа. Без телефона и e-mail в тексте, без торговых марок медизделий и аппаратов, без гарантий результата и упоминания конкурентов. На тексте и обложке — «Имеются противопоказания. Необходима консультация специалиста», не менее 5% площади. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Стоматология полного цикла в Калининграде на ул. Аэропортной, 11 — клиника цифровой стоматологии «Матрица»</h3></div><span class="purpose">Знакомство</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — клиника цифровой стоматологии «Матрица»: все виды исследований и лечения зубов у нас в одном месте, на ул. Аэропортной, 11.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Стоматология полного цикла: терапия, хирургия, гигиена, ортопедия, ортодонтия, лечение детей.<span class="src">бриф</span></li>
+      <li>Своя операционная для проведения челюстно-лицевых операций под наркозом.<span class="src">бриф</span></li>
+      <li>КТ-исследования и рентгенография в клинике.<span class="src">бриф</span></li>
+      <li>Клиника 300 м², 5 кресел, большие кабинеты, везде вентиляция.<span class="src">бриф</span></li>
+      <li>Игровая зона для детей, для пациентов — чай и кофе.<span class="src">бриф</span></li>
+      <li>Пн–пт 9:00–20:00, сб 9:00–14:00, Калининград, ул. Аэропортная, 11.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Стоматология в Калининграде на ул. Аэропортной, 11 — клиника полного цикла «Матрица».</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Стоматология полного цикла в Калининграде — клиника «Матрица»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Стоматология в Калининграде на Аэропортной, 11: лечение, имплантация, КТ | Матрица</span></div>
+      <div class="meta-row"><span><b>Description · </b>Терапия, хирургия, гигиена, ортопедия, ортодонтия и лечение детей в одной клинике. КТ и своя операционная. «Матрица», Калининград, ул. Аэропортная, 11.</span></div>
+      <div class="chips"><span class="chip-kw">стоматология калининград</span><span class="chip-kw">стоматологическая клиника калининград</span><span class="chip-kw">стоматология аэропортная</span><span class="chip-kw">стоматология полного цикла</span><span class="chip-kw">клиника цифровой стоматологии</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запишитесь на консультацию в стоматологию «Матрица» на Аэропортной, 11 — через карточку клиники на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Лицензия Л041-01157-39/06116454 (по брифу). Без превосходных степеней («лучший», «последнее слово техники»), без гарантий. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стоматология полного цикла на Аэропортной, 11»</div>
+      <p>Композиция: фото кабинета клиники из карточки, поверх — инфографика из трёх цифр и фактов: 300 м² · 5 кресел · своя операционная. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: плашка инфографики — основной зелёный, цифры — бежевый, подписи — белый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Имплантация зубов в Калининграде: своя операционная и постановка имплантата за 22 000 ₽ до конца года</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы проводим дентальную имплантацию — сложную и комплексную — и у нас есть своя операционная для челюстно-лицевых операций под наркозом.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Дентальная имплантация — сложная и комплексная, в том числе при полном отсутствии зубов на челюсти.<span class="src">бриф</span></li>
+      <li>Костная пластика, синус-лифтинг, пластика десны.<span class="src">бриф</span></li>
+      <li>Своя операционная для проведения челюстно-лицевых операций под наркозом.<span class="src">бриф</span></li>
+      <li>Главный врач Туров Дмитрий Валентинович — челюстно-лицевой хирург, хирург-имплантолог, стаж 31 год.<span class="src">сайт</span></li>
+      <li>До конца года постановка имплантата — 22 000 ₽.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Имплантация зубов в Калининграде — в клинике «Матрица» на ул. Аэропортной, 11, со своей операционной.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Имплантация зубов в Калининграде — клиника «Матрица» на Аэропортной</span></div>
+      <div class="meta-row"><span><b>Title · </b>Имплантация зубов, костная пластика, синус-лифтинг, Калининград | Матрица</span></div>
+      <div class="meta-row"><span><b>Description · </b>Дентальная имплантация, костная пластика и синус-лифтинг, своя операционная. Постановка имплантата — 22 000 ₽ до конца года. «Матрица», Калининград, ул. Аэропортная, 11.</span></div>
+      <div class="chips"><span class="chip-kw">имплантация зубов калининград</span><span class="chip-kw">удаление зубов калининград</span><span class="chip-kw">костная пластика</span><span class="chip-kw">синус-лифтинг</span><span class="chip-kw">хирург-имплантолог</span><span class="chip-kw">стоматология аэропортная</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запишитесь на консультацию хирурга-имплантолога в «Матрице» на Аэропортной, 11 — через карточку клиники на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Лицензия Л041-01157-39/06116454 (по брифу). Без марок имплантатов и названий запатентованных протоколов. Без гарантий приживаемости и безболезненности. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Имплантат — 22 000 ₽ до конца года»</div>
+      <p>Композиция: инфографика — крупная цена в центре, под ней три пункта строкой: имплантация · костная пластика · своя операционная. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: фон бежевый, цена и пункты — основной зелёный, разделители — второй оттенок зелёного.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>КТ зубов в Калининграде: снимки с разрешением 70–75 мкм прямо в клинике «Матрица»</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы делаем КТ-исследования в клинике на компьютерном томографе высокой точности — снимок готов за секунды, а план лечения строится по нему.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Разрешение снимков достигает 70–75 мкм — видны мельчайшие трещины корня, кисты и точное расположение нервов.<span class="src">бриф</span></li>
+      <li>Сканирование длится 7–10 секунд, лучевая нагрузка минимальная.<span class="src">бриф</span></li>
+      <li>Виды исследований: ортопантомограмма — панорамный снимок, конусно-лучевая компьютерная томограмма, томограмма суставов, полное КТ лицевого скелета.<span class="src">бриф</span></li>
+      <li>Прицельные снимки на радиовизиографе — локальное исследование 1–3 зубов: глубина кариеса, корневые каналы, воспаление у верхушки корня.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>КТ зубов в Калининграде — прямо в клинике «Матрица» на ул. Аэропортной, 11.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>КТ зубов в Калининграде — диагностика в клинике «Матрица»</span></div>
+      <div class="meta-row"><span><b>Title · </b>КТ зубов, ортопантомограмма, КЛКТ, Калининград, ул. Аэропортная | Матрица</span></div>
+      <div class="meta-row"><span><b>Description · </b>КТ-исследования с разрешением 70–75 мкм, сканирование 7–10 секунд. Ортопантомограмма, КЛКТ, томограмма суставов. «Матрица», Калининград, ул. Аэропортная, 11.</span></div>
+      <div class="chips"><span class="chip-kw">кт зубов калининград</span><span class="chip-kw">ортопантомограмма калининград</span><span class="chip-kw">кт челюсти</span><span class="chip-kw">панорамный снимок зубов</span><span class="chip-kw">стоматология калининград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запишитесь на КТ зубов в «Матрице» на Аэропортной, 11 — через карточку клиники на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Лицензия Л041-01157-39/06116454 (по брифу). Модель томографа в тексте и на обложке не называем. «Минимальная лучевая нагрузка» — формулировка брифа, без слов «безопасно» и «без вреда». Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«КТ зубов: 70–75 мкм · 7–10 секунд»</div>
+      <p>Композиция: инфографика с двумя крупными цифрами, рядом фото кабинета КТ из карточки клиники. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: фон основной зелёный, цифры — бежевый, подписи — белый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Детская стоматология в Калининграде: молочные и постоянные зубы, профилактика прикуса и игровая зона</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы лечим молочные и постоянные зубы детей и подростков, а пока ребёнок ждёт приёма, у нас есть игровая зона.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Лечение кариеса и его осложнений молочных и постоянных зубов, лечение пульпита и периодонтита постоянных зубов у детей и подростков.<span class="src">бриф</span></li>
+      <li>Профилактика развития аномалий прикуса.<span class="src">бриф</span></li>
+      <li>Удаление зубов, пластика уздечек, вестибулопластика, коронки на молочные и постоянные зубы.<span class="src">бриф</span></li>
+      <li>Детские врачи клиники: детский стоматолог (стаж 13 лет), детский стоматолог-терапевт (стаж 10 лет), детский стоматолог-хирург (стаж 19 лет).<span class="src">сайт</span></li>
+      <li>Игровая зона для детей, для пациентов — чай и кофе.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Детская стоматология в Калининграде — детский приём в клинике «Матрица» на ул. Аэропортной, 11.</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Детская стоматология в Калининграде — клиника «Матрица»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Детский стоматолог, лечение молочных зубов, Калининград | Матрица</span></div>
+      <div class="meta-row"><span><b>Description · </b>Лечение молочных и постоянных зубов, профилактика аномалий прикуса, детский хирург. Игровая зона. «Матрица», Калининград, ул. Аэропортная, 11.</span></div>
+      <div class="chips"><span class="chip-kw">детская стоматология калининград</span><span class="chip-kw">детский стоматолог калининград</span><span class="chip-kw">лечение молочных зубов</span><span class="chip-kw">профилактика прикуса</span><span class="chip-kw">стоматология аэропортная</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запишите ребёнка к детскому стоматологу в «Матрице» на Аэропортной, 11 — через карточку клиники на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Лицензия Л041-01157-39/06116454 (по брифу). Текст адресован родителям. Без обещаний «без боли» и «без слёз». Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Детский приём: три детских врача»</div>
+      <p>Композиция: фото игровой зоны клиники, сверху тезис, снизу три плашки-пиктограммы: лечение · профилактика прикуса · хирург. Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашки — второй оттенок зелёного, тезис — основной зелёный на бежевом поле.</p>
+    </div>
+  </div>
+
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Стоматология полного цикла</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">300 м²</span><span class="fact-pill">5 кресел</span><span class="fact-pill">Своя операционная</span><span class="fact-pill">ул. Аэропортная, 11</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон основной зелёный, цифры крупно бежевым, подписи белым. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Цены до конца года</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Постановка имплантата — 22 000 ₽</span><span class="fact-pill">Комплексная гигиена — 6 000 ₽</span><span class="fact-pill">Гигиеническая чистка — 3 000 ₽</span><span class="fact-pill">Отбеливание — 29 500 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый, четыре строки прайса — услуга основным зелёным, цена крупно вторым оттенком зелёного. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">КТ зубов в клинике</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">70–75 мкм</span><span class="fact-pill">7–10 секунд</span><span class="fact-pill">Ортопантомограмма</span><span class="fact-pill">КЛКТ</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон основной зелёный, цифры бежевым, подписи белым. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Детский приём</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Молочные и постоянные зубы</span><span class="fact-pill">Профилактика прикуса</span><span class="fact-pill">Игровая зона</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон бежевый, заголовок основным зелёным, факты — три пиктограммы вторым оттенком зелёного. Внизу — пометка о противопоказаниях.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — знакомство с клиникой, имплантация, КТ, детский приём <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматология полного цикла на Аэропортной, 11</b>под «стоматология калининград», «стоматология аэропортная»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Стоматология полного цикла</b>300 м², 5 кресел, своя операционная</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Имплантация и своя операционная</b>под «имплантация зубов калининград», «удаление зубов калининград»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Цены до конца года</b>имплантат, гигиена, чистка, отбеливание</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>КТ зубов в клинике</b>под «кт зубов калининград», «ортопантомограмма калининград»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>КТ зубов в клинике</b>70–75 мкм, 7–10 секунд, виды исследований</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Детская стоматология</b>под «детская стоматология калининград»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Детский приём</b>лечение, профилактика прикуса, игровая зона</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
