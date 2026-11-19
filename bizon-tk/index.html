@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Бизон»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}.va .verdicts{display:grid;gap:10px}.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.va table{border-collapse:collapse;width:100%;font-size:14.5px}.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Бизон»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Мурманск · грузоперевозки и грузчики · ул. Мира, 8 · замер 19.11.2026</span>
+  <h1>Где «Бизон» видно на Картах, а где нет</h1>
+  <p>Карточка «Бизон» на Яндекс Картах: позиции в поиске по Мурманску, 10 целевых запросов и соседи по гео-выдаче.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">в выдаче</span><p><b>«Грузчики» и «квартирный переезд» — 1 место</b>По обоим запросам «Бизон» первым в списке, выше «Аврора Переезды», «51 Переезд» и «Эверест».</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Грузоперевозки» — карточки нет в первой пятёрке</b>Пятёрку занимают «Лидер груз», два пункта CDEK, «51 Переезд» и «Аврора Переезды».</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Вывоз мусора», «эвакуатор», «манипулятор» — карточки нет в первой пятёрке</b>Все три услуги есть в прайсе карточки, но по ним показываются профильные компании: «Эверест», «Эвакуатор», «Техник51».</p></div>
+    <div class="v"><span class="pill warn">мало контента</span><p><b>Про мусор и эвакуатор отдельных новостей нет</b>Из 8 новостей на карточке темы — переезд под ключ, выбор транспорта, междугородние и тяжёлые грузы, парк техники. Сторис на карточке нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,2</div><div class="s">61 оценка · 35 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">2 из 6</div><div class="s">оба раза на 1 месте</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">8</div><div class="s">последняя — 2 сентября 2026</div></div>
+    <div class="kpi"><div class="k">Сторис на карточке</div><div class="n">0</div><div class="s">раздел пустой</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по услугам из прайса карточки: грузоперевозки, грузчики, переезды, вывоз мусора, эвакуатор и буксировка, манипулятор.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>грузоперевозки мурманск</td><td>общий</td><td>нет в первых 5</td><td class="nw">все темы</td></tr>
+      <tr><td>грузчики мурманск</td><td>грузчики</td><td>1 место</td><td class="nw">уже сильная</td></tr>
+      <tr><td>квартирный переезд мурманск</td><td>переезды</td><td>1 место</td><td class="nw">уже сильная</td></tr>
+      <tr><td>вывоз мусора мурманск</td><td>вывоз мусора</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>вывоз строительного мусора мурманск</td><td>вывоз мусора</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>вывоз мусора после ремонта</td><td>вывоз мусора</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>эвакуатор мурманск</td><td>эвакуатор</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>буксировка авто мурманск</td><td>эвакуатор</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>эвакуатор мурманская область</td><td>эвакуатор</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>манипулятор мурманск</td><td>манипулятор</td><td>нет в первых 5</td><td class="nw">следующий этап</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка по замеренным запросам, поиск по Мурманску, карта с центром у ул. Мира, 8.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>грузоперевозки</td><td>Лидер груз</td><td>CDEK</td><td>51 Переезд</td><td>Аврора Переезды</td><td>CDEK</td></tr>
+      <tr><td>грузчики</td><td class="me">Бизон</td><td>Лидер груз</td><td>Аврора Переезды</td><td>Эверест</td><td>Разгрузчики</td></tr>
+      <tr><td>квартирный переезд</td><td class="me">Бизон</td><td>Лидер груз</td><td>Аврора Переезды</td><td>51 Переезд</td><td>Эверест</td></tr>
+      <tr><td>вывоз мусора</td><td>Эверест</td><td>ОРКО-инвест</td><td>Арктиктранском</td><td>Сияние Заполярья</td><td>Чистый город</td></tr>
+      <tr><td>эвакуатор</td><td>Эвакуатор</td><td>AutoMax</td><td>ЭвакХелп</td><td>Ангар 51</td><td>Эвакуатор051</td></tr>
+      <tr><td>манипулятор</td><td>Техник51</td><td>Спецпарк24</td><td>Кольский транспортный терминал</td><td>Кольские строительные машины</td><td>ТопРесурс</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Карточки рядом с «Бизоном»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Бизон</b></td><td class="r num me">4,2</td><td class="r num me">61</td><td>ул. Мира, 8</td><td>1 место в 2 из 6</td></tr>
+      <tr><td>Аврора Переезды</td><td class="r num">5,0</td><td class="r num">158</td><td>Домостроительная ул., 16</td><td>3–4 место в 3 из 6</td></tr>
+      <tr><td>51 Переезд</td><td class="r num">5,0</td><td class="r num">91</td><td>ул. Володарского, 2А</td><td>3–4 место в 2 из 6</td></tr>
+      <tr><td>Лидер груз</td><td class="r num">—</td><td class="r num">—</td><td>ул. Полярные Зори, 19</td><td>1–2 место в 3 из 6</td></tr>
+      <tr><td>Эверест</td><td class="r num">4,8</td><td class="r num">34</td><td>просп. Ленина, 82</td><td>1 место · вывоз мусора</td></tr>
+      <tr><td>Эвакуатор</td><td class="r num">4,5</td><td class="r num">30</td><td>ул. Карла Либкнехта, 30А</td><td>1 место · эвакуатор</td></tr>
+      <tr><td>AutoMax</td><td class="r num">3,7</td><td class="r num">33</td><td>ул. Мира, 10А</td><td>2 место · эвакуатор</td></tr>
+      <tr><td>Техник51</td><td class="r num">4,4</td><td class="r num">11</td><td>Загородная ул., 26</td><td>1 место · манипулятор</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>По грузчикам и переездам «Бизон» — лидер</b>, хотя у «Авроры Переезды» и «51 Переезд» рейтинг 5,0 и больше оценок.</li>
+      <li><b>По мусору, эвакуатору и манипулятору выше профильные карточки</b> — у них эти слова в названии и рубриках.</li>
+      <li><b>AutoMax по эвакуатору стоит на ул. Мира, 10А</b> — в соседнем здании с «Бизоном».</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Отдельные новости под вывоз строительного мусора и эвакуатор с буксировкой — их на карточке ещё не было.</li>
+      <li>В каждом тексте — «Мурманск» и «ул. Мира, 8» в первом абзаце, «грузоперевозки» в SEO-блоке.</li>
+      <li>Переезд под ключ, выбор транспорта, междугородние и тяжёлые грузы уже опубликованы и в этап не входят.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Мурманску, карта с центром у ул. Мира, 8. Шесть запросов, первая пятёрка выдачи.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/bizon/74032129300/" target="_blank" rel="noopener">«Бизон», Мурманск, ул. Мира, 8 — Яндекс Карты</a>
+    <a href="https://www.bizongruz.ru/" target="_blank" rel="noopener">bizongruz.ru — сайт компании</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Грузоперевозки и грузчики · Мурманск · ул. Мира, 8</span>
+  <h1>«Бизон» — ТЗ на контент, этап 1</h1>
+  <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «Бизон» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Бизон</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Грузоперевозки и грузчики <small>переезды, вывоз мусора, эвакуатор, манипулятор</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Мурманск, ул. Мира, 8</div></div>
+    <div class="fact"><div class="k">География</div><div class="v">Мурманск и область <small>междугородние перевозки</small></div></div>
+    <div class="fact"><div class="k">Подача</div><div class="v">40–60 минут <small>или к желаемому времени</small></div></div>
+    <div class="fact"><div class="k">Оплата</div><div class="v">Наличные, карта, безнал <small>QR-код, СБП</small></div></div>
+    <div class="fact"><div class="k">Сайт</div><div class="v">bizongruz.ru</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>После анализа ресурсов компании определены цвета: красный и тёмно-синий сайта и опубликованных обложек, белый фон и почти чёрный текст.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#393185;color:#FFFFFF;border-color:#393185"><div class="role">Основной</div><div class="name">Тёмно-синий</div><div class="hex">#393185</div></div>
+    <div class="swatch" style="background:#EA0B09;color:#FFFFFF;border-color:#EA0B09"><div class="role">Акцентный</div><div class="name">Красный</div><div class="hex">#EA0B09</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#212121;border-color:#FFFFFF"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+    <div class="swatch" style="background:#212121;color:#FFFFFF;border-color:#3a3a3a"><div class="role">Текстовый</div><div class="name">Почти чёрный</div><div class="hex">#212121</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап закрывает две услуги из прайса, по которым карточку сейчас не видно и о которых на карточке ещё не писали.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Вывоз строительного мусора после ремонта в Мурманске: погрузка и вывоз.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Эвакуатор и буксировка автомобилей до 2,5 тонн по Мурманску и области.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>2 темы с обложкой. Публикация — карточка компании «Бизон» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы», спокойно и по делу. Вступление — от лица компании, дальше факты из прайса карточки и сайта без дополнений. Цены — только из прайса карточки. Без телефона и e-mail в тексте, без превосходных степеней и сравнений с другими компаниями. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">2 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Вывоз строительного мусора в Мурманске: погрузка и вывоз после ремонта</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы грузим и вывозим строительный мусор после ремонта — по Мурманску и области.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Вывоз строительного мусора из трёхкомнатной квартиры — погрузка и вывоз строительного мусора после ремонта или строительных работ, 10 000 ₽.<span class="src">прайс карточки</span></li>
+      <li>Перевозим по городу и области: вывоз мусора, строительные материалы, линолеум, ковры.<span class="src">сайт</span></li>
+      <li>Время подачи 40–60 минут или к желаемому времени.<span class="src">сайт</span></li>
+      <li>Оплата: наличными, картой, банковским переводом, QR-код, СБП.<span class="src">карточка</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Вывоз строительного мусора в Мурманске — «Бизон»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Вывоз мусора после ремонта, Мурманск, ул. Мира, 8 | Бизон</span></div>
+      <div class="meta-row"><span><b>Description · </b>Погрузка и вывоз строительного мусора после ремонта по Мурманску и области. Подача 40–60 минут или к желаемому времени. «Бизон», ул. Мира, 8.</span></div>
+      <div class="chips"><span class="chip-kw">вывоз мусора мурманск</span><span class="chip-kw">вывоз строительного мусора мурманск</span><span class="chip-kw">вывоз мусора после ремонта</span><span class="chip-kw">грузчики для вывоза мусора</span><span class="chip-kw">грузоперевозки мурманск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку на вывоз мусора в карточке компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Вывезем мусор после ремонта»</div>
+      <p>Композиция: грузовик компании у подъезда с мешками строительного мусора, без людей в кадре. Тезис одной строкой в нижней трети, логотип в верхнем левом углу. Текст не больше 20% площади.</p>
+      <p>Цвета: плашка под тезисом — тёмно-синий #393185, тезис — белый #FFFFFF, короткая линия — красный #EA0B09.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Эвакуатор и буксировка автомобиля в Мурманске и области — «Бизон»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы перевозим автомобили до 2,5 тонн на эвакуаторе и буксируем авто на гибкой сцепке.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Эвакуатор подходит для перевозки автомобилей массой до 2,5 тонн, 2 000 ₽/ч.<span class="src">прайс карточки</span></li>
+      <li>Буксировка автомобилей фургоном на гибкой сцепке — подходит для транспортировки автомобилей на необходимое расстояние, 1 500 ₽/ч.<span class="src">прайс карточки</span></li>
+      <li>Перевозим по городу и области: перевозка авто до 2,5 т.<span class="src">сайт</span></li>
+      <li>Время подачи 40–60 минут или к желаемому времени.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Эвакуатор и буксировка авто в Мурманске — «Бизон»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Эвакуатор до 2,5 т и буксировка авто, Мурманск | Бизон</span></div>
+      <div class="meta-row"><span><b>Description · </b>Эвакуатор для автомобилей до 2,5 тонн — 2 000 ₽/ч, буксировка на гибкой сцепке — 1 500 ₽/ч. Мурманск и область, подача 40–60 минут. «Бизон», ул. Мира, 8.</span></div>
+      <div class="chips"><span class="chip-kw">эвакуатор мурманск</span><span class="chip-kw">буксировка авто мурманск</span><span class="chip-kw">эвакуатор мурманская область</span><span class="chip-kw">перевозка автомобиля на эвакуаторе</span><span class="chip-kw">грузоперевозки мурманск</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> закажите эвакуатор в карточке компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Эвакуатор до 2,5 тонн»</div>
+      <p>Композиция: эвакуатор с легковым автомобилем на платформе, городской фон. Тезис сверху, строка «буксировка на гибкой сцепке» ниже, логотип в верхнем левом углу.</p>
+      <p>Цвета: полоса с тезисом — красный #EA0B09, тезис — белый #FFFFFF, строка — белый #FFFFFF на тёмно-синем #393185.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>2 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">2 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Вывоз строительного мусора</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Погрузка и вывоз</span><span class="fact-pill">После ремонта</span><span class="fact-pill">Город и область</span><span class="fact-pill">Подача 40–60 минут</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #393185, заголовок белым #FFFFFF, факты на белых плашках #FFFFFF текстом #212121, одна линия красным #EA0B09. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Эвакуатор и буксировка</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Авто до 2,5 т</span><span class="fact-pill">Эвакуатор — 2 000 ₽/ч</span><span class="fact-pill">Гибкая сцепка — 1 500 ₽/ч</span><span class="fact-pill">Мурманск и область</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, заголовок тёмно-синим #393185, цены на красных плашках #EA0B09 белым текстом #FFFFFF.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — вывоз мусора, эвакуатор <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Вывоз строительного мусора в Мурманске</b>под «вывоз мусора мурманск», «вывоз строительного мусора»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Вывоз строительного мусора</b>погрузка, вывоз, подача</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Эвакуатор и буксировка автомобиля</b>под «эвакуатор мурманск», «буксировка авто»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Эвакуатор и буксировка</b>до 2,5 т, цены за час</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}if(scroll)window.scrollTo({top:0})}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
