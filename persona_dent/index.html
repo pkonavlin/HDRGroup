@@ -1,388 +1,499 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Персона — ТЗ</title>
+<title>Проект «Персона» — этапы 2–3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
-  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
-  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
-  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
-  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
-    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
-  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
-}
-*{box-sizing:border-box}
-html{scroll-padding-top:70px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
-h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
-a{color:var(--teal)}
-a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
-  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
-.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
-.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
-.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
-.topbar nav a:hover{color:var(--roe)}
-.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
-@media (max-width:560px){.wrap{padding-inline:16px}}
-section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
-section:last-of-type{border-bottom:none}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
-h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
-h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
-.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
-.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
-.fact{background:var(--card);padding:16px 18px;min-width:0}
-.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
-.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
-.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
-.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
-.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
-.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
-.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
-.sw.light{color:#FFFFFF}
-.sw.dark{color:#111111}
-.legal{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:14px}
-.legal b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--roe);display:block;margin-bottom:4px}
-.timeline{display:grid;gap:12px;margin-top:24px}
-.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
-.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
-.stage summary::-webkit-details-marker{display:none}
-.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
-.stage[open] summary::before{transform:rotate(90deg)}
-.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
-.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
-.stage-body{margin-top:14px}
-.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
-.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
-.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-.flow i{font-style:normal;color:var(--ink-soft)}
-.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
-.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
-.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
-@media (max-width:560px){.theme-card{padding:20px 18px}}
-.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
-.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
-.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
-.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
-.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
-.blk{margin-top:18px}
-.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
-.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch;margin:0}
-ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
-ul.thesis li{margin-bottom:6px}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
-.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch;margin:0}
-.cta{font-size:14.5px;font-weight:600;color:var(--roe);margin:0}
-.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
-.cover-box .blk-h{color:var(--roe)}
-.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
-.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
-.cover-box dd{margin:0;min-width:0}
-@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
-.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
-.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
-.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
-.story-card h4{font-size:16.5px}
-.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
-.story-card ul li{margin-bottom:4px}
-.story-card .chips{margin-top:12px}
-.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
-.design-note b{color:var(--ink)}
-.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
-.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
-.road li{position:relative;padding:0 0 14px 28px}
-.road li:last-child{padding-bottom:0}
-.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
-.road li.st::before{border-color:var(--roe)}
-.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
-.road li.st .fmt{color:var(--roe)}
-.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
-.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero,.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1,.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.14;max-width:24ch}
+.vc .lead,.va header.top p{margin:14px 0 0;max-width:64ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.8}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px}
+.vc .sw-l{color:#FFFFFF}.vc .sw-d{color:#201C1C}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .lbl,.vc .thesis-lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl,.vc .cover-box .lbl{color:var(--gold)}.vc .thesis-lbl,.vc .seo-box .lbl{color:var(--ink-3)}.vc .thesis-lbl{margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .meta-row{margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .legal{margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--good-soft);font-size:13.5px;color:var(--ink-2)}.vc .legal .lbl{color:var(--good)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}.vc .badge.mute{background:none;color:var(--ink-3);border-color:var(--line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
 </style>
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">«Персона»</div>
-  <nav aria-label="Разделы">
-    <a href="#p-company">Компания</a>
-    <a href="#p-brandbook">Брендбук</a>
-    <a href="#p-cycle">Логика цикла</a>
-    <a href="#p-news">Новости</a>
-    <a href="#p-stories">Сторис</a>
-    <a href="#p-map">Карта тем</a>
-  </nav>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Персона»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Екатеринбург · стоматология · замер 19.11.2026</span>
+  <h1>Где «Персона» сильна на Картах, а где её обходят соседи</h1>
+  <p>Стоматологический центр «Персона», ул. Анатолия Мехренцева, 3: 10 целевых запросов под этапы 2–3 и клиники Академического района, которые стоят рядом в гео-выдаче.</p>
 </header>
-<main class="wrap">
 
-  <section id="p-company">
-    <div class="eyebrow">01 · Компания</div>
-    <h1 class="title">Стоматологический центр «Персона», Екатеринбург</h1>
-    <p class="lede">Стоматологическая клиника. Детская стоматология. Публикация новостей и сторис — карточка компании на Яндекс Картах и в 2ГИС.</p>
-    <div class="facts-grid">
-      <div class="fact"><div class="k">Наименование</div><div class="v">Стоматологический центр "Персона"</div></div>
-      <div class="fact"><div class="k">Сфера деятельности</div><div class="v">В стоматологическом центре "Персона" оказывают помощь по всем направлениям: лечение, удаление, восстановление и отбеливание зубов, имплантация, протезирование, профилактика, исправление прикуса.</div></div>
-      <div class="fact"><div class="k">Основные услуги</div><div class="v">Имплантация, виниры, коронки из диоксида циркония, элайнеры, брекет-системы, отбеливание, профессиональная гигиена зубов, лечение кариеса/пульпита, ортодонтические пластины</div></div>
-      <div class="fact"><div class="k">Преимущества</div><div class="v">Высокий уровень обслуживания, первоклассный сервис, соблюдение строгих стандартов безопасности, уникальный персонал</div></div>
-      <div class="fact"><div class="k">Режим работы</div><div class="v">Понедельник–Пятница 09:00–21:00 · Суббота 09:00–17:00 · Воскресенье Выходной</div></div>
-      <div class="fact"><div class="k">Адрес</div><div class="v">Екатеринбург, Свердловская область, улица Мехренцева д.3</div></div>
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">держит первое место</span><p><b>Имплантация, «все на 4», лечение каналов под микроскопом, пародонтит, удаление зуба</b>По этим запросам рядом с клиникой «Персона» стоит первой: рейтинг 5,0 и 271 оценка.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Стоматология академический» — карточки нет в первой пятёрке</b>Пятёрку занимают Альфа Бета, Академический, Белый жемчуг, Первая Цифровая Стоматология и Альба. Три из пяти — со спецпредложением.</p></div>
+    <div class="v"><span class="pill warn">ниже соседей</span><p><b>Синус-лифтинг — 5 место, съёмные протезы и чистка с брекетами — 4 место</b>Выше стоят клиники с акциями в карточке: Альфа Бета, Первая Цифровая Стоматология, Май Дент, Дента-Кристалл.</p></div>
+    <div class="v"><span class="pill warn">соседи с акциями</span><p><b>Конкуренты подкрепляют позиции спецпредложениями</b>Альфа Бета продвигает «новую челюсть на 4 имплантах», Май Дент — лечение лазером, Ultra-Dent — лечение под микроскопом. У «Персоны» спецпредложения в выдаче нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Запросов, где карточка первая</div><div class="n">5 из 10</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Запросов вне первой пятёрки</div><div class="n">1</div><div class="s">«стоматология академический»</div></div>
+    <div class="kpi"><div class="k">Рейтинг карточки</div><div class="n">5,0</div><div class="s">271 оценка · «Хорошее место 2026»</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Направления с сайта persona-dent.ru, которые ещё не раскрыты в новостях этапа 1. Позиции — Яндекс Карты, поиск от клиники.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th class="r">Место</th><th>Тема</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология академический</td><td>гео</td><td class="r num">нет в 5</td><td class="nw">Этап 2 · Новость 1</td></tr>
+      <tr><td>синус-лифтинг</td><td>хирургия</td><td class="r num">5</td><td class="nw">Этап 2 · Новость 2</td></tr>
+      <tr><td>съемные протезы</td><td>ортопедия</td><td class="r num">4</td><td class="nw">Этап 2 · Новость 3</td></tr>
+      <tr><td>чистка зубов с брекетами</td><td>пародонтология</td><td class="r num">4</td><td class="nw">Этап 2 · Новость 4</td></tr>
+      <tr><td>лечение пародонтита</td><td>пародонтология</td><td class="r num">1</td><td class="nw">Этап 2 · Новость 4</td></tr>
+      <tr><td>удаление зуба</td><td>хирургия</td><td class="r num">1</td><td class="nw">Этап 2 · Сторис 2</td></tr>
+      <tr><td>все на 4 имплантация</td><td>имплантация</td><td class="r num">1</td><td class="nw">Этап 3 · Новость 1</td></tr>
+      <tr><td>имплантация зубов</td><td>имплантация</td><td class="r num">1</td><td class="nw">Этап 3 · Новость 1</td></tr>
+      <tr><td>лечение каналов под микроскопом</td><td>эндодонтия</td><td class="r num">1</td><td class="nw">Этап 3 · Новость 2</td></tr>
+      <tr><td>кт зубов</td><td>диагностика</td><td class="r num">4</td><td class="nw">не берём</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:14px">По «КТ зубов» первое место у «Центра рентгенологии» на Чкалова, 256 — компании того же владельца. Тему в план «Персоны» не ставим, чтобы карточки не делили этот спрос.</p>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка Яндекс Карт, поиск от ул. Мехренцева, 3.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>стоматология академический</td><td>Альфа Бета</td><td>Академический</td><td>Белый жемчуг</td><td>Первая Цифровая Стоматология</td><td>Альба</td></tr>
+      <tr><td>синус-лифтинг</td><td>Первая Цифровая Стоматология</td><td>Май Дент</td><td>Альфа Бета</td><td>ОЛМЕД</td><td class="me">Персона</td></tr>
+      <tr><td>съемные протезы</td><td>Альфа Бета</td><td>Первая Цифровая Стоматология</td><td>Май Дент</td><td class="me">Персона</td><td>Альфа Бета</td></tr>
+      <tr><td>чистка зубов с брекетами</td><td>Дента-Кристалл</td><td>Альфа Бета</td><td>Альфа Бета</td><td class="me">Персона</td><td>Май Дент</td></tr>
+      <tr><td>имплантация зубов</td><td class="me">Персона</td><td>Белый жемчуг</td><td>Линия Улыбки</td><td>Нобель</td><td>Адлон</td></tr>
+      <tr><td>все на 4 имплантация</td><td class="me">Персона</td><td>Белый жемчуг</td><td>Альфа Бета</td><td>Атлант</td><td>Адлон</td></tr>
+      <tr><td>лечение каналов под микроскопом</td><td class="me">Персона</td><td>Линия Улыбки</td><td>Ultra-Dent</td><td>Май Дент</td><td>Альфа Бета</td></tr>
+      <tr><td>лечение пародонтита</td><td class="me">Персона</td><td>Май Дент</td><td>Нобель</td><td>Белый жемчуг</td><td>Линия Улыбки</td></tr>
+      <tr><td>удаление зуба</td><td class="me">Персона</td><td>Белый жемчуг</td><td>Адлон</td><td>Anydent</td><td>Denta Os</td></tr>
+      <tr><td>кт зубов</td><td>Центр рентгенологии</td><td>Нобель</td><td>Picasso</td><td class="me">Персона</td><td>Орион Дент</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Клиники рядом</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>Спецпредложение</th></tr></thead>
+    <tbody>
+      <tr><td><b>Персона</b></td><td class="r num me">5,0</td><td class="r num me">271</td><td>ул. Мехренцева, 3</td><td>нет</td></tr>
+      <tr><td>Альфа Бета</td><td class="r num">5,0</td><td class="r num">1039</td><td>пр. Академика Сахарова, 39</td><td>новая челюсть на 4 имплантах</td></tr>
+      <tr><td>Альфа Бета</td><td class="r num">5,0</td><td class="r num">272</td><td>ул. Академика Ландау, 36</td><td>скидка многодетным</td></tr>
+      <tr><td>Первая Цифровая Стоматология</td><td class="r num">5,0</td><td class="r num">500</td><td>ул. Краснолесья, 10/4</td><td>металлические брекеты</td></tr>
+      <tr><td>Белый жемчуг</td><td class="r num">5,0</td><td class="r num">443</td><td>ул. Краснолесья, 123</td><td>есть</td></tr>
+      <tr><td>Май Дент</td><td class="r num">5,0</td><td class="r num">202</td><td>ул. Краснолесья, 30</td><td>лечение лазером</td></tr>
+      <tr><td>Линия Улыбки</td><td class="r num">4,9</td><td class="r num">253</td><td>ул. Павла Шаманова, 26</td><td>нет</td></tr>
+      <tr><td>Адлон</td><td class="r num">5,0</td><td class="r num">155</td><td>ул. Мехренцева, 46</td><td>есть</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Альфа Бета</b> — две карточки рядом, у одной 1039 оценок; встречается в пятёрке по 6 запросам из 10.</li>
+      <li><b>Первая Цифровая Стоматология и Май Дент</b> обходят «Персону» по синус-лифтингу и съёмным протезам при меньшем или равном рейтинге — за счёт акций и охвата района.</li>
+      <li><b>Адлон</b> на той же улице, Мехренцева, 46 — прямой сосед по имплантации и удалению.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Этап 2 — запросы, где карточка слабее: район, хирургия, съёмное протезирование, гигиена с брекетами.</li>
+      <li>Этап 3 — удерживаем первые места против акций соседей: «все на 4 / все на 6» и лечение под микроскопом.</li>
+      <li>В каждом тексте — «Екатеринбург», «Академический район» и адрес Мехренцева, 3.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск с центром на ул. Мехренцева, 3, первая пятёрка выдачи по 10 запросам.</li>
+    <li>Направления и формулировки услуг — сайт persona-dent.ru и «Особенности» карточки на Яндекс Картах.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/-/CXaV4JJi" target="_blank" rel="noopener">Карточка «Персона» — Яндекс Карты</a>
+    <a href="https://persona-dent.ru/" target="_blank" rel="noopener">persona-dent.ru — сайт клиники</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Стоматология · Екатеринбург · Академический район</span>
+  <h1>«Персона» — ТЗ на контент, этапы 2–3</h1>
+  <p class="lead">Продолжение плана после этапа 1. Этап 2 — 4 новости с обложкой и 4 сторис, этап 3 — 2 новости и 2 сторис. Публикация — карточка компании на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Стоматологический центр «Персона»</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Стоматологическая клиника <small>детская стоматология</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">ул. Анатолия Мехренцева, 3 <small>Академический район</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 9:00–21:00 <small>сб 9:00–17:00, вс — выходной</small></div></div>
+    <div class="fact"><div class="k">Карточка</div><div class="v">5,0 · 271 оценка <small>«Хорошее место 2026»</small></div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Цвета сняты с сайта persona-dent.ru, как в этапе 1.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch sw-l" style="background:#3A5564"><div class="role">Основной</div><div class="name">Сине-серый</div><div class="hex">#3A5564</div></div>
+    <div class="swatch sw-l" style="background:#2B4250"><div class="role">Второстепенный</div><div class="name">Глубокий сине-серый</div><div class="hex">#2B4250</div></div>
+    <div class="swatch sw-l" style="background:#FF3F1E"><div class="role">Акцент</div><div class="name">Оранжево-красный</div><div class="hex">#FF3F1E</div></div>
+    <div class="swatch sw-d" style="background:#F4F4F4"><div class="role">Фоновый</div><div class="name">Светло-серый</div><div class="hex">#F4F4F4</div></div>
+    <div class="swatch sw-l" style="background:#201C1C"><div class="role">Текст</div><div class="name">Графит</div><div class="hex">#201C1C</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем</h2>
+    <p>Этап 1 раскрыл клинику, коронки, виниры и отбеливание, детскую стоматологию. Этап 2 закрывает запросы, где карточка вне пятёрки или ниже соседей. Этап 3 удерживает первые места против акций конкурентов.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Клиника в Академическом районе с доступной средой.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Хирургия: синус-лифтинг, наращивание костной ткани, пластика дёсен, удаление зубов.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Съёмное протезирование.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Пародонтология: лечение пародонтита, удаление камня, чистка зубов с брекетами.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 5</div><p>«Все на 4» и «Все на 6», протезирование на имплантах.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 6</div><p>Лечение зубов под микроскопом: каналы, пульпит, гранулема.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> тепло, от лица клиники, на «вы». Вступление — голос клиники, дальше факты без дополнений. Услуги не перечисляем каталогом — каждая тема раскрывает своё направление. Без цен, телефона и e-mail в тексте, без торговых марок, без превосходных степеней и обещаний результата. На тексте и обложке — «Имеются противопоказания. Необходима консультация специалиста», не менее 5% площади. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Стоматология в Академическом районе Екатеринбурга с доступной средой — «Персона» на Мехренцева, 3</h3></div><span class="purpose">Гео</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — стоматологический центр «Персона» в Академическом районе. Мы сделали клинику доступной для всех пациентов, в том числе для людей на колясках.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Стоматологическая клиника и детская стоматология на ул. Анатолия Мехренцева, 3, Академический район.<span class="src">карточка</span></li>
+      <li>Вход и санузел, доступные для колясок, парковка для людей с инвалидностью, автоматическая дверь.<span class="src">карточка</span></li>
+      <li>Предварительная запись, Wi-Fi в клинике.<span class="src">карточка</span></li>
+      <li>Оплата картой, безналичный расчёт, онлайн-оплата.<span class="src">карточка</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Стоматология в Академическом районе Екатеринбурга — «Персона» на Мехренцева, 3.</div>
+      <div class="meta-row"><b>H1 · </b>Стоматология в Академическом районе с доступной средой</div>
+      <div class="meta-row"><b>Title · </b>Стоматология Академический, Екатеринбург, Мехренцева 3 | Персона</div>
+      <div class="meta-row"><b>Description · </b>Стоматологическая клиника в Академическом районе: доступно для колясок, парковка для людей с инвалидностью, предварительная запись. «Персона», Мехренцева, 3.</div>
+      <div class="chips"><span class="chip-kw">стоматология академический</span><span class="chip-kw">стоматология академический район екатеринбург</span><span class="chip-kw">стоматология мехренцева</span><span class="chip-kw">доступная стоматология для колясок</span></div>
     </div>
-  </section>
-
-  <section id="p-brandbook">
-    <div class="eyebrow">02 · Мини-брендбук</div>
-    <h2 class="title">Фирменные цвета</h2>
-    <p class="lede">После анализа ресурсов компании определены фирменные цвета: сине-серый, оранжево-красный и белый. Сине-серый — фон шапки сайта под белым логотипом «Персона», глубокий сине-серый — тёмные панели сайта, оранжево-красный — кнопка «Запись на приём», светло-серый — фон блоков сайта, графит — основной текст.</p>
-    <div class="swatches">
-      <div class="sw light" style="background:#3A5564"><span class="role">Основной</span><span class="name">Сине-серый</span><span class="hex">#3A5564</span></div>
-      <div class="sw light" style="background:#2B4250"><span class="role">Второстепенный</span><span class="name">Глубокий сине-серый</span><span class="hex">#2B4250</span></div>
-      <div class="sw light" style="background:#FF3F1E"><span class="role">Акцентный</span><span class="name">Оранжево-красный</span><span class="hex">#FF3F1E</span></div>
-      <div class="sw dark" style="background:#F4F4F4"><span class="role">Фоновый</span><span class="name">Светло-серый</span><span class="hex">#F4F4F4</span></div>
-      <div class="sw light" style="background:#201C1C"><span class="role">Текстовый</span><span class="name">Графит</span><span class="hex">#201C1C</span></div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на приём через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Факты об удобствах — из «Особенностей» карточки, без оценок качества лечения. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стоматология в Академическом — доступна для всех»</div>
+      <p>Композиция: фасад или вход клиники, поверх тезис и строка «Мехренцева, 3». Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: подложка тезиса #3A5564, текст белый, строка адреса — акцент #FF3F1E.</p>
     </div>
-    <div class="legal"><b>Обязательная надпись</b>«Имеются противопоказания. Необходима консультация специалиста» — на каждой обложке новости и на каждом слайде сторис, мелким кеглем внизу.</div>
-  </section>
+  </div>
 
-  <section id="p-cycle">
-    <div class="eyebrow">03 · Логика цикла</div>
-    <h2 class="title">От клиники полного цикла к детской стоматологии</h2>
-    <div class="timeline">
-      <details class="stage" open>
-        <summary>Этап 1 — клиника, коронки, виниры, детская стоматология <span class="badge">актуальный</span></summary>
-        <div class="stage-body">
-          <p>Этап начинается со знакомства с «Персоной» как с центром, где помогают по всем направлениям и принимают по вечерам и в субботу. Затем раскрываются две услуги восстановления и эстетики — коронки из диоксида циркония и виниры с отбеливанием. Завершает цикл детская стоматология и исправление прикуса ортодонтическими пластинами. Сторис дополняют цикл графиком, направлениями, исправлением прикуса и лечением.</p>
-          <div class="flow"><span>Все направления, удобный график</span><i>→</i><span>Коронки из диоксида циркония</span><i>→</i><span>Виниры и отбеливание</span><i>→</i><span>Детская стоматология и пластины</span></div>
-        </div>
-      </details>
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Синус-лифтинг и наращивание костной ткани в Екатеринбурге — хирургия в стоматологии «Персона»</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы проводим в «Персоне» хирургическое лечение: от удаления зуба до восстановления костной ткани.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Синус-лифтинг.<span class="src">сайт</span></li>
+      <li>Наращивание и восстановление костной ткани.<span class="src">сайт</span></li>
+      <li>Наращивание и пластика дёсен.<span class="src">сайт</span></li>
+      <li>Удаление зуба.<span class="src">сайт</span></li>
+      <li>В клинике есть направление имплантации зубов.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Синус-лифтинг и наращивание костной ткани в Екатеринбурге — стоматология «Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Синус-лифтинг и костная пластика в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Синус-лифтинг, наращивание кости, пластика дёсен, Екатеринбург | Персона</div>
+      <div class="meta-row"><b>Description · </b>Хирургия в стоматологии «Персона»: синус-лифтинг, наращивание костной ткани, пластика дёсен, удаление зубов. Мехренцева, 3.</div>
+      <div class="chips"><span class="chip-kw">синус-лифтинг екатеринбург</span><span class="chip-kw">наращивание костной ткани</span><span class="chip-kw">пластика десны</span><span class="chip-kw">удаление зуба екатеринбург</span></div>
     </div>
-  </section>
-
-  <section id="p-news">
-    <div class="eyebrow">04 · Новости</div>
-    <h2 class="title">Новости этапа 1</h2>
-    <p class="lede">Публикация — карточка компании «Персона» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, гео-ключи «Екатеринбург», «Мехренцева, 3» в первом абзаце и далее по тексту. Телефон и адрес электронной почты в тексте не указываются: они находятся в полях карточки. Стоимость в тексте не указывается.</p>
-    <div class="tone-banner"><b>Тон текстов</b>Обращение на «Вы». Каждый текст начинается от лица клиники («мы») и раскрывает одну тему, без перечисления всех услуг подряд. Без слов «безопасно», «безвредно», «безболезненно», «эффективно», без превосходных степеней. В тексте — только факты из блока «Компания», без названий материалов, брендов, сроков и цен. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Минимум эмодзи. В конце каждого текста — «Имеются противопоказания. Необходима консультация специалиста».</div>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 1</span>
-        <h3>Стоматология на Мехренцева, 3 в Екатеринбурге: помощь по всем направлениям, приём до 21:00 и по субботам</h3>
-        <span class="tag">Имиджевый</span>
-      </div>
-      <p class="why">Знакомство с «Персоной» через то, что важно для записи: все направления в одном центре и график с вечерним приёмом и субботой.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В стоматологическом центре „Персона“ мы оказываем помощь по всем направлениям — и принимаем по будням до 21:00».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Стоматологический центр «Персона» — Екатеринбург, улица Мехренцева д.3</li>
-          <li>Помощь по всем направлениям: лечение, удаление, восстановление и отбеливание зубов, имплантация, протезирование, профилактика, исправление прикуса</li>
-          <li>Понедельник–Пятница 09:00–21:00, Суббота 09:00–17:00</li>
-          <li>Высокий уровень обслуживания, уникальный персонал</li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">стоматология Екатеринбург</span><span class="chip">стоматологическая клиника Екатеринбург</span><span class="chip">стоматология Мехренцева 3</span><span class="chip">стоматолог вечером Екатеринбург</span><span class="chip">стоматология в субботу Екатеринбург</span><span class="chip">стоматологический центр Персона</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Стоматологический центр «Персона» в Екатеринбурге на Мехренцева, 3: помощь по всем направлениям, приём по будням до 21:00 и в субботу с 09:00 до 17:00.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь в «Персону» в удобное время — по будням до 21:00.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>«Приём до 21:00»</dd>
-          <dt>Фото</dt><dd>Кабинет клиники из фотографий карточки компании на Яндекс Картах</dd>
-          <dt>Цвета</dt><dd>Заголовок #FFFFFF на плашке #3A5564, акцент-линия #FF3F1E, логотип белым в нижнем углу; обязательная надпись внизу на #2B4250</dd>
-          <dt>Подпись</dt><dd>«Мехренцева, 3 · Пн–Пт до 21:00 · Сб»</dd>
-        </dl>
-      </div>
-    </article>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 2</span>
-        <h3>Коронки из диоксида циркония в Екатеринбурге — протезирование в стоматологии «Персона»</h3>
-        <span class="tag">Экспертный</span>
-      </div>
-      <p class="why">Протезирование — направление клиники, коронки из диоксида циркония — отдельная позиция основных услуг.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Восстанавливаем зубы коронками из диоксида циркония».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Коронки из диоксида циркония</li>
-          <li>Протезирование и восстановление зубов</li>
-          <li>Имплантация — в том же центре</li>
-          <li>«Персона», улица Мехренцева д.3</li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">коронки из диоксида циркония Екатеринбург</span><span class="chip">циркониевые коронки Екатеринбург</span><span class="chip">коронка на зуб Екатеринбург</span><span class="chip">протезирование зубов Екатеринбург</span><span class="chip">протезирование Мехренцева</span><span class="chip">восстановление зубов коронками</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Коронки из диоксида циркония в стоматологии «Персона», Екатеринбург, Мехренцева, 3: протезирование и восстановление зубов.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по протезированию.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>«Коронки из циркония»</dd>
-          <dt>Фото</dt><dd>Улыбка крупным планом из фотографий карточки компании на Яндекс Картах</dd>
-          <dt>Цвета</dt><dd>Светлый фон #F4F4F4, заголовок #201C1C, акцент-линия #FF3F1E, логотип на плашке #3A5564 в нижнем углу; обязательная надпись внизу</dd>
-          <dt>Подпись</dt><dd>«Протезирование»</dd>
-        </dl>
-      </div>
-    </article>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 3</span>
-        <h3>Виниры и отбеливание зубов в Екатеринбурге: эстетика улыбки в стоматологии «Персона»</h3>
-        <span class="tag">Продающий</span>
-      </div>
-      <p class="why">Виниры и отбеливание — основные услуги клиники; продолжают тему восстановления, но с акцентом на эстетику.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Помогаем улыбке выглядеть так, как Вам хочется, — с помощью виниров и отбеливания».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Виниры</li>
-          <li>Отбеливание</li>
-          <li>Восстановление и отбеливание зубов — направления клиники</li>
-          <li>«Персона», улица Мехренцева д.3</li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">виниры Екатеринбург</span><span class="chip">поставить виниры Екатеринбург</span><span class="chip">отбеливание зубов Екатеринбург</span><span class="chip">эстетическая стоматология Екатеринбург</span><span class="chip">виниры Мехренцева</span><span class="chip">отбеливание зубов Мехренцева 3</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Виниры и отбеливание зубов в стоматологии «Персона» в Екатеринбурге на Мехренцева, 3: восстановление и эстетика улыбки.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по винирам и отбеливанию.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>«Виниры и отбеливание»</dd>
-          <dt>Фото</dt><dd>Портрет с открытой улыбкой из фотографий карточки компании на Яндекс Картах</dd>
-          <dt>Цвета</dt><dd>Заголовок #FFFFFF поверх фото, затемнение нижней трети #2B4250, акцент-линия #FF3F1E, логотип белым в углу; обязательная надпись внизу</dd>
-          <dt>Подпись</dt><dd>«Эстетика улыбки»</dd>
-        </dl>
-      </div>
-    </article>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 4</span>
-        <h3>Детская стоматология и ортодонтические пластины в Екатеринбурге — стоматология «Персона»</h3>
-        <span class="tag">Продающий</span>
-      </div>
-      <p class="why">Детская стоматология — направление компании; ортодонтические пластины и исправление прикуса — из основных услуг.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«В „Персоне“ есть детская стоматология — и мы исправляем прикус ортодонтическими пластинами».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Детская стоматология</li>
-          <li>Ортодонтические пластины</li>
-          <li>Исправление прикуса — одно из направлений клиники; также элайнеры и брекет-системы</li>
-          <li>«Персона», улица Мехренцева д.3</li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">детская стоматология Екатеринбург</span><span class="chip">детский стоматолог Екатеринбург</span><span class="chip">ортодонтические пластины Екатеринбург</span><span class="chip">пластинки для выравнивания зубов</span><span class="chip">исправление прикуса Екатеринбург</span><span class="chip">детская стоматология Мехренцева</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Meta-описание</div><p class="meta">Стоматология «Персона» в Екатеринбурге на Мехренцева, 3: детская стоматология и исправление прикуса ортодонтическими пластинами.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Записывайтесь на консультацию по исправлению прикуса.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>«Детская стоматология»</dd>
-          <dt>Фото</dt><dd>Ребёнок на приёме из фотографий карточки компании на Яндекс Картах</dd>
-          <dt>Цвета</dt><dd>Заголовок #FFFFFF на плашке #3A5564, акцент-линия #FF3F1E, подпись на светлом #F4F4F4 текстом #201C1C, логотип в углу; обязательная надпись внизу</dd>
-          <dt>Подпись</dt><dd>«Ортодонтические пластины»</dd>
-        </dl>
-      </div>
-    </article>
-  </section>
-
-  <section id="p-stories">
-    <div class="eyebrow">05 · Сторис</div>
-    <h2 class="title">Сторис этапа 1</h2>
-    <p class="lede">Публикация — карточка компании на Яндекс Картах и в 2ГИС. Формат — презентация, один слайд — одна тема, только тезисы и факты. На каждом слайде — обязательная надпись «Имеются противопоказания. Необходима консультация специалиста».</p>
-    <div class="story-grid">
-      <div class="story-card">
-        <span class="slide-tag">Сторис 1 · 1 слайд</span>
-        <h4>График работы</h4>
-        <ul>
-          <li>Пн–Пт 09:00–21:00</li>
-          <li>Сб 09:00–17:00</li>
-          <li>Вс выходной</li>
-        </ul>
-        <div class="chips"><span class="chip">стоматология Мехренцева 3</span><span class="chip">стоматолог вечером Екатеринбург</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #3A5564, заголовок #FFFFFF, акцент-линия #FF3F1E под заголовком, три строки графика белым, логотип «Персона» белым внизу по центру.</div>
-      </div>
-      <div class="story-card">
-        <span class="slide-tag">Сторис 2 · 1 слайд</span>
-        <h4>Помощь по всем направлениям</h4>
-        <ul>
-          <li>Лечение · удаление</li>
-          <li>Восстановление · отбеливание</li>
-          <li>Имплантация · протезирование</li>
-          <li>Профилактика · исправление прикуса</li>
-        </ul>
-        <div class="chips"><span class="chip">стоматологическая клиника Екатеринбург</span><span class="chip">стоматология Мехренцева</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> светлый фон #F4F4F4, заголовок #201C1C, направления списком в плашках #3A5564 с белым текстом, акцент-линия #FF3F1E.</div>
-      </div>
-      <div class="story-card">
-        <span class="slide-tag">Сторис 3 · 1 слайд</span>
-        <h4>Исправление прикуса</h4>
-        <ul>
-          <li>Элайнеры</li>
-          <li>Брекет-системы</li>
-          <li>Ортодонтические пластины</li>
-        </ul>
-        <div class="chips"><span class="chip">исправление прикуса Екатеринбург</span><span class="chip">элайнеры Екатеринбург</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фото из фотографий карточки в верхней половине, ниже фон #2B4250, заголовок #FFFFFF, три способа в строку через тонкие разделители #FF3F1E.</div>
-      </div>
-      <div class="story-card">
-        <span class="slide-tag">Сторис 4 · 1 слайд</span>
-        <h4>Лечение и профилактика</h4>
-        <ul>
-          <li>Лечение кариеса/пульпита</li>
-          <li>Профессиональная гигиена зубов</li>
-        </ul>
-        <div class="chips"><span class="chip">лечение кариеса Екатеринбург</span><span class="chip">профессиональная гигиена зубов Екатеринбург</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #3A5564, заголовок #FFFFFF, два пункта в плашках #F4F4F4 с текстом #201C1C, акцент-линия #FF3F1E, логотип белым внизу.</div>
-      </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на консультацию хирурга через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без формулировок «без боли», «безопасно», без сроков приживления и гарантий результата. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Синус-лифтинг · костная пластика · пластика дёсен»</div>
+      <p>Композиция: три плашки с названиями процедур на светлом фоне, тезис сверху. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: фон #F4F4F4, плашки #2B4250 с белым текстом, разделители — #FF3F1E.</p>
     </div>
-  </section>
+  </div>
 
-  <section id="p-map">
-    <div class="eyebrow">06 · Карта тем</div>
-    <h2 class="title">Карта тем по этапам</h2>
-    <div class="timeline">
-      <details class="stage" open>
-        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span> <span class="badge">актуальный</span></summary>
-        <ol class="road">
-          <li><span class="fmt">Новость 1</span><span class="t">Помощь по всем направлениям, приём до 21:00 и по субботам</span><span class="d">Все направления клиники, график работы, адрес</span></li>
-          <li class="st"><span class="fmt">История 1</span><span class="t">График работы</span><span class="d">Пн–Пт 09:00–21:00, Сб 09:00–17:00, Вс выходной</span></li>
-          <li><span class="fmt">Новость 2</span><span class="t">Коронки из диоксида циркония</span><span class="d">Протезирование и восстановление зубов</span></li>
-          <li class="st"><span class="fmt">История 2</span><span class="t">Помощь по всем направлениям</span><span class="d">Лечение, удаление, восстановление, отбеливание, имплантация, протезирование, профилактика, прикус</span></li>
-          <li><span class="fmt">Новость 3</span><span class="t">Виниры и отбеливание зубов</span><span class="d">Эстетика улыбки</span></li>
-          <li class="st"><span class="fmt">История 3</span><span class="t">Исправление прикуса</span><span class="d">Элайнеры, брекет-системы, ортодонтические пластины</span></li>
-          <li><span class="fmt">Новость 4</span><span class="t">Детская стоматология и ортодонтические пластины</span><span class="d">Детская стоматология, ортодонтические пластины, исправление прикуса</span></li>
-          <li class="st"><span class="fmt">История 4</span><span class="t">Лечение и профилактика</span><span class="d">Лечение кариеса/пульпита, профессиональная гигиена зубов</span></li>
-        </ol>
-      </details>
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Съёмные протезы в Екатеринбурге — съёмное протезирование в стоматологии «Персона»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы восстанавливаем зубы в «Персоне» разными способами, и съёмное протезирование — одно из направлений нашей ортопедии.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Съёмное протезирование — отдельное направление в разделе протезирования.<span class="src">сайт</span></li>
+      <li>В ортопедии клиники также коронки, микропротезирование и протезирование на имплантах.<span class="src">сайт</span></li>
+      <li>Приём по будням до 21:00 и в субботу.<span class="src">карточка</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Съёмные протезы в Екатеринбурге — съёмное протезирование в стоматологии «Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Съёмное протезирование зубов в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Съёмные протезы, протезирование зубов, Академический | Персона</div>
+      <div class="meta-row"><b>Description · </b>Съёмное протезирование в стоматологическом центре «Персона»: подбор конструкции на консультации ортопеда. Мехренцева, 3, Екатеринбург.</div>
+      <div class="chips"><span class="chip-kw">съемные протезы екатеринбург</span><span class="chip-kw">съемное протезирование</span><span class="chip-kw">протезирование зубов академический</span></div>
     </div>
-  </section>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на консультацию ортопеда через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без марок материалов и сроков службы протеза. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Съёмное протезирование — в “Персоне” на Мехренцева, 3»</div>
+      <p>Композиция: крупный тезис на однотонном фоне, сбоку — пиктограмма зуба в линейном стиле. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: фон #3A5564, тезис белый, пиктограмма — #FF3F1E.</p>
+    </div>
+  </div>
 
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Лечение пародонтита и чистка зубов с брекетами в Екатеринбурге — пародонтология в «Персоне»</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Персоне» заботимся о дёснах так же внимательно, как о зубах, — в том числе у пациентов с брекетами.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Лечение пародонтита.<span class="src">сайт</span></li>
+      <li>Удаление зубного камня.<span class="src">сайт</span></li>
+      <li>Чистка зубов с брекетами.<span class="src">сайт</span></li>
+      <li>Гигиена полости рта — в разделе пародонтологии.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Лечение пародонтита и чистка зубов с брекетами в Екатеринбурге — стоматология «Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Пародонтология в Екатеринбурге: лечение пародонтита и чистка зубов с брекетами</div>
+      <div class="meta-row"><b>Title · </b>Лечение пародонтита, чистка зубов с брекетами, Екатеринбург | Персона</div>
+      <div class="meta-row"><b>Description · </b>Пародонтология в «Персоне»: лечение пародонтита, удаление зубного камня, чистка зубов с брекетами. Мехренцева, 3, Академический.</div>
+      <div class="chips"><span class="chip-kw">лечение пародонтита екатеринбург</span><span class="chip-kw">чистка зубов с брекетами</span><span class="chip-kw">удаление зубного камня</span><span class="chip-kw">пародонтолог академический</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь к пародонтологу через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без обещаний излечения и сроков. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Здоровые дёсны — и с брекетами тоже»</div>
+      <p>Композиция: улыбка с брекетами крупным планом, тезис на плашке поверх. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: плашка #2B4250, тезис белый, акцент «с брекетами» — #FF3F1E.</p>
+    </div>
+  </div>
+
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 новости · следующий</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Имплантация «Все на 4» и «Все на 6» в Екатеринбурге — протезирование на имплантах в «Персоне»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Персоне» восстанавливаем зубной ряд на имплантах — и когда нужен один зуб, и когда нужно восстановить всю челюсть.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Протокол «Все на 4» (All-on-4) и «Все на 6» (All-on-6).<span class="src">сайт</span></li>
+      <li>Протезирование на имплантах.<span class="src">сайт</span></li>
+      <li>Имплантация зубов — отдельное направление клиники.<span class="src">сайт</span></li>
+      <li>В клинике есть хирургия: синус-лифтинг и наращивание костной ткани.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Имплантация «Все на 4» и «Все на 6» в Екатеринбурге — стоматология «Персона».</div>
+      <div class="meta-row"><b>H1 · </b>«Все на 4» и «Все на 6»: протезирование на имплантах в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Все на 4, все на 6, имплантация зубов, Екатеринбург | Персона</div>
+      <div class="meta-row"><b>Description · </b>Протоколы «Все на 4» и «Все на 6», протезирование на имплантах в стоматологическом центре «Персона». Мехренцева, 3, Академический.</div>
+      <div class="chips"><span class="chip-kw">все на 4 имплантация екатеринбург</span><span class="chip-kw">все на 6</span><span class="chip-kw">имплантация зубов екатеринбург</span><span class="chip-kw">протезирование на имплантах</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на консультацию по имплантации через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без марок имплантов, сроков и гарантий результата. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Все на 4 · Все на 6»</div>
+      <p>Композиция: две крупные цифры «4» и «6» в плашках, под ними строка «протезирование на имплантах». Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: фон #F4F4F4, цифры #3A5564, строка — #201C1C, разделитель — #FF3F1E.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Лечение каналов под микроскопом в Екатеринбурге — эндодонтия в стоматологии «Персона»</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы в «Персоне» лечим зубы под микроскопом, чтобы врач видел всё, что происходит внутри зуба.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Лечение зубов под микроскопом.<span class="src">сайт</span></li>
+      <li>Лечение пульпита и гранулемы.<span class="src">сайт</span></li>
+      <li>Эндодонтия — в списке направлений карточки.<span class="src">карточка</span></li>
+      <li>Приём по будням до 21:00 и в субботу.<span class="src">карточка</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Лечение каналов под микроскопом в Екатеринбурге — стоматология «Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Лечение зубов под микроскопом в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Лечение каналов под микроскопом, пульпит, гранулема | Персона</div>
+      <div class="meta-row"><b>Description · </b>Эндодонтия в «Персоне»: лечение каналов под микроскопом, лечение пульпита и гранулемы. Мехренцева, 3, Академический район.</div>
+      <div class="chips"><span class="chip-kw">лечение каналов под микроскопом</span><span class="chip-kw">лечение зубов под микроскопом екатеринбург</span><span class="chip-kw">лечение гранулемы зуба</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на приём к стоматологу-терапевту через карточку «Персоны» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без марок микроскопа и обещаний «сохраним зуб». Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Лечение каналов под микроскопом»</div>
+      <p>Композиция: макро-фото работы врача с микроскопом, тезис на плашке снизу. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: плашка #3A5564, тезис белый, линия-акцент — #FF3F1E.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>Формат презентации: один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Клиника, доступная для всех</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Вход для колясок</span><span class="fact-pill">Доступный санузел</span><span class="fact-pill">Парковка для людей с инвалидностью</span><span class="fact-pill">Автоматическая дверь</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #F4F4F4, тезис #201C1C, факты — плашки #3A5564 с белым текстом. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Хирургия в «Персоне»</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Удаление зуба</span><span class="fact-pill">Синус-лифтинг</span><span class="fact-pill">Наращивание костной ткани</span><span class="fact-pill">Пластика дёсен</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #2B4250, тезис белым крупно, факты списком, маркеры — #FF3F1E. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Как мы восстанавливаем зубы</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Съёмное протезирование</span><span class="fact-pill">Микропротезирование</span><span class="fact-pill">Протезирование на имплантах</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #3A5564, три способа — карточки #F4F4F4 с текстом #201C1C. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Брекеты? Дёснам нужна забота</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Чистка зубов с брекетами</span><span class="fact-pill">Удаление зубного камня</span><span class="fact-pill">Лечение пародонтита</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #F4F4F4, тезис #2B4250, слово «брекеты» — #FF3F1E. Внизу — пометка о противопоказаниях.</div></div>
+  </div>
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 сторис · следующий</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Все на 4 · Все на 6</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">All-on-4</span><span class="fact-pill">All-on-6</span><span class="fact-pill">Протезирование на имплантах</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #2B4250, цифры «4» и «6» крупно белым, подпись — #FF3F1E. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Лечим под микроскопом</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Лечение каналов</span><span class="fact-pill">Пульпит</span><span class="fact-pill">Гранулема</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #F4F4F4, тезис #3A5564, факты — плашки #2B4250 с белым текстом. Внизу — пометка о противопоказаниях.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage">
+    <summary>Этап 1 — клиника, коронки, эстетика, детская стоматология <span class="badge mute">Пройден</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматология на Мехренцева, 3: помощь по всем направлениям</b>приём до 21:00 и по субботам</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>График работы</b>пн–пт 9–21, сб 9–17</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Коронки из диоксида циркония</b>протезирование</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Помощь по всем направлениям</b>направления клиники</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Виниры и отбеливание зубов</b>эстетика улыбки</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Исправление прикуса</b>элайнеры, брекеты, пластины</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Детская стоматология и ортодонтические пластины</b>исправление прикуса</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Лечение и профилактика</b>кариес, пульпит, гигиена</span></div>
+    </div>
+  </details>
+  <details class="stage" open>
+    <summary>Этап 2 — район, хирургия, съёмное протезирование, пародонтология <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматология в Академическом районе с доступной средой</b>под «стоматология академический»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Клиника, доступная для всех</b>вход, санузел, парковка, дверь</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Синус-лифтинг и наращивание костной ткани</b>под «синус-лифтинг»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Хирургия в «Персоне»</b>под «удаление зуба»</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Съёмные протезы</b>под «съемные протезы»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Как мы восстанавливаем зубы</b>три способа протезирования</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Лечение пародонтита и чистка зубов с брекетами</b>под «чистка зубов с брекетами», «лечение пародонтита»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Брекеты? Дёснам нужна забота</b>гигиена с брекетами</span></div>
+    </div>
+  </details>
+  <details class="stage" open>
+    <summary>Этап 3 — имплантация и эндодонтия <span class="badge mute">Следующий</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>«Все на 4» и «Все на 6»</b>под «все на 4 имплантация», «имплантация зубов»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Все на 4 · Все на 6</b>протезирование на имплантах</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Лечение каналов под микроскопом</b>под «лечение каналов под микроскопом»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Лечим под микроскопом</b>каналы, пульпит, гранулема</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
 </main>
-
+<script>
+const NAV={analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
 </body>
 </html>
