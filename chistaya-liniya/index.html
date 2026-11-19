@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Чистая линия»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --crit:#F08A7E; --crit-soft:rgba(240,138,126,.13); --warn:#E8B65F; --warn-soft:rgba(232,182,95,.13); --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px dashed var(--gold-line);background:var(--panel)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px}
+.vc .swatch.empty .role{color:var(--ink-3)} .vc .swatch.empty .hex{color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)} .va .pill.warn{color:var(--warn);background:var(--warn-soft)} .va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}
+.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Чистая линия»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Санкт-Петербург · клининг · Трамвайный пр., 12 · замер 19.11.2026</span>
+  <h1>Где «Чистую линию» видно на Картах, а где нет</h1>
+  <p>Карточка компании на Яндекс Картах: 10 целевых запросов по направлениям из брифа и соседи по гео-выдаче Санкт-Петербурга.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">в пятёрке</span><p><b>«Уборка офисов» — 2 место по городу</b>Сразу за карточкой с 3 154 оценками. Направление для юрлиц карточка уже держит.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>По главным направлениям брифа карточки нет в первой пятёрке</b>«Клининг», «генеральная уборка», «уборка квартир после ремонта» — именно эти услуги компания назвала приоритетными.</p></div>
+    <div class="v"><span class="pill warn">акции, а не услуги</span><p><b>Последние новости карточки — про скидки и подарки</b>новосёлам −10%, повторная генеральная −20%, мойка окон в подарок, бесплатный выезд менеджера. Отдельных текстов про саму уборку после ремонта, генеральную уборку, уборку для бизнеса и химчистку нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">5,0</div><div class="s">285 оценок · 249 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">1 из 4</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">14</div><div class="s">последние — акции</div></div>
+    <div class="kpi"><div class="k">Рубрик на карточке</div><div class="n">3</div><div class="s">клининг · химчистка ковров · химчистка</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям из брифа: уборка после ремонта, генеральная уборка, поддерживающая уборка для юрлиц, химчистка мебели и ковров.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>уборка квартир после ремонта спб</td><td>после ремонта</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>уборка после ремонта спб</td><td>после ремонта</td><td>не замеряли</td><td class="nw">Новость 1</td></tr>
+      <tr><td>генеральная уборка спб</td><td>генеральная</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>генеральная уборка квартиры спб</td><td>генеральная</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>клининг спб</td><td>общий</td><td>нет в первых 5</td><td class="nw">Новость 1, 2</td></tr>
+      <tr><td>клининговая компания спб</td><td>общий</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>уборка офисов спб</td><td>юрлица</td><td>2 место</td><td class="nw">Новость 3</td></tr>
+      <tr><td>уборка складов и производств спб</td><td>юрлица</td><td>не замеряли</td><td class="nw">Новость 3</td></tr>
+      <tr><td>химчистка мягкой мебели спб</td><td>химчистка</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+      <tr><td>химчистка ковров спб</td><td>химчистка</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка по замеренным запросам, поиск по Санкт-Петербургу.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>клининг</td><td>Colibri-cleaning</td><td>Neva Home Cleaning</td><td>Уборка-812</td><td>Cleaning812</td><td>Яркий Феникс</td></tr>
+      <tr><td>уборка квартир после ремонта</td><td>Woo Cleaning</td><td>Uberu24</td><td>Оптимум Клининг</td><td>EClean</td><td>Capital Cleaning</td></tr>
+      <tr><td>генеральная уборка</td><td>Оптимум Клининг</td><td>Братья Чистовы</td><td>Woo Cleaning</td><td>Klining24</td><td>Airo</td></tr>
+      <tr><td>уборка офисов</td><td>Dry Cleaning Factory № 1</td><td class="me">Чистая линия</td><td>Alfamaster Cleaning</td><td>Яркий Феникс</td><td>Уборка-812</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Карточки в выдаче рядом с «Чистой линией»</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Чистая линия</b></td><td class="r num me">5,0</td><td class="r num me">285</td><td>Трамвайный пр., 12к2</td><td>2 место · офисы</td></tr>
+      <tr><td>Оптимум Клининг</td><td class="r num">5,0</td><td class="r num">1 019</td><td>ул. Уральская, 19к8</td><td>1 и 3 место</td></tr>
+      <tr><td>Woo Cleaning</td><td class="r num">4,9</td><td class="r num">67</td><td>ул. Миллионная, 12</td><td>1 и 3 место</td></tr>
+      <tr><td>Яркий Феникс</td><td class="r num">5,0</td><td class="r num">302–322</td><td>Тихоокеанская ул., 18к2</td><td>4–5 место в 2 из 4</td></tr>
+      <tr><td>Уборка-812</td><td class="r num">5,0</td><td class="r num">192–198</td><td>пр. Юрия Гагарина, 1</td><td>3–5 место в 2 из 4</td></tr>
+      <tr><td>Братья Чистовы</td><td class="r num">5,0</td><td class="r num">263</td><td>Московский пр., 2/6</td><td>2 место · генеральная</td></tr>
+      <tr><td>Colibri-cleaning</td><td class="r num">4,9</td><td class="r num">128</td><td>ул. Коли Томчака, 24</td><td>1 место · клининг</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Оценки не решают</b>: в пятёрке по «клинингу» и «после ремонта» стоят карточки с 67–192 оценками, у «Чистой линии» — 285 при рейтинге 5,0.</li>
+      <li><b>Выдача по услугам разная</b>: по каждому запросу своя пятёрка, общего лидера нет — карточке нужны тексты под каждое направление.</li>
+      <li><b>По офисам карточка уже вторая</b> — направление для юрлиц стоит расширить на склады и производства.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Первые темы — приоритеты брифа: уборка после ремонта и генеральная уборка, дальше поддерживающая уборка для бизнеса и химчистка.</li>
+      <li>В каждом тексте — «Санкт-Петербург» и услуга с ценой «от N ₽» в первом абзаце.</li>
+      <li>Акции, бесплатный выезд и мойка окон в подарок уже опубликованы и в этап не входят.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Санкт-Петербургу, четыре запроса, первая пятёрка выдачи.</li>
+    <li>Остальные запросы из списка — целевые для текстов этапа, позиции по ним не замерялись.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/chistaya_liniya/57948282390/" target="_blank" rel="noopener">«Чистая линия», Санкт-Петербург, Трамвайный пр., 12к2 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/2/saint-petersburg/search/%D0%BA%D0%BB%D0%B8%D0%BD%D0%B8%D0%BD%D0%B3" target="_blank" rel="noopener">Клининг в Санкт-Петербурге — Яндекс Карты</a>
+    <a href="https://cleanline-spb.ru/" target="_blank" rel="noopener">cleanline-spb.ru — сайт компании</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Клининг · Санкт-Петербург и Ленинградская область</span>
+  <h1>«Чистая линия» — ТЗ на контент, этап 1</h1>
+  <p class="lead">Первый период работы. 4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Чистая линия» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Чистая линия <small>Clean Line</small></div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Клининговые услуги <small>для юрлиц и физлиц</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно <small>и в ночь тоже — по предварительной записи</small></div></div>
+    <div class="fact"><div class="k">Зона работы</div><div class="v">Любые адреса <small>по Санкт-Петербургу и Ленинградской области</small></div></div>
+    <div class="fact"><div class="k">Офис</div><div class="v">Трамвайный пр., 12</div></div>
+    <div class="fact"><div class="k">Преимущество</div><div class="v">Качество и средняя цена</div></div>
+    <div class="fact"><div class="k">Обращение</div><div class="v">На «вы»</div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽»</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Фирменные цвета по брифу: синий и зелёный.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#36AA46;border:0;color:#FFFFFF"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#36AA46</div></div>
+    <div class="swatch empty"><div class="role">Дополнительный</div><div class="name">Синий</div><div class="hex">HEX — по логотипу</div></div>
+    <div class="swatch" style="background:#FFFFFF;border:0;color:#16263E"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Сначала два приоритета брифа — уборка после ремонта и генеральная уборка, по которым карточки нет в выдаче. Затем поддерживающая уборка для бизнеса и химчистка мебели и ковров.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Уборка квартир и домов после ремонта в Санкт-Петербурге и Ленобласти — от 155 ₽/м².</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Генеральная уборка квартир, домов и коттеджей — от 135 ₽/м².</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Поддерживающая уборка для бизнеса: офисы, производства, склады, фитнес-центры, кинотеатры.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Химчистка мягкой мебели и ковров с выездом.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Чистая линия» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы», модно и по-человечески. Вступление — от лица компании, дальше факты брифа и сайта без дополнений. Цены — в формате «от N ₽». Без телефона и e-mail в тексте, без превосходных степеней, без упоминания конкурентов. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Уборка квартир после ремонта в Санкт-Петербурге — от 155 ₽ за м²</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы делаем уборку квартир и домов после ремонта — по любым адресам Санкт-Петербурга и Ленинградской области.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Уборка квартир и домов после ремонта — приоритетное направление компании.<span class="src">бриф</span></li>
+      <li>Уборка квартир после ремонта — от 155 ₽/м², домов и коттеджей после ремонта — от 145 ₽/м².<span class="src">прайс компании</span></li>
+      <li>Удаление клея, штукатурки и пятен рассчитывается индивидуально; мойка окон в базовую цену не входит.<span class="src">прайс компании</span></li>
+      <li>Работаем ежедневно, и в ночь тоже — по предварительной записи.<span class="src">бриф</span></li>
+      <li>Любые адреса по Санкт-Петербургу и Ленинградской области.<span class="src">бриф</span></li>
+      <li>Бесплатная консультация и расчёт стоимости, работа по договору.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Уборка квартир после ремонта в Санкт-Петербурге — от 155 ₽ за м² в клининговой компании «Чистая линия».</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Уборка после ремонта в Санкт-Петербурге и Ленобласти — «Чистая линия»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Уборка квартир и домов после ремонта, СПб — от 155 ₽/м² | Чистая линия</span></div>
+      <div class="meta-row"><span><b>Description · </b>Уборка квартир после ремонта от 155 ₽/м², домов и коттеджей — от 145 ₽/м². Ежедневно, ночью — по записи. Санкт-Петербург и Ленобласть.</span></div>
+      <div class="chips"><span class="chip-kw">уборка квартир после ремонта спб</span><span class="chip-kw">уборка после ремонта спб</span><span class="chip-kw">уборка дома после ремонта</span><span class="chip-kw">клининг спб</span><span class="chip-kw">клининг после ремонта</span><span class="chip-kw">уборка после ремонта цена</span><span class="chip-kw">уборка коттеджа после ремонта</span><span class="chip-kw">послестроительная уборка</span><span class="chip-kw">уборка после ремонта ленобласть</span><span class="chip-kw">клининговая компания спб</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Оставьте заявку на уборку после ремонта в «Чистой линии» — через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Уборка после ремонта — от 155 ₽/м²»</div>
+      <p>Композиция: фото чистой квартиры после ремонта из карточки компании, поверх — плашка с ценой и подписью «квартиры · дома · СПб и Ленобласть». Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — зелёный #36AA46, текст — белый, акцентная линия — синий.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Генеральная уборка квартир, домов и коттеджей в Санкт-Петербурге — от 135 ₽ за м²</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы делаем генеральную уборку квартир, домов и коттеджей — по качеству и по средней цене.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Генеральные уборки для физлиц — приоритетное направление компании.<span class="src">бриф</span></li>
+      <li>Генеральная уборка квартир — от 145 ₽/м².<span class="src">прайс компании</span></li>
+      <li>Генеральная уборка домов и коттеджей — от 135 ₽/м²; транспортные расходы в цену не входят.<span class="src">прайс компании</span></li>
+      <li>Сотрудники с опытом не менее 2 лет, обязательные стажировки с зачётами.<span class="src">сайт</span></li>
+      <li>Ежедневно, и в ночь тоже — по предварительной записи.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Генеральная уборка квартир в Санкт-Петербурге — от 145 ₽ за м², домов и коттеджей — от 135 ₽ за м².</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Генеральная уборка в Санкт-Петербурге — клининговая компания «Чистая линия»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Генеральная уборка квартир, домов и коттеджей, СПб — от 135 ₽/м² | Чистая линия</span></div>
+      <div class="meta-row"><span><b>Description · </b>Генеральная уборка квартир от 145 ₽/м², домов и коттеджей от 135 ₽/м². Опытные сотрудники, ежедневно. Санкт-Петербург и Ленобласть.</span></div>
+      <div class="chips"><span class="chip-kw">генеральная уборка спб</span><span class="chip-kw">генеральная уборка квартиры спб</span><span class="chip-kw">генеральная уборка дома</span><span class="chip-kw">уборка коттеджа</span><span class="chip-kw">клининг спб</span><span class="chip-kw">генеральная уборка цена</span><span class="chip-kw">генеральная уборка коттеджа спб</span><span class="chip-kw">клининг квартиры спб</span><span class="chip-kw">уборка квартир спб</span><span class="chip-kw">генеральная уборка ленобласть</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запишитесь на генеральную уборку в «Чистой линии» — через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Генеральная уборка — от 135 ₽/м²»</div>
+      <p>Композиция: инфографика из трёх строк — квартиры от 145 ₽/м² · дома от 135 ₽/м² · коттеджи от 135 ₽/м², рядом фото работ из карточки. Логотип в верхнем левом углу.</p>
+      <p>Цвета: фон белый, цены — зелёный #36AA46, названия услуг — синий.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Поддерживающая уборка для бизнеса в Санкт-Петербурге: офисы, производства, склады</h3></div><span class="purpose">B2B</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы каждый день убираем офисы, производства, склады, фитнес-центры и кинотеатры — по любым адресам Санкт-Петербурга и Ленобласти.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Ежедневная уборка офисов, производств, складов, фитнесов, кинотеатров; разовые генеральные уборки и уборки после ремонта.<span class="src">бриф</span></li>
+      <li>Повседневная (ежедневная) уборка офиса — от 40 ₽/м², производственных помещений — от 45 ₽/м², складов — от 25 ₽/м².<span class="src">прайс компании</span></li>
+      <li>Компания контролирует персонал и возмещает ущерб имуществу.<span class="src">сайт</span></li>
+      <li>Работа по договору, бесплатный расчёт стоимости.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Ежедневная уборка офисов, складов и производств в Санкт-Петербурге — клининговая компания «Чистая линия».</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Клининг для бизнеса в Санкт-Петербурге — офисы, склады, производства</span></div>
+      <div class="meta-row"><span><b>Title · </b>Уборка офисов, складов и производств, СПб — от 25 ₽/м² | Чистая линия</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ежедневная уборка офисов от 40 ₽/м², складов от 25 ₽/м², производственных помещений от 45 ₽/м². По договору. Санкт-Петербург и Ленобласть.</span></div>
+      <div class="chips"><span class="chip-kw">клининговая компания спб</span><span class="chip-kw">уборка офисов спб</span><span class="chip-kw">уборка складов спб</span><span class="chip-kw">уборка производственных помещений</span><span class="chip-kw">ежедневная уборка</span><span class="chip-kw">клининг спб</span><span class="chip-kw">клининг для юридических лиц</span><span class="chip-kw">уборка фитнес-центров</span><span class="chip-kw">уборка кинотеатров</span><span class="chip-kw">клининг офисов спб</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запросите расчёт уборки для вашего объекта в «Чистой линии» — через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Уборка для бизнеса — каждый день»</div>
+      <p>Композиция: фото офиса или склада из карточки, снизу три плашки-пиктограммы: офисы от 40 ₽/м² · склады от 25 ₽/м² · производства от 45 ₽/м². Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашки — синий, цены — белый, акцент — зелёный #36AA46.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Химчистка мягкой мебели и ковров в Санкт-Петербурге</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы делаем химчистку мягкой мебели и ковров у вас дома или в офисе.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Химчистка мягкой мебели — в списке услуг компании для физлиц.<span class="src">бриф</span></li>
+      <li>Химчистка мягкой мебели — от 4 700 ₽/м², химчистка кресла — от 1 700 ₽.<span class="src">прайс компании</span></li>
+      <li>Химчистка ковров — от 155 ₽/м².<span class="src">прайс компании</span></li>
+      <li>58 ноу-хау по выведению пятен.<span class="src">сайт</span></li>
+      <li>Любые адреса по Санкт-Петербургу и Ленинградской области.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>Первая строка · </b>Химчистка мягкой мебели и ковров в Санкт-Петербурге — кресло от 1 700 ₽, ковры от 155 ₽ за м².</span></div>
+      <div class="meta-row"><span><b>H1 · </b>Химчистка мебели и ковров в Санкт-Петербурге — «Чистая линия»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Химчистка мягкой мебели и ковров на дому, СПб | Чистая линия</span></div>
+      <div class="meta-row"><span><b>Description · </b>Химчистка мягкой мебели от 4 700 ₽/м², кресла — от 1 700 ₽, ковров — от 155 ₽/м². Санкт-Петербург и Ленобласть.</span></div>
+      <div class="chips"><span class="chip-kw">химчистка мягкой мебели спб</span><span class="chip-kw">химчистка дивана на дому</span><span class="chip-kw">химчистка ковров спб</span><span class="chip-kw">химчистка ковролина</span><span class="chip-kw">химчистка мебели спб</span><span class="chip-kw">химчистка кресла</span><span class="chip-kw">химчистка мягкой мебели цена</span><span class="chip-kw">чистка ковров на дому</span><span class="chip-kw">клининг спб</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Оставьте заявку на химчистку мебели или ковров в «Чистой линии» — через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Химчистка кресла — от 1 700 ₽»</div>
+      <p>Композиция: фото дивана или ковра в процессе чистки из карточки, поверх — плашка с ценой и подписью «мебель · ковры · СПб и Ленобласть». Логотип в верхнем левом углу.</p>
+      <p>Цвета: плашка — синий, цена — белый, линия-акцент — зелёный #36AA46.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Уборка после ремонта</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Квартиры — от 155 ₽/м²</span><span class="fact-pill">Дома и коттеджи — от 145 ₽/м²</span><span class="fact-pill">СПб и Ленобласть</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон зелёный #36AA46, цены крупно белым, подписи — белым мельче.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Генеральная уборка</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Квартиры — от 145 ₽/м²</span><span class="fact-pill">Дома — от 135 ₽/м²</span><span class="fact-pill">Коттеджи — от 135 ₽/м²</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, три строки прайса — услуга синим, цена крупно зелёным #36AA46.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Уборка для бизнеса</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Офисы — от 40 ₽/м²</span><span class="fact-pill">Производства — от 45 ₽/м²</span><span class="fact-pill">Склады — от 25 ₽/м²</span><span class="fact-pill">По договору</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий, цены белым, маркеры строк — зелёный #36AA46.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Когда и где работаем</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Ежедневно</span><span class="fact-pill">Ночью — по предварительной записи</span><span class="fact-pill">Любые адреса СПб и Ленобласти</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, заголовок зелёным #36AA46, факты — три пиктограммы синим.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — после ремонта, генеральная уборка, бизнес, химчистка <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Уборка после ремонта — от 155 ₽/м²</b>под «уборка квартир после ремонта спб», «клининг спб»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Уборка после ремонта</b>квартиры, дома, СПб и Ленобласть</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Генеральная уборка — от 135 ₽/м²</b>под «генеральная уборка спб»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Генеральная уборка</b>квартиры, дома, коттеджи</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Поддерживающая уборка для бизнеса</b>под «клининговая компания спб», «уборка складов спб»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Уборка для бизнеса</b>офисы, производства, склады</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Химчистка мебели и ковров</b>под «химчистка мягкой мебели спб», «химчистка ковров спб»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Когда и где работаем</b>ежедневно, ночью по записи, СПб и Ленобласть</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={
+ analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],
+ content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
