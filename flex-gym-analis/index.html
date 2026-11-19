@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flex Gym: анализ филиалов, спрос региона и точки роста</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#F5F3EE;--panel:#FFFFFF;--sunk:#ECE8DF;--ink:#14213A;--ink-2:#46536A;--ink-3:#77839A;
+  --line:rgba(20,33,58,.12);--gold-line:rgba(160,120,50,.35);--gold:#9A7330;
+  --s-strong:#2E8B62;--s-mid:#B7801F;--s-risk:#C8473B;--s-off:#9AA3B2;
+  --c1:#2F5DA8;--c2:#B7801F;--c3:#2E8B62;--neg:#C8473B;--pos:#2E8B62;--grid:rgba(20,33,58,.08);
+  --f-mark:'EB Garamond',Georgia,serif;--f-d:'Montserrat',system-ui,sans-serif;--f-b:'Manrope',system-ui,sans-serif;--f-m:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0F1B2D;--panel:#16263E;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;
+  --line:rgba(152,161,172,.18);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;
+  --s-strong:#6FC79B;--s-mid:#E2B45E;--s-risk:#EE8577;--s-off:#5F6B7D;
+  --c1:#7FA8E8;--c2:#E2B45E;--c3:#6FC79B;--neg:#EE8577;--pos:#6FC79B;--grid:rgba(238,241,245,.07);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-b);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{margin:0;text-wrap:balance}
+.bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.bar-in{display:flex;align-items:center;gap:14px;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+.bar-in::-webkit-scrollbar{display:none}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:16px;letter-spacing:.3em;white-space:nowrap}
+.bar-in b{font:600 14px var(--f-d);white-space:nowrap}
+.bar-in nav{display:flex;gap:6px;margin-left:auto}
+.bar-in nav a{font:500 12px var(--f-m);color:var(--ink-3);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.bar-in nav a:hover{color:var(--gold);border-color:var(--gold-line)}
+header.hero{padding:56px 0 36px;border-bottom:1px solid var(--gold-line)}
+.kicker{font:500 12px var(--f-m);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.hero h1{font:800 clamp(28px,4.6vw,48px)/1.08 var(--f-d);margin-top:12px;max-width:22ch;letter-spacing:-.01em}
+.hero p{color:var(--ink-2);margin:14px 0 0;max-width:62ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:30px}
+.kpi{background:var(--panel);padding:18px}
+.kpi .k{font-size:13px;color:var(--ink-3)}
+.kpi .n{font:700 30px/1.15 var(--f-d);font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi .s{font-size:13px;color:var(--ink-2);margin-top:2px}
+section{padding:48px 0;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.sh{display:flex;gap:12px;align-items:baseline;margin-bottom:22px;flex-wrap:wrap}
+.sh .n{font:600 12px var(--f-m);color:var(--gold)}
+.sh h2{font:700 clamp(21px,2.8vw,27px)/1.2 var(--f-d)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:6px;align-content:start}
+.fact .big{font:800 36px/1 var(--f-d);font-variant-numeric:tabular-nums}
+.fact .big.r{color:var(--s-risk)}.fact .big.g{color:var(--s-strong)}.fact .big.y{color:var(--gold)}
+.fact b{font-weight:600}
+.fact span{font-size:14px;color:var(--ink-2)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.panel h3{font:700 16px/1.3 var(--f-d)}
+.cap{font:500 12px var(--f-m);color:var(--ink-3);margin:4px 0 12px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-2);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-b);fill:var(--ink-2);font-size:12px}
+.chart .ax{fill:var(--ink-3);font-size:11px;font-family:var(--f-m)}
+.chart .hit{fill:transparent;cursor:default}
+.tip{position:fixed;z-index:100;pointer-events:none;background:var(--ink);color:var(--bg);font:500 13px/1.4 var(--f-b);padding:8px 11px;border-radius:8px;max-width:280px;opacity:0;transition:opacity .1s;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{font:600 13px var(--f-b);color:var(--ink-2);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font:600 11.5px var(--f-m);color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;position:sticky;top:0;background:var(--panel);user-select:none}
+th.grp{cursor:default;text-align:center;color:var(--gold);border-bottom:1px solid var(--gold-line)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);z-index:1}
+td{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-b);font-weight:600}
+td.w{color:var(--s-risk);font-weight:600}
+tr:last-child td{border-bottom:0}
+.pill{font:600 10.5px var(--f-m);text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.p-Сильная{color:var(--s-strong);background:color-mix(in srgb,var(--s-strong) 14%,transparent)}
+.p-Средняя{color:var(--s-mid);background:color-mix(in srgb,var(--s-mid) 16%,transparent)}
+.p-Риск{color:var(--s-risk);background:color-mix(in srgb,var(--s-risk) 14%,transparent)}
+.foot{font-size:12.5px;color:var(--ink-3);margin-top:10px}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.sc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.sc .k{font:600 11px var(--f-m);text-transform:uppercase;letter-spacing:.06em;color:var(--gold)}
+.sc .t{font:700 19px var(--f-d);margin-top:6px}
+.sc p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
+.news{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.nw{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:18px;display:grid;gap:8px;align-content:start}
+.nw .big{font:800 30px/1 var(--f-d)}
+.nw p{margin:0;font-size:14.5px}
+.nw a{font:500 12px var(--f-m);color:var(--ink-3)}
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.step .when{font:600 11px var(--f-m);text-transform:uppercase;color:var(--gold);letter-spacing:.06em}
+.step h3{font:700 17px/1.3 var(--f-d);margin:8px 0 8px}
+.step ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:grid;gap:4px}
+.alert{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin-top:16px}
+.duo{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.duo .k{font:600 11px var(--f-m);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.duo .v{font:800 34px/1.1 var(--f-d);margin-top:6px}
+.duo .v.r{color:var(--s-risk)}.duo .v.g{color:var(--s-strong)}
+.duo p{margin:6px 0 0;font-size:14px;color:var(--ink-2)}
+footer{padding:40px 0 60px;font-size:13px;color:var(--ink-3)}
+footer ul{padding-left:18px;display:grid;gap:4px}
+footer a{color:var(--ink-2)}
+@media(max-width:640px){.chart text{font-size:10.5px}.chart .ax{font-size:10px}header.hero{padding:36px 0 26px}.kpi .n{font-size:24px}.fact .big{font-size:30px}section{padding:36px 0}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <span class="mark">HDR</span><b>Flex Gym · Омск</b>
+  <nav><a href="#table">Филиалы</a><a href="#health">Карточки</a><a href="#comp">Конкуренты</a><a href="#voice">Отзывы</a><a href="#brand">Бренд</a><a href="#market">Спрос</a><a href="#season">Сезонность</a><a href="#route">Маршрут роста</a></nav>
+</div></div>
+<main class="wrap">
+<header class="hero">
+  <span class="kicker">HDR Group · Яндекс Карты и 2ГИС · данные на 19.11.2026</span>
+  <h1>Flex Gym: анализ филиалов, спрос региона и точки роста</h1>
+  <p>Все 10 фитнес-клубов сети в Омске: наполнение карточек на Яндекс Картах и в 2ГИС, конкуренты в радиусе 1,5 км от каждого клуба, отзывы, поисковый спрос и сезонность.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<section id="main"><div class="sh"><span class="n">00</span><h2>Главное за 30 секунд</h2></div><div class="facts" id="facts"></div></section>
+
+<section id="table"><div class="sh"><span class="n">01</span><h2>Сравнение всех филиалов</h2></div>
+  <div class="filters" id="flt"></div>
+  <div class="tbl"><table id="tb"><thead><tr class="g"></tr><tr class="h"></tr></thead><tbody></tbody></table></div>
+  <div class="foot" id="tb-foot"></div>
+</section>
+
+<section id="health"><div class="sh"><span class="n">02</span><h2>Состояние карточек</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Сколько из 10 филиалов проседает</h3><div class="cap">Яндекс Карты и 2ГИС</div><div class="chart" id="c-health"></div></div>
+    <div class="panel"><h3>Рейтинг: Яндекс против 2ГИС</h3><div class="cap">10 филиалов</div>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Яндекс Карты</span><span><i style="background:var(--c2)"></i>2ГИС</span></div>
+      <div class="chart" id="c-rate"></div></div>
+  </div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="panel"><h3>Фото в карточке</h3><div class="cap">10 филиалов</div>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Яндекс Карты</span><span><i style="background:var(--c2)"></i>2ГИС</span></div>
+      <div class="chart" id="c-photo"></div></div>
+    <div class="panel"><h3>Ответы на отзывы на Яндексе</h3><div class="cap">доля ответов среди 50 последних отзывов</div><div class="chart" id="c-ans"></div></div>
+  </div>
+  <div class="alert">
+    <div class="duo"><div class="k">ул. 24-я Линия, 59 · Яндекс Карты</div><div class="v r">3,3 ★</div><p>5 оценок, ни одного фото, нет сторис, карточка не входит в сеть Flex Gym</p></div>
+    <div class="duo"><div class="k">Тот же клуб · 2ГИС</div><div class="v g">4,7 ★</div><p>102 оценки, 41 фото, карточка в сети из 10 филиалов</p></div>
+  </div>
+</section>
+
+<section id="comp"><div class="sh"><span class="n">03</span><h2>Конкуренты</h2></div>
+  <div class="panel"><h3>Филиал и самый заметный конкурент рядом</h3><div class="cap">число оценок на Яндекс Картах, конкуренты в радиусе 1,5 км</div>
+    <div class="legend"><span><i style="background:var(--gold)"></i>Flex Gym</span><span><i style="background:var(--s-off)"></i>Конкурент с наибольшим числом оценок</span></div>
+    <div class="chart" id="c-pair"></div></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="panel"><h3>Кто чаще всего рядом с Flex Gym</h3><div class="cap">в скольких из 10 зон присутствует</div><div class="chart" id="c-top"></div></div>
+    <div class="panel"><h3>Филиал сети против конкурента в его зоне</h3><div class="cap">медианы: 9 филиалов сети и <span id="uq"></span> карточек конкурентов</div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Flex Gym</span><span><i style="background:var(--s-off)"></i>Конкуренты</span></div>
+      <div class="chart" id="c-med"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Новости на карточке: кто публикует</h3><div class="cap">число новостей на Яндекс Картах, все карточки в зонах филиалов</div><div class="chart" id="c-news"></div></div>
+</section>
+
+<section id="voice"><div class="sh"><span class="n">04</span><h2>Что говорят клиенты</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>Темы отзывов по сети</h3><div class="cap">упоминания на Яндекс Картах, 9 карточек сети</div>
+      <div class="legend"><span><i style="background:var(--pos)"></i>Хвалят</span><span><i style="background:var(--neg)"></i>Ругают</span></div>
+      <div class="chart" id="c-asp"></div></div>
+    <div class="panel"><h3>Негативные упоминания по филиалам</h3><div class="cap">Яндекс Карты, 9 карточек сети</div><div class="chart" id="c-negb"></div></div>
+  </div>
+</section>
+
+<section id="brand"><div class="sh"><span class="n">05</span><h2>Брендовый спрос</h2></div>
+  <div class="panel"><h3>Flex Gym и фитнес-клубы Омска</h3><div class="cap">Вордстат, Омск, ноябрь 2025 — октябрь 2026, запросов за 12 месяцев и изменение к прошлому году</div><div class="chart" id="c-brand"></div></div>
+  <div class="panel" style="margin-top:16px"><h3>Flex Gym против DDX Fitness</h3><div class="cap">Вордстат, Омск, запросов в месяц</div>
+    <div class="legend"><span><i style="background:var(--gold)"></i>Flex Gym, все написания</span><span><i style="background:var(--s-off)"></i>DDX Fitness</span></div>
+    <div class="chart" id="c-bvl"></div></div>
+</section>
+
+<section id="market"><div class="sh"><span class="n">06</span><h2>Спрос на рынке</h2></div>
+  <div class="grid2">
+    <div class="panel"><h3>«тренажёрный зал» по месяцам</h3><div class="cap">Вордстат, ноябрь 2024 — октябрь 2026</div>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Омск</span><span><i style="background:var(--c2)"></i>Омская область</span></div>
+      <div class="chart" id="c-gym"></div></div>
+    <div class="panel"><h3>«фитнес-клуб» по месяцам</h3><div class="cap">Вордстат, ноябрь 2024 — октябрь 2026</div>
+      <div class="legend"><span><i style="background:var(--c1)"></i>Омск</span><span><i style="background:var(--c2)"></i>Омская область</span></div>
+      <div class="chart" id="c-fc"></div></div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Что растёт и что падает</h3><div class="cap">Вордстат, Омск, ноябрь 2025 — октябрь 2026 к тем же месяцам год назад</div><div class="chart" id="c-div"></div></div>
+</section>
+
+<section id="season"><div class="sh"><span class="n">07</span><h2>Сезонность</h2></div>
+  <div class="panel"><h3>Направления по месяцам</h3><div class="cap">Вордстат, Омск, ноябрь 2025 — октябрь 2026</div><div class="chart" id="c-heat"></div></div>
+  <div class="cards3" id="seasc"></div>
+</section>
+
+<section id="rules"><div class="sh"><span class="n">08</span><h2>Новые правила — готовые поводы для контента</h2></div><div class="news" id="news"></div></section>
+
+<section id="route"><div class="sh"><span class="n">09</span><h2>Маршрут роста</h2></div>
+  <div class="route">
+    <div class="step"><div class="when">Шаг 1 · ноябрь — декабрь</div><h3>Навести порядок в 20 карточках</h3><ul><li>24-я Линия: присоединить карточку к сети на Яндексе, загрузить фото, сторис, описание</li><li>2ГИС: фото до 40+ в 7 филиалах, где их 11–27</li><li>Ответы на все отзывы: Пушкина и Мира, 9Б</li><li>Мира, 9Б в 2ГИС: 4,3 — работа с отзывами</li></ul></div>
+    <div class="step"><div class="when">Шаг 2 · каждый месяц</div><h3>Новости и сторис во всех филиалах</h3><ul><li>Новости в 10 карточках Яндекса и 2ГИС: сейчас они есть только у 2</li><li>Сторис обновлять ежемесячно</li><li>Темы под растущий спрос: пилатес, персональный тренер, групповые</li></ul></div>
+    <div class="step"><div class="when">Шаг 3 · январь — март</div><h3>Главный сезон года</h3><ul><li>Январь — пик «тренажёрный зал» и «фитнес-клуб»</li><li>Вычет за спорт, теперь и за родителей-пенсионеров</li><li>Персональные тренировки, абонементы на год</li></ul></div>
+    <div class="step"><div class="when">Шаг 4 · апрель — сентябрь</div><h3>Удержать спрос летом</h3><ul><li>Летом запросы о зале падают на 40%</li><li>Пилатес и бассейн на пике в мае — июле</li><li>Сентябрь: возврат с отпусков, групповые программы</li></ul></div>
+  </div>
+</section>
+</main>
+<div class="wrap"><footer>
+  <b>Источники и ограничения</b>
+  <ul>
+    <li>Публичные карточки Яндекс Карт: 9 карточек сети Flex Gym и карточка на ул. 24-я Линия, 59/2 вне сети — рейтинг, оценки, отзывы, фото, сторис, новости, темы отзывов, ответы на 50 последних отзывов; на 19.11.2026.</li>
+    <li>Публичные карточки 2ГИС: 10 филиалов сети — рейтинг, оценки, отзывы, фото, награды; на 19.11.2026.</li>
+    <li>Конкуренты: поиск «фитнес-клуб» и «тренажёрный зал» на Яндекс Картах вокруг каждого филиала, карточки в радиусе 1,5 км, 56 уникальных карточек.</li>
+    <li>Доступа к кабинету Яндекс Бизнеса по этой сети нет, поэтому переходы, звонки, маршруты и доли в зоне на странице не показаны; сравнение с конкурентами построено по публичным данным карточек.</li>
+    <li>Яндекс Вордстат, регионы «Омск» и «Омская область», ноябрь 2024 — октябрь 2026. Flex Gym — сумма запросов «flex gym» и «флекс джим»; МетроFitness — «метрофитнес» и «метро фитнес». Яlina появилась в Вордстате в июле 2025, изменение к прошлому году не считается.</li>
+    <li id="src-news"></li>
+  </ul>
+</footer></div>
+<div class="tip" id="tip"></div>
+<script>
+const D={"branches": [{"id": "22993102911", "name": "ул. Дианова, 7/1", "r": 5.0, "n": 342, "rv": 223, "ph": 51, "stories": true, "news": 0, "ans": 98, "feats": 15, "soc": 3, "inl": true, "inch": true, "st": "Сильная", "gr": 4.8, "grv": 292, "gn": 410, "gph": 88, "gaw": false, "zc": 4, "rank": 2, "of": 5, "top": "ФОК на Дианова, 14А", "topn": 1232, "topr": 5.0}, {"id": "1161083656", "name": "пр. Комарова, 6/1", "r": 5.0, "n": 633, "rv": 360, "ph": 56, "stories": true, "news": 0, "ans": 100, "feats": 13, "soc": 1, "inl": true, "inch": true, "st": "Сильная", "gr": 4.6, "grv": 627, "gn": 704, "gph": 11, "gaw": true, "zc": 10, "rank": 1, "of": 11, "top": "Energy Zone", "topn": 184, "topr": 4.9}, {"id": "217007342700", "name": "ул. Маршала Жукова, 4/2", "r": 5.0, "n": 162, "rv": 115, "ph": 40, "stories": true, "news": 0, "ans": 98, "feats": 17, "soc": 3, "inl": true, "inch": true, "st": "Сильная", "gr": 4.7, "grv": 175, "gn": 268, "gph": 59, "gaw": true, "zc": 14, "rank": 5, "of": 15, "top": "О2", "topn": 275, "topr": 4.9}, {"id": "243447859008", "name": "ул. Фрунзе, 38", "r": 5.0, "n": 845, "rv": 424, "ph": 97, "stories": true, "news": 0, "ans": 96, "feats": 15, "soc": 4, "inl": true, "inch": true, "st": "Сильная", "gr": 4.7, "grv": 497, "gn": 606, "gph": 17, "gaw": true, "zc": 11, "rank": 1, "of": 12, "top": "GrandFitnessHall", "topn": 572, "topr": 5.0}, {"id": "85042928078", "name": "пр. Мира, 9Б", "r": 5.0, "n": 478, "rv": 296, "ph": 76, "stories": true, "news": 0, "ans": 76, "feats": 23, "soc": 3, "inl": true, "inch": true, "st": "Сильная", "gr": 4.3, "grv": 597, "gn": 691, "gph": 13, "gaw": false, "zc": 8, "rank": 1, "of": 9, "top": "Cometa Sport", "topn": 228, "topr": 5.0}, {"id": "230756737121", "name": "пр. Мира, 19", "r": 5.0, "n": 558, "rv": 348, "ph": 46, "stories": true, "news": 1, "ans": 96, "feats": 8, "soc": 4, "inl": true, "inch": true, "st": "Сильная", "gr": 4.9, "grv": 601, "gn": 686, "gph": 13, "gaw": true, "zc": 8, "rank": 1, "of": 9, "top": "Cometa Sport", "topn": 228, "topr": 5.0}, {"id": "1106161317", "name": "ул. Пушкина, 59", "r": 5.0, "n": 491, "rv": 266, "ph": 44, "stories": true, "news": 1, "ans": 68, "feats": 19, "soc": 2, "inl": true, "inch": true, "st": "Сильная", "gr": 4.8, "grv": 575, "gn": 668, "gph": 13, "gaw": true, "zc": 11, "rank": 2, "of": 12, "top": "МетроFitness", "topn": 526, "topr": 4.7}, {"id": "26299868246", "name": "пр. Карла Маркса, 67А", "r": 5.0, "n": 640, "rv": 426, "ph": 63, "stories": true, "news": 0, "ans": 98, "feats": 13, "soc": 4, "inl": false, "inch": true, "st": "Сильная", "gr": 4.9, "grv": 663, "gn": 739, "gph": 27, "gaw": true, "zc": 7, "rank": 1, "of": 8, "top": "Gym Studio", "topn": 195, "topr": 4.6}, {"id": "1744095243", "name": "ул. Бархатовой, 2", "r": 5.0, "n": 634, "rv": 363, "ph": 26, "stories": true, "news": 0, "ans": 100, "feats": 12, "soc": 3, "inl": false, "inch": true, "st": "Сильная", "gr": 4.7, "grv": 472, "gn": 533, "gph": 27, "gaw": true, "zc": 6, "rank": 1, "of": 7, "top": "МетроFitness", "topn": 213, "topr": 4.7}, {"id": "98709076709", "name": "ул. 24-я Линия, 59", "r": 3.3, "n": 5, "rv": 4, "ph": 0, "stories": false, "news": 0, "ans": 0, "feats": 0, "soc": 0, "inl": false, "inch": false, "st": "Риск", "gr": 4.7, "grv": 62, "gn": 102, "gph": 41, "gaw": false, "zc": 1, "rank": 2, "of": 2, "top": "Park Fitness", "topn": 169, "topr": 4.5}], "med": [["Рейтинг", 5.0, 4.7], ["Оценки", 558, 82], ["Отзывы", 348, 37], ["Фото", 51, 43]], "content": {"net_news": 2, "net_stories": 9, "comp_news": 12, "comp_st": 11, "comp_total": 56, "leaders": [["Stretch House", 113], ["DDX Fitness", 15], ["Яlina", 6], ["Яlina", 6], ["Яlina", 6], ["МетроFitness", 4], ["О2", 2], ["МетроFitness", 2], ["MasterClub", 2], ["Ритм", 1], ["МетроFitness", 1], ["DDX Fitness", 1]]}, "top": [["МетроFitness", 4, 3, 4.8, 888], ["DDX Fitness", 3, 2, 5.0, 247], ["ИнФит", 3, 1, 4.9, 33], ["Яlina", 3, 3, 5.0, 123], ["Rave Up", 3, 2, 4.9, 125], ["О2", 2, 1, 4.9, 275], ["Live Fitness", 2, 1, 4.5, 31], ["Генезис", 2, 1, 4.9, 127]], "asp": [["Персонал", 1843, 74], ["Залы", 1369, 57], ["Оборудование", 803, 39], ["Чистота", 640, 26], ["Групповые тренировки", 243, 17], ["Персональные тренировки", 245, 13], ["Раздевалки", 171, 39], ["Расположение", 166, 3], ["Бассейн", 120, 14], ["Сауна", 75, 10], ["Интерьер", 32, 1]], "negb": [["ул. Фрунзе, 38", 81], ["пр. Мира, 9Б", 68], ["ул. Пушкина, 59", 39], ["пр. Карла Маркса, 67А", 31], ["пр. Комарова, 6/1", 20], ["ул. Дианова, 7/1", 17], ["пр. Мира, 19", 14], ["ул. Бархатовой, 2", 12], ["ул. Маршала Жукова, 4/2", 11]], "ws": {"labels": ["ноя 24", "дек 24", "янв 25", "фев 25", "мар 25", "апр 25", "май 25", "июн 25", "июл 25", "авг 25", "сен 25", "окт 25", "ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26", "окт 26"], "fc": [2221, 1977, 2707, 2171, 2239, 1583, 1641, 1468, 1834, 1780, 2020, 2411, 2328, 1580, 2239, 1621, 1933, 1608, 1238, 1196, 1303, 1467, 1741, 1873], "gym": [3325, 2735, 4330, 3675, 3490, 2679, 2425, 2554, 2797, 2628, 3228, 3660, 3495, 2705, 3282, 3023, 3040, 2506, 2015, 1980, 2293, 2366, 2953, 2656], "fco": [2423, 2171, 2991, 2438, 2522, 1827, 1830, 1653, 2089, 2014, 2223, 2627, 2669, 1812, 2539, 1901, 2148, 1834, 1448, 1364, 1530, 1657, 1970, 2119], "gymo": [3753, 3196, 4946, 4204, 4009, 3051, 2825, 2889, 3256, 2988, 3682, 4168, 4106, 3145, 3832, 3497, 3434, 2833, 2322, 2246, 2708, 2726, 3421, 3031], "div": [["Пилатес", 25.3, 43637], ["Персональный тренер", 20.5, 1846], ["Групповые тренировки", 16.5, 1935], ["Функциональный тренинг", 13.7, 844], ["Бассейн", 9.1, 628072], ["Бокс", 3.7, 267652], ["Зал для женщин", 0.0, 785], ["Массаж", -1.5, 587022], ["Йога", -2.8, 87320], ["Похудение", -3.4, 254473], ["Сауна", -6.0, 221636], ["Аквааэробика", -6.7, 6567], ["Растяжка", -6.8, 53880], ["Фитнес", -7.8, 201876], ["Кроссфит", -12.5, 6367], ["Детский фитнес", -13.1, 695], ["Тренажёрный зал", -13.9, 32314], ["Фитнес-клуб", -16.3, 20127], ["Абонемент в фитнес-клуб", -17.4, 822], ["Фитнес-клуб с бассейном", -21.7, 245], ["Стретчинг", -26.2, 5838], ["Спортивное питание", -26.5, 13742], ["Фитнес-клуб цена", -35.6, 396], ["Абонемент в тренажёрный зал", -53.3, 501]], "brands": [["Flex Gym", 63327, -2.2], ["DDX Fitness", 32262, 127.1], ["МетроFitness", 15332, -24.9], ["GrandFitnessHall", 4200, -25.6], ["Яlina", 1363, null], ["MasterClub", 1146, -18.3], ["О2", 1122, -22.0], ["Железная шахта", 775, -34.3], ["Energy Zone", 485, -17.9], ["Cometa Sport", 381, -2.8], ["Rave Up", 323, -25.7]], "flex": [6020, 5466, 7556, 5880, 5451, 4380, 4382, 4293, 4869, 5075, 5248, 6159, 6102, 4435, 6643, 5482, 6654, 5721, 4994, 4060, 4019, 4131, 5892, 5194], "ddx": [95, 278, 334, 221, 521, 221, 249, 637, 1133, 1304, 4675, 4536, 4351, 2501, 3459, 2404, 2663, 1992, 1749, 2058, 3084, 2637, 2511, 2853], "lab12": ["ноя 25", "дек 25", "янв 26", "фев 26", "мар 26", "апр 26", "май 26", "июн 26", "июл 26", "авг 26", "сен 26", "окт 26"], "seas": [["Тренажёрный зал", [3495, 2705, 3282, 3023, 3040, 2506, 2015, 1980, 2293, 2366, 2953, 2656]], ["Фитнес-клуб", [2328, 1580, 2239, 1621, 1933, 1608, 1238, 1196, 1303, 1467, 1741, 1873]], ["Пилатес", [3385, 2719, 3337, 3275, 3271, 3419, 4577, 4639, 4624, 3520, 3437, 3434]], ["Стретчинг", [864, 638, 690, 553, 674, 451, 350, 316, 235, 325, 323, 419]], ["Персональный тренер", [378, 238, 167, 89, 108, 106, 76, 73, 107, 92, 130, 282]], ["Аквааэробика", [659, 420, 695, 592, 635, 500, 367, 471, 437, 533, 590, 668]], ["Кроссфит", [615, 438, 667, 556, 593, 672, 509, 397, 376, 498, 545, 501]], ["Бассейн", [43918, 35496, 49123, 39101, 41264, 38005, 47053, 114164, 82638, 54146, 42847, 40317]]]}, "health": [["Нет новостей на Яндексе", 8], ["Меньше 50 фото на Яндексе", 5], ["Меньше 20 фото в 2ГИС", 5], ["Рейтинг в 2ГИС ниже 4,7", 2], ["Ответы на отзывы ниже 80%", 3], ["Нет сторис", 1], ["Карточка вне сети", 1]], "kpi": {"uniq": 51, "cards": 10, "yn": 4788, "yr": 5.0, "gn": 5407, "gr": 4.71, "comp": 56, "lead": 6, "news": 2, "flex12": 63327, "flexyoy": -2.2, "ddx12": 32262, "ddxyoy": 127.1, "main_yoy": -16.3, "gym_yoy": -13.9}};
+const fmt=n=>n==null?'—':(typeof n==='number'?n.toLocaleString('ru-RU',{maximumFractionDigits:1}):n);
+const dec=v=>v==null?'—':v.toFixed(1).replace('.',',');
+const tip=document.getElementById('tip');
+function showTip(e,h){tip.innerHTML=h;tip.style.opacity=1;const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8);tip.style.left=x+'px';tip.style.top=y+'px'}
+function hideTip(){tip.style.opacity=0}
+const NS='http://www.w3.org/2000/svg';
+const CW=id=>Math.max(300,Math.min(1100,document.getElementById(id).clientWidth||640));
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function svg(id,w,h){const c=document.getElementById(id);c.innerHTML='';return el('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'},c)}
+function hover(node,html){node.addEventListener('mousemove',e=>showTip(e,html));node.addEventListener('mouseleave',hideTip);node.addEventListener('touchstart',e=>showTip(e.touches[0],html),{passive:true})}
+const SC={'Сильная':'var(--s-strong)','Средняя':'var(--s-mid)','Риск':'var(--s-risk)'};
+const short=s=>s.replace('ул. ','').replace('пр. ','пр. ').replace('Маршала ','М. ');
+function hbar(id,items,o={}){
+  const w=CW(id),lw=Math.min(o.lw||170,Math.round(w*0.47)),pad=o.pad||60,rh=o.rh||26,h=items.length*rh+6,max=o.max||Math.max(...items.map(i=>i.value)),W=w-lw-pad;
+  const s=svg(id,w,h);
+  items.forEach((it,i)=>{const y=i*rh+3,bw=Math.max(2,it.value/max*W);
+    const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=it.label;
+    el('rect',{x:lw,y:y+4,width:bw,height:rh-10,rx:4,fill:it.color||'var(--c1)'},s);
+    const v=el('text',{x:lw+bw+6,y:y+rh/2+4,class:'ax'},s);v.textContent=it.vlabel||fmt(it.value);
+    const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,it.tip||`<b>${it.label}</b><br>${fmt(it.value)}`)});
+}
+function pair(id,items,o={}){ // items {label,a,b,ca,cb,la,lb,tip}
+  const w=CW(id),rh=34,lw=Math.min(o.lw||160,Math.round(w*0.45)),W=w-lw-(o.pad||70),h=items.length*rh+6,max=o.max||Math.max(...items.flatMap(i=>[i.a,i.b])),s=svg(id,w,h);
+  items.forEach((it,i)=>{const y=i*rh+3;const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=it.label;
+    const sc=o.min!=null?(v=>Math.max(2,(v-o.min)/(max-o.min)*W)):(v=>Math.max(2,v/max*W));
+    [[it.a,it.ca||'var(--gold)',4,it.la],[it.b,it.cb||'var(--s-off)',18,it.lb]].forEach(([v,c,dy,lab])=>{const bw=sc(v);el('rect',{x:lw,y:y+dy,width:bw,height:11,rx:4,fill:c},s);const tx=el('text',{x:lw+bw+6,y:y+dy+10,class:'ax'},s);tx.textContent=lab!=null?lab:fmt(v)});
+    const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,it.tip)});
+}
+function line(id,labels,series,o={}){
+  const w=CW(id),h=o.h||240,l=52,r=12,t=12,b=28,W=w-l-r,H=h-t-b;
+  const all=series.flatMap(s=>s.data.filter(v=>v!=null));const raw=Math.max(...all)*1.05,mag=Math.pow(10,Math.floor(Math.log10(raw/4))),max=Math.ceil(raw/4/mag)*mag*4,min=0;
+  const s=svg(id,w,h);const X=i=>l+i*(W/(labels.length-1)),Y=v=>t+H-(v-min)/(max-min)*H;
+  for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=Y(v);el('line',{x1:l,x2:w-r,y1:y,y2:y,stroke:'var(--grid)'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end',class:'ax'},s);tx.textContent=v>=10000?Math.round(v/1000)+'k':fmt(Math.round(v))}
+  const step=Math.ceil(labels.length/Math.max(3,Math.min(8,Math.floor(W/62))));labels.forEach((lb,i)=>{const last=labels.length-1;if(i!==last&&i%step)return;if(i===last&&last%step&&last%step<step*0.7)return;const tx=el('text',{x:X(i),y:h-8,'text-anchor':'middle',class:'ax'},s);tx.textContent=lb});
+  series.forEach(se=>{let d='';se.data.forEach((v,i)=>{if(v==null)return;d+=(d?'L':'M')+X(i)+','+Y(v)});el('path',{d,fill:'none',stroke:se.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},s)});
+  const cross=el('line',{y1:t,y2:t+H,stroke:'var(--ink-3)','stroke-dasharray':'3 3',opacity:0},s);
+  const dots=series.map(se=>el('circle',{r:4,fill:se.color,stroke:'var(--panel)','stroke-width':2,opacity:0},s));
+  const hit=el('rect',{x:l,y:t,width:W,height:H,class:'hit'},s);
+  const mv=e=>{const p=s.createSVGPoint();const pt=e.touches?e.touches[0]:e;p.x=pt.clientX;p.y=pt.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const i=Math.max(0,Math.min(labels.length-1,Math.round((q.x-l)/(W/(labels.length-1)))));cross.setAttribute('x1',X(i));cross.setAttribute('x2',X(i));cross.setAttribute('opacity',1);
+    series.forEach((se,k)=>{const v=se.data[i];if(v==null){dots[k].setAttribute('opacity',0);return}dots[k].setAttribute('cx',X(i));dots[k].setAttribute('cy',Y(v));dots[k].setAttribute('opacity',1)});
+    showTip(pt,`<b>${labels[i]}</b>`+series.map(se=>`<br>${se.name}: ${fmt(se.data[i])}`).join(''))};
+  hit.addEventListener('mousemove',mv);hit.addEventListener('touchmove',mv,{passive:true});hit.addEventListener('mouseleave',()=>{hideTip();cross.setAttribute('opacity',0);dots.forEach(d=>d.setAttribute('opacity',0))});
+}
+const K=D.kpi,B=D.branches,W=D.ws;
+document.getElementById('kpis').innerHTML=[
+ ['Филиалов в Омске',K.cards,'9 в сети Яндекса · 1 вне сети'],
+ ['Оценок на Яндексе',fmt(K.yn),'средний рейтинг '+dec(K.yr)],
+ ['Оценок в 2ГИС',fmt(K.gn),'средний рейтинг '+K.gr.toFixed(2).replace('.',',')],
+ ['Конкурентов рядом',K.comp,'карточек в радиусе 1,5 км'],
+ ['Первые в зоне',K.lead+' из 10','по числу оценок на Яндексе']
+].map(k=>`<div class="kpi"><div class="k">${k[0]}</div><div class="n">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
+const med=D.med;
+const div0=W.div[0];
+document.getElementById('facts').innerHTML=[
+ ['r',`${K.news} из 10`,'филиалов с новостями на Яндексе','По одной новости; у Stretch House рядом — 113, у DDX Fitness — 15'],
+ ['r','3,3 ★','клуб на 24-й Линии на Яндексе','Карточка вне сети, без фото; в 2ГИС тот же клуб — 4,7 из 102 оценок'],
+ ['g',`в ${Math.round(med[1][1]/med[1][2])} раз`,'больше оценок, чем у конкурента рядом',`Медиана ${fmt(med[1][1])} против ${fmt(med[1][2])}`],
+ ['y',`+${fmt(K.ddxyoy)}%`,'брендовый спрос DDX Fitness за год',`${fmt(K.ddx12)} запросов — уже половина от Flex Gym (${fmt(K.flex12)})`],
+ ['r',`${fmt(K.gym_yoy)}%`,'спрос «тренажёрный зал» в Омске за год',`«фитнес-клуб» ${fmt(K.main_yoy)}%, бренд Flex Gym ${fmt(K.flexyoy)}%`],
+ ['g',`+${fmt(div0[1])}%`,`«${div0[0].toLowerCase()}» — самый быстрый рост`,'Персональный тренер +21%, групповые +17%']
+].map(f=>`<div class="fact"><div class="big ${f[0]}">${f[1]}</div><b>${f[2]}</b><span>${f[3]}</span></div>`).join('');
+// table
+const COLS=[['name','Филиал',''],['st','Статус',''],['r','Рейтинг','Я'],['n','Оценки','Я'],['rv','Отзывы','Я'],['ph','Фото','Я'],['news','Новости','Я'],['stories','Сторис','Я'],['ans','Ответы, %','Я'],['gr','Рейтинг','2'],['gn','Оценки','2'],['grv','Отзывы','2'],['gph','Фото','2'],['rank','Место в зоне','З'],['top','Главный конкурент','З']];
+const weak={r:v=>v<4.5,n:v=>v<50,ph:v=>v<50,news:v=>v<1,ans:v=>v<80,gr:v=>v<4.7,gph:v=>v<20,rank:v=>v>1};
+let sortK='n',sortD=-1,flt='all';
+const g=document.querySelector('#tb thead tr.g');g.innerHTML='<th class="grp"></th><th class="grp"></th><th class="grp" colspan="7">Яндекс Карты</th><th class="grp" colspan="4">2ГИС</th><th class="grp" colspan="2">Зона 1,5 км</th>';
+const thead=document.querySelector('#tb thead tr.h');thead.innerHTML=COLS.map(c=>`<th data-k="${c[0]}" tabindex="0">${c[1]}</th>`).join('');
+thead.querySelectorAll('th').forEach(th=>{const f=()=>{const k=th.dataset.k;sortD=sortK===k?-sortD:-1;sortK=k;renderT()};th.onclick=f;th.onkeydown=e=>{if(e.key==='Enter')f()}});
+function cell(b,k){let v=b[k];if(k==='st')return `<td><span class="pill p-${v}">${v}</span></td>`;
+ if(k==='stories')return `<td${v?'':' class="w"'}>${v?'есть':'нет'}</td>`;
+ if(k==='name')return `<td>${v}${b.inch?'':' *'}</td>`;
+ if(k==='top')return `<td style="font-family:var(--f-b)">${v} · ${fmt(b.topn)}</td>`;
+ if(k==='rank')return `<td${weak.rank(v)?' class="w"':''}>${v} из ${b.of}</td>`;
+ const w=weak[k]&&weak[k](v)?' class="w"':'';return `<td${w}>${(k==='r'||k==='gr')?dec(v):fmt(v)}</td>`}
+function renderT(){const rows=B.filter(b=>flt==='all'||b.st===flt).slice().sort((a,b)=>{const x=a[sortK],y=b[sortK];return (typeof x==='string'?x.localeCompare(y):(x-y))*sortD});
+ document.querySelector('#tb tbody').innerHTML=rows.map(b=>'<tr>'+COLS.map(([k])=>cell(b,k)).join('')+'</tr>').join('')}
+const counts={all:B.length};B.forEach(b=>counts[b.st]=(counts[b.st]||0)+1);
+document.getElementById('flt').innerHTML=[['all','Все'],['Сильная','Сильная'],['Средняя','Средняя'],['Риск','Риск']].filter(f=>counts[f[0]]).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${f[0]==='all'}">${f[1]} · ${counts[f[0]]}</button>`).join('');
+document.querySelectorAll('#flt button').forEach(b=>b.onclick=()=>{flt=b.dataset.f;document.querySelectorAll('#flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderT()});
+renderT();
+document.getElementById('tb-foot').textContent='* Карточка на Яндекс Картах не входит в сеть Flex Gym. Ответы — доля среди 50 последних отзывов (у 24-й Линии — среди 4). Место в зоне — по числу оценок на Яндексе среди фитнес-клубов и залов в радиусе 1,5 км.';
+// health
+hbar('c-health',D.health.map(h=>({label:h[0],value:h[1],color:h[1]?'var(--s-risk)':'var(--s-strong)',vlabel:h[1]+' из 10'})),{max:10,lw:230});
+const BS=B.slice().sort((a,b)=>b.n-a.n);
+pair('c-rate',BS.map(b=>({label:short(b.name),a:b.r,b:b.gr,ca:'var(--c1)',cb:'var(--c2)',la:dec(b.r),lb:dec(b.gr),tip:`<b>${b.name}</b><br>Яндекс: ${dec(b.r)} · ${fmt(b.n)} оценок<br>2ГИС: ${dec(b.gr)} · ${fmt(b.gn)} оценок`})),{min:3,max:5,lw:150,pad:50});
+pair('c-photo',BS.map(b=>({label:short(b.name),a:b.ph,b:b.gph,ca:'var(--c1)',cb:'var(--c2)',tip:`<b>${b.name}</b><br>Фото на Яндексе: ${b.ph}<br>Фото в 2ГИС: ${b.gph}`})),{lw:150,pad:40});
+hbar('c-ans',B.slice().sort((a,b)=>a.ans-b.ans).map(b=>({label:short(b.name),value:Math.max(b.ans,0.5),vlabel:b.ans+'%',color:b.ans<80?'var(--s-risk)':'var(--s-strong)',tip:`<b>${b.name}</b><br>Ответов: ${b.ans}%`})),{max:100,lw:150});
+// competitors
+pair('c-pair',BS.map(b=>({label:short(b.name),a:b.n,b:b.topn,la:fmt(b.n),lb:(CW('c-pair')>640?`${fmt(b.topn)} · ${b.top}`:fmt(b.topn)),tip:`<b>${b.name}</b><br>Flex Gym: ${fmt(b.n)} оценок, ${dec(b.r)}<br>${b.top}: ${fmt(b.topn)} оценок, ${dec(b.topr)}<br>Место по оценкам: ${b.rank} из ${b.of}`})),{lw:CW('c-pair')>640?150:110,pad:CW('c-pair')>640?200:50});
+hbar('c-top',D.top.map(t=>({label:t[0],value:t[1],color:'var(--s-off)',vlabel:t[1]+' зон',tip:`<b>${t[0]}</b><br>В ${t[1]} зонах из 10<br>Карточек рядом с сетью: ${t[2]}<br>Оценок суммарно: ${fmt(t[4])}`})),{max:10,lw:150});
+document.getElementById('uq').textContent=D.kpi.uniq;
+(function(){const w=CW('c-med'),rh=46,lw=90,Wd=w-lw-60,h=med.length*rh+6,s=svg('c-med',w,h);
+ med.forEach((m,i)=>{const y=i*rh+3,mx=Math.max(m[1],m[2]),norm=m[0]==='Рейтинг'?5:mx;const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=m[0];
+  [[m[1],'var(--gold)',6],[m[2],'var(--s-off)',22]].forEach(([v,c,dy])=>{const bw=Math.max(2,v/norm*Wd);el('rect',{x:lw,y:y+dy,width:bw,height:13,rx:4,fill:c},s);const tx=el('text',{x:lw+bw+6,y:y+dy+11,class:'ax'},s);tx.textContent=m[0]==='Рейтинг'?dec(v):fmt(v)});
+  const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,`<b>${m[0]}</b><br>Flex Gym: ${m[0]==='Рейтинг'?dec(m[1]):fmt(m[1])}<br>Конкуренты: ${m[0]==='Рейтинг'?dec(m[2]):fmt(m[2])}`)});
+})();
+(function(){const L=D.content.leaders;const agg={};L.forEach(([n,v])=>agg[n]=Math.max(agg[n]||0,v));
+ const it=Object.entries(agg).sort((a,b)=>b[1]-a[1]).map(([n,v])=>({label:n,value:v,color:'var(--s-off)',vlabel:String(v),tip:`<b>${n}</b><br>${v} новостей на карточке`}));
+ it.push({label:'Flex Gym, лучший филиал',value:1,color:'var(--gold)',vlabel:'1',tip:'<b>Flex Gym</b><br>По 1 новости у 2 филиалов из 10'});
+ hbar('c-news',it,{lw:190});})();
+// voice
+pair('c-asp',D.asp.slice(0,9).map(a=>({label:a[0],a:a[1],b:a[2],ca:'var(--pos)',cb:'var(--neg)',tip:`<b>${a[0]}</b><br>Хвалят: ${fmt(a[1])}<br>Ругают: ${fmt(a[2])}<br>Доля позитива: ${Math.round(a[1]/(a[1]+a[2])*100)}%`})),{lw:190,pad:50});
+hbar('c-negb',D.negb.map(([n,v])=>({label:short(n),value:v,color:v>=40?'var(--s-risk)':'var(--s-off)'})),{lw:150});
+// brand
+hbar('c-brand',W.brands.map(b=>({label:b[0],value:b[1],color:b[0]==='Flex Gym'?'var(--gold)':'var(--s-off)',vlabel:fmt(b[1])+'  '+(b[2]==null?'новый':(b[2]>0?'+':'')+fmt(b[2])+'%'),tip:`<b>${b[0]}</b><br>${fmt(b[1])} запросов за 12 месяцев<br>${b[2]==null?'Появился в июле 2025':'Год к году: '+(b[2]>0?'+':'')+fmt(b[2])+'%'}`})),{lw:150,pad:130});
+line('c-bvl',W.labels,[{name:'Flex Gym',color:'var(--gold)',data:W.flex},{name:'DDX Fitness',color:'var(--s-off)',data:W.ddx}]);
+line('c-gym',W.labels,[{name:'Омск',color:'var(--c1)',data:W.gym},{name:'Омская область',color:'var(--c2)',data:W.gymo}]);
+line('c-fc',W.labels,[{name:'Омск',color:'var(--c1)',data:W.fc},{name:'Омская область',color:'var(--c2)',data:W.fco}]);
+(function(){const it=W.div,w=CW('c-div'),rh=24,lw=Math.min(220,Math.round(w*0.42)),h=it.length*rh+6,mid=lw+(w-lw-50)*0.55,sc=(w-lw-60)*0.45/55,s=svg('c-div',w,h);
+ el('line',{x1:mid,x2:mid,y1:0,y2:h,stroke:'var(--ink-3)','stroke-width':1},s);
+ it.forEach((d,i)=>{const y=i*rh+3,v=Math.max(-55,Math.min(55,d[1])),bw=Math.max(2,Math.abs(v)*sc);const t=el('text',{x:lw-8,y:y+rh/2+4,'text-anchor':'end'},s);t.textContent=d[0];
+  el('rect',{x:v>=0?mid:mid-bw,y:y+4,width:bw,height:rh-9,rx:4,fill:v>=0?'var(--pos)':'var(--neg)'},s);
+  const tx=el('text',{x:v>=0?mid+bw+5:mid-bw-5,y:y+rh/2+4,'text-anchor':v>=0?'start':'end',class:'ax'},s);tx.textContent=(d[1]>0?'+':'')+fmt(d[1])+'%';
+  const hit=el('rect',{x:0,y,width:w,height:rh,class:'hit'},s);hover(hit,`<b>${d[0]}</b><br>${d[1]>0?'+':''}${fmt(d[1])}% год к году<br>${fmt(d[2])} запросов за 12 месяцев`)});
+})();
+(function(){const S=W.seas,L=W.lab12,w=CW('c-heat'),lw=Math.min(150,Math.round(w*0.32)),cw=(w-lw)/12,rh=30,h=S.length*rh+26,s=svg('c-heat',w,h);
+ L.forEach((lb,j)=>{if(cw<34&&j%2)return;const tx=el('text',{x:lw+j*cw+cw/2,y:h-6,'text-anchor':'middle',class:'ax'},s);tx.textContent=lb.split(' ')[0]});
+ S.forEach(([n,v],i)=>{const mx=Math.max(...v),mn=Math.min(...v);const t=el('text',{x:lw-8,y:i*rh+rh/2+4,'text-anchor':'end'},s);t.textContent=n;
+  v.forEach((x,j)=>{const a=0.08+0.92*(x-mn)/(mx-mn||1);const r=el('rect',{x:lw+j*cw+1,y:i*rh+1,width:cw-2,height:rh-2,rx:4,fill:'var(--c1)','fill-opacity':a.toFixed(2)},s);hover(r,`<b>${n}</b> · ${L[j]}<br>${fmt(x)} запросов`)})});
+})();
+document.getElementById('seasc').innerHTML=[
+ ['На пике сейчас','Персональный тренер','Октябрь — ноябрь: спрос почти в 4 раза выше летнего'],
+ ['Набирает обороты','Январь — пик года','«Тренажёрный зал» и «фитнес-клуб» в январе на 65–90% выше июня'],
+ ['Сезонный спад','Лето: май — август','Запросы о зале падают на 40%, растут пилатес и бассейн']].map(c=>`<div class="sc"><div class="k">${c[0]}</div><div class="t">${c[1]}</div><p>${c[2]}</p></div>`).join('');
+const NEWS=[
+ {fact:'150 000 ₽',line:'С расходов 2026 года вычет за фитнес можно получить и за родителей-пенсионеров; общий лимит социальных вычетов прежний',src:'Федеральный закон № 425-ФЗ, buh.ru',url:'https://buh.ru/news/s-2026-goda-raskhody-na-fitnes-dlya-pozhilykh-roditeley-mozhno-budet-vklyuchit-v-sotsialnyy-vychet.html'},
+ {fact:'Перечень',line:'Вычет дают только за клуб из перечня Минспорта; перечень на 2026 год направлен в ФНС до 1 марта',src:'1С:ИТС',url:'https://its.1c.ru/db/content/newscomm/src/497703.htm'},
+ {fact:'+2–3%',line:'Рынок фитнеса в первом полугодии 2026 года почти не рос — клубы борются за каждого клиента',src:'CRM Index',url:'https://crmindex.ru/products/1c_fitness/blog/chto_proishodit_s_fitnes_industriey_v_2026_godu_trendy_novye_instrumenty_i_budushchie_perspektivy'},
+ {fact:'01.09.2026',line:'Крупные клубы с выручкой больше 120 млн ₽ обязаны принимать оплату цифровым рублём',src:'Workspace',url:'https://workspace.ru/blog/chto-menyaetsya-dlya-fitnes-klubov-s-1-sentyabrya-2026/'}];
+document.getElementById('news').innerHTML=NEWS.map(n=>`<div class="nw"><div class="big">${n.fact}</div><p>${n.line}</p><a href="${n.url}" target="_blank" rel="noopener">${n.src}</a></div>`).join('');
+document.getElementById('src-news').innerHTML='Поводы для контента: '+NEWS.map(n=>`<a href="${n.url}" target="_blank" rel="noopener">${new URL(n.url).hostname}</a>`).join(', ');
+</script>
+</body>
+</html>
