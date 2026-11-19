@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Персона-Дент»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero,.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1,.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.14;max-width:24ch}
+.vc .lead,.va header.top p{margin:14px 0 0;max-width:64ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px dashed var(--gold-line);background:var(--panel)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;color:var(--ink-2)}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .lbl,.vc .thesis-lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl,.vc .cover-box .lbl{color:var(--gold)}.vc .thesis-lbl,.vc .seo-box .lbl{color:var(--ink-3)}.vc .thesis-lbl{margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .meta-row{margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .legal{margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--good-soft);font-size:13.5px;color:var(--ink-2)}.vc .legal .lbl{color:var(--good)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--gold-line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Персона-Дент»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Екатеринбург · стоматологические материалы · замер 19.11.2026</span>
+  <h1>Кто забирает поиск по стоматологическим материалам на Картах</h1>
+  <p>ООО ТД «Персона-Дент» на Яндекс Картах: 10 целевых запросов по направлениям брифа и магазины, которые сейчас стоят в выдаче по Екатеринбургу.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Персона-Дент» нет в первой пятёрке ни по одному замеренному запросу</b>«Стоматологические материалы», «стоматологический магазин», «расходные материалы для стоматологии», «стоматологические инструменты» — поиск по Екатеринбургу.</p></div>
+    <div class="v"><span class="pill warn">ниша узкая</span><p><b>По профильным запросам в пятёрке одни и те же 5–6 магазинов</b>Мед-Орто, МастерФарм, Дентал Хорс, Техно-Дент, Дентекс, ТД Аверон. Конкуренция идёт за небольшое число мест.</p></div>
+    <div class="v"><span class="pill warn">выдача размыта</span><p><b>По «средствам для стерилизации» и «дезсредствам» в пятёрке медтехника и бытовая химия</b>Профильного стоматологического поставщика там нет — место для карточки с текстами про стерилизацию в стоматологии.</p></div>
+    <div class="v"><span class="pill warn">выдача размыта</span><p><b>По «ортодонтическим материалам» Карты показывают клиники</b>Поставщиков ортодонтической продукции в пятёрке нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">0 из 9</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Профильных магазинов в выдаче</div><div class="n">7</div><div class="s">по 10 запросам</div></div>
+    <div class="kpi"><div class="k">Оценок у лидера ниши</div><div class="n">124</div><div class="s">Мед-Орто · 5,0</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям брифа: расходные стоматологические материалы, пломбировочные материалы, инструменты, стерилизация, гигиена и ортодонтия.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>стоматологические материалы екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>стоматологический магазин екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>расходные материалы для стоматологии</td><td>расходники</td><td>нет в первых 5</td><td class="nw">Новость 1</td></tr>
+      <tr><td>пломбировочные материалы</td><td>пломбирование</td><td>не замеряли</td><td class="nw">Новость 2</td></tr>
+      <tr><td>стоматологические инструменты</td><td>инструменты</td><td>нет в первых 5</td><td class="nw">Новость 2</td></tr>
+      <tr><td>средства для стерилизации</td><td>стерилизация</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>дезинфицирующие средства оптом</td><td>дезинфекция</td><td>нет в первых 5</td><td class="nw">Новость 3</td></tr>
+      <tr><td>ортодонтические материалы</td><td>ортодонтия</td><td>нет в первых 5</td><td class="nw">Новость 4</td></tr>
+      <tr><td>средства гигиены полости рта оптом</td><td>гигиена</td><td>не замеряли</td><td class="nw">Новость 4</td></tr>
+      <tr><td>медицинские товары екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">Сторис 1</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка Яндекс Карт по Екатеринбургу.</p></div>
+  <h3 style="margin-top:0">Первая пятёрка</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>стоматологические материалы</td><td>Мед-Орто</td><td>Дентекс</td><td>МастерФарм</td><td>Дентал Хорс</td><td>Техно-Дент</td></tr>
+      <tr><td>стоматологический магазин</td><td>Мед-Орто</td><td>Дентекс</td><td>МастерФарм</td><td>Дентал Хорс</td><td>Мегадента</td></tr>
+      <tr><td>расходные материалы для стоматологии</td><td>Мед-Орто</td><td>МастерФарм</td><td>Медторг-св</td><td>Wisehoff</td><td>ТД Аверон</td></tr>
+      <tr><td>стоматологические инструменты</td><td>Мед-Орто</td><td>Dr. Yun</td><td>Техно-Дент</td><td>Дентал Хорс</td><td>МастерФарм</td></tr>
+      <tr><td>средства для стерилизации</td><td>Медтехника № 7</td><td>Супер Лента</td><td>М.Косметик</td><td>М.Косметик</td><td>Магнит</td></tr>
+      <tr><td>дезинфицирующие средства оптом</td><td>АбсолютБытХим</td><td>Савитар</td><td>Константа</td><td>Ника</td><td>Растер</td></tr>
+      <tr><td>ортодонтические материалы</td><td>Гелиос</td><td>Dr. Yun</td><td>Новодент</td><td>Классик дент детям</td><td>Первая Цифровая Стоматология</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Профильные магазины в выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>Персона-Дент</b></td><td class="r num me">—</td><td class="r num me">—</td><td>—</td><td>нет в первых 5</td></tr>
+      <tr><td>Мед-Орто</td><td class="r num">5,0</td><td class="r num">124</td><td>ул. Шейнкмана, 55</td><td>1 место в 4 запросах</td></tr>
+      <tr><td>МастерФарм</td><td class="r num">4,9</td><td class="r num">79</td><td>ул. Чкалова, 124</td><td>2–5 место в 4 запросах</td></tr>
+      <tr><td>Дентал Хорс</td><td class="r num">4,7</td><td class="r num">23</td><td>ул. Шейнкмана, 55</td><td>4 место в 3 запросах</td></tr>
+      <tr><td>Техно-Дент</td><td class="r num">4,7</td><td class="r num">47</td><td>ул. Фурманова, 123</td><td>3–5 место в 2 запросах</td></tr>
+      <tr><td>Дентекс</td><td class="r num">—</td><td class="r num">—</td><td>ул. Репина, 42А</td><td>2 место в 2 запросах</td></tr>
+      <tr><td>ТД Аверон</td><td class="r num">4,6</td><td class="r num">143</td><td>ул. Фурманова, 125</td><td>5 место</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Нишу держит Мед-Орто</b>: первое место по четырём профильным запросам, 124 оценки и рейтинг 5,0.</li>
+      <li><b>Дентекс стоит вторым без рейтинга</b>: в узкой нише карточку поднимают рубрики и релевантность, а не только число оценок.</li>
+      <li><b>По стерилизации, дезинфекции и ортодонтии</b> стоматологических поставщиков в пятёрке нет.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Первая тема — сам поставщик под общие запросы «стоматологические материалы» и «стоматологический магазин».</li>
+      <li>Дальше — направления ассортимента, где выдача свободнее: пломбирование и инструменты, стерилизация и дезинфекция, гигиена и ортодонтия.</li>
+      <li>В каждом тексте — «Екатеринбург» и условие продажи юрлицам с лицензией.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Екатеринбургу, первая пятёрка выдачи по 9 запросам.</li>
+    <li>Запросы «пломбировочные материалы» и «средства гигиены полости рта оптом» — целевые для текстов этапа, позиции по ним не замерялись.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/54/yekaterinburg/search/%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B/" target="_blank" rel="noopener">Стоматологические материалы в Екатеринбурге — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/54/yekaterinburg/search/%D1%80%D0%B0%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B%20%D0%B4%D0%BB%D1%8F%20%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B8/" target="_blank" rel="noopener">Расходные материалы для стоматологии в Екатеринбурге — Яндекс Карты</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Стоматологические материалы · Екатеринбург · опт и розница</span>
+  <h1>«Персона-Дент» — ТЗ на контент, этап 1</h1>
+  <p class="lead">Первый период работы. 4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании ТД «Персона-Дент» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">ООО ТД «Персона-Дент»</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Оптовая и розничная торговля <small>стоматологические материалы</small></div></div>
+    <div class="fact"><div class="k">Покупатели</div><div class="v">Только юридические лица <small>с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированные в «Честном знаке»</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 8:00–17:00 <small>обед 12:00–13:00, сб–вс — выходные</small></div></div>
+    <div class="fact"><div class="k">Обращение и стиль</div><div class="v">На «вы» <small>деловой стиль</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Без указания цен</div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Фирменные цвета по брифу: белый, серый, чёрный. Стилистика — на усмотрение исполнителя. HEX снимаем с векторного логотипа, который предоставит компания.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">HEX — по логотипу</div></div>
+    <div class="swatch"><div class="role">Дополнительный</div><div class="name">Серый</div><div class="hex">HEX — по логотипу</div></div>
+    <div class="swatch"><div class="role">Основной</div><div class="name">Чёрный</div><div class="hex">HEX — по логотипу</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Приоритет брифа — продажа расходных стоматологических материалов, поэтому все темы этапа о нём. Сначала знакомство с поставщиком под общие запросы, затем направления ассортимента, где профильных поставщиков нет в выдаче.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Знакомство: поставщик сертифицированных расходных стоматологических материалов в Екатеринбурге, опт и розница, доставка по адресу.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Пломбировочные материалы и инструменты для терапевтического приёма и эндодонтии.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Стерилизация и дезинфекция: всё для санитарного режима стоматологического кабинета.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Гигиена, профилактика и ортодонтическая продукция.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании ТД «Персона-Дент» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы», деловой стиль. Вступление — от лица компании, дальше факты брифа без дополнений. Без цен, телефона и e-mail в тексте, без торговых марок, без превосходных степеней. Лекарственные средства и анестетики в текстах и на обложках не упоминаем. В каждом тексте — условие продажи: только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак». На тексте и обложке — «Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению», не менее 5% площади. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Стоматологические материалы в Екатеринбурге оптом и в розницу — ТД «Персона-Дент»</h3></div><span class="purpose">Знакомство</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — ТД «Персона-Дент»: помогаем клиникам оперативно приобретать сертифицированные расходные стоматологические материалы с доставкой на указанный адрес в минимальные сроки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Оптовая и розничная торговля стоматологическими материалами.<span class="src">бриф</span></li>
+      <li>В ассортименте пломбировочные материалы, инструменты, средства для стерилизации, товары для гигиены и профилактики полости рта, медицинские изделия, ортодонтическая продукция.<span class="src">бриф</span></li>
+      <li>Сертифицированные расходные материалы с доставкой на указанный адрес в минимальные сроки.<span class="src">бриф</span></li>
+      <li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li>
+      <li>Пн–пт 8:00–17:00, обед 12:00–13:00.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Стоматологические материалы в Екатеринбурге оптом и в розницу — ТД «Персона-Дент».</div>
+      <div class="meta-row"><b>H1 · </b>Расходные стоматологические материалы в Екатеринбурге — ТД «Персона-Дент»</div>
+      <div class="meta-row"><b>Title · </b>Стоматологические материалы оптом и в розницу, Екатеринбург | Персона-Дент</div>
+      <div class="meta-row"><b>Description · </b>Сертифицированные расходные стоматологические материалы для клиник с доставкой по адресу. Продажа юрлицам с медицинской лицензией. ТД «Персона-Дент», Екатеринбург.</div>
+      <div class="chips"><span class="chip-kw">стоматологические материалы екатеринбург</span><span class="chip-kw">стоматологический магазин екатеринбург</span><span class="chip-kw">расходные материалы для стоматологии</span><span class="chip-kw">стоматологические материалы оптом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Оформляйте заказ расходных материалов для клиники через карточку ТД «Персона-Дент» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Продажа юрлицам с лицензией — формулировка брифа, в тексте обязательна. Без торговых марок и без лекарственных средств. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стоматологические материалы для клиник — оптом и в розницу»</div>
+      <p>Композиция: предметная раскладка расходных материалов на светлом фоне, поверх — тезис и строка «Доставка на указанный адрес». Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: фон белый, тезис чёрный, подложка строки — серый.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Пломбировочные материалы и стоматологические инструменты для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам материалы и инструменты для терапевтического приёма — от пломбирования до работы с корневыми каналами.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Пломбировочные материалы: нанокомпозиты, стеклоиономерные цементы для фиксации, цементы для временной фиксации, пасты для пломбирования каналов.<span class="src">бриф</span></li>
+      <li>Адгезивы, протравочные гели, материалы для временных коронок и мостов.<span class="src">бриф</span></li>
+      <li>Эндодонтия: файлы, пульпоэкстракторы, гуттаперчевые и бумажные штифты, каналонаполнители, средства для расширения корневых каналов.<span class="src">бриф</span></li>
+      <li>Инструменты: зеркала, зонды, пинцеты, гладилки, штопферы, шпатели, скальпели.<span class="src">бриф</span></li>
+      <li>Продажа только юрлицам с лицензией, зарегистрированным в «Честном знаке».<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Пломбировочные материалы и стоматологические инструменты в Екатеринбурге — в ТД «Персона-Дент».</div>
+      <div class="meta-row"><b>H1 · </b>Пломбировочные материалы и инструменты для стоматологии в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Пломбировочные материалы, эндодонтия, стоматологические инструменты | Персона-Дент</div>
+      <div class="meta-row"><b>Description · </b>Композиты, цементы, адгезивы, эндодонтические файлы и штифты, инструменты для приёма. Поставки клиникам Екатеринбурга. ТД «Персона-Дент».</div>
+      <div class="chips"><span class="chip-kw">пломбировочные материалы</span><span class="chip-kw">стоматологические инструменты</span><span class="chip-kw">эндодонтические инструменты</span><span class="chip-kw">стоматологические материалы екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запрашивайте наличие материалов для приёма через карточку ТД «Персона-Дент» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Только группы товаров из брифа, без торговых марок. Без обещаний результата лечения. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Пломбирование · эндодонтия · инструменты»</div>
+      <p>Композиция: три колонки-плашки с пиктограммами групп товаров, над ними тезис. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: фон белый, плашки серые, тезис и пиктограммы чёрные.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Средства для стерилизации и дезинфекции для стоматологических клиник в Екатеринбурге</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы собрали в одном месте всё, что нужно стоматологическому кабинету для стерилизации, дезинфекции и учёта санитарного режима.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Рулоны для стерилизации, индикаторы стерилизации.<span class="src">бриф</span></li>
+      <li>Дезинфицирующие средства, в том числе для аспирационных систем, салфетки для дезинфекции, антисептик для кожи.<span class="src">бриф</span></li>
+      <li>Пакеты для сбора отходов классов «А» и «Б», ёмкость-контейнер для сбора колющих отходов.<span class="src">бриф</span></li>
+      <li>Журналы контроля концентрации рабочих растворов дезинфицирующих и стерилизующих средств, учёта качества предстерилизационной обработки, проведения генеральных уборок.<span class="src">бриф</span></li>
+      <li>Одноразовые расходники: перчатки, маски, шапочки, бахилы, нагрудники для пациентов.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Средства для стерилизации и дезинфекции для стоматологии в Екатеринбурге — ТД «Персона-Дент».</div>
+      <div class="meta-row"><b>H1 · </b>Стерилизация и дезинфекция в стоматологии: расходники для клиник Екатеринбурга</div>
+      <div class="meta-row"><b>Title · </b>Средства для стерилизации, дезсредства, отходы класса Б, журналы | Персона-Дент</div>
+      <div class="meta-row"><b>Description · </b>Рулоны для стерилизации, индикаторы, дезинфицирующие средства, пакеты для отходов, журналы учёта. Для клиник Екатеринбурга. ТД «Персона-Дент».</div>
+      <div class="chips"><span class="chip-kw">средства для стерилизации</span><span class="chip-kw">дезинфицирующие средства оптом</span><span class="chip-kw">пакеты для отходов класса б</span><span class="chip-kw">индикаторы стерилизации</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Комплектуйте санитарный режим клиники — оформляйте заказ через карточку ТД «Персона-Дент» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без формулировок «безопасно», «уничтожает 100%», без торговых марок дезсредств. Пометка о противопоказаниях и инструкции — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Всё для стерилизации и дезинфекции кабинета»</div>
+      <p>Композиция: инфографика-список из четырёх строк — стерилизация · дезинфекция · отходы · журналы учёта. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: фон чёрный, строки белые, разделители серые.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Средства гигиены полости рта и ортодонтическая продукция для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам товары для гигиены и профилактики полости рта и ортодонтическую продукцию — для работы врача и для рекомендаций пациентам.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Зубные щётки, в том числе детские, ортодонтические и для брекетов, монопучковые, межзубные нити.<span class="src">бриф</span></li>
+      <li>Зубные пасты и гели, ополаскиватели, профилактические гели для фторирования.<span class="src">бриф</span></li>
+      <li>Ортодонтическая продукция: брекеты, дуги, лигатуры, эластичные кольца и цепочки.<span class="src">бриф</span></li>
+      <li>Наборы для профессионального отбеливания, полировочные пасты.<span class="src">бриф</span></li>
+      <li>Продажа только юрлицам с лицензией, зарегистрированным в «Честном знаке».<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Средства гигиены полости рта и ортодонтические материалы в Екатеринбурге — ТД «Персона-Дент».</div>
+      <div class="meta-row"><b>H1 · </b>Гигиена, профилактика и ортодонтия: продукция для клиник Екатеринбурга</div>
+      <div class="meta-row"><b>Title · </b>Средства гигиены полости рта оптом, ортодонтические материалы | Персона-Дент</div>
+      <div class="meta-row"><b>Description · </b>Зубные щётки, пасты, ополаскиватели, гели для фторирования, брекеты, дуги и лигатуры. Поставки клиникам Екатеринбурга. ТД «Персона-Дент».</div>
+      <div class="chips"><span class="chip-kw">ортодонтические материалы</span><span class="chip-kw">средства гигиены полости рта оптом</span><span class="chip-kw">ортодонтические щетки</span><span class="chip-kw">стоматологические материалы екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Пополняйте ассортимент гигиены и ортодонтии для клиники через карточку ТД «Персона-Дент» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без торговых марок и без обещаний эффекта отбеливания или профилактики. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Гигиена · профилактика · ортодонтия»</div>
+      <p>Композиция: предметная раскладка щёток и ортодонтических элементов на светлом фоне, тезис сверху. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: фон белый, тезис чёрный, плашка тезиса — серый.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Кому мы продаём</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Юридические лица</span><span class="fact-pill">Лицензия на мед. или фарм. деятельность</span><span class="fact-pill">Регистрация в «Честном знаке»</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, три условия списком чёрным, номера — на серых кругах. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Опт и розница с доставкой</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Сертифицированные материалы</span><span class="fact-pill">Доставка на указанный адрес</span><span class="fact-pill">Пн–пт 8:00–17:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон чёрный, тезис белым крупно, факты — серые плашки. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Что в ассортименте</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Пломбировочные материалы</span><span class="fact-pill">Инструменты</span><span class="fact-pill">Стерилизация</span><span class="fact-pill">Гигиена</span><span class="fact-pill">Ортодонтия</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый, пять групп — сетка пиктограмм чёрным с подписями. Внизу — пометка о противопоказаниях.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Санитарный режим кабинета</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Рулоны для стерилизации</span><span class="fact-pill">Индикаторы</span><span class="fact-pill">Пакеты для отходов «А» и «Б»</span><span class="fact-pill">Журналы учёта</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон серый, тезис чёрным, факты белыми плашками. Внизу — пометка о противопоказаниях.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — поставщик, пломбирование, стерилизация, гигиена и ортодонтия <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматологические материалы оптом и в розницу</b>под «стоматологические материалы екатеринбург», «стоматологический магазин»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Кому мы продаём</b>юрлица, лицензия, «Честный знак»</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Пломбировочные материалы и инструменты</b>под «пломбировочные материалы», «стоматологические инструменты»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Опт и розница с доставкой</b>сертифицированные материалы, доставка, график</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Стерилизация и дезинфекция</b>под «средства для стерилизации», «дезинфицирующие средства оптом»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Что в ассортименте</b>пять групп товаров</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Гигиена и ортодонтия</b>под «ортодонтические материалы», «средства гигиены полости рта оптом»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Санитарный режим кабинета</b>стерилизация, отходы, журналы</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
