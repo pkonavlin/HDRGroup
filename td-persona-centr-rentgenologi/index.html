@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «ТД Персона» и «Центр рентгенологии»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with company switch + view tabs + section chips */
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.cos{display:flex;gap:4px;min-width:0;flex-wrap:wrap}
+.cos button{font:600 14px var(--f-display);color:var(--ink-2);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.cos button:hover{color:var(--ink)}.cos button[aria-pressed="true"]{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;flex-wrap:wrap;gap:8px 14px}.cos button{font-size:13px;padding:5px 10px}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:170px}main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero,.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1,.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.14;max-width:24ch}
+.vc .lead,.va header.top p{margin:14px 0 0;max-width:64ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px dashed var(--gold-line);background:var(--panel)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;color:var(--ink-2)}
+.vc .swatch.solid{border-style:solid}.vc .swatch.solid .role,.vc .swatch.solid .hex{color:inherit;opacity:.85}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .cyc-lead{margin:0 0 14px;color:var(--ink-2);font-size:15px;max-width:72ch}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2);margin-bottom:6px}.vc .tone-banner b{color:var(--ink)}
+.vc details.pstage{border:0;background:none;border-radius:0;margin-top:26px;overflow:visible}
+.vc details.pstage>summary{padding:0 0 10px;border-bottom:1px solid var(--gold-line);font:700 19px var(--f-display);color:var(--gold);justify-content:flex-start;flex-wrap:wrap;gap:8px 12px}
+.vc details.pstage>summary::before{content:"▸";color:var(--gold-2);font-size:14px;transition:transform .15s}
+.vc details.pstage[open]>summary::before{transform:rotate(90deg)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.vc .pbody{padding-top:4px}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .lbl,.vc .thesis-lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl,.vc .cover-box .lbl{color:var(--gold)}.vc .thesis-lbl,.vc .seo-box .lbl{color:var(--ink-3)}.vc .thesis-lbl{margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .meta-row{margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .legal{margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--good-soft);font-size:13.5px;color:var(--ink-2)}.vc .legal .lbl{color:var(--good)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage:not(.pstage){border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]:not(.pstage){border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px}
+.vc details.stage:not(.pstage)>summary{padding:16px 20px;justify-content:space-between;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span>
+      <div class="cos" role="group" aria-label="Компания"><button type="button" data-co-go="td" aria-pressed="true">ТД Персона</button><button type="button" data-co-go="rg" aria-pressed="false">Центр рентгенологии</button></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-td-analytics" data-co="td" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="td-top">
+  <span class="eyebrow">Екатеринбург · стоматологические материалы · замер 19.11.2026</span>
+  <h1>Кто забирает поиск по стоматологическим материалам на Картах</h1>
+  <p>«ТД Персона» на Яндекс Картах: 10 целевых запросов по направлениям брифа и магазины, которые сейчас стоят в выдаче по Екатеринбургу.</p>
+</header>
+<section id="td-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«ТД Персона» нет в первой пятёрке ни по одному замеренному запросу</b>«Стоматологические материалы», «стоматологический магазин», «расходные материалы для стоматологии», «стоматологические инструменты» — поиск по Екатеринбургу.</p></div>
+    <div class="v"><span class="pill warn">ниша узкая</span><p><b>По профильным запросам в пятёрке одни и те же 5–6 магазинов</b>Мед-Орто, МастерФарм, Дентал Хорс, Техно-Дент, Дентекс, ТД Аверон. Конкуренция идёт за небольшое число мест.</p></div>
+    <div class="v"><span class="pill warn">выдача размыта</span><p><b>По «средствам для стерилизации» и «дезсредствам» в пятёрке медтехника и бытовая химия</b>Профильного стоматологического поставщика там нет — место для карточки с текстами про стерилизацию в стоматологии.</p></div>
+    <div class="v"><span class="pill warn">выдача размыта</span><p><b>По «ортодонтическим материалам» Карты показывают клиники</b>Поставщиков ортодонтической продукции в пятёрке нет.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Запросов, где карточка в пятёрке</div><div class="n">0 из 9</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Профильных магазинов в выдаче</div><div class="n">7</div><div class="s">по 10 запросам</div></div>
+    <div class="kpi"><div class="k">Оценок у лидера ниши</div><div class="n">124</div><div class="s">Мед-Орто · 5,0</div></div>
+  </div>
+</section>
+<section id="td-queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Запросы по направлениям брифа и темы этапов 1–3, которые на них работают.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Направление</th><th>Карточка в выдаче</th><th>Темы</th></tr></thead>
+    <tbody>
+      <tr><td>стоматологические материалы екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">Н1 · Н5 · Н7</td></tr>
+      <tr><td>стоматологический магазин екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">Н1 · Н7</td></tr>
+      <tr><td>расходные материалы для стоматологии</td><td>расходники</td><td>нет в первых 5</td><td class="nw">Н1 · Н5 · Н6</td></tr>
+      <tr><td>пломбировочные материалы</td><td>пломбирование</td><td>не замеряли</td><td class="nw">Н2 · Н8</td></tr>
+      <tr><td>стоматологические инструменты</td><td>инструменты</td><td>нет в первых 5</td><td class="nw">Н2 · Н8</td></tr>
+      <tr><td>средства для стерилизации</td><td>стерилизация</td><td>нет в первых 5</td><td class="nw">Н3</td></tr>
+      <tr><td>дезинфицирующие средства оптом</td><td>дезинфекция</td><td>нет в первых 5</td><td class="nw">Н3</td></tr>
+      <tr><td>ортодонтические материалы</td><td>ортодонтия</td><td>нет в первых 5</td><td class="nw">Н4</td></tr>
+      <tr><td>средства гигиены полости рта оптом</td><td>гигиена</td><td>не замеряли</td><td class="nw">Н4</td></tr>
+      <tr><td>медицинские товары екатеринбург</td><td>общий</td><td>нет в первых 5</td><td class="nw">С1 · Н6</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<section id="td-geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Первая пятёрка Яндекс Карт по Екатеринбургу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>стоматологические материалы</td><td>Мед-Орто</td><td>Дентекс</td><td>МастерФарм</td><td>Дентал Хорс</td><td>Техно-Дент</td></tr>
+      <tr><td>стоматологический магазин</td><td>Мед-Орто</td><td>Дентекс</td><td>МастерФарм</td><td>Дентал Хорс</td><td>Мегадента</td></tr>
+      <tr><td>расходные материалы для стоматологии</td><td>Мед-Орто</td><td>МастерФарм</td><td>Медторг-св</td><td>Wisehoff</td><td>ТД Аверон</td></tr>
+      <tr><td>стоматологические инструменты</td><td>Мед-Орто</td><td>Dr. Yun</td><td>Техно-Дент</td><td>Дентал Хорс</td><td>МастерФарм</td></tr>
+      <tr><td>средства для стерилизации</td><td>Медтехника № 7</td><td>Супер Лента</td><td>М.Косметик</td><td>М.Косметик</td><td>Магнит</td></tr>
+      <tr><td>дезинфицирующие средства оптом</td><td>АбсолютБытХим</td><td>Савитар</td><td>Константа</td><td>Ника</td><td>Растер</td></tr>
+      <tr><td>ортодонтические материалы</td><td>Гелиос</td><td>Dr. Yun</td><td>Новодент</td><td>Классик дент детям</td><td>Первая Цифровая Стоматология</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Профильные магазины в выдаче</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th>В выдаче</th></tr></thead>
+    <tbody>
+      <tr><td><b>ТД Персона</b></td><td class="r num me">—</td><td class="r num me">—</td><td>—</td><td>нет в первых 5</td></tr>
+      <tr><td>Мед-Орто</td><td class="r num">5,0</td><td class="r num">124</td><td>ул. Шейнкмана, 55</td><td>1 место в 4 запросах</td></tr>
+      <tr><td>МастерФарм</td><td class="r num">4,9</td><td class="r num">79</td><td>ул. Чкалова, 124</td><td>2–5 место в 4 запросах</td></tr>
+      <tr><td>Дентал Хорс</td><td class="r num">4,7</td><td class="r num">23</td><td>ул. Шейнкмана, 55</td><td>4 место в 3 запросах</td></tr>
+      <tr><td>Техно-Дент</td><td class="r num">4,7</td><td class="r num">47</td><td>ул. Фурманова, 123</td><td>3–5 место в 2 запросах</td></tr>
+      <tr><td>Дентекс</td><td class="r num">—</td><td class="r num">—</td><td>ул. Репина, 42А</td><td>2 место в 2 запросах</td></tr>
+      <tr><td>ТД Аверон</td><td class="r num">4,6</td><td class="r num">143</td><td>ул. Фурманова, 125</td><td>5 место</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Нишу держит Мед-Орто</b>: первое место по четырём профильным запросам, 124 оценки и рейтинг 5,0.</li>
+      <li><b>Дентекс стоит вторым без рейтинга</b>: в узкой нише карточку поднимают рубрики и релевантность, а не только число оценок.</li>
+      <li><b>По стерилизации, дезинфекции и ортодонтии</b> стоматологических поставщиков в пятёрке нет.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Этап 1 — поставщик под общие запросы и крупные направления ассортимента.</li>
+      <li>Этапы 2 и 3 — отдельные группы товаров из брифа: временные конструкции, одноразовые расходники, эстетический приём, эндодонтия. Каждая — под свой запрос.</li>
+      <li>В каждом тексте — «Екатеринбург» и условие продажи юрлицам с лицензией.</li>
+    </ul></div>
+  </div>
+</section>
+<section id="td-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Екатеринбургу, первая пятёрка выдачи по 9 запросам.</li>
+    <li>Запросы «пломбировочные материалы» и «средства гигиены полости рта оптом» — целевые для текстов, позиции по ним не замерялись.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/54/yekaterinburg/search/%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B/" target="_blank" rel="noopener">Стоматологические материалы в Екатеринбурге — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/54/yekaterinburg/search/%D1%80%D0%B0%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B%20%D0%B4%D0%BB%D1%8F%20%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B8/" target="_blank" rel="noopener">Расходные материалы для стоматологии в Екатеринбурге — Яндекс Карты</a>
+  </div>
+</section>
+</div></div>
+<div class="view vc" id="v-td-content" data-co="td" data-view="content" hidden><div class="wrap">
+<section class="hero" id="td-company">
+  <span class="eyebrow">Стоматологические материалы · Екатеринбург · опт и розница</span>
+  <h1>«ТД Персона» — ТЗ на контент, этапы 1–3</h1>
+  <p class="lead">Этап 1 — 4 новости с обложкой и 4 сторис. Продление: этапы 2 и 3 — по 2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «ТД Персона» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid"><div class="fact"><div class="k">Компания</div><div class="v">«ТД Персона»</div></div><div class="fact"><div class="k">Сфера</div><div class="v">Оптовая и розничная торговля<small>стоматологические материалы</small></div></div><div class="fact"><div class="k">Покупатели</div><div class="v">Только юридические лица<small>с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированные в «Честном знаке»</small></div></div><div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 8:00–17:00<small>обед 12:00–13:00, сб–вс — выходные</small></div></div><div class="fact"><div class="k">Обращение и стиль</div><div class="v">На «вы»<small>деловой стиль</small></div></div><div class="fact"><div class="k">Цены</div><div class="v">Без указания цен</div></div></div>
+</section>
+<section id="td-brandbook">
+  <div class="sec-head"><span class="sec-num">01 · Мини-брендбук</span><h2>Цвета для обложек и слайдов</h2><p>Фирменные цвета по брифу: белый, серый, чёрный. Стилистика — на усмотрение исполнителя. HEX снимаем с векторного логотипа, который предоставит компания.</p></div>
+  <div class="swatches"><div class="swatch"><div class="role">Фоновый</div><div class="name">Белый</div><div class="hex">HEX — по логотипу</div></div><div class="swatch"><div class="role">Второстепенный</div><div class="name">Серый</div><div class="hex">HEX — по логотипу</div></div><div class="swatch"><div class="role">Основной</div><div class="name">Чёрный</div><div class="hex">HEX — по логотипу</div></div></div>
+</section>
+<section id="td-cycle">
+  <div class="sec-head"><span class="sec-num">02 · Логика цикла</span><h2>Последовательность тем по этапам</h2><p>Этап 1 — темы первого периода, этапы 2 и 3 — продление, по 2 новости и 2 сторис.</p></div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">поставщик, пломбирование, стерилизация, гигиена и ортодонтия</span><span class="badge">Первый период</span></summary><div class="pbody"><p class="cyc-lead">Приоритет брифа — продажа расходных стоматологических материалов. Знакомство с поставщиком под общие запросы, затем направления ассортимента, где профильных поставщиков нет в выдаче.</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>Знакомство: поставщик сертифицированных расходных стоматологических материалов, опт и розница, доставка по адресу.</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>Пломбировочные материалы и инструменты для терапевтического приёма.</p></div><div class="cycle-row"><div class="tag">Тема 3</div><p>Стерилизация и дезинфекция: санитарный режим стоматологического кабинета.</p></div><div class="cycle-row"><div class="tag">Тема 4</div><p>Гигиена, профилактика и ортодонтическая продукция.</p></div></div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">временные конструкции и одноразовые расходники</span><span class="badge">Актуальный</span></summary><div class="pbody"><p class="cyc-lead">Продление. Этап раскрывает две группы ассортимента из брифа, которые в этапе 1 были только строкой в списке: материалы для временных конструкций и фиксации и одноразовые расходники для приёма.</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>Материалы для временных коронок и мостов, цементы для фиксации и временной фиксации.</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>Одноразовые расходники для стоматологического приёма: перчатки, маски, шапочки, бахилы, нагрудники для пациентов.</p></div></div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">эстетический приём и эндодонтия</span><span class="badge">Следующий</span></summary><div class="pbody"><p class="cyc-lead">Продление. Этап отдаёт отдельные темы материалам для эстетической реставрации и отбеливания и эндодонтии — в этапе 1 они были частью общих тем.</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>Материалы для эстетического приёма: нанокомпозиты, адгезивы, протравочные гели, наборы для профессионального отбеливания, полировочные пасты.</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>Эндодонтия: файлы, пульпоэкстракторы, гуттаперчевые и бумажные штифты, каналонаполнители, средства для расширения корневых каналов.</p></div></div></div></details>
+</section>
+<section id="td-news">
+  <div class="sec-head"><span class="sec-num">03 · Новости</span><h2>Темы для новостных публикаций</h2><p>Публикация — карточка компании «ТД Персона» на Яндекс Картах и 2ГИС.</p></div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы», деловой стиль. Вступление — от лица компании, дальше факты брифа без дополнений. Без цен, телефона и e-mail в тексте, без торговых марок, без превосходных степеней. Лекарственные средства и анестетики в текстах и на обложках не упоминаем. В каждом тексте — условие продажи: только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак». На тексте и обложке — «Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению», не менее 5% площади. Объём — до 3 000 знаков с пробелами.</div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">4 новости</span><span class="badge">Первый период</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Стоматологические материалы в Екатеринбурге оптом и в розницу — «ТД Персона»</h3></div><span class="purpose">Знакомство</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — «ТД Персона»: помогаем клиникам оперативно приобретать сертифицированные расходные стоматологические материалы с доставкой на указанный адрес в минимальные сроки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Оптовая и розничная торговля стоматологическими материалами.<span class="src">бриф</span></li><li>В ассортименте пломбировочные материалы, инструменты, средства для стерилизации, товары для гигиены и профилактики полости рта, медицинские изделия, ортодонтическая продукция.<span class="src">бриф</span></li><li>Сертифицированные расходные материалы с доставкой на указанный адрес в минимальные сроки.<span class="src">бриф</span></li><li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li><li>Пн–пт 8:00–17:00, обед 12:00–13:00.<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Стоматологические материалы в Екатеринбурге оптом и в розницу — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Расходные стоматологические материалы в Екатеринбурге — «ТД Персона»</div>
+      <div class="meta-row"><b>Title · </b>Стоматологические материалы оптом и в розницу, Екатеринбург | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Сертифицированные расходные стоматологические материалы для клиник с доставкой по адресу. Продажа юрлицам с медицинской лицензией. «ТД Персона», Екатеринбург.</div>
+      <div class="chips"><span class="chip-kw">стоматологические материалы екатеринбург</span><span class="chip-kw">стоматологический магазин екатеринбург</span><span class="chip-kw">расходные материалы для стоматологии</span><span class="chip-kw">стоматологические материалы оптом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Оформляйте заказ расходных материалов для клиники через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Продажа юрлицам с лицензией — формулировка брифа, в тексте обязательна. Без торговых марок, без лекарственных средств и анестетиков. Пометка «Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стоматологические материалы для клиник — оптом и в розницу»</div>
+      <p>Композиция: Предметная раскладка расходных материалов на светлом фоне, поверх — тезис и строка «Доставка на указанный адрес». Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: Фон белый, тезис чёрный, подложка строки — серый.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Пломбировочные материалы и стоматологические инструменты для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам материалы и инструменты для терапевтического приёма — от пломбирования до работы с корневыми каналами.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Пломбировочные материалы: нанокомпозиты, стеклоиономерные цементы для фиксации, цементы для временной фиксации, пасты для пломбирования каналов.<span class="src">бриф</span></li><li>Адгезивы, протравочные гели, материалы для временных коронок и мостов.<span class="src">бриф</span></li><li>Эндодонтия: файлы, пульпоэкстракторы, гуттаперчевые и бумажные штифты, каналонаполнители, средства для расширения корневых каналов.<span class="src">бриф</span></li><li>Инструменты: зеркала, зонды, пинцеты, гладилки, штопферы, шпатели, скальпели.<span class="src">бриф</span></li><li>Продажа только юрлицам с лицензией, зарегистрированным в «Честном знаке».<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Пломбировочные материалы и стоматологические инструменты в Екатеринбурге — в «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Пломбировочные материалы и инструменты для стоматологии в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Пломбировочные материалы, эндодонтия, стоматологические инструменты | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Композиты, цементы, адгезивы, эндодонтические файлы и штифты, инструменты для приёма. Поставки клиникам Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">пломбировочные материалы</span><span class="chip-kw">стоматологические инструменты</span><span class="chip-kw">эндодонтические инструменты</span><span class="chip-kw">стоматологические материалы екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запрашивайте наличие материалов для приёма через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Только группы товаров из брифа, без торговых марок. Без обещаний результата лечения. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Пломбирование · эндодонтия · инструменты»</div>
+      <p>Композиция: Три колонки-плашки с пиктограммами групп товаров, над ними тезис. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: Фон белый, плашки серые, тезис и пиктограммы чёрные.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Средства для стерилизации и дезинфекции для стоматологических клиник в Екатеринбурге</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы собрали в одном месте всё, что нужно стоматологическому кабинету для стерилизации, дезинфекции и учёта санитарного режима.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Рулоны для стерилизации, индикаторы стерилизации.<span class="src">бриф</span></li><li>Дезинфицирующие средства, в том числе для аспирационных систем, салфетки для дезинфекции, антисептик для кожи.<span class="src">бриф</span></li><li>Пакеты для сбора отходов классов «А» и «Б», ёмкость-контейнер для сбора колющих отходов.<span class="src">бриф</span></li><li>Журналы контроля концентрации рабочих растворов дезинфицирующих и стерилизующих средств, учёта качества предстерилизационной обработки, проведения генеральных уборок.<span class="src">бриф</span></li><li>Одноразовые расходники: перчатки, маски, шапочки, бахилы, нагрудники для пациентов.<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Средства для стерилизации и дезинфекции для стоматологии в Екатеринбурге — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Стерилизация и дезинфекция в стоматологии: расходники для клиник Екатеринбурга</div>
+      <div class="meta-row"><b>Title · </b>Средства для стерилизации, дезсредства, отходы класса Б, журналы | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Рулоны для стерилизации, индикаторы, дезинфицирующие средства, пакеты для отходов, журналы учёта. Для клиник Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">средства для стерилизации</span><span class="chip-kw">дезинфицирующие средства оптом</span><span class="chip-kw">пакеты для отходов класса б</span><span class="chip-kw">индикаторы стерилизации</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Комплектуйте санитарный режим клиники — оформляйте заказ через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без формулировок «безопасно», «уничтожает 100%», без торговых марок дезсредств. Пометка о противопоказаниях и инструкции — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Всё для стерилизации и дезинфекции кабинета»</div>
+      <p>Композиция: Инфографика-список из четырёх строк — стерилизация · дезинфекция · отходы · журналы учёта. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: Фон чёрный, строки белые, разделители серые.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Средства гигиены полости рта и ортодонтическая продукция для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам товары для гигиены и профилактики полости рта и ортодонтическую продукцию — для работы врача и для рекомендаций пациентам.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Зубные щётки, в том числе детские, ортодонтические и для брекетов, монопучковые, межзубные нити.<span class="src">бриф</span></li><li>Зубные пасты и гели, ополаскиватели, профилактические гели для фторирования.<span class="src">бриф</span></li><li>Ортодонтическая продукция: брекеты, дуги, лигатуры, эластичные кольца и цепочки.<span class="src">бриф</span></li><li>Наборы для профессионального отбеливания, полировочные пасты.<span class="src">бриф</span></li><li>Продажа только юрлицам с лицензией, зарегистрированным в «Честном знаке».<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Средства гигиены полости рта и ортодонтические материалы в Екатеринбурге — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Гигиена, профилактика и ортодонтия: продукция для клиник Екатеринбурга</div>
+      <div class="meta-row"><b>Title · </b>Средства гигиены полости рта оптом, ортодонтические материалы | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Зубные щётки, пасты, ополаскиватели, гели для фторирования, брекеты, дуги и лигатуры. Поставки клиникам Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">ортодонтические материалы</span><span class="chip-kw">средства гигиены полости рта оптом</span><span class="chip-kw">ортодонтические щетки</span><span class="chip-kw">стоматологические материалы екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Пополняйте ассортимент гигиены и ортодонтии для клиники через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без торговых марок и без обещаний эффекта отбеливания или профилактики. Пометка о противопоказаниях — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Гигиена · профилактика · ортодонтия»</div>
+      <p>Композиция: Предметная раскладка щёток и ортодонтических элементов на светлом фоне, тезис сверху. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: Фон белый, тезис чёрный, плашка тезиса — серый.</p>
+    </div>
+  </div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">2 новости</span><span class="badge">Актуальный</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 5</span><h3>Материалы для временных коронок и мостов и цементы для фиксации — для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам материалы, с которыми работает ортопедический приём: для временных коронок и мостов и для их фиксации.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Материалы для временных коронок и мостов.<span class="src">бриф</span></li><li>Стеклоиономерные цементы для фиксации, цементы для временной фиксации.<span class="src">бриф</span></li><li>Сертифицированные расходные материалы с доставкой на указанный адрес в минимальные сроки.<span class="src">бриф</span></li><li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Материалы для временных коронок и мостов в Екатеринбурге — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Материалы для временных коронок и мостов и цементы для фиксации в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Материалы для временных коронок, цементы для фиксации оптом | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Материалы для временных коронок и мостов, стеклоиономерные цементы и цементы для временной фиксации. Для клиник Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">материал для временных коронок</span><span class="chip-kw">цемент для временной фиксации</span><span class="chip-kw">стеклоиономерный цемент</span><span class="chip-kw">расходные материалы для стоматологии</span><span class="chip-kw">стоматологические материалы екатеринбург</span><span class="chip-kw">стоматологические материалы оптом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запрашивайте наличие материалов для временных конструкций через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Продажа юрлицам с лицензией — формулировка брифа, в тексте обязательна. Без торговых марок, без лекарственных средств и анестетиков. Пометка «Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Временные коронки и мосты: материалы и фиксация»</div>
+      <p>Композиция: Предметная раскладка: материалы для временных конструкций и цементы без этикеток торговых марок, тезис на серой плашке сверху. Логотип в верхнем левом углу, пометка о противопоказаниях внизу.</p>
+      <p>Цвета: Фон белый, тезис чёрный на серой плашке, тонкая чёрная линия под тезисом.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 6</span><h3>Одноразовые расходники для стоматологического приёма в Екатеринбурге: перчатки, маски, шапочки, бахилы, нагрудники</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам одноразовые расходники, которые уходят на каждом приёме, — оптом и в розницу.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Одноразовые расходники: перчатки, маски, шапочки, бахилы, нагрудники для пациентов.<span class="src">бриф</span></li><li>Оптовая и розничная торговля стоматологическими материалами.<span class="src">бриф</span></li><li>Сертифицированные расходные материалы с доставкой на указанный адрес в минимальные сроки.<span class="src">бриф</span></li><li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li><li>Пн–пт 8:00–17:00, обед 12:00–13:00.<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Одноразовые расходники для стоматологии в Екатеринбурге оптом и в розницу — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Одноразовые расходники для стоматологического приёма в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Перчатки, маски, шапочки, бахилы, нагрудники для стоматологии | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Одноразовые перчатки, маски, шапочки, бахилы и нагрудники для пациентов — оптом и в розницу с доставкой. Для клиник Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">одноразовые расходники для стоматологии</span><span class="chip-kw">нагрудники для пациентов</span><span class="chip-kw">медицинские маски оптом</span><span class="chip-kw">медицинские перчатки оптом</span><span class="chip-kw">бахилы оптом</span><span class="chip-kw">медицинские товары екатеринбург</span><span class="chip-kw">расходные материалы для стоматологии</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Пополняйте запас одноразовых расходников для клиники через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Только группы товаров из брифа, без торговых марок, без формулировок о защите от инфекций. Пометка о противопоказаниях и инструкции — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Одноразовое для каждого приёма»</div>
+      <p>Композиция: Пять предметов в ряд на светлом фоне: перчатки, маска, шапочка, бахилы, нагрудник; тезис над ними. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: Фон белый, тезис чёрный, подписи предметов серым.</p>
+    </div>
+  </div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">2 новости</span><span class="badge">Следующий</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 7</span><h3>Нанокомпозиты, адгезивы, наборы для профессионального отбеливания и полировочные пасты для клиник Екатеринбурга</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам материалы для эстетического приёма — от реставрации до профессионального отбеливания и полировки.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Нанокомпозиты.<span class="src">бриф</span></li><li>Адгезивы, протравочные гели.<span class="src">бриф</span></li><li>Наборы для профессионального отбеливания, полировочные пасты.<span class="src">бриф</span></li><li>Сертифицированные расходные материалы с доставкой на указанный адрес в минимальные сроки.<span class="src">бриф</span></li><li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Материалы для эстетической стоматологии в Екатеринбурге — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Материалы для эстетического приёма: композиты, адгезивы, отбеливание — Екатеринбург</div>
+      <div class="meta-row"><b>Title · </b>Нанокомпозиты, адгезивы, наборы для отбеливания, полировочные пасты | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Нанокомпозиты, адгезивы, протравочные гели, наборы для профессионального отбеливания и полировочные пасты. Поставки клиникам Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">нанокомпозит</span><span class="chip-kw">адгезив стоматологический</span><span class="chip-kw">протравочный гель</span><span class="chip-kw">набор для профессионального отбеливания</span><span class="chip-kw">полировочная паста</span><span class="chip-kw">стоматологические материалы екатеринбург</span><span class="chip-kw">стоматологический магазин екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Запрашивайте наличие материалов для эстетического приёма через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Без торговых марок, без обещаний эффекта отбеливания и без фото «до/после». Пометка о противопоказаниях и инструкции — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Реставрация, отбеливание, полировка»</div>
+      <p>Композиция: Три плашки в ряд с подписями «композиты и адгезивы», «отбеливание», «полировка», тезис над ними. Без улыбок «до/после». Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: Фон серый, плашки белые, тезис и подписи чёрные.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 8</span><h3>Эндодонтия: файлы, штифты и каналонаполнители для стоматологических клиник Екатеринбурга</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы поставляем клиникам всё для работы с корневыми каналами — инструменты, штифты и материалы для пломбирования.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Эндодонтия: файлы, пульпоэкстракторы, гуттаперчевые и бумажные штифты, каналонаполнители, средства для расширения корневых каналов.<span class="src">бриф</span></li><li>Пасты для пломбирования каналов.<span class="src">бриф</span></li><li>Инструменты: зеркала, зонды, пинцеты, гладилки, штопферы, шпатели, скальпели.<span class="src">бриф</span></li><li>Продажа только юридическим лицам с лицензией на медицинскую или фармацевтическую деятельность, зарегистрированным в системе маркировки «Честный знак».<span class="src">бриф</span></li><li>Пн–пт 8:00–17:00, обед 12:00–13:00.<span class="src">бриф</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Эндодонтические инструменты и материалы в Екатеринбурге — «ТД Персона».</div>
+      <div class="meta-row"><b>H1 · </b>Эндодонтические инструменты и материалы для клиник Екатеринбурга</div>
+      <div class="meta-row"><b>Title · </b>Эндодонтические файлы, штифты, каналонаполнители | ТД Персона</div>
+      <div class="meta-row"><b>Description · </b>Эндодонтические файлы, пульпоэкстракторы, гуттаперчевые и бумажные штифты, каналонаполнители, пасты для пломбирования каналов. Для клиник Екатеринбурга. «ТД Персона».</div>
+      <div class="chips"><span class="chip-kw">эндодонтические инструменты</span><span class="chip-kw">эндодонтические файлы</span><span class="chip-kw">гуттаперчевые штифты</span><span class="chip-kw">бумажные штифты</span><span class="chip-kw">каналонаполнитель</span><span class="chip-kw">пасты для пломбирования каналов</span><span class="chip-kw">стоматологические инструменты</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Комплектуйте эндодонтический приём — оформляйте заказ через карточку «ТД Персона» на Картах.</p>
+    <div class="legal"><span class="lbl">Мед-юр часть</span>Только группы товаров из брифа, без торговых марок и без обещаний результата лечения. Пометка о противопоказаниях и инструкции — на тексте и обложке.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Всё для работы с корневыми каналами»</div>
+      <p>Композиция: Крупный план эндодонтических файлов и штифтов на светлом фоне без маркировки производителя, тезис на чёрной плашке снизу. Логотип в верхнем левом углу, пометка внизу.</p>
+      <p>Цвета: Фон белый, плашка тезиса чёрная, тезис белый, линия-разделитель серая.</p>
+    </div>
+  </div></div></details>
+</section>
+<section id="td-stories">
+  <div class="sec-head"><span class="sec-num">04 · Сторис</span><h2>Темы для сторис</h2><p>Формат презентации: один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p></div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">4 сторис</span><span class="badge">Первый период</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">Кому мы продаём</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Юридические лица</span><span class="fact-pill">Лицензия на мед. или фарм. деятельность</span><span class="fact-pill">Регистрация в «Честном знаке»</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон белый, три условия списком чёрным, номера — на серых кругах. Внизу — пометка о противопоказаниях.</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Опт и розница с доставкой</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Сертифицированные материалы</span><span class="fact-pill">Доставка на указанный адрес</span><span class="fact-pill">Пн–пт 8:00–17:00</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон чёрный, тезис белым крупно, факты — серые плашки. Внизу — пометка о противопоказаниях.</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Что в ассортименте</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Пломбировочные материалы</span><span class="fact-pill">Инструменты</span><span class="fact-pill">Стерилизация</span><span class="fact-pill">Гигиена</span><span class="fact-pill">Ортодонтия</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон белый, пять групп — сетка пиктограмм чёрным с подписями. Внизу — пометка о противопоказаниях.</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Санитарный режим кабинета</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Рулоны для стерилизации</span><span class="fact-pill">Индикаторы</span><span class="fact-pill">Пакеты для отходов «А» и «Б»</span><span class="fact-pill">Журналы учёта</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон серый, тезис чёрным, факты белыми плашками. Внизу — пометка о противопоказаниях.</div></div></div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">2 сторис</span><span class="badge">Актуальный</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">Временные конструкции</div><span class="slide-no">Сторис 5</span></div>
+      <div class="facts-line"><span class="fact-pill">Материалы для временных коронок и мостов</span><span class="fact-pill">Цементы для временной фиксации</span><span class="fact-pill">Стеклоиономерные цементы для фиксации</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон чёрный, тезис белым, три группы — серые плашки с белым текстом. Внизу — пометка о противопоказаниях.</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Одноразовое для приёма</div><span class="slide-no">Сторис 6</span></div>
+      <div class="facts-line"><span class="fact-pill">Перчатки</span><span class="fact-pill">Маски</span><span class="fact-pill">Шапочки</span><span class="fact-pill">Бахилы</span><span class="fact-pill">Нагрудники для пациентов</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон белый, пять пиктограмм в ряд чёрным с подписями, тезис сверху на серой плашке. Внизу — пометка о противопоказаниях.</div></div></div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">2 сторис</span><span class="badge">Следующий</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">Эстетический приём</div><span class="slide-no">Сторис 7</span></div>
+      <div class="facts-line"><span class="fact-pill">Нанокомпозиты</span><span class="fact-pill">Адгезивы</span><span class="fact-pill">Протравочные гели</span><span class="fact-pill">Наборы для профессионального отбеливания</span><span class="fact-pill">Полировочные пасты</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон белый, тезис чёрным, пять групп списком на серых плашках. Внизу — пометка о противопоказаниях.</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Эндодонтия</div><span class="slide-no">Сторис 8</span></div>
+      <div class="facts-line"><span class="fact-pill">Файлы</span><span class="fact-pill">Пульпоэкстракторы</span><span class="fact-pill">Гуттаперчевые штифты</span><span class="fact-pill">Бумажные штифты</span><span class="fact-pill">Каналонаполнители</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон чёрный, тезис белым крупно, позиции — серые плашки с белым текстом. Внизу — пометка о противопоказаниях.</div></div></div></div></details>
+</section>
+<section id="td-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage"><summary>Этап 1 — поставщик, пломбирование, стерилизация, гигиена и ортодонтия <span class="badge">Первый период</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Стоматологические материалы оптом и в розницу</b>под «стоматологические материалы екатеринбург», «стоматологический магазин»</span></div><div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Кому мы продаём</b>юрлица, лицензия, «Честный знак»</span></div><div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Пломбировочные материалы и инструменты</b>под «пломбировочные материалы», «стоматологические инструменты»</span></div><div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Опт и розница с доставкой</b>сертифицированные материалы, доставка, график</span></div><div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Стерилизация и дезинфекция</b>под «средства для стерилизации», «дезинфицирующие средства оптом»</span></div><div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Что в ассортименте</b>пять групп товаров</span></div><div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Гигиена и ортодонтия</b>под «ортодонтические материалы», «средства гигиены полости рта оптом»</span></div><div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Санитарный режим кабинета</b>стерилизация, отходы, журналы</span></div></div></details><details class="stage" open><summary>Этап 2 — временные конструкции и одноразовые расходники <span class="badge">Актуальный</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 5</span><span class="txt"><b>Материалы для временных коронок и мостов, цементы для фиксации</b>под «расходные материалы для стоматологии», «стоматологические материалы екатеринбург»</span></div><div class="stage-item"><span class="fmt">Сторис 5</span><span class="txt"><b>Временные конструкции</b>три группы материалов</span></div><div class="stage-item"><span class="fmt">Новость 6</span><span class="txt"><b>Одноразовые расходники для приёма</b>под «медицинские товары екатеринбург», «расходные материалы для стоматологии»</span></div><div class="stage-item"><span class="fmt">Сторис 6</span><span class="txt"><b>Одноразовое для приёма</b>пять позиций</span></div></div></details><details class="stage"><summary>Этап 3 — эстетический приём и эндодонтия <span class="badge">Следующий</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 7</span><span class="txt"><b>Материалы для эстетического приёма</b>под «стоматологические материалы екатеринбург», «стоматологический магазин екатеринбург»</span></div><div class="stage-item"><span class="fmt">Сторис 7</span><span class="txt"><b>Эстетический приём</b>пять групп материалов</span></div><div class="stage-item"><span class="fmt">Новость 8</span><span class="txt"><b>Эндодонтия: файлы, штифты, каналонаполнители</b>под «стоматологические инструменты», «эндодонтические инструменты»</span></div><div class="stage-item"><span class="fmt">Сторис 8</span><span class="txt"><b>Эндодонтия</b>пять позиций</span></div></div></details>
+</section>
+</div></div>
+<div class="view va" id="v-rg-analytics" data-co="rg" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="rg-top">
+  <span class="eyebrow">Екатеринбург · рентгенология, КТ · ул. Чкалова, 256 · замер 19.11.2026</span>
+  <h1>Где «Центр рентгенологии» видно на Картах, а где нет</h1>
+  <p>Карточка «Центра рентгенологии» на Яндекс Картах: 10 запросов по снимкам, которые делает центр, — поиск по всему Екатеринбургу и поиск рядом с Чкалова, 256. Соседи в радиусе 2 км.</p>
+</header>
+<section id="rg-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно рядом</span><p><b>Рядом с Чкалова, 256 карточка первая по «кт зубов», «рентген зубов» и «компьютерная томография»</b>Когда карта открыта у центра, «Центр рентгенологии» стоит выше Нобеля, Альфа Беты, Пикассо и Белого жемчуга.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>В поиске по всему Екатеринбургу карточки нет в первой пятёрке ни по одному из 10 запросов</b>По «ортопантомограмма», «кт челюсти», «3д снимок зубов», «телерентгенограмма» пятёрку держат стоматологии Гелиос, Dr. Yun и Первая Цифровая Стоматология.</p></div>
+    <div class="v"><span class="pill warn">риск</span><p><b>Новостей на карточке нет, прайс помечен «Давно не обновлялось»</b>Названия снимков есть только в прайсе карточки — в новостях и описании их нет.</p></div>
+    <div class="v"><span class="pill warn">рейтинг ниже соседей</span><p><b>4,3 при 67 оценках против 4,4–5,0 у соседей</b>Ближайшие стоматологии в радиусе 2 км — 4,5–5,0.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,3</div><div class="s">67 оценок · 29 отзывов</div></div>
+    <div class="kpi"><div class="k">Первое место рядом с центром</div><div class="n">3 из 3</div><div class="s">кт зубов, рентген зубов, КТ</div></div>
+    <div class="kpi"><div class="k">В пятёрке по городу</div><div class="n">0 из 10</div><div class="s">замер 19.11.2026</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">0</div><div class="s">ни одной публикации</div></div>
+  </div>
+</section>
+<section id="rg-queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Поиск по Екатеринбургу без геолокации и поиск с картой у Чкалова, 256. Справа — темы этапов 1–3, которые работают на запрос.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">По городу</th><th class="r">Рядом с центром</th><th>Первая пятёрка по городу</th><th>Темы</th></tr></thead>
+    <tbody>
+      <tr><td>кт зубов</td><td class="r">нет</td><td class="r me">1</td><td>Пикассо, РЖД-Медицина, Пикассо, Пикассо, УГМК-Здоровье</td><td class="nw">Н2 · Н5</td></tr>
+      <tr><td>компьютерная томография</td><td class="r">нет</td><td class="r me">1</td><td>Белый жемчуг, ГлазЦентр, Мира, РЖД-Медицина, Профессорская +</td><td class="nw">Н2</td></tr>
+      <tr><td>рентген зубов</td><td class="r">нет</td><td class="r me">1</td><td>Гелиос, Dr. Yun, Первая Цифровая Стоматология ×3</td><td class="nw">Н8</td></tr>
+      <tr><td>диагностический центр</td><td class="r">нет</td><td class="r">—</td><td>Хромолаб, Гельтек, РЖД-Медицина ×2, Хеликс</td><td class="nw">Н1</td></tr>
+      <tr><td>ортопантомограмма</td><td class="r">нет</td><td class="r">—</td><td>Гелиос, Dr. Yun, Первая Цифровая Стоматология ×2, Новодент</td><td class="nw">Н6</td></tr>
+      <tr><td>кт челюсти</td><td class="r">нет</td><td class="r">—</td><td>Гелиос, Dr. Yun, Первая Цифровая Стоматология ×3</td><td class="nw">Н5</td></tr>
+      <tr><td>3д снимок зубов</td><td class="r">нет</td><td class="r">—</td><td>Гелиос, Семейная стоматология РА, Dr. Yun, Первая Цифровая Стоматология, МКС Стоматология</td><td class="nw">Н5</td></tr>
+      <tr><td>телерентгенограмма</td><td class="r">нет</td><td class="r">—</td><td>Гелиос, Белый жемчуг, Альфа Бета, Dr. Yun, Доктор Юн</td><td class="nw">Н7</td></tr>
+      <tr><td>рентген</td><td class="r">нет</td><td class="r">—</td><td>Первая Цифровая Стоматология ×2, Преображенская клиника, Доктор А, Вимед</td><td class="nw">Н8</td></tr>
+      <tr><td>мрт кт</td><td class="r">нет</td><td class="r">—</td><td>Первая Цифровая Стоматология ×3, Доктор Франк, Здоровье 365</td><td class="nw">—</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<section id="rg-geo">
+  <div class="sh"><h2>Соседи в радиусе 2 км</h2><p>Карточки из выдачи по «кт зубов», «рентген зубов» и «компьютерная томография» с картой у Чкалова, 256.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th>Адрес</th><th>Место рядом с центром</th></tr></thead>
+    <tbody>
+      <tr><td><b>Центр рентгенологии</b></td><td class="r num me">4,3</td><td>ул. Чкалова, 256</td><td>1 по трём запросам</td></tr>
+      <tr><td>Нобель</td><td class="r num">4,8</td><td>ул. Чкалова, 239</td><td>2 по «кт зубов», 4 по «рентген зубов»</td></tr>
+      <tr><td>Атлант</td><td class="r num">4,4</td><td>ул. Чкалова, 252</td><td>5 по «рентген зубов»</td></tr>
+      <tr><td>Альфа Бета</td><td class="r num">5,0</td><td>ул. Академика Ландау, 36</td><td>2 по «рентген зубов», 5 по «кт зубов»</td></tr>
+      <tr><td>Альфа Бета</td><td class="r num">5,0</td><td>просп. Академика Сахарова, 39</td><td>4 по «кт зубов»</td></tr>
+      <tr><td>Пикассо</td><td class="r num">4,5</td><td>ул. Академика Парина, 38/6</td><td>3 по «кт зубов» и «компьютерная томография»</td></tr>
+      <tr><td>Белый жемчуг</td><td class="r num">5,0</td><td>ул. Академика Парина, 39</td><td>4 по «компьютерная томография»</td></tr>
+      <tr><td>Rmc clinic</td><td class="r num">4,7</td><td>ул. Краснолесья, 24</td><td>2 по «компьютерная томография»</td></tr>
+      <tr><td>Первая Цифровая Стоматология</td><td class="r num">5,0</td><td>ул. Краснолесья, 10/4</td><td>3 по «рентген зубов»</td></tr>
+      <tr><td>Фамилия</td><td class="r num">5,0</td><td>ул. Барвинка, 22</td><td>5 по «компьютерная томография»</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно</h3><ul>
+      <li><b>Рядом центр первый</b> по всем трём запросам, выше стоматологий с рейтингом 4,8–5,0.</li>
+      <li><b>По городу пятёрку держат стоматологии</b>: Гелиос, Dr. Yun и Первая Цифровая Стоматология встречаются в 7 запросах из 10.</li>
+      <li><b>Узкие запросы</b> — «ортопантомограмма», «телерентгенограмма», «кт челюсти» — нигде в публикациях карточки не названы.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Этап 1 — центр и направления, чтобы на карточке появились первые публикации.</li>
+      <li>Этапы 2 и 3 — по новости на каждый снимок: КТ зубов, ОПТГ, ТРГ, рентген зубов. Название снимка — в заголовке и первой строке.</li>
+      <li>В каждом тексте — «Екатеринбург» и «Чкалова, 256».</li>
+    </ul></div>
+  </div>
+</section>
+<section id="rg-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 19.11.2026: поиск по Екатеринбургу без геолокации — первая пятёрка по 10 запросам.</li>
+    <li>Поиск рядом с центром: та же выдача с картой у ул. Чкалова, 256, масштаб квартала, по трём запросам.</li>
+    <li>Рейтинг, оценки, новости и прайс — со страницы карточки на 19.11.2026. Лицензия — по ЕГРЮЛ.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/tsentr_rentgenologii/217221260852/" target="_blank" rel="noopener">«Центр рентгенологии», ул. Чкалова, 256 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/54/yekaterinburg/search/%D0%BA%D1%82%20%D0%B7%D1%83%D0%B1%D0%BE%D0%B2/" target="_blank" rel="noopener">КТ зубов в Екатеринбурге — Яндекс Карты</a>
+    <a href="https://www.rusprofile.ru/id/11860296" target="_blank" rel="noopener">ООО «Центр Рентгенологии», ИНН 6671098080 — сведения ЕГРЮЛ</a>
+  </div>
+</section>
+</div></div>
+<div class="view vc" id="v-rg-content" data-co="rg" data-view="content" hidden><div class="wrap">
+<section class="hero" id="rg-company">
+  <span class="eyebrow">Диагностический центр · Екатеринбург · ул. Чкалова, 256</span>
+  <h1>«Центр рентгенологии» — ТЗ на контент, этапы 1–3</h1>
+  <p class="lead">Этап 1 — 4 новости с обложкой и 4 сторис. Продление: этапы 2 и 3 — по 2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «Центр рентгенологии» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid"><div class="fact"><div class="k">Компания</div><div class="v">«Центр рентгенологии»<small>ООО «Центр рентгенологии»</small></div></div><div class="fact"><div class="k">Сфера</div><div class="v">Диагностический центр<small>больница для взрослых, стоматологическая клиника, компьютерная томография, медцентр</small></div></div><div class="fact"><div class="k">Адрес</div><div class="v">ул. Чкалова, 256<small>остановка «Преображенский квартал» — 175 м</small></div></div><div class="fact"><div class="k">Снимки</div><div class="v">КТ зубов · ОПТГ · ТРГ<small>компьютерная 3D-томография (3D-снимок), ортопантомограмма, ТРГ в боковой проекции, рентген зубов</small></div></div><div class="fact"><div class="k">Лицензия</div><div class="v">Л041-01021-66/00337351<small>от 19.12.2019, Росздравнадзор, действующая</small></div></div><div class="fact"><div class="k">Цены</div><div class="v">Без указания цен</div></div></div>
+</section>
+<section id="rg-brandbook">
+  <div class="sec-head"><span class="sec-num">01 · Мини-брендбук</span><h2>Цвета для обложек и слайдов</h2><p>После анализа ресурсов компании определены фирменные цвета: зелёный и белый. Зелёный — фриз фасадной вывески, белый — объёмные буквы «Центр рентгенологии», тёмно-зелёный — фон информационной таблички компании, серебристый — борта объёмных букв вывески.</p></div>
+  <div class="swatches"><div class="swatch solid" style="background:#00845A;color:#FFFFFF;border-color:#00845A"><div class="role">Основной</div><div class="name">Зелёный</div><div class="hex">#00845A</div></div><div class="swatch solid" style="background:#015C30;color:#FFFFFF;border-color:#015C30"><div class="role">Второстепенный</div><div class="name">Тёмно-зелёный</div><div class="hex">#015C30</div></div><div class="swatch solid" style="background:#A8AFB4;color:#0F1B2D;border-color:#A8AFB4"><div class="role">Акцентный</div><div class="name">Серебристый</div><div class="hex">#A8AFB4</div></div><div class="swatch solid" style="background:#FFFFFF;color:#0F1B2D;border-color:rgba(152,161,172,.4)"><div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div></div>
+</section>
+<section id="rg-cycle">
+  <div class="sec-head"><span class="sec-num">02 · Логика цикла</span><h2>Последовательность тем по этапам</h2><p>Этап 1 — темы первого периода, этапы 2 и 3 — продление, по 2 новости и 2 сторис.</p></div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">центр и направления</span><span class="badge">Первый период</span></summary><div class="pbody"><p class="cyc-lead">Знакомство с «Центром рентгенологии» на Чкалова, 256 как с диагностическим центром, затем направления компании по одному.</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>Диагностический центр «Центр рентгенологии» на Чкалова, 256.</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>Компьютерная томография.</p></div><div class="cycle-row"><div class="tag">Тема 3</div><p>Стоматологическая клиника.</p></div><div class="cycle-row"><div class="tag">Тема 4</div><p>Медцентр и больница для взрослых.</p></div></div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">КТ зубов и ОПТГ</span><span class="badge">Актуальный</span></summary><div class="pbody"><p class="cyc-lead">Продление. Этап раскрывает конкретные снимки под запросы, по которым карточку не видно в поиске по городу: «кт челюсти», «3д снимок зубов», «ортопантомограмма».</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>Компьютерная 3D-томография зубов (3D-снимок).</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>ОПТГ — ортопантомограмма зубов, обзорный снимок зубочелюстной системы.</p></div></div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">ТРГ и рентген зубов</span><span class="badge">Следующий</span></summary><div class="pbody"><p class="cyc-lead">Продление. Этап закрывает оставшиеся запросы, по которым карточку не видно в поиске по городу: «телерентгенограмма», «рентген зубов», «рентген».</p><div class="cycle"><div class="cycle-row"><div class="tag">Тема 1</div><p>ТРГ в боковой проекции — снимок для врачей ортодонтов.</p></div><div class="cycle-row"><div class="tag">Тема 2</div><p>Рентген зубов на Чкалова, 256: какие снимки делают в центре.</p></div></div></div></details>
+</section>
+<section id="rg-news">
+  <div class="sec-head"><span class="sec-num">03 · Новости</span><h2>Темы для новостных публикаций</h2><p>Публикация — карточка компании «Центр рентгенологии» на Яндекс Картах и 2ГИС.</p></div>
+  <div class="tone-banner"><b>Тон текстов:</b> на «вы». Вступление — от лица компании, дальше одна тема в тексте. Факты в тезисах — дословно по источнику, указанному у каждого тезиса. Без цен, телефона и e-mail, без марок аппаратов, без превосходных степеней, без слов «безопасно», «безвредно», «эффективно». В конце каждого текста — «Имеются противопоказания. Необходима консультация специалиста». Объём — до 3 000 знаков с пробелами.</div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">4 новости</span><span class="badge">Первый период</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Диагностический центр «Центр рентгенологии» на Чкалова, 256 в Екатеринбурге</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — «Центр рентгенологии», диагностический центр на Чкалова, 256 в Екатеринбурге.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>«Центр рентгенологии» — диагностический центр, Екатеринбург, ул. Чкалова, 256.<span class="src">бриф, Яндекс Карты</span></li><li>Направления: компьютерная томография, стоматологическая клиника, медцентр, больница для взрослых.<span class="src">бриф</span></li><li>Остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Диагностический центр в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Диагностический центр «Центр рентгенологии» на Чкалова, 256</div>
+      <div class="meta-row"><b>Title · </b>Диагностический центр на Чкалова, 256, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>«Центр рентгенологии» — диагностический центр в Екатеринбурге на ул. Чкалова, 256: компьютерная томография, стоматологическая клиника, медцентр.</div>
+      <div class="chips"><span class="chip-kw">диагностический центр екатеринбург</span><span class="chip-kw">центр рентгенологии екатеринбург</span><span class="chip-kw">рентгенология екатеринбург</span><span class="chip-kw">диагностический центр чкалова</span><span class="chip-kw">медицинский центр чкалова 256</span><span class="chip-kw">диагностика екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите в «Центр рентгенологии» на Чкалова, 256.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Центр рентгенологии»</div>
+      <p>Композиция: Фасад с вывеской «Центр рентгенологии» из фотографий карточки на Яндекс Картах, тезис на плашке, подпись «Чкалова, 256».</p>
+      <p>Цвета: Плашка #00845A, тезис #FFFFFF, линия-акцент #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Компьютерная томография в Екатеринбурге — «Центр рентгенологии» на Чкалова, 256</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Центре рентгенологии» на Чкалова, 256 делаем компьютерную томографию.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Компьютерная томография.<span class="src">бриф</span></li><li>Диагностический центр «Центр рентгенологии».<span class="src">бриф</span></li><li>Екатеринбург, ул. Чкалова, 256; остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Компьютерная томография в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Компьютерная томография на Чкалова, 256 в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>Компьютерная томография в Екатеринбурге, ул. Чкалова, 256 | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>Компьютерная томография в Екатеринбурге — «Центр рентгенологии», диагностический центр на ул. Чкалова, 256.</div>
+      <div class="chips"><span class="chip-kw">компьютерная томография екатеринбург</span><span class="chip-kw">кт екатеринбург</span><span class="chip-kw">сделать кт екатеринбург</span><span class="chip-kw">кт чкалова</span><span class="chip-kw">компьютерная томография чкалова 256</span><span class="chip-kw">кт диагностика екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на компьютерную томографию в «Центр рентгенологии».</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Компьютерная томография»</div>
+      <p>Композиция: Кабинет или оборудование из фотографий карточки на Яндекс Картах, без марки аппарата в кадре; тезис на плашке, подпись «Чкалова, 256».</p>
+      <p>Цвета: Плашка #00845A, тезис #FFFFFF, рамка #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Стоматологическая клиника «Центр рентгенологии» в Екатеринбурге на Чкалова, 256</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Центр рентгенологии» — это ещё и стоматологическая клиника на Чкалова, 256.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Стоматологическая клиника.<span class="src">бриф</span></li><li>Диагностический центр и компьютерная томография по тому же адресу.<span class="src">бриф</span></li><li>Екатеринбург, ул. Чкалова, 256.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Стоматологическая клиника в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Стоматологическая клиника «Центр рентгенологии» на Чкалова, 256</div>
+      <div class="meta-row"><b>Title · </b>Стоматологическая клиника на Чкалова, 256, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>Стоматологическая клиника «Центр рентгенологии» в Екатеринбурге на ул. Чкалова, 256 — диагностический центр и компьютерная томография по одному адресу.</div>
+      <div class="chips"><span class="chip-kw">стоматологическая клиника екатеринбург</span><span class="chip-kw">стоматология чкалова</span><span class="chip-kw">стоматология чкалова 256</span><span class="chip-kw">стоматологическая диагностика екатеринбург</span><span class="chip-kw">стоматолог екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите в «Центр рентгенологии» на Чкалова, 256.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Стоматологическая клиника»</div>
+      <p>Композиция: Кабинет из фотографий карточки на Яндекс Картах, тезис на плашке, подпись «Чкалова, 256».</p>
+      <p>Цвета: Тезис #FFFFFF на плашке #00845A, линия-акцент #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Медцентр и больница для взрослых в Екатеринбурге — «Центр рентгенологии» на Чкалова, 256</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>«Центр рентгенологии» — медцентр и больница для взрослых на Чкалова, 256.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Медцентр, клиника.<span class="src">бриф</span></li><li>Больница для взрослых.<span class="src">бриф</span></li><li>Диагностический центр, компьютерная томография, стоматологическая клиника.<span class="src">бриф</span></li><li>Екатеринбург, ул. Чкалова, 256.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Медцентр и больница для взрослых в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Медцентр и больница для взрослых «Центр рентгенологии» на Чкалова, 256</div>
+      <div class="meta-row"><b>Title · </b>Медцентр на Чкалова, 256, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>«Центр рентгенологии» — медцентр и больница для взрослых в Екатеринбурге на ул. Чкалова, 256: диагностический центр, компьютерная томография, стоматологическая клиника.</div>
+      <div class="chips"><span class="chip-kw">медцентр екатеринбург</span><span class="chip-kw">медицинский центр чкалова</span><span class="chip-kw">клиника для взрослых екатеринбург</span><span class="chip-kw">больница для взрослых екатеринбург</span><span class="chip-kw">медцентр чкалова 256</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите в «Центр рентгенологии» на Чкалова, 256.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Медцентр»</div>
+      <p>Композиция: Вход в центр из фотографий карточки на Яндекс Картах, тезис на плашке, подпись «Для взрослых».</p>
+      <p>Цвета: Плашка #00845A, тезис #FFFFFF, рамка #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">2 новости</span><span class="badge">Актуальный</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 5</span><h3>КТ зубов в Екатеринбурге: компьютерная 3D-томография (3D-снимок) на Чкалова, 256</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Центре рентгенологии» делаем компьютерную 3D-томографию зубов — 3D-снимок.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Компьютерная 3D-томография (3D-снимок).<span class="src">Яндекс Карты · подтверждено</span></li><li>Компьютерная томография зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Диагностический центр, стоматологическая клиника.<span class="src">бриф</span></li><li>Екатеринбург, ул. Чкалова, 256; остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>КТ зубов в Екатеринбурге — 3D-снимок в «Центре рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Компьютерная 3D-томография зубов на Чкалова, 256</div>
+      <div class="meta-row"><b>Title · </b>КТ зубов и челюсти, 3D-снимок, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>Компьютерная 3D-томография зубов — 3D-снимок в «Центре рентгенологии», Екатеринбург, ул. Чкалова, 256.</div>
+      <div class="chips"><span class="chip-kw">кт зубов екатеринбург</span><span class="chip-kw">кт челюсти</span><span class="chip-kw">3д снимок зубов</span><span class="chip-kw">компьютерная томография зубов</span><span class="chip-kw">3d томография зубов</span><span class="chip-kw">кт зубов чкалова</span><span class="chip-kw">кт челюсти екатеринбург</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Записывайтесь на КТ зубов в «Центр рентгенологии».</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«КТ зубов · 3D-снимок»</div>
+      <p>Композиция: Кабинет из фотографий карточки на Яндекс Картах без марки аппарата в кадре; тезис на плашке в нижней трети, подпись «Чкалова, 256».</p>
+      <p>Цвета: Плашка #00845A, тезис #FFFFFF, «3D» в серебристой обводке #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 6</span><h3>ОПТГ в Екатеринбурге: ортопантомограмма — обзорный снимок зубочелюстной системы</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Центре рентгенологии» делаем ОПТГ — ортопантомограмму зубов.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>ОПТГ — ортопантомограмма зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Обзорный снимок зубочелюстной системы.<span class="src">Яндекс Карты · подтверждено</span></li><li>Рентген зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Екатеринбург, ул. Чкалова, 256; остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>ОПТГ в Екатеринбурге — ортопантомограмма в «Центре рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Ортопантомограмма (ОПТГ) на Чкалова, 256 в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>ОПТГ, ортопантомограмма зубов, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>ОПТГ — ортопантомограмма зубов, обзорный снимок зубочелюстной системы. «Центр рентгенологии», Екатеринбург, ул. Чкалова, 256.</div>
+      <div class="chips"><span class="chip-kw">ортопантомограмма</span><span class="chip-kw">оптг екатеринбург</span><span class="chip-kw">ортопантомограмма екатеринбург</span><span class="chip-kw">панорамный снимок зубов</span><span class="chip-kw">обзорный снимок зубов</span><span class="chip-kw">рентген зубов екатеринбург</span><span class="chip-kw">оптг чкалова</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите на ОПТГ в «Центр рентгенологии» на Чкалова, 256.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«ОПТГ зубов»</div>
+      <p>Композиция: Кабинет из фотографий карточки на Яндекс Картах; тезис на плашке, второй строкой «обзорный снимок».</p>
+      <p>Цвета: Тезис #FFFFFF на плашке #00845A, вторая строка на #015C30, линия-акцент #A8AFB4.</p>
+    </div>
+  </div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">2 новости</span><span class="badge">Следующий</span></summary><div class="pbody"><div class="card">
+    <div class="card-top"><div><span class="num">Новость 7</span><h3>ТРГ в боковой проекции в Екатеринбурге — снимок для врачей ортодонтов</h3></div><span class="purpose">Экспертный</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Центре рентгенологии» делаем ТРГ в боковой проекции — снимок для врачей ортодонтов.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>ТРГ в боковой проекции — снимок для врачей ортодонтов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Производится расчёт лечения при ортодонтической помощи, для фиксации брекет системы.<span class="src">Яндекс Карты · подтверждено</span></li><li>Рентген зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Екатеринбург, ул. Чкалова, 256; остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>ТРГ в боковой проекции в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>ТРГ в боковой проекции на Чкалова, 256 в Екатеринбурге</div>
+      <div class="meta-row"><b>Title · </b>ТРГ, телерентгенограмма для ортодонта, Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>ТРГ в боковой проекции — снимок для врачей ортодонтов перед фиксацией брекет системы. «Центр рентгенологии», Екатеринбург, ул. Чкалова, 256.</div>
+      <div class="chips"><span class="chip-kw">телерентгенограмма</span><span class="chip-kw">трг екатеринбург</span><span class="chip-kw">трг в боковой проекции</span><span class="chip-kw">снимок для ортодонта</span><span class="chip-kw">снимок перед брекетами</span><span class="chip-kw">трг для брекетов</span><span class="chip-kw">трг чкалова</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите на ТРГ по направлению вашего ортодонта.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«ТРГ для ортодонта»</div>
+      <p>Композиция: Боковой снимок черепа из фотографий карточки на Яндекс Картах на тёмном фоне; тезис на плашке, подпись «Боковая проекция». Без изображения пациентов.</p>
+      <p>Цвета: Плашка #00845A, тезис #FFFFFF, рамка #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div><div class="card">
+    <div class="card-top"><div><span class="num">Новость 8</span><h3>Рентген зубов на Чкалова, 256: КТ зубов, ОПТГ и ТРГ в одном центре</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В «Центре рентгенологии» на Чкалова, 256 делаем рентген зубов: КТ, ОПТГ и ТРГ.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis"><li>Рентген зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>Компьютерная 3D-томография (3D-снимок), компьютерная томография зубов.<span class="src">Яндекс Карты · подтверждено</span></li><li>ОПТГ — ортопантомограмма зубов; ТРГ в боковой проекции.<span class="src">Яндекс Карты · подтверждено</span></li><li>Диагностический центр, стоматологическая клиника.<span class="src">бриф</span></li><li>Екатеринбург, ул. Чкалова, 256; остановка «Преображенский квартал» — 175 м.<span class="src">Яндекс Карты</span></li></ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><b>Первая строка · </b>Рентген зубов в Екатеринбурге — «Центр рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="meta-row"><b>H1 · </b>Рентген зубов в «Центре рентгенологии» на Чкалова, 256</div>
+      <div class="meta-row"><b>Title · </b>Рентген зубов: КТ, ОПТГ, ТРГ — Екатеринбург | Центр рентгенологии</div>
+      <div class="meta-row"><b>Description · </b>Рентген зубов в Екатеринбурге: компьютерная 3D-томография, ОПТГ и ТРГ в боковой проекции в «Центре рентгенологии» на ул. Чкалова, 256.</div>
+      <div class="chips"><span class="chip-kw">рентген зубов екатеринбург</span><span class="chip-kw">рентген зубов</span><span class="chip-kw">рентген</span><span class="chip-kw">снимок зубов екатеринбург</span><span class="chip-kw">рентген зубов чкалова</span><span class="chip-kw">кт зубов</span><span class="chip-kw">оптг</span><span class="chip-kw">трг</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> Приходите на снимок в «Центр рентгенологии» на Чкалова, 256.</p>
+    <div class="legal"><span class="lbl">Проверено по реестрам · мед-юр часть</span>Лицензия № Л041-01021-66/00337351 от 19.12.2019, Федеральная служба по надзору в сфере здравоохранения, действующая (ЕГРЮЛ). Без марок аппаратов, без цен, без гарантий результата, без слов «безопасно» и «эффективно». «Имеются противопоказания. Необходима консультация специалиста» — на тексте и обложке, не менее 5% площади.</div>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Рентген зубов: КТ · ОПТГ · ТРГ»</div>
+      <p>Композиция: Фасад или кабинет из фотографий карточки на Яндекс Картах; три названия снимков на плашках в ряд, тезис над ними.</p>
+      <p>Цвета: Плашки #00845A, тезис #FFFFFF, разделители #A8AFB4, пометка внизу на полосе #015C30.</p>
+    </div>
+  </div></div></details>
+</section>
+<section id="rg-stories">
+  <div class="sec-head"><span class="sec-num">04 · Сторис</span><h2>Темы для сторис</h2><p>Формат презентации: один слайд — тезис, факты и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p></div>
+  <details class="stage pstage"><summary>Этап 1 <span class="pmeta">4 сторис</span><span class="badge">Первый период</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">Как нас найти</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">ул. Чкалова, 256</span><span class="fact-pill">Остановка «Преображенский квартал» — 175 м</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фото фасада с вывеской в верхней половине, ниже фон #00845A, адрес крупно #FFFFFF, остановка на плашке #015C30, метка-пин #A8AFB4. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Наши направления</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Диагностический центр</span><span class="fact-pill">Компьютерная томография</span><span class="fact-pill">Стоматологическая клиника</span><span class="fact-pill">Медцентр, больница для взрослых</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон #015C30, заголовок #FFFFFF, четыре направления на плашках #00845A с обводкой #A8AFB4. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Компьютерная томография</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">«Центр рентгенологии»</span><span class="fact-pill">ул. Чкалова, 256</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фото кабинета во весь слайд, сверху плашка #00845A с заголовком #FFFFFF, снизу адрес на плашке #015C30. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">Стоматологическая клиника</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">«Центр рентгенологии»</span><span class="fact-pill">ул. Чкалова, 256</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон #00845A, заголовок #FFFFFF крупно по центру, адрес на плашке #015C30, тонкая линия #A8AFB4. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div></div></div></details><details class="stage pstage" open><summary>Этап 2 <span class="pmeta">2 сторис</span><span class="badge">Актуальный</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">Какие снимки делаем</div><span class="slide-no">Сторис 5</span></div>
+      <div class="facts-line"><span class="fact-pill">Компьютерная 3D-томография (3D-снимок)</span><span class="fact-pill">Компьютерная томография зубов</span><span class="fact-pill">ОПТГ</span><span class="fact-pill">ТРГ в боковой проекции</span><span class="fact-pill">Рентген зубов</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон #015C30, заголовок #FFFFFF, пять снимков списком на плашках #00845A с обводкой #A8AFB4. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">ОПТГ</div><span class="slide-no">Сторис 6</span></div>
+      <div class="facts-line"><span class="fact-pill">Ортопантомограмма зубов</span><span class="fact-pill">Обзорный снимок зубочелюстной системы</span><span class="fact-pill">ул. Чкалова, 256</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон #00845A, «ОПТГ» крупно #FFFFFF, факты на плашках #015C30, тонкая линия #A8AFB4. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div></div></div></details><details class="stage pstage" open><summary>Этап 3 <span class="pmeta">2 сторис</span><span class="badge">Следующий</span></summary><div class="pbody"><div class="story-grid"><div class="story-card"><div class="story-top"><div class="story-thesis">ТРГ для ортодонта</div><span class="slide-no">Сторис 7</span></div>
+      <div class="facts-line"><span class="fact-pill">Снимок для врачей ортодонтов</span><span class="fact-pill">Расчёт лечения при ортодонтической помощи</span><span class="fact-pill">Для фиксации брекет системы</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фото бокового снимка в верхней половине, ниже фон #00845A, заголовок #FFFFFF, факты на плашках #015C30. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div><div class="story-card"><div class="story-top"><div class="story-thesis">3D-снимок зубов</div><span class="slide-no">Сторис 8</span></div>
+      <div class="facts-line"><span class="fact-pill">Компьютерная 3D-томография</span><span class="fact-pill">Компьютерная томография зубов</span><span class="fact-pill">ул. Чкалова, 256</span><span class="fact-pill">«Преображенский квартал» — 175 м</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> Фон #015C30, «3D» крупно #FFFFFF в обводке #A8AFB4, факты на плашках #00845A. Внизу — «Имеются противопоказания. Необходима консультация специалиста».</div></div></div></div></details>
+</section>
+<section id="rg-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage"><summary>Этап 1 — центр и направления <span class="badge">Первый период</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Диагностический центр на Чкалова, 256</b>кто мы, адрес, направления</span></div><div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Как нас найти</b>Чкалова, 256, остановка «Преображенский квартал» — 175 м</span></div><div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Компьютерная томография в Екатеринбурге</b>направление компании, адрес</span></div><div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Наши направления</b>диагностический центр, КТ, стоматологическая клиника, медцентр</span></div><div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Стоматологическая клиника на Чкалова, 256</b>направление компании, адрес</span></div><div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Компьютерная томография</b>направление, адрес</span></div><div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Медцентр и больница для взрослых</b>направления компании, адрес</span></div><div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Стоматологическая клиника</b>направление, адрес</span></div></div></details><details class="stage" open><summary>Этап 2 — КТ зубов и ОПТГ <span class="badge">Актуальный</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 5</span><span class="txt"><b>КТ зубов: компьютерная 3D-томография (3D-снимок)</b>под «кт челюсти», «3д снимок зубов», «кт зубов»</span></div><div class="stage-item"><span class="fmt">Сторис 5</span><span class="txt"><b>Какие снимки делаем</b>пять видов снимков</span></div><div class="stage-item"><span class="fmt">Новость 6</span><span class="txt"><b>ОПТГ — ортопантомограмма</b>под «ортопантомограмма»</span></div><div class="stage-item"><span class="fmt">Сторис 6</span><span class="txt"><b>ОПТГ</b>обзорный снимок зубочелюстной системы</span></div></div></details><details class="stage"><summary>Этап 3 — ТРГ и рентген зубов <span class="badge">Следующий</span></summary><div class="stage-body"><div class="stage-item"><span class="fmt">Новость 7</span><span class="txt"><b>ТРГ в боковой проекции — снимок для врачей ортодонтов</b>под «телерентгенограмма»</span></div><div class="stage-item"><span class="fmt">Сторис 7</span><span class="txt"><b>ТРГ для ортодонта</b>снимок для ортодонта, фиксация брекет системы</span></div><div class="stage-item"><span class="fmt">Новость 8</span><span class="txt"><b>Рентген зубов: КТ, ОПТГ и ТРГ в одном центре</b>под «рентген зубов», «рентген»</span></div><div class="stage-item"><span class="fmt">Сторис 8</span><span class="txt"><b>3D-снимок зубов</b>КТ зубов, адрес</span></div></div></details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const CODES=['td','rg'];const sub=document.getElementById('subnav');let st={co:'td',view:'analytics'};
+function show(co,view,scroll){
+  if(!CODES.includes(co))co='td'; if(!NAV[view])view='analytics'; st={co,view};
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=!(el.dataset.co===co&&el.dataset.view===view)});
+  document.querySelectorAll('[data-co-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.coGo===co?'true':'false'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${co}-${id}">${t}</button>`).join('');
+  const h=co+'-'+view; if(location.hash.slice(1)!==h){try{history.replaceState(null,'','#'+h)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-co-go]');if(c){show(c.dataset.coGo,st.view,true);return}
+  const g=e.target.closest('[data-go]');if(g){show(st.co,g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+function fromHash(s){const [co,view]=location.hash.slice(1).split('-');show(co,view,s)}
+window.addEventListener('hashchange',()=>fromHash(true));
+fromHash(false);
+</script>
+</body>
+</html>
