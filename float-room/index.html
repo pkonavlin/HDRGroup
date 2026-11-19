@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Float Room»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:8px;padding:6px 12px;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px;margin-top:20px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}.va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .up{color:var(--good)}.va .down{color:var(--crit)}
+.va .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;min-width:0}
+.va .chart h3{margin:0 0 2px;font-size:15px}.va .chart .cs{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.va .chart svg{display:block;width:100%;height:auto}.va .chart svg text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+.va .chart svg .val{fill:var(--ink);font-size:11.5px}.va .chart .grid{stroke:var(--line);stroke-width:1}.va .chart .col{fill:var(--gold)}.va .chart .col.pk{fill:var(--gold-2)}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Float Room</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Курган · спа-салон · флоатинг и кедровая бочка · замер 19.11.2026</span>
+  <h1>По каким запросам Float Room видно на Картах и кто стоит выше</h1>
+  <p>Карточка спа-салона Float Room, ул. Коли Мяготина, 129. Позиции на Яндекс Картах по 10 целевым запросам, соседи по гео-выдаче и спрос по Вордстату для региона «Курган».</p>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">видно</span><p><b>«флоатинг» — сразу карточка Float Room, «спа салон» — 2-е место</b>По запросу «флоатинг» Яндекс открывает карточку Float Room без списка. По «спа салон» выше только Алтайская Здравница.</p></div>
+    <div class="v"><span class="pill warn">слабо</span><p><b>«кедровая бочка», «спа для мужчин», «массажный салон» — 4-е место</b>По «кедровая бочка» выше Алтайская Здравница, Мэрилин и Роскедр, хотя горизонтальная кедровая бочка — одно из двух приоритетных направлений брифа.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«магниевая ванна» — в Кургане результатов нет</b>Запрос растёт (+33% за год), а Карты показывают магазин в Уфе. Магний — акцент брифа.</p></div>
+  </div>
+</header>
+
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск по Кургану без геолокации, 19.11.2026. Показана первая пятёрка выдачи.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Float Room</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>флоатинг</td><td class="r me">1</td><td>Яндекс сразу открывает карточку Float Room</td></tr>
+      <tr><td>спа салон</td><td class="r me">2</td><td>Алтайская Здравница, Float Room, Сиам (Гоголя, 183), Сиам (Гоголя, 40), Мэрилин</td></tr>
+      <tr><td>спа для двоих</td><td class="r me">3</td><td>Алтайская Здравница, Сиам (Гоголя, 183), Float Room, Сиам (Гоголя, 40), Lavanda</td></tr>
+      <tr><td>спа программа</td><td class="r me">3</td><td>Алтайская Здравница, Сиам (Гоголя, 183), Float Room, Сиам (Заозёрный), Фишка</td></tr>
+      <tr><td>подарочный сертификат спа</td><td class="r me">3</td><td>Адам и Ева, Сиам (Гоголя, 183), Float Room, Алтайская Здравница, Сиам (Гоголя, 40)</td></tr>
+      <tr><td>релакс массаж</td><td class="r me">3</td><td>Алтайская Здравница, Сиам (Гоголя, 40), Float Room, Сиам (Гоголя, 183), Lavanda</td></tr>
+      <tr><td>кедровая бочка</td><td class="r me">4</td><td>Алтайская Здравница, Мэрилин, Роскедр, Float Room, Сиам (Гоголя, 183)</td></tr>
+      <tr><td>массажный салон</td><td class="r me">4</td><td>Подружки, Сиам (Гоголя, 40), Сиам (Гоголя, 183), Float Room, Массажный кабинет Дмитрия Сканцева</td></tr>
+      <tr><td>спа для мужчин</td><td class="r me">4</td><td>Адам и Ева, Алтайская Здравница, Сиам (Гоголя, 183), Float Room, Сиам (Гоголя, 40)</td></tr>
+      <tr><td>магниевая ванна</td><td class="r">нет</td><td>Курганских организаций в выдаче нет</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-comp">
+  <div class="sh"><h2>Конкуренты в гео-выдаче</h2><p>Карточки, которые попали в первую пятёрку хотя бы по одному из 10 запросов.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th class="r">Запросов в топ-5</th><th>Где выше Float Room</th></tr></thead>
+    <tbody>
+      <tr><td><b>Float Room</b><div class="sub">ул. Коли Мяготина, 129</div></td><td class="r num me">4,9</td><td class="r num me">64</td><td class="r num me">9 из 10</td><td>—</td></tr>
+      <tr><td>Алтайская Здравница<div class="sub">ул. Кирова, 105</div></td><td class="r num">5,0</td><td class="r num">73</td><td class="r num">7</td><td>спа салон, спа для двоих, спа программа, релакс массаж, кедровая бочка, спа для мужчин</td></tr>
+      <tr><td>Сиам<div class="sub">ул. Гоголя, 183</div></td><td class="r num">4,6</td><td class="r num">126</td><td class="r num">8</td><td>спа для двоих, спа программа, сертификат, массажный салон, спа для мужчин</td></tr>
+      <tr><td>Сиам<div class="sub">ул. Гоголя, 40</div></td><td class="r num">4,7</td><td class="r num">50</td><td class="r num">6</td><td>массажный салон, релакс массаж</td></tr>
+      <tr><td>Адам и Ева<div class="sub">Заозёрный, 11-й мкр, 19</div></td><td class="r num">4,3</td><td class="r num">219</td><td class="r num">2</td><td>подарочный сертификат спа, спа для мужчин</td></tr>
+      <tr><td>Мэрилин<div class="sub">ул. Гоголя, 55</div></td><td class="r num">4,9</td><td class="r">—</td><td class="r num">2</td><td>кедровая бочка</td></tr>
+      <tr><td>Роскедр<div class="sub">Омская ул., 82</div></td><td class="r num">4,0</td><td class="r num">5</td><td class="r num">1</td><td>кедровая бочка</td></tr>
+      <tr><td>Подружки<div class="sub">Комсомольская ул., 26</div></td><td class="r num">4,9</td><td class="r">—</td><td class="r num">1</td><td>массажный салон</td></tr>
+      <tr><td>Lavanda<div class="sub">ул. Максима Горького, 140</div></td><td class="r num">5,0</td><td class="r num">36</td><td class="r num">2</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Почему выше</h3><ul>
+      <li><b>Алтайская Здравница</b> — рейтинг 5,0 и 73 оценки против 4,9 и 64 у Float Room: первое место по шести запросам из десяти.</li>
+      <li><b>Адам и Ева</b> — 219 оценок, больше всех в выдаче: первое место по «сертификату» и «спа для мужчин».</li>
+      <li><b>Роскедр и Мэрилин</b> по «кедровой бочке» выше, хотя у Роскедра 5 оценок. На карточке Float Room про бочку одна новость — от 14 мая 2026.</li>
+    </ul></div>
+    <div class="note"><h3>Что опубликовано на карточке</h3><ul>
+      <li>29 новостей, последняя — 11 ноября 2026 («компьютерная шея»).</li>
+      <li>Флоатингу посвящены четыре публикации 2026 года: польза, абонемент, страхи, «Утренние часы».</li>
+      <li>Публикаций про магний, массаж с магниевым маслом и спа-комплексы с бочкой для двоих нет.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос в Кургане</h2><p>Вордстат, регион «Курган», все устройства. Сумма за октябрь 2025 — сентябрь 2026 и изменение к предыдущим 12 месяцам.</p></div>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>За 12 месяцев</th><th class="r">К прошлому году</th></tr></thead><tbody id="t-q"></tbody></table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="chart" data-chart="spa"><h3>«спа салон», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц</div></div>
+    <div class="chart" data-chart="fl"><h3>«флоатинг», апрель — сентябрь 2026</h3><div class="cs">запросов в месяц</div></div>
+  </div>
+  <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Месяц</th><th class="r">«спа салон»</th><th class="r">м/м</th><th class="r">«флоатинг»</th><th class="r">м/м</th></tr></thead><tbody id="t-mom"></tbody></table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Растут магний и подарки</b>: «магниевая ванна» +33%, «подарочный сертификат спа» +88%.</li>
+      <li><b>Флоатинг держится</b>: 1 444 запроса за год, −9%, пик — январь (233).</li>
+      <li><b>«спа салон» с августа растёт</b>: 450 и 491 запрос после летних 322–324.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В каждой новости — «спа-салон», «Курган» и название процедуры в первом абзаце.</li>
+      <li>Отдельные новости под «кедровая бочка», «спа для двоих», «магний» и «релакс».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск по Кургану 19.11.2026 без геолокации; рейтинги и оценки — из выдачи и карточек.</li>
+    <li>Вордстат: регион «Курган», все устройства, октябрь 2024 — сентябрь 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/float_room/222567077136/" target="_blank" rel="noopener">Float Room — Яндекс Карты</a>
+    <a href="https://salon-floatinga-float-room.clients.site/" target="_blank" rel="noopener">salon-floatinga-float-room.clients.site</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Спа-салон · Курган · ул. Коли Мяготина, 129</span>
+  <h1>Float Room — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании Float Room на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Float Room <small>Уникальный спа салон в городе</small></div></div>
+    <div class="fact"><div class="k">Услуги</div><div class="v">Флоатинг, массаж <small>горизонтальная люксовая кедровая бочка, спа программы</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Курган, Коли Мяготина, 129</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">10–22 ежедневно</div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Спа с пользой для здоровья <small>индивидуальный подход, центр города</small></div></div>
+    <div class="fact"><div class="k">Приоритет</div><div class="v">Флоатинг и бочка <small>акцент на пользу магния</small></div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль Float Room</h2>
+    <p>После анализа ресурсов компании определены цвета для обложек и слайдов: синий логотипа, глубокий синий и яркий синий фирменного баннера, морской оттенок капли логотипа и светлый фон.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#1C4C94;color:#FCFCFC;border-color:#1C4C94"><div class="role">Основной</div><div class="name">Синий</div><div class="hex">#1C4C94</div></div>
+    <div class="swatch" style="background:#2C64CC;color:#FCFCFC;border-color:#2C64CC"><div class="role">Акцентный</div><div class="name">Яркий синий</div><div class="hex">#2C64CC</div></div>
+    <div class="swatch" style="background:#1C547C;color:#FCFCFC;border-color:#1C547C"><div class="role">Второстепенный</div><div class="name">Морской</div><div class="hex">#1C547C</div></div>
+    <div class="swatch" style="background:#FCFCFC;color:#142C6C;border-color:#FCFCFC"><div class="role">Фоновый</div><div class="name">Светлый</div><div class="hex">#FCFCFC</div></div>
+    <div class="swatch" style="background:#142C6C;color:#FCFCFC;border-color:#2a4278"><div class="role">Текстовый</div><div class="name">Глубокий синий</div><div class="hex">#142C6C</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап отдаёт все темы двум приоритетам брифа: две — флоатингу, две — кедровой бочке. Каждая тема закрывает запрос, где карточка сейчас на 3–4 месте или не видна.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Флоатинг: вода с английской солью, невесомость, тишина — под «флоатинг» и «магниевая ванна».</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Релакс-сессия и флоатинг в одном посещении — под «релакс массаж» и «спа программа».</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Кедровая бочка и массаж с магниевым маслом, СПА-комплекс 7 — под «кедровая бочка».</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Кедровая бочка для двоих: СПА-комплексы 5, 6 и 8 — под «спа для двоих».</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании Float Room на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой стиль, нейтральный выдержанный тон — так указано в брифе. Вступление от лица компании, дальше факты по теме, цитаты с сайта на «ты» переводятся на «вы». CTA — одна строка: действие на «вы» + услуга + кнопка «Записаться» в карточке. Факты в тезисах приведены дословно по источнику у каждого тезиса. Деятельность не лицензируемая: без обещаний лечебного эффекта, без «лечит», «безопасно», «эффективно». В тексте нет телефона и e-mail, превосходных степеней и сравнений с другими салонами. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Флоатинг в Кургане: невесомость в воде с английской солью в спа-салоне Float Room</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Флоатинг — одно из главных направлений Float Room: насыщение магнием, расслабление позвоночника и перезагрузка.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Парить по поверхности воды — именно в этом и заключается суть флоатинга.<span class="src">сайт</span></li>
+      <li>Флоат-камера наполняется неглубоким слоем воды. Вода насыщается английской солью, позволяя парить на поверхности.<span class="src">сайт</span></li>
+      <li>Одновременно перестаешь получать входящие сигналы от органов зрения, слуха, осязания и равновесия.<span class="src">сайт</span></li>
+      <li>Насыщение магнием, расслабление позвоночника и перезагрузка.<span class="src">бриф</span></li>
+      <li>Индивидуальный подход и безупречный сервис, центр города.<span class="src">бриф</span></li>
+      <li>10–22 ежедневно, Курган, Коли Мяготина 129.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Флоатинг в Кургане — невесомость в воде с английской солью</span></div>
+      <div class="meta-row"><span><b>Title · </b>Флоатинг в Кургане: флоат-камера с английской солью | Float Room</span></div>
+      <div class="meta-row"><span><b>Description · </b>Флоатинг в спа-салоне Float Room в Кургане: флоат-камера с неглубоким слоем воды и английской солью, невесомость и тишина. Ежедневно с 10 до 22, ул. Коли Мяготина, 129.</span></div>
+      <div class="chips"><span class="chip-kw">флоатинг</span><span class="chip-kw">флоатинг курган</span><span class="chip-kw">флоат камера</span><span class="chip-kw">магниевая ванна</span><span class="chip-kw">ванна с магнием</span><span class="chip-kw">английская соль</span><span class="chip-kw">соль эпсома</span><span class="chip-kw">спа салон курган</span><span class="chip-kw">float room</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на флоатинг через кнопку «Записаться» в карточке.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Невесомость и тишина»</div>
+      <p>Композиция: флоат-камера с подсветкой воды, вид сбоку, без людей; тезис на плашке в нижней трети, строка «вода с английской солью». Логотип в верхнем левом углу, текст не больше 20% площади.</p>
+      <p>Цвета: плашка — синий #1C4C94, тезис — светлый #FCFCFC, строка — яркий синий #2C64CC на светлой подложке #FCFCFC.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Релакс-сессия и флоатинг в одном посещении: спа-программа для восстановления в Кургане</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В Float Room флоатинг можно дополнить релакс-сессией — так посещение становится полной спа-программой.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Во время сеанса вы расслабитесь на физическом и психоэмоциональном уровнях, погрузитесь в атмосферу покоя и тишины.<span class="src">сайт</span></li>
+      <li>Приятный аромат в помещении и расслабляющая музыка дополнят эффект релаксации.<span class="src">сайт</span></li>
+      <li>Релакс-сессия — от 1 490 ₽.<span class="src">сайт</span></li>
+      <li>Флоатинга, массаж, горизонтальная люксовая кедровая бочка, спа программы.<span class="src">бриф</span></li>
+      <li>Индивидуальный подход и безупречный сервис.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Релакс-сессия и флоатинг в Кургане — спа-программа Float Room</span></div>
+      <div class="meta-row"><span><b>Title · </b>Релакс-сессия и флоатинг: спа-программа в Кургане | Float Room</span></div>
+      <div class="meta-row"><span><b>Description · </b>Спа-программа в Float Room: флоатинг и релакс-сессия в одном посещении, аромат и расслабляющая музыка. Релакс-сессия от 1 490 ₽, Курган, ул. Коли Мяготина, 129.</span></div>
+      <div class="chips"><span class="chip-kw">релакс массаж</span><span class="chip-kw">релакс массаж курган</span><span class="chip-kw">спа программа</span><span class="chip-kw">спа программы курган</span><span class="chip-kw">флоатинг</span><span class="chip-kw">антистресс</span><span class="chip-kw">спа салон</span><span class="chip-kw">спа курган</span><span class="chip-kw">массажный салон курган</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на флоатинг с релакс-сессией через кнопку «Записаться» в карточке.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Флоатинг + релакс-сессия»</div>
+      <p>Композиция: кабинет для релакс-сессии с приглушённым светом и аромалампой, на заднем плане — дверь флоат-комнаты; тезис на плашке в верхней трети, строка «от 1 490 ₽».</p>
+      <p>Цвета: плашка — глубокий синий #142C6C, тезис — светлый #FCFCFC, строка — яркий синий #2C64CC.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Кедровая бочка в Кургане и массаж с магниевым маслом: СПА-комплекс 7 в Float Room</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Горизонтальная люксовая кедровая бочка — второй приоритет Float Room, и с ней мы соединили массаж с магниевым маслом.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Программа включает прогревание в кедровой бочке, после чего проводится массаж с магниевым маслом.<span class="src">сайт</span></li>
+      <li>Такая комбинация помогает телу мягко расслабиться и почувствовать комфорт после напряжённого дня.<span class="src">сайт</span></li>
+      <li>СПА-комплекс 7 (для одного) — 3 700 ₽ за 1.5 ч.<span class="src">сайт</span></li>
+      <li>СПА-комплекс 7 (для двоих) — 7 400 ₽ за 1.5 ч.<span class="src">сайт</span></li>
+      <li>Насыщение магнием, расслабление позвоночника и перезагрузка.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Кедровая бочка и массаж с магниевым маслом в Кургане</span></div>
+      <div class="meta-row"><span><b>Title · </b>Кедровая бочка в Кургане: СПА-комплекс 7 от 3 700 ₽ | Float Room</span></div>
+      <div class="meta-row"><span><b>Description · </b>СПА-комплекс 7 в Float Room: прогревание в горизонтальной кедровой бочке и массаж с магниевым маслом. 3 700 ₽ за 1,5 часа, для двоих — 7 400 ₽. Курган, ул. Коли Мяготина, 129.</span></div>
+      <div class="chips"><span class="chip-kw">кедровая бочка</span><span class="chip-kw">кедровая бочка курган</span><span class="chip-kw">фитобочка</span><span class="chip-kw">массаж с магнием</span><span class="chip-kw">магниевое масло</span><span class="chip-kw">спа комплекс</span><span class="chip-kw">спа курган</span><span class="chip-kw">массаж курган</span><span class="chip-kw">спа салон курган</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на СПА-комплекс 7 через кнопку «Записаться» в карточке.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кедр и магний»</div>
+      <p>Композиция: горизонтальная кедровая бочка крупным планом, рядом флакон масла и полотенце; тезис на плашке в нижней трети, строка «СПА-комплекс 7 · 1,5 часа».</p>
+      <p>Цвета: плашка — морской #1C547C, тезис — светлый #FCFCFC, строка — светлый #FCFCFC на синем #1C4C94.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Спа для двоих в Кургане: кедровая бочка, массаж и уход в СПА-комплексах 5, 6 и 8</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В Float Room есть СПА-комплексы для двоих: каждый начинается с прогревания в кедровой бочке.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>СПА-комплекс 5 (для двоих) — 9 200 ₽ за 2 ч: прогревание в кедровой бочке, общеукрепляющий массаж тела, скрабирование.<span class="src">сайт</span></li>
+      <li>СПА-комплекс 6 (для двоих) — 12 000 ₽ за 2.5 ч: после кедровой бочки общеукрепляющий массаж, далее скрабирование и обёртывание.<span class="src">сайт</span></li>
+      <li>СПА-комплекс 8 (для двоих) — 10 000 ₽ за 2.5 ч: кедровая бочка, массаж коррекции фигуры, обёртывание.<span class="src">сайт</span></li>
+      <li>Горизонтальная люксовая кедровая бочка.<span class="src">бриф</span></li>
+      <li>Индивидуальный подход и безупречный сервис. Центр города.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Спа для двоих в Кургане — комплексы с кедровой бочкой</span></div>
+      <div class="meta-row"><span><b>Title · </b>Спа для двоих в Кургане: кедровая бочка и массаж | Float Room</span></div>
+      <div class="meta-row"><span><b>Description · </b>СПА-комплексы для двоих в Float Room: кедровая бочка, массаж, скрабирование и обёртывание. Комплекс 5 — 9 200 ₽, комплекс 8 — 10 000 ₽, комплекс 6 — 12 000 ₽. Курган.</span></div>
+      <div class="chips"><span class="chip-kw">спа для двоих</span><span class="chip-kw">спа для двоих курган</span><span class="chip-kw">спа для пары</span><span class="chip-kw">кедровая бочка для двоих</span><span class="chip-kw">кедровая бочка</span><span class="chip-kw">спа программа</span><span class="chip-kw">обертывание</span><span class="chip-kw">спа салон курган</span><span class="chip-kw">спа комплекс</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте СПА-комплекс и записывайтесь вдвоём через кнопку «Записаться» в карточке.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Спа для двоих»</div>
+      <p>Композиция: две кедровые бочки или две подготовленные кушетки с полотенцами, без людей; тезис на плашке в верхней трети, строка «кедровая бочка · массаж · уход».</p>
+      <p>Цвета: плашка — синий #1C4C94, тезис — светлый #FCFCFC, строка — глубокий синий #142C6C на светлой подложке #FCFCFC.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Флоатинг: невесомость</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Неглубокий слой воды</span><span class="fact-pill">Английская соль</span><span class="fact-pill">Насыщение магнием</span><span class="fact-pill">10–22 ежедневно</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон синий #1C4C94, заголовок светлым #FCFCFC сверху, факты на плашках глубокого синего #142C6C светлым текстом. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Флоатинг + релакс-сессия</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Релакс-сессия от 1 490 ₽</span><span class="fact-pill">Аромат и музыка</span><span class="fact-pill">Покой и тишина</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон глубокий синий #142C6C, заголовок светлым #FCFCFC, цена крупно яркими синими цифрами #2C64CC на светлой плашке #FCFCFC.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Кедр и магний</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Кедровая бочка</span><span class="fact-pill">Массаж с магниевым маслом</span><span class="fact-pill">1,5 часа</span><span class="fact-pill">3 700 ₽ · для двоих 7 400 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фото бочки в верхней половине, нижняя — плашка морского #1C547C, факты светлым #FCFCFC, цены крупно.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Спа для двоих</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Комплекс 5 — 9 200 ₽</span><span class="fact-pill">Комплекс 8 — 10 000 ₽</span><span class="fact-pill">Комплекс 6 — 12 000 ₽</span><span class="fact-pill">Все с кедровой бочкой</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светлый #FCFCFC, заголовок синим #1C4C94, три комплекса столбиком на плашках яркого синего #2C64CC светлым текстом.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — флоатинг и кедровая бочка <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Флоатинг: невесомость в воде с английской солью</b>флоат-камера, магний, перезагрузка</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Флоатинг: невесомость</b>суть процедуры</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Релакс-сессия и флоатинг в одном посещении</b>аромат, музыка, от 1 490 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Флоатинг + релакс-сессия</b>сочетание процедур</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Кедровая бочка и массаж с магниевым маслом</b>СПА-комплекс 7, 3 700 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Кедр и магний</b>состав и цена комплекса</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Спа для двоих с кедровой бочкой</b>комплексы 5, 6 и 8</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Спа для двоих</b>три комплекса и цены</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const M=['апр 26','май 26','июн 26','июл 26','авг 26','сен 26'];
+const D={spa:[282,355,324,322,450,491],fl:[99,97,62,98,98,95]};
+const fmt=n=>n.toLocaleString('ru-RU');
+function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v)));return [1,2,2.5,5,10].find(k=>k*p>=v)*p}
+document.querySelectorAll('[data-chart]').forEach(box=>{
+  const d=D[box.dataset.chart],W=520,H=210,L=44,R=8,T=18,B=24,mx=nice(Math.max(...d)*1.1);
+  const bw=(W-L-R)/d.length,y=v=>T+(H-T-B)*(1-v/mx),pk=d.indexOf(Math.max(...d));
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`}
+  d.forEach((v,i)=>{const x=L+i*bw+bw*.2,w=bw*.6;g+=`<rect class="col${i===pk?' pk':''}" x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3"/><text class="val" x="${x+w/2}" y="${y(v)-5}" text-anchor="middle">${fmt(v)}</text><text x="${x+w/2}" y="${H-6}" text-anchor="middle">${M[i]}</text>`});
+  box.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${box.querySelector('h3').textContent}">${g}</svg>`);
+});
+const ch=(a,i)=>{if(!i)return '<td class="r">—</td>';const c=Math.round((a[i]/a[i-1]-1)*100);return `<td class="r num ${c>=0?'up':'down'}">${c>0?'+':''}${c}%</td>`};
+document.getElementById('t-mom').innerHTML=M.map((m,i)=>`<tr><td>${m}</td><td class="r num">${fmt(D.spa[i])}</td>${ch(D.spa,i)}<td class="r num">${fmt(D.fl[i])}</td>${ch(D.fl,i)}</tr>`).join('');
+const Q=[['спа салон','коммерческое',4968,-37],['массажный салон','коммерческое',2062,-31],['флоатинг','коммерческое',1444,-9],['спа для мужчин','коммерческое',491,-55],['магниевая ванна','информационное',355,33],['кедровая бочка','коммерческое',352,-13],['релакс массаж','коммерческое',260,-15],['спа для двоих','коммерческое',130,-50],['спа программа','коммерческое',101,-31],['подарочный сертификат спа','коммерческое',92,88]];
+const qm=Math.max(...Q.map(r=>r[2]));
+document.getElementById('t-q').innerHTML=Q.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/qm*160))}px"></i><span>${fmt(r[2])}</span></div></td><td class="r num ${r[3]>=0?'up':'down'}">${r[3]>0?'+':''}${r[3]}%</td></tr>`).join('');
+const NAV={analytics:[['a-top','Итог'],['a-maps','Позиции на Картах'],['a-comp','Конкуренты'],['a-demand','Спрос'],['a-method','Методика']],content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
