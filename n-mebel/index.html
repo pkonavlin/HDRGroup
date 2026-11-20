@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Проект «Н-Мебель»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}.coname{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .eyebrow,.va .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+.vc .badge.actual{background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}.va td.nw{white-space:nowrap}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}.va .note h3{margin:0 0 8px;font-size:15.5px}
+.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="coname">«Н-Мебель»</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="top">
+  <span class="eyebrow">Челябинск · мебель на заказ · наб. Героя России С.А. Кислова, 23 · замер 20.11.2026</span>
+  <h1>Где «Н-Мебель» видно на Картах, а где нет</h1>
+  <p>Карточка компании на Яндекс Картах: 10 целевых запросов по Челябинску и соседи по гео-выдаче вокруг наб. Героя России С.А. Кислова, 23.</p>
+</header>
+
+<section id="summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill warn">видно ниже двойки</span><p><b>Кухни: карточка видна в 2 запросах из 3</b>«Кухни на заказ» — 3 место, «кухонный гарнитур на заказ» — 4. По «мебель для кухни» карточки нет, хотя это её основная рубрика.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Мебель на заказ, корпусная и дизайнерская — мимо</b>В списках Мария, Абажур, Лофтовик, Style Design Interior, Милана.</p></div>
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>Гардеробные, шкафы, детская и ванная — карточки нет</b>Все эти направления есть в брифе и на сайте, но на карточке о них ни слова.</p></div>
+    <div class="v"><span class="pill warn">мало сигналов</span><p><b>5 оценок и 4 новости-ссылки</b>Новости на карточке — только ссылки на публикации интерьеров, без текста по услугам и без ключевых запросов.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Рейтинг на Яндекс Картах</div><div class="n">4,2</div><div class="s">5 оценок · 5 отзывов</div></div>
+    <div class="kpi"><div class="k">Запросов, где карточка видна</div><div class="n">2 из 10</div><div class="s">лучшее место — 3</div></div>
+    <div class="kpi"><div class="k">Соседей выше в каждом списке</div><div class="n">2–5</div><div class="s">Мария — в 9 списках из 10</div></div>
+    <div class="kpi"><div class="k">Новостей на карточке</div><div class="n">4</div><div class="s">только ссылки, последняя — 04.08.2025</div></div>
+  </div>
+</section>
+
+<section id="queries">
+  <div class="sh"><h2>10 целевых запросов</h2><p>Направления из брифа: кухни, корпусная мебель, шкафы и гардеробные, детская, дизайнерская мебель по проектам. Для каждого запроса — место карточки и тема этапа, которая ведёт её в выдачу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th>Карточка</th><th>Первые три</th><th>Тема этапа</th></tr></thead>
+    <tbody>
+      <tr><td>кухни на заказ</td><td class="me">3</td><td>Мария, Любимая кухня, Н-Мебель</td><td class="nw">Новость 1</td></tr>
+      <tr><td>кухонный гарнитур на заказ</td><td class="me">4</td><td>Мария, Любимая кухня, Абажур</td><td class="nw">Новость 1</td></tr>
+      <tr><td>мебель для кухни</td><td>нет</td><td>Лофтовик, Любимая кухня, Мария</td><td class="nw">Новость 1</td></tr>
+      <tr><td>дизайнерская мебель на заказ</td><td>нет</td><td>Лофтовик, Style Design Interior, Салон элитных дверей</td><td class="nw">Новость 2</td></tr>
+      <tr><td>мебель на заказ</td><td>нет</td><td>Лофтовик, Мария, Абажур</td><td class="nw">Новость 2</td></tr>
+      <tr><td>гардеробная на заказ</td><td>нет</td><td>Мария, Style Design Interior, Абажур</td><td class="nw">Новость 3</td></tr>
+      <tr><td>шкаф купе на заказ</td><td>нет</td><td>Любимая кухня, Абажур, Style Design Interior</td><td class="nw">Новость 3</td></tr>
+      <tr><td>корпусная мебель на заказ</td><td>нет</td><td>Style Design Interior, Абажур, Кухня Мечты</td><td class="nw">Новость 4</td></tr>
+      <tr><td>детская мебель на заказ</td><td>нет</td><td>Мария, Абажур, Мебельные технологии</td><td class="nw">Сторис 1</td></tr>
+      <tr><td>мебель для ванной на заказ</td><td>нет</td><td>Лофтовик, Мария, Сантехсити</td><td class="nw">Сторис 2</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="geo">
+  <div class="sh"><h2>Соседи по гео-выдаче</h2><p>Кто чаще всего стоит выше карточки по тем же 10 запросам. Рейтинг / число оценок там, где оно показано в списке.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Компания</th><th>Адрес</th><th class="r">Запросов в выдаче</th><th>Рейтинг</th></tr></thead>
+    <tbody>
+      <tr><td>Мария</td><td>ул. Труда, 176</td><td class="r num">9 из 10</td><td>4,8 / 68</td></tr>
+      <tr><td>Абажур</td><td>ул. Труда, 185А</td><td class="r num">8 из 10</td><td>4,5 / 25</td></tr>
+      <tr><td>Лофтовик</td><td>Комсомольский просп., 10, стр. 11</td><td class="r num">5 из 10</td><td>промо-размещение</td></tr>
+      <tr><td>Любимая кухня</td><td>наб. Героя России С.А. Кислова, 23</td><td class="r num">4 из 10</td><td>4,2 / 10</td></tr>
+      <tr><td>Кухня Мечты</td><td>ул. Братьев Кашириных, 12</td><td class="r num">4 из 10</td><td>5,0 / 161</td></tr>
+      <tr><td>Style Design Interior</td><td>ул. Труда, 174</td><td class="r num">4 из 10</td><td>—</td></tr>
+      <tr><td>Милана</td><td>ул. Труда, 172</td><td class="r num">3 из 10</td><td>4,3 / 9</td></tr>
+      <tr><td class="me">Н-Мебель</td><td class="me">наб. Героя России С.А. Кислова, 23</td><td class="r num me">2 из 10</td><td class="me">4,2 / 5</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Что видно по соседям</h3><ul>
+      <li><b>Мария и Абажур</b> — в 8–9 списках из 10, по всем направлениям: кухни, шкафы, гардеробные, детская, ванная.</li>
+      <li><b>Любимая кухня по тому же адресу</b> стоит выше карточки по «кухни на заказ», «кухонный гарнитур» и «мебель для кухни».</li>
+      <li><b>Лофтовик</b> поднимается за счёт промо-размещения в выдаче.</li>
+      <li>Рейтинг у карточки на уровне соседа по адресу (4,2), но оценок вдвое меньше.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>Отдельная новость под каждое направление: кухни, дизайнерская мебель по проекту, гардеробные и шкафы, корпусная мебель.</li>
+      <li>Детская и ванная — в сторис, чтобы карточка получила сигналы и по этим услугам.</li>
+      <li>В каждом тексте — «Челябинск» и «на заказ» в первом абзаце, название «Н-Мебель» в заголовке.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты, 20.11.2026: поиск по Челябинску, центр карты у наб. Героя России С.А. Кислова, 23, масштаб ~2 км. 10 запросов, места считаются по списку слева.</li>
+    <li>В списках подгружалось 5–6 карточек; «нет» — карточки нет в загруженном списке.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/org/n_mebel/199410847390/" target="_blank" rel="noopener">«Н-Мебель», Челябинск, наб. Героя России С.А. Кислова, 23 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/56/chelyabinsk/search/%D0%BA%D1%83%D1%85%D0%BD%D0%B8%20%D0%BD%D0%B0%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7/" target="_blank" rel="noopener">Кухни на заказ в Челябинске — Яндекс Карты</a>
+    <a href="http://www.n-mebel.pro/" target="_blank" rel="noopener">n-mebel.pro — сайт компании</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="company">
+  <span class="eyebrow">Мебель на заказ · Челябинск · наб. Героя России С.А. Кислова, 23</span>
+  <h1>«Н-Мебель» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Н-Мебель» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">Н-Мебель</div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Авторская мебель по дизайн-проектам <small>кухни, шкафы, гардеробные, детские, умная мебель</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Челябинск, наб. Героя России С.А. Кислова, 23 <small>основной; также ул. Энгельса, 4, оф. 314</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">11:00–19:00 <small>выходные — по предварительной записи</small></div></div>
+    <div class="fact"><div class="k">Приоритет</div><div class="v">Индивидуальный подход, философия и педантичность компании</div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Без указания цен <small>фиксированных цен нет</small></div></div>
+  </div>
+</section>
+
+<section id="brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Цвета для обложек и слайдов</h2>
+    <p>Фирменный цвет по брифу — терракот. Цвета сняты с сайта n-mebel.pro.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#BC7D4A;color:#FFFFFF;border-color:#BC7D4A"><div class="role">Фирменный</div><div class="name">Терракот</div><div class="hex">#BC7D4A</div></div>
+    <div class="swatch" style="background:#1C1C1C;color:#FCFCFC;border-color:#3a3a3a"><div class="role">Основной</div><div class="name">Графит</div><div class="hex">#1C1C1C</div></div>
+    <div class="swatch" style="background:#FCFCFC;color:#1C1C1C;border-color:#FCFCFC"><div class="role">Текст и фон</div><div class="name">Белый</div><div class="hex">#FCFCFC</div></div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Сначала кухни — основная рубрика, где карточка видна, но ниже соседей. Дальше направления, по которым карточки в выдаче нет.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Кухни на заказ без каталогов и шаблонов.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Дизайнерская мебель по проекту: от идеи до производства.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Гардеробные и шкафы на заказ.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Корпусная и умная мебель со сложной инженерией.</p></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Н-Мебель» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», лёгкий неформальный юмор допустим. Вступление от лица команды, дальше факты по теме — из брифа и с сайта компании. Без цен, без телефона и e-mail, без превосходных степеней и упоминаний других компаний. Объём — до 3 000 знаков с пробелами.</div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Кухни на заказ в Челябинске без каталогов и шаблонов — «Н-Мебель»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы не изготавливаем мебель по шаблонам или каталогам: наша кухня отражает характер клиента, его повседневные привычки и стиль жизни.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Кухни — одно из направлений: любая корпусная мебель на заказ.<span class="src">бриф</span></li>
+      <li>С большим вниманием прорабатываем каждый сантиметр мебели.<span class="src">бриф</span></li>
+      <li>Фасады неповторимы, фрезеровки у каждого клиента индивидуальны.<span class="src">бриф</span></li>
+      <li>Фурнитура Blum; гарантия на мебель — 2 года, на фурнитуру Blum — 10 лет.<span class="src">сайт</span></li>
+      <li>При покупке техники аксессуары в подарок: мойка, смеситель.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Кухни на заказ в Челябинске — «Н-Мебель»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Кухни на заказ, кухонный гарнитур на заказ, Челябинск | Н-Мебель</span></div>
+      <div class="meta-row"><span><b>Description · </b>Кухни на заказ без каталогов и шаблонов, фасады с индивидуальной фрезеровкой, фурнитура Blum. «Н-Мебель», Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">кухни на заказ челябинск</span><span class="chip-kw">кухонный гарнитур на заказ</span><span class="chip-kw">мебель для кухни челябинск</span><span class="chip-kw">кухня по индивидуальному проекту</span><span class="chip-kw">фасады для кухни</span><span class="chip-kw">фурнитура blum</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на встречу в шоу-руме через карточку компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кухня без шаблонов»</div>
+      <p>Композиция: авторское фото кухни из проектов компании, тезис на плашке в нижней трети, логотип N-MEBEL в углу, текст не больше 20% площади.</p>
+      <p>Цвета: плашка — графит #1C1C1C, тезис — белый #FCFCFC, тонкая линия — терракот #BC7D4A.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Дизайнерская мебель на заказ в Челябинске: разработаем проект, даже если у вас нет дизайнера</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы изготавливаем авторскую мебель по дизайн-проектам, а если сопровождения дизайнера интерьеров нет — разрабатываем дизайн мебели сами.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Помогаем подобрать материал, придумываем эргономику, запускаем в производство.<span class="src">бриф</span></li>
+      <li>Шесть этапов: первая встреча, коммерческое предложение, 3D-визуализация, договор, контрольный замер, доставка и монтаж.<span class="src">сайт</span></li>
+      <li>Стоимость проекта фиксируется при подписании договора.<span class="src">сайт</span></li>
+      <li>Производство на автоматизированном оборудовании в собственном цехе.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Дизайнерская мебель на заказ в Челябинске — «Н-Мебель»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Дизайнерская мебель на заказ, мебель по дизайн-проекту, Челябинск | Н-Мебель</span></div>
+      <div class="meta-row"><span><b>Description · </b>Авторская мебель по дизайн-проектам: подбор материала, эргономика, 3D-визуализация, производство в своём цехе. «Н-Мебель», Челябинск.</span></div>
+      <div class="chips"><span class="chip-kw">дизайнерская мебель на заказ</span><span class="chip-kw">мебель на заказ челябинск</span><span class="chip-kw">мебель по дизайн проекту</span><span class="chip-kw">авторская мебель</span><span class="chip-kw">3d визуализация мебели</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку на первую встречу в карточке компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«От идеи до проекта»</div>
+      <p>Композиция: образцы материалов и фасадов на столе (как на главной странице сайта), тезис крупно в верхней трети, логотип N-MEBEL внизу.</p>
+      <p>Цвета: фон фото затемнён к графиту #1C1C1C, тезис — белый #FCFCFC, акцент — терракот #BC7D4A.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Гардеробные и шкафы на заказ в Челябинске под ваши привычки — «Н-Мебель»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы перфекционисты: для нас качество и комфорт выше всего, поэтому гардеробную продумываем под то, как вы живёте.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Шкафы, гардеробные — весь спектр производства от и до.<span class="src">бриф</span></li>
+      <li>Мебель отражает повседневные привычки клиента и его стиль жизни.<span class="src">бриф</span></li>
+      <li>Шкафы, гардеробные и системы хранения для постирочной.<span class="src">сайт</span></li>
+      <li>Контрольный замер на объекте перед производством.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Гардеробные и шкафы на заказ в Челябинске — «Н-Мебель»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Гардеробная на заказ, шкаф на заказ, Челябинск | Н-Мебель</span></div>
+      <div class="meta-row"><span><b>Description · </b>Гардеробные, шкафы и системы хранения на заказ под ваши привычки, контрольный замер на объекте. «Н-Мебель», Челябинск, наб. Героя России С.А. Кислова, 23.</span></div>
+      <div class="chips"><span class="chip-kw">гардеробная на заказ челябинск</span><span class="chip-kw">шкаф на заказ</span><span class="chip-kw">шкаф купе на заказ</span><span class="chip-kw">встроенный шкаф</span><span class="chip-kw">система хранения на заказ</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> запишитесь на консультацию по гардеробной в карточке компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Гардеробная под вас»</div>
+      <p>Композиция: авторское фото гардеробной из проектов компании, тезис на плашке в нижней трети, логотип N-MEBEL в углу.</p>
+      <p>Цвета: плашка — терракот #BC7D4A, тезис — белый #FCFCFC, тонкая линия — графит #1C1C1C.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Корпусная мебель на заказ в Челябинске: умная мебель и сложная инженерия в интерьере</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы делаем любую корпусную мебель на заказ — в том числе мебель со сложной инженерией и умную мебель, которая слушается голосовых команд.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сложные инженерные решения мебели в интерьере.<span class="src">бриф</span></li>
+      <li>Умная мебель, управляемая голосовыми командами.<span class="src">бриф</span></li>
+      <li>Кухня с системой автоматического открывания и с автоматизированным управлением — в проектах компании.<span class="src">сайт</span></li>
+      <li>Доставка и монтаж входят в работу, после сборки вывозим мусор.<span class="src">сайт</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Корпусная и умная мебель на заказ в Челябинске — «Н-Мебель»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Корпусная мебель на заказ, умная мебель, Челябинск | Н-Мебель</span></div>
+      <div class="meta-row"><span><b>Description · </b>Корпусная мебель на заказ, умная мебель с голосовым управлением, автоматическое открывание. «Н-Мебель», Челябинск.</span></div>
+      <div class="chips"><span class="chip-kw">корпусная мебель на заказ челябинск</span><span class="chip-kw">умная мебель</span><span class="chip-kw">мебель с голосовым управлением</span><span class="chip-kw">встроенная мебель на заказ</span><span class="chip-kw">мебель с автоматическим открыванием</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> оставьте заявку на проект в карточке компании.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Мебель слышит вас»</div>
+      <p>Композиция: авторское фото встроенной мебели с открытым фасадом, тезис крупно в верхней трети, логотип N-MEBEL внизу.</p>
+      <p>Цвета: фон — графит #1C1C1C, тезис — белый #FCFCFC, акцентная линия — терракот #BC7D4A.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис и факты. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Детская мебель на заказ</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Мебель для детской</span><span class="fact-pill">Рабочие зоны</span><span class="fact-pill">По проекту</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> авторское фото детской, нижняя половина — плашка #BC7D4A, заголовок и факты белым #FCFCFC.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Мебель для ванной на заказ</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Мебель для ванной</span><span class="fact-pill">Гарантия 2 года</span><span class="fact-pill">Монтаж включён</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #1C1C1C, заголовок белым #FCFCFC, факты на плашках #BC7D4A.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Фасады с индивидуальной фрезеровкой</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Без каталога</span><span class="fact-pill">Фрезеровка под клиента</span><span class="fact-pill">Образцы в шоу-руме</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FCFCFC, заголовок графит #1C1C1C, факты на плашках #BC7D4A белым текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Техника для кухни — аксессуары в подарок</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Мойка в подарок</span><span class="fact-pill">Смеситель в подарок</span><span class="fact-pill">При покупке техники</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> авторское фото кухни, сверху плашка #1C1C1C, заголовок и факты белым #FCFCFC, акцент #BC7D4A.</div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — кухни, дизайн-проекты, гардеробные, корпусная мебель <span class="badge actual">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Кухни на заказ без каталогов и шаблонов</b>под «кухни на заказ», «кухонный гарнитур на заказ», «мебель для кухни»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Детская мебель на заказ</b>под «детская мебель на заказ»</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Дизайнерская мебель по проекту</b>под «дизайнерская мебель на заказ», «мебель на заказ»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Мебель для ванной на заказ</b>под «мебель для ванной на заказ»</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Гардеробные и шкафы на заказ</b>под «гардеробная на заказ», «шкаф купе на заказ»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Фасады с индивидуальной фрезеровкой</b>без каталога, под клиента</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Корпусная и умная мебель</b>под «корпусная мебель на заказ»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Аксессуары в подарок при покупке техники</b>мойка, смеситель</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const NAV={analytics:[['summary','Итог'],['queries','Запросы'],['geo','Соседи'],['method','Методика']],content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){if(!NAV[view])view='analytics';document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}if(scroll)window.scrollTo({top:0})}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
