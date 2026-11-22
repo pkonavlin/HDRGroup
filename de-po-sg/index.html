@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «DE.PO. Service Group»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}.va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">DE.PO. Service Group</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Волгоград · автосервис · Козловская улица · замер 22.11.2026</span>
+  <h1>Где автосервис на Козловской виден в поиске, а где нет</h1>
+  <p>DE.PO. Service Group, Волгоград, ул. Козловская. Выдача Яндекс Карт по 10 целевым запросам вокруг адреса и спрос по Вордстату для региона «Волгоград».</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">сильные</span><p><b>Первое место по «ремонт dsg» и «ремонт автоэлектрики», второе по «ремонт акпп»</b>По узким специализациям карточка уже ведёт выдачу у Козловской.</p></div>
+    <div class="v"><span class="pill crit">нет в пятёрке</span><p><b>5 из 10 запросов уходят соседям</b>«автосервис», «ремонт двигателя», «ремонт ходовой», «замена масла в акпп», «заправка автокондиционера» — карточки DE.PO. в первой пятёрке нет. Это и самые частотные запросы: «автосервис» — 6 973, «ремонт двигателя» — 1 292, «замена масла в акпп» — 1 079 в месяц.</p></div>
+    <div class="v"><span class="pill warn">на грани</span><p><b>«замена сцепления» и «компьютерная диагностика автомобиля» — пятое место</b>«замена сцепления» — 2 105 запросов в месяц, второй по объёму после «автосервис».</p></div>
+    <div class="v"><span class="pill info">карточка</span><p><b>Новостей на карточке нет, истории скрыты</b>Рейтинг 4,4 (116 оценок). Для показа историй в Картах Яндекс требует тариф — без него сторис этапа на Яндекс Картах не будут видны.</p></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Выдача Яндекс Карт по целевым запросам</h2><p>Поиск в Волгограде, карта у ул. Козловская, 34, масштаб около 2 км. Показана первая пятёрка списка.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">DE.PO.</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>ремонт dsg</td><td class="r me">1</td><td>DE.PO., БММ Сервис, Luxe Service, Агрегатка</td></tr>
+      <tr><td>ремонт автоэлектрики</td><td class="r me">1</td><td>DE.PO., Вэлью, Авторемонт, G-Energy Service, Автореанимация34</td></tr>
+      <tr><td>ремонт акпп</td><td class="r me">2</td><td>Вилгуд, DE.PO., Jack Cars, Ford-Mazda Service, Вэлью</td></tr>
+      <tr><td>замена сцепления</td><td class="r me">5</td><td>Вэлью, Jack Cars, Авторемонт, G-Energy Service, DE.PO.</td></tr>
+      <tr><td>компьютерная диагностика автомобиля</td><td class="r me">5</td><td>Jack Cars, Вэлью, Авторемонт, Вилгуд, DE.PO.</td></tr>
+      <tr><td>автосервис</td><td class="r">нет</td><td>Вэлью, Авторемонт, G-Energy Service, Jack Cars, Вилгуд</td></tr>
+      <tr><td>ремонт двигателя</td><td class="r">нет</td><td>Вилгуд, Вэлью, Jack Cars, Авторемонт, G-Energy Service</td></tr>
+      <tr><td>ремонт ходовой</td><td class="r">нет</td><td>Вэлью, Авторемонт, G-Energy Service, БММ Сервис, Вилгуд</td></tr>
+      <tr><td>замена масла в акпп</td><td class="r">нет</td><td>Вэлью, Вилгуд, Авторемонт, Ford-Mazda Service, Jack Cars</td></tr>
+      <tr><td>заправка автокондиционера</td><td class="r">нет</td><td>Jack Cars, Вэлью, Авторемонт, Кондерка, Элси</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-rivals">
+  <div class="sh"><h2>Конкуренты в гео-выдаче</h2><p>Карточки, которые чаще всего стоят в пятёрке вокруг Козловской, 34.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th class="r">В пятёрке</th></tr></thead>
+    <tbody>
+      <tr><td><b>Вэлью</b></td><td class="r num">4,6</td><td class="r num">566</td><td>Елецкая ул., 173А</td><td class="r num">9 из 10</td></tr>
+      <tr><td><b>Авторемонт</b></td><td class="r num">4,5</td><td class="r num">96</td><td>Глубокоовражная ул., 35К</td><td class="r num">8 из 10</td></tr>
+      <tr><td><b>Jack Cars</b></td><td class="r num">4,7</td><td class="r num">789</td><td>Козловская ул., 44А</td><td class="r num">7 из 10</td></tr>
+      <tr><td><b>Вилгуд</b></td><td class="r num">4,4</td><td class="r num">149</td><td>Социалистическая ул., 45</td><td class="r num">6 из 10</td></tr>
+      <tr><td><b>G-Energy Service</b></td><td class="r num">4,9</td><td class="r num">—</td><td>ул. Рокоссовского, 6Б</td><td class="r num">5 из 10</td></tr>
+      <tr><td class="me">DE.PO. Service Group</td><td class="r num me">4,4</td><td class="r num me">116</td><td class="me">Козловская ул., 34</td><td class="r num me">5 из 10</td></tr>
+      <tr><td><b>Ford-Mazda Service</b></td><td class="r num">4,7</td><td class="r num">—</td><td>Козловская ул., 34Г</td><td class="r num">2 из 10</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Почему они выше</h3><ul>
+      <li><b>Объём оценок.</b> У Jack Cars — 789, у Вэлью — 566 против 116 у DE.PO.</li>
+      <li><b>Широкие запросы.</b> По «автосервис», «ремонт двигателя», «ремонт ходовой» выше стоят карточки, которые показываются как универсальные автосервисы; у DE.PO. по этим словам нет ни одной публикации.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для карточки</h3><ul>
+      <li>Новости — под запросы, где карточки нет в пятёрке: автосервис, ремонт двигателя, замена масла в АКПП, сцепление и ходовая.</li>
+      <li>Сторис — кондиционеры, автоэлектрика с диагностикой, дополнительное оборудование.</li>
+      <li>Одно название во всех текстах — «DE.PO. Service Group».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос по запросам</h2><p>Вордстат, регион «Волгоград», все устройства, частоты за 13.10–11.11.2026.</p></div>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Карточка в пятёрке</th><th>Запросов в месяц</th></tr></thead><tbody id="t-q"></tbody></table></div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: 22.11.2026, поиск в Волгограде, карта у ул. Козловская, 34, масштаб около 2 км; рейтинги и оценки — из списка выдачи.</li>
+    <li>Вордстат: регион «Волгоград», все устройства, частоты за 13.10–11.11.2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/38/volgograd/search/%D0%B0%D0%B2%D1%82%D0%BE%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81/?ll=44.484220%2C48.692957&z=15" target="_blank" rel="noopener">Яндекс Карты — «автосервис» у Козловской, 34</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://t.me/DePoSG" target="_blank" rel="noopener">Telegram-канал DE.PO. Service Group</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Автосервис · Волгоград · Козловская улица</span>
+  <h1>«DE.PO. Service Group» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании DE.PO. Service Group на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">DE.PO. Service Group <small>ДЕ.ПО. Сервис Групп</small></div></div>
+    <div class="fact"><div class="k">Сфера</div><div class="v">Автосервис <small>ремонт авто любой сложности</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Волгоград, ул. Козловская, д. 34А</div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт с 10 до 20</div></div>
+    <div class="fact"><div class="k">Направления</div><div class="v">15 направлений <small>DSG, АКПП, двигатель, ходовая, тормоза, масла, ГРМ, кондиционеры, электрика, ЭБУ, доп. оборудование, фары, запчасти</small></div></div>
+    <div class="fact"><div class="k">Цены</div><div class="v">Формат «от N ₽» <small>по конкретным карточкам услуг</small></div></div>
+    <div class="fact"><div class="k">Telegram</div><div class="v mono">t.me/DePoSG</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль DE.PO. Service Group</h2>
+    <p>Цвета сняты с логотипа компании: графитовый фон, хромированный металл и белый.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#141615;color:#FEFFFF;border-color:#3a3d3c"><div class="role">Основной</div><div class="name">Графит</div><div class="hex">#141615</div></div>
+    <div class="swatch" style="background:#B7B9B8;color:#141615;border-color:#B7B9B8"><div class="role">Акцентный</div><div class="name">Хром</div><div class="hex">#B7B9B8</div></div>
+    <div class="swatch" style="background:#FEFFFF;color:#141615;border-color:#FEFFFF"><div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FEFFFF</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап ведёт карточку в запросы, где её сейчас нет в первой пятёрке у Козловской: автосервис, ремонт двигателя, замена масла в АКПП, ремонт ходовой, заправка автокондиционера.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Автосервис на Козловской: ремонт авто любой сложности, 15 направлений.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Ремонт двигателя и замена ГРМ.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Замена масла в ДВС, АКПП, МКПП, DSG и Haldex; ремонт DSG и АКПП.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Сцепление, маховик, ходовая и тормоза.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании DE.PO. Service Group на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», деловой тон с допустимой лёгкостью. Вступление от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по брифу. Без упоминания конкурентов. В тексте нет телефона и e-mail, превосходных степеней и ссылок на сторонние сайты. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Автосервис в Волгограде на Козловской: ремонт авто любой сложности</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — DE.PO. Service Group, автосервис на Козловской улице. Ремонтируем авто любой сложности.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Ремонт авто любой сложности.<span class="src">Telegram</span></li>
+      <li>г.Волгоград, ул. Козловская, д. 34А.<span class="src">бриф</span></li>
+      <li>пн-пт с 10 до 20.<span class="src">бриф</span></li>
+      <li>Ремонт DSG (Роботизированная коробка передач). Ремонт АКПП (Автоматическая коробка передач). Замена сцепления, маховика. Ремонт двигателя. Ремонт ходовой части. Ремонт тормозной системы.<span class="src">бриф</span></li>
+      <li>Заправка, диагностика, ремонт автокондиционеров. Компьютерная диагностика. Ремонт автоэлектрики. Ремонт и прошивка блоков ЭБУ.<span class="src">бриф</span></li>
+      <li>Запчасти и расходные материалы в наличии и под заказ.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Автосервис в Волгограде на Козловской — DE.PO. Service Group</span></div>
+      <div class="meta-row"><span><b>Title · </b>Автосервис на Козловской, Волгоград: ремонт авто любой сложности | DE.PO.</span></div>
+      <div class="meta-row"><span><b>Description · </b>Автосервис DE.PO. Service Group в Волгограде, ул. Козловская, 34А: ремонт DSG и АКПП, двигателя, ходовой, тормозов, автоэлектрики, кондиционеров. Пн–пт с 10 до 20.</span></div>
+      <div class="chips"><span class="chip-kw">автосервис</span><span class="chip-kw">автосервис волгоград</span><span class="chip-kw">автосервис рядом</span><span class="chip-kw">автосервис ворошиловский район</span><span class="chip-kw">ремонт авто</span><span class="chip-kw">ремонт автомобилей волгоград</span><span class="chip-kw">автотехцентр</span><span class="chip-kw">сто волгоград</span><span class="chip-kw">запчасти под заказ</span><span class="chip-kw">козловская</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на ремонт — работаем с понедельника по пятницу.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Ремонт любой сложности»</div>
+      <p>Композиция: реальное фото автомобиля на подъёмнике в боксе сервиса, логотип в верхнем левом углу; тезис на плашке в нижней трети, строка «Козловская, 34А · пн–пт 10–20». Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — графит #141615, тезис — белый #FEFFFF, строка — хром #B7B9B8.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Ремонт двигателя и замена ГРМ в Волгограде — автосервис DE.PO. Service Group</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Двигатель и ГРМ — одно из наших направлений в автосервисе на Козловской.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Ремонт двигателя.<span class="src">бриф</span></li>
+      <li>Замена ГРМ.<span class="src">бриф</span></li>
+      <li>Двигатель и ходовая.<span class="src">Telegram</span></li>
+      <li>Компьютерная диагностика.<span class="src">бриф</span></li>
+      <li>Замена масла в ДВС.<span class="src">бриф</span></li>
+      <li>Запчасти и расходные материалы в наличии и под заказ.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Ремонт двигателя в Волгограде — DE.PO. Service Group</span></div>
+      <div class="meta-row"><span><b>Title · </b>Ремонт двигателя и замена ГРМ на Козловской, Волгоград | DE.PO.</span></div>
+      <div class="meta-row"><span><b>Description · </b>Ремонт двигателя, замена ГРМ, компьютерная диагностика и замена масла в ДВС в автосервисе DE.PO. Service Group, Волгоград, ул. Козловская, 34А.</span></div>
+      <div class="chips"><span class="chip-kw">ремонт двигателя</span><span class="chip-kw">ремонт двигателя волгоград</span><span class="chip-kw">капитальный ремонт двигателя</span><span class="chip-kw">замена грм</span><span class="chip-kw">замена ремня грм</span><span class="chip-kw">диагностика двигателя</span><span class="chip-kw">замена масла в двигателе</span><span class="chip-kw">автосервис волгоград</span><span class="chip-kw">ремонт двс</span><span class="chip-kw">моторист волгоград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на диагностику и ремонт двигателя.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Ремонт двигателя и ГРМ»</div>
+      <p>Композиция: реальное фото открытого моторного отсека или двигателя на стенде крупным планом; тезис на плашке в верхней трети, логотип в нижнем правом углу.</p>
+      <p>Цвета: плашка — графит #141615, тезис — белый #FEFFFF, тонкая линия-разделитель — хром #B7B9B8.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Замена масла в АКПП, МКПП, DSG и Haldex в Волгограде — и ремонт коробок передач</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Меняем масло не только в двигателе, но и в коробках передач и Haldex, а также ремонтируем DSG и АКПП.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Замена масла в ДВС, АКПП, МКПП, DSG, Haldex.<span class="src">бриф</span></li>
+      <li>Ремонт DSG (Роботизированная коробка передач).<span class="src">бриф</span></li>
+      <li>Ремонт АКПП (Автоматическая коробка передач).<span class="src">бриф</span></li>
+      <li>Компьютерная диагностика.<span class="src">бриф</span></li>
+      <li>Запчасти и расходные материалы в наличии и под заказ.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Замена масла в АКПП и DSG в Волгограде — DE.PO. Service Group</span></div>
+      <div class="meta-row"><span><b>Title · </b>Замена масла в АКПП, МКПП, DSG, Haldex на Козловской | DE.PO.</span></div>
+      <div class="meta-row"><span><b>Description · </b>Замена масла в двигателе, АКПП, МКПП, DSG и Haldex, ремонт DSG и АКПП в автосервисе DE.PO. Service Group, Волгоград, ул. Козловская, 34А.</span></div>
+      <div class="chips"><span class="chip-kw">замена масла в акпп</span><span class="chip-kw">замена масла в акпп волгоград</span><span class="chip-kw">замена масла в dsg</span><span class="chip-kw">замена масла в мкпп</span><span class="chip-kw">замена масла haldex</span><span class="chip-kw">замена масла в коробке</span><span class="chip-kw">ремонт акпп</span><span class="chip-kw">ремонт dsg</span><span class="chip-kw">ремонт робота</span><span class="chip-kw">замена масла в двигателе</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на замену масла в коробке передач.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Масло в АКПП, DSG, Haldex»</div>
+      <p>Композиция: реальное фото коробки передач или работы под автомобилем на подъёмнике; тезис крупно на плашке, ниже строка «ДВС · АКПП · МКПП · DSG · Haldex».</p>
+      <p>Цвета: фон плашки — хром #B7B9B8, тезис — графит #141615, строка — белый #FEFFFF на графитовой полосе #141615.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Замена сцепления, ремонт ходовой и тормозной системы в Волгограде</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Сцепление, маховик, ходовая часть и тормоза — ещё одно наше направление на Козловской.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Замена сцепления, маховика.<span class="src">бриф</span></li>
+      <li>Ремонт ходовой части.<span class="src">бриф</span></li>
+      <li>Ремонт тормозной системы.<span class="src">бриф</span></li>
+      <li>Двигатель и ходовая.<span class="src">Telegram</span></li>
+      <li>Запчасти и расходные материалы в наличии и под заказ.<span class="src">бриф</span></li>
+      <li>пн-пт с 10 до 20.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Замена сцепления и ремонт ходовой в Волгограде — DE.PO. Service Group</span></div>
+      <div class="meta-row"><span><b>Title · </b>Замена сцепления, маховика, ремонт ходовой и тормозов | DE.PO.</span></div>
+      <div class="meta-row"><span><b>Description · </b>Замена сцепления и маховика, ремонт ходовой части и тормозной системы в автосервисе DE.PO. Service Group, Волгоград, ул. Козловская, 34А. Запчасти в наличии и под заказ.</span></div>
+      <div class="chips"><span class="chip-kw">замена сцепления</span><span class="chip-kw">замена сцепления волгоград</span><span class="chip-kw">замена маховика</span><span class="chip-kw">ремонт ходовой</span><span class="chip-kw">ремонт ходовой части</span><span class="chip-kw">ремонт подвески</span><span class="chip-kw">ремонт тормозной системы</span><span class="chip-kw">замена тормозных колодок</span><span class="chip-kw">автосервис рядом</span><span class="chip-kw">ремонт авто волгоград</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> записывайтесь на замену сцепления или ремонт ходовой.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Сцепление, ходовая, тормоза»</div>
+      <p>Композиция: реальное фото снятого колеса с тормозным диском и подвеской или корзины сцепления; тезис на плашке в нижней трети, логотип сверху.</p>
+      <p>Цвета: плашка — графит #141615, тезис — белый #FEFFFF, слова через запятую — хром #B7B9B8.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Автосервис на Козловской</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">ул. Козловская, 34А</span><span class="fact-pill">Пн–пт с 10 до 20</span><span class="fact-pill">Ремонт авто любой сложности</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #141615, заголовок белым #FEFFFF, адрес и часы на хромовых плашках #B7B9B8 текстом #141615. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Автокондиционер: заправка и ремонт</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Заправка</span><span class="fact-pill">Диагностика</span><span class="fact-pill">Ремонт автокондиционеров</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FEFFFF, заголовок графитом #141615, три пункта столбиком на графитовых плашках #141615 белым текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Электрика и блоки ЭБУ</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">Компьютерная диагностика</span><span class="fact-pill">Ремонт автоэлектрики</span><span class="fact-pill">Ремонт и прошивка ЭБУ</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон хром #B7B9B8, заголовок графитом #141615, пункты на белых плашках #FEFFFF.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Доп. оборудование и оптика</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Музыка, динамики, магнитолы</span><span class="fact-pill">Камеры</span><span class="fact-pill">Bi LED линзы</span><span class="fact-pill">Ремонт фар</span><span class="fact-pill">Замена стекол</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон графит #141615, заголовок белым #FEFFFF, пункты хромом #B7B9B8 с тонкими разделителями.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — автосервис, двигатель, масла и коробки, сцепление и ходовая <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Автосервис на Козловской</b>ремонт авто любой сложности, направления, адрес и часы</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Автосервис на Козловской</b>адрес и часы работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Ремонт двигателя и замена ГРМ</b>двигатель, ГРМ, диагностика, масло в ДВС</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Автокондиционер: заправка и ремонт</b>заправка, диагностика, ремонт</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Замена масла в АКПП, МКПП, DSG, Haldex</b>и ремонт DSG и АКПП</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Электрика и блоки ЭБУ</b>диагностика, автоэлектрика, прошивка ЭБУ</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Сцепление, ходовая, тормоза</b>сцепление и маховик, ходовая часть, тормозная система</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Доп. оборудование и оптика</b>автозвук, камеры, Bi LED линзы, фары, стёкла</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const fmt=n=>n.toLocaleString('ru-RU');
+const Q=[['автосервис','нет',6973],['замена сцепления','5',2105],['ремонт двигателя','нет',1292],['замена масла в акпп','нет',1079],['ремонт акпп','2',402],['ремонт ходовой','нет',107],['компьютерная диагностика автомобиля','5',46],['заправка автокондиционера','нет',43],['ремонт dsg','1',29],['ремонт автоэлектрики','1',15]];
+const mx=Math.max(...Q.map(r=>r[2]));
+document.getElementById('t-q').innerHTML=Q.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]==='нет'?'нет':r[1]+' место'}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('');
+const NAV={analytics:[['a-summary','Итог'],['a-maps','Выдача на Картах'],['a-rivals','Конкуренты'],['a-demand','Спрос'],['a-method','Методика']],
+content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
