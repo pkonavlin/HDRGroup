@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Лисолесье»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0F1B2D;--panel:#16263E;--panel-2:#1B2E4A;--sunk:#0C1626;--ink:#EEF1F5;--ink-2:#B8C2CF;--ink-3:#8794A6;--line:rgba(152,161,172,.20);--gold-line:rgba(227,192,138,.30);--gold:#E3C08A;--gold-2:#D9B870;--bronze:#B89A5A;--gold-soft:rgba(227,192,138,.10);--crit:#F08A7E;--crit-soft:rgba(240,138,126,.13);--warn:#E8B65F;--warn-soft:rgba(232,182,95,.13);--good:#7FCBA4;--good-soft:rgba(127,203,164,.13);--f-mark:'EB Garamond',Georgia,serif;--f-display:'Montserrat',system-ui,sans-serif;--f-body:'Manrope',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--sunk)}
+h1,h2,h3{margin:0;text-wrap:balance}h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:600 14px var(--f-display);color:var(--gold);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.bar-in{gap:10px}.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .intro .lbl,.vc .thesis-lbl,.vc .seo-box .lbl,.vc .cover-box .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}.vc .thesis-lbl{color:var(--ink-3);margin-top:18px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.vc .src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14px;color:var(--ink-2)}.vc .cta-line b{color:var(--ink)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .num{font-variant-numeric:tabular-nums}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.crit{color:var(--crit);background:var(--crit-soft)}.va .pill.warn{color:var(--warn);background:var(--warn-soft)}.va .pill.good{color:var(--good);background:var(--good-soft)}.va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.va td .sub{font-size:13px;color:var(--ink-3)}
+.va .barcell{display:flex;align-items:center;gap:10px;min-width:150px}
+.va .barcell i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--gold);min-width:2px}
+.va .barcell span{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.va .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+@media(max-width:400px){.va .two{grid-template-columns:1fr}}
+.va .note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.va .note h3{margin:0 0 8px;font-size:15.5px}.va .note ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink-2)}.va .note li b{color:var(--ink)}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .src{display:grid;gap:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Лисолесье</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+<main>
+<div class="view va" id="v-analytics" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Балашиха · кофейня · Реутовская улица · замер 22.11.2026</span>
+  <h1>Кто забирает поиск кофейни у Реутовской, 5</h1>
+  <p>Кофейня «Лисолесье» формата to go, Балашиха, ул. Реутовская, д. 5. Выдача Яндекс Карт по 10 целевым запросам вокруг адреса и спрос по Вордстату для региона «Балашиха».</p>
+</header>
+
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill crit">нет в выдаче</span><p><b>«Лисолесье» не показывается ни по одному из 10 запросов</b>Карточки кофейни на Яндекс Картах и в 2ГИС пока нет, поэтому по «кофейня», «кофе с собой», «капучино» и остальным запросам у Реутовской выдача уходит соседям.</p></div>
+    <div class="v"><span class="pill warn">соседи</span><p><b>На Реутовской улице четыре кофейни с рейтингом 5,0</b>Heart Coffee (627 оценок), «Здрасте» (402), «Счастливый кофе» (173) и «Кофейня на Этаже» (45) — по запросу «кофейня» все в первой пятёрке. У первых трёх отметка «Хорошее место 2026».</p></div>
+    <div class="v"><span class="pill info">спрос</span><p><b>«кофейня» — 3 782 запроса в месяц по Балашихе</b>Из них «кофейня балашиха» — 239, «кофейня железнодорожный» — 326, «кофейня рядом» — 55.</p></div>
+  </div>
+</section>
+
+<section id="a-maps">
+  <div class="sh"><h2>Выдача Яндекс Карт по целевым запросам</h2><p>Поиск в Балашихе, карта у ул. Реутовская, 5, масштаб около 2 км. Показана первая пятёрка списка.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Лисолесье</th><th>Первая пятёрка</th></tr></thead>
+    <tbody>
+      <tr><td>кофейня</td><td class="r">нет</td><td>Маэстро кофе, Heart Coffee, Здрасте, Счастливый кофе, Кофейня на Этаже</td></tr>
+      <tr><td>кофе с собой</td><td class="r">нет</td><td>Маэстро кофе, Качуко, Теремок, Додо Пицца, Здрасте</td></tr>
+      <tr><td>кофе навынос</td><td class="r">нет</td><td>Маэстро кофе, Котосуши, Качуко, Здрасте, Бургер Кинг</td></tr>
+      <tr><td>кафе</td><td class="r">нет</td><td>Маэстро кофе, Роллофф, Котосуши, Теремок, Нияма</td></tr>
+      <tr><td>кофе</td><td class="r">нет</td><td>Маэстро кофе, Котосуши, Качуко, Бургер Кинг, Rostic's</td></tr>
+      <tr><td>капучино</td><td class="r">нет</td><td>Маэстро кофе, Качуко, Rostic's, Додо Пицца, Бургер Кинг</td></tr>
+      <tr><td>горячий шоколад</td><td class="r">нет</td><td>Ёбидоёби, Нияма, Мята Lounge Новогиреево, Здрасте, Додо Пицца</td></tr>
+      <tr><td>выпечка</td><td class="r">нет</td><td>Маэстро кофе, Теремок, Нияма, Бургер Кинг, Rostic's</td></tr>
+      <tr><td>десерты</td><td class="r">нет</td><td>Маэстро кофе, Ёбидоёби, Качуко, Теремок, Нияма</td></tr>
+      <tr><td>авторский кофе</td><td class="r">нет</td><td>Маэстро кофе, Качуко, Здрасте, Нияма, Додо Пицца</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" style="margin-top:12px">По «кофе», «кофе с собой», «выпечка» и «десерты» в пятёрку попадают сети быстрого питания и суши-бары: кофейни рядом не раскрывают эти слова в своих карточках. Здесь новой карточке проще всего занять место.</p>
+</section>
+
+<section id="a-rivals">
+  <div class="sh"><h2>Конкуренты в гео-выдаче</h2><p>Карточки, которые чаще всего стоят в пятёрке вокруг Реутовской, 5.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Карточка</th><th>Рубрика</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th>Адрес</th><th class="r">В пятёрке</th></tr></thead>
+    <tbody>
+      <tr><td><b>Маэстро кофе</b></td><td><span class="sub">кофейня, кондитерская</span></td><td class="r num">4,6</td><td class="r num">167</td><td>ш. Энтузиастов, 55, Москва</td><td class="r num">9 из 10</td></tr>
+      <tr><td><b>Качуко</b></td><td><span class="sub">ресторан</span></td><td class="r num">5,0</td><td class="r num">584</td><td>Реутовская ул., 27</td><td class="r num">6 из 10</td></tr>
+      <tr><td><b>Здрасте</b></td><td><span class="sub">кофейня, кафе</span></td><td class="r num">5,0</td><td class="r num">402</td><td>Реутовская ул., 21</td><td class="r num">5 из 10</td></tr>
+      <tr><td><b>Heart Coffee</b></td><td><span class="sub">кофейня</span></td><td class="r num">5,0</td><td class="r num">627</td><td>Реутовская ул., 14</td><td class="r num">1 из 10</td></tr>
+      <tr><td><b>Счастливый кофе</b></td><td><span class="sub">кофейня</span></td><td class="r num">5,0</td><td class="r num">173</td><td>Реутовская ул., 11</td><td class="r num">1 из 10</td></tr>
+      <tr><td><b>Кофейня на Этаже</b></td><td><span class="sub">кофейня, быстрое питание</span></td><td class="r num">5,0</td><td class="r num">45</td><td>Реутовская ул., 5</td><td class="r num">1 из 10</td></tr>
+      <tr><td><b>Котосуши</b></td><td><span class="sub">суши-бар, кафе</span></td><td class="r num">5,0</td><td class="r num">235</td><td>Реутовская ул., 27</td><td class="r num">3 из 10</td></tr>
+      <tr><td><b>Додо Пицца</b></td><td><span class="sub">пиццерия, кафе</span></td><td class="r num">4,9</td><td class="r num">2 168</td><td>Сиреневый бул., 60, Москва</td><td class="r num">4 из 10</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Почему они выше</h3><ul>
+      <li><b>Цены и позиции в карточке.</b> У «Качуко» в выдаче сразу видно «Капучино · 280 ₽» и «Эспрессо» — поэтому ресторан стоит вторым по «капучино» и «кофе с собой».</li>
+      <li><b>Отметки и акции.</b> У Heart Coffee, «Здрасте» и «Счастливого кофе» — «Хорошее место 2026», у «Маэстро кофе» — «Скидка 10% на любой чек от 500₽».</li>
+      <li><b>Объём оценок.</b> 173–627 оценок у кофеен Реутовской улицы.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для карточки</h3><ul>
+      <li>Создать карточки «Лисолесье» на Яндекс Картах и в 2ГИС с рубрикой «Кофейня» и отметкой «Еда навынос».</li>
+      <li>Загрузить прайс с напитками и выпечкой — точные цены, как просит бриф.</li>
+      <li>Акцию «Сироп выходного дня» вынести в блок акций.</li>
+      <li>Новости — под запросы, где в пятёрке нет кофеен: «кофе с собой», «горячий шоколад», «выпечка», «авторский кофе».</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос по запросам</h2><p>Вордстат, регион «Балашиха», все устройства, частоты за 13.10–11.11.2026.</p></div>
+  <div class="tbl"><table><thead><tr><th>Запрос</th><th>Тип</th><th>Запросов в месяц</th></tr></thead><tbody id="t-q"></tbody></table></div>
+  <div class="two" style="margin-top:20px">
+    <div class="note"><h3>Выводы по спросу</h3><ul>
+      <li><b>Ищут по месту</b>: «кафе балашиха» — 2 827, «кофейня железнодорожный» — 326, «кофейня балашиха» — 239.</li>
+      <li><b>Напитки ищут по названию</b>: «капучино» — 1 646, «раф» — 1 115, «горячий шоколад» — 302.</li>
+      <li><b>«сливочное пиво» — 1 647</b>, но 1 295 из них — про пиво «Балтика»; в текстах пишем «Сливочное пиво — напиток» и состав.</li>
+      <li>«кофе навынос» и «авторский кофе» почти не ищут (3 и 2) — оставляем как дополнительные ключи.</li>
+    </ul></div>
+    <div class="note"><h3>Что это значит для текстов</h3><ul>
+      <li>В первом абзаце каждой новости — «кофейня», «Балашиха», «Реутовская» и «кофе с собой».</li>
+      <li>Названия напитков из меню — словами: капучино, раф, горячий шоколад, какао, матча.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: 22.11.2026, поиск в Балашихе, карта у ул. Реутовская, 5, масштаб около 2 км; рейтинги и оценки — из списка выдачи.</li>
+    <li>Вордстат: регион «Балашиха», все устройства, частоты за 13.10–11.11.2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="src">
+    <a href="https://yandex.ru/maps/10716/balashiha/search/%D0%BA%D0%BE%D1%84%D0%B5%D0%B9%D0%BD%D1%8F/?ll=37.854727%2C55.785276&z=15" target="_blank" rel="noopener">Яндекс Карты — «кофейня» у Реутовской, 5</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+    <a href="https://t.me/Lisolesyehouse" target="_blank" rel="noopener">Telegram-канал «Лисолесье»</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Кофейня · Балашиха · Реутовская улица</span>
+  <h1>«Лисолесье» — ТЗ на контент, этап 1</h1>
+  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Лисолесье» на Яндекс Картах и в 2ГИС.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Формат</div><div class="v">Кофейня to go <small>небольшая, но атмосферная</small></div></div>
+    <div class="fact"><div class="k">Адрес</div><div class="v">Балашиха, ул. Реутовская, д. 5 <small>около 3 подъезда, в помещении, где Яндекс Маркет</small></div></div>
+    <div class="fact"><div class="k">Режим работы</div><div class="v">Пн–пт 07:30–21:00 <small>выходные и праздники 8:00–21:30</small></div></div>
+    <div class="fact"><div class="k">Меню</div><div class="v">Кофе, не кофе, авторские напитки <small>чаи, выпечка, десерты</small></div></div>
+    <div class="fact"><div class="k">Преимущества</div><div class="v">Авторские напитки <small>по мотивам фильмов или сериалов; открытость, душевность, постоянные обновления</small></div></div>
+    <div class="fact"><div class="k">Акция</div><div class="v">Сироп выходного дня <small>по субботам 1 сироп бесплатно</small></div></div>
+    <div class="fact"><div class="k">Telegram</div><div class="v mono">t.me/Lisolesyehouse</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head">
+    <span class="sec-num">01 · Мини-брендбук</span>
+    <h2>Фирменный стиль «Лисолесья»</h2>
+    <p>Фирменные цвета компании для обложек и слайдов: лесной зелёный, лисий оранжевый, тёмно-коричневый и светлый молочный.</p>
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#045E4F;color:#F9F2EC;border-color:#045E4F"><div class="role">Основной</div><div class="name">Лесной зелёный</div><div class="hex">#045E4F</div></div>
+    <div class="swatch" style="background:#F17317;color:#2B0000;border-color:#F17317"><div class="role">Акцентный</div><div class="name">Лисий оранжевый</div><div class="hex">#F17317</div></div>
+    <div class="swatch" style="background:#2B0000;color:#F9F2EC;border-color:#4a2222"><div class="role">Текстовый</div><div class="name">Тёмно-коричневый</div><div class="hex">#2B0000</div></div>
+    <div class="swatch" style="background:#F9F2EC;color:#2B0000;border-color:#F9F2EC"><div class="role">Фоновый</div><div class="name">Молочный</div><div class="hex">#F9F2EC</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head">
+    <span class="sec-num">02 · Логика цикла</span>
+    <h2>Последовательность тем этапа</h2>
+    <p>Этап знакомит Балашиху с новой кофейней на Реутовской и ведёт карточку в запросы, где сейчас в пятёрке нет кофеен: кофе с собой, авторский кофе, горячий шоколад, выпечка.</p>
+  </div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Кофейня to go на Реутовской, 5: адрес, часы, кофейная классика с собой.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Авторские напитки по мотивам фильмов и сериалов.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 3</div><p>Акция «Сироп выходного дня» и напитки с сиропом на выбор.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 4</div><p>Не кофе и выпечка: горячий шоколад, какао, матча, чаи, косички и круассаны.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head">
+    <span class="sec-num">03 · Новости</span>
+    <h2>Темы для новостных публикаций</h2>
+    <p>4 темы с обложкой. Публикация — карточка компании «Лисолесье» на Яндекс Картах и 2ГИС.</p>
+  </div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», неформальный тон допустим — как в Telegram-канале кофейни; приколы и отсылки приветствуются. Вступление от лица кофейни, дальше факты по теме. Факты в тезисах приведены дословно по брифу. В тексте нет телефона и e-mail, превосходных степеней и ссылок на сторонние сайты. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Кофейня в Балашихе на Реутовской, 5: кофе с собой от двойного эспрессо до рафа</h3></div><span class="purpose">Имиджевый</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы — небольшая, но атмосферная кофейня формата ту гоу на Реутовской улице.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сфера деятельности общественное питание. Небольшая, но атмосферная кофейня формата ту гоу.<span class="src">бриф</span></li>
+      <li>Г. Балашиха, ул. Реутовская, д 5 (около 3 подъезда, в помещении где Яндекс маркет).<span class="src">бриф</span></li>
+      <li>Понедельник - пятница 07:30-21:00, выходные и праздники 8:00-21:30.<span class="src">бриф</span></li>
+      <li>Двойной эспрессо - концентрированный кофейный напиток с ярким вкусом, балансирующим между кислинкой и горчинкой. Вес порции ~36г.<span class="src">бриф</span></li>
+      <li>Флэт Уайт - крепкий кофейный напиток, состоящий из молока и эспрессо. От капучино и латте отличается большим количеством кофеина и меньшим объёмом молока.<span class="src">бриф</span></li>
+      <li>Капучино - сбалансированный по крепости кофейный напиток. Латте - наиболее молочный кофейный напиток. Раф - сливочный кофейный напиток, в который можно добавить сироп на выбор.<span class="src">бриф</span></li>
+      <li>Глясе - подаётся тёплым за счет контраста тёплого молока, эспрессо и шариков ванильного мороженого.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Кофейня в Балашихе на Реутовской, 5 — кофе с собой в «Лисолесье»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Кофейня to go на Реутовской: кофе с собой, Балашиха | Лисолесье</span></div>
+      <div class="meta-row"><span><b>Description · </b>Кофейня «Лисолесье» в Балашихе, ул. Реутовская, 5: двойной эспрессо, американо, флэт уайт, капучино, латте, раф, глясе с собой. Пн–пт с 07:30, выходные с 8:00.</span></div>
+      <div class="chips"><span class="chip-kw">кофейня</span><span class="chip-kw">кофейня балашиха</span><span class="chip-kw">кофейня рядом</span><span class="chip-kw">кофейня железнодорожный</span><span class="chip-kw">кофе с собой</span><span class="chip-kw">кофе с собой рядом</span><span class="chip-kw">кофе навынос</span><span class="chip-kw">капучино</span><span class="chip-kw">кафе балашиха</span><span class="chip-kw">кафе рядом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> заходите за кофе с собой — с 07:30 по будням.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кофе с собой на Реутовской»</div>
+      <p>Композиция: стакан to go с логотипом на стойке кофейни, рядом кофемашина; тезис на плашке в нижней трети, строка «Реутовская, 5 · с 07:30». Можно лёгкую мем-отсылку в подписи. Текст не больше 20% площади.</p>
+      <p>Цвета: плашка — лесной зелёный #045E4F, тезис — молочный #F9F2EC, строка — на оранжевой полосе #F17317 текстом #2B0000.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Авторский кофе в Балашихе: напитки по мотивам фильмов и сериалов в кофейне «Лисолесье»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>В нашем арсенале не только кофейная классика, но и оригинальные авторские напитки по мотивам фильмов или сериалов — мы не боимся экспериментов.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Чарли - американо с сиропами чёрная смородина и макадамия. Добавляются сушёные ягоды и листья смородины.<span class="src">бриф</span></li>
+      <li>Белла - латте, в который входят сразу три сиропа: хвойный, баблгам и лаванда. Украшается напиток маршмеллоу и комментариями в стиле «Лев влюбился в овечку».<span class="src">бриф</span></li>
+      <li>Карлайл - флэт, который смягчает топлёный белый шоколад, кедровый сироп и пищевые блёстки. Эдвард - капучино с нотками малины, цитрусовым послевкусием и пищевыми блёстками.<span class="src">бриф</span></li>
+      <li>Лисьи запасы - раф, который заслуженно прозвали арахисовым безумием: арахисовая паста и кленовый сироп.<span class="src">бриф</span></li>
+      <li>Жабий спас(ибо) - латте на фисташковом молоке с сиропами яблоко и попкорн. Общее сочетание напоминает штрудель.<span class="src">бриф</span></li>
+      <li>Сливочное пиво - напиток, максимально приближенный к оригинальному рецепту: сливки, мороженое, ирисковый сироп, мускатный орех, корица и сгущенка.<span class="src">бриф</span></li>
+      <li>Каждый сезон новые тематические сезонные напитки.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Авторский кофе в Балашихе — напитки по мотивам фильмов в «Лисолесье»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Авторский кофе и раф с собой на Реутовской, Балашиха | Лисолесье</span></div>
+      <div class="meta-row"><span><b>Description · </b>Авторские напитки кофейни «Лисолесье»: Белла, Карлайл, Эдвард, Лисьи запасы, Жабий спас(ибо), Сливочное пиво. Кофе с собой на ул. Реутовская, 5 в Балашихе.</span></div>
+      <div class="chips"><span class="chip-kw">авторский кофе</span><span class="chip-kw">авторские напитки</span><span class="chip-kw">раф</span><span class="chip-kw">лавандовый раф</span><span class="chip-kw">раф кофе</span><span class="chip-kw">сливочное пиво напиток</span><span class="chip-kw">латте</span><span class="chip-kw">кофейня балашиха</span><span class="chip-kw">кофе с собой</span><span class="chip-kw">необычный кофе</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте напиток по любимому фильму — и берите с собой.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Кофе по мотивам фильмов»</div>
+      <p>Композиция: 3–4 стакана авторских напитков в ряд — с маршмеллоу, блёстками, взбитыми сливками; над каждым подпись названия. Тезис на плашке в верхней трети. Приколы и отсылки приветствуются, без кадров и логотипов из фильмов.</p>
+      <p>Цвета: фон — молочный #F9F2EC, плашка — тёмно-коричневый #2B0000, тезис — молочный #F9F2EC, названия напитков — оранжевый #F17317.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 3</span><h3>Сироп выходного дня: по субботам один сироп в кофе бесплатно — кофейня на Реутовской</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>По субботам у нас сироп выходного дня — один сироп в напиток бесплатно.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Сироп выходного дня - по субботам 1 сироп бесплатно (до окончания дня или окончания сиропа в наличии).<span class="src">бриф</span></li>
+      <li>Раф - сливочный кофейный напиток, в который можно добавить сироп на выбор. По уровню крепости не уступает капучино.<span class="src">бриф</span></li>
+      <li>Черри - кофейный напиток, в который входит вишнёвый сок, эспрессо и сироп на выбор. Может подаваться холодным и горячим.<span class="src">бриф</span></li>
+      <li>Бамбл - кофейный напиток с апельсиновым соком и сиропом на выбор (карамельный сироп является классикой).<span class="src">бриф</span></li>
+      <li>Бейбичино - молочный напиток с сиропом на выбор. Частый выбор детей и более взрослых сладкоежек.<span class="src">бриф</span></li>
+      <li>Выходные и праздники 8:00-21:30.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Сироп выходного дня в кофейне «Лисолесье» — по субботам бесплатно</span></div>
+      <div class="meta-row"><span><b>Title · </b>Акция кофейни в Балашихе: сироп в кофе бесплатно по субботам | Лисолесье</span></div>
+      <div class="meta-row"><span><b>Description · </b>По субботам в кофейне «Лисолесье» на ул. Реутовская, 5 — один сироп бесплатно: в раф, черри, бамбл или бейбичино. До конца дня или пока сироп есть в наличии.</span></div>
+      <div class="chips"><span class="chip-kw">акции кофейни</span><span class="chip-kw">кофейня балашиха</span><span class="chip-kw">кофе с сиропом</span><span class="chip-kw">раф</span><span class="chip-kw">раф с сиропом</span><span class="chip-kw">бамбл кофе</span><span class="chip-kw">бейбичино</span><span class="chip-kw">кофе с собой</span><span class="chip-kw">кофейня рядом</span><span class="chip-kw">кофе в субботу</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> приходите в субботу и выбирайте сироп.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Сироп в подарок по субботам»</div>
+      <p>Композиция: ряд бутылок сиропа на стойке, бариста добавляет сироп в стакан; тезис крупно по центру, строка «до окончания дня или сиропа».</p>
+      <p>Цвета: фон — оранжевый #F17317, тезис — тёмно-коричневый #2B0000, строка — молочный #F9F2EC на зелёной плашке #045E4F.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 4</span><h3>Горячий шоколад, какао и матча с собой в Балашихе — и выпечка к ним в «Лисолесье»</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кофе — не единственное, за чем к нам заходят: есть горячий шоколад, какао, матча, чаи и выпечка.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Горячий шоколад - густой и горячий напиток, из которого, при должном усердии, можно сделать шоколадный пудинг. Уровень густоты поддаётся регулировке.<span class="src">бриф</span></li>
+      <li>Какао - напиток, состоящий из молока и какао порошка. Важно: наш какао порошок изначально без сахара; сладость регулируется в процессе приготовления.<span class="src">бриф</span></li>
+      <li>Матча - напиток, в который добавляется молоко и растертый чай, он же - матча. В наличии сразу несколько видов матчи.<span class="src">бриф</span></li>
+      <li>Чаи - листовые чаи на любой вкус: гречичный, фруктовый, антистресс, жасмин, ассам и белый.<span class="src">бриф</span></li>
+      <li>Молочный коктейль - мороженое, сироп и молоко проходят через блендер, а уже готовый коктейль вливается в стаканчик 0.5.<span class="src">бриф</span></li>
+      <li>Косичка (в ассортименте) 160, Круассан (в ассортименте) 160, Капкейк Сникерс 220, Ореховый стаканчик 180, Трубочки со сгущенкой 100, Панини (брынза/картошка) 100, Пирожок капуста/картошка 80.<span class="src">бриф</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Горячий шоколад и выпечка с собой в Балашихе — кофейня «Лисолесье»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Горячий шоколад, какао, матча и выпечка на Реутовской | Лисолесье</span></div>
+      <div class="meta-row"><span><b>Description · </b>Не только кофе: горячий шоколад с регулируемой густотой, какао без сахара, несколько видов матчи, листовые чаи. Круассаны и косички — 160 ₽, пирожки — 80 ₽. Балашиха, ул. Реутовская, 5.</span></div>
+      <div class="chips"><span class="chip-kw">горячий шоколад</span><span class="chip-kw">какао</span><span class="chip-kw">матча</span><span class="chip-kw">матча латте</span><span class="chip-kw">выпечка</span><span class="chip-kw">круассаны</span><span class="chip-kw">десерты</span><span class="chip-kw">молочный коктейль</span><span class="chip-kw">кофейня балашиха</span><span class="chip-kw">кафе рядом</span></div>
+    </div>
+    <p class="cta-line"><b>CTA:</b> загляните за горячим шоколадом и круассаном по дороге домой.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Не кофе тоже можно»</div>
+      <p>Композиция: стакан горячего шоколада, рядом круассан и косичка на крафтовой бумаге; тезис на плашке в нижней трети, строка «шоколад · какао · матча · чаи».</p>
+      <p>Цвета: плашка — тёмно-коричневый #2B0000, тезис — молочный #F9F2EC, строка — оранжевый #F17317.</p>
+    </div>
+  </div>
+</section>
+
+<section id="c-stories">
+  <div class="sec-head">
+    <span class="sec-num">04 · Сторис</span>
+    <h2>Темы для сторис</h2>
+    <p>4 темы, формат презентации. Один слайд — тезис, сухие факты и заметка по дизайну слайда. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+  </div>
+  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Кофе с собой на Реутовской</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">ул. Реутовская, 5</span><span class="fact-pill">Около 3 подъезда</span><span class="fact-pill">Пн–пт 07:30–21:00</span><span class="fact-pill">Выходные 8:00–21:30</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон лесной зелёный #045E4F, заголовок молочным #F9F2EC, часы работы на оранжевых плашках #F17317 текстом #2B0000. Логотип в верхнем левом углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Напитки по мотивам фильмов</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Белла</span><span class="fact-pill">Карлайл</span><span class="fact-pill">Эдвард</span><span class="fact-pill">Лисьи запасы</span><span class="fact-pill">Жабий спас(ибо)</span><span class="fact-pill">Сливочное пиво</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон молочный #F9F2EC, заголовок тёмно-коричневым #2B0000, названия напитков столбиком на зелёных плашках #045E4F молочным текстом.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Суббота = сироп бесплатно</div><span class="slide-no">Сторис 3</span></div>
+      <div class="facts-line"><span class="fact-pill">1 сироп бесплатно</span><span class="fact-pill">Каждую субботу</span><span class="fact-pill">До конца дня</span><span class="fact-pill">Пока сироп в наличии</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон оранжевый #F17317, «1 сироп» крупно тёмно-коричневым #2B0000, условия ниже на молочных плашках #F9F2EC.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">К напитку — выпечка</div><span class="slide-no">Сторис 4</span></div>
+      <div class="facts-line"><span class="fact-pill">Круассан — 160 ₽</span><span class="fact-pill">Косичка — 160 ₽</span><span class="fact-pill">Капкейк Сникерс — 220 ₽</span><span class="fact-pill">Пирожок — 80 ₽</span><span class="fact-pill">Панини — 100 ₽</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-коричневый #2B0000, заголовок молочным #F9F2EC, цены оранжевым #F17317 справа от названий.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage" open>
+    <summary>Этап 1 — кофейня, авторские напитки, суббота, не кофе <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Кофейня в Балашихе на Реутовской, 5</b>формат to go, адрес, часы, кофейная классика</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Кофе с собой на Реутовской</b>адрес и часы работы</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Авторский кофе по мотивам фильмов и сериалов</b>Чарли, Белла, Карлайл, Эдвард, Лисьи запасы, Сливочное пиво</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Напитки по мотивам фильмов</b>названия авторских напитков</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>Сироп выходного дня</b>акция по субботам, напитки с сиропом на выбор</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>Суббота = сироп бесплатно</b>условия акции</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Горячий шоколад, какао, матча и выпечка</b>не кофе, чаи, цены на выпечку</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>К напитку — выпечка</b>выпечка с ценами</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
+</main>
+<script>
+const fmt=n=>n.toLocaleString('ru-RU');
+const Q=[['кафе','коммерческое',26654],['кофе','общее',24488],['десерты','общее',6297],['выпечка','общее',5760],['кофейня','коммерческое',3782],['кафе балашиха','коммерческое, гео',2827],['сливочное пиво','общее',1647],['капучино','общее',1646],['раф','общее',1115],['кафе рядом','коммерческое, гео',617],['кофейня железнодорожный','коммерческое, гео',326],['горячий шоколад','общее',302],['кофейня балашиха','коммерческое, гео',239],['кофе с собой','коммерческое',77],['кофейня рядом','коммерческое, гео',55],['кофе навынос','коммерческое',3],['авторский кофе','коммерческое',2]];
+const mx=Math.max(...Q.map(r=>r[2]));
+document.getElementById('t-q').innerHTML=Q.map(r=>`<tr><td>${r[0]}</td><td><span class="sub">${r[1]}</span></td><td><div class="barcell"><i style="width:${Math.max(2,Math.round(r[2]/mx*160))}px"></i><span>${fmt(r[2])}</span></div></td></tr>`).join('');
+const NAV={analytics:[['a-summary','Итог'],['a-maps','Выдача на Картах'],['a-rivals','Конкуренты'],['a-demand','Спрос'],['a-method','Методика']],
+content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');
+function show(view,scroll){
+  if(!NAV[view])view='analytics';
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+show(location.hash.slice(1),false);
+</script>
+</body>
+</html>
