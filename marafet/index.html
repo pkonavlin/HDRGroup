@@ -93,6 +93,15 @@ main section:last-of-type{border-bottom:0}
 .va .src{display:grid;gap:6px;font-size:14px}
 
 /* content plan */
+.vc .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.vc table{border-collapse:collapse;width:100%;font-size:14.5px}
+.vc th,.vc td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.vc th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.vc tr:last-child td{border-bottom:0}
+.vc td.r,.vc th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vc td.up{color:var(--good)} .vc td.dn{color:var(--crit)} .vc td.mu{color:var(--ink-3)}
+.vc tr.tg td{background:var(--gold-soft)}
+.vc .note-p{margin:14px 0 0;font-size:14px;color:var(--ink-2);max-width:78ch}
 .vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
 .vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
 .vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
@@ -270,23 +279,50 @@ main section:last-of-type{border-bottom:0}
 <div class="view vc" id="v-content" data-view="content" hidden><div class="wrap">
 <section class="hero" id="company">
   <span class="eyebrow">Клининговые услуги · Барнаул</span>
-  <h1>«Марафет+» — ТЗ на контент, этап 1</h1>
-  <p class="lead">4 новости с обложкой и 4 сторис в формате презентации, один слайд. Публикация — карточка компании «Марафет+» на Яндекс Картах и 2ГИС.</p>
+  <h1>«Марафет+» — ТЗ на контент, этап 2</h1>
+  <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточка компании «Марафет+» на Яндекс Картах и 2ГИС.</p>
   <div class="factgrid">
     <div class="fact"><div class="k">Сфера</div><div class="v">Клининг <small>генеральная, после ремонта, поддерживающая уборка</small></div></div>
     <div class="fact"><div class="k">Ещё услуги</div><div class="v">Химчистка <small>мягкой мебели, ковров и ковровых покрытий · мойка окон и фасадов</small></div></div>
     <div class="fact"><div class="k">Для бизнеса</div><div class="v">Уборка помещений <small>коммерческих и производственных</small></div></div>
-    <div class="fact"><div class="k">Город</div><div class="v">Барнаул <small>ул. Матросова, 7Б</small></div></div>
+    <div class="fact"><div class="k">Город</div><div class="v">Барнаул <small>ул. Матросова, 7Б — карточка на Яндекс Картах</small></div></div>
     <div class="fact"><div class="k">Режим работы</div><div class="v">Ежедневно <small>с 7:00 до 22:00</small></div></div>
     <div class="fact"><div class="k">Преимущества</div><div class="v">Опыт более 10 лет <small>опытные сотрудники, современное оборудование и качественная химия</small></div></div>
-    <div class="fact"><div class="k">Акция</div><div class="v">−10% <small>за первое обращение; на предновогодние уборки скидки не действуют</small></div></div>
+    <div class="fact"><div class="k">Отработка заказа</div><div class="v">На следующий день <small>после обращения</small></div></div>
     <div class="fact"><div class="k">Приоритет</div><div class="v">Запись перед Новым годом</div></div>
   </div>
 </section>
 
+<section id="dyn">
+  <div class="sec-head">
+    <span class="sec-num">01 · Динамика позиций</span>
+    <h2>Позиции на Яндекс Картах: было → стало</h2>
+    <p>Поиск по Барнаулу, первые 5 карточек списка. Компания переехала на ул. Матросова, 7Б: контент этапа 2 публикуется на новой карточке, её позиции — стартовая точка для следующих замеров. Частота — Вордстат, регион «Барнаул», замер 04.11.2026.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Запросов в месяц</th><th class="r">Ул. Никитина · 04.11</th><th class="r">Ул. Никитина · 26.11</th><th class="r">Ул. Матросова · 26.11</th></tr></thead>
+    <tbody>
+      <tr><td>уборка квартир</td><td class="r">354</td><td class="r">2</td><td class="r dn">3</td><td class="r mu">нет</td></tr>
+      <tr><td>генеральная уборка</td><td class="r">703</td><td class="r">4</td><td class="r up">3</td><td class="r mu">нет</td></tr>
+      <tr><td>уборка офиса</td><td class="r">25</td><td class="r">4</td><td class="r">4</td><td class="r mu">нет</td></tr>
+      <tr><td>клининг</td><td class="r">562</td><td class="r">5</td><td class="r">5</td><td class="r mu">нет</td></tr>
+      <tr><td>поддерживающая уборка</td><td class="r">—</td><td class="r mu">—</td><td class="r">2</td><td class="r mu">нет</td></tr>
+      <tr><td>химчистка дивана на дому</td><td class="r">635</td><td class="r mu">нет</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr><td>уборка после ремонта</td><td class="r">36</td><td class="r mu">нет</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr><td>мойка окон</td><td class="r">155</td><td class="r mu">нет</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr class="tg"><td>клининг цены</td><td class="r">125</td><td class="r mu">—</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr class="tg"><td>услуги клининга</td><td class="r">145</td><td class="r mu">нет</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr class="tg"><td>химчистка ковров</td><td class="r">234</td><td class="r mu">нет</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+      <tr class="tg"><td>химчистка матраса</td><td class="r">—</td><td class="r mu">—</td><td class="r mu">нет</td><td class="r mu">нет</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note-p">Темы этапа 2 построены под запросы, выделенные в таблице: по ним компании нет в выдаче ни одной карточкой.</p>
+  <p class="note-p"><b>Статистика этого замера может быть неактуальна из-за смены адреса.</b> Старая карточка на ул. Никитина помечена Яндексом как «Организация переехала», новая карточка на ул. Матросова только начала индексироваться. Позиции обеих карточек в ближайшие недели могут меняться независимо от публикаций. Следующий замер покажет динамику уже по новой карточке.</p>
+</section>
+
 <section id="brandbook">
   <div class="sec-head">
-    <span class="sec-num">01 · Мини-брендбук</span>
+    <span class="sec-num">02 · Мини-брендбук</span>
     <h2>Фирменный стиль «Марафет+»</h2>
     <p>Цвета сняты с логотипа и сайта компании: синий логотипа, тёмно-синий заголовков, графит надписи логотипа, светлый фон блоков и белый.</p>
   </div>
@@ -301,181 +337,114 @@ main section:last-of-type{border-bottom:0}
 
 <section id="cycle">
   <div class="sec-head">
-    <span class="sec-num">02 · Логика цикла</span>
+    <span class="sec-num">03 · Логика цикла</span>
     <h2>Последовательность тем этапа</h2>
-    <p>Все темы этапа работают на запись перед Новым годом. Каждая ведёт карточку в запрос, где её сейчас нет или она слабая. Одна новость и одна сторис в неделю.</p>
+    <p>Этап 1 рассказал об услугах по отдельности: генеральная уборка, химчистка мебели, уборка после ремонта, уборка офисов. Этап 2 собирает их цены в одной публикации и добирает запросы химчистки, по которым компании пока нет в выдаче.</p>
   </div>
   <div class="cycle">
-    <div class="cycle-row"><div class="tag">Неделя 1</div><p>Генеральная уборка перед Новым годом — открываем запись.</p></div>
-    <div class="cycle-row"><div class="tag">Неделя 2</div><p>Химчистка матрасов, мягкой мебели, ковров и ковровых покрытий — самый большой спрос, по которому карточки нет в выдаче.</p></div>
-    <div class="cycle-row"><div class="tag">Неделя 3</div><p>Уборка после ремонта — для тех, кто заканчивает ремонт к праздникам.</p></div>
-    <div class="cycle-row"><div class="tag">Неделя 4</div><p>Уборка офисов и коммерческих помещений — работа с организациями по договору.</p></div>
+    <div class="cycle-row"><div class="tag">Тема 1</div><p>Цены на клининг в Барнауле: уборка, химчистка, мойка окон — под запросы «клининг цены» и «услуги клининга».</p></div>
+    <div class="cycle-row"><div class="tag">Тема 2</div><p>Химчистка матрасов и ковровых покрытий — продолжение темы химчистки из этапа 1, под запросы «химчистка ковров» и «химчистка матраса».</p></div>
   </div>
 </section>
 
 <section id="news">
   <div class="sec-head">
-    <span class="sec-num">03 · Новости</span>
+    <span class="sec-num">04 · Новости</span>
     <h2>Темы для новостных публикаций</h2>
-    <p>4 темы с обложкой. Публикация — карточка компании на Яндекс Картах и 2ГИС.</p>
+    <p>2 темы с обложкой. Публикация — карточка компании на Яндекс Картах (ул. Матросова, 7Б) и 2ГИС.</p>
   </div>
   <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы», допустим неформальный тон. Каждая новость начинается с вступления от лица компании, дальше факты по теме. Факты в тезисах приведены дословно по источнику, указанному у каждого тезиса. SEO-ключи вплетаются в текст органично, без повторов подряд. В тексте нет телефона и e-mail. Объём — до 3 000 знаков с пробелами.</div>
 
-  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 новости · актуальный</span></div>
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">2 новости · актуальный</span></div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 1</span><h3>Генеральная уборка перед Новым годом в Барнауле: открыта запись</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы открыли запись на генеральную уборку перед Новым годом. Наша задача — чтобы вы не тратили выходные на уборку, а встретили праздник в чистоте.</div>
+    <div class="card-top"><div><span class="num">Новость 1</span><h3>Узнайте цены на клининг в Барнауле: уборка, химчистка, мойка окон</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Собрали в одном месте цены на наши услуги, чтобы вы сразу понимали, сколько стоит уборка. Точную стоимость рассчитаем по фото помещения.</div>
     <span class="lbl thesis-lbl">Тезисы</span>
     <ul class="thesis">
+      <li>Поддерживающая уборка — от 70 ₽ за м².<span class="src">прайс клиента</span></li>
       <li>Генеральная уборка — от 150 ₽ за м².<span class="src">клиент</span></li>
-      <li>Чистка раковины, унитаза, ванны; обезжиривание кухонной зоны; мытьё полов; протирка дверей; удаление пыли со всех поверхностей; чистка зеркал, люстр, светильников; вынос мусора.<span class="src">сайт</span></li>
-      <li>Мойка окон считается отдельно.<span class="src">сайт</span></li>
-      <li>Опыт более 10 лет, опытные сотрудники, современное оборудование и качественная химия.<span class="src">бриф</span></li>
-      <li>Работаем ежедневно с 7:00 до 22:00.<span class="src">бриф</span></li>
-    </ul>
-    <div class="seo-box">
-      <span class="lbl">SEO-блок</span>
-      <div class="meta-row"><b>H1 · </b>Генеральная уборка перед Новым годом в Барнауле — «Марафет+»</div>
-      <div class="meta-row"><b>Title · </b>Генеральная уборка квартиры в Барнауле перед Новым годом | Марафет+</div>
-      <div class="meta-row"><b>Description · </b>Генеральная уборка в Барнауле перед Новым годом: кухня, санузел, пыль со всех поверхностей, люстры и зеркала. Открыта запись.</div>
-      <div class="chips">
-        <span class="chip-kw">генеральная уборка барнаул</span><span class="chip-kw">генеральная уборка квартиры</span><span class="chip-kw">уборка перед новым годом</span><span class="chip-kw">клининг барнаул</span><span class="chip-kw">уборка квартир в барнауле</span><span class="chip-kw">клининг уборка квартиры цена</span><span class="chip-kw">клининг барнаул цена</span><span class="chip-kw">заказать клининг</span>
-      </div>
-    </div>
-    <p class="cta-line"><b>CTA:</b> записывайтесь на уборку перед Новым годом.</p>
-    <div class="cover-box">
-      <span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Уборка к Новому году»</div>
-      <p>Композиция: чистая светлая кухня или гостиная, на переднем плане клинер в униформе протирает поверхность; тезис на плашке в нижней трети, логотип в верхнем левом углу.</p>
-      <p>Цвета: плашка — синий #3A6FA1, тезис — белый #FFFFFF, тонкая линия над тезисом — тёмно-синий #093C79.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-top"><div><span class="num">Новость 2</span><h3>Химчистка матрасов, мягкой мебели, ковров и ковровых покрытий в Барнауле</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Чистим матрасы, мягкую мебель, ковры и ковровые покрытия. Стоимость оцениваем по фото.</div>
-    <span class="lbl thesis-lbl">Тезисы</span>
-    <ul class="thesis">
-      <li>Химчистка дивана — от 3 500 ₽, стоимость оцениваем по фото.<span class="src">клиент</span></li>
-      <li>Минимальная сумма выезда — 3 500 ₽.<span class="src">клиент</span></li>
-      <li>Чистим кресла и диваны, матрасы, ковры и паласы, кухонные уголки, подушки.<span class="src">сайт</span></li>
-      <li>Гипоаллергенная химия не вызывает аллергию и безопасна для детей и домашних животных.<span class="src">сайт</span></li>
-      <li>Химчистка матрасов, мягкой мебели, ковров и ковровых покрытий.<span class="src">клиент</span></li>
-    </ul>
-    <div class="seo-box">
-      <span class="lbl">SEO-блок</span>
-      <div class="meta-row"><b>H1 · </b>Химчистка матрасов, мягкой мебели и ковров в Барнауле</div>
-      <div class="meta-row"><b>Title · </b>Химчистка дивана, матраса и ковра в Барнауле | Марафет+</div>
-      <div class="meta-row"><b>Description · </b>Химчистка матрасов, мягкой мебели, ковров и ковровых покрытий в Барнауле. Гипоаллергенная химия, оценка стоимости по фото.</div>
-      <div class="chips">
-        <span class="chip-kw">химчистка дивана барнаул</span><span class="chip-kw">химчистка мягкой мебели барнаул</span><span class="chip-kw">химчистка ковров барнаул</span><span class="chip-kw">химчистка матраса барнаул</span><span class="chip-kw">химчистка ковровых покрытий</span><span class="chip-kw">химчистка дивана цена</span><span class="chip-kw">химчистка мебели и ковров</span><span class="chip-kw">сколько стоит химчистка дивана в барнауле</span>
-      </div>
-    </div>
-    <p class="cta-line"><b>CTA:</b> пришлите фото дивана или ковра — рассчитаем стоимость химчистки.</p>
-    <div class="cover-box">
-      <span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Химчистка мебели и ковров»</div>
-      <p>Композиция: светлый диван крупным планом, половина обивки после чистки, половина до; тезис на светлой подложке в верхней трети, логотип в верхнем левом углу.</p>
-      <p>Цвета: подложка — светло-серый #EDF1F5, тезис — тёмно-синий #093C79, линия под тезисом — синий #3A6FA1.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-top"><div><span class="num">Новость 3</span><h3>Уборка после ремонта в Барнауле: строительная пыль, цемент, затирка и пена</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>После ремонта остаются строительная пыль и следы материалов. Их мы и убираем — со стен, мебели, сантехники и пола.</div>
-    <span class="lbl thesis-lbl">Тезисы</span>
-    <ul class="thesis">
       <li>Уборка после ремонта — от 180 ₽ за м².<span class="src">клиент</span></li>
-      <li>Обеспыливание стен и потолков, батарей, осветительных приборов; протирка мебели от строительной пыли и опилок внутри и снаружи.<span class="src">сайт</span></li>
-      <li>Ванная и туалет: чистка кафеля, сантехники, санфаянса, труб.<span class="src">сайт</span></li>
-      <li>Очистка пола от строительных материалов: цемент, герметик, грунтовка, затирка, пена.<span class="src">сайт</span></li>
-      <li>Мойка дверей, откосов, выключателей, розеток, плинтусов, пола.<span class="src">сайт</span></li>
+      <li>Химчистка дивана — от 3 500 ₽, оцениваем по фото. Минимальная сумма выезда — 3 500 ₽.<span class="src">клиент</span></li>
+      <li>Мойка окон — от 350 ₽ за стандартную створку.<span class="src">прайс клиента</span></li>
       <li>Мойка окон считается отдельно.<span class="src">сайт</span></li>
+      <li>Расчёт стоимости по фото.<span class="src">сайт</span></li>
+      <li>Оплата по факту выполненных работ, наличный и безналичный расчёт.<span class="src">сайт</span></li>
     </ul>
     <div class="seo-box">
       <span class="lbl">SEO-блок</span>
-      <div class="meta-row"><b>H1 · </b>Уборка после ремонта в Барнауле — «Марафет+»</div>
-      <div class="meta-row"><b>Title · </b>Уборка квартиры после ремонта в Барнауле | Марафет+</div>
-      <div class="meta-row"><b>Description · </b>Послестроительная уборка в Барнауле: пыль со стен и потолков, цемент, затирка и пена с пола, кафель и сантехника.</div>
+      <div class="meta-row"><b>H1 · </b>Цены на клининг в Барнауле — «Марафет+»</div>
+      <div class="meta-row"><b>Title · </b>Сколько стоит клининг в Барнауле: уборка, химчистка, окна | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Цены на услуги клининга в Барнауле: поддерживающая, генеральная и уборка после ремонта, химчистка мебели, мойка окон. Расчёт стоимости по фото.</div>
       <div class="chips">
-        <span class="chip-kw">уборка после ремонта барнаул</span><span class="chip-kw">клининг после ремонта</span><span class="chip-kw">послестроительная уборка барнаул</span><span class="chip-kw">уборка квартиры после ремонта цена</span><span class="chip-kw">уборка после строительства и ремонта</span><span class="chip-kw">клининг барнаул</span>
+        <span class="chip-kw">клининг цены</span><span class="chip-kw">цена клининга</span><span class="chip-kw">клининг барнаул цена</span><span class="chip-kw">услуги клининга цены</span><span class="chip-kw">услуги клининга в барнауле</span><span class="chip-kw">клининг в барнауле цены на услуги</span><span class="chip-kw">сколько стоит клининг в барнауле</span><span class="chip-kw">клининг уборка квартиры цена</span>
       </div>
     </div>
-    <p class="cta-line"><b>CTA:</b> оставляйте заявку — уберём после ремонта к праздникам.</p>
+    <p class="cta-line"><b>CTA:</b> пришлите фото помещения — рассчитаем стоимость уборки.</p>
     <div class="cover-box">
       <span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Уборка после ремонта»</div>
-      <p>Композиция: свежеотремонтированная комната, клинер моет пол; тезис на плашке в нижней трети, слева вертикальная полоса, логотип в верхнем левом углу.</p>
-      <p>Цвета: плашка — тёмно-синий #093C79, тезис — белый #FFFFFF, вертикальная полоса — синий #3A6FA1.</p>
+      <div class="thesis-cover">«Цены на клининг»</div>
+      <p>Композиция: клинер в униформе с инвентарём в светлой комнате; справа столбик из трёх цен «от 70 / от 150 / от 180 ₽ за м²»; логотип в верхнем левом углу.</p>
+      <p>Цвета: фон столбика — тёмно-синий #093C79, цифры и тезис — белый #FFFFFF, разделители — синий #3A6FA1.</p>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-top"><div><span class="num">Новость 4</span><h3>Уборка офисов, коммерческих и производственных помещений в Барнауле</h3></div><span class="purpose">Продающий</span></div>
-    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Мы убираем не только квартиры: офисы, коммерческие и производственные помещения — тоже наша работа. С организациями работаем по договору.</div>
+    <div class="card-top"><div><span class="num">Новость 2</span><h3>Закажите химчистку матрасов и ковровых покрытий в Барнауле</h3></div><span class="purpose">Продающий</span></div>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Кроме диванов и кресел, мы чистим матрасы, изголовья кроватей, ковры и ковровые покрытия. Стоимость оцениваем по фото.</div>
     <span class="lbl thesis-lbl">Тезисы</span>
     <ul class="thesis">
-      <li>Уборка коммерческих и производственных помещений, поддерживающая уборка на регулярной основе, мойка окон и фасадов.<span class="src">бриф</span></li>
-      <li>Оказываем услуги частным лицам и организациям, предоставляем все документы для отчётности.<span class="src">сайт</span></li>
-      <li>Оплата по факту выполненных работ, наличный и безналичный расчёт.<span class="src">сайт</span></li>
-      <li>Отработка заказа на следующий день.<span class="src">клиент</span></li>
-      <li>Работаем ежедневно с 7:00 до 22:00.<span class="src">бриф</span></li>
+      <li>Химчистка матрасов, мягкой мебели, ковров и ковровых покрытий.<span class="src">клиент</span></li>
+      <li>Химчистка матраса 1,5-спального — от 2 000 ₽, двуспального — от 3 500 ₽.<span class="src">прайс клиента</span></li>
+      <li>Химчистка изголовья кровати — от 2 000 ₽.<span class="src">прайс клиента</span></li>
+      <li>Химчистка ковровых покрытий — от 250 ₽.<span class="src">прайс клиента</span></li>
+      <li>Минимальная сумма выезда — 3 500 ₽.<span class="src">клиент</span></li>
+      <li>Гипоаллергенная химия не вызывает аллергию и безопасна для детей и домашних животных.<span class="src">сайт</span></li>
     </ul>
     <div class="seo-box">
       <span class="lbl">SEO-блок</span>
-      <div class="meta-row"><b>H1 · </b>Уборка офисов и коммерческих помещений в Барнауле</div>
-      <div class="meta-row"><b>Title · </b>Уборка офиса в Барнауле по договору | Марафет+</div>
-      <div class="meta-row"><b>Description · </b>Уборка офисов, коммерческих и производственных помещений в Барнауле: работаем по договору, документы для отчётности, безналичный расчёт.</div>
+      <div class="meta-row"><b>H1 · </b>Химчистка матрасов и ковровых покрытий в Барнауле</div>
+      <div class="meta-row"><b>Title · </b>Химчистка матраса и ковра в Барнауле | Марафет+</div>
+      <div class="meta-row"><b>Description · </b>Химчистка матрасов, изголовий кроватей, ковров и ковровых покрытий в Барнауле. Гипоаллергенная химия, оценка стоимости по фото.</div>
       <div class="chips">
-        <span class="chip-kw">уборка офиса барнаул</span><span class="chip-kw">уборка офисов</span><span class="chip-kw">клининг офиса</span><span class="chip-kw">уборка коммерческих помещений барнаул</span><span class="chip-kw">уборка производственных помещений барнаул</span><span class="chip-kw">поддерживающая уборка офиса</span><span class="chip-kw">коммерческий клининг</span><span class="chip-kw">услуги клининга в барнауле</span>
+        <span class="chip-kw">химчистка ковров барнаул</span><span class="chip-kw">химчистка ковров</span><span class="chip-kw">химчистка матраса барнаул</span><span class="chip-kw">химчистка матраса</span><span class="chip-kw">химчистка мебели и ковров</span><span class="chip-kw">химчистка ковролина барнаул</span><span class="chip-kw">химчистка ковровых покрытий</span>
       </div>
     </div>
-    <p class="cta-line"><b>CTA:</b> оставляйте заявку — подготовим договор на уборку.</p>
+    <p class="cta-line"><b>CTA:</b> пришлите фото матраса или ковра — оценим стоимость химчистки.</p>
     <div class="cover-box">
       <span class="lbl">ТЗ на обложку</span>
-      <div class="thesis-cover">«Уборка офисов»</div>
-      <p>Композиция: светлый офис с рабочими столами, клинер протирает стол; тезис в верхней трети на светлой подложке, логотип в верхнем левом углу.</p>
-      <p>Цвета: подложка — белый #FFFFFF, тезис — синий #3A6FA1, рамка-уголок — графит #303030.</p>
+      <div class="thesis-cover">«Химчистка матрасов и ковров»</div>
+      <p>Композиция: светлый матрас крупным планом, на нём оборудование для химчистки; тезис на светлой подложке в верхней трети, логотип в верхнем левом углу.</p>
+      <p>Цвета: подложка — светло-серый #EDF1F5, тезис — тёмно-синий #093C79, линия под тезисом — синий #3A6FA1.</p>
     </div>
   </div>
 </section>
 
 <section id="stories">
   <div class="sec-head">
-    <span class="sec-num">04 · Сторис</span>
+    <span class="sec-num">05 · Сторис</span>
     <h2>Темы для сторис</h2>
-    <p>4 темы, формат презентации. Один слайд — тезис, сухие данные и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
+    <p>2 темы, формат презентации. Один слайд — тезис, сухие данные и заметка по дизайну. Публикация — карточка компании на Яндекс Картах и 2ГИС, вместе с парной новостью.</p>
   </div>
-  <div class="period"><h3>Этап 1</h3><span class="pmeta">4 сторис · актуальный</span></div>
+  <div class="period"><h3>Этап 2</h3><span class="pmeta">2 сторис · актуальный</span></div>
   <div class="story-grid">
     <div class="story-card">
-      <div class="story-top"><div class="story-thesis">Генеральная уборка — от 150 ₽/м²</div><span class="slide-no">Сторис 1</span></div>
-      <div class="facts-line"><span class="fact-pill">Кухня и санузел</span><span class="fact-pill">Пыль со всех поверхностей</span><span class="fact-pill">Зеркала, люстры, светильники</span><span class="fact-pill">Вынос мусора</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, логотип в верхнем левом углу. Заголовок синим #3A6FA1, цена крупно тёмно-синим #093C79, пункты списком графитом #303030.</div>
+      <div class="story-top"><div class="story-thesis">Цены на клининг</div><span class="slide-no">Сторис 1</span></div>
+      <div class="facts-line"><span class="fact-pill">Поддерживающая — от 70 ₽/м²</span><span class="fact-pill">Генеральная — от 150 ₽/м²</span><span class="fact-pill">После ремонта — от 180 ₽/м²</span><span class="fact-pill">Химчистка дивана — от 3 500 ₽</span><span class="fact-pill">Окна — от 350 ₽ за створку</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, логотип в верхнем левом углу. Заголовок тёмно-синим #093C79, услуги слева графитом #303030, цены справа жирным синим #3A6FA1. Внизу строка-призыв «Рассчитаем по фото» тёмно-синим #093C79.</div>
     </div>
     <div class="story-card">
-      <div class="story-top"><div class="story-thesis">Химчистка дивана — от 3 500 ₽</div><span class="slide-no">Сторис 2</span></div>
-      <div class="facts-line"><span class="fact-pill">Кресла и диваны</span><span class="fact-pill">Матрасы</span><span class="fact-pill">Ковры и паласы</span><span class="fact-pill">Кухонные уголки</span><span class="fact-pill">Подушки</span><span class="fact-pill">Оценка по фото</span><span class="fact-pill">Минимальный выезд — 3 500 ₽</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #EDF1F5, заголовок тёмно-синим #093C79, предметы списком графитом #303030, цена на плашке синим #3A6FA1 с белым текстом.</div>
-    </div>
-    <div class="story-card">
-      <div class="story-top"><div class="story-thesis">После ремонта — от 180 ₽/м²</div><span class="slide-no">Сторис 3</span></div>
-      <div class="facts-line"><span class="fact-pill">Стены, потолки, батареи</span><span class="fact-pill">Мебель внутри и снаружи</span><span class="fact-pill">Кафель и сантехника</span><span class="fact-pill">Цемент, затирка, пена с пола</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон тёмно-синий #093C79, заголовок белым #FFFFFF, цена синим #3A6FA1 на белой плашке, пункты белым.</div>
-    </div>
-    <div class="story-card">
-      <div class="story-top"><div class="story-thesis">Уборка для организаций</div><span class="slide-no">Сторис 4</span></div>
-      <div class="facts-line"><span class="fact-pill">Работаем по договору</span><span class="fact-pill">Документы для отчётности</span><span class="fact-pill">Безналичный расчёт</span><span class="fact-pill">Отработка заказа на следующий день</span></div>
-      <div class="design-note"><b>Дизайн слайда:</b> фон белый #FFFFFF, слева вертикальная полоса синим #3A6FA1. Заголовок тёмно-синим #093C79, пункты графитом #303030 с синими маркерами.</div>
+      <div class="story-top"><div class="story-thesis">Химчистка матраса — от 2 000 ₽</div><span class="slide-no">Сторис 2</span></div>
+      <div class="facts-line"><span class="fact-pill">Матрас 1,5-спальный — от 2 000 ₽</span><span class="fact-pill">Двуспальный — от 3 500 ₽</span><span class="fact-pill">Изголовье — от 2 000 ₽</span><span class="fact-pill">Ковровые покрытия — от 250 ₽</span><span class="fact-pill">Оценка по фото</span></div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон светло-серый #EDF1F5, заголовок тёмно-синим #093C79, позиции графитом #303030, цены на плашках синего #3A6FA1 с белым текстом. Внизу строка-призыв «Пришлите фото» синим #3A6FA1.</div>
     </div>
   </div>
 </section>
 
 <section id="map">
-  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
-  <details class="stage" open>
-    <summary>Этап 1 — запись перед Новым годом <span class="badge">Актуальный</span></summary>
+  <div class="sec-head"><span class="sec-num">06 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage">
+    <summary>Этап 1 — запись перед Новым годом</summary>
     <div class="stage-body">
       <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Генеральная уборка перед Новым годом: открыта запись</b>от 150 ₽/м², состав уборки</span></div>
       <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Генеральная уборка — от 150 ₽/м²</b>что входит в уборку</span></div>
@@ -487,13 +456,22 @@ main section:last-of-type{border-bottom:0}
       <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Уборка для организаций</b>условия работы с бизнесом</span></div>
     </div>
   </details>
+  <details class="stage" open>
+    <summary>Этап 2 — цены и химчистка матрасов и ковров <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Узнайте цены на клининг в Барнауле: уборка, химчистка, мойка окон</b>цены всех услуг, расчёт по фото</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Цены на клининг</b>пять услуг с ценами</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Закажите химчистку матрасов и ковровых покрытий</b>матрас от 2 000 ₽, изголовье от 2 000 ₽, ковровые покрытия от 250 ₽</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Химчистка матраса — от 2 000 ₽</b>цены по позициям, оценка по фото</span></div>
+    </div>
+  </details>
 </section>
 </div></div>
 </main>
 <script>
 const NAV={
  analytics:[['summary','Итог'],['maps','Позиции и спрос'],['why','Что это значит'],['method','Методика']],
- content:[['company','Компания'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
+ content:[['company','Компания'],['dyn','Позиции'],['brandbook','Брендбук'],['cycle','Логика цикла'],['news','Новости'],['stories','Сторис'],['map','Карта тем']]};
 const sub=document.getElementById('subnav');
 function show(v,scroll){
   if(!NAV[v])v='analytics';
