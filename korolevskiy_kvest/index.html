@@ -1,324 +1,482 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Королевский квест — ТЗ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект «Королевский квест»</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: single sticky top bar + one reading column; client palette lives only in swatches and design notes */
+/* HDR Group project site: navy deck, gold hairlines, one sticky bar with view tabs + section chips; two views (Аналитика / Контент-план) */
 :root{
-  --ocean:#0E3B47; --teal:#1B6B78; --ice:#F5F8F8; --roe:#C4572B;
-  --ink:#12262A; --ink-soft:#4C6066; --line:#DCE6E6; --card:#FFFFFF; --bg:#F5F8F8;
-  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
-  --disp:'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
-  --body:'Public Sans', ui-sans-serif, system-ui, sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
-    --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --ocean:#8FD5E3; --teal:#5FC2D0; --ice:#0B1E22; --roe:#E98A5C;
-  --ink:#EAF3F3; --ink-soft:#A9BEC2; --line:#22383D; --card:#102428; --bg:#0B1E22; color-scheme:dark;
+  color-scheme:dark;
+  --bg:#0F1B2D; --panel:#16263E; --panel-2:#1B2E4A; --sunk:#0C1626;
+  --ink:#EEF1F5; --ink-2:#B8C2CF; --ink-3:#8794A6;
+  --line:rgba(152,161,172,.20); --gold-line:rgba(227,192,138,.30);
+  --gold:#E3C08A; --gold-2:#D9B870; --bronze:#B89A5A; --gold-soft:rgba(227,192,138,.10);
+  --good:#7FCBA4; --good-soft:rgba(127,203,164,.13);
+  --f-mark:'EB Garamond',Georgia,serif; --f-display:'Montserrat',system-ui,sans-serif; --f-body:'Manrope',system-ui,-apple-system,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:15px}
-h1,h2,h3,h4{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
-a{color:var(--teal)}
-a:focus-visible,summary:focus-visible{outline:2px solid var(--roe);outline-offset:3px;border-radius:4px}
-.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;
-  background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);padding:14px max(16px,calc((100% - 980px)/2 + 28px))}
-.topbar .brand{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ocean);margin-right:auto}
-.topbar nav{display:flex;gap:6px 18px;flex-wrap:wrap}
-.topbar nav a{font-size:13.5px;color:var(--ink-soft);text-decoration:none;font-weight:600}
-.topbar nav a:hover{color:var(--roe)}
-.wrap{max-width:980px;margin:0 auto;padding-inline:28px}
-@media (max-width:560px){.wrap{padding-inline:16px}}
-section{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:70px}
-section:last-of-type{border-bottom:none}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--roe);margin-bottom:10px}
-h1.title{font-size:clamp(28px,5vw,40px);line-height:1.12}
-h2.title{font-size:clamp(23px,4vw,28px);line-height:1.2}
-.lede{color:var(--ink-soft);max-width:66ch;margin:10px 0 0;font-size:15px}
-.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
-.fact{background:var(--card);padding:16px 18px;min-width:0}
-.fact .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
-.fact .v{font-size:14.5px;font-weight:600;margin-top:6px}
-.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:24px}
-.sw{border-radius:14px;min-height:132px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border:1px solid var(--line)}
-.sw .role{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;opacity:.85}
-.sw .name{font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.25}
-.sw .hex{font-family:var(--mono);font-size:13px;font-weight:600}
-.sw.light{color:#FFFFFF}
-.sw.dark{color:#1A1020}
-.timeline{display:grid;gap:12px;margin-top:24px}
-.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
-.stage summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--disp);font-weight:600;font-size:15.5px}
-.stage summary::-webkit-details-marker{display:none}
-.stage summary::before{content:"▸";color:var(--ink-soft);font-size:13px;transition:transform .15s}
-.stage[open] summary::before{transform:rotate(90deg)}
-.stage .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
-.badge{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--roe) 15%,transparent);color:var(--roe)}
-.stage-body{margin-top:14px}
-.stage-body p{margin:0;color:var(--ink-soft);font-size:14px;max-width:70ch}
-.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
-.flow span{font-size:13px;background:var(--ice);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-.flow i{font-style:normal;color:var(--ink-soft)}
-.tone-banner{margin-top:22px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 30%,var(--line));border-radius:12px;padding:14px 18px;font-size:14px}
-.tone-banner b{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);display:block;margin-bottom:4px}
-.theme-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:20px}
-@media (max-width:560px){.theme-card{padding:20px 18px}}
-.theme-head{display:flex;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;align-items:flex-start}
-.theme-head .num{font-family:var(--mono);font-size:11px;color:var(--roe);letter-spacing:.06em;text-transform:uppercase;width:100%}
-.theme-head h3{font-size:19px;line-height:1.3;max-width:600px;flex:1 1 300px;min-width:0}
-.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);border-radius:999px;padding:5px 11px;white-space:nowrap}
-.why{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:70ch}
-.blk{margin-top:18px}
-.blk-h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);margin-bottom:6px}
-.voice{border-left:3px solid var(--roe);padding:4px 0 4px 14px;font-size:15px;max-width:70ch;margin:0}
-ul.thesis{margin:0;padding-left:18px;font-size:14.5px;max-width:72ch}
-ul.thesis li{margin-bottom:6px}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{font-family:var(--mono);font-size:11.5px;background:var(--ice);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
-.meta{font-size:13.5px;color:var(--ink-soft);max-width:72ch;margin:0}
-.cta{font-size:14.5px;font-weight:600;color:var(--roe);margin:0}
-.cover-box{margin-top:18px;background:var(--ice);border:1px dashed color-mix(in srgb,var(--ink-soft) 40%,var(--line));border-radius:12px;padding:14px 16px;font-size:14px}
-.cover-box .blk-h{color:var(--roe)}
-.cover-box dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0}
-.cover-box dt{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
-.cover-box dd{margin:0;min-width:0}
-@media (max-width:520px){.cover-box dl{grid-template-columns:1fr}.cover-box dd{margin-bottom:6px}}
-.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px}
-.story-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
-.story-card .slide-tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--roe);letter-spacing:.06em;display:block;margin-bottom:8px}
-.story-card h4{font-size:16.5px}
-.story-card ul{margin:12px 0 0;padding-left:17px;font-size:14px}
-.story-card ul li{margin-bottom:4px}
-.story-card .chips{margin-top:12px}
-.design-note{margin-top:14px;background:var(--ice);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-soft)}
-.design-note b{color:var(--ink)}
-.road{list-style:none;margin:14px 0 0;padding:0;position:relative}
-.road::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
-.road li{position:relative;padding:0 0 14px 28px}
-.road li:last-child{padding-bottom:0}
-.road li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
-.road li.st::before{border-color:var(--roe)}
-.road .fmt{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal)}
-.road li.st .fmt{color:var(--roe)}
-.road .t{font-weight:600;font-size:14.5px;display:block;margin-top:1px}
-.road .d{font-size:13.5px;color:var(--ink-soft);display:block}
-.src{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);background:var(--ice);border:1px solid var(--line);border-radius:5px;padding:1px 7px;margin-left:4px;white-space:nowrap}
-@media (max-width:560px){.src{white-space:normal}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+a{color:var(--gold)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,22,38,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--gold-line)}
+.bar-in,.subnav-in,.wrap{max-width:1120px;margin:0 auto;padding-left:16px;padding-right:16px}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-block:12px}
+.id{display:flex;align-items:center;gap:14px;min-width:0}
+.mark{font-family:var(--f-mark);font-weight:600;color:var(--gold);font-size:17px;letter-spacing:.32em;white-space:nowrap}
+.mark i{font-style:normal;color:var(--bronze);margin:0 .05em}
+.mark small{font-size:12.5px;letter-spacing:.42em;color:var(--ink-2);margin-left:.4em}
+.id .sep{width:1px;height:22px;background:var(--gold-line)}
+.co{font:700 15px var(--f-display);color:var(--ink);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:600 13.5px var(--f-body);color:var(--ink-2);background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#16263E}
+.subnav{border-top:1px solid var(--line)}
+.subnav-in{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
+.subnav-in::-webkit-scrollbar{display:none}
+.subnav button{font:500 12.5px var(--f-mono);color:var(--ink-3);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.subnav button:hover,.subnav button.on{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft)}
+@media(max-width:640px){.tabs{width:100%}.tabs button{flex:1;padding:7px 6px}.id .sep{display:none}.id{width:100%;justify-content:space-between}}
+@media(max-width:380px){.mark{font-size:15px;letter-spacing:.24em}.mark small{display:none}}
+main section,main header.top,main .hero{scroll-margin-top:150px}
+main section{padding-block:48px;border-bottom:1px solid var(--line)}
+main section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);display:block;margin-bottom:12px}
+/* content view */
+.vc .hero{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.vc .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.12;max-width:22ch}
+.vc .lead{margin:14px 0 0;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.vc .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:30px}
+.vc .fact{background:var(--panel);padding:16px 18px;min-width:0}
+.vc .fact .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.vc .fact .v{margin-top:6px;font:700 15.5px var(--f-display)}
+.vc .fact .v small{display:block;font:500 13px var(--f-body);color:var(--ink-2);margin-top:3px}
+.vc .sec-head{margin-bottom:26px;display:grid;gap:6px;max-width:70ch}
+.vc .sec-num{font-family:var(--f-mono);font-size:12px;color:var(--gold);font-weight:600}
+.vc .sec-head h2{font-size:clamp(22px,3vw,28px)}
+.vc .sec-head p{margin:0;color:var(--ink-2)}
+.vc .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vc .swatch{border-radius:12px;padding:18px 16px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+.vc .swatch .role{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.vc .swatch .name{font-weight:700;font-size:14.5px;margin-top:5px}
+.vc .swatch .hex{font-family:var(--f-mono);font-size:12.5px;margin-top:3px;opacity:.85}
+.vc .cycle{display:grid;gap:12px}
+.vc .cycle-row{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.vc .cycle-row .tag{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;padding-top:3px;min-width:60px}
+.vc .cycle-row p{margin:0;font-size:15px;min-width:0}
+.vc .tone-banner{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-2)}
+.vc .tone-banner b{color:var(--ink)}
+.vc .period{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:30px;padding-bottom:10px;border-bottom:1px solid var(--gold-line)}
+.vc .period h3{font:700 19px var(--f-display);color:var(--gold)}
+.vc .pmeta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.vc .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:18px}
+.vc .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.vc .card-top>div{min-width:0}
+.vc .num{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.vc .card h3{font:700 20px/1.3 var(--f-display);max-width:46ch;margin-top:6px}
+.vc .purpose{font-family:var(--f-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.vc .why{margin:12px 0 0;font-size:14.5px;color:var(--ink-2);max-width:72ch}
+.vc .intro{margin-top:16px;font-size:15px;padding:14px 16px;background:var(--sunk);border-radius:10px;border-left:3px solid var(--gold)}
+.vc .lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px}
+.vc .intro .lbl{color:var(--gold)}
+.vc .thesis-lbl{display:block;font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--ink-3);margin:18px 0 8px}
+.vc .thesis{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.vc .thesis li{position:relative;padding-left:20px;font-size:15px}
+.vc .thesis li::before{content:"";position:absolute;left:2px;top:.65em;width:8px;height:1px;background:var(--gold)}
+.src{display:inline-block;margin-left:8px;font-family:var(--f-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:1px}
+.vc .seo-box{margin-top:18px;padding:14px 16px;background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+.vc .seo-box .lbl{color:var(--ink-3)}
+.vc .meta-row{display:grid;margin-bottom:8px;font-size:14px;color:var(--ink-2)}
+.vc .meta-row b{color:var(--gold-2);font-weight:600;font-size:12px}
+.vc .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.vc .chip-kw{font-family:var(--f-mono);font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+.vc .cta-line{margin:14px 0 0;font-size:14.5px;color:var(--ink-2)}
+.vc .cta-line b{color:var(--gold)}
+.vc .cover-box{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px dashed var(--gold-line)}
+.vc .cover-box .lbl{color:var(--gold)}
+.vc .thesis-cover{font:700 17px var(--f-display);margin-bottom:8px}
+.vc .cover-box p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+.vc .cover-box p:last-child{margin-bottom:0}
+.vc .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.vc .story-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.vc .story-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.vc .story-thesis{font:700 18px/1.25 var(--f-display);min-width:0}
+.vc .slide-no{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);white-space:nowrap;padding-top:3px}
+.vc .facts-line{display:flex;flex-wrap:wrap;gap:8px}
+.vc .fact-pill{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.vc .story-cta{font-size:14px;color:var(--ink-2)}
+.vc .story-cta b{color:var(--gold)}
+.vc .design-note{margin-top:auto;padding:12px 14px;background:var(--sunk);border-radius:9px;font-size:14px;color:var(--ink-2)}
+.vc .design-note b{color:var(--gold-2);font-weight:600}
+.vc details.stage{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-top:14px;overflow:hidden}
+.vc details.stage[open]{border-color:var(--gold-line)}
+.vc details.stage summary{cursor:pointer;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font:700 15.5px var(--f-display)}
+.vc details.stage summary::-webkit-details-marker{display:none}
+.vc .badge{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-line)}
+.vc .stage-body{padding:4px 20px 20px;display:grid;border-left:1px solid var(--gold-line);margin-left:28px}
+.vc .stage-item{font-size:14px;color:var(--ink-2);display:flex;gap:12px;padding:8px 0}
+.vc .stage-item .fmt{font-family:var(--f-mono);font-size:10.5px;color:var(--gold);font-weight:600;white-space:nowrap;padding-top:2px;min-width:78px}
+.vc .stage-item .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vc .stage-item .txt b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.vc .card{padding:20px 18px}.vc .story-grid{grid-template-columns:1fr}.vc .cycle-row{flex-direction:column;gap:6px}.vc .stage-body{margin-left:12px}.vc .stage-item{flex-direction:column;gap:2px}}
+/* analytics view */
+.va header.top{padding-block:52px 40px;border-bottom:1px solid var(--gold-line)}
+.va header.top h1{font-size:clamp(26px,4vw,40px);line-height:1.15;max-width:24ch}
+.va header.top p{max-width:66ch;color:var(--ink-2);margin:14px 0 0}
+.va .sh{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.va .sh h2{font-size:clamp(20px,2.6vw,26px);line-height:1.25}
+.va .sh p{margin:0;color:var(--ink-2)}
+.va h3{font:700 17px var(--f-display);margin:30px 0 12px}
+.va .verdicts{display:grid;gap:10px}
+.va .v{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.va .v p{margin:0;min-width:0;color:var(--ink-2)}
+.va .v p b{display:block;margin-bottom:2px;color:var(--ink)}
+@media(max-width:520px){.va .v{grid-template-columns:1fr;gap:8px}.va .v .pill{justify-self:start}}
+.va .pill{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.va .pill.good{color:var(--good);background:var(--good-soft)} .va .pill.gold{color:var(--gold);background:var(--gold-soft)} .va .pill.info{color:var(--ink-2);background:var(--line)}
+.va .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--gold-line);border:1px solid var(--gold-line);border-radius:12px;overflow:hidden;margin-top:28px}
+.va .kpi{background:var(--panel);padding:16px 18px;min-width:0}
+.va .kpi .k{font-size:12.5px;color:var(--ink-3)}
+.va .kpi .n{font:700 26px var(--f-display);margin-top:4px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.va .kpi .s{font-size:13px;color:var(--ink-2)}
+.va .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.va table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+.va th,.va td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.va th{font:600 11.5px var(--f-mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;background:var(--sunk);white-space:nowrap}
+.va tr:last-child td{border-bottom:0}
+.va td.r,.va th.r{text-align:right}
+.va td.me{background:var(--gold-soft);color:var(--gold);font-weight:700}
+.va td .sub{display:block;font-size:12.5px;color:var(--ink-3);font-weight:400}
+.va .up{color:var(--good);font-weight:600}
+.va .causes{display:grid;gap:14px}
+.va .cause{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.va .cause-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.va .cause-h h3{margin:0;font-size:16.5px}
+.va .cause p{margin:0;color:var(--ink-2);max-width:76ch}
+.va .cause .next{color:var(--ink);background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 12px}
+.va .small{font-size:14px;color:var(--ink-2);max-width:78ch}
+.va .srcs{display:grid;gap:6px;font-size:14px}
 </style>
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">«Королевский квест»</div>
-  <nav aria-label="Разделы">
-    <a href="#company">Компания</a>
-    <a href="#brandbook">Брендбук</a>
-    <a href="#cycle">Логика цикла</a>
-    <a href="#news">Новости</a>
-    <a href="#stories">Сторис</a>
-    <a href="#map">Карта тем</a>
-  </nav>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="id"><span class="mark">H<i>|</i>D<i>|</i>R<small>GROUP</small></span><span class="sep"></span><span class="co">Королевский квест</span></div>
+    <div class="tabs" role="tablist" aria-label="Разделы проекта">
+      <button type="button" role="tab" data-go="analytics">Аналитика</button>
+      <button type="button" role="tab" data-go="content">Контент-план</button>
+    </div>
+  </div>
+  <div class="subnav"><div class="subnav-in" id="subnav"></div></div>
+</div>
+
+<main>
+<div class="view va" data-view="analytics" hidden><div class="wrap">
+<header class="top" id="a-top">
+  <span class="eyebrow">Москва и Подмосковье · квесты · 5 точек · замер 27.11.2026</span>
+  <h1>«Королевский квест» на Яндекс Картах</h1>
+  <p>Пять карточек сети: Вешняки, Люберцы, Некрасовка, Салтыковка и Рязанский проспект. Выдача по целевым запросам в радиусе 2 км от каждой точки, рост карточек за месяц, спрос по Вордстату и темы, которые продвигают каждую страницу.</p>
 </header>
 
-<main class="wrap">
+<section id="a-summary">
+  <div class="sh"><h2>Коротко</h2></div>
+  <div class="verdicts">
+    <div class="v"><span class="pill good">1-е место</span><p><b>«Квест», «квест для детей», «квест с актерами», «квест для класса»</b>Вешняки, Люберцы и Некрасовка — первые в выдаче по этим запросам в радиусе 2 км.</p></div>
+    <div class="v"><span class="pill good">рост</span><p><b>Вешняки: переходы в профиль +5%, маршруты +17% за месяц</b>Яндекс Бизнес, 27.10–27.11.2026. С 7 октября у карточки +19 оценок, +18 отзывов, +26 фото и +6 новостей.</p></div>
+    <div class="v"><span class="pill good">рост</span><p><b>Люберцы: звонки +27%, переходы на сайт +9%; Некрасовка: переходы на сайт +14%</b>Яндекс Бизнес, 27.10–27.11.2026.</p></div>
+    <div class="v"><span class="pill gold">спрос</span><p><b>«Квест с актерами» +68%, «хоррор квест» +21% к сентябрю</b>Вордстат, Москва и область, октябрь 2026. Вторая тема этапа 3 построена под этот спрос.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Переходы в профиль, Вешняки</div><div class="n">3 304</div><div class="s">+5% за месяц</div></div>
+    <div class="kpi"><div class="k">Маршруты, Вешняки</div><div class="n">35</div><div class="s">+17% за месяц</div></div>
+    <div class="kpi"><div class="k">Звонки, Люберцы</div><div class="n">76</div><div class="s">+27% за месяц</div></div>
+    <div class="kpi"><div class="k">Оценки, Вешняки</div><div class="n">192</div><div class="s">173 на 7 октября</div></div>
+  </div>
+</section>
 
-  <section id="company">
-    <div class="eyebrow">01 · Компания</div>
-    <h1 class="title">«Королевский квест» — квесты с актёрами для всей семьи</h1>
-    <p class="lede">Квесты с актёрами для всей семьи, дни рождения, выпускные и корпоративы. Публикация новостей и сторис — карточки компании «Королевский квест» на Яндекс Картах и в 2ГИС. Темы и тексты без привязки к адресу: подходят для карточки любого филиала компании.</p>
-    <div class="facts-grid">
-      <div class="fact"><div class="k">Название</div><div class="v">«Королевский квест»</div></div>
-      <div class="fact"><div class="k">Сфера</div><div class="v">Квесты · Организация мероприятий · Развлекательный центр</div></div>
-      <div class="fact"><div class="k">Формат</div><div class="v">Квесты с актёрами для всей семьи</div></div>
-      <div class="fact"><div class="k">Направления</div><div class="v">Квесты · Дни рождения · Выпускной · Корпоративы</div></div>
-      <div class="fact"><div class="k">С какого года</div><div class="v">С 2017 года дарим эмоции</div></div>
-      <div class="fact"><div class="k">Цифры</div><div class="v">10000+ довольных клиентов</div></div>
-      <div class="fact"><div class="k">Команда на квест</div><div class="v">2–10 чел.</div></div>
-      <div class="fact"><div class="k">Возраст</div><div class="v">Сценарии от 0+ до 18+, адаптированы под возраст</div></div>
+<section id="a-maps">
+  <div class="sh"><h2>Позиции на Яндекс Картах</h2><p>Поиск на Яндекс Картах с центром в каждой точке, радиус около 2 км, 27.11.2026. В ячейке — место карточки этой точки.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Вешняки</th><th class="r">Люберцы</th><th class="r">Некрасовка</th><th class="r">Салтыковка</th><th class="r">Рязанский пр-т</th></tr></thead>
+    <tbody>
+      <tr><td>квест</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r">3</td><td class="r">4</td></tr>
+      <tr><td>квест для детей</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r">2</td><td class="r">4</td></tr>
+      <tr><td>квест на день рождения</td><td class="r">2</td><td class="r me">1</td><td class="r me">1</td><td class="r">2</td><td class="r">4</td></tr>
+      <tr><td>квест с актерами</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r">5</td></tr>
+      <tr><td>корпоратив квест</td><td class="r me">1</td><td class="r">2</td><td class="r me">1</td><td class="r">2</td><td class="r me">1</td></tr>
+      <tr><td>квест для класса</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r me">1</td><td class="r">4</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточки точек</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Точка</th><th class="r">Рейтинг</th><th class="r">Оценки</th><th class="r">Отзывы</th><th class="r">Фото</th><th class="r">Новости</th><th>Награда</th></tr></thead>
+    <tbody>
+      <tr><td><b>Вешняки</b><span class="sub">Вешняковская ул., 18</span></td><td class="r">5,0</td><td class="r">192</td><td class="r">172</td><td class="r">250</td><td class="r">15</td><td>Хорошее место 2026</td></tr>
+      <tr><td><b>Люберцы</b><span class="sub">ул. Кирова, 9, корп. 1</span></td><td class="r">5,0</td><td class="r">1 168</td><td class="r">686</td><td class="r">277</td><td class="r">22</td><td>Хорошее место 2026</td></tr>
+      <tr><td><b>Некрасовка</b><span class="sub">Рождественская ул., 21, корп. 6</span></td><td class="r">5,0</td><td class="r">392</td><td class="r">307</td><td class="r">196</td><td class="r">16</td><td>Хорошее место 2026</td></tr>
+      <tr><td><b>Салтыковка</b><span class="sub">Носовихинское ш., 4, стр. 16</span></td><td class="r">5,0</td><td class="r">87</td><td class="r">84</td><td class="r">134</td><td class="r">14</td><td>Хорошее место 2026</td></tr>
+      <tr><td><b>Рязанский проспект</b><span class="sub">Рязанский просп., 71, корп. 2</span></td><td class="r">4,4</td><td class="r">16</td><td class="r">11</td><td class="r">34</td><td class="r">—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-stats">
+  <div class="sh"><h2>Рост карточек за месяц</h2><p>Яндекс Бизнес, 27.10–27.11.2026, изменение к предыдущему месяцу.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Точка</th><th>Показатель</th><th class="r">За месяц</th><th class="r">Изменение</th></tr></thead>
+    <tbody>
+      <tr><td>Вешняки</td><td>Переходы в профиль</td><td class="r">3 304</td><td class="r up">+5%</td></tr>
+      <tr><td>Вешняки</td><td>Проложено маршрутов</td><td class="r">35</td><td class="r up">+17%</td></tr>
+      <tr><td>Люберцы</td><td>Нажатий «Позвонить»</td><td class="r">76</td><td class="r up">+27%</td></tr>
+      <tr><td>Люберцы</td><td>Переходы на сайт</td><td class="r">534</td><td class="r up">+9%</td></tr>
+      <tr><td>Некрасовка</td><td>Переходы на сайт</td><td class="r">246</td><td class="r up">+14%</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Карточка на Вешняковской за период работы</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Показатель</th><th class="r">7 октября</th><th class="r">27 ноября</th><th class="r">Изменение</th></tr></thead>
+    <tbody>
+      <tr><td>Оценки</td><td class="r">173</td><td class="r">192</td><td class="r up">+11%</td></tr>
+      <tr><td>Отзывы</td><td class="r">154</td><td class="r">172</td><td class="r up">+12%</td></tr>
+      <tr><td>Фото</td><td class="r">224</td><td class="r">250</td><td class="r up">+12%</td></tr>
+      <tr><td>Новости</td><td class="r">9</td><td class="r">15</td><td class="r up">+6</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Опубликовано на карточке за период</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Дата</th><th>Формат</th><th>Тема</th></tr></thead>
+    <tbody>
+      <tr><td>9 ноября</td><td>Новость</td><td>Праздник для класса в квесте: квесты и квест-шоу для школьников</td></tr>
+      <tr><td>17 ноября</td><td>Новость</td><td>«Мафия» и «Бункер» в «Королевском квесте»: игры для дня рождения и корпоратива</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-demand">
+  <div class="sh"><h2>Спрос по целевым запросам</h2><p>Вордстат, Москва и Московская область, октябрь 2026 года, изменение к сентябрю.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Запрос</th><th class="r">Запросов в месяц</th><th class="r">К сентябрю</th></tr></thead>
+    <tbody>
+      <tr><td>квест</td><td class="r">754 354</td><td class="r up">+17%</td></tr>
+      <tr><td>хоррор квест</td><td class="r">18 906</td><td class="r up">+21%</td></tr>
+      <tr><td>квест для детей</td><td class="r">17 310</td><td class="r up">+14%</td></tr>
+      <tr><td>квест на день рождения</td><td class="r">6 390</td><td class="r up">+7%</td></tr>
+      <tr><td>квест с актерами</td><td class="r">3 089</td><td class="r up">+68%</td></tr>
+      <tr><td>бумажная дискотека</td><td class="r">622</td><td class="r up">+22%</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="a-growth">
+  <div class="sh"><h2>Зоны роста по точкам</h2><p>Где карточке есть куда расти в выдаче и какая тема этапа 3 на это работает.</p></div>
+  <div class="causes">
+    <div class="cause"><div class="cause-h"><span class="pill gold">Вешняки</span><h3>«Квест на день рождения» — 2-е место</h3></div><p>Выше «Лига Миров: Пандора». По остальным запросам таблицы — 1-е место.</p><p class="next">Новость 1 этапа 3: дополнения к детскому дню рождения.</p></div>
+    <div class="cause"><div class="cause-h"><span class="pill gold">Люберцы</span><h3>«Корпоратив квест» — 2-е место</h3></div><p>Выше «Другие Миры». По остальным запросам таблицы — 1-е место.</p><p class="next">Новости 1 и 2 этапа 3 укрепляют карточку по праздникам и квестам с актёрами.</p></div>
+    <div class="cause"><div class="cause-h"><span class="pill good">Некрасовка</span><h3>1-е место по всем запросам таблицы</h3></div><p>Задача — удержать позиции регулярными публикациями.</p><p class="next">Новости 1 и 2 этапа 3.</p></div>
+    <div class="cause"><div class="cause-h"><span class="pill gold">Салтыковка</span><h3>«Квест» — 3-е место, «квест для детей», «квест на день рождения», «корпоратив квест» — 2-е</h3></div><p>Выше VrRealTeam, «Остров Дискавери» и «Другие Миры». По «квест с актерами» и «квест для класса» — 1-е место.</p><p class="next">Новость 1 — под «квест на день рождения», новость 2 — под «квест с актерами».</p></div>
+    <div class="cause"><div class="cause-h"><span class="pill gold">Рязанский проспект</span><h3>4–5-е места по пяти запросам из шести</h3></div><p>16 оценок, раздела новостей на карточке нет, рубрика — «Развлекательный центр», у остальных точек — «Квесты». По «корпоратив квест» — 1-е место.</p><p class="next">Публиковать новости этапа на этой карточке, начиная с этапа 3.</p></div>
+  </div>
+</section>
+
+<section id="a-method">
+  <div class="sh"><h2>Как мерили</h2></div>
+  <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:6px">
+    <li>Яндекс Карты: поиск 27.11.2026 с центром карты в каждой точке, масштаб около 2 км; место — позиция карточки этой точки в списке.</li>
+    <li>Яндекс Бизнес: раздел «Статистика», период 27.10–27.11.2026 к предыдущему месяцу.</li>
+    <li>Вордстат: регион «Москва и Московская область», все устройства, октябрь 2026 к сентябрю 2026.</li>
+  </ul>
+  <h3>Источники</h3>
+  <div class="srcs">
+    <a href="https://yandex.ru/maps/org/korolevskiy_kvest/49550940043/" target="_blank" rel="noopener">«Королевский квест», Вешняковская ул., 18 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/korolevskiy_kvest/3260787289/" target="_blank" rel="noopener">«Королевский квест», Люберцы, ул. Кирова, 9к1 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/korolevskiy_kvest/44712156097/" target="_blank" rel="noopener">«Королевский квест», Рождественская ул., 21к6 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/korolevskiy_kvest/172378651229/" target="_blank" rel="noopener">«Королевский квест», Носовихинское ш., 4с16 — Яндекс Карты</a>
+    <a href="https://yandex.ru/maps/org/korolevskiy_kvest/160472055293/" target="_blank" rel="noopener">«Королевский квест», Рязанский просп., 71к2 — Яндекс Карты</a>
+    <a href="https://royal-quest-vykhino.ru/" target="_blank" rel="noopener">royal-quest-vykhino.ru</a>
+    <a href="https://wordstat.yandex.ru/" target="_blank" rel="noopener">Яндекс Вордстат</a>
+  </div>
+</section>
+</div></div>
+
+<div class="view vc" data-view="content" hidden><div class="wrap">
+<section class="hero" id="c-company">
+  <span class="eyebrow">Квесты · организация мероприятий · развлекательный центр</span>
+  <h1>«Королевский квест» — ТЗ на контент, этап 3</h1>
+  <p class="lead">2 новости с обложкой и 2 сторис в формате презентации, один слайд. Публикация — карточки компании «Королевский квест» на Яндекс Картах и в 2ГИС. Темы и тексты без привязки к адресу: подходят для карточки любого филиала компании.</p>
+  <div class="factgrid">
+    <div class="fact"><div class="k">Компания</div><div class="v">«Королевский квест»</div></div>
+    <div class="fact"><div class="k">Формат</div><div class="v">Квесты с актёрами для всей семьи</div></div>
+    <div class="fact"><div class="k">Направления</div><div class="v">Квесты · дни рождения <small>выпускной · корпоративы</small></div></div>
+    <div class="fact"><div class="k">С какого года</div><div class="v">С 2017 года дарим эмоции</div></div>
+    <div class="fact"><div class="k">Цифры</div><div class="v">10000+ довольных клиентов</div></div>
+    <div class="fact"><div class="k">Команда на квест</div><div class="v">2–10 человек</div></div>
+  </div>
+</section>
+
+<section id="c-brandbook">
+  <div class="sec-head"><span class="sec-num">01 · Мини-брендбук</span><h2>Фирменные цвета «Королевского квеста»</h2><p>После анализа ресурсов компании определены фирменные цвета: фиолетовый кнопок сайта, яркий фиолетовый оформления сообщества, светлое золото слогана и короны, глубокий тёмный фон сайта и белый текст.</p></div>
+  <div class="swatches">
+    <div class="swatch" style="background:#6337BD;color:#FFFFFF;border-color:#6337BD"><div class="role">Акцентный</div><div class="name">Фиолетовый кнопок</div><div class="hex">#6337BD</div></div>
+    <div class="swatch" style="background:#793FC0;color:#FFFFFF;border-color:#793FC0"><div class="role">Основной</div><div class="name">Яркий фиолетовый</div><div class="hex">#793FC0</div></div>
+    <div class="swatch" style="background:#FBECA8;color:#1A1020;border-color:#FBECA8"><div class="role">Второстепенный</div><div class="name">Светлое золото</div><div class="hex">#FBECA8</div></div>
+    <div class="swatch" style="background:#0C0511;color:#FFFFFF;border-color:#3a3044"><div class="role">Фоновый</div><div class="name">Глубокий тёмный</div><div class="hex">#0C0511</div></div>
+    <div class="swatch" style="background:#FFFFFF;color:#1A1020;border-color:#FFFFFF"><div class="role">Текстовый</div><div class="name">Белый</div><div class="hex">#FFFFFF</div></div>
+  </div>
+</section>
+
+<section id="c-cycle">
+  <div class="sec-head"><span class="sec-num">02 · Логика цикла</span><h2>Последовательность тем этапа 3</h2><p>Этап продолжает линию «чем дополнить праздник» после игр «Мафия» и «Бункер» и возвращается к самим квестам: хоррор-квестам с актёрами, которым в теме «Квест по возрасту» отведён один абзац.</p></div>
+  <div class="cycle">
+    <div class="cycle-row"><div class="tag">02.12</div><p>Дискотеки, шоу и поздравление героем к детскому дню рождения.</p></div>
+    <div class="cycle-row"><div class="tag">09.12</div><p>Хоррор-квесты с актёрами: уровни 12+ и 18+, игра на 30 или 60 минут.</p></div>
+  </div>
+</section>
+
+<section id="c-news">
+  <div class="sec-head"><span class="sec-num">03 · Новости</span><h2>Темы для новостных публикаций</h2><p>2 темы с обложкой. Публикация — карточки компании «Королевский квест» на Яндекс Картах и 2ГИС, один и тот же текст в карточке любого филиала.</p></div>
+  <div class="tone-banner"><b>Тон текстов:</b> обращение на «вы». Вступление от лица компании («мы»), дальше факты по теме. Факты в тезисах приведены по источнику, указанному у каждого тезиса. В тексте нет адреса, телефона, e-mail, цен и превосходных степеней. Каждый текст заканчивается призывом к действию. Объём — до 3 000 знаков с пробелами.</div>
+
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 новости · актуальный</span></div>
+
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 1 · 2 декабря</span><h3>Дискотеки, шоу и поздравление героем: чем дополнить детский день рождения в квесте</h3></div><span class="purpose">Продающий</span></div>
+    <p class="why">Продолжает этап 2: после игр «Мафия» и «Бункер» — следующие дополнения к празднику из перечня услуг. Ведёт к запросам «детский день рождения» (35 812 запросов в месяц) и «квест на день рождения», где у карточек на Вешняковской и в Салтыковке 2-е место, у Рязанского проспекта — 4-е.</p>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Детский день рождения в квесте можно дополнить: к программе мы добавляем дискотеку, шоу или поздравление героем.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>Дискотека с диджеем на 30 минут — музыкальное дополнение к празднику<span class="src">Яндекс Карты, услуги</span></li>
+      <li>Дискотека на 30 минут с выбранным героем; доступность персонажа уточняется при бронировании<span class="src">Яндекс Карты, услуги</span></li>
+      <li>Дискотека на 30 минут с неоновыми подушками или реквизитом, бумажная дискотека, неоновая дискотека<span class="src">Яндекс Карты, услуги</span></li>
+      <li>Дискотека входит в программы «Весёлый час» и «Праздник в ритме игры» (30 мин.), дискотека с неоновым реквизитом — в «ВИП Королевский праздник» (30 мин.)<span class="src">сайт, «Дни рождения»</span></li>
+      <li>Шоу мыльных пузырей, научное шоу на 30 или 60 минут, фокусник с трюками с картами и предметами<span class="src">Яндекс Карты, услуги</span></li>
+      <li>Поздравление костюмированным актёром: актёр в выбранном образе поздравит именинника, вынесет торт, устроит мини-фотосессию<span class="src">Яндекс Карты, услуги</span></li>
+      <li>Анимационная программа для праздника; итоговый формат подбирается при бронировании<span class="src">Яндекс Карты, услуги</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Дискотека, шоу и поздравление героем на детский день рождения в квесте</span></div>
+      <div class="meta-row"><span><b>Title · </b>Детский день рождения в квесте: дискотеки и шоу | Королевский квест</span></div>
+      <div class="meta-row"><span><b>Description · </b>Дополните детский день рождения в «Королевском квесте»: дискотека с героем, неоновая и бумажная дискотека, шоу мыльных пузырей, научное шоу, фокусник и поздравление костюмированным актёром.</span></div>
+      <div class="chips"><span class="chip-kw">детский день рождения</span><span class="chip-kw">детский день рождения в квесте</span><span class="chip-kw">дискотека на день рождения</span><span class="chip-kw">бумажная дискотека</span><span class="chip-kw">неоновая дискотека</span><span class="chip-kw">шоу мыльных пузырей на день рождения</span><span class="chip-kw">научное шоу на день рождения</span><span class="chip-kw">фокусник на день рождения</span><span class="chip-kw">поздравление героем на день рождения</span><span class="chip-kw">анимационная программа на день рождения</span></div>
     </div>
-  </section>
-
-  <section id="brandbook">
-    <div class="eyebrow">02 · Мини-брендбук</div>
-    <h2 class="title">Фирменные цвета</h2>
-    <p class="lede">После анализа ресурсов компании определены фирменные цвета. Фиолетовый — кнопки «Выбрать квест», «Забронировать» и плашки акций на сайте. Яркий фиолетовый — фон обложки и оформления сообщества компании. Светлое золото — плашка слогана и корона в оформлении сообщества. Глубокий тёмный — фон всех разделов сайта. Белый — заголовки и текст на тёмном фоне.</p>
-    <div class="swatches">
-      <div class="sw light" style="background:#6337BD"><span class="role">Акцентный</span><span class="name">Фиолетовый кнопок</span><span class="hex">#6337BD</span></div>
-      <div class="sw light" style="background:#793FC0"><span class="role">Основной</span><span class="name">Яркий фиолетовый</span><span class="hex">#793FC0</span></div>
-      <div class="sw dark" style="background:#FBECA8"><span class="role">Второстепенный</span><span class="name">Светлое золото</span><span class="hex">#FBECA8</span></div>
-      <div class="sw light" style="background:#0C0511"><span class="role">Фоновый</span><span class="name">Глубокий тёмный</span><span class="hex">#0C0511</span></div>
-      <div class="sw dark" style="background:#FFFFFF"><span class="role">Текстовый</span><span class="name">Белый</span><span class="hex">#FFFFFF</span></div>
+    <p class="cta-line"><b>CTA:</b> добавьте дискотеку или шоу к программе — бронируйте детский день рождения в «Королевском квесте».</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Дискотека и шоу на день рождения»</div>
+      <p>Композиция: дети на неоновой дискотеке с неоновым реквизитом; фото в белой рамке под наклоном, тезис крупным гротеском, под ним плашка «дополнение к празднику», небольшая корона над тезисом, логотип «Королевский квест» в верхнем углу. Текст не больше 20% площади.</p>
+      <p>Цвета: фон #793FC0, тезис белым #FFFFFF, плашка #FBECA8 с текстом #0C0511, корона #FBECA8.</p>
     </div>
-  </section>
+  </div>
 
-  <section id="cycle">
-    <div class="eyebrow">03 · Логика цикла</div>
-    <h2 class="title">От квестов к праздникам и играм для компании</h2>
-    <div class="timeline">
-      <details class="stage">
-        <summary>Этап 1 — квесты и праздничные форматы</summary>
-        <div class="stage-body">
-          <p>Первая тема знакомит с «Королевским квестом» и форматом квестов с актёрами. Вторая помогает выбрать квест по возрасту участников. Третья и четвёртая раскрывают праздничные форматы: день рождения под ключ и корпоратив в квесте.</p>
-          <div class="flow"><span>Квесты с актёрами для всей семьи</span><i>→</i><span>Квест по возрасту</span><i>→</i><span>День рождения под ключ</span><i>→</i><span>Корпоратив в квесте</span></div>
-        </div>
-      </details>
-      <details class="stage" open>
-        <summary>Этап 2 — праздник для класса и игры для компании <span class="badge">актуальный</span></summary>
-        <div class="stage-body">
-          <p>Этап продолжает праздничные форматы. Школьный праздник для класса в новости о корпоративах упомянут одним абзацем, здесь он раскрывается отдельной темой. Вторая тема рассказывает об играх «Мафия» и «Бункер», которые входят в программы дня рождения, корпоратива и выпускного.</p>
-          <div class="flow"><span>11 ноября · Праздник для класса в квесте</span><i>→</i><span>18 ноября · «Мафия» и «Бункер»</span></div>
-        </div>
-      </details>
+  <div class="card">
+    <div class="card-top"><div><span class="num">Новость 2 · 9 декабря</span><h3>Хоррор-квесты с актёрами: уровни 12+ и 18+, игра на 30 или 60 минут</h3></div><span class="purpose">Экспертный</span></div>
+    <p class="why">Возвращается к самим квестам: в теме «Квест по возрасту» хоррор-квестам отведён один абзац, здесь они раскрываются отдельно. Ведёт к запросам «хоррор квест» (+21% к сентябрю) и «квест с актерами» (+68%), где у карточки на Рязанском проспекте 5-е место.</p>
+    <div class="intro"><span class="lbl">Вступление (тон и голос)</span>Для тех, кто любит загадки и напряжённую атмосферу, у нас есть хоррор-квесты с актёрами: можно выбрать уровень и длительность игры.</div>
+    <span class="thesis-lbl">Тезисы</span>
+    <ul class="thesis">
+      <li>«Секретная лаборатория сумасшедшего учёного» — хоррор-квест в заброшенной психиатрической больнице с паранормальными явлениями и загадками; задача — объединиться против злых сил и найти путь к выходу<span class="src">сайт, страница квеста</span></li>
+      <li>Уровни «Секретной лаборатории»: 12+ без контакта, 18+ без контакта или с минимальным контактом (без боли); команда 2–10 человек, квест с актёрами<span class="src">сайт, страница квеста</span></li>
+      <li>«Зомби-Апокалипсис» — командный квест с хоррор-атмосферой в тайной лаборатории, с участием актёров: проникнуть в эпицентр заражения, создать антидот и уложиться во время<span class="src">сайт, страница квеста</span></li>
+      <li>«Зомби-Апокалипсис»: 30 или 60 минут, 12+, команда до 10 человек<span class="src">сайт, страница квеста</span></li>
+      <li>Хоррор-квесты длятся 30–60 минут: для лёгкого испуга — программы около 30–40 минут, для максимальной интенсивности — квесты около часа; новичкам советуют начать с квеста без актёров<span class="src">сайт, статья «Длительность хоррор квеста»</span></li>
+    </ul>
+    <div class="seo-box"><span class="lbl">SEO-блок</span>
+      <div class="meta-row"><span><b>H1 · </b>Хоррор-квесты с актёрами: уровни 12+ и 18+ в «Королевском квесте»</span></div>
+      <div class="meta-row"><span><b>Title · </b>Хоррор-квест с актёрами 12+ и 18+, 30 или 60 минут | Королевский квест</span></div>
+      <div class="meta-row"><span><b>Description · </b>«Секретная лаборатория сумасшедшего учёного» — уровни 12+ и 18+ без контакта или с минимальным контактом, «Зомби-Апокалипсис» — 30 или 60 минут. Команда до 10 человек, квесты с актёрами.</span></div>
+      <div class="chips"><span class="chip-kw">хоррор квест</span><span class="chip-kw">квест с актерами</span><span class="chip-kw">хоррор квест с актерами</span><span class="chip-kw">страшный квест</span><span class="chip-kw">хоррор квест 18+</span><span class="chip-kw">хоррор квест 12+</span><span class="chip-kw">бесконтактный хоррор квест</span><span class="chip-kw">квест зомби апокалипсис</span><span class="chip-kw">квест секретная лаборатория</span><span class="chip-kw">хоррор квест на день рождения</span></div>
     </div>
-  </section>
-
-  <section id="news">
-    <div class="eyebrow">04 · Новости</div>
-    <h2 class="title">Новости этапа 2</h2>
-    <p class="lede">Публикация — карточки компании «Королевский квест» на Яндекс Картах и в 2ГИС. Тексты до 3000 знаков с пробелами, без адреса и названия района: один и тот же текст публикуется в карточке любого филиала. Телефон в тексте не указывается: он находится в полях карточки.</p>
-    <div class="tone-banner"><b>Тон текстов</b>Обращение на «вы». Каждый текст начинается от лица компании («мы») и раскрывает одну тему, без перечисления всех квестов и услуг подряд. Факты берутся только из указанных источников, дословно. SEO-ключи вплетаются в предложения, без списков и повторов подряд. Без превосходных степеней, капса и цен.</div>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 1 · 11 ноября</span>
-        <h3>Праздник для класса в квесте: квест, квест-шоу и сюжет с учётом интересов школьников</h3>
-        <span class="tag">Продающий</span>
-      </div>
-      <p class="why">Продолжает тему корпоратива из этапа 1. В новости о корпоративах школьный праздник для класса занимает один абзац, здесь он раскрывается отдельно: формат, выбор сюжета, сценарий, количество участников.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Планируете праздник для класса? Мы предлагаем квест или квест-шоу — возможность провести время вместе, проверить смекалку и поучаствовать в командных испытаниях».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Квест или квест-шоу для класса: провести время вместе, проверить смекалку и поучаствовать в командных испытаниях <span class="src">Яндекс Карты, новость 26.10.2026</span></li>
-          <li>Сюжет выбирается с учётом интересов школьников и формата мероприятия <span class="src">Яндекс Карты, новость 26.10.2026</span></li>
-          <li>Среди вариантов — «Игра в кальмара», «Агент 007», «Подземелье чародея», «Майнкрафт», «Форт Боярд», «Битва за корону», «Сокровища судьбы» и викторины <span class="src">Яндекс Карты, новость 26.10.2026</span></li>
-          <li>Возможна разработка сценария с использованием имеющегося антуража; можно заказать выездной квест или иммерсивную программу <span class="src">Яндекс Карты, новость 26.10.2026</span></li>
-          <li>Количество гостей обсуждается при бронировании, формат и зал подбираются исходя из числа участников <span class="src">сайт, «Дни рождения», вопросы и ответы</span></li>
-          <li>Большой зал — до 40 человек <span class="src">сайт, «Дни рождения», дополнительные услуги</span></li>
-          <li>Когда гостей больше 10 человек, необходимо заказать дополнительного актёра <span class="src">сайт, «Дни рождения», вопросы и ответы</span></li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">праздник для класса</span><span class="chip">квест для класса</span><span class="chip">новогодний праздник для класса</span><span class="chip">школьный корпоратив</span><span class="chip">квест для школьников</span><span class="chip">квест-шоу для класса</span><span class="chip">праздник для класса в квесте</span><span class="chip">командный квест для детей</span><span class="chip">выездной квест для класса</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление от лица компании → квест или квест-шоу для класса → выбор сюжета под интересы школьников и варианты сюжетов → сценарий в антураже квеста, выездной квест, иммерсивная программа → количество гостей, большой зал до 40 человек, дополнительный актёр при группе больше 10 человек → CTA.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Оставляйте заявку на праздник для класса — подберём сюжет с учётом интересов школьников.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>Праздник для класса</dd>
-          <dt>Визуал</dt><dd>Группа школьников в декорации квеста выполняет командное задание.</dd>
-          <dt>Цвета</dt><dd>Фон #0C0511, фото в белой рамке под небольшим наклоном, тезис белым #FFFFFF крупным гротеском, под тезисом скруглённая плашка #6337BD с надписью «квест или квест-шоу» белым, небольшая корона #FBECA8 над тезисом.</dd>
-          <dt>Логотип</dt><dd>Логотип «Королевский квест» с короной в верхнем углу.</dd>
-        </dl>
-      </div>
-    </article>
-
-    <article class="theme-card">
-      <div class="theme-head">
-        <span class="num">Новость 2 · 18 ноября</span>
-        <h3>«Мафия» и «Бункер» в «Королевском квесте»: час игры на дне рождения и корпоративе</h3>
-        <span class="tag">Продающий</span>
-      </div>
-      <p class="why">Игры «Мафия» и «Бункер» входят в программы дня рождения, корпоратива и выпускного, но отдельной темой ещё не выходили. Тема продолжает этап 1: показывает, чем можно дополнить квест в уже знакомых программах.</p>
-      <div class="blk"><div class="blk-h">Вступление (тон и голос)</div><p class="voice">«Кроме квестов, у нас можно сыграть в «Мафию» или «Бункер» — игру на час, которая входит в программы дня рождения, корпоратива и выпускного».</p></div>
-      <div class="blk"><div class="blk-h">Тезисы</div>
-        <ul class="thesis">
-          <li>Игра «Мафия» или «Бункер» — до 10 человек, дополнительные игроки — за доплату <span class="src">сайт, «Дни рождения», цены на квесты и игры</span></li>
-          <li>«ВИП День рождения»: увлекательный квест с актёром (60 мин.), игра «Мафия» или «Бункер» (60 мин.), банкетный зал на всё мероприятие <span class="src">сайт, «Дни рождения»</span></li>
-          <li>«ВИП Звёздный формат»: игра «Мафия», «Бункер» или дополнительный квест (60 мин.) <span class="src">сайт, «Дни рождения»</span></li>
-          <li>Корпоратив: программа «Лайт» — квест или «Мафия» (1 час); «VIP like» — квест и «Мафия» (2 часа); «VIP STAR» — квест, «Мафия» и банкетная зона (3 часа) <span class="src">сайт, «Корпоративы»</span></li>
-          <li>Выпускной: игра на выбор — «Мафия», «Бункер» или активная квест-игра (1 час) <span class="src">сайт, «Выпускной»</span></li>
-        </ul>
-      </div>
-      <div class="blk"><div class="blk-h">SEO-ключи</div>
-        <div class="chips"><span class="chip">мафия на день рождения</span><span class="chip">мафия на корпоратив</span><span class="chip">мафия с ведущим</span><span class="chip">игра бункер</span><span class="chip">бункер с ведущим</span><span class="chip">игра мафия для компании</span><span class="chip">мафия на новогодний корпоратив</span><span class="chip">бункер на день рождения</span><span class="chip">квест и мафия</span></div>
-      </div>
-      <div class="blk"><div class="blk-h">Структура</div><p class="meta">Вступление от лица компании → «Мафия» и «Бункер»: до 10 человек, дополнительные игроки → игры в программах дня рождения → игры в программах корпоратива → игра на выбор в выпускных программах → CTA.</p></div>
-      <div class="blk"><div class="blk-h">CTA</div><p class="cta">Выбирайте программу с «Мафией» или «Бункером» и бронируйте дату праздника.</p></div>
-      <div class="cover-box">
-        <div class="blk-h">ТЗ на обложку</div>
-        <dl>
-          <dt>Тезис</dt><dd>«Мафия» и «Бункер»</dd>
-          <dt>Визуал</dt><dd>Компания за игровым столом, крупным планом карты и руки участников.</dd>
-          <dt>Цвета</dt><dd>Фон #793FC0, фото в белой рамке под наклоном, тезис белым #FFFFFF крупным гротеском, под тезисом скруглённая плашка #FBECA8 с надписью «час игры» тёмным #0C0511.</dd>
-          <dt>Логотип</dt><dd>Логотип «Королевский квест» с короной в верхнем углу.</dd>
-        </dl>
-      </div>
-    </article>
-  </section>
-
-  <section id="stories">
-    <div class="eyebrow">05 · Сторис</div>
-    <h2 class="title">Сторис этапа 2</h2>
-    <p class="lede">Публикация — карточки компании на Яндекс Картах и в 2ГИС, без привязки к адресу. Формат — презентация, один слайд — одна тема, только тезисы и факты.</p>
-    <div class="story-grid">
-      <div class="story-card">
-        <span class="slide-tag">Сторис 1 · 11 ноября · 1 слайд</span>
-        <h4>Праздник для класса</h4>
-        <ul>
-          <li>Квест или квест-шоу</li>
-          <li>Сюжет с учётом интересов школьников</li>
-          <li>Сценарий в антураже квеста</li>
-          <li>Выездной квест</li>
-        </ul>
-        <div class="chips"><span class="chip">квест для класса</span><span class="chip">праздник для класса</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #0C0511, фото школьников в декорации квеста в белой рамке под наклоном в верхней половине, заголовок белым #FFFFFF крупным гротеском, четыре строки белым столбиком, слева от каждой маленькая корона #FBECA8, логотип «Королевский квест» в верхнем углу.</div>
-      </div>
-      <div class="story-card">
-        <span class="slide-tag">Сторис 2 · 18 ноября · 1 слайд</span>
-        <h4>«Мафия» и «Бункер»</h4>
-        <ul>
-          <li>Игра на 60 минут</li>
-          <li>До 10 человек</li>
-          <li>В программах дня рождения</li>
-          <li>В программах корпоратива</li>
-        </ul>
-        <div class="chips"><span class="chip">мафия на день рождения</span><span class="chip">мафия на корпоратив</span></div>
-        <div class="design-note"><b>Дизайн слайда:</b> фон #793FC0, заголовок белым #FFFFFF, четыре строки в скруглённых плашках #6337BD с текстом белым, фото игрового стола с картами вырезом в нижней трети, логотип «Королевский квест» в верхнем углу.</div>
-      </div>
+    <p class="cta-line"><b>CTA:</b> выбирайте уровень и бронируйте хоррор-квест с актёрами для своей команды.</p>
+    <div class="cover-box"><span class="lbl">ТЗ на обложку</span>
+      <div class="thesis-cover">«Хоррор-квест 12+ и 18+»</div>
+      <p>Композиция: кадр из «Секретной лаборатории» — актёр в гриме в тёмной зелёной декорации, как на сайте; фото в белой рамке со скруглёнными углами, тезис крупным гротеском, под ним две плашки «12+» и «18+», логотип «Королевский квест» в верхнем углу.</p>
+      <p>Цвета: фон #0C0511, тезис белым #FFFFFF, плашки #6337BD с белым текстом.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="map">
-    <div class="eyebrow">06 · Карта тем</div>
-    <h2 class="title">Карта тем по этапам</h2>
-    <div class="timeline">
-      <details class="stage">
-        <summary>Этап 1 <span class="when">4 новости · 4 сторис</span></summary>
-        <ol class="road">
-          <li><span class="fmt">Новость 1 · 23 октября</span><span class="t">Квесты с актёрами для всей семьи: «Королевский квест» дарит эмоции с 2017 года</span><span class="d">Формат, с 2017 года, 10000+ клиентов, четыре причины прийти</span></li>
-          <li class="st"><span class="fmt">История 1</span><span class="t">Квесты с актёрами для всей семьи</span><span class="d">С 2017 года, 10000+, команда, направления</span></li>
-          <li><span class="fmt">Новость 2 · 23 октября</span><span class="t">Квест по возрасту: семейные сценарии 0+, квест-игры 6+ и хоррор-квесты 12+</span><span class="d">Квесты по возрастам и уровням прохождения</span></li>
-          <li class="st"><span class="fmt">История 2</span><span class="t">Квест по возрасту</span><span class="d">0+, 6+, 10+, 12+ с названиями квестов</span></li>
-          <li><span class="fmt">Новость 3 · 23 октября</span><span class="t">День рождения в квесте под ключ: программы от 2 до 4 часов</span><span class="d">Шесть программ, скидка 15% пн–чт, индивидуальная концепция</span></li>
-          <li class="st"><span class="fmt">История 3</span><span class="t">День рождения под ключ</span><span class="d">Программы, состав, скидка в будни</span></li>
-          <li><span class="fmt">Новость 4 · 26 октября</span><span class="t">Корпоратив в квесте: программы от 1 до 3 часов для коллектива</span><span class="d">Поводы, форматы игр, четыре программы</span></li>
-          <li class="st"><span class="fmt">История 4</span><span class="t">Корпоратив в квесте</span><span class="d">Четыре программы со стоимостью за человека</span></li>
-        </ol>
-      </details>
-      <details class="stage" open>
-        <summary>Этап 2 <span class="when">2 новости · 2 сторис</span> <span class="badge">актуальный</span></summary>
-        <ol class="road">
-          <li><span class="fmt">Новость 1 · 11 ноября</span><span class="t">Праздник для класса в квесте: квест, квест-шоу и сюжет с учётом интересов школьников</span><span class="d">Формат, выбор сюжета, сценарий в антураже, выездной квест, группа больше 10 человек</span></li>
-          <li class="st"><span class="fmt">История 1 · 11 ноября</span><span class="t">Праздник для класса</span><span class="d">Квест или квест-шоу, сюжет, сценарий, выезд</span></li>
-          <li><span class="fmt">Новость 2 · 18 ноября</span><span class="t">«Мафия» и «Бункер» в «Королевском квесте»: час игры на дне рождения и корпоративе</span><span class="d">Игры в программах дня рождения, корпоратива и выпускного</span></li>
-          <li class="st"><span class="fmt">История 2 · 18 ноября</span><span class="t">«Мафия» и «Бункер»</span><span class="d">60 минут, до 10 человек, программы</span></li>
-        </ol>
-      </details>
+<section id="c-stories">
+  <div class="sec-head"><span class="sec-num">04 · Сторис</span><h2>Темы для сторис</h2><p>2 темы, формат презентации. Один слайд — тезис, факты и призыв к действию. Публикация — карточки компании на Яндекс Картах и 2ГИС, в день выхода парной новости.</p></div>
+  <div class="period"><h3>Этап 3</h3><span class="pmeta">2 сторис · актуальный</span></div>
+  <div class="story-grid">
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Дополнения к детскому дню рождения</div><span class="slide-no">Сторис 1 · 2 декабря</span></div>
+      <div class="facts-line"><span class="fact-pill">Дискотека с героем · 30 минут</span><span class="fact-pill">Неоновая и бумажная дискотека</span><span class="fact-pill">Шоу мыльных пузырей</span><span class="fact-pill">Научное шоу</span><span class="fact-pill">Поздравление актёром</span></div>
+      <div class="story-cta"><b>CTA на слайде:</b> «Бронируйте день рождения»</div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #793FC0, фото неоновой дискотеки в белой рамке под наклоном в верхней половине, заголовок белым #FFFFFF, факты белым столбиком с маленькой короной #FBECA8 у каждой строки, CTA на плашке #FBECA8 текстом #0C0511 внизу, логотип в верхнем углу.</div></div>
+    <div class="story-card"><div class="story-top"><div class="story-thesis">Хоррор-квесты с актёрами</div><span class="slide-no">Сторис 2 · 9 декабря</span></div>
+      <div class="facts-line"><span class="fact-pill">Уровни 12+ и 18+</span><span class="fact-pill">12+ — без контакта</span><span class="fact-pill">«Зомби-Апокалипсис» — 30 или 60 минут</span><span class="fact-pill">До 10 человек</span></div>
+      <div class="story-cta"><b>CTA на слайде:</b> «Выберите уровень и бронируйте»</div>
+      <div class="design-note"><b>Дизайн слайда:</b> фон #0C0511, заголовок белым #FFFFFF, факты на плашках #6337BD белым текстом, кадр из «Секретной лаборатории» вырезом в нижней трети, CTA на плашке #FBECA8 текстом #0C0511, логотип в верхнем углу.</div></div>
+  </div>
+</section>
+
+<section id="c-map">
+  <div class="sec-head"><span class="sec-num">05 · Карта тем</span><h2>Дорожная карта этапов</h2></div>
+  <details class="stage">
+    <summary>Этап 1 — квесты и праздничные форматы</summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Квесты с актёрами для всей семьи: «Королевский квест» дарит эмоции с 2017 года</b>23.10 · формат, с 2017 года, 10000+ клиентов</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Квесты с актёрами для всей семьи</b>с 2017 года, команда, направления</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Квест по возрасту: семейные сценарии 0+, квест-игры 6+ и хоррор-квесты 12+</b>23.10 · квесты по возрастам и уровням</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Квест по возрасту</b>0+, 6+, 10+, 12+</span></div>
+      <div class="stage-item"><span class="fmt">Новость 3</span><span class="txt"><b>День рождения в квесте под ключ: программы от 2 до 4 часов</b>23.10 · шесть программ, скидка 15% пн–чт</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 3</span><span class="txt"><b>День рождения под ключ</b>программы, состав, скидка в будни</span></div>
+      <div class="stage-item"><span class="fmt">Новость 4</span><span class="txt"><b>Корпоратив в квесте: программы от 1 до 3 часов для коллектива</b>26.10 · поводы, форматы, программы</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 4</span><span class="txt"><b>Корпоратив в квесте</b>четыре программы</span></div>
     </div>
-  </section>
-
+  </details>
+  <details class="stage">
+    <summary>Этап 2 — праздник для класса и игры для компании</summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Праздник для класса в квесте: квест, квест-шоу и сюжет с учётом интересов школьников</b>09.11 · формат, сюжет, сценарий, выездной квест</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Праздник для класса</b>квест или квест-шоу, сюжет, выезд</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>«Мафия» и «Бункер» в «Королевском квесте»: час игры на дне рождения и корпоративе</b>17.11 · игры в программах ДР, корпоратива, выпускного</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>«Мафия» и «Бункер»</b>60 минут, до 10 человек</span></div>
+    </div>
+  </details>
+  <details class="stage" open>
+    <summary>Этап 3 — дополнения к детскому празднику и хоррор-квесты <span class="badge">Актуальный</span></summary>
+    <div class="stage-body">
+      <div class="stage-item"><span class="fmt">Новость 1</span><span class="txt"><b>Дискотеки, шоу и поздравление героем: чем дополнить детский день рождения в квесте</b>02.12 · дискотеки, шоу, фокусник, поздравление актёром</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 1</span><span class="txt"><b>Дополнения к детскому дню рождения</b>02.12 · дискотеки, шоу, поздравление актёром</span></div>
+      <div class="stage-item"><span class="fmt">Новость 2</span><span class="txt"><b>Хоррор-квесты с актёрами: уровни 12+ и 18+, игра на 30 или 60 минут</b>09.12 · «Секретная лаборатория», «Зомби-Апокалипсис»</span></div>
+      <div class="stage-item"><span class="fmt">Сторис 2</span><span class="txt"><b>Хоррор-квесты с актёрами</b>09.12 · уровни, контакт, длительность</span></div>
+    </div>
+  </details>
+</section>
+</div></div>
 </main>
+
+<script>
+const NAV={
+ analytics:[['a-summary','Итог'],['a-maps','Позиции на Картах'],['a-stats','Рост карточек'],['a-demand','Спрос'],['a-growth','Зоны роста'],['a-method','Методика']],
+ content:[['c-company','Компания'],['c-brandbook','Брендбук'],['c-cycle','Логика цикла'],['c-news','Новости'],['c-stories','Сторис'],['c-map','Карта тем']]};
+const sub=document.getElementById('subnav');let cur='analytics';
+function show(view,scroll){
+  if(!NAV[view])view='analytics'; cur=view;
+  document.querySelectorAll('.view').forEach(el=>{el.hidden=el.dataset.view!==view});
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===view?'true':'false'));
+  sub.innerHTML=NAV[view].map(([id,t])=>`<button type="button" data-to="${id}">${t}</button>`).join('');
+  if(location.hash.slice(1)!==view){try{history.replaceState(null,'','#'+view)}catch(e){}}
+  if(scroll)window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){show(g.dataset.go,true);return}
+  const t=e.target.closest('[data-to]');if(t){const el=document.getElementById(t.dataset.to);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});sub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t))}
+});
+show(location.hash.slice(1)==='content'?'content':'analytics',false);
+window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+</script>
+
 </body>
 </html>
