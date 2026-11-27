@@ -118,6 +118,14 @@ details.past>summary{cursor:pointer;padding:14px 18px;font:600 12px/1.4 var(--mo
 details.past>.flow{padding:0 18px 18px}
 summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
 .src{display:inline-block;font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--roe);background:var(--roe-soft);padding:3px 6px;border-radius:3px;margin-left:4px;vertical-align:1px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table.pos{width:100%;border-collapse:collapse;font-size:14.5px;min-width:420px}
+table.pos th{font:600 11px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--teal);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+table.pos td{padding:11px 16px;border-top:1px solid var(--line)}
+table.pos tr:first-child td{border-top:0}
+table.pos td.num{font:600 13px/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.num.ok{color:var(--teal)} .num.mid{color:var(--ocean)} .num.no{color:var(--roe)}
+table.pos tr.hl td{background:var(--roe-soft)}
 </style>
 </head>
 <body>
@@ -125,10 +133,11 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
 
 <header class="topbar">
   <div class="in">
-    <div class="brand">Сильный Пол<small>ТЗ · Этап 2</small></div>
+    <div class="brand">Сильный Пол<small>ТЗ · Этап 3</small></div>
     <nav aria-label="Разделы">
       <a href="#company">Компания</a>
       <a href="#brand">Брендбук</a>
+      <a href="#seo">Позиции</a>
       <a href="#logic">Логика цикла</a>
       <a href="#news">Новости</a>
       <a href="#stories">Сторис</a>
@@ -140,9 +149,9 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
 <main>
 
 <section id="company" class="hero">
-  <div class="eyebrow">Техническое задание · Этап 2</div>
+  <div class="eyebrow">Техническое задание · Этап 3</div>
   <h1>Сильный Пол: новости и сторис для Яндекс Карт и 2ГИС</h1>
-  <p class="lead">Материалы этапа 2 публикуются в карточке компании «Сильный Пол» на Яндекс Картах и в 2ГИС: 2 новостных поста с обложкой и 2 сторис в формате одного слайда-презентации. Темы продолжают цикл этапа 1.</p>
+  <p class="lead">Материалы этапа 3 публикуются в карточке компании «Сильный Пол» на Яндекс Картах и в 2ГИС: 2 новостных поста с обложкой и 2 сторис в формате одного слайда-презентации. Темы продолжают последние публикации карточки и добирают целевые запросы.</p>
   <div class="meta-row">
     <span class="tag">2 новости + обложка</span>
     <span class="tag">2 сторис · 1 слайд</span>
@@ -191,24 +200,40 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
   </div>
 </section>
 
+<section id="seo">
+  <div class="sec-head">
+    <div class="eyebrow">Позиции на Яндекс Картах</div>
+    <h2>По каким запросам карточку видно и куда ведут темы этапа 3</h2>
+    <p>Замер 27.11.2026: поиск в интерфейсе Яндекс Карт в радиусе около 2 км от магазина на ул. Пришвина, 26, место карточки «Сильный Пол» в списке результатов. Это первый замер позиций, дальше этапы сравниваются с ним.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="pos">
+      <thead><tr><th>Запрос</th><th>Место</th><th>Темы этапа 3</th></tr></thead>
+      <tbody>
+        <tr><td>магазин ламината</td><td class="num ok">1</td><td>—</td></tr>
+        <tr><td>напольные покрытия</td><td class="num ok">1</td><td>—</td></tr>
+        <tr><td>ламинат купить</td><td class="num ok">1</td><td>—</td></tr>
+        <tr><td>плинтус для ламината</td><td class="num ok">1</td><td>—</td></tr>
+        <tr><td>подложка под ламинат</td><td class="num mid">2</td><td>—</td></tr>
+        <tr><td>кварцвиниловый ламинат</td><td class="num mid">2</td><td>—</td></tr>
+        <tr><td>ламинат</td><td class="num mid">3</td><td>—</td></tr>
+        <tr><td>паркетная доска</td><td class="num mid">3</td><td>—</td></tr>
+        <tr class="hl"><td>укладка ламината</td><td class="num mid">2</td><td>Новость 1 · Сторис 1</td></tr>
+        <tr class="hl"><td>инженерная доска</td><td class="num no">нет в выдаче</td><td>Новость 2 · Сторис 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <section id="logic">
   <div class="sec-head">
     <div class="eyebrow">Логика цикла</div>
-    <h2>Этап 2: от новых декоров — к новой коллекции и материалам для укладки</h2>
-    <p>Этап 1 рассказал о ламинате Underwood и Joss Beaumont в наличии, о декорах, характеристиках и услугах. Этап 2 продолжает тему новых декоров ламината из брифа: представляет новинку — коллекцию Joss Beaumont Vivus — и раскрывает сопутствующие товары, которые понадобятся при её укладке: подложку и плинтус.</p>
+    <h2>Этап 3: от комплектующих — к укладке и инженерной доске</h2>
+    <p>Последние публикации карточки рассказали о коллекции ламината Joss Beaumont Vertu 2, затем о подложке и плинтусе для укладки. Этап 3 продолжает этот путь: после выбора покрытия и комплектующих — укладка с бесплатным замером, затем расширение выбора покрытия до инженерной доски, по которой карточки «Сильный Пол» сейчас нет в выдаче Яндекс Карт.</p>
   </div>
-  <details class="past">
-    <summary>Этап 1 · Новые декоры ламината: от наличия к услугам</summary>
-    <div class="flow">
-      <div class="step"><span class="n">Новость 1</span><b>Товар в наличии</b><span>Новые декоры ламината Underwood и Joss Beaumont, адрес и режим работы</span></div>
-      <div class="step"><span class="n">Новость 2</span><b>Декоры и текстуры</b><span>Максимально приближенные к натуральной доске, толщины от 8 до 12мм</span></div>
-      <div class="step"><span class="n">Новость 3</span><b>Характеристики</b><span>33 и 34 класс, тёплый пол, влагостойкий, км2, E0 и E0,5</span></div>
-      <div class="step"><span class="n">Новость 4</span><b>Товары и услуги</b><span>Сопутствующие товары, доставка в квартиру, укладка, гарантия, услуги хранения</span></div>
-    </div>
-  </details>
-  <div class="flow" style="margin-top:14px">
-    <div class="step"><span class="n">Новость 1</span><b>Новинка Joss Beaumont Vivus</b><span>Новые декоры ламината: коллекция Vivus, 12 мм, 33 класс, фаска V4, тёплый пол до 27°C</span></div>
-    <div class="step"><span class="n">Новость 2</span><b>Подложка и плинтус</b><span>Подложка-гармошка Joss Beaumont с пароизоляционной плёнкой, плинтус на МДФ основе</span></div>
+  <div class="flow">
+    <div class="step"><span class="n">Новость 1</span><b>Укладка напольных покрытий</b><span>Бесплатный замер и измерение влажности основания при заказе укладки, гарантия на выполненные работы</span></div>
+    <div class="step"><span class="n">Новость 2</span><b>Инженерная доска</b><span>Ценный слой натурального дуба и влагостойкая фанера, Underwood Country, четыре типа конструкции</span></div>
   </div>
 </section>
 
@@ -225,50 +250,48 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
       <li>На «вы». Чаще на Вы, но более неформальное общение и живое: текст начинается с короткого вступления от лица компании («мы»), а не с перечня товаров.</li>
       <li>Факты — только из тезисов ниже, без добавленных деталей. Без указания цен.</li>
       <li>SEO-ключи вплетаются в каждое предложение органично, без повторов одного ключа подряд.</li>
-      <li>Объём до 3000 знаков с пробелами. CTA в конце — только словами, без телефона и e-mail в тексте. Без капса, минимум эмодзи и восклицательных знаков, без превосходных степеней.</li>
+      <li>Объём до 3000 знаков с пробелами. CTA в конце — только словами, без телефона, e-mail и ссылок в тексте. Без капса, минимум эмодзи и восклицательных знаков, без превосходных степеней.</li>
     </ul>
   </div>
 
   <div class="cards">
 
     <article class="card">
-      <div class="card-top"><span class="idx">Новость 1</span><span class="tag">Продающая · новые декоры ламината</span></div>
-      <h3>Новая коллекция ламината Joss Beaumont Vivus — в магазине «Сильный Пол»</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">У нас новые декоры ламината Joss Beaumont — коллекция Vivus.</p></div>
+      <div class="card-top"><span class="idx">Новость 1</span><span class="tag">Продающая · укладка</span><span class="tag roe">укладка ламината · место 2</span></div>
+      <h3>Укладка ламината и напольных покрытий в «Сильном Поле»: бесплатный замер при заказе укладки</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">После покупки напольного покрытия у нас вам не придётся дополнительно искать специалистов: укладку можно заказать здесь же.</p></div>
       <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Ламинат Joss Beaumont Vivus — новинка в каталоге «Сильный Пол». <span class="src">сайт</span></li>
-        <li>Декоры коллекции: Ван Гог, Дали, Микеланджело, Моцарт, Ньютон, Пикассо, Шуберт. Декор под дерево, однополосный ламинат. <span class="src">сайт</span></li>
-        <li>Толщина 12 мм, 33 класс, основа HDF, замковая система JClick. <span class="src">сайт</span></li>
-        <li>Фаска V4 — V-образная, с четырёх сторон. <span class="src">сайт</span></li>
-        <li>Влагостойкость — да. Тёплый пол — до 27°C. <span class="src">сайт</span></li>
-        <li>Страна — Россия. <span class="src">сайт</span></li>
-        <li>Ламинат Underwood и Joss Beaumont - Товар в наличии! Наличие товара на складах, что обеспечивает быструю доставку. <span class="src">бриф</span></li>
+        <li>Купив напольное покрытие в любом из салонов, можно заказать его укладку. Мастера выполнят полный комплекс работ по укладке напольных покрытий. <span class="src">сайт</span></li>
+        <li>Если вы заказываете укладку напольного покрытия, замер помещения и измерения содержания влаги в основании производятся бесплатно. <span class="src">сайт</span></li>
+        <li>Бесплатная консультация мастера помогает определиться со способом укладки и предусмотреть нюансы на конкретном объекте. <span class="src">сайт</span></li>
+        <li>Работы: подготовка основания пола (шлифовка, грунтовка основания, заливка наливной смесью), демонтаж старого покрытия, укладка ламината, паркетной доски и массива, установка плинтуса, вывоз мусора и уборка помещения. <span class="src">сайт</span></li>
+        <li>Заказав укладку у мастеров, вы получаете гарантию на выполненные работы. <span class="src">сайт</span> Доставка в квартиру, Укладка, Гарантия. <span class="src">бриф</span></li>
       </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>ламинат joss beaumont</span><span>joss beaumont vivus</span><span>новая коллекция ламината</span><span>ламинат 33 класс</span><span>ламинат 12 мм</span><span>ламинат с фаской</span><span>ламинат под дерево</span><span>однополосный ламинат</span><span>ламинат для тёплого пола</span><span>влагостойкий ламинат</span><span>купить ламинат</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите посмотреть новые декоры Joss Beaumont Vivus в магазин «Сильный Пол» в ТД «Миллион Мелочей».</p></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>укладка ламината</span><span>укладка ламината в Москве</span><span>укладка напольных покрытий</span><span>укладка паркетной доски</span><span>укладка массива</span><span>замер помещения бесплатно</span><span>подготовка основания пола</span><span>демонтаж старого покрытия</span><span>установка плинтуса</span><span>гарантия на укладку</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Заказывайте укладку вместе с покрытием в магазине «Сильный Пол» — замер помещения при заказе укладки бесплатный.</p></div>
       <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Новинка Joss Beaumont Vivus</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Фото ламината коллекции Vivus (фото магазина и образцов компания делает по запросу). Сверху логотип, надзаголовок «Новинка» контуром <span class="hexs">#321311</span>, заголовок «Joss Beaumont Vivus» заглавными в градиенте <span class="hexs">#55201F → #240909</span> в прямоугольной рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор из треугольников <span class="hexs">#764341</span> по краям. Текст не более 20% площади, без контактов и слов «акция», «купить».</p></div>
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Укладка под ключ</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото уложенного ламината или процесса укладки (фото магазина и образцов компания делает по запросу). Сверху логотип, надзаголовок «Укладка» контуром <span class="hexs">#321311</span>, заголовок заглавными в градиенте <span class="hexs">#55201F → #240909</span> в прямоугольной рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор из треугольников <span class="hexs">#764341</span> по краям. Текст не более 20% площади, без контактов, цен и слов «акция», «купить».</p></div>
       </div>
     </article>
 
     <article class="card">
-      <div class="card-top"><span class="idx">Новость 2</span><span class="tag">Экспертная · сопутствующие товары</span></div>
-      <h3>Подложка Joss Beaumont и плинтус: что понадобится при укладке ламината</h3>
-      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Вместе с ламинатом у нас можно подобрать подложку и плинтус.</p></div>
+      <div class="card-top"><span class="idx">Новость 2</span><span class="tag">Экспертная · новое направление</span><span class="tag roe">инженерная доска · нет в выдаче</span></div>
+      <h3>Инженерная доска в магазине «Сильный Пол»: натуральный дуб на влагостойкой фанере</h3>
+      <div class="blk"><span class="lbl">Вступление (тон и голос)</span><p class="voice">Кроме ламината, у нас есть инженерная доска — натуральное напольное покрытие.</p></div>
       <div class="blk"><span class="lbl">Тезисы</span><ul>
-        <li>Продажа напольных покрытий и сопутствующих товаров: подложный материал, плинтуса. <span class="src">бриф</span></li>
-        <li>Новинка — подложка-гармошка Joss Beaumont с пароизоляционной плёнкой: толщина 3 мм, доступна толщина 2 мм. <span class="src">сайт</span></li>
-        <li>Звукоизоляция до 20 дБ, защита от грибка и бактерий, теплопроводность не более 0,11 м²К/W, плотность 30 кг/м², ширина 1000 мм, 1 упаковка = 10 м². <span class="src">сайт</span></li>
-        <li>При укладке ламината Joss Beaumont понадобятся: подложка Joss Beaumont 3 мм, плёнка п/э армированная Joss Beaumont 140 г/кв.м. <span class="src">сайт</span></li>
-        <li>Весь плинтус на МДФ основе, он является комплектным: покупая любой ламинат, можно подобрать соответствующий плинтус. <span class="src">сайт</span></li>
-        <li>Доставка в квартиру, Укладка. <span class="src">бриф</span></li>
+        <li>Инженерная доска — это натуральное напольное покрытие. Конструктивно она состоит из двух слоёв — ценного и стабилизирующего: ценный слой из натурального дуба, стабилизирующий — из влагостойкой и прочной фанеры. <span class="src">сайт</span></li>
+        <li>Underwood — американская двухслойная инженерная доска на основе влагостойкой фанеры и ценного слоя дуба. <span class="src">сайт</span></li>
+        <li>Underwood Country: толщина 15 мм, порода дерева — дуб, покрытие — лак или масло. <span class="src">сайт</span></li>
+        <li>Тип конструкции: палуба шип-паз, палуба замок, французская ёлка, английская ёлка. Селекция: Mount, Hill, Plain. Ширина 110–185 мм, длина 400–2400 мм. <span class="src">сайт</span></li>
+        <li>В каталоге инженерной доски: Underwood, Alpine Floor, Amigo, Auswood, BEBEL Covering, Goodwin, Parketoff. <span class="src">сайт</span></li>
+        <li>Инженерная доска указана в особенностях карточки «Сильный Пол» на Яндекс Картах. <span class="src">Яндекс Карты</span></li>
       </ul></div>
-      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>подложка под ламинат</span><span>подложка с пароизоляцией</span><span>пароизоляция под ламинат</span><span>звукоизоляционная подложка</span><span>подложка гармошка</span><span>подложка 3 мм</span><span>плинтус для ламината</span><span>плинтус МДФ</span><span>плинтус напольный</span><span>укладка ламината</span></div></div>
-      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите подобрать подложку и плинтус к ламинату в магазин «Сильный Пол».</p></div>
+      <div class="blk"><span class="lbl">SEO-ключи</span><div class="chips"><span>инженерная доска</span><span>инженерная доска купить</span><span>инженерная доска в Москве</span><span>инженерная доска Underwood</span><span>инженерная доска дуб</span><span>двухслойная инженерная доска</span><span>инженерная доска ёлка</span><span>французская ёлка</span><span>английская ёлка</span><span>укладка инженерной доски</span><span>магазин напольных покрытий</span></div></div>
+      <div class="blk"><span class="lbl">CTA</span><p class="cta">Приходите в магазин «Сильный Пол» в ТД «Миллион Мелочей», чтобы выбрать инженерную доску и тип укладки.</p></div>
       <div class="cover">
-        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Подложка и плинтус</p></div>
-        <div class="blk"><span class="lbl">Визуал</span><p>Фото подложки и плинтуса рядом с ламинатом. Заголовок заглавными в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span> по краям.</p></div>
+        <div class="blk"><span class="lbl">ТЗ на обложку · тезис</span><p class="thesis">Инженерная доска</p></div>
+        <div class="blk"><span class="lbl">Визуал</span><p>Фото инженерной доски в укладке «ёлкой» или палубой. Надзаголовок «Натуральный дуб» контуром <span class="hexs">#321311</span>, заголовок «Инженерная доска» заглавными в градиенте <span class="hexs">#55201F → #240909</span> в рамке <span class="hexs">#321311</span>, фон <span class="hexs">#FFFFFF → #ECE6E7</span>, узор <span class="hexs">#764341</span> по краям.</p></div>
       </div>
     </article>
 
@@ -279,24 +302,26 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
   <div class="sec-head">
     <div class="eyebrow">Сторис</div>
     <h2>Один слайд — один факт</h2>
-    <p>Формат 1080×1920, слайд-презентация в фирменной стилистике компании: логотип сверху, надзаголовок контуром, заголовок заглавными в рамке, фото по центру, скруглённая плашка <span class="hexs">#4A4140</span> с белым текстом внизу, узор из треугольников <span class="hexs">#764341</span> по краям на фоне <span class="hexs">#FFFFFF → #ECE6E7</span>. Публикация — карточка «Сильный Пол» на Яндекс Картах и в 2ГИС; название сторис обязательно.</p>
+    <p>Формат 1080×1920, слайд-презентация в фирменной стилистике компании: логотип сверху, надзаголовок контуром, заголовок заглавными в рамке, фото по центру, скруглённая плашка <span class="hexs">#4A4140</span> с белым текстом внизу, узор из треугольников <span class="hexs">#764341</span> по краям на фоне <span class="hexs">#FFFFFF → #ECE6E7</span>. На каждом слайде — строка CTA. Публикация — карточка «Сильный Пол» на Яндекс Картах и в 2ГИС; название сторис обязательно.</p>
   </div>
   <div class="stories">
 
     <article class="story">
       <div class="card-top"><span class="idx">Сторис 1</span></div>
-      <h3>Vivus: два вида ламелей</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>Joss Beaumont Vivus — 2 вида ламелей: 123 × 683 мм и 193 × 1387 мм. Толщина 12 мм. <span class="src">сайт</span></p></div>
-      <div class="chips"><span>ламинат joss beaumont</span><span>joss beaumont vivus</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Joss Beaumont Vivus» контуром <span class="hexs">#321311</span>, заголовок «Два вида ламелей» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру фото двух ламелей разной ширины, на плашке <span class="hexs">#4A4140</span> белым: «123 × 683 мм и 193 × 1387 мм».</div>
+      <h3>Бесплатный замер при заказе укладки</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Если вы заказываете укладку напольного покрытия, замер помещения и измерения содержания влаги в основании производятся бесплатно. <span class="src">сайт</span></p></div>
+      <div class="blk"><span class="lbl">CTA на слайде</span><p class="cta">Закажите укладку вместе с покрытием</p></div>
+      <div class="chips"><span>укладка ламината</span><span>бесплатный замер</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Укладка» контуром <span class="hexs">#321311</span>, заголовок «Бесплатный замер» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру фото рулетки или замера на полу, на плашке <span class="hexs">#4A4140</span> белым: «Замер помещения и влажности основания — бесплатно при заказе укладки». CTA отдельной строкой под плашкой.</div>
     </article>
 
     <article class="story">
       <div class="card-top"><span class="idx">Сторис 2</span></div>
-      <h3>Подложка-гармошка Joss Beaumont</h3>
-      <div class="blk"><span class="lbl">Тезис</span><p>С пароизоляционной плёнкой. Звукоизоляция до 20 дБ. Толщина 3 мм, доступна 2 мм. <span class="src">сайт</span></p></div>
-      <div class="chips"><span>подложка под ламинат</span><span>подложка с пароизоляцией</span></div>
-      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Новинка» контуром <span class="hexs">#321311</span>, заголовок «Подложка-гармошка» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру фото подложки, на плашке <span class="hexs">#4A4140</span> белым три строки: пароизоляционная плёнка, до 20 дБ, 3 мм.</div>
+      <h3>Инженерная доска: ёлка и палуба</h3>
+      <div class="blk"><span class="lbl">Тезис</span><p>Underwood Country — 4 типа конструкции: палуба шип-паз, палуба замок, французская ёлка, английская ёлка. Толщина 15 мм, дуб. <span class="src">сайт</span></p></div>
+      <div class="blk"><span class="lbl">CTA на слайде</span><p class="cta">Выберите инженерную доску в «Сильном Поле»</p></div>
+      <div class="chips"><span>инженерная доска</span><span>французская ёлка</span></div>
+      <div class="slide-note"><span class="lbl">Дизайн слайда</span>Надзаголовок «Инженерная доска» контуром <span class="hexs">#321311</span>, заголовок «Ёлка и палуба» в градиенте <span class="hexs">#55201F → #240909</span> в рамке. По центру четыре схемы-плашки раскладки (палуба шип-паз, палуба замок, французская ёлка, английская ёлка), на плашке <span class="hexs">#4A4140</span> белым: «Underwood Country · 15 мм · дуб». CTA отдельной строкой под плашкой.</div>
     </article>
 
   </div>
@@ -321,13 +346,22 @@ summary:focus-visible{outline:2px solid var(--roe);outline-offset:2px}
         <li class="st"><span class="k">Сторис 4</span><span class="t"><b>Доставка в квартиру и укладка</b><span>Гарантия, услуги хранения</span></span></li>
       </ol>
     </details>
-    <details class="stage" open>
-      <summary class="stage-head"><h3>Этап 2</h3><span class="badge">актуальный</span></summary>
+    <details class="stage">
+      <summary class="stage-head"><h3>Этап 2</h3></summary>
       <ol class="rm">
         <li><span class="k">Новость 1</span><span class="t"><b>Новая коллекция ламината Joss Beaumont Vivus</b><span>Новые декоры, 12 мм, 33 класс, фаска V4, тёплый пол до 27°C</span></span></li>
         <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Vivus: два вида ламелей</b><span>123 × 683 мм и 193 × 1387 мм</span></span></li>
         <li><span class="k">Новость 2</span><span class="t"><b>Подложка Joss Beaumont и плинтус</b><span>Подложка-гармошка с пароизоляционной плёнкой, плинтус на МДФ основе</span></span></li>
         <li class="st"><span class="k">Сторис 2</span><span class="t"><b>Подложка-гармошка Joss Beaumont</b><span>Пароизоляционная плёнка, до 20 дБ, 3 мм</span></span></li>
+      </ol>
+    </details>
+    <details class="stage" open>
+      <summary class="stage-head"><h3>Этап 3</h3><span class="badge">актуальный</span></summary>
+      <ol class="rm">
+        <li><span class="k">Новость 1</span><span class="t"><b>Укладка напольных покрытий: бесплатный замер при заказе укладки</b><span>Полный комплекс работ, замер и влажность основания бесплатно, гарантия на работы</span></span></li>
+        <li class="st"><span class="k">Сторис 1</span><span class="t"><b>Бесплатный замер при заказе укладки</b><span>Замер помещения и влажности основания</span></span></li>
+        <li><span class="k">Новость 2</span><span class="t"><b>Инженерная доска: натуральный дуб на влагостойкой фанере</b><span>Underwood Country, 15 мм, четыре типа конструкции, бренды каталога</span></span></li>
+        <li class="st"><span class="k">Сторис 2</span><span class="t"><b>Инженерная доска: ёлка и палуба</b><span>Палуба шип-паз, палуба замок, французская и английская ёлка</span></span></li>
       </ol>
     </details>
   </div>
